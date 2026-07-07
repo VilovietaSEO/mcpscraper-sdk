@@ -1,0 +1,40 @@
+{
+  "name": "mcpscraper-memory-sdk",
+  "version": "0.1.0",
+  "description": "Official TypeScript/JavaScript client for the memory.mcpscraper.dev hosted memory API",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/"
+  },
+  "keywords": [
+    "mcp-memory",
+    "memory-api",
+    "obsidian",
+    "vaults"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VilovietaSEO/mcpscraper-sdk.git",
+    "directory": "packages/memory"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

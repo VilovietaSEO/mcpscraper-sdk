@@ -1,0 +1,24 @@
+{
+  "name": "mcpscraper-sdk-monorepo",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Public client SDKs and API contracts for mcpscraper.dev and memory.mcpscraper.dev",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm run test --workspaces",
+    "validate-contracts": "tsx scripts/validate-contracts.ts",
+    "smoke-test": "tsx scripts/smoke-test.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "tsx": "^4.19.0",
+    "tsup": "^8.3.0"
+  }
+}
