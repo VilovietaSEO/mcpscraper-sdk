@@ -1,0 +1,1529 @@
+openapi: 3.0.3
+info:
+  title: mcpscraper.dev API
+  version: "1.0.0"
+  description: |
+    Public REST contract for mcpscraper.dev — web intelligence (SERP, People-Also-Ask,
+    site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video
+    breakdown, Google Maps, directory/rank-tracking workflows).
+
+    This is a hand-curated public subset of the hosted API: internal/admin routes,
+    Stripe webhooks, OAuth session routes, and the interactive browser-agent console are
+    not part of this contract. Every operation here is billed in millicredits (mc); 1,000
+    mc = 1 credit. Insufficient balance and concurrency-limit responses share the schemas
+    below across every operation.
+  license:
+    name: MIT
+    url: https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/LICENSE
+servers:
+  - url: https://mcpscraper.dev
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Core
+    description: SERP search, People-Also-Ask harvesting, single-page and whole-site extraction, URL mapping.
+  - name: YouTube
+    description: YouTube search, channel listing, and transcription.
+  - name: Screenshot
+    description: Full-page PNG screenshot capture.
+  - name: Facebook
+    description: Facebook Ad Library and organic video/post intelligence.
+  - name: GoogleAds
+    description: Google Ads Transparency Center intelligence.
+  - name: Instagram
+    description: Instagram profile content and media extraction.
+  - name: Reddit
+    description: Reddit thread and comment capture.
+  - name: Video
+    description: Frame-by-frame video breakdown and transcription.
+  - name: Maps
+    description: Google Maps business search and place intelligence.
+  - name: Directory
+    description: Multi-city Google Maps directory/rank-tracking workflow.
+  - name: Workflows
+    description: Multi-step SEO workflow runs, schedules, and artifacts.
+  - name: SerpIntelligence
+    description: Structured SERP capture with AI Overview/AI Mode detection and optional page snapshots.
+
+paths:
+  /harvest/sync:
+    post:
+      tags: [Core]
+      operationId: harvestSync
+      summary: Run a Google SERP search, or a full People-Also-Ask harvest
+      description: |
+        Set `serpOnly: true` for a pure organic-results/SERP call (~0.1 credit). Omit or
+        set `false` for a full People-Also-Ask harvest, which also returns SERP data
+        (~1 credit base + 0.2 credit per question actually returned; unused estimate is
+        refunded). Runs synchronously and returns the result inline.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/HarvestSyncRequest' }
+      responses:
+        '200':
+          description: Harvest completed (or failed/cancelled — check `status`).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HarvestSyncResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+
+  /jobs:
+    get:
+      tags: [Core]
+      operationId: listJobs
+      summary: List your harvest jobs (most recent first)
+      responses:
+        '200':
+          description: Job list.
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: '#/components/schemas/JobRecord' } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /jobs/{id}:
+    get:
+      tags: [Core]
+      operationId: getJob
+      summary: Get one harvest job by id, including its result and attempt log
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Job detail.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/JobRecord' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /history:
+    get:
+      tags: [Core]
+      operationId: getHistory
+      summary: Recent SERP/harvest activity (jobs and one-off request events combined)
+      responses:
+        '200':
+          description: Up to 100 most recent rows.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object, additionalProperties: true }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /ledger:
+    get:
+      tags: [Core]
+      operationId: getLedger
+      summary: Recent credit ledger entries (debits, credits, refunds)
+      responses:
+        '200':
+          description: Up to 100 most recent ledger rows.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object, additionalProperties: true }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /extract-url:
+    post:
+      tags: [Core]
+      operationId: extractUrl
+      summary: Extract a single page (markdown/HTML, headings, optional screenshot/branding/media)
+      description: Costs 0.1 credit per page.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ExtractUrlRequest' }
+      responses:
+        '200':
+          description: Extraction result.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ExtractUrlResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /map-urls:
+    post:
+      tags: [Core]
+      operationId: mapSiteUrls
+      summary: Spider a site and return its discovered URL inventory
+      description: Flat 0.5 credit per call, regardless of URL count discovered.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MapUrlsRequest' }
+      responses:
+        '200':
+          description: URL inventory.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MapUrlsResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /extract-site:
+    post:
+      tags: [Core]
+      operationId: extractSite
+      summary: Crawl and extract every page of a site (also serves audit_site)
+      description: |
+        0.1 credit per page crawled (estimated up front against `maxPages`, then
+        reconciled to the actual page count crawled; unused estimate refunded). Set
+        `background: true` to enqueue an async crawl and poll
+        `GET /extract-site/status/{id}` instead of waiting inline — recommended above a
+        few hundred pages.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ExtractSiteRequest' }
+      responses:
+        '200':
+          description: Full crawl result (synchronous mode) or a queued job (`background:true`).
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - { $ref: '#/components/schemas/ExtractSiteResponse' }
+                  - { $ref: '#/components/schemas/ExtractSiteQueuedResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: Failed to enqueue the background crawl. }
+
+  /extract-site/status/{id}:
+    get:
+      tags: [Core]
+      operationId: getExtractSiteStatus
+      summary: Poll a background extract-site job
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Job status.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ExtractSiteStatus' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /youtube/harvest:
+    post:
+      tags: [YouTube]
+      operationId: youtubeHarvest
+      summary: Search YouTube, or list a channel's videos
+      description: Costs 0.2 credit per call.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/YoutubeHarvestRequest' }
+      responses:
+        '200':
+          description: Video list.
+          content:
+            application/json:
+              schema: { type: object, additionalProperties: true, description: 'Contains a `videos` array.' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: YouTube blocked the request (CAPTCHA) — billed amount was refunded. }
+
+  /youtube/transcribe:
+    post:
+      tags: [YouTube]
+      operationId: youtubeTranscribe
+      summary: Transcribe a YouTube video's captions
+      description: 0.2 credit per minute; a 5-minute hold is taken up front and reconciled to actual duration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [videoId]
+              properties:
+                videoId: { type: string, description: 'YouTube video ID (not a full URL).' }
+      responses:
+        '200':
+          description: Transcript with plain text, timestamped chunks, markdown, and HTML renderings.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TranscriptResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /screenshot:
+    post:
+      tags: [Screenshot]
+      operationId: screenshot
+      summary: Capture a full-page PNG screenshot of a URL
+      description: Costs 0.1 credit. Returns the raw PNG bytes, not JSON.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+                device: { type: string, enum: [desktop, mobile], default: desktop }
+                allowLocal: { type: boolean, default: false, description: 'Allow non-public/local URLs. Off by default.' }
+      responses:
+        '200':
+          description: PNG image bytes.
+          content:
+            image/png: { schema: { type: string, format: binary } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '502': { description: Screenshot capture failed. }
+
+  /facebook/ad:
+    post:
+      tags: [Facebook]
+      operationId: facebookAd
+      summary: Extract one Facebook Ad Library ad (all its variants) by URL or library ID
+      description: Costs 0.2 credit.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: 'Provide `url` or `libraryId`.'
+              properties:
+                url: { type: string, description: 'A facebook.com/ads/library ad URL.' }
+                libraryId: { type: string }
+                openModal: { type: boolean, default: true }
+      responses:
+        '200':
+          description: Ad detail with creative variants.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: Facebook blocked the request (CAPTCHA/soft-block) — billed amount was refunded. }
+
+  /facebook/page-intel:
+    post:
+      tags: [Facebook]
+      operationId: facebookPageIntel
+      summary: List an advertiser's active/recent ads by page ID, library ID, or search query
+      description: Costs 0.2 credit.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: 'Provide one of `pageId`, `libraryId`, or `query`.'
+              properties:
+                pageId: { type: string }
+                query: { type: string }
+                libraryId: { type: string }
+                maxAds: { type: integer, minimum: 1, maximum: 200, default: 50 }
+                country: { type: string, description: 'ISO 3166-1 alpha-2, e.g. US.', default: US }
+      responses:
+        '200':
+          description: Ads for the advertiser.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains an `ads` array.' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: Soft-blocked with an empty result — billed amount was refunded. }
+
+  /facebook/transcribe:
+    post:
+      tags: [Facebook]
+      operationId: facebookAdTranscribe
+      summary: Transcribe a Facebook ad's video by direct video URL
+      description: 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [videoUrl]
+              properties: { videoUrl: { type: string, format: uri } }
+      responses:
+        '200':
+          description: Transcript.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/TranscriptResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /facebook/video-transcribe:
+    post:
+      tags: [Facebook]
+      operationId: facebookVideoTranscribe
+      summary: Transcribe an organic Facebook video, reel, or share URL (not an ad)
+      description: 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, description: 'facebook.com or fb.watch URL.' }
+                quality: { type: string, enum: [best, hd, sd], default: best }
+      responses:
+        '200':
+          description: Video metadata plus transcript.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /facebook/search:
+    post:
+      tags: [Facebook]
+      operationId: facebookSearch
+      summary: Search the Facebook Ad Library by keyword and return matching advertisers
+      description: Costs 0.6 credit.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query: { type: string }
+                country: { type: string, default: US }
+                maxResults: { type: integer, minimum: 1, maximum: 20, default: 10 }
+      responses:
+        '200':
+          description: Matching advertisers.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: { type: string }
+                  searchUrl: { type: string }
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name: { type: string }
+                        pageName: { type: string }
+                        pageId: { type: string, nullable: true }
+                        libraryId: { type: string }
+                        sampleLibraryId: { type: string }
+                        adCount: { type: integer }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: Soft-blocked with an empty result — billed amount was refunded. }
+
+  /facebook/media:
+    post:
+      tags: [Facebook]
+      operationId: facebookMedia
+      summary: Proxy-download a Facebook/Instagram CDN media URL (fbcdn.net / cdninstagram.com only)
+      description: Free — no credit cost. Streams the raw file bytes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+                filename: { type: string }
+      responses:
+        '200':
+          description: Media bytes with the original content type.
+          content:
+            application/octet-stream: { schema: { type: string, format: binary } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '502': { description: The CDN fetch failed. }
+
+  /google-ads/search:
+    post:
+      tags: [GoogleAds]
+      operationId: googleAdsSearch
+      summary: Find advertisers in the Google Ads Transparency Center by keyword
+      description: Costs 0.6 credit.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query: { type: string }
+                region: { type: string, description: 'ISO 3166-1 alpha-2.', default: US }
+                maxResults: { type: integer, minimum: 1, maximum: 20, default: 10 }
+      responses:
+        '200':
+          description: Matching advertisers.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains an `advertisers` array.' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: 'No advertisers found, or blocked — billed amount was refunded.' }
+
+  /google-ads/page-intel:
+    post:
+      tags: [GoogleAds]
+      operationId: googleAdsPageIntel
+      summary: List one advertiser's creatives by advertiser ID or domain
+      description: Costs 0.2 credit.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: 'Provide `advertiserId` or `domain`.'
+              properties:
+                advertiserId: { type: string }
+                domain: { type: string }
+                region: { type: string, default: US }
+                maxAds: { type: integer, minimum: 1, maximum: 200, default: 50 }
+      responses:
+        '200':
+          description: Advertiser creatives.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains an `ads` array.' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: 'No ads found, or blocked — billed amount was refunded.' }
+
+  /google-ads/transcribe:
+    post:
+      tags: [GoogleAds]
+      operationId: googleAdsTranscribe
+      summary: Transcribe a Google ad's video by direct video URL
+      description: 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [videoUrl]
+              properties: { videoUrl: { type: string, format: uri } }
+      responses:
+        '200':
+          description: Transcript.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/TranscriptResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /instagram/profile-content:
+    post:
+      tags: [Instagram]
+      operationId: instagramProfileContent
+      summary: List a public Instagram profile's grid content
+      description: Costs 0.4 credit per profile scan. Provide `handle` or `url`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                handle: { type: string }
+                url: { type: string }
+                maxItems: { type: integer, minimum: 1, maximum: 2000, default: 50 }
+                maxScrolls: { type: integer, minimum: 0, maximum: 250, default: 10 }
+                scrollDelayMs: { type: integer, minimum: 250, maximum: 5000, default: 1200 }
+                stableScrollLimit: { type: integer, minimum: 1, maximum: 10, default: 4 }
+      responses:
+        '200':
+          description: Profile content.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains an `items` array.' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: Blocked/CAPTCHA. }
+
+  /instagram/media-download:
+    post:
+      tags: [Instagram]
+      operationId: instagramMediaDownload
+      summary: Extract and optionally download media from an Instagram post, reel, or tv URL
+      description: Costs 0.4 credit; +0.05 credit if `includeTranscript` is used.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, description: 'Instagram post/reel/tv URL.' }
+                mediaTypes: { type: array, items: { type: string, enum: [image, video, audio] }, default: [image, video, audio] }
+                downloadMedia: { type: boolean, default: true }
+                downloadAllTracks: { type: boolean, default: false }
+                includeTranscript: { type: boolean, default: false }
+                mux: { type: boolean, default: true, description: 'Mux separately-downloaded video+audio tracks into one file with ffmpeg.' }
+      responses:
+        '200':
+          description: Extraction result with download manifest and optional transcript.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains a `downloads` array and optional `transcript`.' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: Blocked/CAPTCHA. }
+
+  /reddit/thread:
+    post:
+      tags: [Reddit]
+      operationId: redditThread
+      summary: Capture a Reddit post and its comment tree
+      description: Costs 2 credits. Refunded automatically if Reddit blocks the request after retries.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, description: 'A reddit.com or redd.it thread URL.' }
+                maxComments: { type: integer, minimum: 1, maximum: 2000 }
+      responses:
+        '200':
+          description: Thread with comments.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title: { type: string }
+                  author: { type: string, nullable: true }
+                  score: { type: string, nullable: true }
+                  postBody: { type: string }
+                  numComments: { type: integer }
+                  comments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        author: { type: string, nullable: true }
+                        score: { type: string }
+                        depth: { type: integer }
+                        body: { type: string }
+                  sourceUrl: { type: string }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: Reddit blocked the request after retries — billed amount was refunded. }
+
+  /video/analyze:
+    post:
+      tags: [Video]
+      operationId: videoAnalyze
+      summary: Start a frame-by-frame video breakdown (async — poll /video/status)
+      description: |
+        Full multi-lens breakdown: samples frames across a video (up to 30 minutes),
+        analyzes each with vision AI, transcribes audio, then produces summary,
+        pacing/energy, words-per-minute, topic outline, key points, hook analysis,
+        visual style, and a how-to-replicate recipe. ~0.667 credit per 120 frames
+        requested (max 480 frames); billed down automatically if the video can't use
+        the requested frames, refunded fully if the run fails.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sourceUrl]
+              properties:
+                sourceUrl: { type: string, format: uri, description: 'Direct video file URL.' }
+                intervalS: { type: number, minimum: 1, maximum: 30, default: 2 }
+                maxFrames: { type: integer, minimum: 1, maximum: 480, default: 120 }
+                detail: { type: string, enum: [fast, standard, deep], default: standard }
+                vault: { type: string, description: 'Destination memory vault name.', default: Library }
+      responses:
+        '200':
+          description: Run queued.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  runId: { type: string }
+                  status: { type: string, enum: [queued] }
+                  message: { type: string }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '502': { description: 'Memory backend unavailable, or the run failed to start (billed amount refunded).' }
+
+  /video/status:
+    post:
+      tags: [Video]
+      operationId: videoAnalyzeStatus
+      summary: Poll a video breakdown run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [runId]
+              properties: { runId: { type: string } }
+      responses:
+        '200':
+          description: Run status. `artifactPath`/`report` are present once `status` is `done`.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  runId: { type: string }
+                  status: { type: string, description: 'e.g. queued, running, done, failed.' }
+                  progress: { type: object, nullable: true, properties: { analyzed: { type: integer }, total: { type: integer } } }
+                  frameCount: { type: integer, nullable: true }
+                  artifactPath: { type: string }
+                  report: { type: string, description: 'Markdown report.' }
+                  error: { type: string }
+                  reconciliation:
+                    type: object
+                    properties:
+                      billedMc: { type: integer }
+                      refundedMc: { type: integer }
+                      effectiveFrames: { type: integer, nullable: true }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { description: Run not found. }
+        '502': { description: Memory backend unavailable. }
+
+  /maps/search:
+    post:
+      tags: [Maps]
+      operationId: mapsSearch
+      summary: Search Google Maps for businesses matching a query and location
+      description: Costs 0.5 credit. Returns up to 50 business/profile candidates.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MapsSearchRequest' }
+      responses:
+        '200':
+          description: Search results.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains `searchQuery`, `resultCount`, and business result candidates.' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: CAPTCHA/blocked — retryable. }
+
+  /maps/place:
+    post:
+      tags: [Maps]
+      operationId: mapsPlaceIntel
+      summary: Deep-dive one Google Maps business by name and location, with reviews
+      description: 3 credits base; +0.1 credit per review card when `includeReviews` is true.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MapsPlaceRequest' }
+      responses:
+        '200':
+          description: Place detail with optional reviews.
+          content:
+            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains business overview fields and a `reviews` array when requested.' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+        '503': { description: CAPTCHA/blocked — retryable. }
+
+  /directory/run:
+    post:
+      tags: [Directory]
+      operationId: directoryWorkflow
+      summary: Run Google Maps business search across many cities in a state/region at once
+      description: Cost is `0.5 credit × number of markets resolved` for the query — see `GET /workflows/definitions` for related workflow shapes. Failed cities are refunded individually.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query, state]
+              properties:
+                query: { type: string, description: 'Business category to search, e.g. "roofers".' }
+                state: { type: string, description: 'US state code or name.' }
+                minPop: { type: integer, description: 'Minimum city population to include as a market.' }
+                perCity: { type: integer, description: 'Max results per city.' }
+      responses:
+        '200':
+          description: Per-city results.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: { type: string }
+                  state: { type: string }
+                  totalResultCount: { type: integer }
+                  cities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        city: { type: string }
+                        status: { type: string, enum: [done, failed] }
+                        results: { type: array, items: { type: object, additionalProperties: true } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { description: Directory workflow failed. }
+
+  /serp-intelligence/capture:
+    post:
+      tags: [SerpIntelligence]
+      operationId: serpIntelligenceCapture
+      summary: Structured SERP capture with AI Overview/AI Mode detection, entity IDs, and location-match evidence
+      description: Costs 0.1 credit. Rate-limited to 60 requests/minute per account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SerpIntelligenceCaptureRequest' }
+      responses:
+        '200':
+          description: Structured SERP capture.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SerpIntelligenceCaptureResponse' }
+        '400': { $ref: '#/components/responses/StructuredBadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/StructuredRateLimited' }
+        '500': { $ref: '#/components/responses/StructuredCaptureFailed' }
+
+  /serp-intelligence/page-snapshots:
+    post:
+      tags: [SerpIntelligence]
+      operationId: serpIntelligencePageSnapshots
+      summary: Fetch and archive full-content snapshots (HTML/text/markdown/screenshot) of specific URLs
+      description: Costs 0.1 credit per URL (max 25 per call). Rate-limited to 60 requests/minute per account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SerpIntelligencePageSnapshotsRequest' }
+      responses:
+        '200':
+          description: Page snapshot artifacts.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SerpIntelligencePageSnapshotsResponse' }
+        '400': { $ref: '#/components/responses/StructuredBadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/StructuredRateLimited' }
+        '500': { $ref: '#/components/responses/StructuredCaptureFailed' }
+
+  /workflows/definitions:
+    get:
+      tags: [Workflows]
+      operationId: listWorkflowDefinitions
+      summary: List available workflow definitions and their input schemas
+      responses:
+        '200':
+          description: Workflow definitions.
+          content:
+            application/json:
+              schema: { type: object, properties: { workflows: { type: array, items: { type: object, additionalProperties: true } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /workflows/run:
+    post:
+      tags: [Workflows]
+      operationId: runWorkflow
+      summary: Start a workflow run (some workflows execute stepwise; check `done` in the response)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [workflowId]
+              properties:
+                workflowId: { type: string }
+                input: { type: object, additionalProperties: true, description: 'Validated against the workflow''s own input schema — see GET /workflows/definitions.' }
+                webhookUrl: { type: string, format: uri, description: 'HTTPS URL to receive a signed webhook on completion.' }
+      responses:
+        '200':
+          description: "Run started — either completed inline or advanced one step (`done: false` means call POST /workflows/runs/{id}/step to continue)."
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/WorkflowRunStepResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /workflows/runs/{id}/step:
+    post:
+      tags: [Workflows]
+      operationId: advanceWorkflowRunStep
+      summary: Advance a stepwise workflow run by one step
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Step result.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/WorkflowRunStepResponse' } }
+        '400': { description: This workflow doesn't support stepwise execution. }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { description: 'The run is already in a terminal state, or has no remaining steps.' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /workflows/runs:
+    get:
+      tags: [Workflows]
+      operationId: listWorkflowRuns
+      summary: List your workflow runs
+      responses:
+        '200':
+          description: Run list.
+          content:
+            application/json: { schema: { type: object, properties: { runs: { type: array, items: { $ref: '#/components/schemas/WorkflowRun' } } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /workflows/runs/{id}:
+    get:
+      tags: [Workflows]
+      operationId: getWorkflowRun
+      summary: Get one workflow run, including its artifacts
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Run detail.
+          content:
+            application/json: { schema: { type: object, properties: { run: { $ref: '#/components/schemas/WorkflowRun' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /workflows/runs/{id}/artifacts/{artifactId}:
+    get:
+      tags: [Workflows]
+      operationId: getWorkflowRunArtifact
+      summary: Download one artifact produced by a workflow run
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+        - { name: artifactId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: "Artifact file bytes, with the artifact's own content type." }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '410': { description: The artifact file is no longer available. }
+
+  /workflows/schedules:
+    post:
+      tags: [Workflows]
+      operationId: createWorkflowSchedule
+      summary: Create a recurring schedule for a workflow
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [workflowId]
+              properties:
+                workflowId: { type: string }
+                name: { type: string, maxLength: 120 }
+                input: { type: object, additionalProperties: true }
+                cadence: { type: string, enum: [daily, weekly, monthly], default: weekly }
+                timezone: { type: string, default: UTC }
+                webhookUrl: { type: string, format: uri }
+                nextRunAt: { type: string, format: date-time }
+      responses:
+        '201':
+          description: Schedule created.
+          content:
+            application/json: { schema: { type: object, properties: { schedule: { $ref: '#/components/schemas/WorkflowSchedule' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+    get:
+      tags: [Workflows]
+      operationId: listWorkflowSchedules
+      summary: List your workflow schedules
+      responses:
+        '200':
+          description: Schedule list.
+          content:
+            application/json: { schema: { type: object, properties: { schedules: { type: array, items: { $ref: '#/components/schemas/WorkflowSchedule' } } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /workflows/schedules/{id}:
+    patch:
+      tags: [Workflows]
+      operationId: patchWorkflowSchedule
+      summary: Update a workflow schedule
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string, maxLength: 120 }
+                status: { type: string, enum: [active, paused] }
+                input: { type: object, additionalProperties: true }
+                cadence: { type: string, enum: [daily, weekly, monthly] }
+                timezone: { type: string }
+                webhookUrl: { type: string, format: uri, nullable: true }
+                nextRunAt: { type: string, format: date-time, nullable: true }
+      responses:
+        '200':
+          description: Updated schedule.
+          content:
+            application/json: { schema: { type: object, properties: { schedule: { $ref: '#/components/schemas/WorkflowSchedule' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [Workflows]
+      operationId: deleteWorkflowSchedule
+      summary: Delete a workflow schedule
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'Deleted.', content: { application/json: { schema: { type: object, properties: { ok: { type: boolean } } } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /workflows/schedules/{id}/run:
+    post:
+      tags: [Workflows]
+      operationId: runWorkflowScheduleNow
+      summary: Trigger a workflow schedule immediately, out of cadence
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Run started.
+          content:
+            application/json: { schema: { type: object, properties: { run: { $ref: '#/components/schemas/WorkflowRun' }, summary: { type: object, additionalProperties: true } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid `x-api-key`.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/Error' } }
+    BadRequest:
+      description: Invalid request body.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/Error' } }
+    NotFound:
+      description: Not found.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/Error' } }
+    ServerError:
+      description: Unexpected server error.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/Error' } }
+    InsufficientBalance:
+      description: Not enough credit balance to cover this call's cost.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/InsufficientBalanceError' } }
+    ConcurrencyLimitExceeded:
+      description: Too many concurrent operations for your account's concurrency limit.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/ConcurrencyLimitError' } }
+    StructuredBadRequest:
+      description: Invalid request body.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/StructuredError' } }
+    StructuredRateLimited:
+      description: Too many SERP Intelligence requests (60/minute limit).
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/StructuredError' } }
+    StructuredCaptureFailed:
+      description: Capture failed.
+      content:
+        application/json: { schema: { $ref: '#/components/schemas/StructuredError' } }
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error: { type: string }
+        error_code: { type: string }
+        message: { type: string }
+      required: [error]
+
+    StructuredError:
+      type: object
+      description: Shared structured error shape used by SERP Intelligence endpoints.
+      properties:
+        error_code: { type: string }
+        error_type: { type: string }
+        message: { type: string }
+        retryable: { type: boolean }
+        attempts: { type: array, items: { type: object, additionalProperties: true } }
+      required: [error_code, error_type, message, retryable]
+
+    InsufficientBalanceError:
+      type: object
+      properties:
+        error: { type: string, enum: [insufficient_balance] }
+        error_code: { type: string, enum: [insufficient_balance] }
+        message: { type: string }
+        balance_credits: { type: number }
+        required_credits: { type: number }
+        topup_url: { type: string, format: uri }
+      required: [error, error_code, message, balance_credits, required_credits, topup_url]
+
+    ConcurrencyLimitError:
+      type: object
+      properties:
+        error: { type: string }
+        message: { type: string }
+        error_code: { type: string, enum: [concurrency_limit_exceeded] }
+        error_type: { type: string, enum: [concurrency_limit] }
+        retryable: { type: boolean }
+        active: { type: integer }
+        limit: { type: integer }
+        operation: { type: string }
+        upgrade_url: { type: string, format: uri }
+        upgrade_command: { type: string, description: 'CLI command to buy an extra concurrency slot.' }
+      required: [error_code, message, active, limit, operation]
+
+    HarvestSyncRequest:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string, description: 'Search query.' }
+        location: { type: string, description: 'e.g. "Austin, TX".' }
+        depth: { type: integer, minimum: 1, maximum: 4, default: 4, description: 'PAA drill-down depth. Ignored when serpOnly is true.' }
+        maxQuestions: { type: integer, minimum: 1, default: 30, description: 'Max PAA questions to harvest. Ignored when serpOnly is true.' }
+        gl: { type: string, default: us, description: 'Google country code.' }
+        hl: { type: string, default: en, description: 'Google language code.' }
+        device: { type: string, enum: [desktop, mobile], default: desktop }
+        proxyMode: { type: string, enum: [location, configured, none], default: none }
+        proxyZip: { type: string, pattern: '^\d{5}$', description: 'US ZIP to localize the proxy egress to.' }
+        pages: { type: integer, minimum: 1, maximum: 2, default: 1, description: 'Organic result pages to fetch.' }
+        serpOnly: { type: boolean, default: false, description: 'true = pure SERP call (search_serp); false = full PAA harvest.' }
+        debug: { type: boolean, default: false }
+
+    HarvestSyncResponse:
+      type: object
+      properties:
+        job_id: { type: string }
+        status: { type: string, enum: [done, cancelled, failed] }
+        result: { type: object, additionalProperties: true, description: 'Present when status is done — SERP/PAA harvest result.' }
+        attempts: { type: array, items: { type: object, additionalProperties: true } }
+        error: { type: string }
+      required: [job_id, status]
+
+    JobRecord:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string }
+        query: { type: string }
+        result: { type: object, additionalProperties: true, nullable: true }
+        attempts: { type: array, items: { type: object, additionalProperties: true } }
+        created_at: { type: string }
+
+    ExtractUrlRequest:
+      type: object
+      required: [url]
+      properties:
+        url: { type: string, format: uri }
+        screenshot: { type: boolean, default: false }
+        screenshotDevice: { type: string, enum: [desktop, mobile], default: desktop }
+        extractBranding: { type: boolean, default: false, description: 'Extract brand colors/fonts/logo.' }
+        downloadMedia: { type: boolean, default: false }
+        mediaTypes: { type: array, items: { type: string, enum: [image, video, audio] } }
+        allowLocal: { type: boolean, default: false }
+        depositToVault: { type: boolean, default: false, description: 'Save the extracted content into an mcp-memory vault.' }
+        vaultName: { type: string, maxLength: 120 }
+
+    ExtractUrlResponse:
+      type: object
+      description: Spreads the page extraction result plus optional screenshot/branding/media/memory.
+      properties:
+        title: { type: string, nullable: true }
+        bodyMarkdown: { type: string }
+        bodyHtml: { type: string }
+        headings: { type: array, items: { type: object, additionalProperties: true } }
+        screenshot:
+          type: object
+          nullable: true
+          properties: { base64: { type: string }, sizeBytes: { type: integer }, device: { type: string } }
+        branding: { type: object, additionalProperties: true, nullable: true }
+        media: { type: object, additionalProperties: true, nullable: true }
+        memory: { type: object, additionalProperties: true, nullable: true, description: 'Present when depositToVault was true.' }
+      additionalProperties: true
+
+    MapUrlsRequest:
+      type: object
+      required: [url]
+      properties:
+        url: { type: string, format: uri }
+        maxUrls: { type: integer, minimum: 1, maximum: 2000, default: 500 }
+        concurrency: { type: integer, minimum: 1, maximum: 20, default: 12 }
+        browserFallback: { type: boolean, default: false, description: 'Use a real browser session for JS-heavy sites.' }
+        kernelFallback: { type: boolean, default: false }
+
+    MapUrlsResponse:
+      type: object
+      properties:
+        urls: { type: array, items: { type: string } }
+      additionalProperties: true
+
+    ExtractSiteRequest:
+      type: object
+      required: [url]
+      properties:
+        url: { type: string, format: uri }
+        maxPages: { type: integer, minimum: 1, maximum: 10000, default: 100 }
+        background: { type: boolean, default: false, description: 'Enqueue an async crawl instead of waiting inline.' }
+        rotateProxies: { type: boolean, default: false }
+        rotateProxyEvery: { type: integer, minimum: 1, maximum: 100, default: 30 }
+        browserFallback: { type: boolean, default: false }
+        kernelFallback: { type: boolean, default: false }
+        formats: { type: array, items: { type: string, enum: [markdown, links, json, images, branding] } }
+
+    ExtractSiteResponse:
+      type: object
+      description: Full synchronous crawl result.
+      properties:
+        pages: { type: array, items: { type: object, additionalProperties: true } }
+      additionalProperties: true
+
+    ExtractSiteQueuedResponse:
+      type: object
+      properties:
+        jobId: { type: string }
+        status: { type: string, enum: [pending] }
+        statusUrl: { type: string }
+      required: [jobId, status, statusUrl]
+
+    ExtractSiteStatus:
+      type: object
+      properties:
+        jobId: { type: string }
+        status: { type: string }
+        startUrl: { type: string }
+        totalUrls: { type: integer }
+        doneUrls: { type: integer }
+        artifacts: { type: array, items: { type: object, additionalProperties: true } }
+        error: { type: string, nullable: true }
+        updatedAt: { type: string }
+
+    YoutubeHarvestRequest:
+      type: object
+      required: [mode]
+      properties:
+        mode: { type: string, enum: [search, channel] }
+        query: { type: string, description: 'Required when mode is search.' }
+        channelHandle: { type: string, description: 'Required when mode is channel — @handle or UC... channel ID.' }
+        maxVideos: { type: integer, minimum: 1, maximum: 500, default: 50 }
+
+    TranscriptResponse:
+      type: object
+      properties:
+        videoId: { type: string }
+        text: { type: string }
+        chunks:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp: { type: array, items: { type: number }, minItems: 2, maxItems: 2 }
+              text: { type: string }
+        durationMs: { type: number }
+        markdown: { type: string }
+        html: { type: string }
+
+    MapsSearchRequest:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string }
+        location: { type: string }
+        gl: { type: string, default: us }
+        hl: { type: string, default: en }
+        maxResults: { type: integer, minimum: 1, maximum: 50, default: 10 }
+        proxyMode: { type: string, enum: [location, configured, none], default: location }
+        proxyZip: { type: string, pattern: '^\d{5}$' }
+        debug: { type: boolean, default: false }
+
+    MapsPlaceRequest:
+      type: object
+      required: [businessName, location]
+      properties:
+        businessName: { type: string }
+        location: { type: string }
+        gl: { type: string, default: us }
+        hl: { type: string, default: en }
+        includeReviews: { type: boolean, default: false }
+        maxReviews: { type: integer, minimum: 1, maximum: 500, default: 50 }
+
+    SerpIntelligenceCaptureRequest:
+      type: object
+      required: [query]
+      properties:
+        query: { type: string, minLength: 1 }
+        location: { type: string }
+        gl: { type: string, default: us }
+        hl: { type: string, default: en }
+        device: { type: string, enum: [desktop, mobile], default: desktop }
+        proxyMode: { type: string, enum: [location, configured, none], default: none }
+        proxyZip: { type: string, pattern: '^\d{5}$' }
+        pages: { type: integer, minimum: 1, maximum: 2, default: 1 }
+        debug: { type: boolean, default: false }
+        includePageSnapshots: { type: boolean, default: false }
+        pageSnapshotLimit: { type: integer, minimum: 0, maximum: 10, default: 0 }
+      additionalProperties: false
+
+    SerpIntelligencePageSnapshotsRequest:
+      type: object
+      required: [urls]
+      properties:
+        urls: { type: array, items: { type: string, format: uri }, minItems: 1, maxItems: 25 }
+        targets:
+          type: array
+          maxItems: 25
+          items:
+            type: object
+            properties:
+              url: { type: string, format: uri }
+              sourceKind: { type: string, enum: [organic, ai_citation, local_pack_website, configured_target, site_subject], default: configured_target }
+              sourcePosition: { type: integer, minimum: 1 }
+        maxConcurrency: { type: integer, minimum: 1, maximum: 5, default: 2 }
+        timeoutMs: { type: integer, minimum: 1000, maximum: 60000, default: 15000 }
+        debug: { type: boolean, default: false }
+      additionalProperties: false
+
+    SerpIntelligenceOrganicResult:
+      type: object
+      properties:
+        position: { type: integer, minimum: 1 }
+        title: { type: string }
+        url: { type: string }
+        domain: { type: string }
+        cite: { type: string, nullable: true }
+        snippet: { type: string, nullable: true }
+        isRedditStyle: { type: boolean }
+        inlineRating:
+          type: object
+          nullable: true
+          properties: { value: { type: string }, count: { type: string } }
+
+    SerpIntelligenceHarvestResult:
+      type: object
+      properties:
+        seed: { type: string }
+        location: { type: string, nullable: true }
+        extractedAt: { type: string }
+        totalQuestions: { type: integer }
+        surface: { type: string, enum: [web, aim, unknown] }
+        aiOverview:
+          type: object
+          properties:
+            detected: { type: boolean }
+            text: { type: string, nullable: true }
+            citations: { type: array, items: { type: object, properties: { text: { type: string }, href: { type: string } } } }
+        aiMode:
+          type: object
+          properties:
+            detected: { type: boolean }
+            text: { type: string, nullable: true }
+            citations: { type: array, items: { type: object, properties: { text: { type: string }, href: { type: string } } } }
+        tree: { type: array, items: {} }
+        flat: { type: array, items: {} }
+        videos: { type: array, items: {} }
+        forums: { type: array, items: {} }
+        organicResults: { type: array, items: { $ref: '#/components/schemas/SerpIntelligenceOrganicResult' } }
+        localPack: { type: array, items: {} }
+        entityIds:
+          type: object
+          properties:
+            entities: { type: array, items: { type: object, properties: { name: { type: string }, kgId: { type: string, nullable: true }, cid: { type: string, nullable: true }, gcid: { type: string, nullable: true } } } }
+            kgIds: { type: array, items: { type: string } }
+            cids: { type: array, items: { type: string } }
+            gcids: { type: array, items: { type: string } }
+        stats:
+          type: object
+          properties:
+            seed: { type: string }
+            totalQuestions: { type: integer }
+            maxDepthReached: { type: integer }
+            durationMs: { type: number }
+            errorCount: { type: integer }
+        diagnostics: { type: object, additionalProperties: true }
+        whatPeopleSaying: { type: array, items: {} }
+
+    SerpPageSnapshotCapture:
+      type: object
+      properties:
+        url: { type: string }
+        requestedUrl: { type: string }
+        finalUrl: { type: string, nullable: true }
+        sourceKind: { type: string, enum: [organic, ai_citation, local_pack_website, configured_target, site_subject] }
+        sourcePosition: { type: integer, nullable: true }
+        status: { type: string, enum: [captured, skipped, failed] }
+        fetchedVia: { type: string, enum: [fetch, headless, browser, mcp], nullable: true }
+        httpStatus: { type: integer, nullable: true }
+        contentType: { type: string, nullable: true }
+        title: { type: string, nullable: true }
+        canonicalUrl: { type: string, nullable: true }
+        metaDescription: { type: string, nullable: true }
+        headings: { type: array, items: { type: object, properties: { level: { type: integer }, text: { type: string } } } }
+        artifact:
+          type: object
+          properties:
+            htmlBlobUrl: { type: string, nullable: true }
+            textBlobUrl: { type: string, nullable: true }
+            markdownBlobUrl: { type: string, nullable: true }
+            screenshotBlobUrl: { type: string, nullable: true }
+            contentSha256: { type: string, nullable: true }
+            capturedAt: { type: string, nullable: true }
+        error:
+          type: object
+          nullable: true
+          properties: { code: { type: string }, message: { type: string } }
+
+    SerpIntelligenceCaptureAttempt:
+      type: object
+      properties:
+        attemptNumber: { type: integer }
+        outcome: { type: string }
+        startedAt: { type: string }
+        completedAt: { type: string }
+        durationMs: { type: number }
+        problemCode: { type: string }
+        message: { type: string }
+        kernelSessionId: { type: string, nullable: true }
+        cleanupSucceeded: { type: boolean, nullable: true }
+
+    SerpIntelligenceCaptureResponse:
+      type: object
+      properties:
+        harvestResult: { $ref: '#/components/schemas/SerpIntelligenceHarvestResult' }
+        attempts: { type: array, items: { $ref: '#/components/schemas/SerpIntelligenceCaptureAttempt' } }
+        locationEvidence: { type: object, additionalProperties: true, nullable: true }
+        pageSnapshotArtifacts: { type: array, items: { $ref: '#/components/schemas/SerpPageSnapshotCapture' } }
+        billing:
+          type: object
+          properties: { creditsUsed: { type: number }, requestId: { type: string }, jobId: { type: string } }
+
+    SerpIntelligencePageSnapshotsResponse:
+      type: object
+      properties:
+        pageSnapshotArtifacts: { type: array, items: { $ref: '#/components/schemas/SerpPageSnapshotCapture' } }
+        attempts: { type: array, items: { $ref: '#/components/schemas/SerpIntelligenceCaptureAttempt' } }
+
+    WorkflowRun:
+      type: object
+      properties:
+        id: { type: string }
+        workflow_id: { type: string }
+        status: { type: string, enum: [queued, running, succeeded, partial, failed, cancelled] }
+        input: { type: object, additionalProperties: true }
+        step_index: { type: integer }
+        created_at: { type: string }
+        completed_at: { type: string, nullable: true }
+        error_message: { type: string, nullable: true }
+        artifacts:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              kind: { type: string }
+              label: { type: string }
+              downloadUrl: { type: string }
+      additionalProperties: true
+
+    WorkflowRunStepResponse:
+      type: object
+      properties:
+        run: { $ref: '#/components/schemas/WorkflowRun' }
+        summary: { type: object, additionalProperties: true, nullable: true, description: 'Present once the run reaches a terminal state.' }
+        step:
+          type: object
+          nullable: true
+          properties:
+            index: { type: integer }
+            id: { type: string }
+            title: { type: string }
+            totalSteps: { type: integer }
+            output: { type: object, additionalProperties: true }
+            warnings: { type: array, items: { type: string } }
+        nextStep:
+          type: object
+          nullable: true
+          properties: { index: { type: integer }, id: { type: string, nullable: true }, title: { type: string, nullable: true } }
+        done: { type: boolean }
+
+    WorkflowSchedule:
+      type: object
+      properties:
+        id: { type: string }
+        workflow_id: { type: string }
+        name: { type: string }
+        status: { type: string, enum: [active, paused] }
+        input: { type: object, additionalProperties: true }
+        cadence: { type: string, enum: [daily, weekly, monthly] }
+        timezone: { type: string }
+        webhook_url: { type: string, nullable: true }
+        next_run_at: { type: string, nullable: true }
