@@ -19,9 +19,10 @@
     "README.md"
   ],
   "scripts": {
+    "generate": "openapi-typescript ../../contracts/scraper.openapi.yaml -o src/schema.ts",
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/"
+    "test": "tsx --test test/*.test.ts"
   },
   "keywords": [
     "mcp-scraper",
@@ -29,6 +30,9 @@
     "web-scraping",
     "seo-api"
   ],
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/VilovietaSEO/mcpscraper-sdk.git",
