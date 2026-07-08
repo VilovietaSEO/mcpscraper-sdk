@@ -150,7 +150,7 @@ test('memoryTools dispatches through /memory/mcp-call with toolName and args', a
   const result = await client.memoryTools.memory.search({ query: 'roofing warranty terms' } as never)
 
   assert.equal(capturedUrl, 'https://mcpscraper.dev/memory/mcp-call')
-  assert.equal((capturedBody as { toolName: string }).toolName, 'memory-search')
+  assert.equal((capturedBody as { toolName: string }).toolName, 'searchTool')
   assert.deepEqual((capturedBody as { args: unknown }).args, { query: 'roofing warranty terms' })
   assert.equal((result as { ok: boolean }).ok, true)
 })

@@ -37,7 +37,7 @@ test('memory.search sends a tools/call JSON-RPC request and parses structuredCon
   const result = await client.memory.search({ query: 'hello world' })
 
   assert.equal(capturedBody.method, 'tools/call')
-  assert.equal(capturedBody.params.name, 'memory-search')
+  assert.equal(capturedBody.params.name, 'searchTool')
   assert.deepEqual(capturedBody.params.arguments, { query: 'hello world' })
   assert.equal(result.ok, true)
   assert.equal(result.results?.[0]?.text, 'hello')

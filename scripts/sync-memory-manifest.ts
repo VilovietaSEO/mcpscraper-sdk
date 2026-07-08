@@ -39,8 +39,22 @@ async function fetchLiveTools(apiKey: string): Promise<RpcTool[]> {
   return body.result?.tools ?? []
 }
 
+function canonicalize(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(canonicalize)
+  if (value && typeof value === 'object') {
+    return Object.keys(value as object)
+      .filter(key => key !== '$schema')
+      .sort()
+      .reduce<Record<string, unknown>>((acc, key) => {
+        acc[key] = canonicalize((value as Record<string, unknown>)[key])
+        return acc
+      }, {})
+  }
+  return value
+}
+
 function schemaSignature(schema: unknown): string {
-  return JSON.stringify(schema, Object.keys(schema as object ?? {}).sort())
+  return JSON.stringify(canonicalize(schema))
 }
 
 async function main(): Promise<void> {

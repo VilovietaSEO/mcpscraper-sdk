@@ -11,6 +11,7 @@ const TOOLS_DIR = join(OUT_DIR, 'tools')
 
 interface ToolEntry {
   name: string
+  legacyId: string
   description: string
   category: string
   inputSchema: unknown
@@ -79,16 +80,16 @@ async function main(): Promise<void> {
     const entries: Array<{ methodName: string; tool: ToolEntry }> = []
 
     for (const tool of tools) {
-      let methodName = deriveMethodName(tool.name, category)
+      let methodName = deriveMethodName(tool.legacyId, category)
       if (usedNames.has(methodName)) {
-        methodName = toCamelCase(tool.name)
+        methodName = toCamelCase(tool.legacyId)
       }
       usedNames.add(methodName)
       entries.push({ methodName, tool })
 
       const inputTs = await compileSchema(tool.inputSchema, 'Input', tool.name, fallbacks)
       const outputTs = await compileSchema(tool.outputSchema, 'Output', tool.name, fallbacks)
-      await writeFile(join(TOOLS_DIR, `${tool.name}.ts`), `${inputTs}\n${outputTs}`)
+      await writeFile(join(TOOLS_DIR, `${tool.legacyId}.ts`), `${inputTs}\n${outputTs}`)
     }
 
     methodsByCategory.set(category, entries)
@@ -101,8 +102,8 @@ async function main(): Promise<void> {
     const namespaceClass = `${toPascalCase(category)}Namespace`
 
     const methodBlocks = entries.map(({ methodName, tool }) => {
-      const varName = toPascalCase(tool.name)
-      importLines.push(`import * as ${varName} from './tools/${tool.name}.js'`)
+      const varName = toPascalCase(tool.legacyId)
+      importLines.push(`import * as ${varName} from './tools/${tool.legacyId}.js'`)
       return [
         `  async ${methodName}(input: ${varName}.Input): Promise<${varName}.Output> {`,
         `    return this.callTool('${tool.name}', input) as Promise<${varName}.Output>`,
