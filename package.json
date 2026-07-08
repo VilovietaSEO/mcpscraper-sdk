@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "description": "Public client SDKs and API contracts for mcpscraper.dev and memory.mcpscraper.dev",
   "workspaces": [
-    "packages/scraper",
     "packages/memory",
+    "packages/scraper",
     "packages/cli"
   ],
   "engines": {
