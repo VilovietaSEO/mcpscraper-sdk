@@ -176,3 +176,21 @@ def test_memory_tools_raises_on_tool_level_ok_false():
         client.memory_tools.call_tool("listVaultsTool")
 
     assert str(exc_info.value) == "vault not found"
+
+
+@responses.activate
+def test_snake_case_kwargs_are_sent_as_camel_case():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/extract-site",
+        json={"pages": []},
+        status=200,
+    )
+    client = ScraperClient(api_key="sk_test")
+    client.extract_site("https://example.com", max_pages=100, deposit_to_vault=True, vault_name="research")
+
+    sent_body = json.loads(responses.calls[0].request.body)
+    assert sent_body["maxPages"] == 100
+    assert sent_body["depositToVault"] is True
+    assert sent_body["vaultName"] == "research"
+    assert "max_pages" not in sent_body

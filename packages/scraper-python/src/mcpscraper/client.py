@@ -10,6 +10,21 @@ from .errors import ScraperApiError
 JsonDict = dict[str, Any]
 
 
+def _camel_key(key: str) -> str:
+    if "_" not in key:
+        return key
+    head, *rest = key.split("_")
+    return head + "".join(word[:1].upper() + word[1:] for word in rest if word)
+
+
+def _camelize(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {_camel_key(k) if isinstance(k, str) else k: _camelize(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_camelize(v) for v in value]
+    return value
+
+
 class _Requester:
     def __init__(self, api_key: str, base_url: str, session: requests.Session) -> None:
         self._api_key = api_key
@@ -18,7 +33,8 @@ class _Requester:
 
     def call(self, method: str, path: str, body: Optional[JsonDict] = None) -> Any:
         headers = {"x-api-key": self._api_key}
-        response = self._session.request(method, f"{self._base_url}{path}", json=body, headers=headers)
+        payload = _camelize(body) if body is not None else None
+        response = self._session.request(method, f"{self._base_url}{path}", json=payload, headers=headers)
         try:
             data = response.json()
         except ValueError:

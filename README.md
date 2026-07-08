@@ -160,7 +160,7 @@ const site = await client.extractSite({ url: 'https://example.com', maxPages: 10
 <details><summary>Python</summary>
 
 ```python
-site = client.extract_site("https://example.com", maxPages=100)
+site = client.extract_site("https://example.com", max_pages=100)
 ```
 </details>
 
@@ -181,8 +181,6 @@ mcpscraper crawl https://example.com --max-pages 100
 </details>
 
 Above a few hundred pages, pass `background: true` (Node/Python) and poll `getExtractSiteStatus(id)` / `get_extract_site_status(job_id)` instead of waiting inline.
-
-> Note: the Python SDK's optional keyword arguments (`maxPages`, `depositToVault`, etc.) currently pass through using the raw API's camelCase field names rather than being translated to snake_case — a known rough edge, tracked for a future release.
 
 ### Map
 
