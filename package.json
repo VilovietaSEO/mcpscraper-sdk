@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "description": "Public client SDKs and API contracts for mcpscraper.dev and memory.mcpscraper.dev",
   "workspaces": [
-    "packages/*"
+    "packages/scraper",
+    "packages/memory",
+    "packages/cli"
   ],
   "engines": {
     "node": ">=20"
@@ -13,6 +15,7 @@
     "build": "npm run build --workspaces",
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspaces",
+    "test:python": "cd packages/scraper-python && uv run pytest && cd ../memory-python && uv run pytest",
     "validate-contracts": "tsx scripts/validate-contracts.ts",
     "smoke-test": "tsx scripts/smoke-test.ts",
     "generate:memory": "tsx scripts/generate-memory-client.ts"
