@@ -1,0 +1,115 @@
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import { createProgram } from '../src/cli.js'
+
+function jsonResponse(status: number, body: unknown): Response {
+  return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } })
+}
+
+function captureLogs(): { logs: string[]; errors: string[]; restore: () => void } {
+  const logs: string[] = []
+  const errors: string[] = []
+  const originalLog = console.log
+  const originalError = console.error
+  console.log = (...args: unknown[]) => logs.push(args.map(String).join(' '))
+  console.error = (...args: unknown[]) => errors.push(args.map(String).join(' '))
+  return {
+    logs,
+    errors,
+    restore: () => {
+      console.log = originalLog
+      console.error = originalError
+    },
+  }
+}
+
+test('search sends the query and prints organic results', async () => {
+  let capturedBody: Record<string, unknown> = {}
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    capturedBody = JSON.parse(String(init?.body))
+    return jsonResponse(200, { result: { organicResults: [{ position: 1, title: 'Example', url: 'https://example.com' }] } })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync(
+      ['node', 'mcpscraper', '--api-key', 'sk_test', 'search', 'roof repair denver'],
+    )
+  } finally {
+    capture.restore()
+  }
+  assert.equal(capturedBody.query, 'roof repair denver')
+  assert.equal(capturedBody.serpOnly, true)
+  assert.ok(capture.logs.some((l) => l.includes('Example')))
+})
+
+test('scrape passes depositToVault and vault name through', async () => {
+  let capturedBody: Record<string, unknown> = {}
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    capturedBody = JSON.parse(String(init?.body))
+    return jsonResponse(200, { title: 'A Page', bodyMarkdown: 'hello world' })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test',
+      'scrape', 'https://example.com', '--deposit-to-vault', '--vault', 'research',
+    ])
+  } finally {
+    capture.restore()
+  }
+  assert.equal(capturedBody.url, 'https://example.com')
+  assert.equal(capturedBody.depositToVault, true)
+  assert.equal(capturedBody.vaultName, 'research')
+  assert.ok(capture.logs.some((l) => l.includes('A Page')))
+})
+
+test('memory search dispatches through /memory/mcp-call with the right tool name', async () => {
+  let capturedUrl = ''
+  let capturedBody: Record<string, unknown> = {}
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    capturedUrl = String(url)
+    capturedBody = JSON.parse(String(init?.body))
+    return jsonResponse(200, { ok: true, results: [{ text: 'a fact', source: 'note:a.md', score: 0.5 }] })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'memory', 'search', 'warranty terms',
+    ])
+  } finally {
+    capture.restore()
+  }
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/memory/mcp-call')
+  assert.equal(capturedBody.toolName, 'searchTool')
+  assert.ok(capture.logs.some((l) => l.includes('a fact')))
+})
+
+test('--json prints the raw response', async () => {
+  const fetchImpl = async () => jsonResponse(200, { urls: ['https://example.com/a', 'https://example.com/b'] })
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'map', 'https://example.com', '--json',
+    ])
+  } finally {
+    capture.restore()
+  }
+  const parsed = JSON.parse(capture.logs.join(''))
+  assert.deepEqual(parsed.urls, ['https://example.com/a', 'https://example.com/b'])
+})
+
+test('an API error prints a clean message instead of a stack trace', async () => {
+  const fetchImpl = async () => jsonResponse(402, { error: 'insufficient_balance', error_code: 'insufficient_balance', message: 'Not enough credits' })
+  const capture = captureLogs()
+  const originalExitCode = process.exitCode
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'search', 'anything',
+    ])
+  } finally {
+    capture.restore()
+  }
+  assert.ok(capture.errors.some((e) => e.includes('Not enough credits') && e.includes('insufficient_balance')))
+  assert.equal(process.exitCode, 1)
+  process.exitCode = originalExitCode
+})
