@@ -71,3 +71,7 @@ Use `mcpscraper-memory-sdk`'s own `MemoryClient` instead if you already have a d
 ```bash
 npm run generate
 ```
+
+## See also
+
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 74-tool typed surface) · [`mcpscraper-sdk` on PyPI](../scraper-python) (Python) · [`mcpscraper-cli`](../cli)

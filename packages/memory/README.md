@@ -45,3 +45,7 @@ Issue one via the `access-issue-key` tool (or `client.access.issueKey(...)` once
 ## Errors
 
 All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`) — surface as a single `MemoryApiError` with `httpStatus`, `rpcCode`, and `data`/`toolError` fields depending on where the failure occurred.
+
+## See also
+
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 74 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](../memory-python) (Python) · [`mcpscraper-cli`](../cli)

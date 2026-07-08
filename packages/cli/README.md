@@ -91,3 +91,7 @@ $ mcpscraper map https://example.com --json
   "urls": ["https://example.com/", "https://example.com/about"]
 }
 ```
+
+## See also
+
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) · [`mcpscraper-memory-sdk`](../memory) · Python: [`mcpscraper-sdk`](../scraper-python) · [`mcpscraper-memory-sdk`](../memory-python)

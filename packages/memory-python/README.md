@@ -40,3 +40,7 @@ If you already have an `mcpscraper.dev` API key and don't want to provision a se
 ```bash
 python scripts/generate_models.py
 ```
+
+## See also
+
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](../scraper-python) (Python, also reaches these 74 tools via a scraper key) · [`mcpscraper-cli`](../cli)

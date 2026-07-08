@@ -79,3 +79,7 @@ uv run datamodel-codegen \
   --target-python-version 3.10 \
   --disable-timestamp
 ```
+
+## See also
+
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk` on npm](../scraper) (Node, full `memory_tools` typed surface) · [`mcpscraper-memory-sdk` on PyPI](../memory-python) · [`mcpscraper-cli`](../cli)
