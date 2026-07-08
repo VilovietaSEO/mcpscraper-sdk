@@ -773,6 +773,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/memory/mcp-call": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Call one memory.mcpscraper.dev tool by name, using this account's mcpscraper.dev API key
+         * @description Generic dispatch: names one of the 74 tools documented in this repo's
+         *     `contracts/memory.tools.json` and forwards `args` to it, using a memory identity
+         *     auto-provisioned for the calling mcpscraper.dev account. The response shape depends
+         *     entirely on which tool was called — see that tool's `outputSchema` in the manifest.
+         *     Tool-level failures come back as HTTP 200 with `{ "ok": false, "error": "..." }`
+         *     rather than a non-2xx status; SDK clients built on this endpoint should treat that the
+         *     same as a thrown error.
+         */
+        post: operations["callMemoryTool"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -940,12 +966,35 @@ export interface components {
             media?: {
                 [key: string]: unknown;
             } | null;
-            /** @description Present when depositToVault was true. */
-            memory?: {
-                [key: string]: unknown;
-            } | null;
+            memory?: components["schemas"]["VaultDepositResult"];
         } & {
             [key: string]: unknown;
+        };
+        /**
+         * @description Present on ExtractUrlResponse only when the request set depositToVault: true.
+         *     Result of depositing a scrape into the caller's mcp-memory vault. Falls back to a
+         *     temporary downloadable file (`fileUrl`, expires in 24h) if the vault deposit itself
+         *     fails, so the content is never silently lost.
+         */
+        VaultDepositResult: {
+            /** @description True if the content was embedded into the vault. */
+            deposited: boolean;
+            /** @description The vault handle deposited into. */
+            vault?: string;
+            noteId?: string;
+            /** @description Note path within the vault, addressable via mcpscraper-memory-sdk. */
+            path?: string;
+            /** @description Number of embedded chunks created. */
+            chunks?: number;
+            /** @description Present when deposited is false. */
+            error?: string;
+            /** @description Fallback download URL, only present when the vault deposit failed. */
+            fileUrl?: string;
+            /**
+             * Format: date-time
+             * @description Fallback file expiry, only present alongside fileUrl.
+             */
+            fileExpiresAt?: string;
         };
         MapUrlsRequest: {
             /** Format: uri */
@@ -1294,6 +1343,25 @@ export interface components {
             timezone?: string;
             webhook_url?: string | null;
             next_run_at?: string | null;
+        };
+        CallMemoryToolRequest: {
+            /** @description A tool name from contracts/memory.tools.json, e.g. "memory-search". */
+            toolName: string;
+            /**
+             * @description The named tool's input, matching its inputSchema in memory.tools.json.
+             * @default {}
+             */
+            args: {
+                [key: string]: unknown;
+            };
+        };
+        /** @description Shape depends on the tool called — see its outputSchema in memory.tools.json. */
+        CallMemoryToolResponse: {
+            ok?: boolean;
+            /** @description Present when ok is false. */
+            error?: string;
+        } & {
+            [key: string]: unknown;
         };
     };
     responses: {
@@ -2907,6 +2975,40 @@ export interface operations {
             404: components["responses"]["NotFound"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
+        };
+    };
+    callMemoryTool: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CallMemoryToolRequest"];
+            };
+        };
+        responses: {
+            /** @description Whatever the named tool returns, or `{ok: false, error}` on tool-level failure. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CallMemoryToolResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            /** @description Memory identity could not be provisioned or reached. */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Error"];
+                };
+            };
         };
     };
 }

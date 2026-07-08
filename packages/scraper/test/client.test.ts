@@ -120,3 +120,51 @@ test('namespaced methods hit the right path', async () => {
   await client.workflows.getRun('run_123')
   assert.equal(capturedUrl, 'https://mcpscraper.dev/workflows/runs/run_123')
 })
+
+test('extractUrl with depositToVault returns a memory field', async () => {
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    const sentBody = JSON.parse(String(init?.body))
+    assert.equal(sentBody.depositToVault, true)
+    assert.equal(sentBody.vaultName, 'research')
+    return jsonResponse(200, {
+      title: 'Example',
+      bodyMarkdown: '# Example',
+      memory: { deposited: true, vault: 'research', noteId: 'note_1', path: 'research/example.md', chunks: 3 },
+    })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  const result = await client.extractUrl({ url: 'https://example.com', depositToVault: true, vaultName: 'research' })
+  assert.equal(result.memory?.deposited, true)
+  assert.equal(result.memory?.noteId, 'note_1')
+})
+
+test('memoryTools dispatches through /memory/mcp-call with toolName and args', async () => {
+  let capturedUrl = ''
+  let capturedBody: unknown
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    capturedUrl = String(url)
+    capturedBody = JSON.parse(String(init?.body))
+    return jsonResponse(200, { ok: true, results: [{ text: 'a fact', source: 'note:roofing.md', score: 0.9 }] })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  const result = await client.memoryTools.memory.search({ query: 'roofing warranty terms' } as never)
+
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/memory/mcp-call')
+  assert.equal((capturedBody as { toolName: string }).toolName, 'memory-search')
+  assert.deepEqual((capturedBody as { args: unknown }).args, { query: 'roofing warranty terms' })
+  assert.equal((result as { ok: boolean }).ok, true)
+})
+
+test('memoryTools throws ScraperApiError on a tool-level {ok:false} result', async () => {
+  const fetchImpl = async () => jsonResponse(200, { ok: false, error: 'vault not found' })
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+
+  await assert.rejects(
+    () => client.memoryTools.vaults.listVaults({} as never),
+    (err: unknown) => {
+      assert.ok(err instanceof ScraperApiError)
+      assert.equal(err.message, 'vault not found')
+      return true
+    },
+  )
+})

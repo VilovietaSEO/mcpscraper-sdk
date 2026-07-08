@@ -1,5 +1,21 @@
 import type { operations } from './schema.js'
 import { ScraperApiError } from './errors.js'
+import {
+  AccessNamespace,
+  CaptureNamespace,
+  ChannelsNamespace,
+  FactsNamespace,
+  LibraryNamespace,
+  MemoryNamespace as MemoryToolNamespace,
+  RecallNamespace,
+  ScheduleNamespace,
+  StorageNamespace,
+  TablesNamespace,
+  VaultsNamespace,
+  VideoNamespace as MemoryVideoNamespace,
+  WebhooksNamespace,
+  type CallToolFn,
+} from 'mcpscraper-memory-sdk'
 
 type OperationId = keyof operations
 
@@ -202,6 +218,38 @@ class WorkflowsNamespace {
   }
 }
 
+class MemoryTools {
+  readonly access: AccessNamespace
+  readonly capture: CaptureNamespace
+  readonly channels: ChannelsNamespace
+  readonly facts: FactsNamespace
+  readonly library: LibraryNamespace
+  readonly memory: MemoryToolNamespace
+  readonly recall: RecallNamespace
+  readonly schedule: ScheduleNamespace
+  readonly storage: StorageNamespace
+  readonly tables: TablesNamespace
+  readonly vaults: VaultsNamespace
+  readonly video: MemoryVideoNamespace
+  readonly webhooks: WebhooksNamespace
+
+  constructor(callTool: CallToolFn) {
+    this.access = new AccessNamespace(callTool)
+    this.capture = new CaptureNamespace(callTool)
+    this.channels = new ChannelsNamespace(callTool)
+    this.facts = new FactsNamespace(callTool)
+    this.library = new LibraryNamespace(callTool)
+    this.memory = new MemoryToolNamespace(callTool)
+    this.recall = new RecallNamespace(callTool)
+    this.schedule = new ScheduleNamespace(callTool)
+    this.storage = new StorageNamespace(callTool)
+    this.tables = new TablesNamespace(callTool)
+    this.vaults = new VaultsNamespace(callTool)
+    this.video = new MemoryVideoNamespace(callTool)
+    this.webhooks = new WebhooksNamespace(callTool)
+  }
+}
+
 export class ScraperClient {
   private readonly r: Requester
 
@@ -216,6 +264,7 @@ export class ScraperClient {
   readonly directory: DirectoryNamespace
   readonly serpIntelligence: SerpIntelligenceNamespace
   readonly workflows: WorkflowsNamespace
+  readonly memoryTools: MemoryTools
 
   constructor(options: ScraperClientOptions) {
     this.r = new Requester(options.apiKey, options.baseUrl ?? 'https://mcpscraper.dev', options.fetch ?? globalThis.fetch)
@@ -230,6 +279,19 @@ export class ScraperClient {
     this.directory = new DirectoryNamespace(this.r)
     this.serpIntelligence = new SerpIntelligenceNamespace(this.r)
     this.workflows = new WorkflowsNamespace(this.r)
+    this.memoryTools = new MemoryTools(this.callMemoryTool.bind(this))
+  }
+
+  private async callMemoryTool(toolName: string, args: unknown): Promise<unknown> {
+    const result = await this.r.call<'callMemoryTool'>('POST', '/memory/mcp-call', {
+      toolName,
+      args: (args ?? {}) as Record<string, unknown>,
+    })
+    if (result && typeof result === 'object' && (result as Record<string, unknown>).ok === false) {
+      const failure = result as Record<string, unknown>
+      throw new ScraperApiError(200, { message: failure.error, ...failure })
+    }
+    return result
   }
 
   searchSerp(params: Omit<RequestBodyOf<'harvestSync'>, 'serpOnly'>) {

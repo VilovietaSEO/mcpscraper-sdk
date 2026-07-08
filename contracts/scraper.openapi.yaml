@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: mcpscraper.dev API
-  version: "1.0.0"
+  version: "1.1.0"
   description: |
     Public REST contract for mcpscraper.dev — web intelligence (SERP, People-Also-Ask,
     site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video
@@ -44,6 +44,13 @@ tags:
     description: Multi-step SEO workflow runs, schedules, and artifacts.
   - name: SerpIntelligence
     description: Structured SERP capture with AI Overview/AI Mode detection and optional page snapshots.
+  - name: Memory
+    description: |
+      Invoke any of the memory.mcpscraper.dev tools using only your mcpscraper.dev API key —
+      no separate `mk_...` memory key needed. mcpscraper.dev auto-provisions a memory identity
+      for your account on first call. See `mcpscraper-memory-sdk`'s tool manifest
+      (`contracts/memory.tools.json` in this repo) for the full set of tool names and their
+      per-tool input/output shapes; this single endpoint dispatches to whichever tool you name.
 
 paths:
   /harvest/sync:
@@ -1053,6 +1060,35 @@ paths:
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
 
+  /memory/mcp-call:
+    post:
+      tags: [Memory]
+      operationId: callMemoryTool
+      summary: Call one memory.mcpscraper.dev tool by name, using this account's mcpscraper.dev API key
+      description: |
+        Generic dispatch: names one of the 74 tools documented in this repo's
+        `contracts/memory.tools.json` and forwards `args` to it, using a memory identity
+        auto-provisioned for the calling mcpscraper.dev account. The response shape depends
+        entirely on which tool was called — see that tool's `outputSchema` in the manifest.
+        Tool-level failures come back as HTTP 200 with `{ "ok": false, "error": "..." }`
+        rather than a non-2xx status; SDK clients built on this endpoint should treat that the
+        same as a thrown error.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CallMemoryToolRequest' }
+      responses:
+        '200':
+          description: "Whatever the named tool returns, or `{ok: false, error}` on tool-level failure."
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/CallMemoryToolResponse' } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '502':
+          description: Memory identity could not be provisioned or reached.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/Error' } }
+
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -1209,8 +1245,26 @@ components:
           properties: { base64: { type: string }, sizeBytes: { type: integer }, device: { type: string } }
         branding: { type: object, additionalProperties: true, nullable: true }
         media: { type: object, additionalProperties: true, nullable: true }
-        memory: { type: object, additionalProperties: true, nullable: true, description: 'Present when depositToVault was true.' }
+        memory: { $ref: '#/components/schemas/VaultDepositResult' }
       additionalProperties: true
+
+    VaultDepositResult:
+      type: object
+      description: |
+        Present on ExtractUrlResponse only when the request set depositToVault: true.
+        Result of depositing a scrape into the caller's mcp-memory vault. Falls back to a
+        temporary downloadable file (`fileUrl`, expires in 24h) if the vault deposit itself
+        fails, so the content is never silently lost.
+      properties:
+        deposited:     { type: boolean, description: 'True if the content was embedded into the vault.' }
+        vault:         { type: string, description: 'The vault handle deposited into.' }
+        noteId:        { type: string }
+        path:          { type: string, description: 'Note path within the vault, addressable via mcpscraper-memory-sdk.' }
+        chunks:        { type: integer, description: 'Number of embedded chunks created.' }
+        error:         { type: string, description: 'Present when deposited is false.' }
+        fileUrl:       { type: string, description: 'Fallback download URL, only present when the vault deposit failed.' }
+        fileExpiresAt: { type: string, format: date-time, description: 'Fallback file expiry, only present alongside fileUrl.' }
+      required: [deposited]
 
     MapUrlsRequest:
       type: object
@@ -1527,3 +1581,18 @@ components:
         timezone: { type: string }
         webhook_url: { type: string, nullable: true }
         next_run_at: { type: string, nullable: true }
+
+    CallMemoryToolRequest:
+      type: object
+      required: [toolName]
+      properties:
+        toolName: { type: string, description: 'A tool name from contracts/memory.tools.json, e.g. "memory-search".' }
+        args: { type: object, additionalProperties: true, default: {}, description: "The named tool's input, matching its inputSchema in memory.tools.json." }
+
+    CallMemoryToolResponse:
+      type: object
+      description: Shape depends on the tool called — see its outputSchema in memory.tools.json.
+      properties:
+        ok: { type: boolean }
+        error: { type: string, description: 'Present when ok is false.' }
+      additionalProperties: true
