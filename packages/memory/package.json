@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-memory-sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Official TypeScript/JavaScript client for the memory.mcpscraper.dev hosted memory API",
   "license": "MIT",
   "type": "module",

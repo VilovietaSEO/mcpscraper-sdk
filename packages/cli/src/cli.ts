@@ -171,7 +171,7 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
       })
     })
 
-  const memory = program.command('memory').description('Memory tools, dispatched through your mcpscraper.dev API key (see mcpscraper-memory-sdk for the full 74-tool surface)')
+  const memory = program.command('memory').description('Memory tools, dispatched through your mcpscraper.dev API key (see mcpscraper-memory-sdk for the full 85-tool surface)')
 
   memory
     .command('search <query>')

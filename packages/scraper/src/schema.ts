@@ -784,7 +784,7 @@ export interface paths {
         put?: never;
         /**
          * Call one memory.mcpscraper.dev tool by name, using this account's mcpscraper.dev API key
-         * @description Generic dispatch: names one of the 74 tools documented in this repo's
+         * @description Generic dispatch: names one of the 85 tools documented in this repo's
          *     `contracts/memory.tools.json` and forwards `args` to it, using a memory identity
          *     auto-provisioned for the calling mcpscraper.dev account. The response shape depends
          *     entirely on which tool was called — see that tool's `outputSchema` in the manifest.

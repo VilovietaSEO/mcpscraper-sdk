@@ -20,5 +20,5 @@ class RecordFactOutput(BaseModel):
 
     ok: bool = Field(..., alias="ok", description="True when the fact was recorded (whether or not it superseded one); false on auth/scope/validation error.")
     fact: dict[str, Any] | None = Field(None, alias="fact", description="The new (or refreshed) active fact. Present when ok is true.")
-    superseded: Any | None = Field(None, alias="superseded", description="The previously-active fact that this one replaced, with its resolution/precedence. Absent on an idempotent no-op or first assertion.")
+    superseded: dict[str, Any] | None = Field(None, alias="superseded", description="The previously-active fact that this one replaced, with its resolution/precedence. Absent on an idempotent no-op or first assertion.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")

@@ -83,54 +83,53 @@ export interface Output {
      */
     updatedAt: string;
   };
-  superseded?: Fact;
+  /**
+   * The previously-active fact that this one replaced, with its resolution/precedence. Absent on an idempotent no-op or first assertion.
+   */
+  superseded?: {
+    /**
+     * Stable id of the fact.
+     */
+    id: string;
+    /**
+     * Canonical subject key the fact is about (lowercased/trimmed).
+     */
+    subject: string;
+    /**
+     * The asserted value/conclusion.
+     */
+    value: string;
+    /**
+     * Where the fact came from (chat / library:… / tool / user).
+     */
+    source: string;
+    /**
+     * Salience/confidence 0..1 recorded on write.
+     */
+    confidence: number;
+    /**
+     * "active" for the current truth, "superseded" once replaced.
+     */
+    status: "active" | "superseded";
+    /**
+     * Why this fact was superseded; null while active.
+     */
+    resolution: string | null;
+    /**
+     * Which policy decided supersession (recency/source-priority/intent-aware); null while active.
+     */
+    precedence: string | null;
+    /**
+     * ISO-8601 creation timestamp.
+     */
+    createdAt: string;
+    /**
+     * ISO-8601 last-update timestamp.
+     */
+    updatedAt: string;
+  };
   /**
    * Human-readable failure reason when ok is false.
    */
   error?: string;
-}
-/**
- * The previously-active fact that this one replaced, with its resolution/precedence. Absent on an idempotent no-op or first assertion.
- */
-export interface Fact {
-  /**
-   * Stable id of the fact.
-   */
-  id: string;
-  /**
-   * Canonical subject key the fact is about (lowercased/trimmed).
-   */
-  subject: string;
-  /**
-   * The asserted value/conclusion.
-   */
-  value: string;
-  /**
-   * Where the fact came from (chat / library:… / tool / user).
-   */
-  source: string;
-  /**
-   * Salience/confidence 0..1 recorded on write.
-   */
-  confidence: number;
-  /**
-   * "active" for the current truth, "superseded" once replaced.
-   */
-  status: "active" | "superseded";
-  /**
-   * Why this fact was superseded; null while active.
-   */
-  resolution: string | null;
-  /**
-   * Which policy decided supersession (recency/source-priority/intent-aware); null while active.
-   */
-  precedence: string | null;
-  /**
-   * ISO-8601 creation timestamp.
-   */
-  createdAt: string;
-  /**
-   * ISO-8601 last-update timestamp.
-   */
-  updatedAt: string;
 }

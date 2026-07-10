@@ -1,6 +1,6 @@
 # mcpscraper-sdk
 
-Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: search, vaults, tables, scheduled actions, and more — 74 tools).
+Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 85 tools).
 
 These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. Four ways in: **Node.js**, **Python**, **cURL**, and a **CLI**.
 
@@ -278,7 +278,7 @@ Sample output (real, captured live):
 
 ### Memory search, using only your scraper key
 
-Every one of memory.mcpscraper.dev's 74 tools (search, vaults, tables, scheduled actions, webhooks, and more — see [`contracts/memory.tools.json`](./contracts/memory.tools.json)) is callable from `mcpscraper-sdk` alone, dispatched through `POST /memory/mcp-call`. mcpscraper.dev auto-provisions a memory identity for your account on first use — no separate `mk_...` key required.
+Every one of memory.mcpscraper.dev's 85 tools (governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, webhooks, and more — see [`contracts/memory.tools.json`](./contracts/memory.tools.json)) is callable from `mcpscraper-sdk` alone, dispatched through `POST /memory/mcp-call`. mcpscraper.dev auto-provisions a memory identity for your account on first use — no separate `mk_...` key required.
 
 <details open><summary>Node.js</summary>
 
@@ -327,7 +327,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-Want the full 74-tool surface with per-tool typed methods instead of a generic `call_tool`/`toolName` dispatch? Use [`mcpscraper-memory-sdk`](./packages/memory) (Node — full typed parity) or [`mcpscraper-memory-sdk` on PyPI](./packages/memory-python) (Python — full typed parity) directly with your own memory key: `client.memory.search(...)`, `client.vaults.listVaults(...)`, etc. mcpscraper-sdk's Python `memory_tools` is currently a generic passthrough only (not yet the full typed namespace the Node SDK has) — see [`packages/scraper-python`](./packages/scraper-python) for that scope note.
+Want the full 85-tool surface with per-tool typed methods instead of a generic `call_tool`/`toolName` dispatch? Use [`mcpscraper-memory-sdk`](./packages/memory) (Node — full typed parity) or [`mcpscraper-memory-sdk` on PyPI](./packages/memory-python) (Python — full typed parity) directly with your own memory key: `client.capture.prepareMemoryWrite(...)`, `client.tags.listMemoryTags(...)`, `client.graph.memoryGraphUniverse(...)`, etc. mcpscraper-sdk's Python `memory_tools` is currently a generic passthrough only (not yet the full typed namespace the Node SDK has) — see [`packages/scraper-python`](./packages/scraper-python) for that scope note.
 
 ## Errors
 
@@ -344,7 +344,7 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 ## Contracts
 
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 40 operations, hand-curated public REST contract for mcpscraper.dev. Source of truth for `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` (or any static file server) from the repo root, then open `http://localhost:<port>/docs/` — [`docs/index.html`](./docs/index.html) renders it via Redoc. It won't render from a plain `file://` URL (the browser blocks the relative YAML fetch via CORS); it needs to be served over HTTP.
-- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 74 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
+- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 85 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
 
 Both are hand-maintained, independent of either product's internal implementation — they only change when a public-facing shape changes, and both ship a drift-checking script (`npm run validate-contracts`) that diffs them against the live servers.
 

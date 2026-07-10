@@ -4,12 +4,14 @@ import {
   CaptureNamespace,
   ChannelsNamespace,
   FactsNamespace,
+  GraphNamespace,
   LibraryNamespace,
   MemoryNamespace,
   RecallNamespace,
   ScheduleNamespace,
   StorageNamespace,
   TablesNamespace,
+  TagsNamespace,
   VaultsNamespace,
   VideoNamespace,
   WebhooksNamespace,
@@ -43,12 +45,14 @@ export class MemoryClient {
   readonly capture: CaptureNamespace
   readonly channels: ChannelsNamespace
   readonly facts: FactsNamespace
+  readonly graph: GraphNamespace
   readonly library: LibraryNamespace
   readonly memory: MemoryNamespace
   readonly recall: RecallNamespace
   readonly schedule: ScheduleNamespace
   readonly storage: StorageNamespace
   readonly tables: TablesNamespace
+  readonly tags: TagsNamespace
   readonly vaults: VaultsNamespace
   readonly video: VideoNamespace
   readonly webhooks: WebhooksNamespace
@@ -68,12 +72,14 @@ export class MemoryClient {
     this.capture = new CaptureNamespace(callTool)
     this.channels = new ChannelsNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
+    this.graph = new GraphNamespace(callTool)
     this.library = new LibraryNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
     this.schedule = new ScheduleNamespace(callTool)
     this.storage = new StorageNamespace(callTool)
     this.tables = new TablesNamespace(callTool)
+    this.tags = new TagsNamespace(callTool)
     this.vaults = new VaultsNamespace(callTool)
     this.video = new VideoNamespace(callTool)
     this.webhooks = new WebhooksNamespace(callTool)

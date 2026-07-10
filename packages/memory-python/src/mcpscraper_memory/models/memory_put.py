@@ -12,7 +12,7 @@ class MemoryPutInput(BaseModel):
     share_id: str | None = Field(None, alias="shareId", description="Edit a note someone individually shared with you and you accepted (accept-share), by its shareId, instead of vault+path. Requires the share to grant edit permission, and baseRevision is mandatory (get the current revision first) since you are editing alongside the owner and possibly others.")
     title: str | None = Field(None, alias="title", description="Optional human-readable title; defaults are derived from the path when omitted.")
     content: str = Field(..., alias="content", description="The full note body to store and index for semantic search. Must be non-empty.")
-    props: dict[str, Any] | None = Field(None, alias="props", description="Obsidian note primitives (status, summary, tags, pinned, source_type, source_ref, related, related_vault_notes, embed, embed_priority, type, domain, folder). Stored on the note so it round-trips the vault shape; type/domain/folder also steer routing when no vault is given.")
+    props: dict[str, Any] | None = Field(None, alias="props", description="Obsidian note primitives plus vault-specific template fields. On edits, supplied fields patch the stored props instead of replacing the whole object; pass an empty array to deliberately clear a link list. Type/domain/folder also steer routing when no vault is given.")
     base_revision: float | None = Field(None, alias="baseRevision", description="Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes).")
 
 

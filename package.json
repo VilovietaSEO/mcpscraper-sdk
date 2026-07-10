@@ -18,7 +18,8 @@
     "test:python": "cd packages/scraper-python && uv run pytest && cd ../memory-python && uv run pytest",
     "validate-contracts": "tsx scripts/validate-contracts.ts",
     "smoke-test": "tsx scripts/smoke-test.ts",
-    "generate:memory": "tsx scripts/generate-memory-client.ts"
+    "generate:memory": "tsx scripts/generate-memory-client.ts",
+    "update:memory-contract": "tsx scripts/update-memory-manifest.ts"
   },
   "devDependencies": {
     "typescript": "^5.6.0",

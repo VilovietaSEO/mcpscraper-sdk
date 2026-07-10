@@ -32,15 +32,21 @@ from .models.get_chat_link import GetChatLinkInput, GetChatLinkOutput
 from .models.get_message_note import GetMessageNoteInput, GetMessageNoteOutput
 from .models.get_schedule_link import GetScheduleLinkInput, GetScheduleLinkOutput
 from .models.get_schedule_status import GetScheduleStatusInput, GetScheduleStatusOutput
+from .models.get_vault_contract import GetVaultContractInput, GetVaultContractOutput
 from .models.library_ingest import LibraryIngestInput, LibraryIngestOutput
 from .models.list_channel_members import ListChannelMembersInput, ListChannelMembersOutput
 from .models.list_channel_messages import ListChannelMessagesInput, ListChannelMessagesOutput
+from .models.list_memory_tags import ListMemoryTagsInput, ListMemoryTagsOutput
 from .models.list_scheduled_actions import ListScheduledActionsInput, ListScheduledActionsOutput
 from .models.list_shared_with_me import ListSharedWithMeInput, ListSharedWithMeOutput
 from .models.list_vaults import ListVaultsInput, ListVaultsOutput
 from .models.list_webhooks import ListWebhooksInput, ListWebhooksOutput
+from .models.memory_backlinks import MemoryBacklinksInput, MemoryBacklinksOutput
+from .models.memory_capture import MemoryCaptureInput, MemoryCaptureOutput
 from .models.memory_export import MemoryExportInput, MemoryExportOutput
 from .models.memory_get import MemoryGetInput, MemoryGetOutput
+from .models.memory_graph_path import MemoryGraphPathInput, MemoryGraphPathOutput
+from .models.memory_graph_universe import MemoryGraphUniverseInput, MemoryGraphUniverseOutput
 from .models.memory_list import MemoryListInput, MemoryListOutput
 from .models.memory_put import MemoryPutInput, MemoryPutOutput
 from .models.memory_questions import MemoryQuestionsInput, MemoryQuestionsOutput
@@ -51,16 +57,19 @@ from .models.my_mentions import MyMentionsInput, MyMentionsOutput
 from .models.pause_scheduled_action import PauseScheduledActionInput, PauseScheduledActionOutput
 from .models.poll_channel import PollChannelInput, PollChannelOutput
 from .models.post_message import PostMessageInput, PostMessageOutput
+from .models.prepare_memory_write import PrepareMemoryWriteInput, PrepareMemoryWriteOutput
 from .models.propose_scheduled_action import ProposeScheduledActionInput, ProposeScheduledActionOutput
 from .models.provision_defaults import ProvisionDefaultsInput, ProvisionDefaultsOutput
 from .models.react_message import ReactMessageInput, ReactMessageOutput
 from .models.record_fact import RecordFactInput, RecordFactOutput
 from .models.remove_channel_member import RemoveChannelMemberInput, RemoveChannelMemberOutput
 from .models.reply_message import ReplyMessageInput, ReplyMessageOutput
+from .models.resolve_memory_tags import ResolveMemoryTagsInput, ResolveMemoryTagsOutput
 from .models.resume_scheduled_action import ResumeScheduledActionInput, ResumeScheduledActionOutput
 from .models.revoke_chat_link import RevokeChatLinkInput, RevokeChatLinkOutput
 from .models.revoke_schedule_link import RevokeScheduleLinkInput, RevokeScheduleLinkOutput
 from .models.revoke_webhook import RevokeWebhookInput, RevokeWebhookOutput
+from .models.route_memory import RouteMemoryInput, RouteMemoryOutput
 from .models.set_agent_identity import SetAgentIdentityInput, SetAgentIdentityOutput
 from .models.set_schedule_entitlement import SetScheduleEntitlementInput, SetScheduleEntitlementOutput
 from .models.storage_usage import StorageUsageInput, StorageUsageOutput
@@ -72,6 +81,8 @@ from .models.table_insert_rows import TableInsertRowsInput, TableInsertRowsOutpu
 from .models.table_list import TableListInput, TableListOutput
 from .models.table_query import TableQueryInput, TableQueryOutput
 from .models.temporal_recall import TemporalRecallInput, TemporalRecallOutput
+from .models.upsert_memory_tag import UpsertMemoryTagInput, UpsertMemoryTagOutput
+from .models.validate_memory_write import ValidateMemoryWriteInput, ValidateMemoryWriteOutput
 from .models.video_analyze_start import VideoAnalyzeStartInput, VideoAnalyzeStartOutput
 from .models.video_analyze_status import VideoAnalyzeStatusInput, VideoAnalyzeStatusOutput
 
@@ -80,75 +91,25 @@ class AccessNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def accept_share(self, **kwargs: Any) -> AccessAcceptShareOutput:
-        payload = AccessAcceptShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("acceptShareTool", payload)
-        return AccessAcceptShareOutput.model_validate(result)
-
-    def approve_sender(self, **kwargs: Any) -> AccessApproveSenderOutput:
-        payload = AccessApproveSenderInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("approveSenderTool", payload)
-        return AccessApproveSenderOutput.model_validate(result)
-
-    def decline_share(self, **kwargs: Any) -> AccessDeclineShareOutput:
-        payload = AccessDeclineShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("declineShareTool", payload)
-        return AccessDeclineShareOutput.model_validate(result)
-
-    def inbox_settings(self, **kwargs: Any) -> AccessInboxSettingsOutput:
-        payload = AccessInboxSettingsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("inboxSettingsTool", payload)
-        return AccessInboxSettingsOutput.model_validate(result)
-
-    def invite_account(self, **kwargs: Any) -> AccessInviteAccountOutput:
-        payload = AccessInviteAccountInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("inviteAccountTool", payload)
-        return AccessInviteAccountOutput.model_validate(result)
-
     def issue_key(self, **kwargs: Any) -> AccessIssueKeyOutput:
         payload = AccessIssueKeyInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("issueKeyTool", payload)
         return AccessIssueKeyOutput.model_validate(result)
-
-    def list_approved_senders(self, **kwargs: Any) -> AccessListApprovedSendersOutput:
-        payload = AccessListApprovedSendersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("listApprovedSendersTool", payload)
-        return AccessListApprovedSendersOutput.model_validate(result)
 
     def list_keys(self, **kwargs: Any) -> AccessListKeysOutput:
         payload = AccessListKeysInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("listKeysTool", payload)
         return AccessListKeysOutput.model_validate(result)
 
-    def note_inbox(self, **kwargs: Any) -> AccessNoteInboxOutput:
-        payload = AccessNoteInboxInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("noteInboxTool", payload)
-        return AccessNoteInboxOutput.model_validate(result)
-
-    def remove_approved_sender(self, **kwargs: Any) -> AccessRemoveApprovedSenderOutput:
-        payload = AccessRemoveApprovedSenderInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("removeApprovedSenderTool", payload)
-        return AccessRemoveApprovedSenderOutput.model_validate(result)
-
     def revoke_key(self, **kwargs: Any) -> AccessRevokeKeyOutput:
         payload = AccessRevokeKeyInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("revokeKeyTool", payload)
         return AccessRevokeKeyOutput.model_validate(result)
 
-    def revoke_share(self, **kwargs: Any) -> AccessRevokeShareOutput:
-        payload = AccessRevokeShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("revokeShareTool", payload)
-        return AccessRevokeShareOutput.model_validate(result)
-
     def set_scope(self, **kwargs: Any) -> AccessSetScopeOutput:
         payload = AccessSetScopeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("setScopeTool", payload)
         return AccessSetScopeOutput.model_validate(result)
-
-    def share_note(self, **kwargs: Any) -> AccessShareNoteOutput:
-        payload = AccessShareNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("shareNoteTool", payload)
-        return AccessShareNoteOutput.model_validate(result)
 
     def share_vault(self, **kwargs: Any) -> AccessShareVaultOutput:
         payload = AccessShareVaultInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -160,15 +121,65 @@ class AccessNamespace:
         result = self._call_tool("swapVaultTool", payload)
         return AccessSwapVaultOutput.model_validate(result)
 
+    def invite_account(self, **kwargs: Any) -> AccessInviteAccountOutput:
+        payload = AccessInviteAccountInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("inviteAccountTool", payload)
+        return AccessInviteAccountOutput.model_validate(result)
+
     def switch_account(self, **kwargs: Any) -> AccessSwitchAccountOutput:
         payload = AccessSwitchAccountInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("switchAccountTool", payload)
         return AccessSwitchAccountOutput.model_validate(result)
 
+    def approve_sender(self, **kwargs: Any) -> AccessApproveSenderOutput:
+        payload = AccessApproveSenderInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("approveSenderTool", payload)
+        return AccessApproveSenderOutput.model_validate(result)
+
+    def remove_approved_sender(self, **kwargs: Any) -> AccessRemoveApprovedSenderOutput:
+        payload = AccessRemoveApprovedSenderInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("removeApprovedSenderTool", payload)
+        return AccessRemoveApprovedSenderOutput.model_validate(result)
+
+    def list_approved_senders(self, **kwargs: Any) -> AccessListApprovedSendersOutput:
+        payload = AccessListApprovedSendersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("listApprovedSendersTool", payload)
+        return AccessListApprovedSendersOutput.model_validate(result)
+
+    def inbox_settings(self, **kwargs: Any) -> AccessInboxSettingsOutput:
+        payload = AccessInboxSettingsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("inboxSettingsTool", payload)
+        return AccessInboxSettingsOutput.model_validate(result)
+
+    def share_note(self, **kwargs: Any) -> AccessShareNoteOutput:
+        payload = AccessShareNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("shareNoteTool", payload)
+        return AccessShareNoteOutput.model_validate(result)
+
+    def note_inbox(self, **kwargs: Any) -> AccessNoteInboxOutput:
+        payload = AccessNoteInboxInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("noteInboxTool", payload)
+        return AccessNoteInboxOutput.model_validate(result)
+
+    def accept_share(self, **kwargs: Any) -> AccessAcceptShareOutput:
+        payload = AccessAcceptShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("acceptShareTool", payload)
+        return AccessAcceptShareOutput.model_validate(result)
+
+    def decline_share(self, **kwargs: Any) -> AccessDeclineShareOutput:
+        payload = AccessDeclineShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("declineShareTool", payload)
+        return AccessDeclineShareOutput.model_validate(result)
+
     def unlink_share(self, **kwargs: Any) -> AccessUnlinkShareOutput:
         payload = AccessUnlinkShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("unlinkShareTool", payload)
         return AccessUnlinkShareOutput.model_validate(result)
+
+    def revoke_share(self, **kwargs: Any) -> AccessRevokeShareOutput:
+        payload = AccessRevokeShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("revokeShareTool", payload)
+        return AccessRevokeShareOutput.model_validate(result)
 
     def get_chat_link(self, **kwargs: Any) -> GetChatLinkOutput:
         payload = GetChatLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -195,6 +206,21 @@ class CaptureNamespace:
         result = self._call_tool("memoryQuestionsTool", payload)
         return MemoryQuestionsOutput.model_validate(result)
 
+    def prepare_memory_write(self, **kwargs: Any) -> PrepareMemoryWriteOutput:
+        payload = PrepareMemoryWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("prepareMemoryWriteTool", payload)
+        return PrepareMemoryWriteOutput.model_validate(result)
+
+    def validate_memory_write(self, **kwargs: Any) -> ValidateMemoryWriteOutput:
+        payload = ValidateMemoryWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("validateMemoryWriteTool", payload)
+        return ValidateMemoryWriteOutput.model_validate(result)
+
+    def memory_capture(self, **kwargs: Any) -> MemoryCaptureOutput:
+        payload = MemoryCaptureInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memoryCaptureTool", payload)
+        return MemoryCaptureOutput.model_validate(result)
+
 
 class ChannelsNamespace:
     def __init__(self, call_tool):
@@ -205,65 +231,85 @@ class ChannelsNamespace:
         result = self._call_tool("createChannelTool", payload)
         return CreateChannelOutput.model_validate(result)
 
-    def get_message_note(self, **kwargs: Any) -> GetMessageNoteOutput:
-        payload = GetMessageNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("getMessageNoteTool", payload)
-        return GetMessageNoteOutput.model_validate(result)
-
-    def list_channel_members(self, **kwargs: Any) -> ListChannelMembersOutput:
-        payload = ListChannelMembersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("listChannelMembersTool", payload)
-        return ListChannelMembersOutput.model_validate(result)
-
-    def list_channel_messages(self, **kwargs: Any) -> ListChannelMessagesOutput:
-        payload = ListChannelMessagesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("listChannelMessagesTool", payload)
-        return ListChannelMessagesOutput.model_validate(result)
-
-    def my_mentions(self, **kwargs: Any) -> MyMentionsOutput:
-        payload = MyMentionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("myMentionsTool", payload)
-        return MyMentionsOutput.model_validate(result)
-
-    def poll_channel(self, **kwargs: Any) -> PollChannelOutput:
-        payload = PollChannelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("pollChannelTool", payload)
-        return PollChannelOutput.model_validate(result)
-
     def post_message(self, **kwargs: Any) -> PostMessageOutput:
         payload = PostMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("postMessageTool", payload)
         return PostMessageOutput.model_validate(result)
-
-    def react_message(self, **kwargs: Any) -> ReactMessageOutput:
-        payload = ReactMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("reactMessageTool", payload)
-        return ReactMessageOutput.model_validate(result)
-
-    def remove_channel_member(self, **kwargs: Any) -> RemoveChannelMemberOutput:
-        payload = RemoveChannelMemberInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("removeChannelMemberTool", payload)
-        return RemoveChannelMemberOutput.model_validate(result)
 
     def reply_message(self, **kwargs: Any) -> ReplyMessageOutput:
         payload = ReplyMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("replyMessageTool", payload)
         return ReplyMessageOutput.model_validate(result)
 
+    def list_channel_messages(self, **kwargs: Any) -> ListChannelMessagesOutput:
+        payload = ListChannelMessagesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("listChannelMessagesTool", payload)
+        return ListChannelMessagesOutput.model_validate(result)
+
+    def react_message(self, **kwargs: Any) -> ReactMessageOutput:
+        payload = ReactMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("reactMessageTool", payload)
+        return ReactMessageOutput.model_validate(result)
+
+    def my_mentions(self, **kwargs: Any) -> MyMentionsOutput:
+        payload = MyMentionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("myMentionsTool", payload)
+        return MyMentionsOutput.model_validate(result)
+
+    def list_channel_members(self, **kwargs: Any) -> ListChannelMembersOutput:
+        payload = ListChannelMembersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("listChannelMembersTool", payload)
+        return ListChannelMembersOutput.model_validate(result)
+
+    def remove_channel_member(self, **kwargs: Any) -> RemoveChannelMemberOutput:
+        payload = RemoveChannelMemberInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("removeChannelMemberTool", payload)
+        return RemoveChannelMemberOutput.model_validate(result)
+
+    def poll_channel(self, **kwargs: Any) -> PollChannelOutput:
+        payload = PollChannelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("pollChannelTool", payload)
+        return PollChannelOutput.model_validate(result)
+
+    def get_message_note(self, **kwargs: Any) -> GetMessageNoteOutput:
+        payload = GetMessageNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("getMessageNoteTool", payload)
+        return GetMessageNoteOutput.model_validate(result)
+
 
 class FactsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
+
+    def record_fact(self, **kwargs: Any) -> RecordFactOutput:
+        payload = RecordFactInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("recordFactTool", payload)
+        return RecordFactOutput.model_validate(result)
 
     def history(self, **kwargs: Any) -> FactHistoryOutput:
         payload = FactHistoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("factHistoryTool", payload)
         return FactHistoryOutput.model_validate(result)
 
-    def record_fact(self, **kwargs: Any) -> RecordFactOutput:
-        payload = RecordFactInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("recordFactTool", payload)
-        return RecordFactOutput.model_validate(result)
+
+class GraphNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def memory_backlinks(self, **kwargs: Any) -> MemoryBacklinksOutput:
+        payload = MemoryBacklinksInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("noteBacklinksTool", payload)
+        return MemoryBacklinksOutput.model_validate(result)
+
+    def memory_graph_universe(self, **kwargs: Any) -> MemoryGraphUniverseOutput:
+        payload = MemoryGraphUniverseInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("graphUniverseTool", payload)
+        return MemoryGraphUniverseOutput.model_validate(result)
+
+    def memory_graph_path(self, **kwargs: Any) -> MemoryGraphPathOutput:
+        payload = MemoryGraphPathInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("graphPathTool", payload)
+        return MemoryGraphPathOutput.model_validate(result)
 
 
 class LibraryNamespace:
@@ -279,11 +325,6 @@ class LibraryNamespace:
 class MemoryNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
-
-    def delete_note(self, **kwargs: Any) -> DeleteNoteOutput:
-        payload = DeleteNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("deleteNoteTool", payload)
-        return DeleteNoteOutput.model_validate(result)
 
     def export(self, **kwargs: Any) -> MemoryExportOutput:
         payload = MemoryExportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -320,6 +361,11 @@ class MemoryNamespace:
         result = self._call_tool("uploadTool", payload)
         return MemoryUploadOutput.model_validate(result)
 
+    def delete_note(self, **kwargs: Any) -> DeleteNoteOutput:
+        payload = DeleteNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("deleteNoteTool", payload)
+        return DeleteNoteOutput.model_validate(result)
+
 
 class RecallNamespace:
     def __init__(self, call_tool):
@@ -340,21 +386,6 @@ class ScheduleNamespace:
         result = self._call_tool("createScheduledActionTool", payload)
         return CreateScheduledActionOutput.model_validate(result)
 
-    def delete_scheduled_action(self, **kwargs: Any) -> DeleteScheduledActionOutput:
-        payload = DeleteScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("deleteScheduledActionTool", payload)
-        return DeleteScheduledActionOutput.model_validate(result)
-
-    def get_schedule_link(self, **kwargs: Any) -> GetScheduleLinkOutput:
-        payload = GetScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("getScheduleLinkTool", payload)
-        return GetScheduleLinkOutput.model_validate(result)
-
-    def get_schedule_status(self, **kwargs: Any) -> GetScheduleStatusOutput:
-        payload = GetScheduleStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("getScheduleStatusTool", payload)
-        return GetScheduleStatusOutput.model_validate(result)
-
     def list_scheduled_actions(self, **kwargs: Any) -> ListScheduledActionsOutput:
         payload = ListScheduledActionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("listScheduledActionsTool", payload)
@@ -365,40 +396,55 @@ class ScheduleNamespace:
         result = self._call_tool("pauseScheduledActionTool", payload)
         return PauseScheduledActionOutput.model_validate(result)
 
-    def propose_scheduled_action(self, **kwargs: Any) -> ProposeScheduledActionOutput:
-        payload = ProposeScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("proposeScheduledActionTool", payload)
-        return ProposeScheduledActionOutput.model_validate(result)
-
     def resume_scheduled_action(self, **kwargs: Any) -> ResumeScheduledActionOutput:
         payload = ResumeScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("resumeScheduledActionTool", payload)
         return ResumeScheduledActionOutput.model_validate(result)
 
-    def revoke_schedule_link(self, **kwargs: Any) -> RevokeScheduleLinkOutput:
-        payload = RevokeScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("revokeScheduleLinkTool", payload)
-        return RevokeScheduleLinkOutput.model_validate(result)
+    def delete_scheduled_action(self, **kwargs: Any) -> DeleteScheduledActionOutput:
+        payload = DeleteScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("deleteScheduledActionTool", payload)
+        return DeleteScheduledActionOutput.model_validate(result)
 
     def set_schedule_entitlement(self, **kwargs: Any) -> SetScheduleEntitlementOutput:
         payload = SetScheduleEntitlementInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("setScheduleEntitlementTool", payload)
         return SetScheduleEntitlementOutput.model_validate(result)
 
+    def get_schedule_status(self, **kwargs: Any) -> GetScheduleStatusOutput:
+        payload = GetScheduleStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("getScheduleStatusTool", payload)
+        return GetScheduleStatusOutput.model_validate(result)
+
+    def propose_scheduled_action(self, **kwargs: Any) -> ProposeScheduledActionOutput:
+        payload = ProposeScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("proposeScheduledActionTool", payload)
+        return ProposeScheduledActionOutput.model_validate(result)
+
+    def get_schedule_link(self, **kwargs: Any) -> GetScheduleLinkOutput:
+        payload = GetScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("getScheduleLinkTool", payload)
+        return GetScheduleLinkOutput.model_validate(result)
+
+    def revoke_schedule_link(self, **kwargs: Any) -> RevokeScheduleLinkOutput:
+        payload = RevokeScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("revokeScheduleLinkTool", payload)
+        return RevokeScheduleLinkOutput.model_validate(result)
+
 
 class StorageNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def cost_usage(self, **kwargs: Any) -> CostUsageOutput:
-        payload = CostUsageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("costUsageTool", payload)
-        return CostUsageOutput.model_validate(result)
-
     def usage(self, **kwargs: Any) -> StorageUsageOutput:
         payload = StorageUsageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("storageUsageTool", payload)
         return StorageUsageOutput.model_validate(result)
+
+    def cost_usage(self, **kwargs: Any) -> CostUsageOutput:
+        payload = CostUsageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("costUsageTool", payload)
+        return CostUsageOutput.model_validate(result)
 
 
 class TablesNamespace:
@@ -410,40 +456,70 @@ class TablesNamespace:
         result = self._call_tool("createTableTool", payload)
         return TableCreateOutput.model_validate(result)
 
-    def delete_rows(self, **kwargs: Any) -> TableDeleteRowsOutput:
-        payload = TableDeleteRowsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("deleteTableRowsTool", payload)
-        return TableDeleteRowsOutput.model_validate(result)
+    def list(self, **kwargs: Any) -> TableListOutput:
+        payload = TableListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("listTablesTool", payload)
+        return TableListOutput.model_validate(result)
 
     def describe(self, **kwargs: Any) -> TableDescribeOutput:
         payload = TableDescribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("describeTableTool", payload)
         return TableDescribeOutput.model_validate(result)
 
-    def drop(self, **kwargs: Any) -> TableDropOutput:
-        payload = TableDropInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("dropTableTool", payload)
-        return TableDropOutput.model_validate(result)
-
     def insert_rows(self, **kwargs: Any) -> TableInsertRowsOutput:
         payload = TableInsertRowsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("insertTableRowsTool", payload)
         return TableInsertRowsOutput.model_validate(result)
-
-    def list(self, **kwargs: Any) -> TableListOutput:
-        payload = TableListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("listTablesTool", payload)
-        return TableListOutput.model_validate(result)
 
     def query(self, **kwargs: Any) -> TableQueryOutput:
         payload = TableQueryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("queryTableTool", payload)
         return TableQueryOutput.model_validate(result)
 
+    def delete_rows(self, **kwargs: Any) -> TableDeleteRowsOutput:
+        payload = TableDeleteRowsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("deleteTableRowsTool", payload)
+        return TableDeleteRowsOutput.model_validate(result)
+
+    def drop(self, **kwargs: Any) -> TableDropOutput:
+        payload = TableDropInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("dropTableTool", payload)
+        return TableDropOutput.model_validate(result)
+
+
+class TagsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def list_memory_tags(self, **kwargs: Any) -> ListMemoryTagsOutput:
+        payload = ListMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("listTagsTool", payload)
+        return ListMemoryTagsOutput.model_validate(result)
+
+    def resolve_memory_tags(self, **kwargs: Any) -> ResolveMemoryTagsOutput:
+        payload = ResolveMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("resolveTagsTool", payload)
+        return ResolveMemoryTagsOutput.model_validate(result)
+
+    def upsert_memory_tag(self, **kwargs: Any) -> UpsertMemoryTagOutput:
+        payload = UpsertMemoryTagInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("upsertTagTool", payload)
+        return UpsertMemoryTagOutput.model_validate(result)
+
 
 class VaultsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
+
+    def list_shared_with_me(self, **kwargs: Any) -> ListSharedWithMeOutput:
+        payload = ListSharedWithMeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("listSharedWithMeTool", payload)
+        return ListSharedWithMeOutput.model_validate(result)
+
+    def list_vaults(self, **kwargs: Any) -> ListVaultsOutput:
+        payload = ListVaultsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("listVaultsTool", payload)
+        return ListVaultsOutput.model_validate(result)
 
     def add_vault(self, **kwargs: Any) -> AddVaultOutput:
         payload = AddVaultInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -460,20 +536,20 @@ class VaultsNamespace:
         result = self._call_tool("deleteVaultTool", payload)
         return DeleteVaultOutput.model_validate(result)
 
-    def list_shared_with_me(self, **kwargs: Any) -> ListSharedWithMeOutput:
-        payload = ListSharedWithMeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("listSharedWithMeTool", payload)
-        return ListSharedWithMeOutput.model_validate(result)
-
-    def list_vaults(self, **kwargs: Any) -> ListVaultsOutput:
-        payload = ListVaultsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("listVaultsTool", payload)
-        return ListVaultsOutput.model_validate(result)
-
     def provision_defaults(self, **kwargs: Any) -> ProvisionDefaultsOutput:
         payload = ProvisionDefaultsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("provisionDefaultsTool", payload)
         return ProvisionDefaultsOutput.model_validate(result)
+
+    def get_vault_contract(self, **kwargs: Any) -> GetVaultContractOutput:
+        payload = GetVaultContractInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("getVaultContractTool", payload)
+        return GetVaultContractOutput.model_validate(result)
+
+    def route_memory(self, **kwargs: Any) -> RouteMemoryOutput:
+        payload = RouteMemoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("routeMemoryTool", payload)
+        return RouteMemoryOutput.model_validate(result)
 
 
 class VideoNamespace:

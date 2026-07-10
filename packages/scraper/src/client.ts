@@ -5,12 +5,14 @@ import {
   CaptureNamespace,
   ChannelsNamespace,
   FactsNamespace,
+  GraphNamespace,
   LibraryNamespace,
   MemoryNamespace as MemoryToolNamespace,
   RecallNamespace,
   ScheduleNamespace,
   StorageNamespace,
   TablesNamespace,
+  TagsNamespace,
   VaultsNamespace,
   VideoNamespace as MemoryVideoNamespace,
   WebhooksNamespace,
@@ -223,12 +225,14 @@ class MemoryTools {
   readonly capture: CaptureNamespace
   readonly channels: ChannelsNamespace
   readonly facts: FactsNamespace
+  readonly graph: GraphNamespace
   readonly library: LibraryNamespace
   readonly memory: MemoryToolNamespace
   readonly recall: RecallNamespace
   readonly schedule: ScheduleNamespace
   readonly storage: StorageNamespace
   readonly tables: TablesNamespace
+  readonly tags: TagsNamespace
   readonly vaults: VaultsNamespace
   readonly video: MemoryVideoNamespace
   readonly webhooks: WebhooksNamespace
@@ -238,12 +242,14 @@ class MemoryTools {
     this.capture = new CaptureNamespace(callTool)
     this.channels = new ChannelsNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
+    this.graph = new GraphNamespace(callTool)
     this.library = new LibraryNamespace(callTool)
     this.memory = new MemoryToolNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
     this.schedule = new ScheduleNamespace(callTool)
     this.storage = new StorageNamespace(callTool)
     this.tables = new TablesNamespace(callTool)
+    this.tags = new TagsNamespace(callTool)
     this.vaults = new VaultsNamespace(callTool)
     this.video = new MemoryVideoNamespace(callTool)
     this.webhooks = new WebhooksNamespace(callTool)

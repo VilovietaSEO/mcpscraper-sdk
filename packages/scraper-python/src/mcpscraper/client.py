@@ -210,7 +210,7 @@ class WorkflowsNamespace:
 
 
 class MemoryTools:
-    """Dispatches to any of the 74 memory.mcpscraper.dev tools via POST /memory/mcp-call,
+    """Dispatches to any of the 85 memory.mcpscraper.dev tools via POST /memory/mcp-call,
     using only this client's mcpscraper.dev API key. See contracts/memory.tools.json in the
     repo (or the mcpscraper-memory-sdk Python package, once published) for the full tool list
     and per-tool argument shapes - this is a generic call_tool(name, args) passthrough rather

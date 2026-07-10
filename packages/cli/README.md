@@ -2,7 +2,7 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-This is a **curated subset** of the full API — search, scrape, crawl, map, Maps search, and a couple of memory commands. It is not full API coverage. For every operation (40 scraper endpoints, 74 memory tools), use [`mcpscraper-sdk`](../scraper) and [`mcpscraper-memory-sdk`](../memory) directly.
+This is a **curated subset** of the full API — search, scrape, crawl, map, Maps search, and a couple of memory commands. It is not full API coverage. For every operation (40 scraper endpoints, 85 memory tools), use [`mcpscraper-sdk`](../scraper) and [`mcpscraper-memory-sdk`](../memory) directly.
 
 ## Install
 

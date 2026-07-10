@@ -28,7 +28,7 @@ export interface Input {
    */
   content: string;
   /**
-   * Obsidian note primitives (status, summary, tags, pinned, source_type, source_ref, related, related_vault_notes, embed, embed_priority, type, domain, folder). Stored on the note so it round-trips the vault shape; type/domain/folder also steer routing when no vault is given.
+   * Obsidian note primitives plus vault-specific template fields. On edits, supplied fields patch the stored props instead of replacing the whole object; pass an empty array to deliberately clear a link list. Type/domain/folder also steer routing when no vault is given.
    */
   props?: {
     /**
@@ -91,6 +91,7 @@ export interface Input {
      * Channel messages only: the path of the top-level message this is a reply to. Absent on top-level messages.
      */
     parentMessageId?: string;
+    [k: string]: unknown;
   };
   /**
    * Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes).

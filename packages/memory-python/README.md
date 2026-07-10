@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk (Python)
 
-Official Python client for the [memory.mcpscraper.dev](https://memory.mcpscraper.dev) hosted memory API — 74 tools across access/keys, channels, memory search/CRUD, tables, vaults, facts, schedule, webhooks, and video.
+Official Python client for the [memory.mcpscraper.dev](https://memory.mcpscraper.dev) hosted memory API — 85 tools across governed capture, tags, graph traversal, access/keys, channels, memory search/CRUD, tables, vaults, facts, schedule, webhooks, and video.
 
 This is a thin JSON-RPC client generated against [`../../contracts/memory.tools.json`](../../contracts/memory.tools.json), the public contract for the hosted API. It contains no product source — only typed request/response plumbing.
 
@@ -31,7 +31,7 @@ except MemoryApiError as err:
 
 ## Don't have a memory key?
 
-If you already have an `mcpscraper.dev` API key and don't want to provision a separate `mk_...` memory key, use `mcpscraper-sdk`'s `ScraperClient.memory_tools` instead — it exposes this exact same set of 74 tools, dispatched through your scraper API key.
+If you already have an `mcpscraper.dev` API key and don't want to provision a separate `mk_...` memory key, use `mcpscraper-sdk`'s `ScraperClient.memory_tools` instead — it exposes this exact same set of 85 tools, dispatched through your scraper API key.
 
 ## Regenerating models
 
@@ -43,4 +43,4 @@ python scripts/generate_models.py
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](../scraper-python) (Python, also reaches these 74 tools via a scraper key) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](../scraper-python) (Python, also reaches these 85 tools via a scraper key) · [`mcpscraper-cli`](../cli)

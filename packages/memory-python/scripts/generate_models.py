@@ -10,8 +10,8 @@ MODELS_DIR = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "models"
 CLIENT_GENERATED_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_generated_client.py"
 
 CATEGORIES = [
-    "access", "capture", "channels", "facts", "library", "memory", "recall",
-    "schedule", "storage", "tables", "vaults", "video", "webhooks",
+    "access", "capture", "channels", "facts", "graph", "library", "memory", "recall",
+    "schedule", "storage", "tables", "tags", "vaults", "video", "webhooks",
 ]
 
 
