@@ -6,6 +6,7 @@ from urllib.parse import quote
 import requests
 
 from .errors import ScraperApiError
+from .mcp_client import McpToolsClient
 
 JsonDict = dict[str, Any]
 
@@ -229,7 +230,9 @@ class MemoryTools:
 
 class ScraperClient:
     def __init__(self, api_key: str, base_url: str = "https://mcpscraper.dev", session: Optional[requests.Session] = None) -> None:
-        self._r = _Requester(api_key, base_url, session or requests.Session())
+        active_session = session or requests.Session()
+        self._r = _Requester(api_key, base_url, active_session)
+        self.tools = McpToolsClient(api_key, base_url, active_session)
         self.youtube = YoutubeNamespace(self._r)
         self.screenshot = ScreenshotNamespace(self._r)
         self.facebook = FacebookNamespace(self._r)

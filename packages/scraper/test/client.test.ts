@@ -168,3 +168,22 @@ test('memoryTools throws ScraperApiError on a tool-level {ok:false} result', asy
     },
   )
 })
+
+test('tools exposes typed access to scraper and memory MCP tools', async () => {
+  const calls: Array<{ url: string; body: any }> = []
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    const body = JSON.parse(String(init?.body))
+    calls.push({ url: String(url), body })
+    return jsonResponse(200, {
+      jsonrpc: '2.0',
+      id: body.id,
+      result: { structuredContent: { ok: true } },
+    })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  await client.tools.browser.listSessions({})
+  await client.tools.memory.search({ query: 'vault routing' })
+
+  assert.deepEqual(calls.map(call => call.url), ['https://mcpscraper.dev/mcp', 'https://mcpscraper.dev/mcp'])
+  assert.deepEqual(calls.map(call => call.body.params.name), ['browser_list_sessions', 'memory-search'])
+})

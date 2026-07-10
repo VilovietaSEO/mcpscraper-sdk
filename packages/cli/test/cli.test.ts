@@ -130,3 +130,41 @@ test('an API error prints a clean message instead of a stack trace', async () =>
   assert.equal(process.exitCode, 1)
   process.exitCode = originalExitCode
 })
+
+test('tools list exposes the complete 145-tool CLI catalog', async () => {
+  const capture = captureLogs()
+  try {
+    await createProgram().parseAsync(['node', 'mcpscraper', 'tools', 'list', '--json'])
+  } finally {
+    capture.restore()
+  }
+  const catalog = JSON.parse(capture.logs.join('')) as Array<{ name: string }>
+  assert.equal(catalog.length, 145)
+  assert.equal(new Set(catalog.map(tool => tool.name)).size, 145)
+})
+
+test('tools call dispatches any catalog tool through unified MCP JSON-RPC', async () => {
+  let capturedUrl = ''
+  let capturedBody: Record<string, any> = {}
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    capturedUrl = String(url)
+    capturedBody = JSON.parse(String(init?.body))
+    return jsonResponse(200, {
+      jsonrpc: '2.0',
+      id: capturedBody.id,
+      result: { structuredContent: { ok: true, vaults: [] } },
+    })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'tools', 'call', 'list-vaults', '--args', '{}', '--json',
+    ])
+  } finally {
+    capture.restore()
+  }
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/mcp')
+  assert.equal(capturedBody.method, 'tools/call')
+  assert.equal(capturedBody.params.name, 'list-vaults')
+  assert.equal(JSON.parse(capture.logs.join('')).ok, true)
+})

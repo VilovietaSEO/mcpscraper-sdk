@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk (Python)
 
-Official Python client for the [memory.mcpscraper.dev](https://memory.mcpscraper.dev) hosted memory API — 85 tools across governed capture, tags, graph traversal, access/keys, channels, memory search/CRUD, tables, vaults, facts, schedule, webhooks, and video.
+Official Python clients for all 145 unified [mcpscraper.dev](https://mcpscraper.dev) MCP tools plus the direct 85-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 This is a thin JSON-RPC client generated against [`../../contracts/memory.tools.json`](../../contracts/memory.tools.json), the public contract for the hosted API. It contains no product source — only typed request/response plumbing.
 
@@ -28,6 +28,8 @@ except MemoryApiError as err:
 ## Namespaces
 
 `client.access`, `client.capture`, `client.channels`, `client.facts`, `client.library`, `client.memory`, `client.recall`, `client.schedule`, `client.storage`, `client.tables`, `client.vaults`, `client.video`, `client.webhooks` — one method per tool, snake_case, typed with generated Pydantic models.
+
+Use `McpToolsClient(api_key="sk_...")` for all 145 unified tools; it has the same 30 generated namespaces as every other SDK package.
 
 ## Don't have a memory key?
 

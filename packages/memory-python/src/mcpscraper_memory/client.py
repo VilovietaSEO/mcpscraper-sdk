@@ -10,12 +10,14 @@ from ._generated_client import (
     CaptureNamespace,
     ChannelsNamespace,
     FactsNamespace,
+    GraphNamespace,
     LibraryNamespace,
     MemoryNamespace,
     RecallNamespace,
     ScheduleNamespace,
     StorageNamespace,
     TablesNamespace,
+    TagsNamespace,
     VaultsNamespace,
     VideoNamespace,
     WebhooksNamespace,
@@ -40,12 +42,14 @@ class MemoryClient:
         self.capture = CaptureNamespace(self._call_tool)
         self.channels = ChannelsNamespace(self._call_tool)
         self.facts = FactsNamespace(self._call_tool)
+        self.graph = GraphNamespace(self._call_tool)
         self.library = LibraryNamespace(self._call_tool)
         self.memory = MemoryNamespace(self._call_tool)
         self.recall = RecallNamespace(self._call_tool)
         self.schedule = ScheduleNamespace(self._call_tool)
         self.storage = StorageNamespace(self._call_tool)
         self.tables = TablesNamespace(self._call_tool)
+        self.tags = TagsNamespace(self._call_tool)
         self.vaults = VaultsNamespace(self._call_tool)
         self.video = VideoNamespace(self._call_tool)
         self.webhooks = WebhooksNamespace(self._call_tool)

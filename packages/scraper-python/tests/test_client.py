@@ -4,6 +4,7 @@ import pytest
 import responses
 
 from mcpscraper import ScraperClient, ScraperApiError
+from mcpscraper._mcp_generated_client import MCP_TOOL_BINDINGS, MCP_TOOL_COUNT
 
 
 @responses.activate
@@ -194,3 +195,44 @@ def test_snake_case_kwargs_are_sent_as_camel_case():
     assert sent_body["depositToVault"] is True
     assert sent_body["vaultName"] == "research"
     assert "max_pages" not in sent_body
+
+
+def test_unified_bindings_contain_all_145_unique_tools():
+    assert MCP_TOOL_COUNT == 145
+    assert len({binding["name"] for binding in MCP_TOOL_BINDINGS}) == 145
+
+
+@responses.activate
+def test_typed_unified_tool_dispatches_through_mcp():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        json={"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": {"ok": True, "results": []}}},
+        status=200,
+    )
+    client = ScraperClient(api_key="sk_test")
+    result = client.tools.search.search_serp(query="roofers denver")
+    sent_body = json.loads(responses.calls[0].request.body)
+    assert sent_body["params"]["name"] == "search_serp"
+    assert sent_body["params"]["arguments"] == {"query": "roofers denver"}
+    assert result == {"ok": True, "results": []}
+
+
+@responses.activate
+def test_unified_tools_list_retries_transient_migration_failure():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        json={"error_code": "migration_failed"},
+        status=503,
+    )
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        json={"jsonrpc": "2.0", "id": 2, "result": {"tools": [{"name": "search_serp"}]}},
+        status=200,
+    )
+    client = ScraperClient(api_key="sk_test")
+    client.tools._retry_delay_s = 0
+    assert client.tools.list_tools()[0]["name"] == "search_serp"
+    assert len(responses.calls) == 2

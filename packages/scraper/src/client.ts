@@ -16,6 +16,7 @@ import {
   VaultsNamespace,
   VideoNamespace as MemoryVideoNamespace,
   WebhooksNamespace,
+  McpToolsClient,
   type CallToolFn,
 } from 'mcpscraper-memory-sdk'
 
@@ -271,6 +272,7 @@ export class ScraperClient {
   readonly serpIntelligence: SerpIntelligenceNamespace
   readonly workflows: WorkflowsNamespace
   readonly memoryTools: MemoryTools
+  readonly tools: McpToolsClient
 
   constructor(options: ScraperClientOptions) {
     this.r = new Requester(options.apiKey, options.baseUrl ?? 'https://mcpscraper.dev', options.fetch ?? globalThis.fetch)
@@ -286,6 +288,11 @@ export class ScraperClient {
     this.serpIntelligence = new SerpIntelligenceNamespace(this.r)
     this.workflows = new WorkflowsNamespace(this.r)
     this.memoryTools = new MemoryTools(this.callMemoryTool.bind(this))
+    this.tools = new McpToolsClient({
+      apiKey: options.apiKey,
+      baseUrl: options.baseUrl ?? 'https://mcpscraper.dev',
+      fetch: options.fetch,
+    })
   }
 
   private async callMemoryTool(toolName: string, args: unknown): Promise<unknown> {

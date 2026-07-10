@@ -5,6 +5,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.3.0 / mcpscraper-sdk 0.4.0 / Python SDKs 0.2.0 / mcpscraper-cli 0.2.0
+- Added one canonical live-derived `contracts/mcp.tools.json` contract for all 145 unified MCP tools.
+- Added generated, typed `McpToolsClient` namespaces with all 145 tools to both Node packages and both Python packages.
+- Added `ScraperClient.tools` in Node and Python while preserving REST convenience APIs and direct 85-tool Memory clients.
+- Added universal CLI discovery and invocation through `tools list`, `tools describe`, and `tools call`; all 145 wire names are reachable.
+- Added a generated complete cURL catalog and deterministic live/Node/Python/CLI/cURL 145/145 release gates.
+- Corrected the public REST operation count from 40 to 43.
+
 ## mcpscraper-cli 0.1.1
 - Fixed npm-installed CLI execution by resolving the `.bin` symlink before checking the module entrypoint.
 - Published the public CLI against `mcpscraper-sdk@0.3.0`.

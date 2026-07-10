@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "dist",
     "paths": {
-      "mcpscraper-sdk": ["../scraper/src/index.ts"]
+      "mcpscraper-sdk": ["../scraper/src/index.ts"],
+      "mcpscraper-memory-sdk": ["../memory/src/index.ts"]
     }
   },
   "include": ["src"]

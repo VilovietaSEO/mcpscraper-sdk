@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { realpathSync } from 'node:fs'
 import { ScraperClient, ScraperApiError } from 'mcpscraper-sdk'
 import { CLI_VERSION } from './version.js'
+import { MCP_TOOL_CATALOG, MCP_TOOL_COUNT } from './generated-tools.js'
 
 function printResult(result: unknown, json: boolean, summarize: (result: unknown) => void): void {
   if (json) {
@@ -11,6 +12,19 @@ function printResult(result: unknown, json: boolean, summarize: (result: unknown
   } else {
     summarize(result)
   }
+}
+
+function parseToolArgs(value: string): Record<string, unknown> {
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(value)
+  } catch (error) {
+    throw new Error(`--args must be valid JSON: ${error instanceof Error ? error.message : String(error)}`)
+  }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw new Error('--args must be a JSON object')
+  }
+  return parsed as Record<string, unknown>
 }
 
 async function run(fn: () => Promise<void>): Promise<void> {
@@ -44,7 +58,7 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
   const program = new Command()
   program
     .name('mcpscraper')
-    .description('CLI for mcpscraper.dev and memory.mcpscraper.dev — a curated subset of the full API, see mcpscraper-sdk for full coverage')
+    .description(`CLI for all ${MCP_TOOL_COUNT} mcpscraper.dev MCP tools plus ergonomic shortcuts`)
     .version(CLI_VERSION)
     .option('--api-key <key>', 'mcpscraper.dev API key (or set MCPSCRAPER_API_KEY)')
 
@@ -172,7 +186,7 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
       })
     })
 
-  const memory = program.command('memory').description('Memory tools, dispatched through your mcpscraper.dev API key (see mcpscraper-memory-sdk for the full 85-tool surface)')
+  const memory = program.command('memory').description('Ergonomic memory shortcuts; use tools list/call for the complete 145-tool surface')
 
   memory
     .command('search <query>')
@@ -201,6 +215,56 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
           const vaults = (r as { vaults?: Array<{ vault: string; role: string; notes: number }> }).vaults ?? []
           for (const v of vaults) console.log(`${v.vault} (${v.notes} notes, ${v.role})`)
         })
+      })
+    })
+
+  const tools = program
+    .command('tools')
+    .description(`Discover, inspect, and call every unified MCP tool (${MCP_TOOL_COUNT} total)`)
+
+  tools
+    .command('list')
+    .description('List the complete local 145-tool catalog')
+    .option('--category <name>', 'filter by SDK category')
+    .option('--json', 'print the complete catalog as JSON')
+    .action((opts: { category?: string; json?: boolean }) => {
+      const catalog = opts.category
+        ? MCP_TOOL_CATALOG.filter(tool => tool.category === opts.category)
+        : MCP_TOOL_CATALOG
+      if (opts.json) {
+        console.log(JSON.stringify(catalog, null, 2))
+        return
+      }
+      for (const tool of catalog) console.log(`${tool.name}\t${tool.category}\t${tool.title}`)
+      console.log(`\n${catalog.length}/${MCP_TOOL_COUNT} tools`)
+    })
+
+  tools
+    .command('describe <name>')
+    .description('Show a tool description, input schema, and safety annotations')
+    .action((name: string) => {
+      const tool = MCP_TOOL_CATALOG.find(entry => entry.name === name)
+      if (!tool) throw new Error(`Unknown tool "${name}". Run "mcpscraper tools list" for all ${MCP_TOOL_COUNT} names.`)
+      console.log(JSON.stringify(tool, null, 2))
+    })
+
+  tools
+    .command('call <name>')
+    .description('Call any of the 145 MCP tools by exact wire name')
+    .option('--args <json>', 'tool arguments as a JSON object', '{}')
+    .option('--yes', 'confirm a tool marked destructive')
+    .option('--json', 'print raw JSON')
+    .action(async (name: string, opts: { args: string; yes?: boolean; json?: boolean }, cmd: Command) => {
+      await run(async () => {
+        const tool = MCP_TOOL_CATALOG.find(entry => entry.name === name)
+        if (!tool) throw new Error(`Unknown tool "${name}". Run "mcpscraper tools list" for all ${MCP_TOOL_COUNT} names.`)
+        const annotations = tool.annotations as { destructiveHint?: boolean }
+        if (annotations.destructiveHint && !opts.yes) {
+          throw new Error(`Tool "${name}" is marked destructive. Re-run with --yes to confirm.`)
+        }
+        const result = await client(cmd).tools.callTool(name, parseToolArgs(opts.args))
+        if (opts.json || typeof result !== 'string') console.log(JSON.stringify(result, null, 2))
+        else console.log(result)
       })
     })
 

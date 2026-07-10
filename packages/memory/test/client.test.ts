@@ -2,6 +2,8 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { MemoryClient } from '../src/client.js'
 import { MemoryApiError } from '../src/errors.js'
+import { McpToolsClient } from '../src/mcp-client.js'
+import { MCP_TOOL_BINDINGS, MCP_TOOL_COUNT } from '../src/generated/mcp/methods.js'
 
 function fakeFetch(handler: (url: string, init: RequestInit) => { status: number; json: unknown }) {
   return (async (url: string | URL, init?: RequestInit) => {
@@ -120,4 +122,55 @@ test('a non-2xx HTTP response throws MemoryApiError with httpStatus set', async 
       return true
     },
   )
+})
+
+test('unified MCP bindings contain all 145 unique tools', () => {
+  assert.equal(MCP_TOOL_COUNT, 145)
+  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 145)
+})
+
+test('McpToolsClient typed methods call the unified MCP wire name', async () => {
+  let capturedUrl = ''
+  let capturedBody: any
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((url, init) => {
+      capturedUrl = url
+      capturedBody = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: capturedBody.id,
+          result: { structuredContent: { ok: true, results: [] } },
+        },
+      }
+    }),
+  })
+
+  const result = await client.search.searchSerp({ query: 'roofers denver' })
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/mcp')
+  assert.equal(capturedBody.method, 'tools/call')
+  assert.equal(capturedBody.params.name, 'search_serp')
+  assert.deepEqual(capturedBody.params.arguments, { query: 'roofers denver' })
+  assert.deepEqual(result, { ok: true, results: [] })
+})
+
+test('McpToolsClient safely retries transient tools/list failures', async () => {
+  let attempts = 0
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    listRetries: 1,
+    retryDelayMs: 0,
+    fetch: fakeFetch(() => {
+      attempts += 1
+      return attempts === 1
+        ? { status: 503, json: { error_code: 'migration_failed' } }
+        : { status: 200, json: { jsonrpc: '2.0', id: 2, result: { tools: [{ name: 'search_serp', inputSchema: {} }] } } }
+    }),
+  })
+
+  const tools = await client.listTools()
+  assert.equal(attempts, 2)
+  assert.equal(tools[0]?.name, 'search_serp')
 })

@@ -19,7 +19,10 @@
     "validate-contracts": "tsx scripts/validate-contracts.ts",
     "smoke-test": "tsx scripts/smoke-test.ts",
     "generate:memory": "tsx scripts/generate-memory-client.ts",
-    "update:memory-contract": "tsx scripts/update-memory-manifest.ts"
+    "update:memory-contract": "tsx scripts/update-memory-manifest.ts",
+    "update:mcp-contract": "tsx scripts/update-mcp-manifest.ts",
+    "generate:mcp": "tsx scripts/generate-mcp-client.ts && python3 scripts/generate-mcp-python.py",
+    "verify:parity": "npm run build --workspace=mcpscraper-memory-sdk && tsx scripts/verify-sdk-parity.ts && uv run --project packages/scraper-python python scripts/verify_sdk_parity.py"
   },
   "devDependencies": {
     "typescript": "^5.6.0",

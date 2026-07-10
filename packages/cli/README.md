@@ -2,7 +2,7 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-This is a **curated subset** of the full API — search, scrape, crawl, map, Maps search, and a couple of memory commands. It is not full API coverage. For every operation (40 scraper endpoints, 85 memory tools), use [`mcpscraper-sdk`](../scraper) and [`mcpscraper-memory-sdk`](../memory) directly.
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 145 unified MCP tools.
 
 ## Install
 
@@ -19,6 +19,16 @@ export MCPSCRAPER_API_KEY=sk_live_your_key
 or pass `--api-key <key>` on any command.
 
 ## Commands
+
+### Every MCP tool
+
+```bash
+mcpscraper tools list
+mcpscraper tools describe prepare-memory-write
+mcpscraper tools call prepare-memory-write --args '{"title":"Example","content":"..."}' --json
+```
+
+`tools list` contains exactly 145 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 ### `mcpscraper search <query>`
 

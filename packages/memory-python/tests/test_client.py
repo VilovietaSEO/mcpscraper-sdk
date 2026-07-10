@@ -3,7 +3,8 @@ import json
 import pytest
 import responses
 
-from mcpscraper_memory import MemoryClient, MemoryApiError
+from mcpscraper_memory import MemoryClient, MemoryApiError, McpToolsClient
+from mcpscraper_memory._mcp_generated_client import MCP_TOOL_BINDINGS, MCP_TOOL_COUNT
 
 BASE_URL = "https://memory.mcpscraper.dev"
 
@@ -99,3 +100,23 @@ def test_non_2xx_http_response_raises_memory_api_error():
     with pytest.raises(MemoryApiError) as exc_info:
         client.memory.search(query="x")
     assert exc_info.value.http_status == 500
+
+
+def test_unified_bindings_contain_all_145_unique_tools():
+    assert MCP_TOOL_COUNT == 145
+    assert len({binding["name"] for binding in MCP_TOOL_BINDINGS}) == 145
+
+
+@responses.activate
+def test_memory_package_unified_client_calls_scraper_and_memory_tools():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        json={"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": {"ok": True}}},
+        status=200,
+    )
+    client = McpToolsClient(api_key="sk_test")
+    result = client.browser.list_sessions()
+    sent_body = json.loads(responses.calls[0].request.body)
+    assert sent_body["params"]["name"] == "browser_list_sessions"
+    assert result == {"ok": True}

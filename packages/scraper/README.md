@@ -40,6 +40,13 @@ Every non-2xx response throws a `ScraperApiError` with `status`, `code`, and the
 
 ## API surface
 
+`client.tools` is the generated, typed 145-tool MCP surface. It includes every scraper, browser, workflow, artifact, billing, and memory tool from `contracts/mcp.tools.json`.
+
+```ts
+await client.tools.search.searchSerp({ query: 'roof repair Denver' })
+await client.tools.memory.search({ query: 'roofing warranty terms' })
+```
+
 Core operations are flat on the client: `searchSerp`, `harvestPaa`, `extractUrl`, `mapSiteUrls`, `extractSite`, `auditSite`, `getExtractSiteStatus`, `listJobs`, `getJob`, `getHistory`, `getLedger`.
 
 Everything else is namespaced by product area, matching the OpenAPI spec's tags: `client.youtube`, `client.screenshot`, `client.facebook`, `client.googleAds`, `client.instagram`, `client.reddit`, `client.video`, `client.maps`, `client.directory`, `client.serpIntelligence`, `client.workflows`.

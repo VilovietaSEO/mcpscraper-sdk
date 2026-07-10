@@ -1,13 +1,23 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript client for [memory.mcpscraper.dev](https://memory.mcpscraper.dev) — a hosted, per-user, multi-vault memory API (notes, search, tables, channels, scheduled actions, and more).
+Official TypeScript/JavaScript clients for all 145 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 85-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
-This is a thin client: every method sends a JSON-RPC 2.0 `tools/call` request to `/mcp` with your Bearer API key and parses the response. No memory/vault logic lives in this package — see [`contracts/memory.tools.json`](../../contracts/memory.tools.json) for the full contract this client is generated from.
+These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
 ## Install
 
 ```bash
 npm install mcpscraper-memory-sdk
+```
+
+For the complete unified surface, use the same `McpToolsClient` exported by every SDK package:
+
+```ts
+import { McpToolsClient } from 'mcpscraper-memory-sdk'
+
+const tools = new McpToolsClient({ apiKey: process.env.MCP_SCRAPER_API_KEY! })
+await tools.browser.listSessions()
+await tools.memory.search({ query: 'q3 roadmap decisions' })
 ```
 
 ## Quickstart
@@ -34,7 +44,7 @@ try {
 
 ## Namespaces
 
-Methods are grouped by category, matching [`contracts/memory.tools.json`](../../contracts/memory.tools.json): `client.memory` (get/list/put/search/suggest/export/upload/deleteNote), `client.vaults`, `client.access` (keys, shares, invites), `client.channels`, `client.tables`, `client.schedule`, `client.webhooks`, `client.facts`, `client.recall`, `client.storage`, `client.video`, `client.library`, `client.capture`.
+`MemoryClient` retains the direct 85-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 145 tools across 30 namespaces.
 
 Every method's input/output types are generated from the live tool schemas (see `src/generated/`, produced by `npm run generate` at the repo root from `contracts/memory.tools.json`) — no hand-maintained duplicate types to drift out of sync.
 
