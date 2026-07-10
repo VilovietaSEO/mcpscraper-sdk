@@ -5,6 +5,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-cli 0.1.1
+- Fixed npm-installed CLI execution by resolving the `.bin` symlink before checking the module entrypoint.
+- Published the public CLI against `mcpscraper-sdk@0.3.0`.
+- Removed the redundant direct memory SDK dependency; memory commands route through `mcpscraper-sdk`.
+- Corrected Python installation documentation to use working GitHub source-package URLs until PyPI publishing is configured.
+
 ## mcpscraper-memory-sdk 0.2.0
 - Expanded the generated client from 74 to 85 live memory tools.
 - Added governed capture (`prepareMemoryWrite`, `validateMemoryWrite`, `memoryCapture`), canonical tag operations, vault contracts/routing, and memory graph backlinks/universe/path namespaces.

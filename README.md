@@ -10,8 +10,8 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 |---|---|---|
 | Node.js — scraper | [`mcpscraper-sdk`](./packages/scraper) | `npm install mcpscraper-sdk` |
 | Node.js — memory | [`mcpscraper-memory-sdk`](./packages/memory) | `npm install mcpscraper-memory-sdk` |
-| Python — scraper | [`mcpscraper-sdk`](./packages/scraper-python) (PyPI) | `pip install mcpscraper-sdk` / `uv add mcpscraper-sdk` |
-| Python — memory | [`mcpscraper-memory-sdk`](./packages/memory-python) (PyPI) | `pip install mcpscraper-memory-sdk` |
+| Python — scraper | [`mcpscraper-sdk`](./packages/scraper-python) (source package) | `pip install "mcpscraper-sdk @ git+https://github.com/VilovietaSEO/mcpscraper-sdk.git#subdirectory=packages/scraper-python"` |
+| Python — memory | [`mcpscraper-memory-sdk`](./packages/memory-python) (source package) | `pip install "mcpscraper-memory-sdk @ git+https://github.com/VilovietaSEO/mcpscraper-sdk.git#subdirectory=packages/memory-python"` |
 | CLI | [`mcpscraper-cli`](./packages/cli) | `npm install -g mcpscraper-cli` |
 
 ## Getting an API key
@@ -327,7 +327,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-Want the full 85-tool surface with per-tool typed methods instead of a generic `call_tool`/`toolName` dispatch? Use [`mcpscraper-memory-sdk`](./packages/memory) (Node — full typed parity) or [`mcpscraper-memory-sdk` on PyPI](./packages/memory-python) (Python — full typed parity) directly with your own memory key: `client.capture.prepareMemoryWrite(...)`, `client.tags.listMemoryTags(...)`, `client.graph.memoryGraphUniverse(...)`, etc. mcpscraper-sdk's Python `memory_tools` is currently a generic passthrough only (not yet the full typed namespace the Node SDK has) — see [`packages/scraper-python`](./packages/scraper-python) for that scope note.
+Want the full 85-tool surface with per-tool typed methods instead of a generic `call_tool`/`toolName` dispatch? Use [`mcpscraper-memory-sdk`](./packages/memory) (Node — full typed parity) or the [`mcpscraper-memory-sdk` Python source package](./packages/memory-python) (full typed parity) directly with your own memory key: `client.capture.prepareMemoryWrite(...)`, `client.tags.listMemoryTags(...)`, `client.graph.memoryGraphUniverse(...)`, etc. mcpscraper-sdk's Python `memory_tools` is currently a generic passthrough only (not yet the full typed namespace the Node SDK has) — see [`packages/scraper-python`](./packages/scraper-python) for that scope note.
 
 ## Errors
 

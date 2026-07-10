@@ -1,6 +1,10 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { createProgram } from '../src/cli.js'
+import { mkdtempSync, rmSync, symlinkSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { pathToFileURL } from 'node:url'
+import { createProgram, isMainModule } from '../src/cli.js'
 
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } })
@@ -22,6 +26,19 @@ function captureLogs(): { logs: string[]; errors: string[]; restore: () => void 
     },
   }
 }
+
+test('recognizes an npm-style symlink as the CLI entrypoint', { skip: process.platform === 'win32' }, () => {
+  const directory = mkdtempSync(join(tmpdir(), 'mcpscraper-cli-entrypoint-'))
+  const target = join(directory, 'cli.js')
+  const symlink = join(directory, 'mcpscraper')
+  try {
+    symlinkSync(new URL(import.meta.url), target)
+    symlinkSync(target, symlink)
+    assert.equal(isMainModule(pathToFileURL(target).href, symlink), true)
+  } finally {
+    rmSync(directory, { recursive: true, force: true })
+  }
+})
 
 test('search sends the query and prints organic results', async () => {
   let capturedBody: Record<string, unknown> = {}

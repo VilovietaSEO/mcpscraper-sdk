@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander'
 import { fileURLToPath } from 'node:url'
+import { realpathSync } from 'node:fs'
 import { ScraperClient, ScraperApiError } from 'mcpscraper-sdk'
 import { CLI_VERSION } from './version.js'
 
@@ -206,7 +207,16 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
   return program
 }
 
-const isMain = process.argv[1] === fileURLToPath(import.meta.url)
+export function isMainModule(metaUrl: string, argvPath = process.argv[1]): boolean {
+  if (!argvPath) return false
+  try {
+    return realpathSync(argvPath) === realpathSync(fileURLToPath(metaUrl))
+  } catch {
+    return false
+  }
+}
+
+const isMain = isMainModule(import.meta.url)
 if (isMain) {
   await createProgram().parseAsync(process.argv)
 }

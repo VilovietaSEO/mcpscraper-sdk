@@ -26,5 +26,8 @@
     "tsx": "^4.19.0",
     "tsup": "^8.3.0",
     "json-schema-to-typescript": "^15.0.4"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
   }
 }

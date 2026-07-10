@@ -7,9 +7,9 @@ This is a thin HTTP client generated against [`../../contracts/scraper.openapi.y
 ## Install
 
 ```bash
-pip install mcpscraper-sdk
+pip install "mcpscraper-sdk @ git+https://github.com/VilovietaSEO/mcpscraper-sdk.git#subdirectory=packages/scraper-python"
 # or
-uv add mcpscraper-sdk
+uv add "mcpscraper-sdk @ git+https://github.com/VilovietaSEO/mcpscraper-sdk.git#subdirectory=packages/scraper-python"
 ```
 
 ## Usage
@@ -82,4 +82,4 @@ uv run datamodel-codegen \
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk` on npm](../scraper) (Node, full `memory_tools` typed surface) · [`mcpscraper-memory-sdk` on PyPI](../memory-python) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk` on npm](../scraper) (Node, full `memory_tools` typed surface) · [`mcpscraper-memory-sdk` Python source package](../memory-python) · [`mcpscraper-cli`](../cli)
