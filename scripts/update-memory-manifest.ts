@@ -39,6 +39,7 @@ const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>
   noteBacklinksTool: { category: 'graph', legacyId: 'memory-backlinks' },
   graphUniverseTool: { category: 'graph', legacyId: 'memory-graph-universe' },
   graphPathTool: { category: 'graph', legacyId: 'memory-graph-path' },
+  setScheduleDefaultsTool: { category: 'schedule', legacyId: 'set-schedule-defaults' },
 }
 
 async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {
@@ -80,7 +81,7 @@ async function main(): Promise<void> {
 
   const updated: Manifest = {
     ...manifest,
-    generatedFrom: 'mcp-memory live tools/list, mcpscraper-memory-tools@1.2.0 (85 registered tools)',
+    generatedFrom: `mcp-memory live tools/list (${tools.length} registered tools)`,
     toolCount: tools.length,
     tools,
   }

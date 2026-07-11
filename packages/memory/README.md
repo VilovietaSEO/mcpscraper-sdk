@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 145 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 85-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official TypeScript/JavaScript clients for all 153 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 86-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
@@ -44,7 +44,7 @@ try {
 
 ## Namespaces
 
-`MemoryClient` retains the direct 85-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 145 tools across 30 namespaces.
+`MemoryClient` retains the direct 86-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 153 tools across 30 namespaces.
 
 Every method's input/output types are generated from the live tool schemas (see `src/generated/`, produced by `npm run generate` at the repo root from `contracts/memory.tools.json`) — no hand-maintained duplicate types to drift out of sync.
 
@@ -58,4 +58,4 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 85 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` Python source package](../memory-python) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 86 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` Python source package](../memory-python) · [`mcpscraper-cli`](../cli)

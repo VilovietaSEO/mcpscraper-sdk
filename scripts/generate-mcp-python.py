@@ -151,8 +151,8 @@ def generate_target(package_root: Path, package_name: str, tools: list[dict]) ->
 def main() -> None:
     manifest = json.loads(MANIFEST_PATH.read_text())
     tools = manifest["tools"]
-    if manifest.get("toolCount") != 145 or len(tools) != 145:
-        raise RuntimeError(f"Unified manifest must contain exactly 145 tools; received {len(tools)}")
+    if manifest.get("toolCount") != 153 or len(tools) != 153:
+        raise RuntimeError(f"Unified manifest must contain exactly 153 tools; received {len(tools)}")
     for package_root, package_name in TARGETS:
         generate_target(package_root, package_name, tools)
 

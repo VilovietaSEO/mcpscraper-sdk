@@ -1,4 +1,4 @@
-# All 145 MCP tools with cURL
+# All 153 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -29,7 +29,7 @@ jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
       --data-binary @-
 ```
 
-## Complete catalog (145)
+## Complete catalog (153)
 
 ## search
 
@@ -110,6 +110,17 @@ jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
 ## billing
 
 - `credits_info` — MCP Scraper Credits & Costs
+
+## connections
+
+- `list_service_connections` — List Connected Services
+- `slack_send_message` — Send Slack Message
+- `gmail_send_message` — Send Gmail Message
+- `google_calendar_create_event` — Create Calendar Event
+- `zoom_create_meeting` — Create Zoom Meeting
+- `read_service_connection` — Read Connected Service
+- `call_service_connection_action` — Run Connected Service Action
+- `set_scheduled_action_connections` — Set Scheduled Action Connections
 
 ## serpIntelligence
 

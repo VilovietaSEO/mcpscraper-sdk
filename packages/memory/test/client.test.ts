@@ -124,9 +124,9 @@ test('a non-2xx HTTP response throws MemoryApiError with httpStatus set', async 
   )
 })
 
-test('unified MCP bindings contain all 145 unique tools', () => {
-  assert.equal(MCP_TOOL_COUNT, 145)
-  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 145)
+test('unified MCP bindings contain all 153 unique tools', () => {
+  assert.equal(MCP_TOOL_COUNT, 153)
+  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 153)
 })
 
 test('McpToolsClient typed methods call the unified MCP wire name', async () => {

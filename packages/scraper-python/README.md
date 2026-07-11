@@ -40,7 +40,7 @@ Every non-2xx response raises a `ScraperApiError` with `.status`, `.code`, and t
 
 ## API surface
 
-`client.tools` is the generated 145-tool MCP surface with one typed snake_case method per tool:
+`client.tools` is the generated 153-tool MCP surface with one typed snake_case method per tool:
 
 ```python
 client.tools.search.search_serp(query="roof repair Denver")
@@ -62,14 +62,14 @@ print(page["memory"])  # {"deposited": True, "vault": "competitors", "noteId": "
 
 ## Memory tools, using only this API key
 
-`client.memory_tools.call_tool(name, args)` dispatches to any of the 85 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
+`client.memory_tools.call_tool(name, args)` dispatches to any of the 86 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
 
 ```python
 hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing pages"})
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose 30 generated namespaces provide one typed method for every one of the 145 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose 30 generated namespaces provide one typed method for every one of the 153 unified MCP tools.
 
 ## Regenerating models
 

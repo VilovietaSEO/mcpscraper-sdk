@@ -4,7 +4,7 @@ import { join } from 'node:path'
 const ENDPOINT = 'https://mcpscraper.dev/mcp'
 const MANIFEST_PATH = join(process.cwd(), 'contracts/mcp.tools.json')
 const MEMORY_MANIFEST_PATH = join(process.cwd(), 'contracts/memory.tools.json')
-const REQUIRED_TOOL_COUNT = 145
+const REQUIRED_TOOL_COUNT = 153
 
 interface LiveTool {
   name: string
@@ -41,6 +41,14 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   extract_site: 'web',
   audit_site: 'web',
   credits_info: 'billing',
+  list_service_connections: 'connections',
+  slack_send_message: 'connections',
+  gmail_send_message: 'connections',
+  google_calendar_create_event: 'connections',
+  zoom_create_meeting: 'connections',
+  read_service_connection: 'connections',
+  call_service_connection_action: 'connections',
+  set_scheduled_action_connections: 'connections',
   directory_workflow: 'directory',
   query_fanout_workflow: 'workflows',
   rank_tracker_workflow: 'workflows',

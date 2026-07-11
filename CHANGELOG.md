@@ -5,6 +5,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.4.0 / mcpscraper-sdk 0.6.0 / Python SDKs 0.3.0 / mcpscraper-cli 0.3.0
+- Regenerated the unified contract and every Node, Python, CLI, and cURL binding for all 153 live MCP tools.
+- Added the connected-service surface: list and read tenant-owned OAuth connections, run explicitly allowlisted gated actions, send through Slack/Gmail/Calendar/Zoom, and bind exact connection tools to scheduled actions.
+- Refreshed the direct Memory contract from 85 to 86 tools, adding schedule-default configuration and current scheduled-action/video schemas.
+- Updated deterministic parity gates from 145 to 153 tools. Verified against mcp-scraper `0.11.0`.
+
 ## mcpscraper-sdk 0.5.0
 - Added the `issues` value to `extractSite`'s `formats` enum and the resulting nullable `seoAudit` response object (31-key issues map, `linkSummary` internal/external link report, `pageMetrics`), reflecting mcp-scraper's new site-wide SEO audit.
 - Added the nullable `imageAudit` response object (`rows` + `summary`) to `extractSite`; `formats: ["images"]` now performs the image audit on the synchronous path too (previously background-only).

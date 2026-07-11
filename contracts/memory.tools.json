@@ -18,8 +18,8 @@
       "note": "Returns the live tool list; used by scripts/sync-memory-manifest.ts to detect drift against this file."
     }
   },
-  "generatedFrom": "mcp-memory live tools/list, mcpscraper-memory-tools@1.2.0 (85 registered tools)",
-  "toolCount": 85,
+  "generatedFrom": "mcp-memory live tools/list (86 registered tools)",
+  "toolCount": 86,
   "tools": [
     {
       "name": "issueKeyTool",
@@ -6948,7 +6948,7 @@
           },
           "timezone": {
             "type": "string",
-            "description": "IANA timezone name, e.g. \"America/Denver\". Only meaningful together with timeOfDay. Defaults to UTC."
+            "description": "IANA timezone name, e.g. \"America/Denver\". Only meaningful together with timeOfDay or deployDate. Omit to use the account's default timezone (set via set-schedule-defaults), falling back to UTC."
           },
           "deployDate": {
             "type": "string",
@@ -7303,7 +7303,7 @@
     },
     {
       "name": "getScheduleStatusTool",
-      "description": "Get your own Scheduled Actions subscription status: whether it is active, your monthly quota, and how much you have used this period.",
+      "description": "Get your own Scheduled Actions subscription status: whether it is active, your monthly quota, how much you have used this period, and your default timezone for new schedules.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7336,6 +7336,13 @@
           "periodStart": {
             "type": "string"
           },
+          "defaultTimezone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "IANA timezone applied to new schedules that name a time without a zone; null means UTC."
+          },
           "error": {
             "type": "string"
           }
@@ -7349,8 +7356,62 @@
       "legacyId": "get-schedule-status"
     },
     {
+      "name": "setScheduleDefaultsTool",
+      "description": "Set your default timezone for scheduled actions. Any schedule you later create with a time of day but no explicit timezone uses this default instead of UTC. Pass null to clear it back to UTC.",
+      "category": "schedule",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key (Bearer secret). Optional when the MCP session is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Session identifier. Optional; defaults to the current MCP session."
+          },
+          "defaultTimezone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "IANA timezone name, e.g. \"America/Denver\". null clears the default (new schedules fall back to UTC)."
+          }
+        },
+        "required": [
+          "defaultTimezone"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "defaultTimezone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The default timezone now in effect; null means UTC."
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "set-schedule-defaults"
+    },
+    {
       "name": "proposeScheduledActionTool",
-      "description": "Turn freeform text describing what you want automated into a structured proposal (description, vault, cadence) for review and confirmation via create-scheduled-action — this is the propose step only; nothing is created here.",
+      "description": "Turn freeform text describing what you want automated into a structured proposal (description, vault, cadence, time of day, timezone) for review and confirmation via create-scheduled-action — this is the propose step only; nothing is created here.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7392,6 +7453,14 @@
           "cadence": {
             "type": "string",
             "description": "Proposed cadence: once, daily, weekly, or monthly."
+          },
+          "timeOfDay": {
+            "type": "string",
+            "description": "Proposed 24-hour HH:MM run time, when the request named one."
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Proposed IANA timezone — from the request, or the account default when the request named a time without a zone."
           },
           "rationale": {
             "type": "string",
@@ -7672,7 +7741,7 @@
     },
     {
       "name": "videoAnalyzeStartTool",
-      "description": "Start a deep async breakdown of a video: samples frames, transcribes audio, and runs parallel analyses (summary, pacing, WPM, topic outline, key points, hook analysis, visual style, replication recipe) into one saved report. Returns a runId immediately — poll video-analyze-status. Pass a direct video file URL (.mp4/.webm/.mov); platform URLs are not auto-resolved yet. Videos up to 1 hour.",
+      "description": "Start a deep async breakdown of a video: samples frames, transcribes audio, and runs parallel analyses (summary, pacing, WPM, topic outline, key points, hook analysis, visual style, replication recipe) into one saved report. Returns a runId immediately — poll video-analyze-status. Accepts a YouTube, Facebook, Instagram, TikTok, or Vimeo URL directly (downloaded for you), or a direct video file URL (.mp4/.webm/.mov). Videos up to 1 hour.",
       "category": "video",
       "inputSchema": {
         "type": "object",
@@ -7688,7 +7757,7 @@
           "sourceUrl": {
             "type": "string",
             "format": "uri",
-            "description": "Direct URL to the video file (.mp4/.webm/.mov/.gif)."
+            "description": "A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov/.gif)."
           },
           "intervalS": {
             "type": "number",

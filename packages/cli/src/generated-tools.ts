@@ -1768,6 +1768,383 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "list_service_connections",
+    "category": "connections",
+    "title": "List Connected Services",
+    "description": "List every third-party service connection this MCP Scraper account has authorized, including Google Analytics, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId plus exact readTools and actionTools. Get a connectionId and exact tool name here before calling read_service_connection or call_service_connection_action. For already-digested history, prefer the returned vaultName or tableName.",
+    "inputSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {}
+    },
+    "annotations": {
+      "title": "List Connected Services",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "slack_send_message",
+    "category": "connections",
+    "title": "Send Slack Message",
+    "description": "Send a message to a Slack channel through a connected, action-enabled Slack connection. Requires a connectionId from list_service_connections with actionsEnabled true; the person must have explicitly turned actions on for that connection.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A Slack connectionId from list_service_connections, with actionsEnabled true."
+        },
+        "channel": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Slack channel ID to send to, e.g. \"C1234567890\". Get this from the connection's own read tools, not guessed."
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000,
+          "description": "Message text to send."
+        }
+      },
+      "required": [
+        "connectionId",
+        "channel",
+        "text"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Send Slack Message",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "gmail_send_message",
+    "category": "connections",
+    "title": "Send Gmail Message",
+    "description": "Send an email through a connected, action-enabled Gmail connection. Requires a connectionId from list_service_connections with actionsEnabled true; the person must have explicitly turned actions on for that connection.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A Gmail connectionId from list_service_connections, with actionsEnabled true."
+        },
+        "to": {
+          "type": "string",
+          "format": "email",
+          "description": "Recipient email address."
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Email subject line."
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50000,
+          "description": "Plain-text email body."
+        }
+      },
+      "required": [
+        "connectionId",
+        "to",
+        "subject",
+        "body"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Send Gmail Message",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "google_calendar_create_event",
+    "category": "connections",
+    "title": "Create Calendar Event",
+    "description": "Create an event on a connected, action-enabled Google Calendar connection. Requires a connectionId from list_service_connections with actionsEnabled true; the person must have explicitly turned actions on for that connection.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A Google Calendar connectionId from list_service_connections, with actionsEnabled true."
+        },
+        "calendarId": {
+          "type": "string",
+          "minLength": 1,
+          "default": "primary",
+          "description": "Calendar to create the event in. Default \"primary\"."
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Event title."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 5000,
+          "description": "Event description."
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Event location."
+        },
+        "startDateTime": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Start time, ISO 8601, e.g. \"2026-07-15T09:00:00-06:00\"."
+        },
+        "endDateTime": {
+          "type": "string",
+          "minLength": 1,
+          "description": "End time, ISO 8601, e.g. \"2026-07-15T10:00:00-06:00\"."
+        },
+        "timeZone": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "IANA timezone, e.g. \"America/Denver\". Applies to both start and end."
+        }
+      },
+      "required": [
+        "connectionId",
+        "summary",
+        "startDateTime",
+        "endDateTime"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Create Calendar Event",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "zoom_create_meeting",
+    "category": "connections",
+    "title": "Create Zoom Meeting",
+    "description": "Create a meeting on a connected, action-enabled Zoom connection. Requires a connectionId from list_service_connections with actionsEnabled true; the person must have explicitly turned actions on for that connection.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A Zoom connectionId from list_service_connections, with actionsEnabled true."
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Meeting topic/title."
+        },
+        "startDateTime": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Start time, ISO 8601, e.g. \"2026-07-15T09:00:00-06:00\"."
+        },
+        "durationMinutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1440,
+          "default": 30,
+          "description": "Meeting duration in minutes. Default 30."
+        },
+        "timezone": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "IANA timezone, e.g. \"America/Denver\"."
+        },
+        "agenda": {
+          "type": "string",
+          "maxLength": 2000,
+          "description": "Meeting description/agenda."
+        }
+      },
+      "required": [
+        "connectionId",
+        "topic",
+        "startDateTime"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Create Zoom Meeting",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "read_service_connection",
+    "category": "connections",
+    "title": "Read Connected Service",
+    "description": "Call one live, read-only tool on any connected service, including Google Analytics, YouTube, Facebook Pages, LinkedIn, X, Slack, Gmail, Calendar, Drive, Zoom, and Xero. Requires a connectionId and an exact name from that connection's readTools in list_service_connections; an unlisted tool is rejected server-side. For already-digested history, prefer memory-search over vaultName or table-query over tableName.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A connectionId from list_service_connections."
+        },
+        "tool": {
+          "type": "string",
+          "minLength": 1,
+          "description": "One of that connection's readTools (from list_service_connections). An unlisted tool name is rejected with the allowed list."
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Arguments for the tool, if it needs any (e.g. a channel id, a date filter)."
+        }
+      },
+      "required": [
+        "connectionId",
+        "tool"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Read Connected Service",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "call_service_connection_action",
+    "category": "connections",
+    "title": "Run Connected Service Action",
+    "description": "Run one explicitly allowlisted write or mutation on a tenant-owned OAuth connection. First call list_service_connections, use a connection with actionsEnabled true, choose one exact actionTools entry, and supply that action's arguments. The server rejects arbitrary action names, inactive or foreign connections, disabled actions, and tools outside the provider allowlist. This may publish, update, send, subscribe, or delete provider data depending on the chosen tool.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A connectionId from list_service_connections with actionsEnabled true."
+        },
+        "tool": {
+          "type": "string",
+          "minLength": 1,
+          "description": "One exact tool name from that connection's actionTools. Arbitrary Nango action names are rejected server-side."
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Arguments required by the selected action. The provider action validates its own typed input before execution."
+        }
+      },
+      "required": [
+        "connectionId",
+        "tool",
+        "args"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Run Connected Service Action",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "set_scheduled_action_connections",
+    "category": "connections",
+    "title": "Set Scheduled Action Connections",
+    "description": "Attach exact tenant-owned OAuth connections and exact allowed tools to an existing scheduled action. First create or identify the schedule, call list_service_connections, then grant only the required readTools and—when that account has actionsEnabled true—the required actionTools. The server verifies schedule ownership, connection ownership, provider policy, and the per-account action switch. Pass an empty connections array to remove all external-service access from the schedule.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "scheduleActionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A scheduled action id returned by create-scheduled-action or list-scheduled-actions."
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "connectionId": {
+                "type": "string",
+                "minLength": 1,
+                "description": "A tenant-scoped connectionId from list_service_connections."
+              },
+              "providerConfigKey": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The matching providerConfigKey returned with that connection."
+              },
+              "allowedTools": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "maxItems": 100,
+                "description": "Exact readTools and, only when live actions are enabled, actionTools this schedule may use."
+              }
+            },
+            "required": [
+              "connectionId",
+              "providerConfigKey",
+              "allowedTools"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 20,
+          "description": "Exact connection and tool grants for this schedule. Pass an empty array to remove every external-service grant."
+        }
+      },
+      "required": [
+        "scheduleActionId",
+        "connections"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Set Scheduled Action Connections",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "capture_serp_snapshot",
     "category": "serpIntelligence",
     "title": "SERP Intelligence Snapshot",

@@ -77,6 +77,7 @@ import * as ResumeScheduledAction from './tools/resume-scheduled-action.js'
 import * as DeleteScheduledAction from './tools/delete-scheduled-action.js'
 import * as SetScheduleEntitlement from './tools/set-schedule-entitlement.js'
 import * as GetScheduleStatus from './tools/get-schedule-status.js'
+import * as SetScheduleDefaults from './tools/set-schedule-defaults.js'
 import * as ProposeScheduledAction from './tools/propose-scheduled-action.js'
 import * as GetScheduleLink from './tools/get-schedule-link.js'
 import * as RevokeScheduleLink from './tools/revoke-schedule-link.js'
@@ -443,6 +444,10 @@ export class ScheduleNamespace {
 
   async getScheduleStatus(input: GetScheduleStatus.Input): Promise<GetScheduleStatus.Output> {
     return this.callTool('getScheduleStatusTool', input) as Promise<GetScheduleStatus.Output>
+  }
+
+  async setScheduleDefaults(input: SetScheduleDefaults.Input): Promise<SetScheduleDefaults.Output> {
+    return this.callTool('setScheduleDefaultsTool', input) as Promise<SetScheduleDefaults.Output>
   }
 
   async proposeScheduledAction(input: ProposeScheduledAction.Input): Promise<ProposeScheduledAction.Output> {

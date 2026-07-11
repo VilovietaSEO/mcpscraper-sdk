@@ -71,7 +71,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
   ].join('\n'))
 
   return [
-    '# All 145 MCP tools with cURL',
+    '# All 153 MCP tools with cURL',
     '',
     'This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.',
     '',
@@ -97,8 +97,8 @@ function renderCurlDocs(tools: ToolEntry[]): string {
 
 async function main(): Promise<void> {
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as Manifest
-  if (manifest.toolCount !== 145 || manifest.tools.length !== 145) {
-    throw new Error(`Unified manifest must contain exactly 145 tools; received ${manifest.tools.length}`)
+  if (manifest.toolCount !== 153 || manifest.tools.length !== 153) {
+    throw new Error(`Unified manifest must contain exactly 153 tools; received ${manifest.tools.length}`)
   }
 
   await rm(OUT_DIR, { recursive: true, force: true })

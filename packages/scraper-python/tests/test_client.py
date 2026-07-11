@@ -197,9 +197,9 @@ def test_snake_case_kwargs_are_sent_as_camel_case():
     assert "max_pages" not in sent_body
 
 
-def test_unified_bindings_contain_all_145_unique_tools():
-    assert MCP_TOOL_COUNT == 145
-    assert len({binding["name"] for binding in MCP_TOOL_BINDINGS}) == 145
+def test_unified_bindings_contain_all_153_unique_tools():
+    assert MCP_TOOL_COUNT == 153
+    assert len({binding["name"] for binding in MCP_TOOL_BINDINGS}) == 153
 
 
 @responses.activate

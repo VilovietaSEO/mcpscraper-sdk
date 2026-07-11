@@ -24,7 +24,7 @@ export interface Input {
    */
   timeOfDay?: string;
   /**
-   * IANA timezone name, e.g. "America/Denver". Only meaningful together with timeOfDay. Defaults to UTC.
+   * IANA timezone name, e.g. "America/Denver". Only meaningful together with timeOfDay or deployDate. Omit to use the account's default timezone (set via set-schedule-defaults), falling back to UTC.
    */
   timezone?: string;
   /**

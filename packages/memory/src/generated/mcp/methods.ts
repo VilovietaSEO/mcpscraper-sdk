@@ -38,6 +38,14 @@ import * as WorkflowsRankTracker from './tools/rank_tracker_workflow.js'
 import * as WorkflowsQueryFanout from './tools/query_fanout_workflow.js'
 import * as ArtifactsRead from './tools/report_artifact_read.js'
 import * as BillingCreditsInfo from './tools/credits_info.js'
+import * as ConnectionsListServiceConnections from './tools/list_service_connections.js'
+import * as ConnectionsSlackSendMessage from './tools/slack_send_message.js'
+import * as ConnectionsGmailSendMessage from './tools/gmail_send_message.js'
+import * as ConnectionsGoogleCalendarCreateEvent from './tools/google_calendar_create_event.js'
+import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
+import * as ConnectionsReadServiceConnection from './tools/read_service_connection.js'
+import * as ConnectionsCallServiceConnectionAction from './tools/call_service_connection_action.js'
+import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as BrowserProfileConnect from './tools/browser_profile_connect.js'
@@ -321,6 +329,46 @@ export const MCP_TOOL_BINDINGS = [
     "name": "credits_info",
     "category": "billing",
     "methodName": "creditsInfo"
+  },
+  {
+    "name": "list_service_connections",
+    "category": "connections",
+    "methodName": "listServiceConnections"
+  },
+  {
+    "name": "slack_send_message",
+    "category": "connections",
+    "methodName": "slackSendMessage"
+  },
+  {
+    "name": "gmail_send_message",
+    "category": "connections",
+    "methodName": "gmailSendMessage"
+  },
+  {
+    "name": "google_calendar_create_event",
+    "category": "connections",
+    "methodName": "googleCalendarCreateEvent"
+  },
+  {
+    "name": "zoom_create_meeting",
+    "category": "connections",
+    "methodName": "zoomCreateMeeting"
+  },
+  {
+    "name": "read_service_connection",
+    "category": "connections",
+    "methodName": "readServiceConnection"
+  },
+  {
+    "name": "call_service_connection_action",
+    "category": "connections",
+    "methodName": "callServiceConnectionAction"
+  },
+  {
+    "name": "set_scheduled_action_connections",
+    "category": "connections",
+    "methodName": "setScheduledActionConnections"
   },
   {
     "name": "capture_serp_snapshot",
@@ -1083,6 +1131,42 @@ export class BillingNamespace {
   }
 }
 
+export class ConnectionsNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async listServiceConnections(input: ConnectionsListServiceConnections.Input = {} as ConnectionsListServiceConnections.Input): Promise<ConnectionsListServiceConnections.Output> {
+    return this.callTool('list_service_connections', input) as Promise<ConnectionsListServiceConnections.Output>
+  }
+
+  async slackSendMessage(input: ConnectionsSlackSendMessage.Input): Promise<ConnectionsSlackSendMessage.Output> {
+    return this.callTool('slack_send_message', input) as Promise<ConnectionsSlackSendMessage.Output>
+  }
+
+  async gmailSendMessage(input: ConnectionsGmailSendMessage.Input): Promise<ConnectionsGmailSendMessage.Output> {
+    return this.callTool('gmail_send_message', input) as Promise<ConnectionsGmailSendMessage.Output>
+  }
+
+  async googleCalendarCreateEvent(input: ConnectionsGoogleCalendarCreateEvent.Input): Promise<ConnectionsGoogleCalendarCreateEvent.Output> {
+    return this.callTool('google_calendar_create_event', input) as Promise<ConnectionsGoogleCalendarCreateEvent.Output>
+  }
+
+  async zoomCreateMeeting(input: ConnectionsZoomCreateMeeting.Input): Promise<ConnectionsZoomCreateMeeting.Output> {
+    return this.callTool('zoom_create_meeting', input) as Promise<ConnectionsZoomCreateMeeting.Output>
+  }
+
+  async readServiceConnection(input: ConnectionsReadServiceConnection.Input): Promise<ConnectionsReadServiceConnection.Output> {
+    return this.callTool('read_service_connection', input) as Promise<ConnectionsReadServiceConnection.Output>
+  }
+
+  async callServiceConnectionAction(input: ConnectionsCallServiceConnectionAction.Input): Promise<ConnectionsCallServiceConnectionAction.Output> {
+    return this.callTool('call_service_connection_action', input) as Promise<ConnectionsCallServiceConnectionAction.Output>
+  }
+
+  async setScheduledActionConnections(input: ConnectionsSetScheduledActionConnections.Input): Promise<ConnectionsSetScheduledActionConnections.Output> {
+    return this.callTool('set_scheduled_action_connections', input) as Promise<ConnectionsSetScheduledActionConnections.Output>
+  }
+}
+
 export class SerpIntelligenceNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -1590,6 +1674,7 @@ export class GeneratedMcpToolsClient {
   readonly workflows: WorkflowsNamespace
   readonly artifacts: ArtifactsNamespace
   readonly billing: BillingNamespace
+  readonly connections: ConnectionsNamespace
   readonly serpIntelligence: SerpIntelligenceNamespace
   readonly browser: BrowserNamespace
   readonly access: AccessNamespace
@@ -1622,6 +1707,7 @@ export class GeneratedMcpToolsClient {
     this.workflows = new WorkflowsNamespace(callTool)
     this.artifacts = new ArtifactsNamespace(callTool)
     this.billing = new BillingNamespace(callTool)
+    this.connections = new ConnectionsNamespace(callTool)
     this.serpIntelligence = new SerpIntelligenceNamespace(callTool)
     this.browser = new BrowserNamespace(callTool)
     this.access = new AccessNamespace(callTool)

@@ -2,7 +2,7 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 145 unified MCP tools.
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 153 unified MCP tools.
 
 ## Install
 
@@ -28,7 +28,7 @@ mcpscraper tools describe prepare-memory-write
 mcpscraper tools call prepare-memory-write --args '{"title":"Example","content":"..."}' --json
 ```
 
-`tools list` contains exactly 145 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 153 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 ### `mcpscraper search <query>`
 
