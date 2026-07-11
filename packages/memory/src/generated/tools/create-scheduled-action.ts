@@ -20,6 +20,10 @@ export interface Input {
    */
   cadence: "once" | "daily" | "weekly" | "monthly";
   /**
+   * How to execute each run. "agent" (default) lets an agent follow the description. "connection_sync" deterministically ingests data from the schedule's bound connections using only their approved read-only tools; bind at least one connection before it runs.
+   */
+  executionMode?: "agent" | "connection_sync";
+  /**
    * 24-hour HH:MM clock time to run at, in the given timezone. Optional — omit to run at any time during the period (matches prior default behavior).
    */
   timeOfDay?: string;
@@ -46,6 +50,10 @@ export interface Output {
    * When it will first run.
    */
   nextRunAt?: string;
+  /**
+   * The stored execution mode. Defaults to agent when omitted from the request.
+   */
+  executionMode?: "agent" | "connection_sync";
   /**
    * Human-readable failure reason when ok is false.
    */

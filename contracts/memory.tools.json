@@ -6908,7 +6908,7 @@
     },
     {
       "name": "createScheduledActionTool",
-      "description": "Create a scheduled action: on the given cadence, an agent reads the description, does what it asks, and writes the result into the target vault. Cadence 'once' runs a single time then completes permanently — use it for one-off tasks, not recurring ones. Requires an active scheduling subscription and write access to the target vault.",
+      "description": "Create a scheduled action in agent mode (default) or connection_sync mode. Agent mode asks an agent to follow the description and write a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Cadence 'once' runs a single time then completes permanently. Requires an active scheduling subscription and write access to the target vault.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -6940,6 +6940,15 @@
               "monthly"
             ],
             "description": "How often this action runs. \"once\" fires a single time and then completes."
+          },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "agent",
+              "connection_sync"
+            ],
+            "default": "agent",
+            "description": "How to execute each run. \"agent\" (default) lets an agent follow the description. \"connection_sync\" deterministically ingests data from the schedule's bound connections using only their approved read-only tools; bind at least one connection before it runs."
           },
           "timeOfDay": {
             "type": "string",
@@ -6979,6 +6988,14 @@
             "type": "string",
             "description": "When it will first run."
           },
+          "executionMode": {
+            "type": "string",
+            "enum": [
+              "agent",
+              "connection_sync"
+            ],
+            "description": "The stored execution mode. Defaults to agent when omitted from the request."
+          },
           "error": {
             "type": "string",
             "description": "Human-readable failure reason when ok is false."
@@ -6998,7 +7015,7 @@
     },
     {
       "name": "listScheduledActionsTool",
-      "description": "List every scheduled action you own — active, paused, and completed one-time actions — with cadence, next run time, and last run status.",
+      "description": "List every scheduled action you own — active, paused, and completed one-time actions — with execution mode, cadence, next run time, and last run status. connection_sync means deterministic read-only ingestion from bound service connections.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7042,6 +7059,13 @@
                     "monthly"
                   ]
                 },
+                "executionMode": {
+                  "type": "string",
+                  "enum": [
+                    "agent",
+                    "connection_sync"
+                  ]
+                },
                 "timeOfDay": {
                   "type": [
                     "string",
@@ -7083,6 +7107,7 @@
                 "description",
                 "vault",
                 "cadence",
+                "executionMode",
                 "timeOfDay",
                 "timezone",
                 "status",

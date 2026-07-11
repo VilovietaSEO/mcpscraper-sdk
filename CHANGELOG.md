@@ -5,6 +5,9 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.5.0
+- Added typed `executionMode` support for scheduled actions: create accepts `agent` or `connection_sync` (defaulting to `agent`), returns the stored mode, and list exposes the mode for every action. Aligned with the mcp-memory 1.8.0 scheduling contract.
+
 ## mcpscraper-memory-sdk 0.4.0 / mcpscraper-sdk 0.6.0 / Python SDKs 0.3.0 / mcpscraper-cli 0.3.0
 - Regenerated the unified contract and every Node, Python, CLI, and cURL binding for all 153 live MCP tools.
 - Added the connected-service surface: list and read tenant-owned OAuth connections, run explicitly allowlisted gated actions, send through Slack/Gmail/Calendar/Zoom, and bind exact connection tools to scheduled actions.
