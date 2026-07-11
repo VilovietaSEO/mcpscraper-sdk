@@ -5,6 +5,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-sdk 0.5.0
+- Added the `issues` value to `extractSite`'s `formats` enum and the resulting nullable `seoAudit` response object (31-key issues map, `linkSummary` internal/external link report, `pageMetrics`), reflecting mcp-scraper's new site-wide SEO audit.
+- Added the nullable `imageAudit` response object (`rows` + `summary`) to `extractSite`; `formats: ["images"]` now performs the image audit on the synchronous path too (previously background-only).
+- Added `inSitemap` (boolean|null) to `extractSite` page objects and `sitemapUrls` to its `spider` object; documented the background job's `seo-audit.json` artifact and `inSitemap` in `pages.jsonl` rows on `getExtractSiteStatus`.
+- Contract bumped to 1.2.0 (additive only). Verified against mcp-scraper `0.8.0`.
+
 ## mcpscraper-memory-sdk 0.3.0 / mcpscraper-sdk 0.4.0 / Python SDKs 0.2.0 / mcpscraper-cli 0.2.0
 - Added one canonical live-derived `contracts/mcp.tools.json` contract for all 145 unified MCP tools.
 - Added generated, typed `McpToolsClient` namespaces with all 145 tools to both Node packages and both Python packages.

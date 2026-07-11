@@ -1034,13 +1034,123 @@ export interface components {
             browserFallback: boolean;
             /** @default false */
             kernelFallback: boolean;
-            formats?: ("markdown" | "links" | "json" | "images" | "branding")[];
+            /**
+             * @description Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and
+             *     returns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).
+             *     `images` performs the image audit and returns `imageAudit` — on the synchronous
+             *     path too, not just background jobs.
+             */
+            formats?: ("markdown" | "links" | "json" | "images" | "branding" | "issues")[];
         };
         /** @description Full synchronous crawl result. */
         ExtractSiteResponse: {
-            pages?: {
+            pages?: ({
+                /** @description Whether this page's URL appears in the site's sitemap(s); null when no sitemap was found. */
+                inSitemap?: boolean | null;
+            } & {
                 [key: string]: unknown;
-            }[];
+            })[];
+            /** @description Crawl/URL-discovery metadata. */
+            spider?: {
+                /** @description Sitemap URLs discovered and parsed during the crawl. */
+                sitemapUrls?: string[];
+            } & {
+                [key: string]: unknown;
+            };
+            /** @description Site-wide SEO audit. Present (non-null) only when `formats` includes `issues`. */
+            seoAudit?: {
+                /**
+                 * @description Map of issue key → occurrence detail. The 31 issue keys: title.missing,
+                 *     title.duplicate, title.tooLong, title.tooShort, title.sameAsH1, meta.missing,
+                 *     meta.duplicate, meta.tooLong, meta.tooShort, h1.missing, h1.multiple,
+                 *     h1.duplicate, h1.tooLong, h2.missing, indexability.nonIndexable,
+                 *     indexability.noindex, canonical.missing, canonical.canonicalised,
+                 *     response.broken4xx, response.error5xx, response.redirect3xx,
+                 *     response.noResponse, content.thin, content.exactDuplicate, images.missingAlt,
+                 *     schema.missing, url.tooLong, url.uppercase, url.underscores, links.orphan,
+                 *     links.brokenInternal.
+                 */
+                issues?: {
+                    [key: string]: {
+                        count: number;
+                        urls: string[];
+                    };
+                };
+                linkSummary?: {
+                    internal?: {
+                        totalLinks?: number;
+                        pages?: number;
+                        orphans?: number;
+                        brokenInternal?: number;
+                        avgInlinks?: number;
+                        avgOutlinks?: number;
+                        distribution?: {
+                            zero?: number;
+                            oneToTwo?: number;
+                            threeToTen?: number;
+                            elevenPlus?: number;
+                        };
+                        topByInlinks?: {
+                            url?: string;
+                            inlinks?: number;
+                            outlinksInternal?: number;
+                            outlinksExternal?: number;
+                        }[];
+                    };
+                    external?: {
+                        totalLinks?: number;
+                        uniqueDomains?: number;
+                        topDomains?: {
+                            domain?: string;
+                            links?: number;
+                            nofollow?: number;
+                            pages?: number;
+                        }[];
+                    };
+                };
+                pageMetrics?: {
+                    url?: string;
+                    inboundInternal?: number;
+                    outboundInternal?: number;
+                    orphan?: boolean;
+                }[];
+            } | null;
+            /**
+             * @description Site-wide image audit. Present (non-null) only when `formats` includes `images` —
+             *     the synchronous path performs this audit too, not just background jobs.
+             */
+            imageAudit?: {
+                rows?: {
+                    url?: string;
+                    /** @description HTTP status returned when probing the image; null when the probe failed. */
+                    status?: number | null;
+                    bytes?: number | null;
+                    /** @description Human-readable size, e.g. "1.2 MB". */
+                    size?: string | null;
+                    contentType?: string | null;
+                    /** @description Detected image format; "unknown" when undetectable. */
+                    format?: string;
+                    over100kb?: boolean;
+                    legacyFormat?: boolean;
+                    /** @description Present when probing the image failed. */
+                    error?: string;
+                }[];
+                summary?: {
+                    unique?: number;
+                    /** @description How many rows have a known byte size. */
+                    sized?: number;
+                    totalBytes?: number;
+                    /** @description Human-readable total, e.g. "4.5 MB". */
+                    totalSize?: string;
+                    avgSize?: string;
+                    over100kb?: number;
+                    legacyFormat?: number;
+                    /** @description Map of format → image count. */
+                    formatCounts?: {
+                        [key: string]: number;
+                    };
+                };
+            } | null;
         } & {
             [key: string]: unknown;
         };
@@ -1056,6 +1166,11 @@ export interface components {
             startUrl?: string;
             totalUrls?: number;
             doneUrls?: number;
+            /**
+             * @description Produced files (name + MIME type). When the job requested formats including
+             *     `issues`, this includes `seo-audit.json` (application/json — the same object as
+             *     the synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`.
+             */
             artifacts?: {
                 [key: string]: unknown;
             }[];

@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: mcpscraper.dev API
-  version: "1.1.0"
+  version: "1.2.0"
   description: |
     Public REST contract for mcpscraper.dev — web intelligence (SERP, People-Also-Ask,
     site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video
@@ -1293,13 +1293,138 @@ components:
         rotateProxyEvery: { type: integer, minimum: 1, maximum: 100, default: 30 }
         browserFallback: { type: boolean, default: false }
         kernelFallback: { type: boolean, default: false }
-        formats: { type: array, items: { type: string, enum: [markdown, links, json, images, branding] } }
+        formats:
+          type: array
+          items: { type: string, enum: [markdown, links, json, images, branding, issues] }
+          description: |
+            Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and
+            returns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).
+            `images` performs the image audit and returns `imageAudit` — on the synchronous
+            path too, not just background jobs.
 
     ExtractSiteResponse:
       type: object
       description: Full synchronous crawl result.
       properties:
-        pages: { type: array, items: { type: object, additionalProperties: true } }
+        pages:
+          type: array
+          items:
+            type: object
+            properties:
+              inSitemap: { type: boolean, nullable: true, description: 'Whether this page''s URL appears in the site''s sitemap(s); null when no sitemap was found.' }
+            additionalProperties: true
+        spider:
+          type: object
+          description: Crawl/URL-discovery metadata.
+          properties:
+            sitemapUrls: { type: array, items: { type: string }, description: 'Sitemap URLs discovered and parsed during the crawl.' }
+          additionalProperties: true
+        seoAudit:
+          type: object
+          nullable: true
+          description: 'Site-wide SEO audit. Present (non-null) only when `formats` includes `issues`.'
+          properties:
+            issues:
+              type: object
+              description: |
+                Map of issue key → occurrence detail. The 31 issue keys: title.missing,
+                title.duplicate, title.tooLong, title.tooShort, title.sameAsH1, meta.missing,
+                meta.duplicate, meta.tooLong, meta.tooShort, h1.missing, h1.multiple,
+                h1.duplicate, h1.tooLong, h2.missing, indexability.nonIndexable,
+                indexability.noindex, canonical.missing, canonical.canonicalised,
+                response.broken4xx, response.error5xx, response.redirect3xx,
+                response.noResponse, content.thin, content.exactDuplicate, images.missingAlt,
+                schema.missing, url.tooLong, url.uppercase, url.underscores, links.orphan,
+                links.brokenInternal.
+              additionalProperties:
+                type: object
+                properties:
+                  count: { type: integer }
+                  urls: { type: array, items: { type: string } }
+                required: [count, urls]
+            linkSummary:
+              type: object
+              properties:
+                internal:
+                  type: object
+                  properties:
+                    totalLinks: { type: integer }
+                    pages: { type: integer }
+                    orphans: { type: integer }
+                    brokenInternal: { type: integer }
+                    avgInlinks: { type: number }
+                    avgOutlinks: { type: number }
+                    distribution:
+                      type: object
+                      properties:
+                        zero: { type: integer }
+                        oneToTwo: { type: integer }
+                        threeToTen: { type: integer }
+                        elevenPlus: { type: integer }
+                    topByInlinks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url: { type: string }
+                          inlinks: { type: integer }
+                          outlinksInternal: { type: integer }
+                          outlinksExternal: { type: integer }
+                external:
+                  type: object
+                  properties:
+                    totalLinks: { type: integer }
+                    uniqueDomains: { type: integer }
+                    topDomains:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          domain: { type: string }
+                          links: { type: integer }
+                          nofollow: { type: integer }
+                          pages: { type: integer }
+            pageMetrics:
+              type: array
+              items:
+                type: object
+                properties:
+                  url: { type: string }
+                  inboundInternal: { type: integer }
+                  outboundInternal: { type: integer }
+                  orphan: { type: boolean }
+        imageAudit:
+          type: object
+          nullable: true
+          description: |
+            Site-wide image audit. Present (non-null) only when `formats` includes `images` —
+            the synchronous path performs this audit too, not just background jobs.
+          properties:
+            rows:
+              type: array
+              items:
+                type: object
+                properties:
+                  url: { type: string }
+                  status: { type: integer, nullable: true, description: 'HTTP status returned when probing the image; null when the probe failed.' }
+                  bytes: { type: integer, nullable: true }
+                  size: { type: string, nullable: true, description: 'Human-readable size, e.g. "1.2 MB".' }
+                  contentType: { type: string, nullable: true }
+                  format: { type: string, description: 'Detected image format; "unknown" when undetectable.' }
+                  over100kb: { type: boolean }
+                  legacyFormat: { type: boolean }
+                  error: { type: string, description: 'Present when probing the image failed.' }
+            summary:
+              type: object
+              properties:
+                unique: { type: integer }
+                sized: { type: integer, description: 'How many rows have a known byte size.' }
+                totalBytes: { type: integer }
+                totalSize: { type: string, description: 'Human-readable total, e.g. "4.5 MB".' }
+                avgSize: { type: string }
+                over100kb: { type: integer }
+                legacyFormat: { type: integer }
+                formatCounts: { type: object, additionalProperties: { type: integer }, description: 'Map of format → image count.' }
       additionalProperties: true
 
     ExtractSiteQueuedResponse:
@@ -1318,7 +1443,13 @@ components:
         startUrl: { type: string }
         totalUrls: { type: integer }
         doneUrls: { type: integer }
-        artifacts: { type: array, items: { type: object, additionalProperties: true } }
+        artifacts:
+          type: array
+          description: |
+            Produced files (name + MIME type). When the job requested formats including
+            `issues`, this includes `seo-audit.json` (application/json — the same object as
+            the synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`.
+          items: { type: object, additionalProperties: true }
         error: { type: string, nullable: true }
         updatedAt: { type: string }
 
