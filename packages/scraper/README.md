@@ -40,19 +40,19 @@ Every non-2xx response throws a `ScraperApiError` with `status`, `code`, and the
 
 ## API surface
 
-`client.tools` is the generated, typed 155-tool MCP surface. It includes every scraper, browser, workflow, artifact, billing, and memory tool from `contracts/mcp.tools.json`.
+`client.tools` is the generated, typed 156-tool MCP surface. It includes 71 MCP Scraper tools and all 85 mirrored memory tools from `contracts/mcp.tools.json`.
 
 ```ts
 await client.tools.search.searchSerp({ query: 'roof repair Denver' })
 await client.tools.memory.search({ query: 'roofing warranty terms' })
 await client.tools.connections.exportConnectedServiceData({
   connectionId: 'conn_123',
-  dataset: 'emails',
+  dataset: 'resend_data',
   lastDays: 7,
 })
 ```
 
-The connected-data export performs bounded provider pagination server-side and returns small results inline or a private seven-day JSONL artifact. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renewConnectedDataDownload({ artifactId })`.
+The connected-data export performs bounded Gmail, Calendar, Zoom, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renewConnectedDataDownload({ artifactId })`. Use `describeServiceConnectionTool` to obtain the exact input schema for a provider-native read or gated action before calling it through the generic connection bridges.
 
 Core operations are flat on the client: `searchSerp`, `harvestPaa`, `extractUrl`, `mapSiteUrls`, `extractSite`, `auditSite`, `getExtractSiteStatus`, `listJobs`, `getJob`, `getHistory`, `getLedger`.
 

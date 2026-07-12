@@ -124,11 +124,12 @@ test('a non-2xx HTTP response throws MemoryApiError with httpStatus set', async 
   )
 })
 
-test('unified MCP bindings contain all 155 unique tools', () => {
-  assert.equal(MCP_TOOL_COUNT, 155)
-  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 155)
+test('unified MCP bindings contain all 156 unique tools', () => {
+  assert.equal(MCP_TOOL_COUNT, 156)
+  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 156)
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'export_connected_service_data'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'renew_connected_data_download'))
+  assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'describe_service_connection_tool'))
 })
 
 test('McpToolsClient typed methods call the unified MCP wire name', async () => {
@@ -177,16 +178,58 @@ test('McpToolsClient dispatches a bulk connected-data export as one MCP call', a
 
   await client.connections.exportConnectedServiceData({
     connectionId: 'conn_123',
-    dataset: 'emails',
+    dataset: 'resend_data',
     lastDays: 7,
   })
 
   assert.equal(capturedBody.params.name, 'export_connected_service_data')
   assert.deepEqual(capturedBody.params.arguments, {
     connectionId: 'conn_123',
-    dataset: 'emails',
+    dataset: 'resend_data',
     lastDays: 7,
   })
+})
+
+test('McpToolsClient dispatches connected-service tool schema discovery', async () => {
+  let capturedBody: any
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: capturedBody.id,
+          result: {
+            structuredContent: {
+              ok: true,
+              tool: {
+                name: 'list-emails',
+                title: 'List emails',
+                description: 'List recent Resend emails.',
+                classification: 'read',
+                inputSchema: { type: 'object' },
+              },
+              error: null,
+            },
+          },
+        },
+      }
+    }),
+  })
+
+  const result = await client.connections.describeServiceConnectionTool({
+    connectionId: 'resend_conn_123',
+    tool: 'list-emails',
+  })
+
+  assert.equal(capturedBody.params.name, 'describe_service_connection_tool')
+  assert.deepEqual(capturedBody.params.arguments, {
+    connectionId: 'resend_conn_123',
+    tool: 'list-emails',
+  })
+  assert.equal(result.tool?.classification, 'read')
 })
 
 test('McpToolsClient safely retries transient tools/list failures', async () => {

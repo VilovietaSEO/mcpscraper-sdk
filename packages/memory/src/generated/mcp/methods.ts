@@ -48,6 +48,7 @@ import * as ConnectionsCallServiceConnectionAction from './tools/call_service_co
 import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
 import * as ConnectionsExportConnectedServiceData from './tools/export_connected_service_data.js'
 import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_data_download.js'
+import * as ConnectionsDescribeServiceConnectionTool from './tools/describe_service_connection_tool.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as BrowserProfileConnect from './tools/browser_profile_connect.js'
@@ -931,6 +932,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "renew_connected_data_download",
     "category": "connections",
     "methodName": "renewConnectedDataDownload"
+  },
+  {
+    "name": "describe_service_connection_tool",
+    "category": "connections",
+    "methodName": "describeServiceConnectionTool"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1184,6 +1190,10 @@ export class ConnectionsNamespace {
 
   async renewConnectedDataDownload(input: ConnectionsRenewConnectedDataDownload.Input): Promise<ConnectionsRenewConnectedDataDownload.Output> {
     return this.callTool('renew_connected_data_download', input) as Promise<ConnectionsRenewConnectedDataDownload.Output>
+  }
+
+  async describeServiceConnectionTool(input: ConnectionsDescribeServiceConnectionTool.Input): Promise<ConnectionsDescribeServiceConnectionTool.Output> {
+    return this.callTool('describe_service_connection_tool', input) as Promise<ConnectionsDescribeServiceConnectionTool.Output>
   }
 }
 

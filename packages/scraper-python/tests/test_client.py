@@ -197,11 +197,15 @@ def test_snake_case_kwargs_are_sent_as_camel_case():
     assert "max_pages" not in sent_body
 
 
-def test_unified_bindings_contain_all_155_unique_tools():
-    assert MCP_TOOL_COUNT == 155
+def test_unified_bindings_contain_all_156_unique_tools():
+    assert MCP_TOOL_COUNT == 156
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
-    assert len(names) == 155
-    assert {"export_connected_service_data", "renew_connected_data_download"} <= names
+    assert len(names) == 156
+    assert {
+        "export_connected_service_data",
+        "renew_connected_data_download",
+        "describe_service_connection_tool",
+    } <= names
 
 
 @responses.activate
@@ -243,14 +247,14 @@ def test_bulk_connected_data_export_dispatches_as_one_mcp_call():
     client = ScraperClient(api_key="sk_test")
     result = client.tools.connections.export_connected_service_data(
         connection_id="conn_123",
-        dataset="emails",
+        dataset="resend_data",
         last_days=7,
     )
     sent_body = json.loads(responses.calls[0].request.body)
     assert sent_body["params"]["name"] == "export_connected_service_data"
     assert sent_body["params"]["arguments"] == {
         "connectionId": "conn_123",
-        "dataset": "emails",
+        "dataset": "resend_data",
         "lastDays": 7,
     }
     assert result.ok is True

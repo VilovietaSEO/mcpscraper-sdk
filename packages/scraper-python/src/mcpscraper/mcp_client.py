@@ -28,7 +28,7 @@ class McpToolError(RuntimeError):
 
 
 class McpToolsClient(GeneratedMcpToolsClient):
-    """Typed access to all 155 tools exposed by https://mcpscraper.dev/mcp."""
+    """Typed access to all 156 tools exposed by https://mcpscraper.dev/mcp."""
 
     def __init__(
         self,

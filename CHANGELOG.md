@@ -5,6 +5,13 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.7.0 / mcpscraper-sdk 0.8.0 / Python SDKs 0.5.0 / mcpscraper-cli 0.5.0
+- Regenerated the unified Node, Python, CLI, and cURL surfaces from the 156-tool MCP Scraper manifest: 71 MCP Scraper tools plus 85 mirrored memory tools.
+- Added typed `connections.describeServiceConnectionTool` / `connections.describe_service_connection_tool` bindings so clients can discover the exact input schema and read/action classification for provider-native connected-service tools before calling them.
+- Expanded connected-data exports to Resend with `resend_data`, `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates` datasets, including typed continuation and output enums.
+- Expanded connection results with credential `transport`, provider/reconnect metadata, and permanently blocked administrative tool names without exposing credentials.
+- Raised deterministic parity and package tests to require exact 156/156 tool-name and binding coverage across every generated surface.
+
 ## mcpscraper-memory-sdk 0.6.0 / mcpscraper-sdk 0.7.0 / Python SDKs 0.4.0 / mcpscraper-cli 0.4.0
 - Regenerated the unified Node, Python, CLI, and cURL surfaces from the mcp-scraper `0.14.0` 155-tool manifest.
 - Added typed `connections.exportConnectedServiceData` / `connections.export_connected_service_data` bindings for bounded Gmail, Google Calendar, and Zoom range exports with inline-or-private-artifact delivery and resumable continuations.

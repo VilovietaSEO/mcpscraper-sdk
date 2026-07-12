@@ -1,4 +1,4 @@
-# All 155 MCP tools with cURL
+# All 156 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -31,7 +31,7 @@ jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
 
 ## Bulk connected-data export
 
-Fetch a bounded Gmail, Google Calendar, or Zoom range in one call. Provider pagination happens server-side; large results become private downloadable artifacts.
+Fetch a bounded Gmail, Google Calendar, Zoom, or Resend range in one call. Provider pagination happens server-side; large results become private downloadable artifacts. Resend supports the aggregate `resend_data` dataset plus sent mail, received mail, logs, contacts, broadcasts, and templates individually.
 
 ```bash
 jq -n --arg connectionId "$CONNECTION_ID" \
@@ -45,7 +45,7 @@ jq -n --arg connectionId "$CONNECTION_ID" \
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (155)
+## Complete catalog (156)
 
 ## search
 
@@ -139,6 +139,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `set_scheduled_action_connections` — Set Scheduled Action Connections
 - `export_connected_service_data` — Export Connected Service Data
 - `renew_connected_data_download` — Renew Connected Data Download
+- `describe_service_connection_tool` — Describe Connected Service Tool
 
 ## serpIntelligence
 

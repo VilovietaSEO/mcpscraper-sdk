@@ -102,11 +102,15 @@ def test_non_2xx_http_response_raises_memory_api_error():
     assert exc_info.value.http_status == 500
 
 
-def test_unified_bindings_contain_all_155_unique_tools():
-    assert MCP_TOOL_COUNT == 155
+def test_unified_bindings_contain_all_156_unique_tools():
+    assert MCP_TOOL_COUNT == 156
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
-    assert len(names) == 155
-    assert {"export_connected_service_data", "renew_connected_data_download"} <= names
+    assert len(names) == 156
+    assert {
+        "export_connected_service_data",
+        "renew_connected_data_download",
+        "describe_service_connection_tool",
+    } <= names
 
 
 @responses.activate

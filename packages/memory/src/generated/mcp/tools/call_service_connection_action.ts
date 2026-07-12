@@ -4,7 +4,7 @@ export interface Input {
    */
   connectionId: string;
   /**
-   * One exact tool name from that connection's actionTools. Arbitrary Nango action names are rejected server-side.
+   * One exact tool name from that connection's actionTools. Arbitrary provider action names and adminBlockedTools are rejected server-side.
    */
   tool: string;
   /**
