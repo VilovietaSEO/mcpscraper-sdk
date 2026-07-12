@@ -46,6 +46,8 @@ import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
 import * as ConnectionsReadServiceConnection from './tools/read_service_connection.js'
 import * as ConnectionsCallServiceConnectionAction from './tools/call_service_connection_action.js'
 import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
+import * as ConnectionsExportConnectedServiceData from './tools/export_connected_service_data.js'
+import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_data_download.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as BrowserProfileConnect from './tools/browser_profile_connect.js'
@@ -919,6 +921,16 @@ export const MCP_TOOL_BINDINGS = [
     "name": "revoke-webhook",
     "category": "webhooks",
     "methodName": "revokeWebhook"
+  },
+  {
+    "name": "export_connected_service_data",
+    "category": "connections",
+    "methodName": "exportConnectedServiceData"
+  },
+  {
+    "name": "renew_connected_data_download",
+    "category": "connections",
+    "methodName": "renewConnectedDataDownload"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1164,6 +1176,14 @@ export class ConnectionsNamespace {
 
   async setScheduledActionConnections(input: ConnectionsSetScheduledActionConnections.Input): Promise<ConnectionsSetScheduledActionConnections.Output> {
     return this.callTool('set_scheduled_action_connections', input) as Promise<ConnectionsSetScheduledActionConnections.Output>
+  }
+
+  async exportConnectedServiceData(input: ConnectionsExportConnectedServiceData.Input): Promise<ConnectionsExportConnectedServiceData.Output> {
+    return this.callTool('export_connected_service_data', input) as Promise<ConnectionsExportConnectedServiceData.Output>
+  }
+
+  async renewConnectedDataDownload(input: ConnectionsRenewConnectedDataDownload.Input): Promise<ConnectionsRenewConnectedDataDownload.Output> {
+    return this.callTool('renew_connected_data_download', input) as Promise<ConnectionsRenewConnectedDataDownload.Output>
   }
 }
 

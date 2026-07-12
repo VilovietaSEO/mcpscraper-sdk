@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 153 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 86-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official TypeScript/JavaScript clients for all 155 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 86-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
@@ -18,6 +18,7 @@ import { McpToolsClient } from 'mcpscraper-memory-sdk'
 const tools = new McpToolsClient({ apiKey: process.env.MCP_SCRAPER_API_KEY! })
 await tools.browser.listSessions()
 await tools.memory.search({ query: 'q3 roadmap decisions' })
+await tools.connections.exportConnectedServiceData({ connectionId: 'conn_123', lastDays: 7 })
 ```
 
 ## Quickstart
@@ -44,7 +45,7 @@ try {
 
 ## Namespaces
 
-`MemoryClient` retains the direct 86-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 153 tools across 30 namespaces.
+`MemoryClient` retains the direct 86-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 155 tools across its generated namespaces.
 
 Every method's input/output types are generated from the live tool schemas (see `src/generated/`, produced by `npm run generate` at the repo root from `contracts/memory.tools.json`) — no hand-maintained duplicate types to drift out of sync.
 

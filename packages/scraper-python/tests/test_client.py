@@ -197,9 +197,11 @@ def test_snake_case_kwargs_are_sent_as_camel_case():
     assert "max_pages" not in sent_body
 
 
-def test_unified_bindings_contain_all_153_unique_tools():
-    assert MCP_TOOL_COUNT == 153
-    assert len({binding["name"] for binding in MCP_TOOL_BINDINGS}) == 153
+def test_unified_bindings_contain_all_155_unique_tools():
+    assert MCP_TOOL_COUNT == 155
+    names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
+    assert len(names) == 155
+    assert {"export_connected_service_data", "renew_connected_data_download"} <= names
 
 
 @responses.activate
@@ -216,6 +218,29 @@ def test_typed_unified_tool_dispatches_through_mcp():
     assert sent_body["params"]["name"] == "search_serp"
     assert sent_body["params"]["arguments"] == {"query": "roofers denver"}
     assert result == {"ok": True, "results": []}
+
+
+@responses.activate
+def test_bulk_connected_data_export_dispatches_as_one_mcp_call():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        json={"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": {"ok": True, "complete": True}}},
+        status=200,
+    )
+    client = ScraperClient(api_key="sk_test")
+    client.tools.connections.export_connected_service_data(
+        connection_id="conn_123",
+        dataset="emails",
+        last_days=7,
+    )
+    sent_body = json.loads(responses.calls[0].request.body)
+    assert sent_body["params"]["name"] == "export_connected_service_data"
+    assert sent_body["params"]["arguments"] == {
+        "connectionId": "conn_123",
+        "dataset": "emails",
+        "lastDays": 7,
+    }
 
 
 @responses.activate

@@ -186,7 +186,7 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
       })
     })
 
-  const memory = program.command('memory').description('Ergonomic memory shortcuts; use tools list/call for the complete 153-tool surface')
+  const memory = program.command('memory').description('Ergonomic memory shortcuts; use tools list/call for the complete 155-tool surface')
 
   memory
     .command('search <query>')
@@ -224,7 +224,7 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
 
   tools
     .command('list')
-    .description('List the complete local 153-tool catalog')
+    .description('List the complete local 155-tool catalog')
     .option('--category <name>', 'filter by SDK category')
     .option('--json', 'print the complete catalog as JSON')
     .action((opts: { category?: string; json?: boolean }) => {
@@ -250,7 +250,7 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
 
   tools
     .command('call <name>')
-    .description('Call any of the 153 MCP tools by exact wire name')
+    .description('Call any of the 155 MCP tools by exact wire name')
     .option('--args <json>', 'tool arguments as a JSON object', '{}')
     .option('--yes', 'confirm a tool marked destructive')
     .option('--json', 'print raw JSON')

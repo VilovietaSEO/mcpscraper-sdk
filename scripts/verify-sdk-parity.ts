@@ -4,7 +4,7 @@ import * as memorySdk from '../packages/memory/src/index.js'
 import * as scraperSdk from '../packages/scraper/src/index.js'
 import { MCP_TOOL_CATALOG } from '../packages/cli/src/generated-tools.js'
 
-const EXPECTED = 153
+const EXPECTED = 155
 
 function namesFromBindings(bindings: ReadonlyArray<{ name: string }>): string[] {
   return bindings.map(binding => binding.name).sort()

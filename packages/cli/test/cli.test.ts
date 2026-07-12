@@ -131,7 +131,7 @@ test('an API error prints a clean message instead of a stack trace', async () =>
   process.exitCode = originalExitCode
 })
 
-test('tools list exposes the complete 153-tool CLI catalog', async () => {
+test('tools list exposes the complete 155-tool CLI catalog', async () => {
   const capture = captureLogs()
   try {
     await createProgram().parseAsync(['node', 'mcpscraper', 'tools', 'list', '--json'])
@@ -139,8 +139,10 @@ test('tools list exposes the complete 153-tool CLI catalog', async () => {
     capture.restore()
   }
   const catalog = JSON.parse(capture.logs.join('')) as Array<{ name: string }>
-  assert.equal(catalog.length, 153)
-  assert.equal(new Set(catalog.map(tool => tool.name)).size, 153)
+  assert.equal(catalog.length, 155)
+  assert.equal(new Set(catalog.map(tool => tool.name)).size, 155)
+  assert.ok(catalog.some(tool => tool.name === 'export_connected_service_data'))
+  assert.ok(catalog.some(tool => tool.name === 'renew_connected_data_download'))
 })
 
 test('tools call dispatches any catalog tool through unified MCP JSON-RPC', async () => {

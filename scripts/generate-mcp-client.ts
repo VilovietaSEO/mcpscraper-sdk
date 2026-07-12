@@ -71,7 +71,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
   ].join('\n'))
 
   return [
-    '# All 153 MCP tools with cURL',
+    '# All 155 MCP tools with cURL',
     '',
     'This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.',
     '',
@@ -89,6 +89,16 @@ function renderCurlDocs(tools: ToolEntry[]): string {
     `TOOL_NAME="memory-search"\nTOOL_ARGS='{"query":"vault routing"}'\n\njq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \\\n  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args}}' \\\n  | curl https://mcpscraper.dev/mcp \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n      -H "content-type: application/json" \\\n      -H "accept: application/json, text/event-stream" \\\n      --data-binary @-`,
     '```',
     '',
+    '## Bulk connected-data export',
+    '',
+    'Fetch a bounded Gmail, Google Calendar, or Zoom range in one call. Provider pagination happens server-side; large results become private downloadable artifacts.',
+    '',
+    '```bash',
+    `jq -n --arg connectionId "$CONNECTION_ID" \\\n  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \\\n  | curl https://mcpscraper.dev/mcp \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n      -H "content-type: application/json" \\\n      -H "accept: application/json, text/event-stream" \\\n      --data-binary @-`,
+    '```',
+    '',
+    'If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.',
+    '',
     `## Complete catalog (${tools.length})`,
     '',
     ...sections,
@@ -97,8 +107,8 @@ function renderCurlDocs(tools: ToolEntry[]): string {
 
 async function main(): Promise<void> {
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as Manifest
-  if (manifest.toolCount !== 153 || manifest.tools.length !== 153) {
-    throw new Error(`Unified manifest must contain exactly 153 tools; received ${manifest.tools.length}`)
+  if (manifest.toolCount !== 155 || manifest.tools.length !== 155) {
+    throw new Error(`Unified manifest must contain exactly 155 tools; received ${manifest.tools.length}`)
   }
 
   await rm(OUT_DIR, { recursive: true, force: true })

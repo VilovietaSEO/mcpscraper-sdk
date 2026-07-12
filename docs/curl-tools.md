@@ -1,4 +1,4 @@
-# All 153 MCP tools with cURL
+# All 155 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -29,7 +29,23 @@ jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
       --data-binary @-
 ```
 
-## Complete catalog (153)
+## Bulk connected-data export
+
+Fetch a bounded Gmail, Google Calendar, or Zoom range in one call. Provider pagination happens server-side; large results become private downloadable artifacts.
+
+```bash
+jq -n --arg connectionId "$CONNECTION_ID" \
+  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \
+  | curl https://mcpscraper.dev/mcp \
+      -H "x-api-key: $MCP_SCRAPER_API_KEY" \
+      -H "content-type: application/json" \
+      -H "accept: application/json, text/event-stream" \
+      --data-binary @-
+```
+
+If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
+
+## Complete catalog (155)
 
 ## search
 
@@ -121,6 +137,8 @@ jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
 - `read_service_connection` — Read Connected Service
 - `call_service_connection_action` — Run Connected Service Action
 - `set_scheduled_action_connections` — Set Scheduled Action Connections
+- `export_connected_service_data` — Export Connected Service Data
+- `renew_connected_data_download` — Renew Connected Data Download
 
 ## serpIntelligence
 

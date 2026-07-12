@@ -7,6 +7,7 @@ export interface Output {
     description: string;
     vault: string;
     cadence: "once" | "daily" | "weekly" | "monthly";
+    executionMode: "agent" | "connection_sync";
     timeOfDay: string | null;
     timezone: string;
     status: "active" | "paused" | "completed";

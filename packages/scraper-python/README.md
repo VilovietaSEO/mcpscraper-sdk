@@ -40,12 +40,19 @@ Every non-2xx response raises a `ScraperApiError` with `.status`, `.code`, and t
 
 ## API surface
 
-`client.tools` is the generated 153-tool MCP surface with one typed snake_case method per tool:
+`client.tools` is the generated 155-tool MCP surface with one typed snake_case method per tool:
 
 ```python
 client.tools.search.search_serp(query="roof repair Denver")
 client.tools.memory.search(query="roofing warranty terms")
+client.tools.connections.export_connected_service_data(
+    connection_id="conn_123",
+    dataset="emails",
+    last_days=7,
+)
 ```
+
+The connected-data export performs bounded provider pagination server-side and returns small results inline or a private seven-day JSONL artifact. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renew_connected_data_download(artifact_id="artifact_123")`.
 
 Core operations are flat on the client: `search_serp`, `harvest_paa`, `extract_url`, `map_site_urls`, `extract_site`, `audit_site`, `get_extract_site_status`, `list_jobs`, `get_job`, `get_history`, `get_ledger`.
 
@@ -69,7 +76,7 @@ hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose 30 generated namespaces provide one typed method for every one of the 153 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 155 unified MCP tools.
 
 ## Regenerating models
 

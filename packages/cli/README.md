@@ -2,7 +2,7 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 153 unified MCP tools.
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 155 unified MCP tools.
 
 ## Install
 
@@ -26,9 +26,11 @@ or pass `--api-key <key>` on any command.
 mcpscraper tools list
 mcpscraper tools describe prepare-memory-write
 mcpscraper tools call prepare-memory-write --args '{"title":"Example","content":"..."}' --json
+mcpscraper tools call export_connected_service_data --args '{"connectionId":"conn_123","dataset":"emails","lastDays":7}' --json
+mcpscraper tools call renew_connected_data_download --args '{"artifactId":"artifact_123"}' --json
 ```
 
-`tools list` contains exactly 153 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 155 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 ### `mcpscraper search <query>`
 

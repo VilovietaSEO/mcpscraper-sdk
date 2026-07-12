@@ -4,7 +4,7 @@ import { join } from 'node:path'
 const ENDPOINT = 'https://mcpscraper.dev/mcp'
 const MANIFEST_PATH = join(process.cwd(), 'contracts/mcp.tools.json')
 const MEMORY_MANIFEST_PATH = join(process.cwd(), 'contracts/memory.tools.json')
-const REQUIRED_TOOL_COUNT = 153
+const REQUIRED_TOOL_COUNT = 155
 
 interface LiveTool {
   name: string
@@ -13,6 +13,13 @@ interface LiveTool {
   inputSchema?: Record<string, unknown>
   outputSchema?: Record<string, unknown>
   annotations?: Record<string, unknown>
+}
+
+interface GeneratedToolManifest {
+  generatedFrom?: string
+  serverInfo?: { name?: string; version?: string }
+  counts?: { unified_stdio?: number }
+  tools?: LiveTool[]
 }
 
 interface UnifiedTool extends LiveTool {
@@ -49,6 +56,8 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   read_service_connection: 'connections',
   call_service_connection_action: 'connections',
   set_scheduled_action_connections: 'connections',
+  export_connected_service_data: 'connections',
+  renew_connected_data_download: 'connections',
   directory_workflow: 'directory',
   query_fanout_workflow: 'workflows',
   rank_tracker_workflow: 'workflows',
@@ -150,13 +159,45 @@ async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {
   return payload.result?.tools ?? []
 }
 
-async function main(): Promise<void> {
-  const apiKey = process.env.MCP_SCRAPER_API_KEY
-  if (!apiKey) throw new Error('MCP_SCRAPER_API_KEY is required')
+async function loadTools(): Promise<{ tools: LiveTool[]; generatedFrom: string }> {
+  const localManifestPath = process.env.MCP_TOOL_MANIFEST_PATH
+  if (localManifestPath) {
+    const manifest = JSON.parse(await readFile(localManifestPath, 'utf8')) as GeneratedToolManifest
+    const tools = manifest.tools ?? []
+    if (manifest.counts?.unified_stdio !== tools.length) {
+      throw new Error(
+        `Local manifest count mismatch: counts.unified_stdio=${manifest.counts?.unified_stdio}, tools=${tools.length}`,
+      )
+    }
+    const server = [manifest.serverInfo?.name, manifest.serverInfo?.version].filter(Boolean).join(' ')
+    const source = manifest.generatedFrom ?? 'generated tools manifest'
+    return { tools, generatedFrom: `${server || 'mcp-scraper'} ${source}` }
+  }
 
+  const apiKey = process.env.MCP_SCRAPER_API_KEY
+  if (!apiKey) throw new Error('MCP_SCRAPER_API_KEY or MCP_TOOL_MANIFEST_PATH is required')
+  return { tools: await fetchLiveTools(apiKey), generatedFrom: `${ENDPOINT} tools/list` }
+}
+
+async function preserveExistingToolOrder(tools: LiveTool[]): Promise<LiveTool[]> {
+  const orderManifestPath = process.env.MCP_TOOL_ORDER_MANIFEST_PATH
+  if (!orderManifestPath) return tools
+
+  const orderManifest = JSON.parse(await readFile(orderManifestPath, 'utf8')) as { tools?: LiveTool[] }
+  const ranks = new Map((orderManifest.tools ?? []).map((tool, index) => [tool.name, index]))
+  const newToolRank = ranks.size
+  return tools.toSorted((left, right) => {
+    const leftRank = ranks.get(left.name) ?? newToolRank
+    const rightRank = ranks.get(right.name) ?? newToolRank
+    return leftRank - rightRank || left.name.localeCompare(right.name)
+  })
+}
+
+async function main(): Promise<void> {
   const memoryManifest = JSON.parse(await readFile(MEMORY_MANIFEST_PATH, 'utf8')) as MemoryManifest
   const memoryCategories = new Map(memoryManifest.tools.map(tool => [tool.legacyId, tool.category]))
-  const liveTools = await fetchLiveTools(apiKey)
+  const { tools: loadedTools, generatedFrom } = await loadTools()
+  const liveTools = await preserveExistingToolOrder(loadedTools)
   if (liveTools.length !== REQUIRED_TOOL_COUNT) {
     throw new Error(`Expected ${REQUIRED_TOOL_COUNT} live MCP tools, received ${liveTools.length}`)
   }
@@ -188,7 +229,7 @@ async function main(): Promise<void> {
 
   const manifest: UnifiedManifest = {
     schemaVersion: 1,
-    generatedFrom: `${ENDPOINT} tools/list`,
+    generatedFrom,
     toolCount: tools.length,
     tools,
   }
