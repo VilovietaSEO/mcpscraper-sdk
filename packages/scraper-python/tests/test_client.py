@@ -206,10 +206,18 @@ def test_unified_bindings_contain_all_155_unique_tools():
 
 @responses.activate
 def test_typed_unified_tool_dispatches_through_mcp():
+    search_result = {
+        "query": "roofers denver",
+        "location": None,
+        "organicResults": [],
+        "localPack": [],
+        "aiOverview": None,
+        "entityIds": None,
+    }
     responses.add(
         responses.POST,
         "https://mcpscraper.dev/mcp",
-        json={"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": {"ok": True, "results": []}}},
+        json={"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": search_result}},
         status=200,
     )
     client = ScraperClient(api_key="sk_test")
@@ -217,7 +225,7 @@ def test_typed_unified_tool_dispatches_through_mcp():
     sent_body = json.loads(responses.calls[0].request.body)
     assert sent_body["params"]["name"] == "search_serp"
     assert sent_body["params"]["arguments"] == {"query": "roofers denver"}
-    assert result == {"ok": True, "results": []}
+    assert result.model_dump(by_alias=True) == search_result
 
 
 @responses.activate
@@ -225,11 +233,15 @@ def test_bulk_connected_data_export_dispatches_as_one_mcp_call():
     responses.add(
         responses.POST,
         "https://mcpscraper.dev/mcp",
-        json={"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": {"ok": True, "complete": True}}},
+        json={
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {"structuredContent": {"ok": True, "complete": True, "error": None}},
+        },
         status=200,
     )
     client = ScraperClient(api_key="sk_test")
-    client.tools.connections.export_connected_service_data(
+    result = client.tools.connections.export_connected_service_data(
         connection_id="conn_123",
         dataset="emails",
         last_days=7,
@@ -241,6 +253,9 @@ def test_bulk_connected_data_export_dispatches_as_one_mcp_call():
         "dataset": "emails",
         "lastDays": 7,
     }
+    assert result.ok is True
+    assert result.complete is True
+    assert result.error is None
 
 
 @responses.activate

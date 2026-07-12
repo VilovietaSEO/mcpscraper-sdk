@@ -83,4 +83,33 @@ export interface Input {
   notes?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  projectName: string;
+  targetDomain: string | null;
+  targetBusinessName: string | null;
+  trackingModes: ("maps" | "organic" | "ai_overview" | "paa")[];
+  database: string;
+  recommendedTools: {
+    tool: string;
+    purpose: string;
+  }[];
+  tables: {
+    name: string;
+    purpose: string;
+    keyColumns: string[];
+  }[];
+  cron: {
+    enabled: boolean;
+    cadence: string;
+    expression: string;
+    timezone: string;
+    jobs: {
+      name: string;
+      purpose: string;
+      modes: ("maps" | "organic" | "ai_overview" | "paa")[];
+      recommendedTools: string[];
+    }[];
+  };
+  metrics: string[];
+  implementationPrompt: string;
+}

@@ -9,4 +9,39 @@ export interface Input {
   maxPages?: number;
 }
 
-export type Output = unknown
+export interface Output {
+  product: string;
+  reviewUrl: string;
+  extractedAt: string;
+  requestedMaxPages: number;
+  pagesFetched: number;
+  reviewCount: number;
+  reviews: {
+    source: "trustpilot" | "g2";
+    sourceReviewId: string | null;
+    reviewUrl: string | null;
+    reviewer: {
+      name: string | null;
+      profileId: string | null;
+      title: string | null;
+      companySegment: string | null;
+    };
+    rating: number | null;
+    ratingScale: number;
+    title: string | null;
+    date: string | null;
+    body: {
+      question: string | null;
+      answer: string;
+    }[];
+    truncated: boolean;
+    flags: {
+      origin: string | null;
+      incentivized: boolean | null;
+      validated: boolean | null;
+      currentUser: boolean | null;
+      companyReplied: boolean | null;
+    };
+  }[];
+  durationMs: number;
+}

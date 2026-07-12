@@ -10,3 +10,9 @@ class RenewConnectedDataDownloadInput(BaseModel):
 
 class RenewConnectedDataDownloadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="")
+    artifact_id: str = Field(..., alias="artifactId", description="")
+    download_url: str = Field(..., alias="downloadUrl", description="")
+    download_url_expires_at: str = Field(..., alias="downloadUrlExpiresAt", description="")
+    expires_at: str = Field(..., alias="expiresAt", description="")

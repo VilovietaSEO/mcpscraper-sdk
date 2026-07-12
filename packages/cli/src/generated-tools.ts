@@ -1771,7 +1771,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "list_service_connections",
     "category": "connections",
     "title": "List Connected Services",
-    "description": "List every third-party service connection this MCP Scraper account has authorized, including Google Analytics, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId plus exact readTools and actionTools. Get a connectionId and exact tool name here before calling read_service_connection or call_service_connection_action. For already-digested history, prefer the returned vaultName or tableName.",
+    "description": "List every third-party service connection this MCP Scraper account has authorized, including GitHub, Google Analytics, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId plus exact readTools and actionTools. Get a connectionId and exact tool name here before calling read_service_connection or call_service_connection_action. GitHub repository, issue, pull-request, release, and workflow operations use these same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. For already-digested history, prefer the returned vaultName or tableName.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -2004,7 +2004,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "read_service_connection",
     "category": "connections",
     "title": "Read Connected Service",
-    "description": "Call one small live, read-only operation on any connected service. Do not loop this tool to fetch a time range or collection: use export_connected_service_data for emails, calendar events, Zoom recordings, or transcripts. Requires a connectionId and an exact name from that connection's readTools in list_service_connections; an unlisted tool is rejected server-side.",
+    "description": "Call one small live, read-only operation on any connected service, including GitHub repository, issue, pull-request, release, and workflow reads. Do not loop this tool to fetch a time range or collection: use export_connected_service_data for emails, calendar events, Zoom recordings, or transcripts. Requires a connectionId and an exact name from that connection's readTools in list_service_connections; an unlisted tool is rejected server-side.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -2043,7 +2043,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "call_service_connection_action",
     "category": "connections",
     "title": "Run Connected Service Action",
-    "description": "Run one explicitly allowlisted write or mutation on a tenant-owned OAuth connection. First call list_service_connections, use a connection with actionsEnabled true, choose one exact actionTools entry, and supply that action's arguments. The server rejects arbitrary action names, inactive or foreign connections, disabled actions, and tools outside the provider allowlist. This may publish, update, send, subscribe, or delete provider data depending on the chosen tool.",
+    "description": "Run one explicitly allowlisted write or mutation on a tenant-owned OAuth connection. First call list_service_connections, use a connection with actionsEnabled true, choose one exact actionTools entry, and supply that action's arguments. The server rejects arbitrary action names, inactive or foreign connections, disabled actions, and tools outside the provider allowlist. This includes GitHub issue, pull-request, repository-content, release, and workflow actions when the exact action is exposed; delete, merge, review-submission, workflow-execution, and content-changing operations are high impact. This may publish, update, send, subscribe, merge, run, or delete provider data depending on the chosen tool.",
     "inputSchema": {
       "type": "object",
       "properties": {

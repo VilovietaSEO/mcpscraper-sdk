@@ -21,4 +21,20 @@ export interface Input {
   formats?: ("markdown" | "links" | "json" | "images" | "branding")[];
 }
 
-export type Output = unknown
+export interface Output {
+  url: string;
+  pageCount: number;
+  pages: {
+    url: string;
+    title: string | null;
+    schemaTypes: string[];
+  }[];
+  durationMs: number;
+  truncatedCount?: number;
+  artifact?: {
+    artifactId: string;
+    bytes: number;
+    expiresAt: string;
+    preview: string;
+  };
+}

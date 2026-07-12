@@ -13,3 +13,12 @@ class AuditSiteInput(BaseModel):
 
 class AuditSiteOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    url: str = Field(..., alias="url", description="")
+    page_count: int = Field(..., alias="pageCount", description="")
+    duration_ms: float = Field(..., alias="durationMs", description="")
+    bulk_folder: Any = Field(..., alias="bulkFolder", description="")
+    issues: dict[str, Any] = Field(..., alias="issues", description="")
+    images: dict[str, Any] = Field(..., alias="images", description="")
+    links: dict[str, Any] = Field(..., alias="links", description="")
+    artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")

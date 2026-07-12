@@ -111,14 +111,21 @@ def test_unified_bindings_contain_all_155_unique_tools():
 
 @responses.activate
 def test_memory_package_unified_client_calls_scraper_and_memory_tools():
+    session_result = {
+        "ok": True,
+        "tool": "browser_list_sessions",
+        "session_id": None,
+        "sessions": [],
+        "count": 0,
+    }
     responses.add(
         responses.POST,
         "https://mcpscraper.dev/mcp",
-        json={"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": {"ok": True}}},
+        json={"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": session_result}},
         status=200,
     )
     client = McpToolsClient(api_key="sk_test")
     result = client.browser.list_sessions()
     sent_body = json.loads(responses.calls[0].request.body)
     assert sent_body["params"]["name"] == "browser_list_sessions"
-    assert result == {"ok": True}
+    assert result.model_dump(by_alias=True) == session_result

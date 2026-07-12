@@ -40,10 +40,14 @@ async function main(): Promise<void> {
   const root = join(import.meta.dirname, '..')
   const manifest = JSON.parse(await readFile(join(root, 'contracts/mcp.tools.json'), 'utf8')) as {
     toolCount: number
-    tools: Array<{ name: string; category: string; methodName: string }>
+    tools: Array<{ name: string; category: string; methodName: string; outputSchema?: Record<string, unknown> }>
   }
   if (manifest.toolCount !== EXPECTED || manifest.tools.length !== EXPECTED) {
     throw new Error(`Manifest count is ${manifest.tools.length}, expected ${EXPECTED}`)
+  }
+  const missingOutputSchemas = manifest.tools.filter(tool => tool.outputSchema?.type !== 'object').map(tool => tool.name)
+  if (missingOutputSchemas.length) {
+    throw new Error(`Manifest tools missing output schemas: ${missingOutputSchemas.join(',')}`)
   }
   const expectedNames = manifest.tools.map(tool => tool.name).sort()
   assertBindings('Node memory package', memorySdk.MCP_TOOL_BINDINGS, manifest.tools)

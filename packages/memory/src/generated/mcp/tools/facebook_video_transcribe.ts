@@ -9,4 +9,21 @@ export interface Input {
   quality?: "best" | "hd" | "sd";
 }
 
-export type Output = unknown
+export interface Output {
+  sourceUrl: string;
+  pageUrl: string;
+  videoId: string | null;
+  ownerName: string | null;
+  selectedQuality: string;
+  bitrate: number | null;
+  videoDurationSec: number | null;
+  videoUrl: string;
+  wordCount: number;
+  chunkCount: number;
+  transcriptText: string;
+  chunks: {
+    startSec: number;
+    endSec: number;
+    text: string;
+  }[];
+}

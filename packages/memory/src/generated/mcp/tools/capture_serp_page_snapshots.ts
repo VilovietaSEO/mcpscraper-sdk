@@ -56,4 +56,21 @@ export interface Input {
   debug?: boolean;
 }
 
-export type Output = unknown
+export interface Output {
+  schemaVersion: "serp-intelligence.page-snapshots.v1";
+  status: string;
+  count: number;
+  failedCount: number;
+  captures: {
+    [k: string]: unknown;
+  }[];
+  resolvedInputs: {
+    [k: string]: unknown;
+  };
+  diagnostics: {
+    [k: string]: unknown;
+  } | null;
+  providerPayload: {
+    [k: string]: unknown;
+  };
+}

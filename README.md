@@ -327,7 +327,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 155 unified tools in both Node and Python, including all 86 memory tools.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 155 unified tools in both Node and Python, including all 85 memory tools.
 
 ## Bulk connected-data exports
 

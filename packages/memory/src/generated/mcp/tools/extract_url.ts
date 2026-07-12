@@ -37,4 +37,27 @@ export interface Input {
   vaultName?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  url: string;
+  title: string | null;
+  headings: {
+    level: number;
+    text: string;
+  }[];
+  schemaBlockCount: number;
+  entityName: string | null;
+  entityTypes: string[];
+  napScore: number | null;
+  missingSchemaFields: string[];
+  screenshotSaved: string | null;
+  memory?: {
+    deposited: boolean;
+    vault?: string;
+    noteId?: string;
+    path?: string;
+    chunks?: number;
+    fileUrl?: string;
+    fileExpiresAt?: string;
+    error?: string;
+  };
+}

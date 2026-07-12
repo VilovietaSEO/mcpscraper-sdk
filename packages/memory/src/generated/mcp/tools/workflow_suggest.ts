@@ -33,4 +33,17 @@ export interface Input {
   maxSuggestions?: number;
 }
 
-export type Output = unknown
+export interface Output {
+  goal: string;
+  suggestions: {
+    id: string;
+    title: string;
+    description: string;
+    primaryWorkflowId: string | null;
+    recommendedTools: string[];
+    requiredInputs: string[];
+    optionalInputs: string[];
+    produces: string[];
+    runHint: string;
+  }[];
+}

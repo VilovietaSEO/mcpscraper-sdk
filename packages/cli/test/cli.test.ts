@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { mkdtempSync, rmSync, symlinkSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync, symlinkSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -38,6 +38,11 @@ test('recognizes an npm-style symlink as the CLI entrypoint', { skip: process.pl
   } finally {
     rmSync(directory, { recursive: true, force: true })
   }
+})
+
+test('reports the package version', () => {
+  const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as { version: string }
+  assert.equal(createProgram().version(), packageJson.version)
 })
 
 test('search sends the query and prints organic results', async () => {

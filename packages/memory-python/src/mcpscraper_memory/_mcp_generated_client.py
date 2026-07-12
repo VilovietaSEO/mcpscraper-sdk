@@ -165,94 +165,110 @@ class SearchNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def harvest_paa(self, **kwargs: Any) -> Any:
+    def harvest_paa(self, **kwargs: Any) -> HarvestPaaOutput:
         payload = HarvestPaaInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("harvest_paa", payload)
+        result = self._call_tool("harvest_paa", payload)
+        return HarvestPaaOutput.model_validate(result)
 
-    def search_serp(self, **kwargs: Any) -> Any:
+    def search_serp(self, **kwargs: Any) -> SearchSerpOutput:
         payload = SearchSerpInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("search_serp", payload)
+        result = self._call_tool("search_serp", payload)
+        return SearchSerpOutput.model_validate(result)
 
 
 class WebNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def extract_url(self, **kwargs: Any) -> Any:
+    def extract_url(self, **kwargs: Any) -> ExtractUrlOutput:
         payload = ExtractUrlInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("extract_url", payload)
+        result = self._call_tool("extract_url", payload)
+        return ExtractUrlOutput.model_validate(result)
 
-    def diff_page(self, **kwargs: Any) -> Any:
+    def diff_page(self, **kwargs: Any) -> DiffPageOutput:
         payload = DiffPageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("diff_page", payload)
+        result = self._call_tool("diff_page", payload)
+        return DiffPageOutput.model_validate(result)
 
-    def map_site_urls(self, **kwargs: Any) -> Any:
+    def map_site_urls(self, **kwargs: Any) -> MapSiteUrlsOutput:
         payload = MapSiteUrlsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("map_site_urls", payload)
+        result = self._call_tool("map_site_urls", payload)
+        return MapSiteUrlsOutput.model_validate(result)
 
-    def extract_site(self, **kwargs: Any) -> Any:
+    def extract_site(self, **kwargs: Any) -> ExtractSiteOutput:
         payload = ExtractSiteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("extract_site", payload)
+        result = self._call_tool("extract_site", payload)
+        return ExtractSiteOutput.model_validate(result)
 
-    def audit_site(self, **kwargs: Any) -> Any:
+    def audit_site(self, **kwargs: Any) -> AuditSiteOutput:
         payload = AuditSiteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("audit_site", payload)
+        result = self._call_tool("audit_site", payload)
+        return AuditSiteOutput.model_validate(result)
 
 
 class YoutubeNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def harvest(self, **kwargs: Any) -> Any:
+    def harvest(self, **kwargs: Any) -> YoutubeHarvestOutput:
         payload = YoutubeHarvestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("youtube_harvest", payload)
+        result = self._call_tool("youtube_harvest", payload)
+        return YoutubeHarvestOutput.model_validate(result)
 
-    def transcribe(self, **kwargs: Any) -> Any:
+    def transcribe(self, **kwargs: Any) -> YoutubeTranscribeOutput:
         payload = YoutubeTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("youtube_transcribe", payload)
+        result = self._call_tool("youtube_transcribe", payload)
+        return YoutubeTranscribeOutput.model_validate(result)
 
 
 class FacebookNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def page_intel(self, **kwargs: Any) -> Any:
+    def page_intel(self, **kwargs: Any) -> FacebookPageIntelOutput:
         payload = FacebookPageIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("facebook_page_intel", payload)
+        result = self._call_tool("facebook_page_intel", payload)
+        return FacebookPageIntelOutput.model_validate(result)
 
-    def ad_search(self, **kwargs: Any) -> Any:
+    def ad_search(self, **kwargs: Any) -> FacebookAdSearchOutput:
         payload = FacebookAdSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("facebook_ad_search", payload)
+        result = self._call_tool("facebook_ad_search", payload)
+        return FacebookAdSearchOutput.model_validate(result)
 
-    def ad_transcribe(self, **kwargs: Any) -> Any:
+    def ad_transcribe(self, **kwargs: Any) -> FacebookAdTranscribeOutput:
         payload = FacebookAdTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("facebook_ad_transcribe", payload)
+        result = self._call_tool("facebook_ad_transcribe", payload)
+        return FacebookAdTranscribeOutput.model_validate(result)
 
-    def video_transcribe(self, **kwargs: Any) -> Any:
+    def video_transcribe(self, **kwargs: Any) -> FacebookVideoTranscribeOutput:
         payload = FacebookVideoTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("facebook_video_transcribe", payload)
+        result = self._call_tool("facebook_video_transcribe", payload)
+        return FacebookVideoTranscribeOutput.model_validate(result)
 
 
 class RedditNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def thread(self, **kwargs: Any) -> Any:
+    def thread(self, **kwargs: Any) -> RedditThreadOutput:
         payload = RedditThreadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("reddit_thread", payload)
+        result = self._call_tool("reddit_thread", payload)
+        return RedditThreadOutput.model_validate(result)
 
 
 class VideoNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def frame_analysis(self, **kwargs: Any) -> Any:
+    def frame_analysis(self, **kwargs: Any) -> VideoFrameAnalysisOutput:
         payload = VideoFrameAnalysisInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("video_frame_analysis", payload)
+        result = self._call_tool("video_frame_analysis", payload)
+        return VideoFrameAnalysisOutput.model_validate(result)
 
-    def frame_analysis_status(self, **kwargs: Any) -> Any:
+    def frame_analysis_status(self, **kwargs: Any) -> VideoFrameAnalysisStatusOutput:
         payload = VideoFrameAnalysisStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("video_frame_analysis_status", payload)
+        result = self._call_tool("video_frame_analysis_status", payload)
+        return VideoFrameAnalysisStatusOutput.model_validate(result)
 
     def analyze_start(self, **kwargs: Any) -> VideoAnalyzeStartOutput:
         payload = VideoAnalyzeStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -269,271 +285,325 @@ class GoogleAdsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def search(self, **kwargs: Any) -> Any:
+    def search(self, **kwargs: Any) -> GoogleAdsSearchOutput:
         payload = GoogleAdsSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("google_ads_search", payload)
+        result = self._call_tool("google_ads_search", payload)
+        return GoogleAdsSearchOutput.model_validate(result)
 
-    def page_intel(self, **kwargs: Any) -> Any:
+    def page_intel(self, **kwargs: Any) -> GoogleAdsPageIntelOutput:
         payload = GoogleAdsPageIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("google_ads_page_intel", payload)
+        result = self._call_tool("google_ads_page_intel", payload)
+        return GoogleAdsPageIntelOutput.model_validate(result)
 
-    def transcribe(self, **kwargs: Any) -> Any:
+    def transcribe(self, **kwargs: Any) -> GoogleAdsTranscribeOutput:
         payload = GoogleAdsTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("google_ads_transcribe", payload)
+        result = self._call_tool("google_ads_transcribe", payload)
+        return GoogleAdsTranscribeOutput.model_validate(result)
 
 
 class InstagramNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def profile_content(self, **kwargs: Any) -> Any:
+    def profile_content(self, **kwargs: Any) -> InstagramProfileContentOutput:
         payload = InstagramProfileContentInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("instagram_profile_content", payload)
+        result = self._call_tool("instagram_profile_content", payload)
+        return InstagramProfileContentOutput.model_validate(result)
 
-    def media_download(self, **kwargs: Any) -> Any:
+    def media_download(self, **kwargs: Any) -> InstagramMediaDownloadOutput:
         payload = InstagramMediaDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("instagram_media_download", payload)
+        result = self._call_tool("instagram_media_download", payload)
+        return InstagramMediaDownloadOutput.model_validate(result)
 
 
 class MapsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def place_intel(self, **kwargs: Any) -> Any:
+    def place_intel(self, **kwargs: Any) -> MapsPlaceIntelOutput:
         payload = MapsPlaceIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("maps_place_intel", payload)
+        result = self._call_tool("maps_place_intel", payload)
+        return MapsPlaceIntelOutput.model_validate(result)
 
-    def search(self, **kwargs: Any) -> Any:
+    def search(self, **kwargs: Any) -> MapsSearchOutput:
         payload = MapsSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("maps_search", payload)
+        result = self._call_tool("maps_search", payload)
+        return MapsSearchOutput.model_validate(result)
 
 
 class ReviewsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def trustpilot_reviews(self, **kwargs: Any) -> Any:
+    def trustpilot_reviews(self, **kwargs: Any) -> TrustpilotReviewsOutput:
         payload = TrustpilotReviewsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("trustpilot_reviews", payload)
+        result = self._call_tool("trustpilot_reviews", payload)
+        return TrustpilotReviewsOutput.model_validate(result)
 
-    def g2_reviews(self, **kwargs: Any) -> Any:
+    def g2_reviews(self, **kwargs: Any) -> G2ReviewsOutput:
         payload = G2ReviewsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("g2_reviews", payload)
+        result = self._call_tool("g2_reviews", payload)
+        return G2ReviewsOutput.model_validate(result)
 
 
 class DirectoryNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def run(self, **kwargs: Any) -> Any:
+    def run(self, **kwargs: Any) -> DirectoryWorkflowOutput:
         payload = DirectoryWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("directory_workflow", payload)
+        result = self._call_tool("directory_workflow", payload)
+        return DirectoryWorkflowOutput.model_validate(result)
 
 
 class WorkflowsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def list(self, **kwargs: Any) -> Any:
+    def list(self, **kwargs: Any) -> WorkflowListOutput:
         payload = WorkflowListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("workflow_list", payload)
+        result = self._call_tool("workflow_list", payload)
+        return WorkflowListOutput.model_validate(result)
 
-    def suggest(self, **kwargs: Any) -> Any:
+    def suggest(self, **kwargs: Any) -> WorkflowSuggestOutput:
         payload = WorkflowSuggestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("workflow_suggest", payload)
+        result = self._call_tool("workflow_suggest", payload)
+        return WorkflowSuggestOutput.model_validate(result)
 
-    def run(self, **kwargs: Any) -> Any:
+    def run(self, **kwargs: Any) -> WorkflowRunOutput:
         payload = WorkflowRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("workflow_run", payload)
+        result = self._call_tool("workflow_run", payload)
+        return WorkflowRunOutput.model_validate(result)
 
-    def step(self, **kwargs: Any) -> Any:
+    def step(self, **kwargs: Any) -> WorkflowStepOutput:
         payload = WorkflowStepInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("workflow_step", payload)
+        result = self._call_tool("workflow_step", payload)
+        return WorkflowStepOutput.model_validate(result)
 
-    def status(self, **kwargs: Any) -> Any:
+    def status(self, **kwargs: Any) -> WorkflowStatusOutput:
         payload = WorkflowStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("workflow_status", payload)
+        result = self._call_tool("workflow_status", payload)
+        return WorkflowStatusOutput.model_validate(result)
 
-    def artifact_read(self, **kwargs: Any) -> Any:
+    def artifact_read(self, **kwargs: Any) -> WorkflowArtifactReadOutput:
         payload = WorkflowArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("workflow_artifact_read", payload)
+        result = self._call_tool("workflow_artifact_read", payload)
+        return WorkflowArtifactReadOutput.model_validate(result)
 
-    def rank_tracker(self, **kwargs: Any) -> Any:
+    def rank_tracker(self, **kwargs: Any) -> RankTrackerWorkflowOutput:
         payload = RankTrackerWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("rank_tracker_workflow", payload)
+        result = self._call_tool("rank_tracker_workflow", payload)
+        return RankTrackerWorkflowOutput.model_validate(result)
 
-    def query_fanout(self, **kwargs: Any) -> Any:
+    def query_fanout(self, **kwargs: Any) -> QueryFanoutWorkflowOutput:
         payload = QueryFanoutWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("query_fanout_workflow", payload)
+        result = self._call_tool("query_fanout_workflow", payload)
+        return QueryFanoutWorkflowOutput.model_validate(result)
 
 
 class ArtifactsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def read(self, **kwargs: Any) -> Any:
+    def read(self, **kwargs: Any) -> ReportArtifactReadOutput:
         payload = ReportArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("report_artifact_read", payload)
+        result = self._call_tool("report_artifact_read", payload)
+        return ReportArtifactReadOutput.model_validate(result)
 
 
 class BillingNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def credits_info(self, **kwargs: Any) -> Any:
+    def credits_info(self, **kwargs: Any) -> CreditsInfoOutput:
         payload = CreditsInfoInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("credits_info", payload)
+        result = self._call_tool("credits_info", payload)
+        return CreditsInfoOutput.model_validate(result)
 
 
 class ConnectionsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def list_service_connections(self, **kwargs: Any) -> Any:
+    def list_service_connections(self, **kwargs: Any) -> ListServiceConnectionsOutput:
         payload = ListServiceConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("list_service_connections", payload)
+        result = self._call_tool("list_service_connections", payload)
+        return ListServiceConnectionsOutput.model_validate(result)
 
-    def slack_send_message(self, **kwargs: Any) -> Any:
+    def slack_send_message(self, **kwargs: Any) -> SlackSendMessageOutput:
         payload = SlackSendMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("slack_send_message", payload)
+        result = self._call_tool("slack_send_message", payload)
+        return SlackSendMessageOutput.model_validate(result)
 
-    def gmail_send_message(self, **kwargs: Any) -> Any:
+    def gmail_send_message(self, **kwargs: Any) -> GmailSendMessageOutput:
         payload = GmailSendMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("gmail_send_message", payload)
+        result = self._call_tool("gmail_send_message", payload)
+        return GmailSendMessageOutput.model_validate(result)
 
-    def google_calendar_create_event(self, **kwargs: Any) -> Any:
+    def google_calendar_create_event(self, **kwargs: Any) -> GoogleCalendarCreateEventOutput:
         payload = GoogleCalendarCreateEventInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("google_calendar_create_event", payload)
+        result = self._call_tool("google_calendar_create_event", payload)
+        return GoogleCalendarCreateEventOutput.model_validate(result)
 
-    def zoom_create_meeting(self, **kwargs: Any) -> Any:
+    def zoom_create_meeting(self, **kwargs: Any) -> ZoomCreateMeetingOutput:
         payload = ZoomCreateMeetingInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("zoom_create_meeting", payload)
+        result = self._call_tool("zoom_create_meeting", payload)
+        return ZoomCreateMeetingOutput.model_validate(result)
 
-    def read_service_connection(self, **kwargs: Any) -> Any:
+    def read_service_connection(self, **kwargs: Any) -> ReadServiceConnectionOutput:
         payload = ReadServiceConnectionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("read_service_connection", payload)
+        result = self._call_tool("read_service_connection", payload)
+        return ReadServiceConnectionOutput.model_validate(result)
 
-    def call_service_connection_action(self, **kwargs: Any) -> Any:
+    def call_service_connection_action(self, **kwargs: Any) -> CallServiceConnectionActionOutput:
         payload = CallServiceConnectionActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("call_service_connection_action", payload)
+        result = self._call_tool("call_service_connection_action", payload)
+        return CallServiceConnectionActionOutput.model_validate(result)
 
-    def set_scheduled_action_connections(self, **kwargs: Any) -> Any:
+    def set_scheduled_action_connections(self, **kwargs: Any) -> SetScheduledActionConnectionsOutput:
         payload = SetScheduledActionConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("set_scheduled_action_connections", payload)
+        result = self._call_tool("set_scheduled_action_connections", payload)
+        return SetScheduledActionConnectionsOutput.model_validate(result)
 
-    def export_connected_service_data(self, **kwargs: Any) -> Any:
+    def export_connected_service_data(self, **kwargs: Any) -> ExportConnectedServiceDataOutput:
         payload = ExportConnectedServiceDataInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("export_connected_service_data", payload)
+        result = self._call_tool("export_connected_service_data", payload)
+        return ExportConnectedServiceDataOutput.model_validate(result)
 
-    def renew_connected_data_download(self, **kwargs: Any) -> Any:
+    def renew_connected_data_download(self, **kwargs: Any) -> RenewConnectedDataDownloadOutput:
         payload = RenewConnectedDataDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("renew_connected_data_download", payload)
+        result = self._call_tool("renew_connected_data_download", payload)
+        return RenewConnectedDataDownloadOutput.model_validate(result)
 
 
 class SerpIntelligenceNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def snapshot(self, **kwargs: Any) -> Any:
+    def snapshot(self, **kwargs: Any) -> CaptureSerpSnapshotOutput:
         payload = CaptureSerpSnapshotInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("capture_serp_snapshot", payload)
+        result = self._call_tool("capture_serp_snapshot", payload)
+        return CaptureSerpSnapshotOutput.model_validate(result)
 
-    def page_snapshots(self, **kwargs: Any) -> Any:
+    def page_snapshots(self, **kwargs: Any) -> CaptureSerpPageSnapshotsOutput:
         payload = CaptureSerpPageSnapshotsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("capture_serp_page_snapshots", payload)
+        result = self._call_tool("capture_serp_page_snapshots", payload)
+        return CaptureSerpPageSnapshotsOutput.model_validate(result)
 
 
 class BrowserNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def profile_connect(self, **kwargs: Any) -> Any:
+    def profile_connect(self, **kwargs: Any) -> BrowserProfileConnectOutput:
         payload = BrowserProfileConnectInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_profile_connect", payload)
+        result = self._call_tool("browser_profile_connect", payload)
+        return BrowserProfileConnectOutput.model_validate(result)
 
-    def profile_list(self, **kwargs: Any) -> Any:
+    def profile_list(self, **kwargs: Any) -> BrowserProfileListOutput:
         payload = BrowserProfileListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_profile_list", payload)
+        result = self._call_tool("browser_profile_list", payload)
+        return BrowserProfileListOutput.model_validate(result)
 
-    def extension_import(self, **kwargs: Any) -> Any:
+    def extension_import(self, **kwargs: Any) -> BrowserExtensionImportOutput:
         payload = BrowserExtensionImportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_extension_import", payload)
+        result = self._call_tool("browser_extension_import", payload)
+        return BrowserExtensionImportOutput.model_validate(result)
 
-    def extension_list(self, **kwargs: Any) -> Any:
+    def extension_list(self, **kwargs: Any) -> BrowserExtensionListOutput:
         payload = BrowserExtensionListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_extension_list", payload)
+        result = self._call_tool("browser_extension_list", payload)
+        return BrowserExtensionListOutput.model_validate(result)
 
-    def extension_delete(self, **kwargs: Any) -> Any:
+    def extension_delete(self, **kwargs: Any) -> BrowserExtensionDeleteOutput:
         payload = BrowserExtensionDeleteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_extension_delete", payload)
+        result = self._call_tool("browser_extension_delete", payload)
+        return BrowserExtensionDeleteOutput.model_validate(result)
 
-    def open(self, **kwargs: Any) -> Any:
+    def open(self, **kwargs: Any) -> BrowserOpenOutput:
         payload = BrowserOpenInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_open", payload)
+        result = self._call_tool("browser_open", payload)
+        return BrowserOpenOutput.model_validate(result)
 
-    def screenshot(self, **kwargs: Any) -> Any:
+    def screenshot(self, **kwargs: Any) -> BrowserScreenshotOutput:
         payload = BrowserScreenshotInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_screenshot", payload)
+        result = self._call_tool("browser_screenshot", payload)
+        return BrowserScreenshotOutput.model_validate(result)
 
-    def read(self, **kwargs: Any) -> Any:
+    def read(self, **kwargs: Any) -> BrowserReadOutput:
         payload = BrowserReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_read", payload)
+        result = self._call_tool("browser_read", payload)
+        return BrowserReadOutput.model_validate(result)
 
-    def locate(self, **kwargs: Any) -> Any:
+    def locate(self, **kwargs: Any) -> BrowserLocateOutput:
         payload = BrowserLocateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_locate", payload)
+        result = self._call_tool("browser_locate", payload)
+        return BrowserLocateOutput.model_validate(result)
 
-    def goto(self, **kwargs: Any) -> Any:
+    def goto(self, **kwargs: Any) -> BrowserGotoOutput:
         payload = BrowserGotoInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_goto", payload)
+        result = self._call_tool("browser_goto", payload)
+        return BrowserGotoOutput.model_validate(result)
 
-    def click(self, **kwargs: Any) -> Any:
+    def click(self, **kwargs: Any) -> BrowserClickOutput:
         payload = BrowserClickInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_click", payload)
+        result = self._call_tool("browser_click", payload)
+        return BrowserClickOutput.model_validate(result)
 
-    def type(self, **kwargs: Any) -> Any:
+    def type(self, **kwargs: Any) -> BrowserTypeOutput:
         payload = BrowserTypeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_type", payload)
+        result = self._call_tool("browser_type", payload)
+        return BrowserTypeOutput.model_validate(result)
 
-    def scroll(self, **kwargs: Any) -> Any:
+    def scroll(self, **kwargs: Any) -> BrowserScrollOutput:
         payload = BrowserScrollInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_scroll", payload)
+        result = self._call_tool("browser_scroll", payload)
+        return BrowserScrollOutput.model_validate(result)
 
-    def press(self, **kwargs: Any) -> Any:
+    def press(self, **kwargs: Any) -> BrowserPressOutput:
         payload = BrowserPressInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_press", payload)
+        result = self._call_tool("browser_press", payload)
+        return BrowserPressOutput.model_validate(result)
 
-    def replay_start(self, **kwargs: Any) -> Any:
+    def replay_start(self, **kwargs: Any) -> BrowserReplayStartOutput:
         payload = BrowserReplayStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_replay_start", payload)
+        result = self._call_tool("browser_replay_start", payload)
+        return BrowserReplayStartOutput.model_validate(result)
 
-    def replay_stop(self, **kwargs: Any) -> Any:
+    def replay_stop(self, **kwargs: Any) -> BrowserReplayStopOutput:
         payload = BrowserReplayStopInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_replay_stop", payload)
+        result = self._call_tool("browser_replay_stop", payload)
+        return BrowserReplayStopOutput.model_validate(result)
 
-    def list_replays(self, **kwargs: Any) -> Any:
+    def list_replays(self, **kwargs: Any) -> BrowserListReplaysOutput:
         payload = BrowserListReplaysInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_list_replays", payload)
+        result = self._call_tool("browser_list_replays", payload)
+        return BrowserListReplaysOutput.model_validate(result)
 
-    def replay_download(self, **kwargs: Any) -> Any:
+    def replay_download(self, **kwargs: Any) -> BrowserReplayDownloadOutput:
         payload = BrowserReplayDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_replay_download", payload)
+        result = self._call_tool("browser_replay_download", payload)
+        return BrowserReplayDownloadOutput.model_validate(result)
 
-    def replay_mark(self, **kwargs: Any) -> Any:
+    def replay_mark(self, **kwargs: Any) -> BrowserReplayMarkOutput:
         payload = BrowserReplayMarkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_replay_mark", payload)
+        result = self._call_tool("browser_replay_mark", payload)
+        return BrowserReplayMarkOutput.model_validate(result)
 
-    def replay_annotate(self, **kwargs: Any) -> Any:
+    def replay_annotate(self, **kwargs: Any) -> BrowserReplayAnnotateOutput:
         payload = BrowserReplayAnnotateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_replay_annotate", payload)
+        result = self._call_tool("browser_replay_annotate", payload)
+        return BrowserReplayAnnotateOutput.model_validate(result)
 
-    def close(self, **kwargs: Any) -> Any:
+    def close(self, **kwargs: Any) -> BrowserCloseOutput:
         payload = BrowserCloseInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_close", payload)
+        result = self._call_tool("browser_close", payload)
+        return BrowserCloseOutput.model_validate(result)
 
-    def list_sessions(self, **kwargs: Any) -> Any:
+    def list_sessions(self, **kwargs: Any) -> BrowserListSessionsOutput:
         payload = BrowserListSessionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        return self._call_tool("browser_list_sessions", payload)
+        result = self._call_tool("browser_list_sessions", payload)
+        return BrowserListSessionsOutput.model_validate(result)
 
 
 class AccessNamespace:

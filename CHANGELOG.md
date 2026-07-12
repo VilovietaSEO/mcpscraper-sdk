@@ -6,9 +6,11 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
 ## mcpscraper-memory-sdk 0.6.0 / mcpscraper-sdk 0.7.0 / Python SDKs 0.4.0 / mcpscraper-cli 0.4.0
-- Regenerated the unified Node, Python, CLI, and cURL surfaces from the mcp-scraper `0.13.0` 155-tool manifest.
+- Regenerated the unified Node, Python, CLI, and cURL surfaces from the mcp-scraper `0.14.0` 155-tool manifest.
 - Added typed `connections.exportConnectedServiceData` / `connections.export_connected_service_data` bindings for bounded Gmail, Google Calendar, and Zoom range exports with inline-or-private-artifact delivery and resumable continuations.
 - Added typed `connections.renewConnectedDataDownload` / `connections.renew_connected_data_download` bindings for refreshing expiring private artifact download URLs.
+- Added manifest-derived output contracts across the unified SDK so connected-data exports and all other schema-backed tools return generated TypeScript/Python output types instead of `unknown` or empty models.
+- Updated the provider-neutral connection descriptions for GitHub's 27 reads and 20 gated actions; the top-level MCP catalog remains 155 tools.
 - Raised deterministic parity and package tests to require exact 155/155 tool-name and binding coverage.
 
 ## mcpscraper-memory-sdk 0.5.0

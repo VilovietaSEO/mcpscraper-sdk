@@ -17,4 +17,31 @@ export interface Input {
   rotateProxyEvery?: number;
 }
 
-export type Output = unknown
+export interface Output {
+  url: string;
+  pageCount: number;
+  durationMs: number;
+  bulkFolder: string | null;
+  issues: {
+    [k: string]: number;
+  };
+  images: {
+    unique: number;
+    totalBytes: number;
+    over100kb: number;
+    legacyFormat: number;
+  };
+  links: {
+    internal: number;
+    external: number;
+    orphans: number;
+    brokenInternal: number;
+    externalDomains: number;
+  };
+  artifact?: {
+    artifactId: string;
+    bytes: number;
+    expiresAt: string;
+    preview: string;
+  };
+}

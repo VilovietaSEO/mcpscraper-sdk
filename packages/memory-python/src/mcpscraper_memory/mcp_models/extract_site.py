@@ -14,3 +14,10 @@ class ExtractSiteInput(BaseModel):
 
 class ExtractSiteOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    url: str = Field(..., alias="url", description="")
+    page_count: int = Field(..., alias="pageCount", description="")
+    pages: list[dict[str, Any]] = Field(..., alias="pages", description="")
+    duration_ms: float = Field(..., alias="durationMs", description="")
+    truncated_count: int | None = Field(None, alias="truncatedCount", description="")
+    artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")

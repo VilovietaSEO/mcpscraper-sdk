@@ -21,4 +21,25 @@ export interface Input {
   country?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  advertiserName: string | null;
+  totalAds: number;
+  activeCount: number;
+  videoCount: number;
+  imageCount: number;
+  ads: {
+    libraryId: string | null;
+    status: string | null;
+    creativeType: string | null;
+    primaryText: string | null;
+    headline: string | null;
+    cta: string | null;
+    startDate: string | null;
+    landingUrl: string | null;
+    domain: string | null;
+    videoUrl: string | null;
+    imageUrl: string | null;
+    videoPoster: string | null;
+    variations: number | null;
+  }[];
+}
