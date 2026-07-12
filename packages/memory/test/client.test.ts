@@ -124,12 +124,13 @@ test('a non-2xx HTTP response throws MemoryApiError with httpStatus set', async 
   )
 })
 
-test('unified MCP bindings contain all 156 unique tools', () => {
-  assert.equal(MCP_TOOL_COUNT, 156)
-  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 156)
+test('unified MCP bindings contain all 157 unique tools', () => {
+  assert.equal(MCP_TOOL_COUNT, 157)
+  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 157)
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'export_connected_service_data'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'renew_connected_data_download'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'describe_service_connection_tool'))
+  assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'import_service_connection_to_memory'))
 })
 
 test('McpToolsClient typed methods call the unified MCP wire name', async () => {
@@ -187,6 +188,41 @@ test('McpToolsClient dispatches a bulk connected-data export as one MCP call', a
     connectionId: 'conn_123',
     dataset: 'resend_data',
     lastDays: 7,
+  })
+})
+
+test('McpToolsClient dispatches a connected-service Memory snapshot with its exact grant', async () => {
+  let capturedBody: any
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: capturedBody.id,
+          result: { structuredContent: { ok: true, stored: true, searchReady: true, untrustedContent: true } },
+        },
+      }
+    }),
+  })
+
+  await client.connections.importServiceConnectionToMemory({
+    connectionId: 'conn_123',
+    providerConfigKey: 'google-drive',
+    tool: 'get-about',
+    args: {},
+    vault: 'Knowledge',
+  })
+
+  assert.equal(capturedBody.params.name, 'import_service_connection_to_memory')
+  assert.deepEqual(capturedBody.params.arguments, {
+    connectionId: 'conn_123',
+    providerConfigKey: 'google-drive',
+    tool: 'get-about',
+    args: {},
+    vault: 'Knowledge',
   })
 })
 

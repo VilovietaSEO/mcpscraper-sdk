@@ -7,6 +7,10 @@ export interface Input {
    * One exact name from that connection's readTools or actionTools. Admin-blocked and arbitrary names are rejected.
    */
   tool: string;
+  /**
+   * Bypass the short-lived sanitized schema cache. Ownership, connection state, and tool policy are still rechecked; use only when a provider tool catalog just changed.
+   */
+  fresh?: boolean;
 }
 
 export interface Output {
@@ -17,11 +21,49 @@ export interface Output {
     description: string | null;
     classification: "read" | "action";
     /**
+     * Whether the tool is callable now. A gated action can be described while actions are off and return false.
+     */
+    callable?: boolean;
+    blockedReason?: ("actions_disabled" | "inactive_connection") | null;
+    transport?: "nango" | "remote_mcp";
+    providerConfigKey?: string;
+    protocolVersion?: string | null;
+    schemaSource?: "live_tools_list";
+    /**
      * JSON Schema for the exact connected-provider tool arguments.
      */
     inputSchema: {
       [k: string]: unknown;
     };
+    /**
+     * Provider-native JSON output schema when the live MCP tool publishes one.
+     */
+    outputSchema?: {
+      [k: string]: unknown;
+    };
+    annotations?: {
+      title?: string;
+      readOnlyHint?: boolean;
+      destructiveHint?: boolean;
+      idempotentHint?: boolean;
+      openWorldHint?: boolean;
+    };
+    icons?: {
+      src: string;
+      mimeType?: string;
+      sizes?: string[];
+      theme?: "light" | "dark";
+    }[];
+    execution?: {
+      taskSupport: "forbidden" | "optional" | "required";
+    };
+    /**
+     * SHA-256 of the sanitized live Tool definition.
+     */
+    schemaHash?: string;
+    fetchedAt?: string;
   };
+  retryable?: boolean;
+  errorCode?: string;
   error: string | null;
 }
