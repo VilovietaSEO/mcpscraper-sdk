@@ -6,7 +6,7 @@ class ExportConnectedServiceDataInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     connection_id: str = Field(..., alias="connectionId", description="A tenant-owned connectionId from list_service_connections.")
-    dataset: Literal["auto", "emails", "calendar_events", "zoom_recordings", "zoom_transcripts", "resend_data", "resend_emails", "resend_received_emails", "resend_logs", "resend_contacts", "resend_broadcasts", "resend_templates"] | None = Field(None, alias="dataset", description="Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, and Resend to resend_data (sent mail, received mail, logs, contacts, broadcasts, and templates).")
+    dataset: Literal["auto", "emails", "calendar_events", "zoom_recordings", "zoom_transcripts", "resend_data", "resend_emails", "resend_received_emails", "resend_logs", "resend_contacts", "resend_broadcasts", "resend_templates"] | None = Field(None, alias="dataset", description="Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, and Resend to resend_data. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.")
     last_days: int | None = Field(None, alias="lastDays", description="Relative range ending at to (or now). Defaults to 7 when from is omitted. Do not pass together with from.")
     from_: str | None = Field(None, alias="from", description="Inclusive RFC3339 range start. Use instead of lastDays.")
     to: str | None = Field(None, alias="to", description="Exclusive RFC3339 range end. Defaults to now.")

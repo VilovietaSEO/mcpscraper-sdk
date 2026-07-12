@@ -4,7 +4,7 @@ export interface Input {
    */
   connectionId: string;
   /**
-   * Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, and Resend to resend_data (sent mail, received mail, logs, contacts, broadcasts, and templates).
+   * Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, and Resend to resend_data. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
    */
   dataset?:
     | "auto"
