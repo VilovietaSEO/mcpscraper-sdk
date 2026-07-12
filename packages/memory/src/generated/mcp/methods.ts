@@ -49,6 +49,7 @@ import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled
 import * as ConnectionsExportConnectedServiceData from './tools/export_connected_service_data.js'
 import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_data_download.js'
 import * as ConnectionsDescribeServiceConnectionTool from './tools/describe_service_connection_tool.js'
+import * as ConnectionsImportServiceConnectionToMemory from './tools/import_service_connection_to_memory.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as BrowserProfileConnect from './tools/browser_profile_connect.js'
@@ -937,6 +938,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "describe_service_connection_tool",
     "category": "connections",
     "methodName": "describeServiceConnectionTool"
+  },
+  {
+    "name": "import_service_connection_to_memory",
+    "category": "connections",
+    "methodName": "importServiceConnectionToMemory"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1194,6 +1200,10 @@ export class ConnectionsNamespace {
 
   async describeServiceConnectionTool(input: ConnectionsDescribeServiceConnectionTool.Input): Promise<ConnectionsDescribeServiceConnectionTool.Output> {
     return this.callTool('describe_service_connection_tool', input) as Promise<ConnectionsDescribeServiceConnectionTool.Output>
+  }
+
+  async importServiceConnectionToMemory(input: ConnectionsImportServiceConnectionToMemory.Input): Promise<ConnectionsImportServiceConnectionToMemory.Output> {
+    return this.callTool('import_service_connection_to_memory', input) as Promise<ConnectionsImportServiceConnectionToMemory.Output>
   }
 }
 

@@ -1771,7 +1771,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "list_service_connections",
     "category": "connections",
     "title": "List Connected Services",
-    "description": "List every third-party service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId, credential transport, exact readTools and actionTools, and permanently blocked administrative tools. Get a connectionId and exact tool name here before calling read_service_connection or call_service_connection_action. Nango OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. For already-digested history, prefer the returned vaultName or tableName.",
+    "description": "List every third-party service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Google Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId, credential transport, exact live readTools and gated actionTools, permanently blocked administrative tools, and schema-discovery metadata. Get a connectionId and exact tool name here before calling describe_service_connection_tool, read_service_connection, or call_service_connection_action. Nango OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. For already-digested history, prefer the returned vaultName or tableName.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -2004,7 +2004,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "read_service_connection",
     "category": "connections",
     "title": "Read Connected Service",
-    "description": "Call one small live, read-only operation on any connected service, including Resend, GitHub repository, issue, pull-request, release, and workflow reads. Do not loop this tool to fetch a time range or collection: use export_connected_service_data for Gmail, calendar, Zoom, or Resend datasets. Requires a connectionId and an exact name from that connection's readTools in list_service_connections; an unlisted tool is rejected server-side.",
+    "description": "Call one small live, read-only operation on any connected service, including Google Drive metadata/search tools, Resend, GitHub, Gmail, Calendar, Zoom, and other approved providers. Call describe_service_connection_tool first when arguments are not already known. Do not loop this tool once per file or record to fetch a corpus: use export_connected_service_data when that provider/dataset supports bulk delivery. Requires a connectionId and an exact name from that connection's live readTools in list_service_connections; an unlisted tool is rejected server-side.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -2043,7 +2043,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "call_service_connection_action",
     "category": "connections",
     "title": "Run Connected Service Action",
-    "description": "Run one explicitly allowlisted write or mutation on a tenant-owned OAuth or remote MCP connection. First call list_service_connections, use a connection with actionsEnabled true, choose one exact actionTools entry, and supply that action's arguments. The server rejects arbitrary action names, inactive or foreign connections, disabled actions, and every adminBlockedTools entry. This includes Resend sends, broadcasts, contacts and templates plus GitHub issue, pull-request, repository-content, release, and workflow actions when exposed. Sends, deletes, merges, review submissions, workflow execution, and content changes are high impact.",
+    "description": "Run one explicitly allowlisted write or mutation on a tenant-owned OAuth or remote MCP connection. First call list_service_connections, use a connection with actionsEnabled true, describe the exact actionTools entry to obtain its live schema, and supply only that action's arguments. The server rejects arbitrary action names, inactive or foreign connections, disabled actions, and every adminBlockedTools entry. This can include Google Drive folder creation or file copies, Resend delivery, and GitHub mutations only when those exact actions are live and approved. Sends, deletes, merges, workflow execution, and content changes are high impact.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6919,7 +6919,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "describe_service_connection_tool",
     "category": "connections",
     "title": "Describe Connected Service Tool",
-    "description": "Get the title, description, read/action classification, and exact JSON input schema for one tool exposed by a tenant-owned service connection. Call list_service_connections first, then describe the selected readTools or actionTools name before constructing arguments. Arbitrary names and permanently blocked administrative tools are rejected. This is especially useful for broad official remote MCP connections such as Resend, whose provider-native tools are intentionally exposed through generic bridges instead of dozens of new top-level MCP names.",
+    "description": "Fetch the sanitized live MCP Tool definition for one exact tool exposed by a tenant-owned Nango OAuth or official remote MCP connection. Returns provider-native title, description, read/action classification, current callability, input schema, optional output schema, safe annotations, and a schema hash. Call list_service_connections first, then describe a listed readTools or actionTools name before constructing arguments. This is a compatibility tool on MCP Scraper's fixed root MCP; protocol-native connection endpoints discover the same definitions through MCP tools/list, not a custom tools/describe method. Arbitrary names and permanently blocked administrative tools are rejected.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6932,6 +6932,10 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "minLength": 1,
           "description": "One exact name from that connection's readTools or actionTools. Admin-blocked and arbitrary names are rejected."
+        },
+        "fresh": {
+          "type": "boolean",
+          "description": "Bypass the short-lived sanitized schema cache. Ownership, connection state, and tool policy are still rechecked; use only when a provider tool catalog just changed."
         }
       },
       "required": [
@@ -6947,6 +6951,67 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": false
+    }
+  },
+  {
+    "name": "import_service_connection_to_memory",
+    "category": "connections",
+    "title": "Import Connected Service Snapshot to Memory",
+    "description": "Run exactly one bounded, approved read on a tenant-owned connected service and upsert the redacted result into an existing ordinary Memory vault at a server-generated stable path. The saved document is embedded for RAG and marked as untrusted provider data, never instructions. This is a one-result snapshot: it does not paginate, bulk-import an account, continuously sync changes, propagate deletions, or create normalized tables. Use list_service_connections first and supply an exact current readTools entry; action and admin tools are rejected.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "A tenant-owned connectionId from list_service_connections."
+        },
+        "providerConfigKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "The exact providerConfigKey returned with that connection. It is matched together with connectionId against the authenticated caller."
+        },
+        "tool": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "One exact current readTools entry for that connection. Actions, admin tools, and unlisted names are rejected."
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "JSON arguments for one bounded provider read. The serialized object may be at most 64 KiB."
+        },
+        "vault": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "An existing ordinary Memory vault the caller can write and index. Secure and channel vaults are rejected because this tool creates searchable RAG content."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Optional human-readable snapshot title. The server always chooses the stable storage path."
+        }
+      },
+      "required": [
+        "connectionId",
+        "providerConfigKey",
+        "tool",
+        "vault"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Import Connected Service Snapshot to Memory",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
     }
   }
 ] as const

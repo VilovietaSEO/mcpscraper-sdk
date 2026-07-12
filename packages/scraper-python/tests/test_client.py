@@ -197,14 +197,15 @@ def test_snake_case_kwargs_are_sent_as_camel_case():
     assert "max_pages" not in sent_body
 
 
-def test_unified_bindings_contain_all_156_unique_tools():
-    assert MCP_TOOL_COUNT == 156
+def test_unified_bindings_contain_all_157_unique_tools():
+    assert MCP_TOOL_COUNT == 157
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
-    assert len(names) == 156
+    assert len(names) == 157
     assert {
         "export_connected_service_data",
         "renew_connected_data_download",
         "describe_service_connection_tool",
+        "import_service_connection_to_memory",
     } <= names
 
 

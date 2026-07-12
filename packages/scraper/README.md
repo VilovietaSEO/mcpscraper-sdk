@@ -40,7 +40,7 @@ Every non-2xx response throws a `ScraperApiError` with `status`, `code`, and the
 
 ## API surface
 
-`client.tools` is the generated, typed 156-tool MCP surface. It includes 71 MCP Scraper tools and all 85 mirrored memory tools from `contracts/mcp.tools.json`.
+`client.tools` is the generated, typed 157-tool MCP surface. It includes 72 MCP Scraper tools and all 85 mirrored memory tools from `contracts/mcp.tools.json`.
 
 ```ts
 await client.tools.search.searchSerp({ query: 'roof repair Denver' })

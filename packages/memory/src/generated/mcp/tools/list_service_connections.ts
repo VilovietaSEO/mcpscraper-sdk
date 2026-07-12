@@ -26,6 +26,18 @@ export interface Output {
      */
     adminBlockedTools: string[];
     /**
+     * Authenticated connection-scoped MCP endpoint when native provider tools/list projection is available. Null means use describe_service_connection_tool on this root MCP.
+     */
+    mcpEndpoint: string | null;
+    /**
+     * How clients discover this connection's exact live provider schemas.
+     */
+    schemaDiscovery: "connection_tools_list" | "compatibility_describe";
+    /**
+     * Opaque revision of the resolved live tool catalog, when available. It changes when provider tools or policy change.
+     */
+    toolRevision: string | null;
+    /**
      * Memory vault this connection's digest writes into, if it has run at least once. Search it with memory-search.
      */
     vaultName: string | null;
