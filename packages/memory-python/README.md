@@ -29,7 +29,7 @@ except MemoryApiError as err:
 
 `client.access`, `client.capture`, `client.channels`, `client.facts`, `client.library`, `client.memory`, `client.recall`, `client.schedule`, `client.storage`, `client.tables`, `client.vaults`, `client.video`, `client.webhooks` — one method per tool, snake_case, typed with generated Pydantic models.
 
-Use `McpToolsClient(api_key="sk_...")` for all 157 unified tools (72 MCP Scraper plus 85 mirrored memory tools); it has the same generated namespaces as every other SDK package. Bulk Gmail, Calendar, Zoom, and Resend exports are available as `client.connections.export_connected_service_data(connection_id="conn_123", dataset="resend_data", last_days=7)`; renew expired artifact URLs with `client.connections.renew_connected_data_download(artifact_id="artifact_123")`.
+Use `McpToolsClient(api_key="sk_...")` for all 157 unified tools (72 MCP Scraper plus 85 mirrored memory tools); it has the same generated namespaces as every other SDK package. Bulk Gmail, Calendar, Zoom, Meta Marketing, and Resend exports are available through `client.connections.export_connected_service_data(...)`; select `meta_ads_insights` for daily account/campaign/ad-set/ad reporting or `resend_data` for the Resend aggregate, and renew expired artifact URLs with `client.connections.renew_connected_data_download(artifact_id="artifact_123")`.
 
 ## Don't have a memory key?
 

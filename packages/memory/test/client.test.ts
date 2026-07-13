@@ -178,16 +178,18 @@ test('McpToolsClient dispatches a bulk connected-data export as one MCP call', a
   })
 
   await client.connections.exportConnectedServiceData({
-    connectionId: 'conn_123',
-    dataset: 'resend_data',
-    lastDays: 7,
+    connectionId: 'meta_conn_123',
+    dataset: 'meta_ads_insights',
+    lastDays: 30,
+    delivery: 'artifact',
   })
 
   assert.equal(capturedBody.params.name, 'export_connected_service_data')
   assert.deepEqual(capturedBody.params.arguments, {
-    connectionId: 'conn_123',
-    dataset: 'resend_data',
-    lastDays: 7,
+    connectionId: 'meta_conn_123',
+    dataset: 'meta_ads_insights',
+    lastDays: 30,
+    delivery: 'artifact',
   })
 })
 
@@ -245,6 +247,10 @@ test('McpToolsClient dispatches connected-service tool schema discovery', async 
                 title: 'List emails',
                 description: 'List recent Resend emails.',
                 classification: 'read',
+                callable: false,
+                blockedReason: 'missing_permission',
+                requiredPermissions: ['pages_read_engagement'],
+                missingPermissions: ['pages_read_engagement'],
                 inputSchema: { type: 'object' },
               },
               error: null,
@@ -266,6 +272,57 @@ test('McpToolsClient dispatches connected-service tool schema discovery', async 
     tool: 'list-emails',
   })
   assert.equal(result.tool?.classification, 'read')
+  assert.equal(result.tool?.callable, false)
+  assert.equal(result.tool?.blockedReason, 'missing_permission')
+  assert.deepEqual(result.tool?.missingPermissions, ['pages_read_engagement'])
+})
+
+test('McpToolsClient exposes permission-aware connection inventory', async () => {
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch(() => ({
+      status: 200,
+      json: {
+        jsonrpc: '2.0',
+        id: 1,
+        result: {
+          structuredContent: {
+            connections: [{
+              connectionId: 'meta_conn_123',
+              providerConfigKey: 'meta-marketing-api',
+              label: 'Meta Marketing',
+              status: 'connected',
+              transport: 'nango',
+              actionsEnabled: false,
+              readTools: ['list-ad-accounts'],
+              actionTools: [],
+              toolCapabilities: [{
+                name: 'subscribe-lead-webhook',
+                classification: 'action',
+                requiredPermissions: ['leads_retrieval'],
+                available: false,
+                blockedReason: 'missing_permission',
+                missingPermissions: ['leads_retrieval'],
+              }],
+              grantedPermissions: ['ads_read', 'ads_management', 'business_management'],
+              permissionVerification: 'verified',
+              adminBlockedTools: [],
+              mcpEndpoint: null,
+              schemaDiscovery: 'compatibility_describe',
+              toolRevision: 'revision_1',
+              vaultName: null,
+              tableName: null,
+            }],
+          },
+        },
+      },
+    })),
+  })
+
+  const result = await client.connections.listServiceConnections()
+  assert.equal(result.connections[0]?.permissionVerification, 'verified')
+  assert.deepEqual(result.connections[0]?.grantedPermissions, ['ads_read', 'ads_management', 'business_management'])
+  assert.equal(result.connections[0]?.toolCapabilities[0]?.blockedReason, 'missing_permission')
 })
 
 test('McpToolsClient safely retries transient tools/list failures', async () => {

@@ -5,6 +5,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.9.0 / mcpscraper-sdk 0.10.0 / Python SDKs 0.7.0 / mcpscraper-cli 0.7.0
+- Regenerated all Node, Python, CLI, and cURL bindings from the 157-tool MCP Scraper contract for the Meta media-buying release.
+- Added `meta_ads_insights` to `connections.exportConnectedServiceData` / `connections.export_connected_service_data` for bounded daily account, campaign, ad-set, and ad reporting with inline-or-private-artifact delivery and resumable continuations.
+- Added permission-aware connection inventory fields: verified `grantedPermissions`, `permissionVerification`, and per-tool `toolCapabilities` with required and missing OAuth grants. Unavailable tools remain discoverable in the inventory but are excluded from callable read/action lists.
+- Expanded `describeServiceConnectionTool` / `describe_service_connection_tool` with exact required and missing permissions plus permission-specific blocked reasons, keeping the generated SDK aligned with the standalone MCP protocol surface outside Mastra.
+
 ## mcpscraper-memory-sdk 0.7.0 / mcpscraper-sdk 0.8.0 / Python SDKs 0.5.0 / mcpscraper-cli 0.5.0
 - Regenerated the unified Node, Python, CLI, and cURL surfaces from the 156-tool MCP Scraper manifest: 71 MCP Scraper tools plus 85 mirrored memory tools.
 - Added typed `connections.describeServiceConnectionTool` / `connections.describe_service_connection_tool` bindings so clients can discover the exact input schema and read/action classification for provider-native connected-service tools before calling them.

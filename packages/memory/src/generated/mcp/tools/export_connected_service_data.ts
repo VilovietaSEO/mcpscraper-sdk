@@ -4,7 +4,7 @@ export interface Input {
    */
   connectionId: string;
   /**
-   * Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, and Resend to resend_data. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
+   * Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, and Resend to resend_data. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
    */
   dataset?:
     | "auto"
@@ -12,6 +12,7 @@ export interface Input {
     | "calendar_events"
     | "zoom_recordings"
     | "zoom_transcripts"
+    | "meta_ads_insights"
     | "resend_data"
     | "resend_emails"
     | "resend_received_emails"
@@ -51,6 +52,7 @@ export interface Input {
       | "calendar_events"
       | "zoom_recordings"
       | "zoom_transcripts"
+      | "meta_ads_insights"
       | "resend_data"
       | "resend_emails"
       | "resend_received_emails"
@@ -75,6 +77,7 @@ export interface Output {
     | "calendar_events"
     | "zoom_recordings"
     | "zoom_transcripts"
+    | "meta_ads_insights"
     | "resend_data"
     | "resend_emails"
     | "resend_received_emails"
@@ -115,6 +118,7 @@ export interface Output {
       | "calendar_events"
       | "zoom_recordings"
       | "zoom_transcripts"
+      | "meta_ads_insights"
       | "resend_data"
       | "resend_emails"
       | "resend_received_emails"

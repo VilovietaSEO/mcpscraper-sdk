@@ -22,6 +22,38 @@ export interface Output {
      */
     actionTools: string[];
     /**
+     * Permission-aware capability inventory. Unavailable Meta tools remain visible here with exact missing grants, but are excluded from readTools/actionTools and cannot be called.
+     */
+    toolCapabilities: {
+      name: string;
+      classification: "read" | "action";
+      requiredPermissions: string[];
+      requiredFeatures: string[];
+      available: boolean;
+      blockedReason:
+        | (
+            | "missing_permission"
+            | "missing_app_feature"
+            | "permission_policy_missing"
+            | "permission_verification_unavailable"
+          )
+        | null;
+      missingPermissions: string[];
+      missingFeatures: string[];
+    }[];
+    /**
+     * Sanitized OAuth permission names verified for this connection. Tokens and credentials are never returned.
+     */
+    grantedPermissions: string[];
+    /**
+     * Provider app features explicitly enabled for this deployment. Restricted tools fail closed until their feature is configured.
+     */
+    enabledFeatures: string[];
+    /**
+     * Whether this connection's provider grant was verified. Optional and core tools fail closed when verification is unavailable.
+     */
+    permissionVerification: ("verified" | "unavailable") | null;
+    /**
      * Credential, OAuth-grant, or other administrative tools permanently blocked from the MCP and scheduler.
      */
     adminBlockedTools: string[];

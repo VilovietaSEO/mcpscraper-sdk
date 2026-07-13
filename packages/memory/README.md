@@ -21,6 +21,8 @@ await tools.memory.search({ query: 'q3 roadmap decisions' })
 await tools.connections.exportConnectedServiceData({ connectionId: 'conn_123', lastDays: 7 })
 ```
 
+The unified connection namespace includes permission-aware provider inventory and `meta_ads_insights` bulk exports for daily account, campaign, ad-set, and ad reporting, with large results delivered as private artifacts.
+
 ## Quickstart
 
 ```ts

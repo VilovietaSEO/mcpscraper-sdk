@@ -247,16 +247,18 @@ def test_bulk_connected_data_export_dispatches_as_one_mcp_call():
     )
     client = ScraperClient(api_key="sk_test")
     result = client.tools.connections.export_connected_service_data(
-        connection_id="conn_123",
-        dataset="resend_data",
-        last_days=7,
+        connection_id="meta_conn_123",
+        dataset="meta_ads_insights",
+        last_days=30,
+        delivery="artifact",
     )
     sent_body = json.loads(responses.calls[0].request.body)
     assert sent_body["params"]["name"] == "export_connected_service_data"
     assert sent_body["params"]["arguments"] == {
-        "connectionId": "conn_123",
-        "dataset": "resend_data",
-        "lastDays": 7,
+        "connectionId": "meta_conn_123",
+        "dataset": "meta_ads_insights",
+        "lastDays": 30,
+        "delivery": "artifact",
     }
     assert result.ok is True
     assert result.complete is True

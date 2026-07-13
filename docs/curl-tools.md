@@ -31,7 +31,7 @@ jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
 
 ## Bulk connected-data export
 
-Fetch a bounded Gmail, Google Calendar, Zoom, or Resend range in one call. Provider pagination happens server-side; large results become private downloadable artifacts. Resend supports the aggregate `resend_data` dataset plus sent mail, received mail, logs, contacts, broadcasts, and templates individually.
+Fetch a bounded Gmail, Google Calendar, Zoom, Meta Marketing, or Resend range in one call. Provider pagination happens server-side; large results become private downloadable artifacts. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus sent mail, received mail, logs, contacts, broadcasts, and templates individually.
 
 ```bash
 jq -n --arg connectionId "$CONNECTION_ID" \

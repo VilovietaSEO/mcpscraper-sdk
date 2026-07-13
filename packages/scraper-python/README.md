@@ -52,7 +52,7 @@ client.tools.connections.export_connected_service_data(
 )
 ```
 
-The connected-data export performs bounded Gmail, Calendar, Zoom, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renew_connected_data_download(artifact_id="artifact_123")`. Use `describe_service_connection_tool` to obtain the exact input schema for a provider-native read or gated action before calling it through the generic connection bridges.
+The connected-data export performs bounded Gmail, Calendar, Zoom, Meta Marketing, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Use `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected Meta ad accounts. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renew_connected_data_download(artifact_id="artifact_123")`. Use `list_service_connections` for verified grants and per-tool permission blockers, then `describe_service_connection_tool` for the exact provider-native schema before calling through the generic connection bridges.
 
 Core operations are flat on the client: `search_serp`, `harvest_paa`, `extract_url`, `map_site_urls`, `extract_site`, `audit_site`, `get_extract_site_status`, `list_jobs`, `get_job`, `get_history`, `get_ledger`.
 

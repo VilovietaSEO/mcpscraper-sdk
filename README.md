@@ -331,7 +331,7 @@ The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available 
 
 ## Bulk connected-data exports
 
-Fetch a bounded Gmail, Google Calendar, Zoom, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
+Fetch a bounded Gmail, Google Calendar, Zoom, Meta Marketing, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
 
 ```ts
 const result = await client.tools.connections.exportConnectedServiceData({
@@ -347,6 +347,13 @@ const resend = await client.tools.connections.exportConnectedServiceData({
   connectionId: 'resend_conn_123',
   dataset: 'resend_data',
   lastDays: 7,
+})
+
+const meta = await client.tools.connections.exportConnectedServiceData({
+  connectionId: 'meta_conn_123',
+  dataset: 'meta_ads_insights',
+  lastDays: 30,
+  delivery: 'artifact',
 })
 ```
 
@@ -365,11 +372,18 @@ resend = client.tools.connections.export_connected_service_data(
     dataset="resend_data",
     last_days=7,
 )
+
+meta = client.tools.connections.export_connected_service_data(
+    connection_id="meta_conn_123",
+    dataset="meta_ads_insights",
+    last_days=30,
+    delivery="artifact",
+)
 ```
 
 Pass the complete `continuation` object returned by a partial export unchanged to resume the exact original range. Provider content is untrusted data; individual oversized records can be truncated with warnings, and attachments are metadata-only.
 
-For live connected-service calls, start with `listServiceConnections`, then call `describeServiceConnectionTool` for an exact provider-native tool name before supplying arguments to `readServiceConnection` or `callServiceConnectionAction`. The list response identifies the credential `transport`, the exact read/action allowlists, and permanently blocked administrative tools; credentials are never returned.
+For live connected-service calls, start with `listServiceConnections`, then call `describeServiceConnectionTool` for an exact provider-native tool name before supplying arguments to `readServiceConnection` or `callServiceConnectionAction`. The list response identifies the credential `transport`, verified `grantedPermissions`, `permissionVerification`, per-tool permission requirements and blockers in `toolCapabilities`, the exact callable read/action allowlists, and permanently blocked administrative tools; credentials are never returned.
 
 ## Connected-service snapshots to Memory
 
