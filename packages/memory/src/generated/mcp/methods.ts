@@ -50,6 +50,7 @@ import * as ConnectionsExportConnectedServiceData from './tools/export_connected
 import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_data_download.js'
 import * as ConnectionsDescribeServiceConnectionTool from './tools/describe_service_connection_tool.js'
 import * as ConnectionsImportServiceConnectionToMemory from './tools/import_service_connection_to_memory.js'
+import * as ConnectionsMetaAdCreativeMedia from './tools/meta_ad_creative_media.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as BrowserProfileConnect from './tools/browser_profile_connect.js'
@@ -943,6 +944,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "import_service_connection_to_memory",
     "category": "connections",
     "methodName": "importServiceConnectionToMemory"
+  },
+  {
+    "name": "meta_ad_creative_media",
+    "category": "connections",
+    "methodName": "metaAdCreativeMedia"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1204,6 +1210,10 @@ export class ConnectionsNamespace {
 
   async importServiceConnectionToMemory(input: ConnectionsImportServiceConnectionToMemory.Input): Promise<ConnectionsImportServiceConnectionToMemory.Output> {
     return this.callTool('import_service_connection_to_memory', input) as Promise<ConnectionsImportServiceConnectionToMemory.Output>
+  }
+
+  async metaAdCreativeMedia(input: ConnectionsMetaAdCreativeMedia.Input): Promise<ConnectionsMetaAdCreativeMedia.Output> {
+    return this.callTool('meta_ad_creative_media', input) as Promise<ConnectionsMetaAdCreativeMedia.Output>
   }
 }
 

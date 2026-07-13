@@ -498,7 +498,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "facebook_page_intel",
     "category": "facebook",
     "title": "Facebook Advertiser Ad Intel",
-    "description": "Harvest ads from a Facebook advertiser: copy, creative angles, CTAs, and direct video URLs ready for facebook_ad_transcribe. Accepts pageId, libraryId, or a brand/advertiser name.",
+    "description": "Harvest public Ad Library creatives. Prefer exact pageId/libraryId; query is broad keyword discovery and can mix unrelated advertisers, so inspect matchConfidence/warnings before analysis. Paused or inactive non-political ads may be absent from Ad Library—use meta_ad_creative_media with the connected ad account for those. Direct Ad Library videoUrl values go to facebook_ad_transcribe.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -512,7 +512,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "query": {
           "type": "string",
-          "description": "Advertiser or brand name when pageId/libraryId is not known. One of pageId, libraryId, or query is required."
+          "description": "Broad Ad Library keyword discovery when pageId/libraryId is not known. Results can mix unrelated advertisers; inspect matchConfidence, matchedAdvertisers, and warnings before analysis. One of pageId, libraryId, or query is required."
         },
         "maxAds": {
           "type": "integer",
@@ -702,14 +702,14 @@ export const MCP_TOOL_CATALOG = [
     "name": "facebook_ad_transcribe",
     "category": "facebook",
     "title": "Facebook Ad Transcription",
-    "description": "Transcribe audio from a Facebook ad video CDN URL returned by facebook_page_intel. Use only that direct videoUrl value — do not pass public Facebook post/reel/share URLs (use facebook_video_transcribe for those).",
+    "description": "Transcribe a direct Meta/Facebook CDN video source returned by facebook_page_intel or meta_ad_creative_media. CDN sources can expire, so use them immediately. Do not pass public post/reel/share URLs; use facebook_video_transcribe for those. For a paused/account-owned ad, start with meta_ad_creative_media: it selects the direct Graph source when available and otherwise returns the effective organic-post candidate.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "videoUrl": {
           "type": "string",
           "format": "uri",
-          "description": "Direct Facebook CDN video URL from facebook_page_intel. Do not pass a public post/reel/share URL — use facebook_video_transcribe for those."
+          "description": "Direct Meta/Facebook CDN video URL from facebook_page_intel or meta_ad_creative_media. Use transient sources immediately. Do not pass a public post/reel/share URL—use facebook_video_transcribe for those."
         }
       },
       "required": [
@@ -842,14 +842,14 @@ export const MCP_TOOL_CATALOG = [
     "name": "facebook_video_transcribe",
     "category": "facebook",
     "title": "Facebook Organic Video Transcription",
-    "description": "Transcribe audio from an organic Facebook reel/video/post/share URL (including fb.watch). Renders the page, selects the best public CDN MP4, and returns the transcript plus resolved video metadata.",
+    "description": "Transcribe audio from a public Facebook reel/video/post/share URL (including fb.watch). Renders the public page, selects the best progressive MP4, and returns transcript plus resolved metadata and a low-speech signal. For a connected paused ad, use meta_ad_creative_media first; pass its public post/permalink candidate here only when no direct Graph source is available. Dark/unpublished ads may not have a public route.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "url": {
           "type": "string",
           "format": "uri",
-          "description": "Organic Facebook reel/video/watch/post/share URL from facebook.com, m.facebook.com, or fb.watch."
+          "description": "Public Facebook reel/video/watch/post/share URL from facebook.com, m.facebook.com, or fb.watch. For connected account ads, get the correct public candidate from meta_ad_creative_media instead of guessing URL structure."
         },
         "quality": {
           "type": "string",
@@ -7013,6 +7013,57 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "meta_ad_creative_media",
+    "category": "connections",
+    "title": "View Meta Ad Creative Media",
+    "description": "Preferred connected-account path for viewing a Meta ad creative, especially paused or dark ads that may be absent from Ad Library. Given a tenant-owned Meta connectionId and adId, resolves the ad, creative, effective story/post candidate, image assets, video assets, and transient Graph playback source. Bounded creative images are returned as actual MCP image content for vision-capable clients. For video, follow the returned exact nextActions with facebook_ad_transcribe when Graph returned a direct source, facebook_video_transcribe when only a public post/video candidate is available, or video_frame_analysis for visual breakdown. This tool is read-only and does not itself spend transcription/analysis credits.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tenant-owned Meta Marketing connectionId from list_service_connections."
+        },
+        "adId": {
+          "type": "string",
+          "pattern": "^\\d{5,30}$",
+          "description": "Meta ad ID from the connected ad account. This is not an Ad Library archive ID."
+        },
+        "imageMode": {
+          "type": "string",
+          "enum": [
+            "inline_preview",
+            "resource_only",
+            "none"
+          ],
+          "default": "inline_preview",
+          "description": "inline_preview returns bounded MCP image content that a vision-capable client can inspect. resource_only returns descriptors/URLs only. none skips image delivery."
+        },
+        "maxInlineImages": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "default": 2,
+          "description": "Maximum creative image/thumbnail previews to attach as MCP image blocks. Default 2; maximum 4."
+        }
+      },
+      "required": [
+        "connectionId",
+        "adId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "View Meta Ad Creative Media",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
       "openWorldHint": true
     }
   }

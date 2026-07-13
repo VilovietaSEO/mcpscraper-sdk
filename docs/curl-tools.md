@@ -1,4 +1,4 @@
-# All 157 MCP tools with cURL
+# All 158 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -45,7 +45,7 @@ jq -n --arg connectionId "$CONNECTION_ID" \
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (157)
+## Complete catalog (158)
 
 ## search
 
@@ -141,6 +141,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `renew_connected_data_download` — Renew Connected Data Download
 - `describe_service_connection_tool` — Describe Connected Service Tool
 - `import_service_connection_to_memory` — Import Connected Service Snapshot to Memory
+- `meta_ad_creative_media` — View Meta Ad Creative Media
 
 ## serpIntelligence
 

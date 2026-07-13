@@ -2,7 +2,7 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 157 unified MCP tools (72 MCP Scraper plus 85 mirrored memory tools).
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 158 unified MCP tools (73 MCP Scraper plus 85 mirrored memory tools).
 
 ## Install
 
@@ -32,7 +32,9 @@ mcpscraper tools call describe_service_connection_tool --args '{"connectionId":"
 mcpscraper tools call renew_connected_data_download --args '{"artifactId":"artifact_123"}' --json
 ```
 
-`tools list` contains exactly 157 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 158 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+
+When a tool returns inline MCP media, the CLI writes each block to a private local file and prints its path instead of dumping base64. Use `--media-dir <path>` to choose the destination; the default is `~/Downloads/mcp-scraper`.
 
 ### `mcpscraper search <query>`
 

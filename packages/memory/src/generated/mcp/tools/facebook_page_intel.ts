@@ -8,7 +8,7 @@ export interface Input {
    */
   libraryId?: string;
   /**
-   * Advertiser or brand name when pageId/libraryId is not known. One of pageId, libraryId, or query is required.
+   * Broad Ad Library keyword discovery when pageId/libraryId is not known. Results can mix unrelated advertisers; inspect matchConfidence, matchedAdvertisers, and warnings before analysis. One of pageId, libraryId, or query is required.
    */
   query?: string;
   /**
@@ -23,6 +23,14 @@ export interface Input {
 
 export interface Output {
   advertiserName: string | null;
+  inputMode: "pageId" | "libraryId" | "query";
+  matchConfidence: "high" | "medium" | "low";
+  matchReason: string;
+  warnings: string[];
+  matchedAdvertisers: {
+    name: string;
+    adCount: number;
+  }[];
   totalAds: number;
   activeCount: number;
   videoCount: number;

@@ -28,7 +28,7 @@ class McpToolError(RuntimeError):
 
 
 class McpToolsClient(GeneratedMcpToolsClient):
-    """Typed access to all 157 tools exposed by https://mcpscraper.dev/mcp."""
+    """Typed access to every tool exposed by https://mcpscraper.dev/mcp."""
 
     def __init__(
         self,
@@ -99,8 +99,8 @@ class McpToolsClient(GeneratedMcpToolsClient):
     def call_tool(self, name: str, args: dict[str, Any] | None = None) -> Any:
         return self._call_tool(name, args or {})
 
-    def _call_tool(self, name: str, arguments: dict[str, Any]) -> Any:
-        result = self._request("tools/call", {"name": name, "arguments": arguments})
+    @staticmethod
+    def _parsed_tool_value(result: dict[str, Any]) -> Any:
         text_block = next(
             (block.get("text") for block in result.get("content", []) if block.get("type") == "text"),
             None,
@@ -113,6 +113,12 @@ class McpToolsClient(GeneratedMcpToolsClient):
                 parsed = text_block
         if "structuredContent" in result:
             parsed = result["structuredContent"]
+        return parsed
+
+    def call_tool_result(self, name: str, args: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Return the complete MCP tool result, preserving image/audio/resource content blocks."""
+        result = self._request("tools/call", {"name": name, "arguments": args or {}})
+        parsed = self._parsed_tool_value(result)
         if result.get("isError"):
             message = (
                 parsed.get("message")
@@ -122,4 +128,9 @@ class McpToolsClient(GeneratedMcpToolsClient):
                 else f'Tool "{name}" failed'
             )
             raise McpToolError(str(message), tool_error=parsed)
+        return result
+
+    def _call_tool(self, name: str, arguments: dict[str, Any]) -> Any:
+        result = self.call_tool_result(name, arguments)
+        parsed = self._parsed_tool_value(result)
         return parsed

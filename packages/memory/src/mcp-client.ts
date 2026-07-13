@@ -46,8 +46,20 @@ interface JsonRpcErrorPayload {
   data?: unknown
 }
 
-interface McpToolCallResult {
-  content?: Array<{ type: string; text?: string }>
+export interface McpContentBlock {
+  type: string
+  text?: string
+  data?: string
+  mimeType?: string
+  uri?: string
+  name?: string
+  description?: string
+  resource?: unknown
+  [key: string]: unknown
+}
+
+export interface McpToolCallResult {
+  content?: McpContentBlock[]
   structuredContent?: unknown
   isError?: boolean
 }
@@ -122,11 +134,25 @@ class McpJsonRpcTransport {
     return result.tools ?? []
   }
 
-  async callTool(name: string, args: unknown = {}): Promise<unknown> {
+  async callToolResult(name: string, args: unknown = {}): Promise<McpToolCallResult> {
     const result = await this.request<McpToolCallResult>('tools/call', {
       name,
       arguments: (args ?? {}) as Record<string, unknown>,
     })
+    if (result.isError) {
+      const parsed = this.parsedToolValue(result)
+      const message =
+        parsed && typeof parsed === 'object' && 'message' in (parsed as Record<string, unknown>)
+          ? String((parsed as Record<string, unknown>).message)
+          : typeof parsed === 'string'
+            ? parsed
+            : `Tool "${name}" failed`
+      throw new McpToolError(message, { toolError: parsed })
+    }
+    return result
+  }
+
+  private parsedToolValue(result: McpToolCallResult): unknown {
     const textBlock = result.content?.find(block => block.type === 'text')?.text
     let parsed: unknown = textBlock
     if (typeof textBlock === 'string') {
@@ -137,16 +163,11 @@ class McpJsonRpcTransport {
       }
     }
     if (result.structuredContent !== undefined) parsed = result.structuredContent
-    if (result.isError) {
-      const message =
-        parsed && typeof parsed === 'object' && 'message' in (parsed as Record<string, unknown>)
-          ? String((parsed as Record<string, unknown>).message)
-          : typeof parsed === 'string'
-            ? parsed
-            : `Tool "${name}" failed`
-      throw new McpToolError(message, { toolError: parsed })
-    }
     return parsed
+  }
+
+  async callTool(name: string, args: unknown = {}): Promise<unknown> {
+    return this.parsedToolValue(await this.callToolResult(name, args))
   }
 }
 
@@ -170,5 +191,9 @@ export class McpToolsClient extends GeneratedMcpToolsClient {
 
   callTool(name: string, args: unknown = {}): Promise<unknown> {
     return this.transport.callTool(name, args)
+  }
+
+  callToolResult(name: string, args: unknown = {}): Promise<McpToolCallResult> {
+    return this.transport.callToolResult(name, args)
   }
 }

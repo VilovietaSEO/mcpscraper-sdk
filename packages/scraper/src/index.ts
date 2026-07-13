@@ -14,4 +14,6 @@ export type {
   McpToolsClientOptions,
   McpToolDescriptor,
   McpToolErrorDetails,
+  McpContentBlock,
+  McpToolCallResult,
 } from 'mcpscraper-memory-sdk'

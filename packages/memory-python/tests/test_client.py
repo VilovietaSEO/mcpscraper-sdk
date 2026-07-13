@@ -40,6 +40,31 @@ def test_memory_search_sends_correct_wire_tool_name_and_parses_structured_conten
 
 
 @responses.activate
+def test_mcp_tools_client_preserves_native_image_content():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        json={
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+                "content": [
+                    {"type": "text", "text": "# Creative"},
+                    {"type": "image", "data": "iVBORw0KGgo=", "mimeType": "image/png"},
+                ],
+                "structuredContent": {"ok": True},
+            },
+        },
+        status=200,
+    )
+    result = McpToolsClient(api_key="sk_test").call_tool_result(
+        "meta_ad_creative_media", {"connectionId": "conn_1", "adId": "12345"}
+    )
+    assert result["content"][1]["type"] == "image"
+    assert result["content"][1]["data"] == "iVBORw0KGgo="
+
+
+@responses.activate
 def test_access_headers_include_accept_and_authorization():
     captured = {}
 
@@ -102,10 +127,10 @@ def test_non_2xx_http_response_raises_memory_api_error():
     assert exc_info.value.http_status == 500
 
 
-def test_unified_bindings_contain_all_157_unique_tools():
-    assert MCP_TOOL_COUNT == 157
+def test_unified_bindings_contain_all_158_unique_tools():
+    assert MCP_TOOL_COUNT == 158
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
-    assert len(names) == 157
+    assert len(names) == 158
     assert {
         "export_connected_service_data",
         "renew_connected_data_download",

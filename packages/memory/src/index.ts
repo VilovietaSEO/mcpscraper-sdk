@@ -21,7 +21,7 @@ export {
 } from './generated/methods.js'
 export type { CallToolFn } from './generated/methods.js'
 export { McpToolsClient, McpToolError } from './mcp-client.js'
-export type { McpToolsClientOptions, McpToolDescriptor, McpToolErrorDetails } from './mcp-client.js'
+export type { McpToolsClientOptions, McpToolDescriptor, McpToolErrorDetails, McpContentBlock, McpToolCallResult } from './mcp-client.js'
 export {
   MCP_TOOL_BINDINGS,
   MCP_TOOL_COUNT,

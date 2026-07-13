@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.18.0 dist/bin/mcp-stdio-server.js",
-  "toolCount": 157,
+  "generatedFrom": "mcp-scraper 0.19.0 dist/bin/mcp-stdio-server.js",
+  "toolCount": 158,
   "tools": [
     {
       "name": "harvest_paa",
@@ -1622,7 +1622,7 @@
     {
       "name": "facebook_page_intel",
       "title": "Facebook Advertiser Ad Intel",
-      "description": "Harvest ads from a Facebook advertiser: copy, creative angles, CTAs, and direct video URLs ready for facebook_ad_transcribe. Accepts pageId, libraryId, or a brand/advertiser name.",
+      "description": "Harvest public Ad Library creatives. Prefer exact pageId/libraryId; query is broad keyword discovery and can mix unrelated advertisers, so inspect matchConfidence/warnings before analysis. Paused or inactive non-political ads may be absent from Ad Library—use meta_ad_creative_media with the connected ad account for those. Direct Ad Library videoUrl values go to facebook_ad_transcribe.",
       "category": "facebook",
       "methodName": "pageIntel",
       "inputSchema": {
@@ -1638,7 +1638,7 @@
           },
           "query": {
             "type": "string",
-            "description": "Advertiser or brand name when pageId/libraryId is not known. One of pageId, libraryId, or query is required."
+            "description": "Broad Ad Library keyword discovery when pageId/libraryId is not known. Results can mix unrelated advertisers; inspect matchConfidence, matchedAdvertisers, and warnings before analysis. One of pageId, libraryId, or query is required."
           },
           "maxAds": {
             "type": "integer",
@@ -1666,6 +1666,51 @@
               "string",
               "null"
             ]
+          },
+          "inputMode": {
+            "type": "string",
+            "enum": [
+              "pageId",
+              "libraryId",
+              "query"
+            ]
+          },
+          "matchConfidence": {
+            "type": "string",
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "matchReason": {
+            "type": "string"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "matchedAdvertisers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "adCount": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "name",
+                "adCount"
+              ],
+              "additionalProperties": false
+            }
           },
           "totalAds": {
             "type": "integer",
@@ -1756,6 +1801,11 @@
         },
         "required": [
           "advertiserName",
+          "inputMode",
+          "matchConfidence",
+          "matchReason",
+          "warnings",
+          "matchedAdvertisers",
           "totalAds",
           "activeCount",
           "videoCount",
@@ -2208,7 +2258,7 @@
     {
       "name": "facebook_ad_transcribe",
       "title": "Facebook Ad Transcription",
-      "description": "Transcribe audio from a Facebook ad video CDN URL returned by facebook_page_intel. Use only that direct videoUrl value — do not pass public Facebook post/reel/share URLs (use facebook_video_transcribe for those).",
+      "description": "Transcribe a direct Meta/Facebook CDN video source returned by facebook_page_intel or meta_ad_creative_media. CDN sources can expire, so use them immediately. Do not pass public post/reel/share URLs; use facebook_video_transcribe for those. For a paused/account-owned ad, start with meta_ad_creative_media: it selects the direct Graph source when available and otherwise returns the effective organic-post candidate.",
       "category": "facebook",
       "methodName": "adTranscribe",
       "inputSchema": {
@@ -2217,7 +2267,7 @@
           "videoUrl": {
             "type": "string",
             "format": "uri",
-            "description": "Direct Facebook CDN video URL from facebook_page_intel. Do not pass a public post/reel/share URL — use facebook_video_transcribe for those."
+            "description": "Direct Meta/Facebook CDN video URL from facebook_page_intel or meta_ad_creative_media. Use transient sources immediately. Do not pass a public post/reel/share URL—use facebook_video_transcribe for those."
           }
         },
         "required": [
@@ -2273,6 +2323,65 @@
               "additionalProperties": false
             }
           },
+          "transcriptSignal": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "speech_detected",
+                  "low_speech_signal",
+                  "empty"
+                ]
+              },
+              "speechDetected": {
+                "type": "boolean"
+              },
+              "confidence": {
+                "type": "string",
+                "enum": [
+                  "medium",
+                  "low"
+                ]
+              },
+              "basis": {
+                "type": "string",
+                "const": "transcript_word_count_and_timing"
+              },
+              "mediaDurationSec": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "wordsPerMinute": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "retryRecommended": {
+                "type": "boolean"
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "speechDetected",
+              "confidence",
+              "basis",
+              "mediaDurationSec",
+              "wordsPerMinute",
+              "retryRecommended",
+              "warnings"
+            ],
+            "additionalProperties": false
+          },
           "resolvedInputs": {
             "type": "object",
             "properties": {
@@ -2294,6 +2403,7 @@
           "durationMs",
           "transcriptText",
           "chunks",
+          "transcriptSignal",
           "resolvedInputs"
         ],
         "additionalProperties": false,
@@ -2676,7 +2786,7 @@
     {
       "name": "facebook_video_transcribe",
       "title": "Facebook Organic Video Transcription",
-      "description": "Transcribe audio from an organic Facebook reel/video/post/share URL (including fb.watch). Renders the page, selects the best public CDN MP4, and returns the transcript plus resolved video metadata.",
+      "description": "Transcribe audio from a public Facebook reel/video/post/share URL (including fb.watch). Renders the public page, selects the best progressive MP4, and returns transcript plus resolved metadata and a low-speech signal. For a connected paused ad, use meta_ad_creative_media first; pass its public post/permalink candidate here only when no direct Graph source is available. Dark/unpublished ads may not have a public route.",
       "category": "facebook",
       "methodName": "videoTranscribe",
       "inputSchema": {
@@ -2685,7 +2795,7 @@
           "url": {
             "type": "string",
             "format": "uri",
-            "description": "Organic Facebook reel/video/watch/post/share URL from facebook.com, m.facebook.com, or fb.watch."
+            "description": "Public Facebook reel/video/watch/post/share URL from facebook.com, m.facebook.com, or fb.watch. For connected account ads, get the correct public candidate from meta_ad_creative_media instead of guessing URL structure."
           },
           "quality": {
             "type": "string",
@@ -2780,6 +2890,65 @@
               ],
               "additionalProperties": false
             }
+          },
+          "transcriptSignal": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "speech_detected",
+                  "low_speech_signal",
+                  "empty"
+                ]
+              },
+              "speechDetected": {
+                "type": "boolean"
+              },
+              "confidence": {
+                "type": "string",
+                "enum": [
+                  "medium",
+                  "low"
+                ]
+              },
+              "basis": {
+                "type": "string",
+                "const": "transcript_word_count_and_timing"
+              },
+              "mediaDurationSec": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "wordsPerMinute": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "retryRecommended": {
+                "type": "boolean"
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "status",
+              "speechDetected",
+              "confidence",
+              "basis",
+              "mediaDurationSec",
+              "wordsPerMinute",
+              "retryRecommended",
+              "warnings"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
@@ -2794,7 +2963,8 @@
           "wordCount",
           "chunkCount",
           "transcriptText",
-          "chunks"
+          "chunks",
+          "transcriptSignal"
         ],
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
@@ -18688,6 +18858,226 @@
         "readOnlyHint": false,
         "destructiveHint": false,
         "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "meta_ad_creative_media",
+      "title": "View Meta Ad Creative Media",
+      "description": "Preferred connected-account path for viewing a Meta ad creative, especially paused or dark ads that may be absent from Ad Library. Given a tenant-owned Meta connectionId and adId, resolves the ad, creative, effective story/post candidate, image assets, video assets, and transient Graph playback source. Bounded creative images are returned as actual MCP image content for vision-capable clients. For video, follow the returned exact nextActions with facebook_ad_transcribe when Graph returned a direct source, facebook_video_transcribe when only a public post/video candidate is available, or video_frame_analysis for visual breakdown. This tool is read-only and does not itself spend transcription/analysis credits.",
+      "category": "connections",
+      "methodName": "metaAdCreativeMedia",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "connectionId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Tenant-owned Meta Marketing connectionId from list_service_connections."
+          },
+          "adId": {
+            "type": "string",
+            "pattern": "^\\d{5,30}$",
+            "description": "Meta ad ID from the connected ad account. This is not an Ad Library archive ID."
+          },
+          "imageMode": {
+            "type": "string",
+            "enum": [
+              "inline_preview",
+              "resource_only",
+              "none"
+            ],
+            "default": "inline_preview",
+            "description": "inline_preview returns bounded MCP image content that a vision-capable client can inspect. resource_only returns descriptors/URLs only. none skips image delivery."
+          },
+          "maxInlineImages": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4,
+            "default": 2,
+            "description": "Maximum creative image/thumbnail previews to attach as MCP image blocks. Default 2; maximum 4."
+          }
+        },
+        "required": [
+          "connectionId",
+          "adId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "adId": {
+            "type": "string"
+          },
+          "adName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adAccountId": {
+            "$ref": "#/properties/adName"
+          },
+          "creativeId": {
+            "type": "string"
+          },
+          "creativeName": {
+            "$ref": "#/properties/adName"
+          },
+          "effectiveObjectStoryId": {
+            "$ref": "#/properties/adName"
+          },
+          "sourceFacebookPostId": {
+            "$ref": "#/properties/adName"
+          },
+          "objectStoryId": {
+            "$ref": "#/properties/adName"
+          },
+          "pageId": {
+            "$ref": "#/properties/adName"
+          },
+          "postId": {
+            "$ref": "#/properties/adName"
+          },
+          "publicPostCandidateUrl": {
+            "$ref": "#/properties/adName"
+          },
+          "publicPostStatus": {
+            "type": "string",
+            "const": "unverified"
+          },
+          "mediaType": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "carousel",
+              "mixed",
+              "unknown"
+            ]
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "videos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "inlineImages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceUrl": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "contentIndex": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "sourceUrl",
+                "mimeType",
+                "bytes",
+                "contentIndex"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "nextActions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tool": {
+                  "type": "string",
+                  "enum": [
+                    "facebook_ad_transcribe",
+                    "facebook_video_transcribe",
+                    "video_frame_analysis"
+                  ]
+                },
+                "args": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tool",
+                "args",
+                "reason"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "ok",
+          "adId",
+          "adName",
+          "adAccountId",
+          "creativeId",
+          "creativeName",
+          "effectiveObjectStoryId",
+          "sourceFacebookPostId",
+          "objectStoryId",
+          "pageId",
+          "postId",
+          "publicPostCandidateUrl",
+          "publicPostStatus",
+          "mediaType",
+          "images",
+          "videos",
+          "inlineImages",
+          "nextActions",
+          "warnings",
+          "limitations"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "View Meta Ad Creative Media",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
         "openWorldHint": true
       }
     }

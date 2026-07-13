@@ -124,9 +124,9 @@ test('a non-2xx HTTP response throws MemoryApiError with httpStatus set', async 
   )
 })
 
-test('unified MCP bindings contain all 157 unique tools', () => {
-  assert.equal(MCP_TOOL_COUNT, 157)
-  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 157)
+test('unified MCP bindings contain all 158 unique tools', () => {
+  assert.equal(MCP_TOOL_COUNT, 158)
+  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 158)
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'export_connected_service_data'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'renew_connected_data_download'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'describe_service_connection_tool'))
@@ -158,6 +158,33 @@ test('McpToolsClient typed methods call the unified MCP wire name', async () => 
   assert.equal(capturedBody.params.name, 'search_serp')
   assert.deepEqual(capturedBody.params.arguments, { query: 'roofers denver' })
   assert.deepEqual(result, { ok: true, results: [] })
+})
+
+test('McpToolsClient callToolResult preserves native MCP image content', async () => {
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      const request = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: request.id,
+          result: {
+            content: [
+              { type: 'text', text: '# Creative' },
+              { type: 'image', data: 'iVBORw0KGgo=', mimeType: 'image/png' },
+            ],
+            structuredContent: { ok: true, creativeId: 'creative_1' },
+          },
+        },
+      }
+    }),
+  })
+
+  const result = await client.callToolResult('meta_ad_creative_media', { connectionId: 'conn_1', adId: '12345' })
+  assert.deepEqual(result.content?.[1], { type: 'image', data: 'iVBORw0KGgo=', mimeType: 'image/png' })
+  assert.deepEqual(result.structuredContent, { ok: true, creativeId: 'creative_1' })
 })
 
 test('McpToolsClient dispatches a bulk connected-data export as one MCP call', async () => {

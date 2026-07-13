@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { createProgram, isMainModule } from '../src/cli.js'
+import { MCP_TOOL_COUNT } from '../src/generated-tools.js'
 
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } })
@@ -136,7 +137,7 @@ test('an API error prints a clean message instead of a stack trace', async () =>
   process.exitCode = originalExitCode
 })
 
-test('tools list exposes the complete 157-tool CLI catalog', async () => {
+test('tools list exposes the complete generated CLI catalog', async () => {
   const capture = captureLogs()
   try {
     await createProgram().parseAsync(['node', 'mcpscraper', 'tools', 'list', '--json'])
@@ -144,12 +145,72 @@ test('tools list exposes the complete 157-tool CLI catalog', async () => {
     capture.restore()
   }
   const catalog = JSON.parse(capture.logs.join('')) as Array<{ name: string }>
-  assert.equal(catalog.length, 157)
-  assert.equal(new Set(catalog.map(tool => tool.name)).size, 157)
+  assert.equal(catalog.length, MCP_TOOL_COUNT)
+  assert.equal(new Set(catalog.map(tool => tool.name)).size, MCP_TOOL_COUNT)
   assert.ok(catalog.some(tool => tool.name === 'export_connected_service_data'))
   assert.ok(catalog.some(tool => tool.name === 'renew_connected_data_download'))
   assert.ok(catalog.some(tool => tool.name === 'describe_service_connection_tool'))
   assert.ok(catalog.some(tool => tool.name === 'import_service_connection_to_memory'))
+})
+
+test('tools call saves inline MCP binary blocks and never prints base64', async () => {
+  const mediaDir = mkdtempSync(join(tmpdir(), 'mcpscraper-cli-media-'))
+  const imageData = Buffer.from('fake-image-bytes').toString('base64')
+  const audioData = Buffer.from('fake-audio-bytes').toString('base64')
+  const resourceData = Buffer.from('fake-resource-bytes').toString('base64')
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    const body = JSON.parse(String(init?.body)) as { id: number }
+    return jsonResponse(200, {
+      jsonrpc: '2.0',
+      id: body.id,
+      result: {
+        content: [
+          { type: 'text', text: '{"ok":true}' },
+          { type: 'image', mimeType: 'image/png', data: imageData },
+          { type: 'audio', mimeType: 'audio/mpeg', data: audioData },
+          { type: 'resource', resource: { uri: 'memory://creative', mimeType: 'application/pdf', blob: resourceData } },
+        ],
+        structuredContent: { ok: true },
+      },
+    })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'tools', 'call', 'list-vaults',
+      '--args', '{"connectionId":"conn","adId":"123"}', '--media-dir', mediaDir, '--json',
+    ])
+  } finally {
+    capture.restore()
+  }
+  try {
+    const printed = capture.logs.join('')
+    assert.equal(printed.includes(imageData), false)
+    assert.equal(printed.includes(audioData), false)
+    assert.equal(printed.includes(resourceData), false)
+    const parsed = JSON.parse(printed) as {
+      content: Array<{
+        type: string
+        savedPath?: string
+        bytes?: number
+        resource?: { savedPath?: string; bytes?: number }
+      }>
+    }
+    const image = parsed.content.find(block => block.type === 'image')
+    const audio = parsed.content.find(block => block.type === 'audio')
+    const resource = parsed.content.find(block => block.type === 'resource')?.resource
+    assert.ok(image?.savedPath)
+    assert.ok(audio?.savedPath)
+    assert.ok(resource?.savedPath)
+    assert.equal(image?.bytes, Buffer.byteLength('fake-image-bytes'))
+    assert.equal(audio?.bytes, Buffer.byteLength('fake-audio-bytes'))
+    assert.equal(resource?.bytes, Buffer.byteLength('fake-resource-bytes'))
+    assert.equal(readFileSync(image.savedPath!).toString(), 'fake-image-bytes')
+    assert.equal(readFileSync(audio.savedPath!).toString(), 'fake-audio-bytes')
+    assert.equal(readFileSync(resource!.savedPath!).toString(), 'fake-resource-bytes')
+  } finally {
+    rmSync(mediaDir, { recursive: true, force: true })
+  }
 })
 
 test('tools call dispatches any catalog tool through unified MCP JSON-RPC', async () => {
