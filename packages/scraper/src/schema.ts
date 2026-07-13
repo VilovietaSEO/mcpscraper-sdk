@@ -1026,6 +1026,11 @@ export interface components {
              * @default false
              */
             background: boolean;
+            /**
+             * @description Download every discovered image as a real file into the background job's bundle.zip (under images/<page>/), not just image URLs/stats. OFF by default. Implies background regardless of the background flag — too slow to run inline. Capped at 20 images/page and 500 images/site.
+             * @default false
+             */
+            downloadImages: boolean;
             /** @default false */
             rotateProxies: boolean;
             /** @default 30 */
@@ -1169,7 +1174,10 @@ export interface components {
             /**
              * @description Produced files (name + MIME type). When the job requested formats including
              *     `issues`, this includes `seo-audit.json` (application/json — the same object as
-             *     the synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`.
+             *     the synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`. The
+             *     `bundle.zip` entry is the full downloadable export — page Markdown under `pages/`,
+             *     plus (when `downloadImages` was set) real image files under `images/<page>/` and an
+             *     `images-download-summary.json` entry reporting queued/downloaded/failed counts.
              */
             artifacts?: {
                 [key: string]: unknown;

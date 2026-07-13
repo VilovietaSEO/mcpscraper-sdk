@@ -5,22 +5,4 @@ export interface Input {
   runId: string;
 }
 
-export interface Output {
-  runId: string;
-  run?: {
-    [k: string]: unknown;
-  };
-  summary?: {
-    [k: string]: unknown;
-  } | null;
-  step?: {
-    [k: string]: unknown;
-  };
-  nextStep?: {
-    [k: string]: unknown;
-  } | null;
-  done: boolean;
-  artifacts: {
-    [k: string]: unknown;
-  }[];
-}
+export type Output = unknown

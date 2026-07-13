@@ -1289,6 +1289,7 @@ components:
         url: { type: string, format: uri }
         maxPages: { type: integer, minimum: 1, maximum: 10000, default: 100 }
         background: { type: boolean, default: false, description: 'Enqueue an async crawl instead of waiting inline.' }
+        downloadImages: { type: boolean, default: false, description: 'Download every discovered image as a real file into the background job''s bundle.zip (under images/<page>/), not just image URLs/stats. OFF by default. Implies background regardless of the background flag — too slow to run inline. Capped at 20 images/page and 500 images/site.' }
         rotateProxies: { type: boolean, default: false }
         rotateProxyEvery: { type: integer, minimum: 1, maximum: 100, default: 30 }
         browserFallback: { type: boolean, default: false }
@@ -1448,7 +1449,10 @@ components:
           description: |
             Produced files (name + MIME type). When the job requested formats including
             `issues`, this includes `seo-audit.json` (application/json — the same object as
-            the synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`.
+            the synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`. The
+            `bundle.zip` entry is the full downloadable export — page Markdown under `pages/`,
+            plus (when `downloadImages` was set) real image files under `images/<page>/` and an
+            `images-download-summary.json` entry reporting queued/downloaded/failed counts.
           items: { type: object, additionalProperties: true }
         error: { type: string, nullable: true }
         updatedAt: { type: string }

@@ -11,12 +11,3 @@ class TrustpilotReviewsInput(BaseModel):
 
 class TrustpilotReviewsOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    domain: str = Field(..., alias="domain", description="")
-    review_url: str = Field(..., alias="reviewUrl", description="")
-    extracted_at: str = Field(..., alias="extractedAt", description="")
-    requested_max_pages: int = Field(..., alias="requestedMaxPages", description="")
-    pages_fetched: int = Field(..., alias="pagesFetched", description="")
-    review_count: int = Field(..., alias="reviewCount", description="")
-    reviews: list[dict[str, Any]] = Field(..., alias="reviews", description="")
-    duration_ms: float = Field(..., alias="durationMs", description="")

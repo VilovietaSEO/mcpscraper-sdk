@@ -9,20 +9,4 @@ export interface Input {
   name: string;
 }
 
-export interface Output {
-  ok: boolean;
-  tool: "browser_extension_import";
-  session_id: null;
-  /**
-   * The name this extension was saved under.
-   */
-  name: string;
-  /**
-   * The store URL this extension was imported from.
-   */
-  source_url: string;
-  /**
-   * Size of the extension package in bytes.
-   */
-  size_bytes: number | null;
-}
+export type Output = unknown

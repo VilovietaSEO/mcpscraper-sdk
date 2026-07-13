@@ -7,6 +7,7 @@ import * as WebDiffPage from './tools/diff_page.js'
 import * as WebMapSiteUrls from './tools/map_site_urls.js'
 import * as WebExtractSite from './tools/extract_site.js'
 import * as WebAuditSite from './tools/audit_site.js'
+import * as WebCheckSiteExport from './tools/check_site_export.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
 import * as FacebookPageIntel from './tools/facebook_page_intel.js'
@@ -44,13 +45,13 @@ import * as ConnectionsGmailSendMessage from './tools/gmail_send_message.js'
 import * as ConnectionsGoogleCalendarCreateEvent from './tools/google_calendar_create_event.js'
 import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
 import * as ConnectionsReadServiceConnection from './tools/read_service_connection.js'
-import * as ConnectionsCallServiceConnectionAction from './tools/call_service_connection_action.js'
-import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
+import * as ConnectionsMetaAdCreativeMedia from './tools/meta_ad_creative_media.js'
+import * as ConnectionsImportServiceConnectionToMemory from './tools/import_service_connection_to_memory.js'
+import * as ConnectionsDescribeServiceConnectionTool from './tools/describe_service_connection_tool.js'
 import * as ConnectionsExportConnectedServiceData from './tools/export_connected_service_data.js'
 import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_data_download.js'
-import * as ConnectionsDescribeServiceConnectionTool from './tools/describe_service_connection_tool.js'
-import * as ConnectionsImportServiceConnectionToMemory from './tools/import_service_connection_to_memory.js'
-import * as ConnectionsMetaAdCreativeMedia from './tools/meta_ad_creative_media.js'
+import * as ConnectionsCallServiceConnectionAction from './tools/call_service_connection_action.js'
+import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as BrowserProfileConnect from './tools/browser_profile_connect.js'
@@ -194,6 +195,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "audit_site",
     "category": "web",
     "methodName": "auditSite"
+  },
+  {
+    "name": "check_site_export",
+    "category": "web",
+    "methodName": "checkSiteExport"
   },
   {
     "name": "youtube_harvest",
@@ -364,6 +370,31 @@ export const MCP_TOOL_BINDINGS = [
     "name": "read_service_connection",
     "category": "connections",
     "methodName": "readServiceConnection"
+  },
+  {
+    "name": "meta_ad_creative_media",
+    "category": "connections",
+    "methodName": "metaAdCreativeMedia"
+  },
+  {
+    "name": "import_service_connection_to_memory",
+    "category": "connections",
+    "methodName": "importServiceConnectionToMemory"
+  },
+  {
+    "name": "describe_service_connection_tool",
+    "category": "connections",
+    "methodName": "describeServiceConnectionTool"
+  },
+  {
+    "name": "export_connected_service_data",
+    "category": "connections",
+    "methodName": "exportConnectedServiceData"
+  },
+  {
+    "name": "renew_connected_data_download",
+    "category": "connections",
+    "methodName": "renewConnectedDataDownload"
   },
   {
     "name": "call_service_connection_action",
@@ -924,31 +955,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "revoke-webhook",
     "category": "webhooks",
     "methodName": "revokeWebhook"
-  },
-  {
-    "name": "export_connected_service_data",
-    "category": "connections",
-    "methodName": "exportConnectedServiceData"
-  },
-  {
-    "name": "renew_connected_data_download",
-    "category": "connections",
-    "methodName": "renewConnectedDataDownload"
-  },
-  {
-    "name": "describe_service_connection_tool",
-    "category": "connections",
-    "methodName": "describeServiceConnectionTool"
-  },
-  {
-    "name": "import_service_connection_to_memory",
-    "category": "connections",
-    "methodName": "importServiceConnectionToMemory"
-  },
-  {
-    "name": "meta_ad_creative_media",
-    "category": "connections",
-    "methodName": "metaAdCreativeMedia"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -986,6 +992,10 @@ export class WebNamespace {
 
   async auditSite(input: WebAuditSite.Input): Promise<WebAuditSite.Output> {
     return this.callTool('audit_site', input) as Promise<WebAuditSite.Output>
+  }
+
+  async checkSiteExport(input: WebCheckSiteExport.Input): Promise<WebCheckSiteExport.Output> {
+    return this.callTool('check_site_export', input) as Promise<WebCheckSiteExport.Output>
   }
 }
 
@@ -1188,12 +1198,16 @@ export class ConnectionsNamespace {
     return this.callTool('read_service_connection', input) as Promise<ConnectionsReadServiceConnection.Output>
   }
 
-  async callServiceConnectionAction(input: ConnectionsCallServiceConnectionAction.Input): Promise<ConnectionsCallServiceConnectionAction.Output> {
-    return this.callTool('call_service_connection_action', input) as Promise<ConnectionsCallServiceConnectionAction.Output>
+  async metaAdCreativeMedia(input: ConnectionsMetaAdCreativeMedia.Input): Promise<ConnectionsMetaAdCreativeMedia.Output> {
+    return this.callTool('meta_ad_creative_media', input) as Promise<ConnectionsMetaAdCreativeMedia.Output>
   }
 
-  async setScheduledActionConnections(input: ConnectionsSetScheduledActionConnections.Input): Promise<ConnectionsSetScheduledActionConnections.Output> {
-    return this.callTool('set_scheduled_action_connections', input) as Promise<ConnectionsSetScheduledActionConnections.Output>
+  async importServiceConnectionToMemory(input: ConnectionsImportServiceConnectionToMemory.Input): Promise<ConnectionsImportServiceConnectionToMemory.Output> {
+    return this.callTool('import_service_connection_to_memory', input) as Promise<ConnectionsImportServiceConnectionToMemory.Output>
+  }
+
+  async describeServiceConnectionTool(input: ConnectionsDescribeServiceConnectionTool.Input): Promise<ConnectionsDescribeServiceConnectionTool.Output> {
+    return this.callTool('describe_service_connection_tool', input) as Promise<ConnectionsDescribeServiceConnectionTool.Output>
   }
 
   async exportConnectedServiceData(input: ConnectionsExportConnectedServiceData.Input): Promise<ConnectionsExportConnectedServiceData.Output> {
@@ -1204,16 +1218,12 @@ export class ConnectionsNamespace {
     return this.callTool('renew_connected_data_download', input) as Promise<ConnectionsRenewConnectedDataDownload.Output>
   }
 
-  async describeServiceConnectionTool(input: ConnectionsDescribeServiceConnectionTool.Input): Promise<ConnectionsDescribeServiceConnectionTool.Output> {
-    return this.callTool('describe_service_connection_tool', input) as Promise<ConnectionsDescribeServiceConnectionTool.Output>
+  async callServiceConnectionAction(input: ConnectionsCallServiceConnectionAction.Input): Promise<ConnectionsCallServiceConnectionAction.Output> {
+    return this.callTool('call_service_connection_action', input) as Promise<ConnectionsCallServiceConnectionAction.Output>
   }
 
-  async importServiceConnectionToMemory(input: ConnectionsImportServiceConnectionToMemory.Input): Promise<ConnectionsImportServiceConnectionToMemory.Output> {
-    return this.callTool('import_service_connection_to_memory', input) as Promise<ConnectionsImportServiceConnectionToMemory.Output>
-  }
-
-  async metaAdCreativeMedia(input: ConnectionsMetaAdCreativeMedia.Input): Promise<ConnectionsMetaAdCreativeMedia.Output> {
-    return this.callTool('meta_ad_creative_media', input) as Promise<ConnectionsMetaAdCreativeMedia.Output>
+  async setScheduledActionConnections(input: ConnectionsSetScheduledActionConnections.Input): Promise<ConnectionsSetScheduledActionConnections.Output> {
+    return this.callTool('set_scheduled_action_connections', input) as Promise<ConnectionsSetScheduledActionConnections.Output>
   }
 }
 

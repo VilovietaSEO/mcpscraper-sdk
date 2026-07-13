@@ -227,6 +227,7 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
           url,
           maxPages: opts.maxPages ?? 100,
           background: false,
+          downloadImages: false,
           rotateProxies: false,
           rotateProxyEvery: 30,
           browserFallback: false,

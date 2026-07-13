@@ -45,6 +45,7 @@ from .mcp_models.browser_type import BrowserTypeInput, BrowserTypeOutput
 from .mcp_models.call_service_connection_action import CallServiceConnectionActionInput, CallServiceConnectionActionOutput
 from .mcp_models.capture_serp_page_snapshots import CaptureSerpPageSnapshotsInput, CaptureSerpPageSnapshotsOutput
 from .mcp_models.capture_serp_snapshot import CaptureSerpSnapshotInput, CaptureSerpSnapshotOutput
+from .mcp_models.check_site_export import CheckSiteExportInput, CheckSiteExportOutput
 from .mcp_models.cost_usage import CostUsageInput, CostUsageOutput
 from .mcp_models.create_channel import CreateChannelInput, CreateChannelOutput
 from .mcp_models.create_scheduled_action import CreateScheduledActionInput, CreateScheduledActionOutput
@@ -160,7 +161,7 @@ from .mcp_models.youtube_transcribe import YoutubeTranscribeInput, YoutubeTransc
 from .mcp_models.zoom_create_meeting import ZoomCreateMeetingInput, ZoomCreateMeetingOutput
 
 
-MCP_TOOL_BINDINGS = [{'name': 'harvest_paa', 'category': 'search', 'method_name': 'harvest_paa'}, {'name': 'search_serp', 'category': 'search', 'method_name': 'search_serp'}, {'name': 'extract_url', 'category': 'web', 'method_name': 'extract_url'}, {'name': 'diff_page', 'category': 'web', 'method_name': 'diff_page'}, {'name': 'map_site_urls', 'category': 'web', 'method_name': 'map_site_urls'}, {'name': 'extract_site', 'category': 'web', 'method_name': 'extract_site'}, {'name': 'audit_site', 'category': 'web', 'method_name': 'audit_site'}, {'name': 'youtube_harvest', 'category': 'youtube', 'method_name': 'harvest'}, {'name': 'youtube_transcribe', 'category': 'youtube', 'method_name': 'transcribe'}, {'name': 'facebook_page_intel', 'category': 'facebook', 'method_name': 'page_intel'}, {'name': 'facebook_ad_search', 'category': 'facebook', 'method_name': 'ad_search'}, {'name': 'reddit_thread', 'category': 'reddit', 'method_name': 'thread'}, {'name': 'video_frame_analysis', 'category': 'video', 'method_name': 'frame_analysis'}, {'name': 'video_frame_analysis_status', 'category': 'video', 'method_name': 'frame_analysis_status'}, {'name': 'facebook_ad_transcribe', 'category': 'facebook', 'method_name': 'ad_transcribe'}, {'name': 'google_ads_search', 'category': 'googleAds', 'method_name': 'search'}, {'name': 'google_ads_page_intel', 'category': 'googleAds', 'method_name': 'page_intel'}, {'name': 'google_ads_transcribe', 'category': 'googleAds', 'method_name': 'transcribe'}, {'name': 'facebook_video_transcribe', 'category': 'facebook', 'method_name': 'video_transcribe'}, {'name': 'instagram_profile_content', 'category': 'instagram', 'method_name': 'profile_content'}, {'name': 'instagram_media_download', 'category': 'instagram', 'method_name': 'media_download'}, {'name': 'maps_place_intel', 'category': 'maps', 'method_name': 'place_intel'}, {'name': 'maps_search', 'category': 'maps', 'method_name': 'search'}, {'name': 'trustpilot_reviews', 'category': 'reviews', 'method_name': 'trustpilot_reviews'}, {'name': 'g2_reviews', 'category': 'reviews', 'method_name': 'g2_reviews'}, {'name': 'directory_workflow', 'category': 'directory', 'method_name': 'run'}, {'name': 'workflow_list', 'category': 'workflows', 'method_name': 'list'}, {'name': 'workflow_suggest', 'category': 'workflows', 'method_name': 'suggest'}, {'name': 'workflow_run', 'category': 'workflows', 'method_name': 'run'}, {'name': 'workflow_step', 'category': 'workflows', 'method_name': 'step'}, {'name': 'workflow_status', 'category': 'workflows', 'method_name': 'status'}, {'name': 'workflow_artifact_read', 'category': 'workflows', 'method_name': 'artifact_read'}, {'name': 'report_artifact_read', 'category': 'artifacts', 'method_name': 'read'}, {'name': 'rank_tracker_workflow', 'category': 'workflows', 'method_name': 'rank_tracker'}, {'name': 'credits_info', 'category': 'billing', 'method_name': 'credits_info'}, {'name': 'list_service_connections', 'category': 'connections', 'method_name': 'list_service_connections'}, {'name': 'slack_send_message', 'category': 'connections', 'method_name': 'slack_send_message'}, {'name': 'gmail_send_message', 'category': 'connections', 'method_name': 'gmail_send_message'}, {'name': 'google_calendar_create_event', 'category': 'connections', 'method_name': 'google_calendar_create_event'}, {'name': 'zoom_create_meeting', 'category': 'connections', 'method_name': 'zoom_create_meeting'}, {'name': 'read_service_connection', 'category': 'connections', 'method_name': 'read_service_connection'}, {'name': 'call_service_connection_action', 'category': 'connections', 'method_name': 'call_service_connection_action'}, {'name': 'set_scheduled_action_connections', 'category': 'connections', 'method_name': 'set_scheduled_action_connections'}, {'name': 'capture_serp_snapshot', 'category': 'serpIntelligence', 'method_name': 'snapshot'}, {'name': 'capture_serp_page_snapshots', 'category': 'serpIntelligence', 'method_name': 'page_snapshots'}, {'name': 'browser_profile_connect', 'category': 'browser', 'method_name': 'profile_connect'}, {'name': 'browser_profile_list', 'category': 'browser', 'method_name': 'profile_list'}, {'name': 'browser_extension_import', 'category': 'browser', 'method_name': 'extension_import'}, {'name': 'browser_extension_list', 'category': 'browser', 'method_name': 'extension_list'}, {'name': 'browser_extension_delete', 'category': 'browser', 'method_name': 'extension_delete'}, {'name': 'browser_open', 'category': 'browser', 'method_name': 'open'}, {'name': 'browser_screenshot', 'category': 'browser', 'method_name': 'screenshot'}, {'name': 'browser_read', 'category': 'browser', 'method_name': 'read'}, {'name': 'browser_locate', 'category': 'browser', 'method_name': 'locate'}, {'name': 'browser_goto', 'category': 'browser', 'method_name': 'goto'}, {'name': 'browser_click', 'category': 'browser', 'method_name': 'click'}, {'name': 'browser_type', 'category': 'browser', 'method_name': 'type'}, {'name': 'browser_scroll', 'category': 'browser', 'method_name': 'scroll'}, {'name': 'browser_press', 'category': 'browser', 'method_name': 'press'}, {'name': 'browser_replay_start', 'category': 'browser', 'method_name': 'replay_start'}, {'name': 'browser_replay_stop', 'category': 'browser', 'method_name': 'replay_stop'}, {'name': 'browser_list_replays', 'category': 'browser', 'method_name': 'list_replays'}, {'name': 'browser_replay_download', 'category': 'browser', 'method_name': 'replay_download'}, {'name': 'browser_replay_mark', 'category': 'browser', 'method_name': 'replay_mark'}, {'name': 'browser_replay_annotate', 'category': 'browser', 'method_name': 'replay_annotate'}, {'name': 'browser_close', 'category': 'browser', 'method_name': 'close'}, {'name': 'browser_list_sessions', 'category': 'browser', 'method_name': 'list_sessions'}, {'name': 'query_fanout_workflow', 'category': 'workflows', 'method_name': 'query_fanout'}, {'name': 'access-accept-share', 'category': 'access', 'method_name': 'accept_share'}, {'name': 'access-approve-sender', 'category': 'access', 'method_name': 'approve_sender'}, {'name': 'access-decline-share', 'category': 'access', 'method_name': 'decline_share'}, {'name': 'get-chat-link', 'category': 'access', 'method_name': 'get_chat_link'}, {'name': 'access-inbox-settings', 'category': 'access', 'method_name': 'inbox_settings'}, {'name': 'access-invite-account', 'category': 'access', 'method_name': 'invite_account'}, {'name': 'access-issue-key', 'category': 'access', 'method_name': 'issue_key'}, {'name': 'access-list-approved-senders', 'category': 'access', 'method_name': 'list_approved_senders'}, {'name': 'access-list-keys', 'category': 'access', 'method_name': 'list_keys'}, {'name': 'access-note-inbox', 'category': 'access', 'method_name': 'note_inbox'}, {'name': 'access-remove-approved-sender', 'category': 'access', 'method_name': 'remove_approved_sender'}, {'name': 'revoke-chat-link', 'category': 'access', 'method_name': 'revoke_chat_link'}, {'name': 'access-revoke-key', 'category': 'access', 'method_name': 'revoke_key'}, {'name': 'access-revoke-share', 'category': 'access', 'method_name': 'revoke_share'}, {'name': 'set-agent-identity', 'category': 'access', 'method_name': 'set_agent_identity'}, {'name': 'access-set-scope', 'category': 'access', 'method_name': 'set_scope'}, {'name': 'access-share-note', 'category': 'access', 'method_name': 'share_note'}, {'name': 'access-share-vault', 'category': 'access', 'method_name': 'share_vault'}, {'name': 'access-swap-vault', 'category': 'access', 'method_name': 'swap_vault'}, {'name': 'access-switch-account', 'category': 'access', 'method_name': 'switch_account'}, {'name': 'access-unlink-share', 'category': 'access', 'method_name': 'unlink_share'}, {'name': 'memory-capture', 'category': 'capture', 'method_name': 'memory_capture'}, {'name': 'memory-questions', 'category': 'capture', 'method_name': 'memory_questions'}, {'name': 'prepare-memory-write', 'category': 'capture', 'method_name': 'prepare_memory_write'}, {'name': 'validate-memory-write', 'category': 'capture', 'method_name': 'validate_memory_write'}, {'name': 'create-channel', 'category': 'channels', 'method_name': 'create_channel'}, {'name': 'get-message-note', 'category': 'channels', 'method_name': 'get_message_note'}, {'name': 'list-channel-members', 'category': 'channels', 'method_name': 'list_channel_members'}, {'name': 'list-channel-messages', 'category': 'channels', 'method_name': 'list_channel_messages'}, {'name': 'my-mentions', 'category': 'channels', 'method_name': 'my_mentions'}, {'name': 'poll-channel', 'category': 'channels', 'method_name': 'poll_channel'}, {'name': 'post-message', 'category': 'channels', 'method_name': 'post_message'}, {'name': 'react-message', 'category': 'channels', 'method_name': 'react_message'}, {'name': 'remove-channel-member', 'category': 'channels', 'method_name': 'remove_channel_member'}, {'name': 'reply-message', 'category': 'channels', 'method_name': 'reply_message'}, {'name': 'fact-history', 'category': 'facts', 'method_name': 'history'}, {'name': 'record-fact', 'category': 'facts', 'method_name': 'record_fact'}, {'name': 'memory-backlinks', 'category': 'graph', 'method_name': 'memory_backlinks'}, {'name': 'memory-graph-path', 'category': 'graph', 'method_name': 'memory_graph_path'}, {'name': 'memory-graph-universe', 'category': 'graph', 'method_name': 'memory_graph_universe'}, {'name': 'library-ingest', 'category': 'library', 'method_name': 'ingest'}, {'name': 'delete-note', 'category': 'memory', 'method_name': 'delete_note'}, {'name': 'memory-export', 'category': 'memory', 'method_name': 'export'}, {'name': 'memory-get', 'category': 'memory', 'method_name': 'get'}, {'name': 'memory-list', 'category': 'memory', 'method_name': 'list'}, {'name': 'memory-put', 'category': 'memory', 'method_name': 'put'}, {'name': 'memory-search', 'category': 'memory', 'method_name': 'search'}, {'name': 'memory-suggest', 'category': 'memory', 'method_name': 'suggest'}, {'name': 'memory-upload', 'category': 'memory', 'method_name': 'upload'}, {'name': 'temporal-recall', 'category': 'recall', 'method_name': 'temporal_recall'}, {'name': 'create-scheduled-action', 'category': 'schedule', 'method_name': 'create_scheduled_action'}, {'name': 'delete-scheduled-action', 'category': 'schedule', 'method_name': 'delete_scheduled_action'}, {'name': 'get-schedule-link', 'category': 'schedule', 'method_name': 'get_schedule_link'}, {'name': 'get-schedule-status', 'category': 'schedule', 'method_name': 'get_schedule_status'}, {'name': 'list-scheduled-actions', 'category': 'schedule', 'method_name': 'list_scheduled_actions'}, {'name': 'pause-scheduled-action', 'category': 'schedule', 'method_name': 'pause_scheduled_action'}, {'name': 'propose-scheduled-action', 'category': 'schedule', 'method_name': 'propose_scheduled_action'}, {'name': 'resume-scheduled-action', 'category': 'schedule', 'method_name': 'resume_scheduled_action'}, {'name': 'revoke-schedule-link', 'category': 'schedule', 'method_name': 'revoke_schedule_link'}, {'name': 'set-schedule-entitlement', 'category': 'schedule', 'method_name': 'set_schedule_entitlement'}, {'name': 'cost-usage', 'category': 'storage', 'method_name': 'cost_usage'}, {'name': 'storage-usage', 'category': 'storage', 'method_name': 'usage'}, {'name': 'table-create', 'category': 'tables', 'method_name': 'create'}, {'name': 'table-delete-rows', 'category': 'tables', 'method_name': 'delete_rows'}, {'name': 'table-describe', 'category': 'tables', 'method_name': 'describe'}, {'name': 'table-drop', 'category': 'tables', 'method_name': 'drop'}, {'name': 'table-insert-rows', 'category': 'tables', 'method_name': 'insert_rows'}, {'name': 'table-list', 'category': 'tables', 'method_name': 'list'}, {'name': 'table-query', 'category': 'tables', 'method_name': 'query'}, {'name': 'list-memory-tags', 'category': 'tags', 'method_name': 'list_memory_tags'}, {'name': 'resolve-memory-tags', 'category': 'tags', 'method_name': 'resolve_memory_tags'}, {'name': 'upsert-memory-tag', 'category': 'tags', 'method_name': 'upsert_memory_tag'}, {'name': 'add-vault', 'category': 'vaults', 'method_name': 'add_vault'}, {'name': 'create-secure-vault', 'category': 'vaults', 'method_name': 'create_secure_vault'}, {'name': 'delete-vault', 'category': 'vaults', 'method_name': 'delete_vault'}, {'name': 'get-vault-contract', 'category': 'vaults', 'method_name': 'get_vault_contract'}, {'name': 'list-shared-with-me', 'category': 'vaults', 'method_name': 'list_shared_with_me'}, {'name': 'list-vaults', 'category': 'vaults', 'method_name': 'list_vaults'}, {'name': 'provision-defaults', 'category': 'vaults', 'method_name': 'provision_defaults'}, {'name': 'route-memory', 'category': 'vaults', 'method_name': 'route_memory'}, {'name': 'video-analyze-start', 'category': 'video', 'method_name': 'analyze_start'}, {'name': 'video-analyze-status', 'category': 'video', 'method_name': 'analyze_status'}, {'name': 'create-webhook', 'category': 'webhooks', 'method_name': 'create_webhook'}, {'name': 'list-webhooks', 'category': 'webhooks', 'method_name': 'list_webhooks'}, {'name': 'revoke-webhook', 'category': 'webhooks', 'method_name': 'revoke_webhook'}, {'name': 'export_connected_service_data', 'category': 'connections', 'method_name': 'export_connected_service_data'}, {'name': 'renew_connected_data_download', 'category': 'connections', 'method_name': 'renew_connected_data_download'}, {'name': 'describe_service_connection_tool', 'category': 'connections', 'method_name': 'describe_service_connection_tool'}, {'name': 'import_service_connection_to_memory', 'category': 'connections', 'method_name': 'import_service_connection_to_memory'}, {'name': 'meta_ad_creative_media', 'category': 'connections', 'method_name': 'meta_ad_creative_media'}]
+MCP_TOOL_BINDINGS = [{'name': 'harvest_paa', 'category': 'search', 'method_name': 'harvest_paa'}, {'name': 'search_serp', 'category': 'search', 'method_name': 'search_serp'}, {'name': 'extract_url', 'category': 'web', 'method_name': 'extract_url'}, {'name': 'diff_page', 'category': 'web', 'method_name': 'diff_page'}, {'name': 'map_site_urls', 'category': 'web', 'method_name': 'map_site_urls'}, {'name': 'extract_site', 'category': 'web', 'method_name': 'extract_site'}, {'name': 'audit_site', 'category': 'web', 'method_name': 'audit_site'}, {'name': 'check_site_export', 'category': 'web', 'method_name': 'check_site_export'}, {'name': 'youtube_harvest', 'category': 'youtube', 'method_name': 'harvest'}, {'name': 'youtube_transcribe', 'category': 'youtube', 'method_name': 'transcribe'}, {'name': 'facebook_page_intel', 'category': 'facebook', 'method_name': 'page_intel'}, {'name': 'facebook_ad_search', 'category': 'facebook', 'method_name': 'ad_search'}, {'name': 'reddit_thread', 'category': 'reddit', 'method_name': 'thread'}, {'name': 'video_frame_analysis', 'category': 'video', 'method_name': 'frame_analysis'}, {'name': 'video_frame_analysis_status', 'category': 'video', 'method_name': 'frame_analysis_status'}, {'name': 'facebook_ad_transcribe', 'category': 'facebook', 'method_name': 'ad_transcribe'}, {'name': 'google_ads_search', 'category': 'googleAds', 'method_name': 'search'}, {'name': 'google_ads_page_intel', 'category': 'googleAds', 'method_name': 'page_intel'}, {'name': 'google_ads_transcribe', 'category': 'googleAds', 'method_name': 'transcribe'}, {'name': 'facebook_video_transcribe', 'category': 'facebook', 'method_name': 'video_transcribe'}, {'name': 'instagram_profile_content', 'category': 'instagram', 'method_name': 'profile_content'}, {'name': 'instagram_media_download', 'category': 'instagram', 'method_name': 'media_download'}, {'name': 'maps_place_intel', 'category': 'maps', 'method_name': 'place_intel'}, {'name': 'maps_search', 'category': 'maps', 'method_name': 'search'}, {'name': 'trustpilot_reviews', 'category': 'reviews', 'method_name': 'trustpilot_reviews'}, {'name': 'g2_reviews', 'category': 'reviews', 'method_name': 'g2_reviews'}, {'name': 'directory_workflow', 'category': 'directory', 'method_name': 'run'}, {'name': 'workflow_list', 'category': 'workflows', 'method_name': 'list'}, {'name': 'workflow_suggest', 'category': 'workflows', 'method_name': 'suggest'}, {'name': 'workflow_run', 'category': 'workflows', 'method_name': 'run'}, {'name': 'workflow_step', 'category': 'workflows', 'method_name': 'step'}, {'name': 'workflow_status', 'category': 'workflows', 'method_name': 'status'}, {'name': 'workflow_artifact_read', 'category': 'workflows', 'method_name': 'artifact_read'}, {'name': 'report_artifact_read', 'category': 'artifacts', 'method_name': 'read'}, {'name': 'rank_tracker_workflow', 'category': 'workflows', 'method_name': 'rank_tracker'}, {'name': 'credits_info', 'category': 'billing', 'method_name': 'credits_info'}, {'name': 'list_service_connections', 'category': 'connections', 'method_name': 'list_service_connections'}, {'name': 'slack_send_message', 'category': 'connections', 'method_name': 'slack_send_message'}, {'name': 'gmail_send_message', 'category': 'connections', 'method_name': 'gmail_send_message'}, {'name': 'google_calendar_create_event', 'category': 'connections', 'method_name': 'google_calendar_create_event'}, {'name': 'zoom_create_meeting', 'category': 'connections', 'method_name': 'zoom_create_meeting'}, {'name': 'read_service_connection', 'category': 'connections', 'method_name': 'read_service_connection'}, {'name': 'meta_ad_creative_media', 'category': 'connections', 'method_name': 'meta_ad_creative_media'}, {'name': 'import_service_connection_to_memory', 'category': 'connections', 'method_name': 'import_service_connection_to_memory'}, {'name': 'describe_service_connection_tool', 'category': 'connections', 'method_name': 'describe_service_connection_tool'}, {'name': 'export_connected_service_data', 'category': 'connections', 'method_name': 'export_connected_service_data'}, {'name': 'renew_connected_data_download', 'category': 'connections', 'method_name': 'renew_connected_data_download'}, {'name': 'call_service_connection_action', 'category': 'connections', 'method_name': 'call_service_connection_action'}, {'name': 'set_scheduled_action_connections', 'category': 'connections', 'method_name': 'set_scheduled_action_connections'}, {'name': 'capture_serp_snapshot', 'category': 'serpIntelligence', 'method_name': 'snapshot'}, {'name': 'capture_serp_page_snapshots', 'category': 'serpIntelligence', 'method_name': 'page_snapshots'}, {'name': 'browser_profile_connect', 'category': 'browser', 'method_name': 'profile_connect'}, {'name': 'browser_profile_list', 'category': 'browser', 'method_name': 'profile_list'}, {'name': 'browser_extension_import', 'category': 'browser', 'method_name': 'extension_import'}, {'name': 'browser_extension_list', 'category': 'browser', 'method_name': 'extension_list'}, {'name': 'browser_extension_delete', 'category': 'browser', 'method_name': 'extension_delete'}, {'name': 'browser_open', 'category': 'browser', 'method_name': 'open'}, {'name': 'browser_screenshot', 'category': 'browser', 'method_name': 'screenshot'}, {'name': 'browser_read', 'category': 'browser', 'method_name': 'read'}, {'name': 'browser_locate', 'category': 'browser', 'method_name': 'locate'}, {'name': 'browser_goto', 'category': 'browser', 'method_name': 'goto'}, {'name': 'browser_click', 'category': 'browser', 'method_name': 'click'}, {'name': 'browser_type', 'category': 'browser', 'method_name': 'type'}, {'name': 'browser_scroll', 'category': 'browser', 'method_name': 'scroll'}, {'name': 'browser_press', 'category': 'browser', 'method_name': 'press'}, {'name': 'browser_replay_start', 'category': 'browser', 'method_name': 'replay_start'}, {'name': 'browser_replay_stop', 'category': 'browser', 'method_name': 'replay_stop'}, {'name': 'browser_list_replays', 'category': 'browser', 'method_name': 'list_replays'}, {'name': 'browser_replay_download', 'category': 'browser', 'method_name': 'replay_download'}, {'name': 'browser_replay_mark', 'category': 'browser', 'method_name': 'replay_mark'}, {'name': 'browser_replay_annotate', 'category': 'browser', 'method_name': 'replay_annotate'}, {'name': 'browser_close', 'category': 'browser', 'method_name': 'close'}, {'name': 'browser_list_sessions', 'category': 'browser', 'method_name': 'list_sessions'}, {'name': 'query_fanout_workflow', 'category': 'workflows', 'method_name': 'query_fanout'}, {'name': 'access-accept-share', 'category': 'access', 'method_name': 'accept_share'}, {'name': 'access-approve-sender', 'category': 'access', 'method_name': 'approve_sender'}, {'name': 'access-decline-share', 'category': 'access', 'method_name': 'decline_share'}, {'name': 'get-chat-link', 'category': 'access', 'method_name': 'get_chat_link'}, {'name': 'access-inbox-settings', 'category': 'access', 'method_name': 'inbox_settings'}, {'name': 'access-invite-account', 'category': 'access', 'method_name': 'invite_account'}, {'name': 'access-issue-key', 'category': 'access', 'method_name': 'issue_key'}, {'name': 'access-list-approved-senders', 'category': 'access', 'method_name': 'list_approved_senders'}, {'name': 'access-list-keys', 'category': 'access', 'method_name': 'list_keys'}, {'name': 'access-note-inbox', 'category': 'access', 'method_name': 'note_inbox'}, {'name': 'access-remove-approved-sender', 'category': 'access', 'method_name': 'remove_approved_sender'}, {'name': 'revoke-chat-link', 'category': 'access', 'method_name': 'revoke_chat_link'}, {'name': 'access-revoke-key', 'category': 'access', 'method_name': 'revoke_key'}, {'name': 'access-revoke-share', 'category': 'access', 'method_name': 'revoke_share'}, {'name': 'set-agent-identity', 'category': 'access', 'method_name': 'set_agent_identity'}, {'name': 'access-set-scope', 'category': 'access', 'method_name': 'set_scope'}, {'name': 'access-share-note', 'category': 'access', 'method_name': 'share_note'}, {'name': 'access-share-vault', 'category': 'access', 'method_name': 'share_vault'}, {'name': 'access-swap-vault', 'category': 'access', 'method_name': 'swap_vault'}, {'name': 'access-switch-account', 'category': 'access', 'method_name': 'switch_account'}, {'name': 'access-unlink-share', 'category': 'access', 'method_name': 'unlink_share'}, {'name': 'memory-capture', 'category': 'capture', 'method_name': 'memory_capture'}, {'name': 'memory-questions', 'category': 'capture', 'method_name': 'memory_questions'}, {'name': 'prepare-memory-write', 'category': 'capture', 'method_name': 'prepare_memory_write'}, {'name': 'validate-memory-write', 'category': 'capture', 'method_name': 'validate_memory_write'}, {'name': 'create-channel', 'category': 'channels', 'method_name': 'create_channel'}, {'name': 'get-message-note', 'category': 'channels', 'method_name': 'get_message_note'}, {'name': 'list-channel-members', 'category': 'channels', 'method_name': 'list_channel_members'}, {'name': 'list-channel-messages', 'category': 'channels', 'method_name': 'list_channel_messages'}, {'name': 'my-mentions', 'category': 'channels', 'method_name': 'my_mentions'}, {'name': 'poll-channel', 'category': 'channels', 'method_name': 'poll_channel'}, {'name': 'post-message', 'category': 'channels', 'method_name': 'post_message'}, {'name': 'react-message', 'category': 'channels', 'method_name': 'react_message'}, {'name': 'remove-channel-member', 'category': 'channels', 'method_name': 'remove_channel_member'}, {'name': 'reply-message', 'category': 'channels', 'method_name': 'reply_message'}, {'name': 'fact-history', 'category': 'facts', 'method_name': 'history'}, {'name': 'record-fact', 'category': 'facts', 'method_name': 'record_fact'}, {'name': 'memory-backlinks', 'category': 'graph', 'method_name': 'memory_backlinks'}, {'name': 'memory-graph-path', 'category': 'graph', 'method_name': 'memory_graph_path'}, {'name': 'memory-graph-universe', 'category': 'graph', 'method_name': 'memory_graph_universe'}, {'name': 'library-ingest', 'category': 'library', 'method_name': 'ingest'}, {'name': 'delete-note', 'category': 'memory', 'method_name': 'delete_note'}, {'name': 'memory-export', 'category': 'memory', 'method_name': 'export'}, {'name': 'memory-get', 'category': 'memory', 'method_name': 'get'}, {'name': 'memory-list', 'category': 'memory', 'method_name': 'list'}, {'name': 'memory-put', 'category': 'memory', 'method_name': 'put'}, {'name': 'memory-search', 'category': 'memory', 'method_name': 'search'}, {'name': 'memory-suggest', 'category': 'memory', 'method_name': 'suggest'}, {'name': 'memory-upload', 'category': 'memory', 'method_name': 'upload'}, {'name': 'temporal-recall', 'category': 'recall', 'method_name': 'temporal_recall'}, {'name': 'create-scheduled-action', 'category': 'schedule', 'method_name': 'create_scheduled_action'}, {'name': 'delete-scheduled-action', 'category': 'schedule', 'method_name': 'delete_scheduled_action'}, {'name': 'get-schedule-link', 'category': 'schedule', 'method_name': 'get_schedule_link'}, {'name': 'get-schedule-status', 'category': 'schedule', 'method_name': 'get_schedule_status'}, {'name': 'list-scheduled-actions', 'category': 'schedule', 'method_name': 'list_scheduled_actions'}, {'name': 'pause-scheduled-action', 'category': 'schedule', 'method_name': 'pause_scheduled_action'}, {'name': 'propose-scheduled-action', 'category': 'schedule', 'method_name': 'propose_scheduled_action'}, {'name': 'resume-scheduled-action', 'category': 'schedule', 'method_name': 'resume_scheduled_action'}, {'name': 'revoke-schedule-link', 'category': 'schedule', 'method_name': 'revoke_schedule_link'}, {'name': 'set-schedule-entitlement', 'category': 'schedule', 'method_name': 'set_schedule_entitlement'}, {'name': 'cost-usage', 'category': 'storage', 'method_name': 'cost_usage'}, {'name': 'storage-usage', 'category': 'storage', 'method_name': 'usage'}, {'name': 'table-create', 'category': 'tables', 'method_name': 'create'}, {'name': 'table-delete-rows', 'category': 'tables', 'method_name': 'delete_rows'}, {'name': 'table-describe', 'category': 'tables', 'method_name': 'describe'}, {'name': 'table-drop', 'category': 'tables', 'method_name': 'drop'}, {'name': 'table-insert-rows', 'category': 'tables', 'method_name': 'insert_rows'}, {'name': 'table-list', 'category': 'tables', 'method_name': 'list'}, {'name': 'table-query', 'category': 'tables', 'method_name': 'query'}, {'name': 'list-memory-tags', 'category': 'tags', 'method_name': 'list_memory_tags'}, {'name': 'resolve-memory-tags', 'category': 'tags', 'method_name': 'resolve_memory_tags'}, {'name': 'upsert-memory-tag', 'category': 'tags', 'method_name': 'upsert_memory_tag'}, {'name': 'add-vault', 'category': 'vaults', 'method_name': 'add_vault'}, {'name': 'create-secure-vault', 'category': 'vaults', 'method_name': 'create_secure_vault'}, {'name': 'delete-vault', 'category': 'vaults', 'method_name': 'delete_vault'}, {'name': 'get-vault-contract', 'category': 'vaults', 'method_name': 'get_vault_contract'}, {'name': 'list-shared-with-me', 'category': 'vaults', 'method_name': 'list_shared_with_me'}, {'name': 'list-vaults', 'category': 'vaults', 'method_name': 'list_vaults'}, {'name': 'provision-defaults', 'category': 'vaults', 'method_name': 'provision_defaults'}, {'name': 'route-memory', 'category': 'vaults', 'method_name': 'route_memory'}, {'name': 'video-analyze-start', 'category': 'video', 'method_name': 'analyze_start'}, {'name': 'video-analyze-status', 'category': 'video', 'method_name': 'analyze_status'}, {'name': 'create-webhook', 'category': 'webhooks', 'method_name': 'create_webhook'}, {'name': 'list-webhooks', 'category': 'webhooks', 'method_name': 'list_webhooks'}, {'name': 'revoke-webhook', 'category': 'webhooks', 'method_name': 'revoke_webhook'}]
 MCP_TOOL_COUNT = len(MCP_TOOL_BINDINGS)
 
 
@@ -168,110 +169,98 @@ class SearchNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def harvest_paa(self, **kwargs: Any) -> HarvestPaaOutput:
+    def harvest_paa(self, **kwargs: Any) -> Any:
         payload = HarvestPaaInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("harvest_paa", payload)
-        return HarvestPaaOutput.model_validate(result)
+        return self._call_tool("harvest_paa", payload)
 
-    def search_serp(self, **kwargs: Any) -> SearchSerpOutput:
+    def search_serp(self, **kwargs: Any) -> Any:
         payload = SearchSerpInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("search_serp", payload)
-        return SearchSerpOutput.model_validate(result)
+        return self._call_tool("search_serp", payload)
 
 
 class WebNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def extract_url(self, **kwargs: Any) -> ExtractUrlOutput:
+    def extract_url(self, **kwargs: Any) -> Any:
         payload = ExtractUrlInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("extract_url", payload)
-        return ExtractUrlOutput.model_validate(result)
+        return self._call_tool("extract_url", payload)
 
-    def diff_page(self, **kwargs: Any) -> DiffPageOutput:
+    def diff_page(self, **kwargs: Any) -> Any:
         payload = DiffPageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("diff_page", payload)
-        return DiffPageOutput.model_validate(result)
+        return self._call_tool("diff_page", payload)
 
-    def map_site_urls(self, **kwargs: Any) -> MapSiteUrlsOutput:
+    def map_site_urls(self, **kwargs: Any) -> Any:
         payload = MapSiteUrlsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("map_site_urls", payload)
-        return MapSiteUrlsOutput.model_validate(result)
+        return self._call_tool("map_site_urls", payload)
 
-    def extract_site(self, **kwargs: Any) -> ExtractSiteOutput:
+    def extract_site(self, **kwargs: Any) -> Any:
         payload = ExtractSiteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("extract_site", payload)
-        return ExtractSiteOutput.model_validate(result)
+        return self._call_tool("extract_site", payload)
 
-    def audit_site(self, **kwargs: Any) -> AuditSiteOutput:
+    def audit_site(self, **kwargs: Any) -> Any:
         payload = AuditSiteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("audit_site", payload)
-        return AuditSiteOutput.model_validate(result)
+        return self._call_tool("audit_site", payload)
+
+    def check_site_export(self, **kwargs: Any) -> Any:
+        payload = CheckSiteExportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        return self._call_tool("check_site_export", payload)
 
 
 class YoutubeNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def harvest(self, **kwargs: Any) -> YoutubeHarvestOutput:
+    def harvest(self, **kwargs: Any) -> Any:
         payload = YoutubeHarvestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("youtube_harvest", payload)
-        return YoutubeHarvestOutput.model_validate(result)
+        return self._call_tool("youtube_harvest", payload)
 
-    def transcribe(self, **kwargs: Any) -> YoutubeTranscribeOutput:
+    def transcribe(self, **kwargs: Any) -> Any:
         payload = YoutubeTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("youtube_transcribe", payload)
-        return YoutubeTranscribeOutput.model_validate(result)
+        return self._call_tool("youtube_transcribe", payload)
 
 
 class FacebookNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def page_intel(self, **kwargs: Any) -> FacebookPageIntelOutput:
+    def page_intel(self, **kwargs: Any) -> Any:
         payload = FacebookPageIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("facebook_page_intel", payload)
-        return FacebookPageIntelOutput.model_validate(result)
+        return self._call_tool("facebook_page_intel", payload)
 
-    def ad_search(self, **kwargs: Any) -> FacebookAdSearchOutput:
+    def ad_search(self, **kwargs: Any) -> Any:
         payload = FacebookAdSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("facebook_ad_search", payload)
-        return FacebookAdSearchOutput.model_validate(result)
+        return self._call_tool("facebook_ad_search", payload)
 
-    def ad_transcribe(self, **kwargs: Any) -> FacebookAdTranscribeOutput:
+    def ad_transcribe(self, **kwargs: Any) -> Any:
         payload = FacebookAdTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("facebook_ad_transcribe", payload)
-        return FacebookAdTranscribeOutput.model_validate(result)
+        return self._call_tool("facebook_ad_transcribe", payload)
 
-    def video_transcribe(self, **kwargs: Any) -> FacebookVideoTranscribeOutput:
+    def video_transcribe(self, **kwargs: Any) -> Any:
         payload = FacebookVideoTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("facebook_video_transcribe", payload)
-        return FacebookVideoTranscribeOutput.model_validate(result)
+        return self._call_tool("facebook_video_transcribe", payload)
 
 
 class RedditNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def thread(self, **kwargs: Any) -> RedditThreadOutput:
+    def thread(self, **kwargs: Any) -> Any:
         payload = RedditThreadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("reddit_thread", payload)
-        return RedditThreadOutput.model_validate(result)
+        return self._call_tool("reddit_thread", payload)
 
 
 class VideoNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def frame_analysis(self, **kwargs: Any) -> VideoFrameAnalysisOutput:
+    def frame_analysis(self, **kwargs: Any) -> Any:
         payload = VideoFrameAnalysisInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("video_frame_analysis", payload)
-        return VideoFrameAnalysisOutput.model_validate(result)
+        return self._call_tool("video_frame_analysis", payload)
 
-    def frame_analysis_status(self, **kwargs: Any) -> VideoFrameAnalysisStatusOutput:
+    def frame_analysis_status(self, **kwargs: Any) -> Any:
         payload = VideoFrameAnalysisStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("video_frame_analysis_status", payload)
-        return VideoFrameAnalysisStatusOutput.model_validate(result)
+        return self._call_tool("video_frame_analysis_status", payload)
 
     def analyze_start(self, **kwargs: Any) -> VideoAnalyzeStartOutput:
         payload = VideoAnalyzeStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -288,340 +277,283 @@ class GoogleAdsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def search(self, **kwargs: Any) -> GoogleAdsSearchOutput:
+    def search(self, **kwargs: Any) -> Any:
         payload = GoogleAdsSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("google_ads_search", payload)
-        return GoogleAdsSearchOutput.model_validate(result)
+        return self._call_tool("google_ads_search", payload)
 
-    def page_intel(self, **kwargs: Any) -> GoogleAdsPageIntelOutput:
+    def page_intel(self, **kwargs: Any) -> Any:
         payload = GoogleAdsPageIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("google_ads_page_intel", payload)
-        return GoogleAdsPageIntelOutput.model_validate(result)
+        return self._call_tool("google_ads_page_intel", payload)
 
-    def transcribe(self, **kwargs: Any) -> GoogleAdsTranscribeOutput:
+    def transcribe(self, **kwargs: Any) -> Any:
         payload = GoogleAdsTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("google_ads_transcribe", payload)
-        return GoogleAdsTranscribeOutput.model_validate(result)
+        return self._call_tool("google_ads_transcribe", payload)
 
 
 class InstagramNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def profile_content(self, **kwargs: Any) -> InstagramProfileContentOutput:
+    def profile_content(self, **kwargs: Any) -> Any:
         payload = InstagramProfileContentInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("instagram_profile_content", payload)
-        return InstagramProfileContentOutput.model_validate(result)
+        return self._call_tool("instagram_profile_content", payload)
 
-    def media_download(self, **kwargs: Any) -> InstagramMediaDownloadOutput:
+    def media_download(self, **kwargs: Any) -> Any:
         payload = InstagramMediaDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("instagram_media_download", payload)
-        return InstagramMediaDownloadOutput.model_validate(result)
+        return self._call_tool("instagram_media_download", payload)
 
 
 class MapsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def place_intel(self, **kwargs: Any) -> MapsPlaceIntelOutput:
+    def place_intel(self, **kwargs: Any) -> Any:
         payload = MapsPlaceIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("maps_place_intel", payload)
-        return MapsPlaceIntelOutput.model_validate(result)
+        return self._call_tool("maps_place_intel", payload)
 
-    def search(self, **kwargs: Any) -> MapsSearchOutput:
+    def search(self, **kwargs: Any) -> Any:
         payload = MapsSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("maps_search", payload)
-        return MapsSearchOutput.model_validate(result)
+        return self._call_tool("maps_search", payload)
 
 
 class ReviewsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def trustpilot_reviews(self, **kwargs: Any) -> TrustpilotReviewsOutput:
+    def trustpilot_reviews(self, **kwargs: Any) -> Any:
         payload = TrustpilotReviewsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("trustpilot_reviews", payload)
-        return TrustpilotReviewsOutput.model_validate(result)
+        return self._call_tool("trustpilot_reviews", payload)
 
-    def g2_reviews(self, **kwargs: Any) -> G2ReviewsOutput:
+    def g2_reviews(self, **kwargs: Any) -> Any:
         payload = G2ReviewsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("g2_reviews", payload)
-        return G2ReviewsOutput.model_validate(result)
+        return self._call_tool("g2_reviews", payload)
 
 
 class DirectoryNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def run(self, **kwargs: Any) -> DirectoryWorkflowOutput:
+    def run(self, **kwargs: Any) -> Any:
         payload = DirectoryWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("directory_workflow", payload)
-        return DirectoryWorkflowOutput.model_validate(result)
+        return self._call_tool("directory_workflow", payload)
 
 
 class WorkflowsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def list(self, **kwargs: Any) -> WorkflowListOutput:
+    def list(self, **kwargs: Any) -> Any:
         payload = WorkflowListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_list", payload)
-        return WorkflowListOutput.model_validate(result)
+        return self._call_tool("workflow_list", payload)
 
-    def suggest(self, **kwargs: Any) -> WorkflowSuggestOutput:
+    def suggest(self, **kwargs: Any) -> Any:
         payload = WorkflowSuggestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_suggest", payload)
-        return WorkflowSuggestOutput.model_validate(result)
+        return self._call_tool("workflow_suggest", payload)
 
-    def run(self, **kwargs: Any) -> WorkflowRunOutput:
+    def run(self, **kwargs: Any) -> Any:
         payload = WorkflowRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_run", payload)
-        return WorkflowRunOutput.model_validate(result)
+        return self._call_tool("workflow_run", payload)
 
-    def step(self, **kwargs: Any) -> WorkflowStepOutput:
+    def step(self, **kwargs: Any) -> Any:
         payload = WorkflowStepInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_step", payload)
-        return WorkflowStepOutput.model_validate(result)
+        return self._call_tool("workflow_step", payload)
 
-    def status(self, **kwargs: Any) -> WorkflowStatusOutput:
+    def status(self, **kwargs: Any) -> Any:
         payload = WorkflowStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_status", payload)
-        return WorkflowStatusOutput.model_validate(result)
+        return self._call_tool("workflow_status", payload)
 
-    def artifact_read(self, **kwargs: Any) -> WorkflowArtifactReadOutput:
+    def artifact_read(self, **kwargs: Any) -> Any:
         payload = WorkflowArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_artifact_read", payload)
-        return WorkflowArtifactReadOutput.model_validate(result)
+        return self._call_tool("workflow_artifact_read", payload)
 
-    def rank_tracker(self, **kwargs: Any) -> RankTrackerWorkflowOutput:
+    def rank_tracker(self, **kwargs: Any) -> Any:
         payload = RankTrackerWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("rank_tracker_workflow", payload)
-        return RankTrackerWorkflowOutput.model_validate(result)
+        return self._call_tool("rank_tracker_workflow", payload)
 
-    def query_fanout(self, **kwargs: Any) -> QueryFanoutWorkflowOutput:
+    def query_fanout(self, **kwargs: Any) -> Any:
         payload = QueryFanoutWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("query_fanout_workflow", payload)
-        return QueryFanoutWorkflowOutput.model_validate(result)
+        return self._call_tool("query_fanout_workflow", payload)
 
 
 class ArtifactsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def read(self, **kwargs: Any) -> ReportArtifactReadOutput:
+    def read(self, **kwargs: Any) -> Any:
         payload = ReportArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("report_artifact_read", payload)
-        return ReportArtifactReadOutput.model_validate(result)
+        return self._call_tool("report_artifact_read", payload)
 
 
 class BillingNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def credits_info(self, **kwargs: Any) -> CreditsInfoOutput:
+    def credits_info(self, **kwargs: Any) -> Any:
         payload = CreditsInfoInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("credits_info", payload)
-        return CreditsInfoOutput.model_validate(result)
+        return self._call_tool("credits_info", payload)
 
 
 class ConnectionsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def list_service_connections(self, **kwargs: Any) -> ListServiceConnectionsOutput:
+    def list_service_connections(self, **kwargs: Any) -> Any:
         payload = ListServiceConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list_service_connections", payload)
-        return ListServiceConnectionsOutput.model_validate(result)
+        return self._call_tool("list_service_connections", payload)
 
-    def slack_send_message(self, **kwargs: Any) -> SlackSendMessageOutput:
+    def slack_send_message(self, **kwargs: Any) -> Any:
         payload = SlackSendMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("slack_send_message", payload)
-        return SlackSendMessageOutput.model_validate(result)
+        return self._call_tool("slack_send_message", payload)
 
-    def gmail_send_message(self, **kwargs: Any) -> GmailSendMessageOutput:
+    def gmail_send_message(self, **kwargs: Any) -> Any:
         payload = GmailSendMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("gmail_send_message", payload)
-        return GmailSendMessageOutput.model_validate(result)
+        return self._call_tool("gmail_send_message", payload)
 
-    def google_calendar_create_event(self, **kwargs: Any) -> GoogleCalendarCreateEventOutput:
+    def google_calendar_create_event(self, **kwargs: Any) -> Any:
         payload = GoogleCalendarCreateEventInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("google_calendar_create_event", payload)
-        return GoogleCalendarCreateEventOutput.model_validate(result)
+        return self._call_tool("google_calendar_create_event", payload)
 
-    def zoom_create_meeting(self, **kwargs: Any) -> ZoomCreateMeetingOutput:
+    def zoom_create_meeting(self, **kwargs: Any) -> Any:
         payload = ZoomCreateMeetingInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("zoom_create_meeting", payload)
-        return ZoomCreateMeetingOutput.model_validate(result)
+        return self._call_tool("zoom_create_meeting", payload)
 
-    def read_service_connection(self, **kwargs: Any) -> ReadServiceConnectionOutput:
+    def read_service_connection(self, **kwargs: Any) -> Any:
         payload = ReadServiceConnectionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("read_service_connection", payload)
-        return ReadServiceConnectionOutput.model_validate(result)
+        return self._call_tool("read_service_connection", payload)
 
-    def call_service_connection_action(self, **kwargs: Any) -> CallServiceConnectionActionOutput:
-        payload = CallServiceConnectionActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("call_service_connection_action", payload)
-        return CallServiceConnectionActionOutput.model_validate(result)
-
-    def set_scheduled_action_connections(self, **kwargs: Any) -> SetScheduledActionConnectionsOutput:
-        payload = SetScheduledActionConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("set_scheduled_action_connections", payload)
-        return SetScheduledActionConnectionsOutput.model_validate(result)
-
-    def export_connected_service_data(self, **kwargs: Any) -> ExportConnectedServiceDataOutput:
-        payload = ExportConnectedServiceDataInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("export_connected_service_data", payload)
-        return ExportConnectedServiceDataOutput.model_validate(result)
-
-    def renew_connected_data_download(self, **kwargs: Any) -> RenewConnectedDataDownloadOutput:
-        payload = RenewConnectedDataDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("renew_connected_data_download", payload)
-        return RenewConnectedDataDownloadOutput.model_validate(result)
-
-    def describe_service_connection_tool(self, **kwargs: Any) -> DescribeServiceConnectionToolOutput:
-        payload = DescribeServiceConnectionToolInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("describe_service_connection_tool", payload)
-        return DescribeServiceConnectionToolOutput.model_validate(result)
-
-    def import_service_connection_to_memory(self, **kwargs: Any) -> ImportServiceConnectionToMemoryOutput:
-        payload = ImportServiceConnectionToMemoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("import_service_connection_to_memory", payload)
-        return ImportServiceConnectionToMemoryOutput.model_validate(result)
-
-    def meta_ad_creative_media(self, **kwargs: Any) -> MetaAdCreativeMediaOutput:
+    def meta_ad_creative_media(self, **kwargs: Any) -> Any:
         payload = MetaAdCreativeMediaInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("meta_ad_creative_media", payload)
-        return MetaAdCreativeMediaOutput.model_validate(result)
+        return self._call_tool("meta_ad_creative_media", payload)
+
+    def import_service_connection_to_memory(self, **kwargs: Any) -> Any:
+        payload = ImportServiceConnectionToMemoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        return self._call_tool("import_service_connection_to_memory", payload)
+
+    def describe_service_connection_tool(self, **kwargs: Any) -> Any:
+        payload = DescribeServiceConnectionToolInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        return self._call_tool("describe_service_connection_tool", payload)
+
+    def export_connected_service_data(self, **kwargs: Any) -> Any:
+        payload = ExportConnectedServiceDataInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        return self._call_tool("export_connected_service_data", payload)
+
+    def renew_connected_data_download(self, **kwargs: Any) -> Any:
+        payload = RenewConnectedDataDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        return self._call_tool("renew_connected_data_download", payload)
+
+    def call_service_connection_action(self, **kwargs: Any) -> Any:
+        payload = CallServiceConnectionActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        return self._call_tool("call_service_connection_action", payload)
+
+    def set_scheduled_action_connections(self, **kwargs: Any) -> Any:
+        payload = SetScheduledActionConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        return self._call_tool("set_scheduled_action_connections", payload)
 
 
 class SerpIntelligenceNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def snapshot(self, **kwargs: Any) -> CaptureSerpSnapshotOutput:
+    def snapshot(self, **kwargs: Any) -> Any:
         payload = CaptureSerpSnapshotInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("capture_serp_snapshot", payload)
-        return CaptureSerpSnapshotOutput.model_validate(result)
+        return self._call_tool("capture_serp_snapshot", payload)
 
-    def page_snapshots(self, **kwargs: Any) -> CaptureSerpPageSnapshotsOutput:
+    def page_snapshots(self, **kwargs: Any) -> Any:
         payload = CaptureSerpPageSnapshotsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("capture_serp_page_snapshots", payload)
-        return CaptureSerpPageSnapshotsOutput.model_validate(result)
+        return self._call_tool("capture_serp_page_snapshots", payload)
 
 
 class BrowserNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def profile_connect(self, **kwargs: Any) -> BrowserProfileConnectOutput:
+    def profile_connect(self, **kwargs: Any) -> Any:
         payload = BrowserProfileConnectInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_profile_connect", payload)
-        return BrowserProfileConnectOutput.model_validate(result)
+        return self._call_tool("browser_profile_connect", payload)
 
-    def profile_list(self, **kwargs: Any) -> BrowserProfileListOutput:
+    def profile_list(self, **kwargs: Any) -> Any:
         payload = BrowserProfileListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_profile_list", payload)
-        return BrowserProfileListOutput.model_validate(result)
+        return self._call_tool("browser_profile_list", payload)
 
-    def extension_import(self, **kwargs: Any) -> BrowserExtensionImportOutput:
+    def extension_import(self, **kwargs: Any) -> Any:
         payload = BrowserExtensionImportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_extension_import", payload)
-        return BrowserExtensionImportOutput.model_validate(result)
+        return self._call_tool("browser_extension_import", payload)
 
-    def extension_list(self, **kwargs: Any) -> BrowserExtensionListOutput:
+    def extension_list(self, **kwargs: Any) -> Any:
         payload = BrowserExtensionListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_extension_list", payload)
-        return BrowserExtensionListOutput.model_validate(result)
+        return self._call_tool("browser_extension_list", payload)
 
-    def extension_delete(self, **kwargs: Any) -> BrowserExtensionDeleteOutput:
+    def extension_delete(self, **kwargs: Any) -> Any:
         payload = BrowserExtensionDeleteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_extension_delete", payload)
-        return BrowserExtensionDeleteOutput.model_validate(result)
+        return self._call_tool("browser_extension_delete", payload)
 
-    def open(self, **kwargs: Any) -> BrowserOpenOutput:
+    def open(self, **kwargs: Any) -> Any:
         payload = BrowserOpenInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_open", payload)
-        return BrowserOpenOutput.model_validate(result)
+        return self._call_tool("browser_open", payload)
 
-    def screenshot(self, **kwargs: Any) -> BrowserScreenshotOutput:
+    def screenshot(self, **kwargs: Any) -> Any:
         payload = BrowserScreenshotInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_screenshot", payload)
-        return BrowserScreenshotOutput.model_validate(result)
+        return self._call_tool("browser_screenshot", payload)
 
-    def read(self, **kwargs: Any) -> BrowserReadOutput:
+    def read(self, **kwargs: Any) -> Any:
         payload = BrowserReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_read", payload)
-        return BrowserReadOutput.model_validate(result)
+        return self._call_tool("browser_read", payload)
 
-    def locate(self, **kwargs: Any) -> BrowserLocateOutput:
+    def locate(self, **kwargs: Any) -> Any:
         payload = BrowserLocateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_locate", payload)
-        return BrowserLocateOutput.model_validate(result)
+        return self._call_tool("browser_locate", payload)
 
-    def goto(self, **kwargs: Any) -> BrowserGotoOutput:
+    def goto(self, **kwargs: Any) -> Any:
         payload = BrowserGotoInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_goto", payload)
-        return BrowserGotoOutput.model_validate(result)
+        return self._call_tool("browser_goto", payload)
 
-    def click(self, **kwargs: Any) -> BrowserClickOutput:
+    def click(self, **kwargs: Any) -> Any:
         payload = BrowserClickInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_click", payload)
-        return BrowserClickOutput.model_validate(result)
+        return self._call_tool("browser_click", payload)
 
-    def type(self, **kwargs: Any) -> BrowserTypeOutput:
+    def type(self, **kwargs: Any) -> Any:
         payload = BrowserTypeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_type", payload)
-        return BrowserTypeOutput.model_validate(result)
+        return self._call_tool("browser_type", payload)
 
-    def scroll(self, **kwargs: Any) -> BrowserScrollOutput:
+    def scroll(self, **kwargs: Any) -> Any:
         payload = BrowserScrollInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_scroll", payload)
-        return BrowserScrollOutput.model_validate(result)
+        return self._call_tool("browser_scroll", payload)
 
-    def press(self, **kwargs: Any) -> BrowserPressOutput:
+    def press(self, **kwargs: Any) -> Any:
         payload = BrowserPressInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_press", payload)
-        return BrowserPressOutput.model_validate(result)
+        return self._call_tool("browser_press", payload)
 
-    def replay_start(self, **kwargs: Any) -> BrowserReplayStartOutput:
+    def replay_start(self, **kwargs: Any) -> Any:
         payload = BrowserReplayStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_start", payload)
-        return BrowserReplayStartOutput.model_validate(result)
+        return self._call_tool("browser_replay_start", payload)
 
-    def replay_stop(self, **kwargs: Any) -> BrowserReplayStopOutput:
+    def replay_stop(self, **kwargs: Any) -> Any:
         payload = BrowserReplayStopInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_stop", payload)
-        return BrowserReplayStopOutput.model_validate(result)
+        return self._call_tool("browser_replay_stop", payload)
 
-    def list_replays(self, **kwargs: Any) -> BrowserListReplaysOutput:
+    def list_replays(self, **kwargs: Any) -> Any:
         payload = BrowserListReplaysInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_list_replays", payload)
-        return BrowserListReplaysOutput.model_validate(result)
+        return self._call_tool("browser_list_replays", payload)
 
-    def replay_download(self, **kwargs: Any) -> BrowserReplayDownloadOutput:
+    def replay_download(self, **kwargs: Any) -> Any:
         payload = BrowserReplayDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_download", payload)
-        return BrowserReplayDownloadOutput.model_validate(result)
+        return self._call_tool("browser_replay_download", payload)
 
-    def replay_mark(self, **kwargs: Any) -> BrowserReplayMarkOutput:
+    def replay_mark(self, **kwargs: Any) -> Any:
         payload = BrowserReplayMarkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_mark", payload)
-        return BrowserReplayMarkOutput.model_validate(result)
+        return self._call_tool("browser_replay_mark", payload)
 
-    def replay_annotate(self, **kwargs: Any) -> BrowserReplayAnnotateOutput:
+    def replay_annotate(self, **kwargs: Any) -> Any:
         payload = BrowserReplayAnnotateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_annotate", payload)
-        return BrowserReplayAnnotateOutput.model_validate(result)
+        return self._call_tool("browser_replay_annotate", payload)
 
-    def close(self, **kwargs: Any) -> BrowserCloseOutput:
+    def close(self, **kwargs: Any) -> Any:
         payload = BrowserCloseInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_close", payload)
-        return BrowserCloseOutput.model_validate(result)
+        return self._call_tool("browser_close", payload)
 
-    def list_sessions(self, **kwargs: Any) -> BrowserListSessionsOutput:
+    def list_sessions(self, **kwargs: Any) -> Any:
         payload = BrowserListSessionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_list_sessions", payload)
-        return BrowserListSessionsOutput.model_validate(result)
+        return self._call_tool("browser_list_sessions", payload)
 
 
 class AccessNamespace:

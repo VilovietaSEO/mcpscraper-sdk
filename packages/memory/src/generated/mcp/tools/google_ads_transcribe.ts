@@ -5,18 +5,4 @@ export interface Input {
   videoUrl: string;
 }
 
-export interface Output {
-  videoUrl: string;
-  wordCount: number;
-  chunkCount: number;
-  durationMs: number | null;
-  transcriptText: string;
-  chunks: {
-    startSec: number;
-    endSec: number;
-    text: string;
-  }[];
-  resolvedInputs: {
-    videoUrl: string;
-  };
-}
+export type Output = unknown

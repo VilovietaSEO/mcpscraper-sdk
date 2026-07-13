@@ -23,25 +23,4 @@ export interface Input {
   webhookUrl?: string;
 }
 
-export interface Output {
-  workflowId: string;
-  input: {
-    [k: string]: unknown;
-  };
-  run?: {
-    [k: string]: unknown;
-  };
-  summary?: {
-    [k: string]: unknown;
-  };
-  step?: {
-    [k: string]: unknown;
-  };
-  nextStep?: {
-    [k: string]: unknown;
-  } | null;
-  done?: boolean;
-  artifacts: {
-    [k: string]: unknown;
-  }[];
-}
+export type Output = unknown

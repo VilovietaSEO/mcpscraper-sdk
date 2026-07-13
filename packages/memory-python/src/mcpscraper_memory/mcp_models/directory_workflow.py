@@ -22,21 +22,3 @@ class DirectoryWorkflowInput(BaseModel):
 
 class DirectoryWorkflowOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    query: str = Field(..., alias="query", description="")
-    state: str = Field(..., alias="state", description="")
-    min_population: int = Field(..., alias="minPopulation", description="")
-    population_year: int = Field(..., alias="populationYear", description="")
-    max_results_per_city: int = Field(..., alias="maxResultsPerCity", description="")
-    concurrency: int = Field(..., alias="concurrency", description="")
-    census_source_url: str = Field(..., alias="censusSourceUrl", description="")
-    us_zips_source_path: Any = Field(..., alias="usZipsSourcePath", description="")
-    warnings: list[str] = Field(..., alias="warnings", description="")
-    extracted_at: str = Field(..., alias="extractedAt", description="")
-    selected_city_count: int = Field(..., alias="selectedCityCount", description="")
-    total_result_count: int = Field(..., alias="totalResultCount", description="")
-    csv_path: Any = Field(..., alias="csvPath", description="")
-    cities: list[dict[str, Any]] = Field(..., alias="cities", description="")
-    duration_ms: int = Field(..., alias="durationMs", description="")
-    truncated_count: int | None = Field(None, alias="truncatedCount", description="")
-    artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")

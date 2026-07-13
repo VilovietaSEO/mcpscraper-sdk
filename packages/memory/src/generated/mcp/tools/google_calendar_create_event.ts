@@ -33,8 +33,4 @@ export interface Input {
   timeZone?: string;
 }
 
-export interface Output {
-  ok: boolean;
-  result?: unknown;
-  error: string | null;
-}
+export type Output = unknown

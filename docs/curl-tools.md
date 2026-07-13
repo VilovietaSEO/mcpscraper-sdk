@@ -1,4 +1,4 @@
-# All 158 MCP tools with cURL
+# All 159 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -45,7 +45,7 @@ jq -n --arg connectionId "$CONNECTION_ID" \
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (158)
+## Complete catalog (159)
 
 ## search
 
@@ -59,6 +59,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `map_site_urls` — Site URL Map
 - `extract_site` — Multi-Page Site Content Crawl
 - `audit_site` — Technical SEO Audit
+- `check_site_export` — Check Site Export
 
 ## youtube
 
@@ -135,13 +136,13 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `google_calendar_create_event` — Create Calendar Event
 - `zoom_create_meeting` — Create Zoom Meeting
 - `read_service_connection` — Read Connected Service
-- `call_service_connection_action` — Run Connected Service Action
-- `set_scheduled_action_connections` — Set Scheduled Action Connections
+- `meta_ad_creative_media` — View Meta Ad Creative Media
+- `import_service_connection_to_memory` — Import Connected Service Snapshot to Memory
+- `describe_service_connection_tool` — Describe Connected Service Tool
 - `export_connected_service_data` — Export Connected Service Data
 - `renew_connected_data_download` — Renew Connected Data Download
-- `describe_service_connection_tool` — Describe Connected Service Tool
-- `import_service_connection_to_memory` — Import Connected Service Snapshot to Memory
-- `meta_ad_creative_media` — View Meta Ad Creative Media
+- `call_service_connection_action` — Run Connected Service Action
+- `set_scheduled_action_connections` — Set Scheduled Action Connections
 
 ## serpIntelligence
 

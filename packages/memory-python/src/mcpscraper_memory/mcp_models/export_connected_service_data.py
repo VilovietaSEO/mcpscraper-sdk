@@ -18,19 +18,3 @@ class ExportConnectedServiceDataInput(BaseModel):
 
 class ExportConnectedServiceDataOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    ok: bool = Field(..., alias="ok", description="")
-    export_id: str | None = Field(None, alias="exportId", description="")
-    status: Literal["complete", "partial"] | None = Field(None, alias="status", description="")
-    provider_config_key: str | None = Field(None, alias="providerConfigKey", description="")
-    dataset: Literal["emails", "calendar_events", "zoom_recordings", "zoom_transcripts", "meta_ads_insights", "resend_data", "resend_emails", "resend_received_emails", "resend_logs", "resend_contacts", "resend_broadcasts", "resend_templates"] | None = Field(None, alias="dataset", description="")
-    range: dict[str, Any] | None = Field(None, alias="range", description="")
-    counts: dict[str, Any] | None = Field(None, alias="counts", description="")
-    complete: bool | None = Field(None, alias="complete", description="")
-    records: list[Any] | None = Field(None, alias="records", description="")
-    preview: list[Any] | None = Field(None, alias="preview", description="")
-    artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")
-    continuation: Any | None = Field(None, alias="continuation", description="")
-    warnings: list[str] | None = Field(None, alias="warnings", description="")
-    untrusted_content: bool | None = Field(None, alias="untrustedContent", description="")
-    error: Any = Field(..., alias="error", description="")

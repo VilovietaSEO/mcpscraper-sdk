@@ -45,24 +45,4 @@ export interface Input {
   pageSnapshotLimit?: number;
 }
 
-export interface Output {
-  schemaVersion: "serp-intelligence.capture.v1";
-  status: string;
-  query: string | null;
-  location: string | null;
-  capturedAt: string | null;
-  resultCount: number | null;
-  snapshotId: string | null;
-  resolvedInputs: {
-    [k: string]: unknown;
-  };
-  artifacts: {
-    [k: string]: unknown;
-  }[];
-  diagnostics: {
-    [k: string]: unknown;
-  } | null;
-  providerPayload: {
-    [k: string]: unknown;
-  };
-}
+export type Output = unknown

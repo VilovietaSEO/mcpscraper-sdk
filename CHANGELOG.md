@@ -5,6 +5,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.11.1 / mcpscraper-sdk 0.12.0 / Python SDKs 0.9.0 / mcpscraper-cli 0.9.0
+- Added the typed `web.checkSiteExport` / `web.check_site_export` binding — polls a background `extract_site`/`audit_site` job and returns `bundleUrl`/`bundleBytes` once the export zip is ready.
+- `extract_site`/`audit_site` requests gain `downloadImages` — downloads every discovered image as a real file into the export bundle (under `images/<page>/`), not just image URLs/stats. OFF by default; implies `background` regardless of the `background` flag since a whole-site image download is too slow to run inline. Capped at 20 images/page and 500/site.
+- Regenerated the unified Node, Python, CLI, and cURL surfaces from the 159-tool MCP Scraper 0.20.0 contract.
+- Fixed a stale nested `node_modules/mcpscraper-memory-sdk` copy in `packages/scraper` that was shadowing the correct hoisted workspace version — this was also the actual root cause of the previously-flagged `meta_ad_creative_media` parity gap, not a separate bug.
+
 ## mcpscraper-memory-sdk 0.11.0
 - Added the typed `memory.bulkDeleteNotes` binding — deletes notes in one vault matching ANDed column filters (path/title/kind/source/captured_at/created_at/updated_at/revision, with a right-anchored `prefix` op alongside `eq`/`neq`/`gt`/`gte`/`lt`/`lte`/`like`/`in`) plus an optional ORed tag match. Defaults to a dry-run preview (match count + up to 20 sample notes); `dryRun: false` is required to actually delete. Verified against mcp-memory 1.8.1.
 

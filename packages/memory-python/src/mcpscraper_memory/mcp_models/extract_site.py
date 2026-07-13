@@ -10,14 +10,9 @@ class ExtractSiteInput(BaseModel):
     rotate_proxies: bool | None = Field(None, alias="rotateProxies", description="Route page fetches through rotating residential proxies to defeat rate-limiting and bot blocks (403/429). Slower and pricier — use only when a site blocks normal crawling.")
     rotate_proxy_every: int | None = Field(None, alias="rotateProxyEvery", description="When rotateProxies is on, pages fetched per proxy before rotating. Default 30.")
     formats: list[Literal["markdown", "links", "json", "images", "branding"]] | None = Field(None, alias="formats", description="Per-page output formats: markdown, links, json, images are captured cheaply from HTML; branding (site-level logo/colors/fonts) requires a browser and adds time. Defaults to markdown+links.")
+    background: bool | None = Field(None, alias="background", description="Run the crawl as a background job instead of blocking this call, returning a jobId immediately — poll it with check_site_export to get a downloadable zip (all page content, plus real image files if downloadImages is set) once ready. Use for large sites where a synchronous call would be slow.")
+    download_images: bool | None = Field(None, alias="downloadImages", description="Download every discovered image as a real file into the export bundle (not just image URLs/stats). OFF by default — must be explicitly set true. Implies background regardless of the background flag, since downloading a whole site's images is too slow to run synchronously. Capped at 20 images/page and 500 images/site.")
 
 
 class ExtractSiteOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    url: str = Field(..., alias="url", description="")
-    page_count: int = Field(..., alias="pageCount", description="")
-    pages: list[dict[str, Any]] = Field(..., alias="pages", description="")
-    duration_ms: float = Field(..., alias="durationMs", description="")
-    truncated_count: int | None = Field(None, alias="truncatedCount", description="")
-    artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")
