@@ -18,8 +18,8 @@
       "note": "Returns the live tool list; used by scripts/sync-memory-manifest.ts to detect drift against this file."
     }
   },
-  "generatedFrom": "mcp-memory live tools/list (86 registered tools)",
-  "toolCount": 86,
+  "generatedFrom": "mcp-memory live tools/list (87 registered tools)",
+  "toolCount": 87,
   "tools": [
     {
       "name": "issueKeyTool",
@@ -5179,6 +5179,155 @@
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "legacyId": "delete-note"
+    },
+    {
+      "name": "bulkDeleteNotesTool",
+      "description": "Delete every note in one vault matching all given filters (ANDed) plus an optional tag match (ANY of the given tags) — at least one filter or tag is required; there is no unfiltered delete-all here (use delete-vault for that). Defaults to dryRun: true, previewing the match count and a sample of up to 20 matching notes without deleting anything. Pass dryRun: false to actually delete. DESTRUCTIVE and not recoverable when dryRun is false. Requires write scope. Refuses secure vaults (not indexed, filtering is meaningless there).",
+      "category": "memory",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key (Bearer secret). Optional when the MCP session is already authenticated; the server resolves auth from the session."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Session identifier used to resolve the active vault and per-session state. Optional; defaults to the current MCP session."
+          },
+          "vault": {
+            "type": "string",
+            "description": "Vault to delete from. Optional; defaults to the session active vault, then the first vault the caller is entitled to."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "column": {
+                  "type": "string",
+                  "enum": [
+                    "path",
+                    "title",
+                    "kind",
+                    "source",
+                    "captured_at",
+                    "created_at",
+                    "updated_at",
+                    "revision"
+                  ],
+                  "description": "Note column to filter on."
+                },
+                "op": {
+                  "type": "string",
+                  "enum": [
+                    "eq",
+                    "neq",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "like",
+                    "prefix",
+                    "in"
+                  ],
+                  "description": "\"prefix\" anchors to the start of the value only (e.g. path prefix \"Mastra/opt-\"); \"like\" matches anywhere in the value; \"in\" requires an array value."
+                },
+                "value": {
+                  "description": "Value to compare against. For \"in\", pass an array."
+                }
+              },
+              "required": [
+                "column",
+                "op"
+              ],
+              "additionalProperties": false
+            },
+            "default": [],
+            "description": "Filters to AND together. At least one of filters/tags is required."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Match notes carrying ANY of these tags (ORed among themselves, ANDed with filters). At least one of filters/tags is required."
+          },
+          "dryRun": {
+            "type": "boolean",
+            "default": true,
+            "description": "When true (default), previews matches without deleting anything. Pass false to actually delete."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "description": "True on success; false on auth/scope/validation error."
+          },
+          "vault": {
+            "type": "string",
+            "description": "The vault operated on (after defaulting). Present when ok is true."
+          },
+          "dryRun": {
+            "type": "boolean",
+            "description": "Echoes whether this call was a preview or a real delete."
+          },
+          "matchCount": {
+            "type": "number",
+            "description": "Number of notes matching the filters. Present on a dry run."
+          },
+          "sample": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "title",
+                "updatedAt"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Up to 20 matching notes, most-recently-updated first. Present on a dry run."
+          },
+          "deleted": {
+            "type": "number",
+            "description": "Number of notes actually deleted. Present when dryRun is false."
+          },
+          "deletedPaths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Paths of the deleted notes. Present when dryRun is false."
+          },
+          "error": {
+            "type": "string",
+            "description": "Human-readable failure reason when ok is false."
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "bulk-delete-notes"
     },
     {
       "name": "listVaultsTool",

@@ -52,6 +52,7 @@ import * as MemorySearch from './tools/memory-search.js'
 import * as MemorySuggest from './tools/memory-suggest.js'
 import * as MemoryUpload from './tools/memory-upload.js'
 import * as DeleteNote from './tools/delete-note.js'
+import * as BulkDeleteNotes from './tools/bulk-delete-notes.js'
 import * as TableCreate from './tools/table-create.js'
 import * as TableList from './tools/table-list.js'
 import * as TableDescribe from './tools/table-describe.js'
@@ -316,6 +317,10 @@ export class MemoryNamespace {
 
   async deleteNote(input: DeleteNote.Input): Promise<DeleteNote.Output> {
     return this.callTool('deleteNoteTool', input) as Promise<DeleteNote.Output>
+  }
+
+  async bulkDeleteNotes(input: BulkDeleteNotes.Input): Promise<BulkDeleteNotes.Output> {
+    return this.callTool('bulkDeleteNotesTool', input) as Promise<BulkDeleteNotes.Output>
   }
 }
 

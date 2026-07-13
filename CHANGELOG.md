@@ -5,6 +5,9 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.11.0
+- Added the typed `memory.bulkDeleteNotes` binding — deletes notes in one vault matching ANDed column filters (path/title/kind/source/captured_at/created_at/updated_at/revision, with a right-anchored `prefix` op alongside `eq`/`neq`/`gt`/`gte`/`lt`/`lte`/`like`/`in`) plus an optional ORed tag match. Defaults to a dry-run preview (match count + up to 20 sample notes); `dryRun: false` is required to actually delete. Verified against mcp-memory 1.8.1.
+
 ## mcpscraper-memory-sdk 0.10.0 / mcpscraper-sdk 0.11.0 / Python SDKs 0.8.0 / mcpscraper-cli 0.8.0
 - Added the typed `connections.metaAdCreativeMedia` / `connections.meta_ad_creative_media` binding for connected Meta ad images, videos, organic-post resolution, transcription handoff, and frame-analysis handoff.
 - Preserved full MCP content results with `callToolResult` in Node and `call_tool_result` in Python so native image, audio, and embedded-resource blocks are available to SDK callers without breaking legacy parsed calls.
