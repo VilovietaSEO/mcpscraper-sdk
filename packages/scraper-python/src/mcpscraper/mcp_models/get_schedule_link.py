@@ -12,4 +12,5 @@ class GetScheduleLinkOutput(BaseModel):
     ok: bool = Field(..., alias="ok", description="True on success; false on auth error.")
     url: str | None = Field(None, alias="url", description="The schedule link. Present only the first time a link is minted for this identity.")
     already_exists: bool | None = Field(None, alias="alreadyExists", description="True when a link already exists and was NOT re-shown. Use revoke-schedule-link then call this again to get a fresh one.")
+    code: str | None = Field(None, alias="code", description="Machine-readable denial code when the link cannot be issued.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")

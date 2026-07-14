@@ -12,11 +12,11 @@ export interface Input {
    */
   granteeIdentity: string;
   /**
-   * True to enable scheduled actions for this identity, false on cancel/expire.
+   * Historical entitlement value for migration/recovery only. Omit to preserve the stored value.
    */
-  enabled: boolean;
+  enabled?: boolean;
   /**
-   * Monthly execution quota. Optional; defaults to 1000, or leaves the existing value unchanged if already set.
+   * Historical monthly quota for migration/recovery only. Omit to preserve the stored value.
    */
   quotaPerPeriod?: number;
   /**

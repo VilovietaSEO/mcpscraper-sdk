@@ -5,6 +5,14 @@ import responses
 
 from mcpscraper_memory import MemoryClient, MemoryApiError, McpToolsClient
 from mcpscraper_memory._mcp_generated_client import MCP_TOOL_BINDINGS, MCP_TOOL_COUNT
+from mcpscraper_memory.models.create_scheduled_action import (
+    CreateScheduledActionInput,
+    CreateScheduledActionOutput,
+)
+from mcpscraper_memory.models.get_schedule_link import GetScheduleLinkOutput
+from mcpscraper_memory.models.get_schedule_status import GetScheduleStatusOutput
+from mcpscraper_memory.models.resume_scheduled_action import ResumeScheduledActionOutput
+from mcpscraper_memory.models.set_schedule_entitlement import SetScheduleEntitlementInput
 
 BASE_URL = "https://memory.mcpscraper.dev"
 
@@ -137,6 +145,32 @@ def test_unified_bindings_contain_all_159_unique_tools():
         "describe_service_connection_tool",
         "import_service_connection_to_memory",
     } <= names
+
+
+def test_direct_scheduling_models_match_the_credit_metered_contract():
+    create_input = CreateScheduledActionInput(
+        description="Sync Drive",
+        vault="Knowledge",
+        cadence="daily",
+        executionMode="connection_sync",
+    )
+    assert create_input.execution_mode == "connection_sync"
+
+    create_output = CreateScheduledActionOutput(ok=True, executionMode="agent")
+    assert create_output.execution_mode == "agent"
+    assert "code" in CreateScheduledActionOutput.model_fields
+    assert "code" in GetScheduleLinkOutput.model_fields
+    assert "code" in GetScheduleStatusOutput.model_fields
+    assert "code" in ResumeScheduledActionOutput.model_fields
+    assert {
+        "billing_mode",
+        "run_base_credits",
+        "llm_cost_multiplier",
+        "default_timezone",
+    } <= set(GetScheduleStatusOutput.model_fields)
+
+    entitlement = SetScheduleEntitlementInput(granteeIdentity="owner@example.com")
+    assert entitlement.enabled is None
 
 
 @responses.activate

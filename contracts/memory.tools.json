@@ -7057,7 +7057,7 @@
     },
     {
       "name": "createScheduledActionTool",
-      "description": "Create a Credit-metered scheduled action in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
+      "description": "Create a Credit-metered scheduled action for an active MCP Scraper Starter plan or higher, in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7325,7 +7325,7 @@
     },
     {
       "name": "resumeScheduledActionTool",
-      "description": "Resume a paused scheduled action. Its next run is computed fresh from now, not backfilled for time spent paused.",
+      "description": "Resume a paused scheduled action for an active MCP Scraper Starter plan or higher. Its next run is computed fresh from now, not backfilled for time spent paused.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7356,6 +7356,10 @@
           },
           "nextRunAt": {
             "type": "string"
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable denial code when the action cannot be resumed."
           },
           "error": {
             "type": "string"
@@ -7417,7 +7421,7 @@
     },
     {
       "name": "setScheduleEntitlementTool",
-      "description": "Legacy migration control for the former Scheduled Actions subscription plus the encrypted mcp-scraper API key used by scheduled tools. New schedules are Credit-metered and do not require this entitlement. Retained temporarily for Stripe migration and admin recovery; requires admin scope.",
+      "description": "Admin-only scheduled-action credential provisioning and historical-row recovery. Use mcpScraperApiKey to rotate the encrypted delegated key without changing legacy enabled/quota fields. The former entitlement and quota values are retained only for migration compatibility and are not runtime access controls; paid-plan access is validated against MCP Scraper directly.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7437,11 +7441,11 @@
           },
           "enabled": {
             "type": "boolean",
-            "description": "True to enable scheduled actions for this identity, false on cancel/expire."
+            "description": "Historical entitlement value for migration/recovery only. Omit to preserve the stored value."
           },
           "quotaPerPeriod": {
             "type": "number",
-            "description": "Monthly execution quota. Optional; defaults to 1000, or leaves the existing value unchanged if already set."
+            "description": "Historical monthly quota for migration/recovery only. Omit to preserve the stored value."
           },
           "mcpScraperApiKey": {
             "type": "string",
@@ -7449,8 +7453,7 @@
           }
         },
         "required": [
-          "granteeIdentity",
-          "enabled"
+          "granteeIdentity"
         ],
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
@@ -7477,7 +7480,7 @@
     },
     {
       "name": "getScheduleStatusTool",
-      "description": "Get the Credit-metered Scheduled Actions policy and your default timezone. Scheduling is included rather than sold as a separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times OpenRouter's actual reported cost.",
+      "description": "Get the Credit-metered Scheduled Actions access, billing policy, and default timezone. Scheduling requires an active MCP Scraper Starter plan or higher but has no separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times OpenRouter's actual reported cost.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7526,6 +7529,10 @@
               "null"
             ],
             "description": "IANA timezone applied to new schedules that name a time without a zone; null means UTC."
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable reason scheduling is unavailable."
           },
           "error": {
             "type": "string"
@@ -7664,7 +7671,7 @@
     },
     {
       "name": "getScheduleLinkTool",
-      "description": "Get your durable, bookmarkable link to the hosted Scheduled Actions page — a login-free UI to create, view, edit, pause, resume, and delete scheduled actions. The embedded secret is shown only once, on first call; it cannot be re-shown, only revoked and reissued via revoke-schedule-link.",
+      "description": "Get your durable, bookmarkable link to the hosted Scheduled Actions page. Requires an active MCP Scraper Starter plan or higher. The embedded secret is shown only once, on first call; it cannot be re-shown, only revoked and reissued via revoke-schedule-link.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7695,6 +7702,10 @@
           "alreadyExists": {
             "type": "boolean",
             "description": "True when a link already exists and was NOT re-shown. Use revoke-schedule-link then call this again to get a fresh one."
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable denial code when the link cannot be issued."
           },
           "error": {
             "type": "string",

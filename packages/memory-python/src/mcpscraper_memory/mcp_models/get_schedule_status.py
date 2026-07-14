@@ -17,4 +17,6 @@ class GetScheduleStatusOutput(BaseModel):
     quota_per_period: float | None = Field(None, alias="quotaPerPeriod", description="")
     used_this_period: float | None = Field(None, alias="usedThisPeriod", description="")
     period_start: str | None = Field(None, alias="periodStart", description="")
+    default_timezone: Any | None = Field(None, alias="defaultTimezone", description="IANA timezone applied to new schedules that name a time without a zone; null means UTC.")
+    code: str | None = Field(None, alias="code", description="Machine-readable reason scheduling is unavailable.")
     error: str | None = Field(None, alias="error", description="")

@@ -5,6 +5,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.11.3 / mcpscraper-sdk 0.12.2 / Python SDKs 0.9.2 / mcpscraper-cli 0.9.2
+- Regenerated the direct Memory and unified 159-tool Node, Python, CLI, and cURL bindings against mcp-memory 1.9.1 and MCP Scraper 0.21.2.
+- Added current paid-plan scheduling access and machine-readable denial fields to the generated scheduled-action models while retaining the shared 75-Credit base charge and 1.5-times OpenRouter agent-usage policy.
+- Reframed the legacy schedule entitlement operation as admin credential provisioning and historical-row recovery; its former enablement and quota inputs are now optional migration-only values.
+- Removed the obsolete generated `not_enabled` / scheduling-subscription denial description from Python `create_scheduled_action`; creation now reports the current machine-readable plan or Credit denial returned by the live service.
+
 ## mcpscraper-memory-sdk 0.11.2 / mcpscraper-sdk 0.12.1 / Python SDKs 0.9.1 / mcpscraper-cli 0.9.1
 - Regenerated every Node, Python, CLI, and cURL binding from the 159-tool MCP Scraper 0.21.0 contract and the live 87-tool mcp-memory 1.9.0 contract.
 - Replaced the old Scheduled Actions subscription contract with the unified policy: 75 Credits per started run, plus agent model usage at 1.5 times OpenRouter's actual reported cost.

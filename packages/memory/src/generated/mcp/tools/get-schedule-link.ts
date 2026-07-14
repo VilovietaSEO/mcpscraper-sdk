@@ -14,6 +14,10 @@ export interface Output {
    */
   alreadyExists?: boolean;
   /**
+   * Machine-readable denial code when the link cannot be issued.
+   */
+  code?: string;
+  /**
    * Human-readable failure reason when ok is false.
    */
   error?: string;

@@ -2075,7 +2075,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "create-scheduled-action",
     "category": "schedule",
     "title": "Create Scheduled Action",
-    "description": "Create a Credit-metered scheduled action in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs approved read-only tools on bound service connections and ingests their data. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
+    "description": "Create a Credit-metered scheduled action for an active MCP Scraper Starter plan or higher, in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs approved read-only tools on bound service connections and ingests their data. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -3049,7 +3049,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "get-schedule-link",
     "category": "schedule",
     "title": "Get Schedule Link",
-    "description": "Get your durable, bookmarkable link to the hosted Scheduled Actions page — a login-free UI to create, view, edit, pause, resume, and delete scheduled actions. The embedded secret is shown only once, on first call; it cannot be re-shown, only revoked and reissued via revoke-schedule-link.",
+    "description": "Get your durable, bookmarkable link to the hosted Scheduled Actions page. Requires an active MCP Scraper Starter plan or higher. The embedded secret is shown only once, on first call; it cannot be re-shown, only revoked and reissued via revoke-schedule-link.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -3067,7 +3067,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "get-schedule-status",
     "category": "schedule",
     "title": "Get Schedule Status",
-    "description": "Get the Credit-metered Scheduled Actions policy. Scheduling is included rather than sold as a separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times OpenRouter's actual reported cost.",
+    "description": "Get the Credit-metered Scheduled Actions access and billing policy. Scheduling requires an active MCP Scraper Starter plan or higher but has no separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times OpenRouter's actual reported cost.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -5926,7 +5926,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "set-schedule-entitlement",
     "category": "schedule",
     "title": "Set Schedule Entitlement",
-    "description": "Legacy migration and account-recovery control for old Scheduled Actions entitlements. New scheduling is Credit-metered and does not require a separate subscription. This admin-only tool may preserve a legacy API-key delegation or recover historical entitlement rows during migration.",
+    "description": "Admin-only scheduled-action credential provisioning and historical-row recovery. Rotate the encrypted delegated MCP Scraper API key without changing legacy enabled/quota fields by omitting those fields. Legacy entitlement values are not runtime access controls; paid-plan access is checked against MCP Scraper directly.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5937,11 +5937,11 @@ export const MCP_TOOL_CATALOG = [
         },
         "enabled": {
           "type": "boolean",
-          "description": "True to enable scheduled actions for this identity, false on cancel/expire."
+          "description": "Historical entitlement value for migration/recovery only. Omit to preserve the stored value."
         },
         "quotaPerPeriod": {
           "type": "number",
-          "description": "Legacy monthly execution quota retained only for historical-row compatibility; it does not price new Credit-metered runs."
+          "description": "Historical monthly execution quota retained only for migration compatibility. Omit to preserve the stored value."
         },
         "mcpScraperApiKey": {
           "type": "string",
@@ -5949,8 +5949,7 @@ export const MCP_TOOL_CATALOG = [
         }
       },
       "required": [
-        "granteeIdentity",
-        "enabled"
+        "granteeIdentity"
       ],
       "additionalProperties": false,
       "$schema": "http://json-schema.org/draft-07/schema#"

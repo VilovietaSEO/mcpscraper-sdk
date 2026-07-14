@@ -16,5 +16,9 @@ export interface Output {
    * IANA timezone applied to new schedules that name a time without a zone; null means UTC.
    */
   defaultTimezone?: string | null;
+  /**
+   * Machine-readable reason scheduling is unavailable.
+   */
+  code?: string;
   error?: string;
 }
