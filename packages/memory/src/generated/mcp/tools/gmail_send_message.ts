@@ -17,4 +17,8 @@ export interface Input {
   body: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  result?: unknown;
+  error: string | null;
+}

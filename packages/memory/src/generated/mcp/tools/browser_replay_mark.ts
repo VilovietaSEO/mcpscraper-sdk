@@ -58,4 +58,26 @@ export interface Input {
   duration_seconds?: number;
 }
 
-export type Output = unknown
+export interface Output {
+  /**
+   * Whether the browser-agent action succeeded.
+   */
+  ok: boolean;
+  tool: "browser_replay_mark";
+  /**
+   * Browser session id when the response is scoped to a session.
+   */
+  session_id: string | null;
+  /**
+   * Replay id when the response is scoped to a replay.
+   */
+  replay_id: string | null;
+  annotation: Annotation;
+  source_width: number | null;
+  source_height: number | null;
+  target: Annotation | null;
+  hint: string;
+}
+export interface Annotation {
+  [k: string]: unknown;
+}

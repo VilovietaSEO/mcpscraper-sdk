@@ -59,7 +59,7 @@ export interface Output {
    */
   error?: string;
   /**
-   * Machine-readable denial code: not_enabled when no scheduling subscription is active.
+   * Machine-readable denial code when creation is refused.
    */
   code?: string;
 }

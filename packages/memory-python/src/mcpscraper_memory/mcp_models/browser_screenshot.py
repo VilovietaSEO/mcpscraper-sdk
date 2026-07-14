@@ -10,3 +10,12 @@ class BrowserScreenshotInput(BaseModel):
 
 class BrowserScreenshotOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="Whether the browser-agent action succeeded.")
+    tool: str = Field(..., alias="tool", description="")
+    session_id: Any = Field(..., alias="session_id", description="Browser session id when the response is scoped to a session.")
+    url: Any = Field(..., alias="url", description="")
+    title: Any = Field(..., alias="title", description="")
+    text: str = Field(..., alias="text", description="")
+    elements: list[dict[str, Any]] = Field(..., alias="elements", description="")
+    screenshot: Any = Field(..., alias="screenshot", description="")

@@ -12,3 +12,9 @@ class DescribeServiceConnectionToolInput(BaseModel):
 
 class DescribeServiceConnectionToolOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="")
+    tool: dict[str, Any] | None = Field(None, alias="tool", description="")
+    retryable: bool | None = Field(None, alias="retryable", description="")
+    error_code: str | None = Field(None, alias="errorCode", description="")
+    error: Any = Field(..., alias="error", description="")

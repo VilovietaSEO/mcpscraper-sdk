@@ -15,9 +15,9 @@ export interface paths {
         put?: never;
         /**
          * Run a Google SERP search, or a full People-Also-Ask harvest
-         * @description Set `serpOnly: true` for a pure organic-results/SERP call (~0.1 credit). Omit or
+         * @description Set `serpOnly: true` for a pure organic-results/SERP call (1 credit). Omit or
          *     set `false` for a full People-Also-Ask harvest, which also returns SERP data
-         *     (~1 credit base + 0.2 credit per question actually returned; unused estimate is
+         *     (55 credit base + 3 credits per question actually returned; unused estimate is
          *     refunded). Runs synchronously and returns the result inline.
          */
         post: operations["harvestSync"];
@@ -106,7 +106,7 @@ export interface paths {
         put?: never;
         /**
          * Extract a single page (markdown/HTML, headings, optional screenshot/branding/media)
-         * @description Costs 0.1 credit per page.
+         * @description Costs 1 credit per page.
          */
         post: operations["extractUrl"];
         delete?: never;
@@ -126,7 +126,7 @@ export interface paths {
         put?: never;
         /**
          * Spider a site and return its discovered URL inventory
-         * @description Flat 0.5 credit per call, regardless of URL count discovered.
+         * @description Flat 5 credits per call, regardless of URL count discovered.
          */
         post: operations["mapSiteUrls"];
         delete?: never;
@@ -146,7 +146,7 @@ export interface paths {
         put?: never;
         /**
          * Crawl and extract every page of a site (also serves audit_site)
-         * @description 0.1 credit per page crawled (estimated up front against `maxPages`, then
+         * @description 1 credit per page crawled (estimated up front against `maxPages`, then
          *     reconciled to the actual page count crawled; unused estimate refunded). Set
          *     `background: true` to enqueue an async crawl and poll
          *     `GET /extract-site/status/{id}` instead of waiting inline — recommended above a
@@ -187,7 +187,7 @@ export interface paths {
         put?: never;
         /**
          * Search YouTube, or list a channel's videos
-         * @description Costs 0.2 credit per call.
+         * @description Costs 2 credits per call.
          */
         post: operations["youtubeHarvest"];
         delete?: never;
@@ -207,7 +207,7 @@ export interface paths {
         put?: never;
         /**
          * Transcribe a YouTube video's captions
-         * @description 0.2 credit per minute; a 5-minute hold is taken up front and reconciled to actual duration.
+         * @description 2 credits per minute; a 5-minute hold is taken up front and reconciled to actual duration.
          */
         post: operations["youtubeTranscribe"];
         delete?: never;
@@ -227,7 +227,7 @@ export interface paths {
         put?: never;
         /**
          * Capture a full-page PNG screenshot of a URL
-         * @description Costs 0.1 credit. Returns the raw PNG bytes, not JSON.
+         * @description Costs 1 credit. Returns the raw PNG bytes, not JSON.
          */
         post: operations["screenshot"];
         delete?: never;
@@ -247,7 +247,7 @@ export interface paths {
         put?: never;
         /**
          * Extract one Facebook Ad Library ad (all its variants) by URL or library ID
-         * @description Costs 0.2 credit.
+         * @description Costs 2 credits.
          */
         post: operations["facebookAd"];
         delete?: never;
@@ -267,7 +267,7 @@ export interface paths {
         put?: never;
         /**
          * List an advertiser's active/recent ads by page ID, library ID, or search query
-         * @description Costs 0.2 credit.
+         * @description Costs 2 credits.
          */
         post: operations["facebookPageIntel"];
         delete?: never;
@@ -287,7 +287,7 @@ export interface paths {
         put?: never;
         /**
          * Transcribe a Facebook ad's video by direct video URL
-         * @description 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+         * @description 333 credits per minute (typical); a hold is taken and reconciled to actual duration and vendor cost.
          */
         post: operations["facebookAdTranscribe"];
         delete?: never;
@@ -307,7 +307,7 @@ export interface paths {
         put?: never;
         /**
          * Transcribe an organic Facebook video, reel, or share URL (not an ad)
-         * @description 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+         * @description 333 credits per minute (typical); a hold is taken and reconciled to actual duration and vendor cost.
          */
         post: operations["facebookVideoTranscribe"];
         delete?: never;
@@ -327,7 +327,7 @@ export interface paths {
         put?: never;
         /**
          * Search the Facebook Ad Library by keyword and return matching advertisers
-         * @description Costs 0.6 credit.
+         * @description Costs 6 credits.
          */
         post: operations["facebookSearch"];
         delete?: never;
@@ -367,7 +367,7 @@ export interface paths {
         put?: never;
         /**
          * Find advertisers in the Google Ads Transparency Center by keyword
-         * @description Costs 0.6 credit.
+         * @description Costs 6 credits.
          */
         post: operations["googleAdsSearch"];
         delete?: never;
@@ -387,7 +387,7 @@ export interface paths {
         put?: never;
         /**
          * List one advertiser's creatives by advertiser ID or domain
-         * @description Costs 0.2 credit.
+         * @description Costs 2 credits.
          */
         post: operations["googleAdsPageIntel"];
         delete?: never;
@@ -407,7 +407,7 @@ export interface paths {
         put?: never;
         /**
          * Transcribe a Google ad's video by direct video URL
-         * @description 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+         * @description 333 credits per minute (typical); a hold is taken and reconciled to actual duration and vendor cost.
          */
         post: operations["googleAdsTranscribe"];
         delete?: never;
@@ -427,7 +427,7 @@ export interface paths {
         put?: never;
         /**
          * List a public Instagram profile's grid content
-         * @description Costs 0.4 credit per profile scan. Provide `handle` or `url`.
+         * @description Costs 4 credits per profile scan. Provide `handle` or `url`.
          */
         post: operations["instagramProfileContent"];
         delete?: never;
@@ -447,7 +447,7 @@ export interface paths {
         put?: never;
         /**
          * Extract and optionally download media from an Instagram post, reel, or tv URL
-         * @description Costs 0.4 credit; +0.05 credit if `includeTranscript` is used.
+         * @description Costs 4 credits per post or reel; when `includeTranscript` is used, transcription is typically 333 credits per minute and is reconciled to actual duration and vendor cost.
          */
         post: operations["instagramMediaDownload"];
         delete?: never;
@@ -467,7 +467,7 @@ export interface paths {
         put?: never;
         /**
          * Capture a Reddit post and its comment tree
-         * @description Costs 2 credits. Refunded automatically if Reddit blocks the request after retries.
+         * @description Costs 30 credits for the thread plus 2 credits per comment actually returned. Refunded automatically if Reddit blocks the request after retries.
          */
         post: operations["redditThread"];
         delete?: never;
@@ -490,7 +490,7 @@ export interface paths {
          * @description Full multi-lens breakdown: samples frames across a video (up to 30 minutes),
          *     analyzes each with vision AI, transcribes audio, then produces summary,
          *     pacing/energy, words-per-minute, topic outline, key points, hook analysis,
-         *     visual style, and a how-to-replicate recipe. ~0.667 credit per 120 frames
+         *     visual style, and a how-to-replicate recipe. 6,667 credits per 120 frames
          *     requested (max 480 frames); billed down automatically if the video can't use
          *     the requested frames, refunded fully if the run fails.
          */
@@ -529,7 +529,7 @@ export interface paths {
         put?: never;
         /**
          * Search Google Maps for businesses matching a query and location
-         * @description Costs 0.5 credit. Returns up to 50 business/profile candidates.
+         * @description Costs 5 credits. Returns up to 50 business/profile candidates.
          */
         post: operations["mapsSearch"];
         delete?: never;
@@ -549,7 +549,7 @@ export interface paths {
         put?: never;
         /**
          * Deep-dive one Google Maps business by name and location, with reviews
-         * @description 3 credits base; +0.1 credit per review card when `includeReviews` is true.
+         * @description 60 credits base; +1 credit per review card when `includeReviews` is true.
          */
         post: operations["mapsPlaceIntel"];
         delete?: never;
@@ -569,7 +569,7 @@ export interface paths {
         put?: never;
         /**
          * Run Google Maps business search across many cities in a state/region at once
-         * @description Cost is `0.5 credit × number of markets resolved` for the query — see `GET /workflows/definitions` for related workflow shapes. Failed cities are refunded individually.
+         * @description Cost is `5 credits × number of markets resolved` for the query — see `GET /workflows/definitions` for related workflow shapes. Failed cities are refunded individually.
          */
         post: operations["directoryWorkflow"];
         delete?: never;
@@ -589,7 +589,7 @@ export interface paths {
         put?: never;
         /**
          * Structured SERP capture with AI Overview/AI Mode detection, entity IDs, and location-match evidence
-         * @description Costs 0.1 credit. Rate-limited to 60 requests/minute per account.
+         * @description Costs 1 credit. Rate-limited to 60 requests/minute per account.
          */
         post: operations["serpIntelligenceCapture"];
         delete?: never;
@@ -609,7 +609,7 @@ export interface paths {
         put?: never;
         /**
          * Fetch and archive full-content snapshots (HTML/text/markdown/screenshot) of specific URLs
-         * @description Costs 0.1 credit per URL (max 25 per call). Rate-limited to 60 requests/minute per account.
+         * @description Costs 1 credit per URL (max 25 per call). Rate-limited to 60 requests/minute per account.
          */
         post: operations["serpIntelligencePageSnapshots"];
         delete?: never;
@@ -784,7 +784,7 @@ export interface paths {
         put?: never;
         /**
          * Call one memory.mcpscraper.dev tool by name, using this account's mcpscraper.dev API key
-         * @description Generic dispatch: names one of the 86 tools documented in this repo's
+         * @description Generic dispatch: names one of the 87 tools documented in this repo's
          *     `contracts/memory.tools.json` and forwards `args` to it, using a memory identity
          *     auto-provisioned for the calling mcpscraper.dev account. The response shape depends
          *     entirely on which tool was called — see that tool's `outputSchema` in the manifest.

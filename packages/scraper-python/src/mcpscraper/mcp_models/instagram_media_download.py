@@ -17,3 +17,20 @@ class InstagramMediaDownloadInput(BaseModel):
 
 class InstagramMediaDownloadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    source_url: str = Field(..., alias="sourceUrl", description="")
+    page_url: str = Field(..., alias="pageUrl", description="")
+    browser: dict[str, Any] = Field(..., alias="browser", description="")
+    type: Any = Field(..., alias="type", description="")
+    shortcode: Any = Field(..., alias="shortcode", description="")
+    owner_name: Any = Field(..., alias="ownerName", description="")
+    caption: Any = Field(..., alias="caption", description="")
+    image_url: Any = Field(..., alias="imageUrl", description="")
+    track_count: int = Field(..., alias="trackCount", description="")
+    selected_video_track: Any = Field(..., alias="selectedVideoTrack", description="")
+    selected_audio_track: Any = Field(..., alias="selectedAudioTrack", description="")
+    downloads: list[dict[str, Any]] = Field(..., alias="downloads", description="")
+    output_dir: Any = Field(..., alias="outputDir", description="")
+    warnings: list[str] = Field(..., alias="warnings", description="")
+    limitations: list[str] = Field(..., alias="limitations", description="")
+    transcript: Any = Field(..., alias="transcript", description="")

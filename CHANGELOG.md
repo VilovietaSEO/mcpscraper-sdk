@@ -5,6 +5,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.11.2 / mcpscraper-sdk 0.12.1 / Python SDKs 0.9.1 / mcpscraper-cli 0.9.1
+- Regenerated every Node, Python, CLI, and cURL binding from the 159-tool MCP Scraper 0.21.0 contract and the live 87-tool mcp-memory 1.9.0 contract.
+- Replaced the old Scheduled Actions subscription contract with the unified policy: 75 Credits per started run, plus agent model usage at 1.5 times OpenRouter's actual reported cost.
+- Corrected public Credit-rate metadata to the production conversion of 100 milli-Credits per Credit and synchronized the documented scraper, browser, social, transcription, review, and video-analysis rates.
+- Documented current integration charging accurately: OAuth connect and reconnect have no extra Credit cost; direct connected-service reads, enabled actions, and exports have no separate connection-operation debit; scheduled and separately metered tool work retain their published prices.
+
 ## mcpscraper-memory-sdk 0.11.1 / mcpscraper-sdk 0.12.0 / Python SDKs 0.9.0 / mcpscraper-cli 0.9.0
 - Added the typed `web.checkSiteExport` / `web.check_site_export` binding — polls a background `extract_site`/`audit_site` job and returns `bundleUrl`/`bundleBytes` once the export zip is ready.
 - `extract_site`/`audit_site` requests gain `downloadImages` — downloads every discovered image as a real file into the export bundle (under `images/<page>/`), not just image URLs/stats. OFF by default; implies `background` regardless of the `background` flag since a whole-site image download is too slow to run inline. Capped at 20 images/page and 500/site.

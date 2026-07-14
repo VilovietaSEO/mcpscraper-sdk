@@ -8,7 +8,7 @@ export interface Input {
    */
   enabled: boolean;
   /**
-   * Monthly execution quota. Optional; defaults to 1000, or leaves the existing value unchanged if already set.
+   * Legacy monthly execution quota retained only for historical-row compatibility; it does not price new Credit-metered runs.
    */
   quotaPerPeriod?: number;
   /**

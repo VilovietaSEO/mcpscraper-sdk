@@ -18,3 +18,13 @@ class HarvestPaaInput(BaseModel):
 
 class HarvestPaaOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    query: str = Field(..., alias="query", description="")
+    location: Any = Field(..., alias="location", description="")
+    question_count: int = Field(..., alias="questionCount", description="")
+    completion_status: Any = Field(..., alias="completionStatus", description="")
+    questions: list[dict[str, Any]] = Field(..., alias="questions", description="")
+    organic_results: list[dict[str, Any]] = Field(..., alias="organicResults", description="")
+    ai_overview: Any = Field(..., alias="aiOverview", description="")
+    entity_ids: Any = Field(..., alias="entityIds", description="")
+    duration_ms: Any = Field(..., alias="durationMs", description="")

@@ -25,4 +25,114 @@ export interface Input {
   export?: boolean;
 }
 
-export type Output = unknown
+export interface Output {
+  /**
+   * Whether the browser-agent action succeeded.
+   */
+  ok: boolean;
+  tool: "query_fanout_workflow";
+  /**
+   * Browser session id when the response is scoped to a session.
+   */
+  session_id: string | null;
+  /**
+   * Which AI-search surface the fan-out was captured from.
+   */
+  platform: "ChatGPT" | "Claude";
+  captured_at: string;
+  /**
+   * The user prompt that triggered the captured fan-out, when recoverable.
+   */
+  prompt: string;
+  meta: {
+    model: string;
+    finishType: string;
+    title: string;
+    rounds: number;
+  };
+  /**
+   * Every web-search sub-query issued, in capture order.
+   */
+  queries: string[];
+  /**
+   * Every researched URL, cited first.
+   */
+  browsed_urls: Items[];
+  /**
+   * Researched URLs cited in the final answer.
+   */
+  cited_urls: Items[];
+  /**
+   * Researched URLs pulled but not cited.
+   */
+  browsed_only: Items[];
+  snippets: {
+    url: string;
+    domain: string;
+    title: string;
+    text: string;
+  }[];
+  counts: {
+    subQueries: number;
+    browsed: number;
+    cited: number;
+    browsedOnly: number;
+  };
+  /**
+   * Objective aggregates: top sourced sites by frequency, citation order, and URL-category counts.
+   */
+  aggregates: {
+    topSites: {
+      domain: string;
+      count: number;
+      cited: boolean;
+      timesCited: number;
+      siteType: string;
+    }[];
+    citationOrder: {
+      rank: number;
+      domain: string;
+      url: string;
+      timesCited: number;
+    }[];
+    byCategory: {
+      [k: string]: number;
+    };
+  };
+  first_party_domain: string | null;
+  /**
+   * Relative export paths when export=true, otherwise null. Paths are relative to MCP_SCRAPER_OUTPUT_DIR, or ~/Downloads/mcp-scraper when that env var is not set.
+   */
+  exports: {
+    relativeTo: string;
+    dir: string;
+    json: string;
+    queriesCsv: string;
+    queriesTsv: string;
+    citationsCsv: string;
+    sourcesCsv: string;
+    browsedOnlyCsv: string;
+    snippetsCsv: string;
+    domainsCsv: string;
+    report: string;
+  } | null;
+  debug?: {
+    interceptorReady: boolean;
+    rawBytes: number;
+    unmappedKeys: string[];
+    note: string;
+  };
+}
+export interface Items {
+  url: string;
+  domain: string;
+  title: string;
+  cited: boolean;
+  timesCited: number;
+  snippet: string;
+  round: number | null;
+  /**
+   * URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog.
+   */
+  siteType: string;
+}

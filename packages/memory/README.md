@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 158 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 86-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official TypeScript/JavaScript clients for all 159 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 87-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
@@ -22,6 +22,8 @@ await tools.connections.exportConnectedServiceData({ connectionId: 'conn_123', l
 ```
 
 The unified connection namespace includes permission-aware provider inventory and `meta_ads_insights` bulk exports for daily account, campaign, ad-set, and ad reporting, with large results delivered as private artifacts.
+
+OAuth connect/reconnect and direct connected-service operations do not currently have an extra connection-operation debit beyond the required paid plan. Scheduled Actions use the shared MCP Scraper balance at 75 Credits per started occurrence; agent-mode runs add 1.5 times OpenRouter's actual reported model cost. Read the live contract with `await tools.schedule.getScheduleStatus()`.
 
 ## Quickstart
 
@@ -47,7 +49,7 @@ try {
 
 ## Namespaces
 
-`MemoryClient` retains the direct 86-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 158 tools — 73 MCP Scraper tools plus 85 mirrored memory tools — across its generated namespaces.
+`MemoryClient` retains the direct 87-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 159 tools — 72 MCP Scraper tools plus 87 mirrored memory tools — across its generated namespaces.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
@@ -63,4 +65,4 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 86 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` Python source package](../memory-python) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 87 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` Python source package](../memory-python) · [`mcpscraper-cli`](../cli)

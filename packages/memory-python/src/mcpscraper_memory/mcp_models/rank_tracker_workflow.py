@@ -24,3 +24,14 @@ class RankTrackerWorkflowInput(BaseModel):
 
 class RankTrackerWorkflowOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    project_name: str = Field(..., alias="projectName", description="")
+    target_domain: Any = Field(..., alias="targetDomain", description="")
+    target_business_name: Any = Field(..., alias="targetBusinessName", description="")
+    tracking_modes: list[Literal["maps", "organic", "ai_overview", "paa"]] = Field(..., alias="trackingModes", description="")
+    database: str = Field(..., alias="database", description="")
+    recommended_tools: list[dict[str, Any]] = Field(..., alias="recommendedTools", description="")
+    tables: list[dict[str, Any]] = Field(..., alias="tables", description="")
+    cron: dict[str, Any] = Field(..., alias="cron", description="")
+    metrics: list[str] = Field(..., alias="metrics", description="")
+    implementation_prompt: str = Field(..., alias="implementationPrompt", description="")

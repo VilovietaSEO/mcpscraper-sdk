@@ -17,3 +17,15 @@ class BrowserReplayAnnotateInput(BaseModel):
 
 class BrowserReplayAnnotateOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="Whether the browser-agent action succeeded.")
+    tool: str = Field(..., alias="tool", description="")
+    session_id: Any = Field(..., alias="session_id", description="Browser session id when the response is scoped to a session.")
+    replay_id: Any = Field(..., alias="replay_id", description="Replay id when the response is scoped to a replay.")
+    source_file_path: Any = Field(..., alias="source_file_path", description="")
+    annotated_file_path: Any = Field(..., alias="annotated_file_path", description="")
+    bytes: Any = Field(..., alias="bytes", description="")
+    width: Any = Field(..., alias="width", description="")
+    height: Any = Field(..., alias="height", description="")
+    annotation_count: Any = Field(..., alias="annotation_count", description="")
+    mime_type: Any = Field(..., alias="mime_type", description="")

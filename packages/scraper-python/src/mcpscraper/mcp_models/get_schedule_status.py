@@ -11,6 +11,9 @@ class GetScheduleStatusOutput(BaseModel):
 
     ok: bool = Field(..., alias="ok", description="")
     enabled: bool | None = Field(None, alias="enabled", description="")
+    billing_mode: str | None = Field(None, alias="billingMode", description="")
+    run_base_credits: float | None = Field(None, alias="runBaseCredits", description="")
+    llm_cost_multiplier: float | None = Field(None, alias="llmCostMultiplier", description="")
     quota_per_period: float | None = Field(None, alias="quotaPerPeriod", description="")
     used_this_period: float | None = Field(None, alias="usedThisPeriod", description="")
     period_start: str | None = Field(None, alias="periodStart", description="")

@@ -13,3 +13,8 @@ class YoutubeHarvestInput(BaseModel):
 
 class YoutubeHarvestOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    mode: str = Field(..., alias="mode", description="")
+    video_count: int = Field(..., alias="videoCount", description="")
+    channel: Any = Field(..., alias="channel", description="")
+    videos: list[dict[str, Any]] = Field(..., alias="videos", description="")

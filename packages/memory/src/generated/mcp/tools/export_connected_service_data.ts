@@ -67,4 +67,67 @@ export interface Input {
   cursor?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  exportId?: string;
+  status?: "complete" | "partial";
+  providerConfigKey?: string;
+  dataset?:
+    | "emails"
+    | "calendar_events"
+    | "zoom_recordings"
+    | "zoom_transcripts"
+    | "meta_ads_insights"
+    | "resend_data"
+    | "resend_emails"
+    | "resend_received_emails"
+    | "resend_logs"
+    | "resend_contacts"
+    | "resend_broadcasts"
+    | "resend_templates";
+  range?: {
+    from: string;
+    to: string;
+  };
+  counts?: {
+    pages: number;
+    listed: number;
+    exported: number;
+    failed: number;
+    bytes: number;
+  };
+  complete?: boolean;
+  records?: unknown[];
+  preview?: unknown[];
+  artifact?: {
+    artifactId: string;
+    filename: string;
+    contentType: "application/x-ndjson";
+    bytes: number;
+    sha256: string;
+    expiresAt: string;
+    downloadUrl: string | null;
+    downloadUrlExpiresAt: string | null;
+  };
+  continuation?: {
+    cursor: string;
+    from: string;
+    to: string;
+    dataset:
+      | "emails"
+      | "calendar_events"
+      | "zoom_recordings"
+      | "zoom_transcripts"
+      | "meta_ads_insights"
+      | "resend_data"
+      | "resend_emails"
+      | "resend_received_emails"
+      | "resend_logs"
+      | "resend_contacts"
+      | "resend_broadcasts"
+      | "resend_templates";
+  } | null;
+  warnings?: string[];
+  untrustedContent?: boolean;
+  error: string | null;
+}

@@ -1,8 +1,8 @@
 # mcpscraper-sdk
 
-Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 86 tools).
+Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 87 tools).
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **158 unified MCP tools** — 73 MCP Scraper tools plus 85 mirrored memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **159 unified MCP tools** — 72 MCP Scraper tools plus 87 mirrored memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Install
 
@@ -23,10 +23,10 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 
 | Feature | What it does | REST endpoint | Cost |
 |---|---|---|---|
-| [Search](#search) | Google SERP + optional full People-Also-Ask harvest | `POST /harvest/sync` | ~0.1 credit |
-| [Scrape](#scrape) | One page → markdown/HTML/headings, optional screenshot, optional deposit into your memory vault | `POST /extract-url` | 0.1 credit |
-| [Crawl](#crawl) | Every page of a site, one call | `POST /extract-site` | 0.1 credit/page |
-| [Map](#map) | Discover a site's full URL inventory | `POST /map-urls` | 0.5 credit flat |
+| [Search](#search) | Google SERP + optional full People-Also-Ask harvest | `POST /harvest/sync` | 1 credit |
+| [Scrape](#scrape) | One page → markdown/HTML/headings, optional screenshot, optional deposit into your memory vault | `POST /extract-url` | 1 credit |
+| [Crawl](#crawl) | Every page of a site, one call | `POST /extract-site` | 1 credit/page |
+| [Map](#map) | Discover a site's full URL inventory | `POST /map-urls` | 5 credits flat |
 | [Maps search](#maps-search) | Local businesses via Google Maps | `POST /maps/search` | — |
 | [Memory search](#memory-search-using-only-your-scraper-key) | Semantic search across your mcp-memory vaults | `POST /memory/mcp-call` | — |
 | YouTube, Facebook/Google Ads, Instagram, Reddit, video, directory workflows | See [`packages/scraper`](./packages/scraper) and [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) for the full 43-operation REST contract | — | — |
@@ -278,7 +278,7 @@ Sample output (real, captured live):
 
 ### Memory search, using only your scraper key
 
-Every one of memory.mcpscraper.dev's 86 tools (governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, webhooks, and more — see [`contracts/memory.tools.json`](./contracts/memory.tools.json)) is callable from `mcpscraper-sdk` alone, dispatched through `POST /memory/mcp-call`. mcpscraper.dev auto-provisions a memory identity for your account on first use — no separate `mk_...` key required.
+Every one of memory.mcpscraper.dev's 87 tools (governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, webhooks, and more — see [`contracts/memory.tools.json`](./contracts/memory.tools.json)) is callable from `mcpscraper-sdk` alone, dispatched through `POST /memory/mcp-call`. mcpscraper.dev auto-provisions a memory identity for your account on first use — no separate `mk_...` key required.
 
 <details open><summary>Node.js</summary>
 
@@ -327,7 +327,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 158 unified tools in both Node and Python, including all 85 memory tools.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 159 unified tools in both Node and Python, including all 87 memory tools.
 
 ## Bulk connected-data exports
 
@@ -385,6 +385,19 @@ Pass the complete `continuation` object returned by a partial export unchanged t
 
 For live connected-service calls, start with `listServiceConnections`, then call `describeServiceConnectionTool` for an exact provider-native tool name before supplying arguments to `readServiceConnection` or `callServiceConnectionAction`. The list response identifies the credential `transport`, verified `grantedPermissions`, `permissionVerification`, per-tool permission requirements and blockers in `toolCapabilities`, the exact callable read/action allowlists, and permanently blocked administrative tools; credentials are never returned.
 
+## Integration and scheduled-run billing
+
+Integrations are included with an active Starter plan or higher. OAuth connect and reconnect do not spend additional Credits, and there is no separate per-connection subscription. Direct connected-service reads, approved actions, bulk exports, and Memory snapshots currently have no additional connection-operation debit; any separately metered MCP Scraper or browser tool they invoke keeps its published rate.
+
+Scheduled Actions use the shared MCP Scraper Credit balance instead of a separate scheduling subscription or monthly run quota. Every started occurrence costs 75 Credits. Deterministic `connection_sync` runs add no model charge. Agent-mode runs add 1.5 times OpenRouter's actual reported cost across all successful model steps.
+
+```ts
+const policy = await client.tools.schedule.getScheduleStatus()
+// { billingMode: 'credits', runBaseCredits: 75, llmCostMultiplier: 1.5, ... }
+```
+
+The 5/10/15/25-Credit connected-operation classes and active-connection minimum described in the product design spec are not enabled in the current release.
+
 ## Connected-service snapshots to Memory
 
 Turn one exact approved connection read into an indexed RAG document without routing through Mastra. The server validates the tenant-owned connection and ordinary Memory vault, makes one bounded read, redacts credentials and signed URLs, writes to a stable server-generated path, embeds the content, and returns a receipt instead of the provider payload.
@@ -417,7 +430,7 @@ This is a one-result snapshot with a 1 MB limit—not whole-account pagination, 
 
 Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Python, scraper) or `MemoryApiError` (Node/Python, memory), each carrying the HTTP status, an error code, and the raw response body. `ScraperApiError` adds `isInsufficientBalance()`/`isConcurrencyLimitExceeded()` narrowing helpers (`is_insufficient_balance()`/`is_concurrency_limit_exceeded()` in Python). The CLI catches these and prints a clean one-line message instead of a stack trace.
 
-## All 158 MCP tools
+## All 159 MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -435,7 +448,7 @@ The authoritative tool names, descriptions, schemas, annotations, categories, an
 
 ## The CLI
 
-`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 158 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 159 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -443,9 +456,9 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical live-derived contract for all 158 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical live-derived contract for all 159 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
-- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 86 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
+- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 87 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
 
 The contracts are checked-in public release artifacts. The unified MCP and memory manifests are generated from their server tool inventories, while the REST OpenAPI contract is curated. Release validation (`npm run validate-contracts`) checks them against the live servers for drift.
 

@@ -11,3 +11,9 @@ class CreditsInfoInput(BaseModel):
 
 class CreditsInfoOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    balance_credits: Any = Field(..., alias="balanceCredits", description="")
+    matched_cost: Any = Field(..., alias="matchedCost", description="")
+    costs: list[dict[str, Any]] = Field(..., alias="costs", description="")
+    ledger: list[dict[str, Any]] = Field(..., alias="ledger", description="")
+    concurrency: Any = Field(..., alias="concurrency", description="")

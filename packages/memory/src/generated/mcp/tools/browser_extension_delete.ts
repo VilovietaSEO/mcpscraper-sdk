@@ -5,4 +5,10 @@ export interface Input {
   name: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  tool: "browser_extension_delete";
+  session_id: null;
+  name: string;
+  deleted: boolean;
+}

@@ -7057,7 +7057,7 @@
     },
     {
       "name": "createScheduledActionTool",
-      "description": "Create a scheduled action in agent mode (default) or connection_sync mode. Agent mode asks an agent to follow the description and write a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Cadence 'once' runs a single time then completes permanently. Requires an active scheduling subscription and write access to the target vault.",
+      "description": "Create a Credit-metered scheduled action in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7151,7 +7151,7 @@
           },
           "code": {
             "type": "string",
-            "description": "Machine-readable denial code: not_enabled when no scheduling subscription is active."
+            "description": "Machine-readable denial code when creation is refused."
           }
         },
         "required": [
@@ -7417,7 +7417,7 @@
     },
     {
       "name": "setScheduleEntitlementTool",
-      "description": "Set whether an identity has an active Scheduled Actions subscription, its monthly execution quota, and (optionally) an mcp-scraper API key for scheduled actions to call mcp-scraper on their behalf. Called by mcp-scraper's Stripe webhook on subscribe/renew/cancel. Requires admin scope.",
+      "description": "Legacy migration control for the former Scheduled Actions subscription plus the encrypted mcp-scraper API key used by scheduled tools. New schedules are Credit-metered and do not require this entitlement. Retained temporarily for Stripe migration and admin recovery; requires admin scope.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7477,7 +7477,7 @@
     },
     {
       "name": "getScheduleStatusTool",
-      "description": "Get your own Scheduled Actions subscription status: whether it is active, your monthly quota, how much you have used this period, and your default timezone for new schedules.",
+      "description": "Get the Credit-metered Scheduled Actions policy and your default timezone. Scheduling is included rather than sold as a separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times OpenRouter's actual reported cost.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -7500,6 +7500,16 @@
           },
           "enabled": {
             "type": "boolean"
+          },
+          "billingMode": {
+            "type": "string",
+            "const": "credits"
+          },
+          "runBaseCredits": {
+            "type": "number"
+          },
+          "llmCostMultiplier": {
+            "type": "number"
           },
           "quotaPerPeriod": {
             "type": "number"

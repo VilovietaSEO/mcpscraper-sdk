@@ -18,3 +18,14 @@ class ExtractUrlInput(BaseModel):
 
 class ExtractUrlOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    url: str = Field(..., alias="url", description="")
+    title: Any = Field(..., alias="title", description="")
+    headings: list[dict[str, Any]] = Field(..., alias="headings", description="")
+    schema_block_count: int = Field(..., alias="schemaBlockCount", description="")
+    entity_name: Any = Field(..., alias="entityName", description="")
+    entity_types: list[str] = Field(..., alias="entityTypes", description="")
+    nap_score: Any = Field(..., alias="napScore", description="")
+    missing_schema_fields: list[str] = Field(..., alias="missingSchemaFields", description="")
+    screenshot_saved: Any = Field(..., alias="screenshotSaved", description="")
+    memory: dict[str, Any] | None = Field(None, alias="memory", description="")

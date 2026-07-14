@@ -22,4 +22,4 @@ class CreateScheduledActionOutput(BaseModel):
     next_run_at: str | None = Field(None, alias="nextRunAt", description="When it will first run.")
     execution_mode: Literal["agent", "connection_sync"] | None = Field(None, alias="executionMode", description="The stored execution mode. Defaults to agent when omitted from the request.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")
-    code: str | None = Field(None, alias="code", description="Machine-readable denial code: not_enabled when no scheduling subscription is active.")
+    code: str | None = Field(None, alias="code", description="Machine-readable denial code when creation is refused.")

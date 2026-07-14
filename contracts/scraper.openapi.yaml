@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: mcpscraper.dev API
-  version: "1.2.0"
+  version: "1.3.0"
   description: |
     Public REST contract for mcpscraper.dev — web intelligence (SERP, People-Also-Ask,
     site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video
@@ -9,7 +9,7 @@ info:
 
     This is a hand-curated public subset of the hosted API: internal/admin routes,
     Stripe webhooks, OAuth session routes, and the interactive browser-agent console are
-    not part of this contract. Every operation here is billed in millicredits (mc); 1,000
+    not part of this contract. Every operation here is billed in millicredits (mc); 100
     mc = 1 credit. Insufficient balance and concurrency-limit responses share the schemas
     below across every operation.
   license:
@@ -59,9 +59,9 @@ paths:
       operationId: harvestSync
       summary: Run a Google SERP search, or a full People-Also-Ask harvest
       description: |
-        Set `serpOnly: true` for a pure organic-results/SERP call (~0.1 credit). Omit or
+        Set `serpOnly: true` for a pure organic-results/SERP call (1 credit). Omit or
         set `false` for a full People-Also-Ask harvest, which also returns SERP data
-        (~1 credit base + 0.2 credit per question actually returned; unused estimate is
+        (55 credit base + 3 credits per question actually returned; unused estimate is
         refunded). Runs synchronously and returns the result inline.
       requestBody:
         required: true
@@ -141,7 +141,7 @@ paths:
       tags: [Core]
       operationId: extractUrl
       summary: Extract a single page (markdown/HTML, headings, optional screenshot/branding/media)
-      description: Costs 0.1 credit per page.
+      description: Costs 1 credit per page.
       requestBody:
         required: true
         content:
@@ -163,7 +163,7 @@ paths:
       tags: [Core]
       operationId: mapSiteUrls
       summary: Spider a site and return its discovered URL inventory
-      description: Flat 0.5 credit per call, regardless of URL count discovered.
+      description: Flat 5 credits per call, regardless of URL count discovered.
       requestBody:
         required: true
         content:
@@ -186,7 +186,7 @@ paths:
       operationId: extractSite
       summary: Crawl and extract every page of a site (also serves audit_site)
       description: |
-        0.1 credit per page crawled (estimated up front against `maxPages`, then
+        1 credit per page crawled (estimated up front against `maxPages`, then
         reconciled to the actual page count crawled; unused estimate refunded). Set
         `background: true` to enqueue an async crawl and poll
         `GET /extract-site/status/{id}` instead of waiting inline — recommended above a
@@ -231,7 +231,7 @@ paths:
       tags: [YouTube]
       operationId: youtubeHarvest
       summary: Search YouTube, or list a channel's videos
-      description: Costs 0.2 credit per call.
+      description: Costs 2 credits per call.
       requestBody:
         required: true
         content:
@@ -254,7 +254,7 @@ paths:
       tags: [YouTube]
       operationId: youtubeTranscribe
       summary: Transcribe a YouTube video's captions
-      description: 0.2 credit per minute; a 5-minute hold is taken up front and reconciled to actual duration.
+      description: 2 credits per minute; a 5-minute hold is taken up front and reconciled to actual duration.
       requestBody:
         required: true
         content:
@@ -280,7 +280,7 @@ paths:
       tags: [Screenshot]
       operationId: screenshot
       summary: Capture a full-page PNG screenshot of a URL
-      description: Costs 0.1 credit. Returns the raw PNG bytes, not JSON.
+      description: Costs 1 credit. Returns the raw PNG bytes, not JSON.
       requestBody:
         required: true
         content:
@@ -307,7 +307,7 @@ paths:
       tags: [Facebook]
       operationId: facebookAd
       summary: Extract one Facebook Ad Library ad (all its variants) by URL or library ID
-      description: Costs 0.2 credit.
+      description: Costs 2 credits.
       requestBody:
         required: true
         content:
@@ -335,7 +335,7 @@ paths:
       tags: [Facebook]
       operationId: facebookPageIntel
       summary: List an advertiser's active/recent ads by page ID, library ID, or search query
-      description: Costs 0.2 credit.
+      description: Costs 2 credits.
       requestBody:
         required: true
         content:
@@ -365,7 +365,7 @@ paths:
       tags: [Facebook]
       operationId: facebookAdTranscribe
       summary: Transcribe a Facebook ad's video by direct video URL
-      description: 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+      description: 333 credits per minute (typical); a hold is taken and reconciled to actual duration and vendor cost.
       requestBody:
         required: true
         content:
@@ -389,7 +389,7 @@ paths:
       tags: [Facebook]
       operationId: facebookVideoTranscribe
       summary: Transcribe an organic Facebook video, reel, or share URL (not an ad)
-      description: 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+      description: 333 credits per minute (typical); a hold is taken and reconciled to actual duration and vendor cost.
       requestBody:
         required: true
         content:
@@ -415,7 +415,7 @@ paths:
       tags: [Facebook]
       operationId: facebookSearch
       summary: Search the Facebook Ad Library by keyword and return matching advertisers
-      description: Costs 0.6 credit.
+      description: Costs 6 credits.
       requestBody:
         required: true
         content:
@@ -483,7 +483,7 @@ paths:
       tags: [GoogleAds]
       operationId: googleAdsSearch
       summary: Find advertisers in the Google Ads Transparency Center by keyword
-      description: Costs 0.6 credit.
+      description: Costs 6 credits.
       requestBody:
         required: true
         content:
@@ -511,7 +511,7 @@ paths:
       tags: [GoogleAds]
       operationId: googleAdsPageIntel
       summary: List one advertiser's creatives by advertiser ID or domain
-      description: Costs 0.2 credit.
+      description: Costs 2 credits.
       requestBody:
         required: true
         content:
@@ -540,7 +540,7 @@ paths:
       tags: [GoogleAds]
       operationId: googleAdsTranscribe
       summary: Transcribe a Google ad's video by direct video URL
-      description: 0.2 credit per minute; a 5-minute hold is taken and reconciled to actual duration.
+      description: 333 credits per minute (typical); a hold is taken and reconciled to actual duration and vendor cost.
       requestBody:
         required: true
         content:
@@ -564,7 +564,7 @@ paths:
       tags: [Instagram]
       operationId: instagramProfileContent
       summary: List a public Instagram profile's grid content
-      description: Costs 0.4 credit per profile scan. Provide `handle` or `url`.
+      description: Costs 4 credits per profile scan. Provide `handle` or `url`.
       requestBody:
         required: true
         content:
@@ -594,7 +594,7 @@ paths:
       tags: [Instagram]
       operationId: instagramMediaDownload
       summary: Extract and optionally download media from an Instagram post, reel, or tv URL
-      description: Costs 0.4 credit; +0.05 credit if `includeTranscript` is used.
+      description: Costs 4 credits per post or reel; when `includeTranscript` is used, transcription is typically 333 credits per minute and is reconciled to actual duration and vendor cost.
       requestBody:
         required: true
         content:
@@ -625,7 +625,7 @@ paths:
       tags: [Reddit]
       operationId: redditThread
       summary: Capture a Reddit post and its comment tree
-      description: Costs 2 credits. Refunded automatically if Reddit blocks the request after retries.
+      description: Costs 30 credits for the thread plus 2 credits per comment actually returned. Refunded automatically if Reddit blocks the request after retries.
       requestBody:
         required: true
         content:
@@ -674,7 +674,7 @@ paths:
         Full multi-lens breakdown: samples frames across a video (up to 30 minutes),
         analyzes each with vision AI, transcribes audio, then produces summary,
         pacing/energy, words-per-minute, topic outline, key points, hook analysis,
-        visual style, and a how-to-replicate recipe. ~0.667 credit per 120 frames
+        visual style, and a how-to-replicate recipe. 6,667 credits per 120 frames
         requested (max 480 frames); billed down automatically if the video can't use
         the requested frames, refunded fully if the run fails.
       requestBody:
@@ -750,7 +750,7 @@ paths:
       tags: [Maps]
       operationId: mapsSearch
       summary: Search Google Maps for businesses matching a query and location
-      description: Costs 0.5 credit. Returns up to 50 business/profile candidates.
+      description: Costs 5 credits. Returns up to 50 business/profile candidates.
       requestBody:
         required: true
         content:
@@ -772,7 +772,7 @@ paths:
       tags: [Maps]
       operationId: mapsPlaceIntel
       summary: Deep-dive one Google Maps business by name and location, with reviews
-      description: 3 credits base; +0.1 credit per review card when `includeReviews` is true.
+      description: 60 credits base; +1 credit per review card when `includeReviews` is true.
       requestBody:
         required: true
         content:
@@ -794,7 +794,7 @@ paths:
       tags: [Directory]
       operationId: directoryWorkflow
       summary: Run Google Maps business search across many cities in a state/region at once
-      description: Cost is `0.5 credit × number of markets resolved` for the query — see `GET /workflows/definitions` for related workflow shapes. Failed cities are refunded individually.
+      description: Cost is `5 credits × number of markets resolved` for the query — see `GET /workflows/definitions` for related workflow shapes. Failed cities are refunded individually.
       requestBody:
         required: true
         content:
@@ -836,7 +836,7 @@ paths:
       tags: [SerpIntelligence]
       operationId: serpIntelligenceCapture
       summary: Structured SERP capture with AI Overview/AI Mode detection, entity IDs, and location-match evidence
-      description: Costs 0.1 credit. Rate-limited to 60 requests/minute per account.
+      description: Costs 1 credit. Rate-limited to 60 requests/minute per account.
       requestBody:
         required: true
         content:
@@ -858,7 +858,7 @@ paths:
       tags: [SerpIntelligence]
       operationId: serpIntelligencePageSnapshots
       summary: Fetch and archive full-content snapshots (HTML/text/markdown/screenshot) of specific URLs
-      description: Costs 0.1 credit per URL (max 25 per call). Rate-limited to 60 requests/minute per account.
+      description: Costs 1 credit per URL (max 25 per call). Rate-limited to 60 requests/minute per account.
       requestBody:
         required: true
         content:
@@ -1066,7 +1066,7 @@ paths:
       operationId: callMemoryTool
       summary: Call one memory.mcpscraper.dev tool by name, using this account's mcpscraper.dev API key
       description: |
-        Generic dispatch: names one of the 86 tools documented in this repo's
+        Generic dispatch: names one of the 87 tools documented in this repo's
         `contracts/memory.tools.json` and forwards `args` to it, using a memory identity
         auto-provisioned for the calling mcpscraper.dev account. The response shape depends
         entirely on which tool was called — see that tool's `outputSchema` in the manifest.
