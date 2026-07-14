@@ -40,6 +40,29 @@ export interface ScraperClientOptions {
   fetch?: typeof globalThis.fetch
 }
 
+type SerpIntelligenceCaptureDefaultedKey =
+  | 'gl'
+  | 'hl'
+  | 'device'
+  | 'proxyMode'
+  | 'pages'
+  | 'debug'
+  | 'includePageSnapshots'
+  | 'pageSnapshotLimit'
+
+export type SerpIntelligenceCaptureParams =
+  Omit<RequestBodyOf<'serpIntelligenceCapture'>, SerpIntelligenceCaptureDefaultedKey>
+  & Partial<Pick<RequestBodyOf<'serpIntelligenceCapture'>, SerpIntelligenceCaptureDefaultedKey>>
+
+export interface SerpIntelligenceCaptureOptions {
+  idempotencyKey?: string
+}
+
+export interface SerpIntelligenceCaptureReceipt {
+  data: SuccessBodyOf<'serpIntelligenceCapture'>
+  idempotencyKey: string | null
+}
+
 class Requester {
   constructor(
     private readonly apiKey: string,
@@ -51,18 +74,29 @@ class Requester {
     method: string,
     path: string,
     body?: RequestBodyOf<K>,
+    extraHeaders: Record<string, string> = {},
   ): Promise<SuccessBodyOf<K>> {
+    return (await this.callWithReceipt<K>(method, path, body, extraHeaders)).data
+  }
+
+  async callWithReceipt<K extends OperationId>(
+    method: string,
+    path: string,
+    body?: RequestBodyOf<K>,
+    extraHeaders: Record<string, string> = {},
+  ): Promise<{ data: SuccessBodyOf<K>; headers: Headers }> {
     const res = await this.fetchImpl(`${this.baseUrl}${path}`, {
       method,
       headers: {
         'x-api-key': this.apiKey,
         ...(body !== undefined ? { 'content-type': 'application/json' } : {}),
+        ...extraHeaders,
       },
       body: body !== undefined ? JSON.stringify(body) : undefined,
     })
     const data = await res.json().catch(() => undefined)
     if (!res.ok) throw new ScraperApiError(res.status, data)
-    return data as SuccessBodyOf<K>
+    return { data: data as SuccessBodyOf<K>, headers: res.headers }
   }
 
   async callRaw(method: string, path: string): Promise<ArrayBuffer> {
@@ -173,8 +207,28 @@ class DirectoryNamespace {
 
 class SerpIntelligenceNamespace {
   constructor(private readonly r: Requester) {}
-  capture(params: RequestBodyOf<'serpIntelligenceCapture'>) {
-    return this.r.call<'serpIntelligenceCapture'>('POST', '/serp-intelligence/capture', params)
+  capture(params: SerpIntelligenceCaptureParams, options: SerpIntelligenceCaptureOptions = {}) {
+    return this.r.call<'serpIntelligenceCapture'>(
+      'POST',
+      '/serp-intelligence/capture',
+      params as RequestBodyOf<'serpIntelligenceCapture'>,
+      options.idempotencyKey === undefined ? {} : { 'Idempotency-Key': options.idempotencyKey },
+    )
+  }
+  async captureWithReceipt(
+    params: SerpIntelligenceCaptureParams,
+    options: SerpIntelligenceCaptureOptions = {},
+  ): Promise<SerpIntelligenceCaptureReceipt> {
+    const result = await this.r.callWithReceipt<'serpIntelligenceCapture'>(
+      'POST',
+      '/serp-intelligence/capture',
+      params as RequestBodyOf<'serpIntelligenceCapture'>,
+      options.idempotencyKey === undefined ? {} : { 'Idempotency-Key': options.idempotencyKey },
+    )
+    return {
+      data: result.data,
+      idempotencyKey: result.headers.get('Idempotency-Key'),
+    }
   }
   pageSnapshots(params: RequestBodyOf<'serpIntelligencePageSnapshots'>) {
     return this.r.call<'serpIntelligencePageSnapshots'>('POST', '/serp-intelligence/page-snapshots', params)

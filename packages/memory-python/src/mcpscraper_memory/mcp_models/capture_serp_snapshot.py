@@ -14,8 +14,8 @@ class CaptureSerpSnapshotInput(BaseModel):
     proxy_zip: str | None = Field(None, alias="proxyZip", description="US ZIP for residential geo-IP targeting. Only meaningful with proxyMode \"location\".")
     pages: int | None = Field(None, alias="pages", description="Google result pages to capture. Use 2 only for deeper ranking evidence.")
     debug: bool | None = Field(None, alias="debug", description="Include sanitized browser/proxy/location diagnostics.")
-    include_page_snapshots: bool | None = Field(None, alias="includePageSnapshots", description="Also capture ranking-page snapshots for selected SERP URLs.")
-    page_snapshot_limit: int | None = Field(None, alias="pageSnapshotLimit", description="Maximum ranking-page snapshots when includePageSnapshots is true.")
+    include_page_snapshots: bool | None = Field(None, alias="includePageSnapshots", description="Also capture ranking-page snapshots for selected SERP URLs. Each attempted snapshot adds 1 Credit.")
+    page_snapshot_limit: int | None = Field(None, alias="pageSnapshotLimit", description="Maximum ranking-page snapshots when includePageSnapshots is true. This capacity is held up front and unused capacity is refunded.")
 
 
 class CaptureSerpSnapshotOutput(BaseModel):
@@ -27,8 +27,14 @@ class CaptureSerpSnapshotOutput(BaseModel):
     location: Any = Field(..., alias="location", description="")
     captured_at: Any = Field(..., alias="capturedAt", description="")
     result_count: Any = Field(..., alias="resultCount", description="")
+    organic_result_count: int = Field(..., alias="organicResultCount", description="")
+    local_pack_result_count: int = Field(..., alias="localPackResultCount", description="")
+    page_snapshot_count: int = Field(..., alias="pageSnapshotCount", description="")
+    page_snapshot_failed_count: int = Field(..., alias="pageSnapshotFailedCount", description="")
     snapshot_id: Any = Field(..., alias="snapshotId", description="")
     resolved_inputs: dict[str, Any] = Field(..., alias="resolvedInputs", description="")
     artifacts: list[dict[str, Any]] = Field(..., alias="artifacts", description="")
+    attempts: list[dict[str, Any]] = Field(..., alias="attempts", description="")
+    billing: Any = Field(..., alias="billing", description="")
     diagnostics: Any = Field(..., alias="diagnostics", description="")
     provider_payload: dict[str, Any] = Field(..., alias="providerPayload", description="")

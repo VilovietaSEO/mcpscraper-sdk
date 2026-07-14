@@ -1262,7 +1262,7 @@ export class ConnectionsNamespace {
 export class SerpIntelligenceNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
-  async pageSnapshots(input: SerpIntelligencePageSnapshots.Input): Promise<SerpIntelligencePageSnapshots.Output> {
+  async pageSnapshots(input: SerpIntelligencePageSnapshots.Input = {} as SerpIntelligencePageSnapshots.Input): Promise<SerpIntelligencePageSnapshots.Output> {
     return this.callTool('capture_serp_page_snapshots', input) as Promise<SerpIntelligencePageSnapshots.Output>
   }
 

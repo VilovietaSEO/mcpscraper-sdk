@@ -1,13 +1,13 @@
 export interface Input {
   /**
-   * Public HTTP/HTTPS URLs to capture. Do not pass localhost, private IPs, file URLs, or internal admin URLs.
+   * Public HTTP/HTTPS URLs to capture. Provide exactly one of urls or targets. Do not pass localhost, private IPs, file URLs, or internal admin URLs.
    *
    * @minItems 1
    * @maxItems 25
    */
-  urls: [string, ...string[]];
+  urls?: [string, ...string[]];
   /**
-   * Structured targets. Use instead of urls when source kind or position should be preserved.
+   * Structured targets. Provide exactly one of targets or urls; use targets when source kind or position should be preserved.
    *
    * @minItems 1
    * @maxItems 25
@@ -60,8 +60,13 @@ export interface Output {
   schemaVersion: "serp-intelligence.page-snapshots.v1";
   status: string;
   count: number;
+  capturedCount: number;
   failedCount: number;
+  skippedCount: number;
   captures: {
+    [k: string]: unknown;
+  }[];
+  attempts: {
     [k: string]: unknown;
   }[];
   resolvedInputs: {

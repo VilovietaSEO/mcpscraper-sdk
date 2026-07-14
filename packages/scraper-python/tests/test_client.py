@@ -150,6 +150,39 @@ def test_namespaced_methods_hit_the_right_path():
 
 
 @responses.activate
+def test_serp_capture_sends_retry_key_and_returns_receipt():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/serp-intelligence/capture",
+        json={"billing": {"creditsUsed": 4}},
+        headers={"Idempotency-Key": "accepted-serp-key"},
+        status=200,
+    )
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/serp-intelligence/capture",
+        json={"billing": {"creditsUsed": 4}},
+        headers={"Idempotency-Key": "generated-serp-key"},
+        status=200,
+    )
+    client = ScraperClient(api_key="sk_test")
+
+    client.serp_intelligence.capture(
+        {"query": "roofers near me"}, idempotency_key="caller-serp-key"
+    )
+    receipt = client.serp_intelligence.capture_with_receipt(
+        {"query": "roofers near me"}
+    )
+
+    assert responses.calls[0].request.headers["Idempotency-Key"] == "caller-serp-key"
+    assert "Idempotency-Key" not in responses.calls[1].request.headers
+    assert receipt == {
+        "data": {"billing": {"creditsUsed": 4}},
+        "idempotency_key": "generated-serp-key",
+    }
+
+
+@responses.activate
 def test_extract_url_with_deposit_to_vault_returns_memory_field():
     responses.add(
         responses.POST,

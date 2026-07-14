@@ -36,11 +36,11 @@ export interface Input {
    */
   debug?: boolean;
   /**
-   * Also capture ranking-page snapshots for selected SERP URLs.
+   * Also capture ranking-page snapshots for selected SERP URLs. Each attempted snapshot adds 1 Credit.
    */
   includePageSnapshots?: boolean;
   /**
-   * Maximum ranking-page snapshots when includePageSnapshots is true.
+   * Maximum ranking-page snapshots when includePageSnapshots is true. This capacity is held up front and unused capacity is refunded.
    */
   pageSnapshotLimit?: number;
 }
@@ -52,6 +52,10 @@ export interface Output {
   location: string | null;
   capturedAt: string | null;
   resultCount: number | null;
+  organicResultCount: number;
+  localPackResultCount: number;
+  pageSnapshotCount: number;
+  pageSnapshotFailedCount: number;
   snapshotId: string | null;
   resolvedInputs: {
     [k: string]: unknown;
@@ -59,6 +63,14 @@ export interface Output {
   artifacts: {
     [k: string]: unknown;
   }[];
+  attempts: {
+    [k: string]: unknown;
+  }[];
+  billing: {
+    creditsUsed: number | null;
+    requestId: string | null;
+    jobId: string | null;
+  } | null;
   diagnostics: {
     [k: string]: unknown;
   } | null;

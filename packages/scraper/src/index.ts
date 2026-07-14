@@ -1,5 +1,10 @@
 export { ScraperClient } from './client.js'
-export type { ScraperClientOptions } from './client.js'
+export type {
+  ScraperClientOptions,
+  SerpIntelligenceCaptureParams,
+  SerpIntelligenceCaptureOptions,
+  SerpIntelligenceCaptureReceipt,
+} from './client.js'
 export { ScraperApiError } from './errors.js'
 export type { InsufficientBalanceBody, ConcurrencyLimitBody, StructuredErrorBody } from './errors.js'
 export type { components, operations, paths } from './schema.js'

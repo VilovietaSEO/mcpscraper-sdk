@@ -3,10 +3,10 @@ import assert from 'node:assert/strict'
 import { ScraperClient } from '../src/client.js'
 import { ScraperApiError } from '../src/errors.js'
 
-function jsonResponse(status: number, body: unknown): Response {
+function jsonResponse(status: number, body: unknown, headers: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', ...headers },
   })
 }
 
@@ -119,6 +119,26 @@ test('namespaced methods hit the right path', async () => {
 
   await client.workflows.getRun('run_123')
   assert.equal(capturedUrl, 'https://mcpscraper.dev/workflows/runs/run_123')
+})
+
+test('SERP capture sends a retry key and captureWithReceipt returns the accepted key', async () => {
+  const capturedHeaders: Array<Record<string, string>> = []
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    capturedHeaders.push(init?.headers as Record<string, string>)
+    return jsonResponse(200, { billing: { creditsUsed: 4 } }, { 'Idempotency-Key': 'accepted-serp-key' })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+
+  await client.serpIntelligence.capture(
+    { query: 'roofers near me' },
+    { idempotencyKey: 'caller-serp-key' },
+  )
+  const receipt = await client.serpIntelligence.captureWithReceipt({ query: 'roofers near me' })
+
+  assert.equal(capturedHeaders[0]['Idempotency-Key'], 'caller-serp-key')
+  assert.equal('Idempotency-Key' in capturedHeaders[1], false)
+  assert.deepEqual(receipt.data, { billing: { creditsUsed: 4 } })
+  assert.equal(receipt.idempotencyKey, 'accepted-serp-key')
 })
 
 test('extractUrl with depositToVault returns a memory field', async () => {

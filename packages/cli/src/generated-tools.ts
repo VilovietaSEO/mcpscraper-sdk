@@ -1780,7 +1780,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "capture_serp_page_snapshots",
     "category": "serpIntelligence",
     "title": "SERP Intelligence Page Snapshots",
-    "description": "Capture public ranking pages as SERP Intelligence page snapshots — persistent page evidence linked to a captured SERP. Provide urls, or targets to preserve source metadata. Private IPs, localhost, file, and internal URLs are rejected.",
+    "description": "Capture public ranking pages as SERP Intelligence page snapshots — persistent page evidence linked to a captured SERP. Provide exactly one of urls or targets; use targets to preserve source metadata. Private IPs, localhost, file, and internal URLs are rejected. Costs 1 Credit per attempted URL.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1792,7 +1792,7 @@ export const MCP_TOOL_CATALOG = [
           },
           "minItems": 1,
           "maxItems": 25,
-          "description": "Public HTTP/HTTPS URLs to capture. Do not pass localhost, private IPs, file URLs, or internal admin URLs."
+          "description": "Public HTTP/HTTPS URLs to capture. Provide exactly one of urls or targets. Do not pass localhost, private IPs, file URLs, or internal admin URLs."
         },
         "targets": {
           "type": "array",
@@ -1829,7 +1829,7 @@ export const MCP_TOOL_CATALOG = [
           },
           "minItems": 1,
           "maxItems": 25,
-          "description": "Structured targets. Use instead of urls when source kind or position should be preserved."
+          "description": "Structured targets. Provide exactly one of targets or urls; use targets when source kind or position should be preserved."
         },
         "maxConcurrency": {
           "type": "integer",
@@ -1851,9 +1851,6 @@ export const MCP_TOOL_CATALOG = [
           "description": "Include sanitized browser/proxy diagnostics."
         }
       },
-      "required": [
-        "urls"
-      ],
       "additionalProperties": false,
       "$schema": "http://json-schema.org/draft-07/schema#"
     },
@@ -1869,7 +1866,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "capture_serp_snapshot",
     "category": "serpIntelligence",
     "title": "SERP Intelligence Snapshot",
-    "description": "Capture a structured SERP Intelligence snapshot of a Google query — the persistent evidence format used by rank-tracking and comparison pipelines. Split query from location; leave proxyMode unset.",
+    "description": "Capture a structured SERP Intelligence snapshot of a Google query — the persistent evidence format used by rank-tracking and comparison pipelines. Split query from location; leave proxyMode unset. Costs 4 Credits when headless or 14 if anti-bot escalation requires headful mode; the 14-Credit hold is settled to the mode used. Optional page snapshots add 1 Credit per attempted URL.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1933,14 +1930,14 @@ export const MCP_TOOL_CATALOG = [
         "includePageSnapshots": {
           "type": "boolean",
           "default": false,
-          "description": "Also capture ranking-page snapshots for selected SERP URLs."
+          "description": "Also capture ranking-page snapshots for selected SERP URLs. Each attempted snapshot adds 1 Credit."
         },
         "pageSnapshotLimit": {
           "type": "integer",
           "minimum": 0,
           "maximum": 10,
           "default": 0,
-          "description": "Maximum ranking-page snapshots when includePageSnapshots is true."
+          "description": "Maximum ranking-page snapshots when includePageSnapshots is true. This capacity is held up front and unused capacity is refunded."
         }
       },
       "required": [

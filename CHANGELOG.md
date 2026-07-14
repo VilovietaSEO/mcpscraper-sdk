@@ -5,6 +5,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.11.4 / mcpscraper-sdk 0.12.4 / mcpscraper-cli 0.9.3
+- Regenerated the unified Node, Python-source, CLI, and cURL bindings from MCP Scraper 0.21.4's rich 159-tool manifest while preserving complete input and output schemas for SDK consumers.
+- Added retry-safe Node and Python convenience methods for `POST /serp-intelligence/capture`: optional `idempotencyKey` / `idempotency_key` inputs plus `captureWithReceipt` / `capture_with_receipt` methods that expose the server-accepted key. The OpenAPI contract now documents the request/response headers and `409 idempotency_conflict` response.
+- Corrected the capture response billing contract so `billing.creditsUsed` is required and removed body-only request/job identifiers that the endpoint does not return.
+- Corrected page-snapshot inputs so callers must provide exactly one of `urls` or structured `targets`; structured targets now require a URL and reject unknown fields.
+- Corrected `POST /serp-intelligence/capture` billing documentation: the service holds 14 Credits and settles to 4 for headless execution or 14 for headful escalation.
+- Documented optional embedded page snapshots at 1 Credit per attempted URL, with requested capacity held up front and unused capacity refunded.
+
 ## mcpscraper-sdk 0.12.3
 - Updated `POST /harvest/sync`'s `serpOnly` description to match MCP Scraper 0.21.3's adaptive SERP pricing: 4 credits when served headless (typical), 14 credits if a CAPTCHA/block forces a headful retry (overestimate refunded). No shape change — description-only.
 

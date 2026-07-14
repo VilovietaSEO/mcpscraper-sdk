@@ -6,7 +6,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any
 
-from pydantic import AnyUrl, AwareDatetime, BaseModel, ConfigDict, Field
+from pydantic import AnyUrl, AwareDatetime, BaseModel, ConfigDict, Field, RootModel
 
 
 class Error(BaseModel):
@@ -219,6 +219,7 @@ class Format(Enum):
     json = 'json'
     images = 'images'
     branding = 'branding'
+    issues = 'issues'
 
 
 class ExtractSiteRequest(BaseModel):
@@ -227,11 +228,154 @@ class ExtractSiteRequest(BaseModel):
     background: bool | None = Field(
         False, description='Enqueue an async crawl instead of waiting inline.'
     )
+    downloadImages: bool | None = Field(
+        False,
+        description="Download every discovered image as a real file into the background job's bundle.zip (under images/<page>/), not just image URLs/stats. OFF by default. Implies background regardless of the background flag — too slow to run inline. Capped at 20 images/page and 500 images/site.",
+    )
     rotateProxies: bool | None = False
     rotateProxyEvery: int | None = Field(30, ge=1, le=100)
     browserFallback: bool | None = False
     kernelFallback: bool | None = False
-    formats: list[Format] | None = None
+    formats: list[Format] | None = Field(
+        None,
+        description='Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and\nreturns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).\n`images` performs the image audit and returns `imageAudit` — on the synchronous\npath too, not just background jobs.\n',
+    )
+
+
+class Page(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    inSitemap: bool | None = Field(
+        None,
+        description="Whether this page's URL appears in the site's sitemap(s); null when no sitemap was found.",
+    )
+
+
+class Spider(BaseModel):
+    """
+    Crawl/URL-discovery metadata.
+    """
+
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    sitemapUrls: list[str] | None = Field(
+        None, description='Sitemap URLs discovered and parsed during the crawl.'
+    )
+
+
+class Issues(BaseModel):
+    count: int
+    urls: list[str]
+
+
+class Distribution(BaseModel):
+    zero: int | None = None
+    oneToTwo: int | None = None
+    threeToTen: int | None = None
+    elevenPlus: int | None = None
+
+
+class TopByInlink(BaseModel):
+    url: str | None = None
+    inlinks: int | None = None
+    outlinksInternal: int | None = None
+    outlinksExternal: int | None = None
+
+
+class Internal(BaseModel):
+    totalLinks: int | None = None
+    pages: int | None = None
+    orphans: int | None = None
+    brokenInternal: int | None = None
+    avgInlinks: float | None = None
+    avgOutlinks: float | None = None
+    distribution: Distribution | None = None
+    topByInlinks: list[TopByInlink] | None = None
+
+
+class TopDomain(BaseModel):
+    domain: str | None = None
+    links: int | None = None
+    nofollow: int | None = None
+    pages: int | None = None
+
+
+class External(BaseModel):
+    totalLinks: int | None = None
+    uniqueDomains: int | None = None
+    topDomains: list[TopDomain] | None = None
+
+
+class LinkSummary(BaseModel):
+    internal: Internal | None = None
+    external: External | None = None
+
+
+class PageMetric(BaseModel):
+    url: str | None = None
+    inboundInternal: int | None = None
+    outboundInternal: int | None = None
+    orphan: bool | None = None
+
+
+class SeoAudit(BaseModel):
+    """
+    Site-wide SEO audit. Present (non-null) only when `formats` includes `issues`.
+    """
+
+    issues: dict[str, Issues] | None = Field(
+        None,
+        description='Map of issue key → occurrence detail. The 31 issue keys: title.missing,\ntitle.duplicate, title.tooLong, title.tooShort, title.sameAsH1, meta.missing,\nmeta.duplicate, meta.tooLong, meta.tooShort, h1.missing, h1.multiple,\nh1.duplicate, h1.tooLong, h2.missing, indexability.nonIndexable,\nindexability.noindex, canonical.missing, canonical.canonicalised,\nresponse.broken4xx, response.error5xx, response.redirect3xx,\nresponse.noResponse, content.thin, content.exactDuplicate, images.missingAlt,\nschema.missing, url.tooLong, url.uppercase, url.underscores, links.orphan,\nlinks.brokenInternal.\n',
+    )
+    linkSummary: LinkSummary | None = None
+    pageMetrics: list[PageMetric] | None = None
+
+
+class Row(BaseModel):
+    url: str | None = None
+    status: int | None = Field(
+        None,
+        description='HTTP status returned when probing the image; null when the probe failed.',
+    )
+    bytes: int | None = None
+    size: str | None = Field(None, description='Human-readable size, e.g. "1.2 MB".')
+    contentType: str | None = None
+    format: str | None = Field(
+        None, description='Detected image format; "unknown" when undetectable.'
+    )
+    over100kb: bool | None = None
+    legacyFormat: bool | None = None
+    error: str | None = Field(
+        None, description='Present when probing the image failed.'
+    )
+
+
+class Summary(BaseModel):
+    unique: int | None = None
+    sized: int | None = Field(None, description='How many rows have a known byte size.')
+    totalBytes: int | None = None
+    totalSize: str | None = Field(
+        None, description='Human-readable total, e.g. "4.5 MB".'
+    )
+    avgSize: str | None = None
+    over100kb: int | None = None
+    legacyFormat: int | None = None
+    formatCounts: dict[str, int] | None = Field(
+        None, description='Map of format → image count.'
+    )
+
+
+class ImageAudit(BaseModel):
+    """
+    Site-wide image audit. Present (non-null) only when `formats` includes `images` —
+    the synchronous path performs this audit too, not just background jobs.
+
+    """
+
+    rows: list[Row] | None = None
+    summary: Summary | None = None
 
 
 class ExtractSiteResponse(BaseModel):
@@ -242,7 +386,16 @@ class ExtractSiteResponse(BaseModel):
     model_config = ConfigDict(
         extra='allow',
     )
-    pages: list[dict[str, Any]] | None = None
+    pages: list[Page] | None = None
+    spider: Spider | None = Field(None, description='Crawl/URL-discovery metadata.')
+    seoAudit: SeoAudit | None = Field(
+        None,
+        description='Site-wide SEO audit. Present (non-null) only when `formats` includes `issues`.',
+    )
+    imageAudit: ImageAudit | None = Field(
+        None,
+        description='Site-wide image audit. Present (non-null) only when `formats` includes `images` —\nthe synchronous path performs this audit too, not just background jobs.\n',
+    )
 
 
 class Status1(Enum):
@@ -261,7 +414,10 @@ class ExtractSiteStatus(BaseModel):
     startUrl: str | None = None
     totalUrls: int | None = None
     doneUrls: int | None = None
-    artifacts: list[dict[str, Any]] | None = None
+    artifacts: list[dict[str, Any]] | None = Field(
+        None,
+        description='Produced files (name + MIME type). When the job requested formats including\n`issues`, this includes `seo-audit.json` (application/json — the same object as\nthe synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`. The\n`bundle.zip` entry is the full downloadable export — page Markdown under `pages/`,\nplus (when `downloadImages` was set) real image files under `images/<page>/` and an\n`images-download-summary.json` entry reporting queued/downloaded/failed counts.\n',
+    )
     error: str | None = None
     updatedAt: str | None = None
 
@@ -327,8 +483,25 @@ class SerpIntelligenceCaptureRequest(BaseModel):
     proxyZip: str | None = Field(None, pattern='^\\d{5}$')
     pages: int | None = Field(1, ge=1, le=2)
     debug: bool | None = False
-    includePageSnapshots: bool | None = False
-    pageSnapshotLimit: int | None = Field(0, ge=0, le=10)
+    includePageSnapshots: bool | None = Field(
+        False, description='Also attempt ranking-page snapshots at 1 credit per URL.'
+    )
+    pageSnapshotLimit: int | None = Field(
+        0,
+        description='Maximum snapshot attempts; capacity is held up front and unused capacity is refunded.',
+        ge=0,
+        le=10,
+    )
+
+
+class SerpIntelligencePageSnapshotsRequest1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    urls: list[AnyUrl] = Field(..., max_length=25, min_length=1)
+    maxConcurrency: int | None = Field(2, ge=1, le=5)
+    timeoutMs: int | None = Field(15000, ge=1000, le=60000)
+    debug: bool | None = False
 
 
 class SourceKind(Enum):
@@ -340,20 +513,30 @@ class SourceKind(Enum):
 
 
 class Target(BaseModel):
-    url: AnyUrl | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    url: AnyUrl
     sourceKind: SourceKind | None = 'configured_target'
     sourcePosition: int | None = Field(None, ge=1)
 
 
-class SerpIntelligencePageSnapshotsRequest(BaseModel):
+class SerpIntelligencePageSnapshotsRequest2(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    urls: list[AnyUrl] = Field(..., max_length=25, min_length=1)
-    targets: list[Target] | None = Field(None, max_length=25)
+    targets: list[Target] = Field(..., max_length=25, min_length=1)
     maxConcurrency: int | None = Field(2, ge=1, le=5)
     timeoutMs: int | None = Field(15000, ge=1000, le=60000)
     debug: bool | None = False
+
+
+class SerpIntelligencePageSnapshotsRequest(
+    RootModel[
+        SerpIntelligencePageSnapshotsRequest1 | SerpIntelligencePageSnapshotsRequest2
+    ]
+):
+    root: SerpIntelligencePageSnapshotsRequest1 | SerpIntelligencePageSnapshotsRequest2
 
 
 class InlineRating(BaseModel):
@@ -500,9 +683,10 @@ class SerpIntelligenceCaptureAttempt(BaseModel):
 
 
 class Billing(BaseModel):
-    creditsUsed: float | None = None
-    requestId: str | None = None
-    jobId: str | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    creditsUsed: float = Field(..., ge=0.0)
 
 
 class SerpIntelligenceCaptureResponse(BaseModel):
@@ -510,7 +694,7 @@ class SerpIntelligenceCaptureResponse(BaseModel):
     attempts: list[SerpIntelligenceCaptureAttempt] | None = None
     locationEvidence: dict[str, Any] | None = None
     pageSnapshotArtifacts: list[SerpPageSnapshotCapture] | None = None
-    billing: Billing | None = None
+    billing: Billing
 
 
 class SerpIntelligencePageSnapshotsResponse(BaseModel):

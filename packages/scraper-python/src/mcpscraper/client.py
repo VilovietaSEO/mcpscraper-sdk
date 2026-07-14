@@ -32,17 +32,40 @@ class _Requester:
         self._base_url = base_url.rstrip("/")
         self._session = session
 
-    def call(self, method: str, path: str, body: Optional[JsonDict] = None) -> Any:
-        headers = {"x-api-key": self._api_key}
+    def call(
+        self,
+        method: str,
+        path: str,
+        body: Optional[JsonDict] = None,
+        headers: Optional[dict[str, str]] = None,
+    ) -> Any:
+        data, _response = self.call_with_receipt(method, path, body, headers)
+        return data
+
+    def call_with_receipt(
+        self,
+        method: str,
+        path: str,
+        body: Optional[JsonDict] = None,
+        headers: Optional[dict[str, str]] = None,
+    ) -> tuple[Any, requests.Response]:
+        request_headers = {"x-api-key": self._api_key}
+        if headers:
+            request_headers.update(headers)
         payload = _camelize(body) if body is not None else None
-        response = self._session.request(method, f"{self._base_url}{path}", json=payload, headers=headers)
+        response = self._session.request(
+            method,
+            f"{self._base_url}{path}",
+            json=payload,
+            headers=request_headers,
+        )
         try:
             data = response.json()
         except ValueError:
             data = None
         if not response.ok:
             raise ScraperApiError(response.status_code, data)
-        return data
+        return data, response
 
     def call_raw(self, method: str, path: str) -> bytes:
         headers = {"x-api-key": self._api_key}
@@ -165,8 +188,29 @@ class SerpIntelligenceNamespace:
     def __init__(self, r: _Requester) -> None:
         self._r = r
 
-    def capture(self, params: JsonDict) -> Any:
-        return self._r.call("POST", "/serp-intelligence/capture", params)
+    def capture(
+        self,
+        params: JsonDict,
+        *,
+        idempotency_key: str | None = None,
+    ) -> Any:
+        headers = {} if idempotency_key is None else {"Idempotency-Key": idempotency_key}
+        return self._r.call("POST", "/serp-intelligence/capture", params, headers)
+
+    def capture_with_receipt(
+        self,
+        params: JsonDict,
+        *,
+        idempotency_key: str | None = None,
+    ) -> JsonDict:
+        headers = {} if idempotency_key is None else {"Idempotency-Key": idempotency_key}
+        data, response = self._r.call_with_receipt(
+            "POST", "/serp-intelligence/capture", params, headers
+        )
+        return {
+            "data": data,
+            "idempotency_key": response.headers.get("Idempotency-Key"),
+        }
 
     def page_snapshots(self, params: JsonDict) -> Any:
         return self._r.call("POST", "/serp-intelligence/page-snapshots", params)
