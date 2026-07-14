@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-sdk",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "description": "Official Node.js client for all 159 mcpscraper.dev MCP tools and the REST API",
   "license": "MIT",
   "type": "module",

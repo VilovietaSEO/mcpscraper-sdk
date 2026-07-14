@@ -5,6 +5,9 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-sdk 0.12.3
+- Updated `POST /harvest/sync`'s `serpOnly` description to match MCP Scraper 0.21.3's adaptive SERP pricing: 4 credits when served headless (typical), 14 credits if a CAPTCHA/block forces a headful retry (overestimate refunded). No shape change — description-only.
+
 ## mcpscraper-memory-sdk 0.11.3 / mcpscraper-sdk 0.12.2 / Python SDKs 0.9.2 / mcpscraper-cli 0.9.2
 - Regenerated the direct Memory and unified 159-tool Node, Python, CLI, and cURL bindings against mcp-memory 1.9.1 and MCP Scraper 0.21.2.
 - Added current paid-plan scheduling access and machine-readable denial fields to the generated scheduled-action models while retaining the shared 75-Credit base charge and 1.5-times OpenRouter agent-usage policy.

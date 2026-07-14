@@ -23,7 +23,7 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 
 | Feature | What it does | REST endpoint | Cost |
 |---|---|---|---|
-| [Search](#search) | Google SERP + optional full People-Also-Ask harvest | `POST /harvest/sync` | 1 credit |
+| [Search](#search) | Google SERP + optional full People-Also-Ask harvest | `POST /harvest/sync` | 4 credits (14 if headful anti-bot retry) |
 | [Scrape](#scrape) | One page → markdown/HTML/headings, optional screenshot, optional deposit into your memory vault | `POST /extract-url` | 1 credit |
 | [Crawl](#crawl) | Every page of a site, one call | `POST /extract-site` | 1 credit/page |
 | [Map](#map) | Discover a site's full URL inventory | `POST /map-urls` | 5 credits flat |

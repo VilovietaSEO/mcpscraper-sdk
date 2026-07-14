@@ -15,8 +15,9 @@ export interface paths {
         put?: never;
         /**
          * Run a Google SERP search, or a full People-Also-Ask harvest
-         * @description Set `serpOnly: true` for a pure organic-results/SERP call (1 credit). Omit or
-         *     set `false` for a full People-Also-Ask harvest, which also returns SERP data
+         * @description Set `serpOnly: true` for a pure organic-results/SERP call (4 credits, headless —
+         *     14 credits if an anti-bot escalation forces a headful retry; overestimate refunded).
+         *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
          *     (55 credit base + 3 credits per question actually returned; unused estimate is
          *     refunded). Runs synchronously and returns the result inline.
          */
