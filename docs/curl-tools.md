@@ -31,7 +31,7 @@ jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
 
 ## Bulk connected-data export
 
-Fetch a bounded Gmail, Google Calendar, Zoom, Meta Marketing, or Resend range in one call. Provider pagination happens server-side; large results become private downloadable artifacts. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus sent mail, received mail, logs, contacts, broadcasts, and templates individually.
+Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Marketing, or Resend range in one call. Provider pagination happens server-side; large results become private downloadable artifacts. Search Console supports `search_console_performance` across every accessible property. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus sent mail, received mail, logs, contacts, broadcasts, and templates individually.
 
 ```bash
 jq -n --arg connectionId "$CONNECTION_ID" \
@@ -42,6 +42,8 @@ jq -n --arg connectionId "$CONNECTION_ID" \
       -H "accept: application/json, text/event-stream" \
       --data-binary @-
 ```
+
+Search Console performance uses the same export contract: set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`.
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 

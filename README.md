@@ -331,7 +331,7 @@ The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available 
 
 ## Bulk connected-data exports
 
-Fetch a bounded Gmail, Google Calendar, Zoom, Meta Marketing, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
+Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Marketing, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. Search Console supports `search_console_performance` across every accessible property and uses the same contract for immediate, scheduled, or private Memory delivery. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
 
 ```ts
 const result = await client.tools.connections.exportConnectedServiceData({
@@ -354,6 +354,12 @@ const meta = await client.tools.connections.exportConnectedServiceData({
   dataset: 'meta_ads_insights',
   lastDays: 30,
   delivery: 'artifact',
+})
+
+const searchConsole = await client.tools.connections.exportConnectedServiceData({
+  connectionId: 'gsc_conn_123',
+  dataset: 'search_console_performance',
+  lastDays: 28,
 })
 ```
 
@@ -378,6 +384,12 @@ meta = client.tools.connections.export_connected_service_data(
     dataset="meta_ads_insights",
     last_days=30,
     delivery="artifact",
+)
+
+search_console = client.tools.connections.export_connected_service_data(
+    connection_id="gsc_conn_123",
+    dataset="search_console_performance",
+    last_days=28,
 )
 ```
 
