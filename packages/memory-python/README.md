@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk (Python)
 
-Official Python clients for all 159 unified [mcpscraper.dev](https://mcpscraper.dev) MCP tools plus the direct 87-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official Python clients for all 160 unified [mcpscraper.dev](https://mcpscraper.dev) MCP tools plus the direct 87-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 This is a thin JSON-RPC client generated against [`../../contracts/memory.tools.json`](../../contracts/memory.tools.json), the public contract for the hosted API. It contains no product source — only typed request/response plumbing.
 
@@ -29,7 +29,7 @@ except MemoryApiError as err:
 
 `client.access`, `client.capture`, `client.channels`, `client.facts`, `client.library`, `client.memory`, `client.recall`, `client.schedule`, `client.storage`, `client.tables`, `client.vaults`, `client.video`, `client.webhooks` — one method per tool, snake_case, typed with generated Pydantic models.
 
-Use `McpToolsClient(api_key="sk_...")` for all 159 unified tools (72 MCP Scraper plus 87 mirrored memory tools); it has the same generated namespaces as every other SDK package. Bulk Gmail, Calendar, Zoom, Meta Marketing, and Resend exports are available through `client.connections.export_connected_service_data(...)`; select `meta_ads_insights` for daily account/campaign/ad-set/ad reporting or `resend_data` for the Resend aggregate, and renew expired artifact URLs with `client.connections.renew_connected_data_download(artifact_id="artifact_123")`.
+Use `McpToolsClient(api_key="sk_...")` for all 160 unified tools (73 MCP Scraper plus 87 mirrored memory tools); it has the same generated namespaces as every other SDK package. Bulk Gmail, Calendar, Zoom, Meta Marketing, and Resend exports are available through `client.connections.export_connected_service_data(...)`; select `meta_ads_insights` for daily account/campaign/ad-set/ad reporting or `resend_data` for the Resend aggregate, and renew expired artifact URLs with `client.connections.renew_connected_data_download(artifact_id="artifact_123")`.
 
 Use `client.call_tool_result(name, args)` for native MCP image, audio, or resource blocks. The existing `call_tool` method keeps returning the parsed structured/text value.
 

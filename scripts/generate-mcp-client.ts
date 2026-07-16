@@ -71,7 +71,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
   ].join('\n'))
 
   return [
-    '# All 159 MCP tools with cURL',
+    '# All 160 MCP tools with cURL',
     '',
     'This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.',
     '',
@@ -97,7 +97,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
     `jq -n --arg connectionId "$CONNECTION_ID" \\\n  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \\\n  | curl https://mcpscraper.dev/mcp \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n      -H "content-type: application/json" \\\n      -H "accept: application/json, text/event-stream" \\\n      --data-binary @-`,
     '```',
     '',
-    'Search Console performance uses the same export contract: set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`.',
+    'For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For persisted scheduled data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.',
     '',
     'If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.',
     '',
@@ -109,8 +109,8 @@ function renderCurlDocs(tools: ToolEntry[]): string {
 
 async function main(): Promise<void> {
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as Manifest
-  if (manifest.toolCount !== 159 || manifest.tools.length !== 159) {
-    throw new Error(`Unified manifest must contain exactly 159 tools; received ${manifest.tools.length}`)
+  if (manifest.toolCount !== 160 || manifest.tools.length !== 160) {
+    throw new Error(`Unified manifest must contain exactly 160 tools; received ${manifest.tools.length}`)
   }
 
   await rm(OUT_DIR, { recursive: true, force: true })

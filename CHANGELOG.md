@@ -5,6 +5,11 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.13.0 / mcpscraper-sdk 0.14.0 / Python SDKs 0.11.0 / mcpscraper-cli 0.11.0
+- Regenerated the complete 160-tool Node, Python, CLI, and cURL surfaces against MCP Scraper 0.23.0.
+- Added typed `connections.exportSearchConsoleTableData` / `connections.export_search_console_table_data` methods for private, server-filtered JSONL downloads from scheduled Search Console tables.
+- Documented the AI-safe workflow distinction: live API export for fresh data, `connection_sync` for scheduling, `tableName` plus table tools for persisted filtering, and the new export method for downloading filtered stored rows.
+
 ## mcpscraper-memory-sdk 0.12.0 / mcpscraper-sdk 0.13.0 / Python SDKs 0.10.0 / mcpscraper-cli 0.10.0
 - Added `search_console_performance` to the generated Node, Python, and CLI connected-data export input, continuation, and output enums.
 - Regenerated the rich 159-tool unified contract from MCP Scraper 0.21.5 without dropping output schemas.

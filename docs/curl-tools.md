@@ -1,4 +1,4 @@
-# All 159 MCP tools with cURL
+# All 160 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -43,11 +43,11 @@ jq -n --arg connectionId "$CONNECTION_ID" \
       --data-binary @-
 ```
 
-Search Console performance uses the same export contract: set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`.
+For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For persisted scheduled data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (159)
+## Complete catalog (160)
 
 ## access
 
@@ -123,6 +123,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `call_service_connection_action` — Run Connected Service Action
 - `describe_service_connection_tool` — Describe Connected Service Tool
 - `export_connected_service_data` — Export Connected Service Data
+- `export_search_console_table_data` — Download Filtered Search Console Table Data
 - `gmail_send_message` — Send Gmail Message
 - `google_calendar_create_event` — Create Calendar Event
 - `import_service_connection_to_memory` — Import Connected Service Snapshot to Memory
