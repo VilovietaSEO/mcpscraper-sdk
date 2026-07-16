@@ -12,7 +12,7 @@ export interface Input {
    */
   cadence: "once" | "daily" | "weekly" | "monthly";
   /**
-   * How to execute each run. "agent" (default) lets an agent follow the description. "connection_sync" deterministically ingests data from the schedule's bound connections using only their approved read-only tools; bind at least one connection before it runs.
+   * How to execute each run. "agent" (default) lets an agent follow the description. "connection_sync" deterministically ingests data from the schedule's bound connections using only their approved read-only tools; bind at least one connection before it runs. Search Console connection_sync also maintains a typed table exposed as the connection tableName.
    */
   executionMode?: "agent" | "connection_sync";
   /**

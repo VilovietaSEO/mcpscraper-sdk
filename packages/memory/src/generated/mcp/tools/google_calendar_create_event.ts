@@ -12,9 +12,9 @@ export interface Input {
    */
   summary: string;
   /**
-   * Event description.
+   * Required event context. Include the purpose or agenda supplied by the user and the Zoom join link when one was created.
    */
-  description?: string;
+  description: string;
   /**
    * Event location.
    */
@@ -31,6 +31,21 @@ export interface Input {
    * IANA timezone, e.g. "America/Denver". Applies to both start and end.
    */
   timeZone?: string;
+  /**
+   * Required attendee list. Include every person the user asked to invite; use an empty array only when no invitee was identified.
+   *
+   * @maxItems 100
+   */
+  attendees: {
+    /**
+     * Invitee email address.
+     */
+    email: string;
+    /**
+     * Invitee name when known.
+     */
+    displayName?: string;
+  }[];
 }
 
 export interface Output {

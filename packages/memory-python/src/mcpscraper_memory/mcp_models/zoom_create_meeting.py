@@ -10,7 +10,7 @@ class ZoomCreateMeetingInput(BaseModel):
     start_date_time: str = Field(..., alias="startDateTime", description="Start time, ISO 8601, e.g. \"2026-07-15T09:00:00-06:00\".")
     duration_minutes: int | None = Field(None, alias="durationMinutes", description="Meeting duration in minutes. Default 30.")
     timezone: str | None = Field(None, alias="timezone", description="IANA timezone, e.g. \"America/Denver\".")
-    agenda: str | None = Field(None, alias="agenda", description="Meeting description/agenda.")
+    agenda: str = Field(..., alias="agenda", description="Required meeting description or agenda. Preserve the purpose and context supplied by the user.")
 
 
 class ZoomCreateMeetingOutput(BaseModel):

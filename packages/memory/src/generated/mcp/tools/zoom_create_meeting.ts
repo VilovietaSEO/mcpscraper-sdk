@@ -20,9 +20,9 @@ export interface Input {
    */
   timezone?: string;
   /**
-   * Meeting description/agenda.
+   * Required meeting description or agenda. Preserve the purpose and context supplied by the user.
    */
-  agenda?: string;
+  agenda: string;
 }
 
 export interface Output {

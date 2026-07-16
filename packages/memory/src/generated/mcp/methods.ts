@@ -60,6 +60,7 @@ import * as BrowserType from './tools/browser_type.js'
 import * as ConnectionsCallServiceConnectionAction from './tools/call_service_connection_action.js'
 import * as ConnectionsDescribeServiceConnectionTool from './tools/describe_service_connection_tool.js'
 import * as ConnectionsExportConnectedServiceData from './tools/export_connected_service_data.js'
+import * as ConnectionsExportSearchConsoleTableData from './tools/export_search_console_table_data.js'
 import * as ConnectionsGmailSendMessage from './tools/gmail_send_message.js'
 import * as ConnectionsGoogleCalendarCreateEvent from './tools/google_calendar_create_event.js'
 import * as ConnectionsImportServiceConnectionToMemory from './tools/import_service_connection_to_memory.js'
@@ -455,6 +456,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "export_connected_service_data",
     "category": "connections",
     "methodName": "exportConnectedServiceData"
+  },
+  {
+    "name": "export_search_console_table_data",
+    "category": "connections",
+    "methodName": "exportSearchConsoleTableData"
   },
   {
     "name": "extract_site",
@@ -1216,6 +1222,10 @@ export class ConnectionsNamespace {
 
   async exportConnectedServiceData(input: ConnectionsExportConnectedServiceData.Input): Promise<ConnectionsExportConnectedServiceData.Output> {
     return this.callTool('export_connected_service_data', input) as Promise<ConnectionsExportConnectedServiceData.Output>
+  }
+
+  async exportSearchConsoleTableData(input: ConnectionsExportSearchConsoleTableData.Input): Promise<ConnectionsExportSearchConsoleTableData.Output> {
+    return this.callTool('export_search_console_table_data', input) as Promise<ConnectionsExportSearchConsoleTableData.Output>
   }
 
   async gmailSendMessage(input: ConnectionsGmailSendMessage.Input): Promise<ConnectionsGmailSendMessage.Output> {

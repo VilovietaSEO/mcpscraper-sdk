@@ -2,7 +2,7 @@
 
 Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 87 tools).
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **159 unified MCP tools** — 72 MCP Scraper tools plus 87 mirrored memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **160 unified MCP tools** — 73 MCP Scraper tools plus 87 mirrored memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Install
 
@@ -327,11 +327,11 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 159 unified tools in both Node and Python, including all 87 memory tools.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 160 unified tools in both Node and Python, including all 87 memory tools.
 
 ## Bulk connected-data exports
 
-Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Marketing, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. Search Console supports `search_console_performance` across every accessible property and uses the same contract for immediate, scheduled, or private Memory delivery. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
+Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Marketing, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. For Search Console, use `exportConnectedServiceData` for a fresh live API extract. A scheduled `connection_sync` also maintains a typed `gsc_performance_*` table; discover it through `listServiceConnections`, inspect or filter it with the table tools, and use `exportSearchConsoleTableData` for a persisted filtered JSONL download. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
 
 ```ts
 const result = await client.tools.connections.exportConnectedServiceData({
@@ -360,6 +360,16 @@ const searchConsole = await client.tools.connections.exportConnectedServiceData(
   connectionId: 'gsc_conn_123',
   dataset: 'search_console_performance',
   lastDays: 28,
+})
+
+const persistedSearchConsole = await client.tools.connections.exportSearchConsoleTableData({
+  tableName: 'gsc_performance_0123456789ab',
+  filters: [
+    { column: 'date', op: 'gte', value: '2026-07-01' },
+    { column: 'query', op: 'like', value: 'roof repair' },
+  ],
+  sort: [{ column: 'clicks', direction: 'desc' }],
+  maxRows: 10_000,
 })
 ```
 
@@ -390,6 +400,16 @@ search_console = client.tools.connections.export_connected_service_data(
     connection_id="gsc_conn_123",
     dataset="search_console_performance",
     last_days=28,
+)
+
+persisted_search_console = client.tools.connections.export_search_console_table_data(
+    table_name="gsc_performance_0123456789ab",
+    filters=[
+        {"column": "date", "op": "gte", "value": "2026-07-01"},
+        {"column": "query", "op": "like", "value": "roof repair"},
+    ],
+    sort=[{"column": "clicks", "direction": "desc"}],
+    max_rows=10_000,
 )
 ```
 
@@ -442,7 +462,7 @@ This is a one-result snapshot with a 1 MB limit—not whole-account pagination, 
 
 Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Python, scraper) or `MemoryApiError` (Node/Python, memory), each carrying the HTTP status, an error code, and the raw response body. `ScraperApiError` adds `isInsufficientBalance()`/`isConcurrencyLimitExceeded()` narrowing helpers (`is_insufficient_balance()`/`is_concurrency_limit_exceeded()` in Python). The CLI catches these and prints a clean one-line message instead of a stack trace.
 
-## All 159 MCP tools
+## All 160 MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -460,7 +480,7 @@ The authoritative tool names, descriptions, schemas, annotations, categories, an
 
 ## The CLI
 
-`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 159 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 160 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -468,7 +488,7 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical live-derived contract for all 159 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical live-derived contract for all 160 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
 - [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 87 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
 

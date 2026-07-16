@@ -74,7 +74,7 @@ export interface Output {
      */
     vaultName: string | null;
     /**
-     * Table this connection's digest writes structured rows into, if it has run at least once. Query it with table-query.
+     * Tenant-owned structured table populated by this connection, if available. For scheduled Google Search Console connection_sync runs, this is a typed performance table with site_url, date, query, page, country, device, clicks, impressions, ctr, and position. Call table-describe, then filter or sort it with table-query.
      */
     tableName: string | null;
   }[];
