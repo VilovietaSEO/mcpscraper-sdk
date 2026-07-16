@@ -31,7 +31,7 @@
     "seo-api"
   ],
   "dependencies": {
-    "mcpscraper-memory-sdk": "^0.12.0"
+    "mcpscraper-memory-sdk": "^0.13.0"
   },
   "devDependencies": {
     "openapi-typescript": "^7.13.0"
