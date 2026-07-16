@@ -45,6 +45,8 @@ jq -n --arg connectionId "$CONNECTION_ID" \
 
 For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For persisted scheduled data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.
 
+For API-only batch work, describe and call the live provider-native tools through the connection bridge. Search Console reads include `inspect-urls` and `query-search-analytics-batch`; gated actions include `add-sites-batch`, `submit-sitemaps-batch`, `delete-sites-batch`, and `delete-sitemaps-batch`. These return per-item receipts and can be granted to scheduled agent runs without creating a database table. Destructive batches plan by default and require the exact confirmation token from their live schema before execution.
+
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
 ## Complete catalog (160)
