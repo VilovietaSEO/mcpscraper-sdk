@@ -5,6 +5,10 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-sdk 0.14.1
+- Documented the six live Google Search Console API batch tools released with MCP Scraper 0.24.0, including exact read/action routing, bounded inputs, per-item receipts, destructive dry-run confirmation, and scheduled-agent availability.
+- Clarified that provider-native batches use the existing schema-discovered connection bridge and do not require database persistence or regenerated SDK methods.
+
 ## mcpscraper-memory-sdk 0.13.0 / mcpscraper-sdk 0.14.0 / Python SDKs 0.11.0 / mcpscraper-cli 0.11.0
 - Regenerated the complete 160-tool Node, Python, CLI, and cURL surfaces against MCP Scraper 0.23.0.
 - Added typed `connections.exportSearchConsoleTableData` / `connections.export_search_console_table_data` methods for private, server-filtered JSONL downloads from scheduled Search Console tables.

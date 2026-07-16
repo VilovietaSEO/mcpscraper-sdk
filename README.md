@@ -333,6 +333,39 @@ The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available 
 
 Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Marketing, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. For Search Console, use `exportConnectedServiceData` for a fresh live API extract. A scheduled `connection_sync` also maintains a typed `gsc_performance_*` table; discover it through `listServiceConnections`, inspect or filter it with the table tools, and use `exportSearchConsoleTableData` for a persisted filtered JSONL download. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
 
+### Search Console API batches
+
+MCP Scraper 0.24.0 adds six provider-native, API-only batches without requiring a database: read tools `inspect-urls` and `query-search-analytics-batch`, plus gated actions `add-sites-batch`, `submit-sitemaps-batch`, `delete-sites-batch`, and `delete-sitemaps-batch`. Discover the current schema before every workflow; live provider schemas can evolve without an SDK release.
+
+```ts
+const connectionId = 'search_console_connection'
+const schema = await client.tools.connections.describeServiceConnectionTool({
+  connectionId,
+  tool: 'inspect-urls',
+  fresh: true,
+})
+
+const inspections = await client.tools.connections.readServiceConnection({
+  connectionId,
+  tool: 'inspect-urls',
+  args: {
+    siteUrl: 'sc-domain:example.com',
+    urls: ['https://example.com/', 'https://example.com/pricing'],
+  },
+})
+
+const deletionPlan = await client.tools.connections.callServiceConnectionAction({
+  connectionId,
+  tool: 'delete-sitemaps-batch',
+  args: {
+    items: [{ requestId: 'old-map', siteUrl: 'sc-domain:example.com', feedpath: 'https://example.com/old-sitemap.xml' }],
+    dryRun: true,
+  },
+})
+```
+
+Each batch returns per-item success or sanitized failure receipts and executes sequentially within provider quotas. Delete batches default to `dryRun: true`; actual execution additionally requires the exact confirmation token published by the live schema. Actions also require `actionsEnabled` on the connection. Scheduled agent runs can bind any exact batch tool; deterministic `connection_sync` remains the separate persisted Search Analytics workflow.
+
 ```ts
 const result = await client.tools.connections.exportConnectedServiceData({
   connectionId: 'conn_123',
