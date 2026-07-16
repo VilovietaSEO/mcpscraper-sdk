@@ -28,6 +28,7 @@ mcpscraper tools describe prepare-memory-write
 mcpscraper tools call prepare-memory-write --args '{"title":"Example","content":"..."}' --json
 mcpscraper tools call export_connected_service_data --args '{"connectionId":"conn_123","dataset":"emails","lastDays":7}' --json
 mcpscraper tools call export_connected_service_data --args '{"connectionId":"meta_conn_123","dataset":"meta_ads_insights","lastDays":30,"delivery":"artifact"}' --json
+mcpscraper tools call export_connected_service_data --args '{"connectionId":"gsc_conn_123","dataset":"search_console_performance","lastDays":28}' --json
 mcpscraper tools call describe_service_connection_tool --args '{"connectionId":"conn_123","tool":"provider-tool-name"}' --json
 mcpscraper tools call renew_connected_data_download --args '{"artifactId":"artifact_123"}' --json
 ```

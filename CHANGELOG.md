@@ -5,6 +5,11 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ## [Unreleased]
 - Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
+## mcpscraper-memory-sdk 0.12.0 / mcpscraper-sdk 0.13.0 / Python SDKs 0.10.0 / mcpscraper-cli 0.10.0
+- Added `search_console_performance` to the generated Node, Python, and CLI connected-data export input, continuation, and output enums.
+- Regenerated the rich 159-tool unified contract from MCP Scraper 0.21.5 without dropping output schemas.
+- Added Search Console examples for immediate, scheduled, and private Memory delivery to the public SDK and cURL guidance.
+
 ## mcpscraper-memory-sdk 0.11.4 / mcpscraper-sdk 0.12.4 / mcpscraper-cli 0.9.3
 - Regenerated the unified Node, Python-source, CLI, and cURL bindings from MCP Scraper 0.21.4's rich 159-tool manifest while preserving complete input and output schemas for SDK consumers.
 - Added retry-safe Node and Python convenience methods for `POST /serp-intelligence/capture`: optional `idempotencyKey` / `idempotency_key` inputs plus `captureWithReceipt` / `capture_with_receipt` methods that expose the server-accepted key. The OpenAPI contract now documents the request/response headers and `409 idempotency_conflict` response.
