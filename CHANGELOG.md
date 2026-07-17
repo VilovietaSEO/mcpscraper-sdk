@@ -3,9 +3,11 @@
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
 ## [Unreleased]
+- Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
+
+## mcpscraper-memory-sdk 0.14.0 / mcpscraper-sdk 0.15.0 / Python SDKs 0.12.0 / mcpscraper-cli 0.12.0
 - Regenerated the complete 163-tool Node, Python, CLI, and cURL surfaces for MCP Scraper 0.26.0, including the typed `connections.testServiceConnection` / `connections.test_service_connection` health check and the current 87-tool Memory contract.
 - Updated SDK validation and public inventory copy to the canonical split of 76 scraper/browser/workflow/billing/connection tools plus 87 Memory tools.
-- Initial scaffold: contracts/ (OpenAPI spec for mcp-scraper, tool manifest for mcp-memory), packages/scraper, packages/memory.
 
 ## mcpscraper-sdk 0.14.1
 - Documented the six live Google Search Console API batch tools released with MCP Scraper 0.24.0, including exact read/action routing, bounded inputs, per-item receipts, destructive dry-run confirmation, and scheduled-agent availability.
