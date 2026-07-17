@@ -58,10 +58,10 @@ async function main(): Promise<void> {
   if (missing.length) console.log(`Missing live: ${missing.join(', ')}`)
   if (extra.length) console.log(`Missing manifest: ${extra.join(', ')}`)
   if (schemaDrift.length) console.log(`Schema drift: ${schemaDrift.join(', ')}`)
-  const ok = live.length === 160 && manifest.toolCount === 160 && manifest.tools.length === 160
+  const ok = live.length === 163 && manifest.toolCount === 163 && manifest.tools.length === 163
     && !missing.length && !extra.length && !schemaDrift.length
   if (!ok) process.exitCode = 1
-  else console.log('OK — unified manifest matches all 160 live MCP tools.')
+  else console.log('OK — unified manifest matches all 163 live MCP tools.')
 }
 
 main().catch(error => {

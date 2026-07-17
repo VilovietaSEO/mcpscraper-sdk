@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Direct URL to the video file (.mp4/.webm/.mov/.gif).
+   * A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov/.gif).
    */
   sourceUrl: string;
   /**

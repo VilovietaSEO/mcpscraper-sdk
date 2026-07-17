@@ -2072,7 +2072,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "create-scheduled-action",
     "category": "schedule",
     "title": "Create Scheduled Action",
-    "description": "Create a Credit-metered scheduled action for an active MCP Scraper Starter plan or higher, in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs approved read-only tools on bound service connections and ingests their data. Google Search Console syncs also upsert a typed tenant-owned performance table for exact filtering with table-query; discover its tableName by calling list_service_connections after the first successful run. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
+    "description": "Create a Credit-metered scheduled action for an active MCP Scraper Starter plan or higher, in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Google Search Console syncs also upsert a typed tenant-owned performance table for exact filtering with table-query; discover its tableName by calling list_service_connections after the first successful run. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -2112,7 +2112,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "timezone": {
           "type": "string",
-          "description": "IANA timezone name, e.g. \"America/Denver\". Only meaningful together with timeOfDay. Defaults to UTC."
+          "description": "IANA timezone name, e.g. \"America/Denver\". Only meaningful together with timeOfDay or deployDate. Omit to use the account's default timezone (set via set-schedule-defaults), falling back to UTC."
         },
         "deployDate": {
           "type": "string",
@@ -3199,7 +3199,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "get-schedule-status",
     "category": "schedule",
     "title": "Get Schedule Status",
-    "description": "Get the Credit-metered Scheduled Actions access and billing policy. Scheduling requires an active MCP Scraper Starter plan or higher but has no separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times OpenRouter's actual reported cost.",
+    "description": "Get the Credit-metered Scheduled Actions access, billing policy, and default timezone. Scheduling requires an active MCP Scraper Starter plan or higher but has no separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times OpenRouter's actual reported cost.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -3860,7 +3860,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "list_service_connections",
     "category": "connections",
     "title": "List Connected Services",
-    "description": "List every third-party service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, Google Search Console, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Google Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId, credential transport, exact live readTools and gated actionTools, permission-aware toolCapabilities with missing OAuth-grant or provider-app-feature blockers, permanently blocked administrative tools, and schema-discovery metadata. Get a connectionId and exact tool name here before calling describe_service_connection_tool, read_service_connection, or call_service_connection_action. Nango OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. A scheduled Search Console connection_sync creates a typed tenant-owned performance table; after it runs, use the returned tableName with table-describe and table-query instead of repeatedly calling Google for historical filtering.",
+    "description": "List every third-party service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, Google Search Console, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Google Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId; verified providerAccountEmail/providerAccountName identity when the provider exposes it; credential transport; exact live readTools and gated actionTools; permission-aware toolCapabilities with missing OAuth-grant or provider-app-feature blockers; permanently blocked administrative tools; and schema-discovery metadata. The provider identity is distinct from the MCP Scraper login: use it to choose the intended account before any read, export, schedule binding, or gated action. Get a connectionId and exact tool name here before calling describe_service_connection_tool, read_service_connection, or call_service_connection_action. Nango OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. A scheduled Search Console connection_sync creates a typed tenant-owned performance table; after it runs, use the returned tableName with table-describe and table-query instead of repeatedly calling Google for historical filtering.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -3938,12 +3938,13 @@ export const MCP_TOOL_CATALOG = [
     "name": "list-memory-tags",
     "category": "tags",
     "title": "List Memory Tags",
-    "description": "List the live canonical tag vocabulary, aliases, usage counts, and per-vault distribution. Use this before choosing tags so existing concepts are reused instead of fragmented.",
+    "description": "List the complete live canonical tag vocabulary, aliases, usage counts, and per-vault distribution. Always call this before proposing, resolving, or writing tags so the AI can reuse existing concepts and add only central, reusable concepts that are genuinely missing.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "includeDeprecated": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Include deprecated tags as well as active tags. Defaults true so the AI sees the complete vocabulary; pass false only for an active-only display."
         }
       },
       "additionalProperties": false,
@@ -4235,7 +4236,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "memory-capture",
     "category": "capture",
     "title": "Capture Governed Memory",
-    "description": "Strict normal-create path for durable memory. Refuses incomplete notes, writes through memory-put, registers canonical tags, and reads the note back to verify persisted content and props. Call prepare-memory-write first. Reserve memory-put for low-level migrations or deliberate edits.",
+    "description": "Strict normal-create path for durable memory. Before capture, list the complete tag vocabulary, call prepare-memory-write, run hybrid memory-search for related notes, and read the strongest link candidates. This tool refuses incomplete notes, writes through memory-put, registers canonical tags, and verifies persisted content and props. Reserve memory-put for low-level migrations or deliberate edits.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -4329,6 +4330,27 @@ export const MCP_TOOL_CATALOG = [
             "folder": {
               "type": "string",
               "description": "Explicit sub-folder within the vault; overrides routing-derived folder."
+            },
+            "script_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: one or more Obsidian/internal paths under scripts/."
+            },
+            "reference_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: optional Obsidian/internal paths under references/."
+            },
+            "template_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: optional Obsidian/internal paths under templates/."
             },
             "parentMessageId": {
               "type": "string",
@@ -4670,6 +4692,27 @@ export const MCP_TOOL_CATALOG = [
               "type": "string",
               "description": "Explicit sub-folder within the vault; overrides routing-derived folder."
             },
+            "script_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: one or more Obsidian/internal paths under scripts/."
+            },
+            "reference_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: optional Obsidian/internal paths under references/."
+            },
+            "template_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: optional Obsidian/internal paths under templates/."
+            },
             "parentMessageId": {
               "type": "string",
               "description": "Channel messages only: the path of the top-level message this is a reply to. Absent on top-level messages."
@@ -4749,33 +4792,141 @@ export const MCP_TOOL_CATALOG = [
   {
     "name": "memory-search",
     "category": "memory",
-    "title": "Semantic Memory Search",
-    "description": "Semantic search across every vault the caller can reach (own, shared, channels) in one call — reach for this first when searching by meaning. For a fast title-only 'does this exist' check, use memory-suggest instead. Form query as a well-phrased semantic reformulation (expand abbreviations, add synonyms/entities) rather than the user's raw message; pass their original wording separately in userMessage for retrieval-quality logging. Each result is tagged with its source vault. Embeds the query (network call).",
+    "title": "Hybrid Smart RAG Memory Search",
+    "description": "Default Smart RAG search across accessible memory. Form 2-4 focused query variants, combine semantic matches with exact vault/tag/date/kind/type/metadata filters, expand one bounded hop of outgoing links and backlinks around strong seeds, then rerank. Defaults: retrieve/fuse 50 candidates, 8 graph seeds, 5 neighbors per seed, rerank to 30. Graph neighbors are candidates, never automatic winners or links. Before tagging or writing, also call list-memory-tags to inspect the complete vocabulary and reuse existing tags; read strong related notes before selecting links.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "vault": {
           "type": "string",
-          "description": "Narrow the search to exactly this vault. Optional; when omitted (the default and recommended usage) every vault the caller is entitled to is searched in one call."
+          "description": "Exact logical vault handle to search. Omit to search every entitled vault."
         },
         "query": {
           "type": "string",
           "minLength": 1,
-          "description": "The semantic search query — YOUR reformulation of what the human wants, not their raw message verbatim. Expand ambiguous references, add relevant synonyms/entities. Must be non-empty."
+          "description": "A focused semantic reformulation of the request."
         },
         "userMessage": {
           "type": "string",
-          "description": "The human's original, unmodified message that prompted this search. Optional but recommended — recorded for retrieval-quality review, does not affect the search."
+          "description": "Original human wording. Used as a distinct query variant when useful and logged for quality review."
+        },
+        "queries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2,
+          "maxItems": 4,
+          "description": "Caller-provided focused query variants. The planner deduplicates these with query, original wording, and tag/entity terms."
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxItems": 20,
+          "description": "Named entities or exact terms used to form a focused query variant."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "maxItems": 20,
+          "description": "Exact canonical tags used for tag-channel retrieval and filtering."
+        },
+        "tagMode": {
+          "type": "string",
+          "enum": [
+            "any",
+            "all"
+          ],
+          "description": "Whether a note must match any or all supplied tags. Default any."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "note",
+            "library",
+            "capture",
+            "decision",
+            "message"
+          ],
+          "description": "Exact persisted note-kind filter."
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Exact props.type filter."
+        },
+        "dateFrom": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Inclusive lower bound for note updatedAt."
+        },
+        "dateTo": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Inclusive upper bound for note updatedAt."
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean"
+            ]
+          },
+          "description": "Exact equality filters for primitive note props."
+        },
+        "queryVariantCount": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 4,
+          "description": "Number of variants. Default 3."
+        },
+        "candidatePool": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 100,
+          "description": "Total fused candidates before final reranking. Default 50."
+        },
+        "graphSeedCount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20,
+          "description": "Strong preliminary notes whose graph neighborhoods are considered. Default 8."
+        },
+        "graphDepth": {
+          "type": "number",
+          "const": 1,
+          "description": "Graph expansion depth. Bounded to exactly one hop."
+        },
+        "graphNeighborsPerSeed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Maximum outgoing-link plus backlink neighbors per seed. Default 5."
+        },
+        "rerankTopN": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Final results retained after Jina reranking. Default 30."
         },
         "topK": {
           "type": "integer",
           "minimum": 1,
           "maximum": 50,
-          "description": "Maximum number of chunks to return. Optional; default 8, range 1-50."
+          "description": "Deprecated compatibility alias for rerankTopN. Prefer rerankTopN; default remains 30."
         },
         "includeShared": {
           "type": "boolean",
-          "description": "Whether to also search notes individually shared with you and accepted. Default true."
+          "description": "Also search individually accepted shares. Default true. Exact note metadata filters exclude shares without accessible metadata."
         }
       },
       "required": [
@@ -4785,7 +4936,7 @@ export const MCP_TOOL_CATALOG = [
       "$schema": "http://json-schema.org/draft-07/schema#"
     },
     "annotations": {
-      "title": "Semantic Memory Search",
+      "title": "Hybrid Smart RAG Memory Search",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -5068,7 +5219,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "prepare-memory-write",
     "category": "capture",
     "title": "Prepare Memory Write",
-    "description": "Mandatory planning pass for a normal new memory. Routes the note, returns the live template and natural vault relationships, resolves proposed tags against the registry, and shortlists interlink opportunities that must be read/reviewed before capture.",
+    "description": "Mandatory planning pass for a normal new memory. First inspect the complete tag vocabulary with list-memory-tags; then this pass routes the note, returns the live template and natural vault relationships, resolves proposed tags, and shortlists interlinks. Use hybrid memory-search (3 focused queries, 50 fused candidates, bounded graph expansion, rerank to 30 by default) and read strong related notes before capture. This is an explicit AI workflow directive, not a claim of persisted call-order enforcement.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5140,7 +5291,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "propose-scheduled-action",
     "category": "schedule",
     "title": "Propose Scheduled Action",
-    "description": "Turn freeform text describing what you want automated into a structured proposal (description, vault, cadence) for review and confirmation via create-scheduled-action — this is the propose step only; nothing is created here.",
+    "description": "Turn freeform text describing what you want automated into a structured proposal (description, vault, cadence, time of day, timezone) for review and confirmation via create-scheduled-action — this is the propose step only; nothing is created here.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5168,18 +5319,18 @@ export const MCP_TOOL_CATALOG = [
     "name": "provision-defaults",
     "category": "vaults",
     "title": "Provision Default Vaults",
-    "description": "Provision the standard 13-vault memory structure (Ideas, Inspiration, Knowledge, Library, People, Communications, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint) for an identity. Idempotent — existing vaults are untouched. Optionally issues a fresh API key entitled to all 13. Requires admin scope.",
+    "description": "Provision the standard 14-vault memory structure (Ideas, Inspiration, Knowledge, Library, People, Communications, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, Skills) for an identity. Idempotent — existing vaults are untouched. Optionally issues a fresh API key entitled to all 14. Requires admin scope.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "granteeIdentity": {
           "type": "string",
           "minLength": 1,
-          "description": "Identity that should OWN the 13 default vaults (e.g. an email or user id)."
+          "description": "Identity that should OWN the 14 default vaults (e.g. an email or user id)."
         },
         "issueKey": {
           "type": "boolean",
-          "description": "When true, also issue a new API key for the identity entitled to all 13 vaults and return its secret once. Default false."
+          "description": "When true, also issue a new API key for the identity entitled to all 14 vaults and return its secret once. Default false."
         },
         "plan": {
           "type": "string",
@@ -5734,7 +5885,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "resolve-memory-tags",
     "category": "tags",
     "title": "Resolve Memory Tags",
-    "description": "Resolve proposed concepts against the live tag vocabulary. Returns reuse, create, or omit. A new tag is allowed only when no equivalent exists and the caller marks the concept central and reusable.",
+    "description": "Resolve proposed concepts against the live tag vocabulary. Always inspect the complete vocabulary with list-memory-tags first. Returns reuse, create, or omit; a new tag is appropriate only when no equivalent exists and the concept is central and reusable.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5784,7 +5935,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "resume-scheduled-action",
     "category": "schedule",
     "title": "Resume Scheduled Action",
-    "description": "Resume a paused scheduled action. Its next run is computed fresh from now, not backfilled for time spent paused.",
+    "description": "Resume a paused scheduled action for an active MCP Scraper Starter plan or higher. Its next run is computed fresh from now, not backfilled for time spent paused.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6086,7 +6237,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "set-schedule-entitlement",
     "category": "schedule",
     "title": "Set Schedule Entitlement",
-    "description": "Admin-only scheduled-action credential provisioning and historical-row recovery. Rotate the encrypted delegated MCP Scraper API key without changing legacy enabled/quota fields by omitting those fields. Legacy entitlement values are not runtime access controls; paid-plan access is checked against MCP Scraper directly.",
+    "description": "Admin-only scheduled-action credential provisioning and historical-row recovery. Use mcpScraperApiKey to rotate the encrypted delegated key without changing legacy enabled/quota fields. The former entitlement and quota values are retained only for migration compatibility and are not runtime access controls; paid-plan access is validated against MCP Scraper directly.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6101,7 +6252,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "quotaPerPeriod": {
           "type": "number",
-          "description": "Historical monthly execution quota retained only for migration compatibility. Omit to preserve the stored value."
+          "description": "Historical monthly quota for migration/recovery only. Omit to preserve the stored value."
         },
         "mcpScraperApiKey": {
           "type": "string",
@@ -6594,7 +6745,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "upsert-memory-tag",
     "category": "tags",
     "title": "Upsert Memory Tag",
-    "description": "Define or curate one canonical tag, its meaning, aliases, and lifecycle. Use only after resolve-memory-tags returns create, or to merge/deprecate vocabulary intentionally. Requires write scope.",
+    "description": "Define or curate one canonical tag, its meaning, aliases, and lifecycle. Inspect the complete vocabulary with list-memory-tags first; use only after resolve-memory-tags returns create, or to merge/deprecate vocabulary intentionally. Requires write scope.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6723,6 +6874,27 @@ export const MCP_TOOL_CATALOG = [
               "type": "string",
               "description": "Explicit sub-folder within the vault; overrides routing-derived folder."
             },
+            "script_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: one or more Obsidian/internal paths under scripts/."
+            },
+            "reference_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: optional Obsidian/internal paths under references/."
+            },
+            "template_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Skills only: optional Obsidian/internal paths under templates/."
+            },
             "parentMessageId": {
               "type": "string",
               "description": "Channel messages only: the path of the top-level message this is a reply to. Absent on top-level messages."
@@ -6834,14 +7006,14 @@ export const MCP_TOOL_CATALOG = [
     "name": "video-analyze-start",
     "category": "video",
     "title": "Start Video Breakdown",
-    "description": "Start a deep async breakdown of a video: samples frames, transcribes audio, and runs parallel analyses (summary, pacing, WPM, topic outline, key points, hook analysis, visual style, replication recipe) into one saved report. Returns a runId immediately — poll video-analyze-status. Pass a direct video file URL (.mp4/.webm/.mov); platform URLs are not auto-resolved yet. Videos up to 1 hour.",
+    "description": "Start a deep async breakdown of a video: samples frames, transcribes audio, and runs parallel analyses (summary, pacing, WPM, topic outline, key points, hook analysis, visual style, replication recipe) into one saved report. Returns a runId immediately — poll video-analyze-status. Accepts a YouTube, Facebook, Instagram, TikTok, or Vimeo URL directly (downloaded for you), or a direct video file URL (.mp4/.webm/.mov). Videos up to 1 hour.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "sourceUrl": {
           "type": "string",
           "format": "uri",
-          "description": "Direct URL to the video file (.mp4/.webm/.mov/.gif)."
+          "description": "A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov/.gif)."
         },
         "intervalS": {
           "type": "number",
@@ -7273,6 +7445,152 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "bulk-delete-notes",
+    "category": "memory",
+    "title": "Bulk Delete Notes",
+    "description": "Delete every note in one vault matching all given filters (ANDed) plus an optional tag match (ANY of the given tags) — at least one filter or tag is required; there is no unfiltered delete-all here (use delete-vault for that). Defaults to dryRun: true, previewing the match count and a sample of up to 20 matching notes without deleting anything. Pass dryRun: false to actually delete. DESTRUCTIVE and not recoverable when dryRun is false. Requires write scope. Refuses secure vaults (not indexed, filtering is meaningless there).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "vault": {
+          "type": "string",
+          "description": "Vault to delete from. Optional; defaults to the session active vault, then the first vault the caller is entitled to."
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "column": {
+                "type": "string",
+                "enum": [
+                  "path",
+                  "title",
+                  "kind",
+                  "source",
+                  "captured_at",
+                  "created_at",
+                  "updated_at",
+                  "revision"
+                ],
+                "description": "Note column to filter on."
+              },
+              "op": {
+                "type": "string",
+                "enum": [
+                  "eq",
+                  "neq",
+                  "gt",
+                  "gte",
+                  "lt",
+                  "lte",
+                  "like",
+                  "prefix",
+                  "in"
+                ],
+                "description": "\"prefix\" anchors to the start of the value only (e.g. path prefix \"Mastra/opt-\"); \"like\" matches anywhere in the value; \"in\" requires an array value."
+              },
+              "value": {
+                "description": "Value to compare against. For \"in\", pass an array."
+              }
+            },
+            "required": [
+              "column",
+              "op"
+            ],
+            "additionalProperties": false
+          },
+          "default": [],
+          "description": "Filters to AND together. At least one of filters/tags is required."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Match notes carrying ANY of these tags (ORed among themselves, ANDed with filters). At least one of filters/tags is required."
+        },
+        "dryRun": {
+          "type": "boolean",
+          "default": true,
+          "description": "When true (default), previews matches without deleting anything. Pass false to actually delete."
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Bulk Delete Notes",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "set-schedule-defaults",
+    "category": "schedule",
+    "title": "Set Schedule Defaults",
+    "description": "Set your default timezone for scheduled actions. Any schedule you later create with a time of day but no explicit timezone uses this default instead of UTC. Pass null to clear it back to UTC.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "defaultTimezone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "IANA timezone name, e.g. \"America/Denver\". null clears the default (new schedules fall back to UTC)."
+        }
+      },
+      "required": [
+        "defaultTimezone"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Set Schedule Defaults",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "test_service_connection",
+    "category": "connections",
+    "title": "Test Connected Service",
+    "description": "Test the current provider transport for one tenant-owned connection without changing its OAuth lifecycle. Call this when a connected account appears unavailable before recommending reconnect. Reconnect is appropriate only when reconnectRequired is true.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A tenant-owned connectionId from list_service_connections."
+        },
+        "providerConfigKey": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional provider hint from list_service_connections."
+        }
+      },
+      "required": [
+        "connectionId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Test Connected Service",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
       "openWorldHint": true
     }
   }

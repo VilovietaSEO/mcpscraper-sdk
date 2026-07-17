@@ -124,9 +124,9 @@ test('a non-2xx HTTP response throws MemoryApiError with httpStatus set', async 
   )
 })
 
-test('unified MCP bindings contain all 160 unique tools', () => {
-  assert.equal(MCP_TOOL_COUNT, 160)
-  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 160)
+test('unified MCP bindings contain all 163 unique tools', () => {
+  assert.equal(MCP_TOOL_COUNT, 163)
+  assert.equal(new Set(MCP_TOOL_BINDINGS.map(binding => binding.name)).size, 163)
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'export_search_console_table_data'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'export_connected_service_data'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'renew_connected_data_download'))

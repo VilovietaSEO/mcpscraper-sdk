@@ -119,6 +119,18 @@ export interface Output {
        */
       folder?: string;
       /**
+       * Skills only: one or more Obsidian/internal paths under scripts/.
+       */
+      script_links?: string[];
+      /**
+       * Skills only: optional Obsidian/internal paths under references/.
+       */
+      reference_links?: string[];
+      /**
+       * Skills only: optional Obsidian/internal paths under templates/.
+       */
+      template_links?: string[];
+      /**
        * Channel messages only: the path of the top-level message this is a reply to. Absent on top-level messages.
        */
       parentMessageId?: string;
