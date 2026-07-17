@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-cli",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Command-line interface for mcpscraper.dev and memory.mcpscraper.dev",
   "license": "MIT",
   "type": "module",
@@ -12,13 +12,14 @@
     "README.md"
   ],
   "scripts": {
+    "prepack": "npm run build",
     "build": "tsup src/cli.ts --format esm --out-dir dist/bin",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts"
   },
   "dependencies": {
     "commander": "^12.0.0",
-    "mcpscraper-sdk": "^0.15.0"
+    "mcpscraper-sdk": "^0.15.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0"
