@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-sdk",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Official Node.js client for all 163 mcpscraper.dev MCP tools and the REST API",
   "license": "MIT",
   "type": "module",
@@ -19,6 +19,7 @@
     "README.md"
   ],
   "scripts": {
+    "prepack": "npm run build",
     "generate": "openapi-typescript ../../contracts/scraper.openapi.yaml -o src/schema.ts",
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "typecheck": "tsc --noEmit",
