@@ -5,8 +5,35 @@ export interface Output {
     connectionId: string;
     providerConfigKey: string;
     provider?: string | null;
+    /**
+     * Best verified provider-side account label. This is never derived from the MCP Scraper login email.
+     */
     label: string;
+    /**
+     * Provider-side account or principal identifier when safely discoverable. This is not the MCP Scraper user id.
+     */
+    providerAccountId: string | null;
+    /**
+     * Actual provider-side email for the authorized account when the provider exposes and verifies it. Null for organization-only accounts or unavailable identity scopes.
+     */
+    providerAccountEmail: string | null;
+    /**
+     * Actual provider-side person, workspace, channel, or organization name when available.
+     */
+    providerAccountName: string | null;
+    /**
+     * Whether provider-side account identity discovery is pending, verified, or unavailable under the current OAuth grant. Reconnect when unavailable after identity scopes were added.
+     */
+    providerIdentityStatus: "pending" | "verified" | "unavailable";
     status: string;
+    /**
+     * Credential lifecycle. This is separate from current provider availability.
+     */
+    lifecycleStatus?: "pending" | "connected" | "needs_reauth" | "disconnecting" | "disconnected";
+    /**
+     * Last observed provider transport availability. Unavailable does not imply reconnect is required.
+     */
+    operationalStatus?: "unknown" | "available" | "degraded" | "unavailable";
     reconnectRequired?: boolean;
     /**
      * Credential transport behind this tenant-scoped connection. Tokens and API keys are never returned.
@@ -69,6 +96,11 @@ export interface Output {
      * Opaque revision of the resolved live tool catalog, when available. It changes when provider tools or policy change.
      */
     toolRevision: string | null;
+    lastCheckedAt?: string | null;
+    lastSuccessfulCallAt?: string | null;
+    lastFailureAt?: string | null;
+    lastFailureCode?: string | null;
+    lastFailureRetryable?: boolean | null;
     /**
      * Memory vault this connection's digest writes into, if it has run at least once. Search it with memory-search.
      */

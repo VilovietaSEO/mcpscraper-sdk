@@ -71,6 +71,7 @@ import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_
 import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
 import * as ConnectionsSlackSendMessage from './tools/slack_send_message.js'
 import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
+import * as ConnectionsTestServiceConnection from './tools/test_service_connection.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as StorageCostUsage from './tools/cost-usage.js'
@@ -95,6 +96,7 @@ import * as ScheduleProposeScheduledAction from './tools/propose-scheduled-actio
 import * as ScheduleResumeScheduledAction from './tools/resume-scheduled-action.js'
 import * as ScheduleRevokeScheduleLink from './tools/revoke-schedule-link.js'
 import * as ScheduleSetScheduleEntitlement from './tools/set-schedule-entitlement.js'
+import * as ScheduleSetScheduleDefaults from './tools/set-schedule-defaults.js'
 import * as WebhooksCreateWebhook from './tools/create-webhook.js'
 import * as WebhooksListWebhooks from './tools/list-webhooks.js'
 import * as WebhooksRevokeWebhook from './tools/revoke-webhook.js'
@@ -107,6 +109,7 @@ import * as MemoryPut from './tools/memory-put.js'
 import * as MemorySearch from './tools/memory-search.js'
 import * as MemorySuggest from './tools/memory-suggest.js'
 import * as MemoryUpload from './tools/memory-upload.js'
+import * as MemoryBulkDeleteNotes from './tools/bulk-delete-notes.js'
 import * as DirectoryRun from './tools/directory_workflow.js'
 import * as FacebookAdSearch from './tools/facebook_ad_search.js'
 import * as FacebookAdTranscribe from './tools/facebook_ad_transcribe.js'
@@ -961,6 +964,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "zoom_create_meeting",
     "category": "connections",
     "methodName": "zoomCreateMeeting"
+  },
+  {
+    "name": "bulk-delete-notes",
+    "category": "memory",
+    "methodName": "bulkDeleteNotes"
+  },
+  {
+    "name": "set-schedule-defaults",
+    "category": "schedule",
+    "methodName": "setScheduleDefaults"
+  },
+  {
+    "name": "test_service_connection",
+    "category": "connections",
+    "methodName": "testServiceConnection"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1267,6 +1285,10 @@ export class ConnectionsNamespace {
   async zoomCreateMeeting(input: ConnectionsZoomCreateMeeting.Input): Promise<ConnectionsZoomCreateMeeting.Output> {
     return this.callTool('zoom_create_meeting', input) as Promise<ConnectionsZoomCreateMeeting.Output>
   }
+
+  async testServiceConnection(input: ConnectionsTestServiceConnection.Input): Promise<ConnectionsTestServiceConnection.Output> {
+    return this.callTool('test_service_connection', input) as Promise<ConnectionsTestServiceConnection.Output>
+  }
 }
 
 export class SerpIntelligenceNamespace {
@@ -1379,6 +1401,10 @@ export class ScheduleNamespace {
   async setScheduleEntitlement(input: ScheduleSetScheduleEntitlement.Input): Promise<ScheduleSetScheduleEntitlement.Output> {
     return this.callTool('set-schedule-entitlement', input) as Promise<ScheduleSetScheduleEntitlement.Output>
   }
+
+  async setScheduleDefaults(input: ScheduleSetScheduleDefaults.Input): Promise<ScheduleSetScheduleDefaults.Output> {
+    return this.callTool('set-schedule-defaults', input) as Promise<ScheduleSetScheduleDefaults.Output>
+  }
 }
 
 export class WebhooksNamespace {
@@ -1438,6 +1464,10 @@ export class MemoryNamespace {
 
   async upload(input: MemoryUpload.Input): Promise<MemoryUpload.Output> {
     return this.callTool('memory-upload', input) as Promise<MemoryUpload.Output>
+  }
+
+  async bulkDeleteNotes(input: MemoryBulkDeleteNotes.Input = {} as MemoryBulkDeleteNotes.Input): Promise<MemoryBulkDeleteNotes.Output> {
+    return this.callTool('bulk-delete-notes', input) as Promise<MemoryBulkDeleteNotes.Output>
   }
 }
 

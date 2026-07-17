@@ -8,7 +8,7 @@ export interface Input {
    */
   enabled?: boolean;
   /**
-   * Historical monthly execution quota retained only for migration compatibility. Omit to preserve the stored value.
+   * Historical monthly quota for migration/recovery only. Omit to preserve the stored value.
    */
   quotaPerPeriod?: number;
   /**

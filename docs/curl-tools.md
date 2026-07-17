@@ -1,4 +1,4 @@
-# All 160 MCP tools with cURL
+# All 163 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -45,11 +45,9 @@ jq -n --arg connectionId "$CONNECTION_ID" \
 
 For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For persisted scheduled data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.
 
-For API-only batch work, describe and call the live provider-native tools through the connection bridge. Search Console reads include `inspect-urls` and `query-search-analytics-batch`; gated actions include `add-sites-batch`, `submit-sitemaps-batch`, `delete-sites-batch`, and `delete-sitemaps-batch`. These return per-item receipts and can be granted to scheduled agent runs without creating a database table. Destructive batches plan by default and require the exact confirmation token from their live schema before execution.
-
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (160)
+## Complete catalog (163)
 
 ## access
 
@@ -136,6 +134,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `set_scheduled_action_connections` — Set Scheduled Action Connections
 - `slack_send_message` — Send Slack Message
 - `zoom_create_meeting` — Create Zoom Meeting
+- `test_service_connection` — Test Connected Service
 
 ## serpIntelligence
 
@@ -172,6 +171,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `resume-scheduled-action` — Resume Scheduled Action
 - `revoke-schedule-link` — Revoke Schedule Link
 - `set-schedule-entitlement` — Set Schedule Entitlement
+- `set-schedule-defaults` — Set Schedule Defaults
 
 ## webhooks
 
@@ -190,9 +190,10 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `memory-get` — Get Memory Note
 - `memory-list` — List Memory Notes
 - `memory-put` — Put Memory Note
-- `memory-search` — Semantic Memory Search
+- `memory-search` — Hybrid Smart RAG Memory Search
 - `memory-suggest` — Suggest Notes (typeahead)
 - `memory-upload` — Upload Document to Vault
+- `bulk-delete-notes` — Bulk Delete Notes
 
 ## directory
 
