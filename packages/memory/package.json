@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-memory-sdk",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Official Node.js clients for all 165 mcpscraper.dev MCP tools and the direct 89-tool memory API",
   "license": "MIT",
   "type": "module",
@@ -21,6 +21,7 @@
   "scripts": {
     "generate": "tsx ../../scripts/generate-memory-client.ts",
     "build": "tsup src/index.ts --format esm,cjs --dts",
+    "prepack": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "node --test --import tsx \"test/**/*.test.ts\""
   },

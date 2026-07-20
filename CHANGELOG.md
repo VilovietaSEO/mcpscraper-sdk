@@ -4,6 +4,9 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## mcpscraper-memory-sdk 0.15.1
+- Ensure the published package builds its declared `dist` entrypoints during `prepack`; 0.15.0 is deprecated because its tarball omitted them.
+
 ## mcpscraper-memory-sdk 0.15.0 / mcpscraper-sdk 0.16.0 / Python SDKs 0.13.0 / mcpscraper-cli 0.13.0
 - Regenerated the direct 89-tool Memory and complete 165-tool MCP Scraper Node, Python, CLI, and cURL clients from the live mcp-memory 1.10.0 and MCP Scraper 0.28.0 contracts.
 - Added typed `access.getVaultAppLink` / `access.get_vault_app_link` and `access.revokeVaultAppLink` / `access.revoke_vault_app_link` bindings for the independent mobile Vault App link lifecycle.
