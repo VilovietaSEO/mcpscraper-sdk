@@ -8,11 +8,11 @@ export interface Input {
    */
   sessionId?: string;
   /**
-   * Identity that should OWN the 13 default vaults (e.g. an email or user id).
+   * Identity that should OWN the 14 default vaults (e.g. an email or user id).
    */
   granteeIdentity: string;
   /**
-   * When true, also issue a new API key for the identity entitled to all 13 vaults and return its secret once. Default false.
+   * When true, also issue a new API key for the identity entitled to all 14 vaults and return its secret once. Default false.
    */
   issueKey?: boolean;
   /**
@@ -31,11 +31,11 @@ export interface Output {
    */
   identity?: string;
   /**
-   * Vault names newly created on this call (empty when all 13 already existed).
+   * Vault names newly created on this call (empty when all 14 already existed).
    */
   created?: string[];
   /**
-   * All 13 default vault names the identity now owns.
+   * All 14 default vault names the identity now owns.
    */
   vaults?: string[];
   /**

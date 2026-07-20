@@ -17,6 +17,3 @@ class WorkflowSuggestInput(BaseModel):
 
 class WorkflowSuggestOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    goal: str = Field(..., alias="goal", description="")
-    suggestions: list[dict[str, Any]] = Field(..., alias="suggestions", description="")

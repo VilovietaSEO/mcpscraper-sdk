@@ -20,6 +20,8 @@ import * as AccessUnlinkShare from './tools/access-unlink-share.js'
 import * as AccessRevokeShare from './tools/access-revoke-share.js'
 import * as GetChatLink from './tools/get-chat-link.js'
 import * as RevokeChatLink from './tools/revoke-chat-link.js'
+import * as GetVaultAppLink from './tools/get-vault-app-link.js'
+import * as RevokeVaultAppLink from './tools/revoke-vault-app-link.js'
 import * as SetAgentIdentity from './tools/set-agent-identity.js'
 import * as ListSharedWithMe from './tools/list-shared-with-me.js'
 import * as ListVaults from './tools/list-vaults.js'
@@ -169,6 +171,14 @@ export class AccessNamespace {
 
   async revokeChatLink(input: RevokeChatLink.Input): Promise<RevokeChatLink.Output> {
     return this.callTool('revokeChatLinkTool', input) as Promise<RevokeChatLink.Output>
+  }
+
+  async getVaultAppLink(input: GetVaultAppLink.Input): Promise<GetVaultAppLink.Output> {
+    return this.callTool('getVaultAppLinkTool', input) as Promise<GetVaultAppLink.Output>
+  }
+
+  async revokeVaultAppLink(input: RevokeVaultAppLink.Input): Promise<RevokeVaultAppLink.Output> {
+    return this.callTool('revokeVaultAppLinkTool', input) as Promise<RevokeVaultAppLink.Output>
   }
 
   async setAgentIdentity(input: SetAgentIdentity.Input): Promise<SetAgentIdentity.Output> {

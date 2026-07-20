@@ -12,7 +12,3 @@ class FacebookAdSearchInput(BaseModel):
 
 class FacebookAdSearchOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    query: str = Field(..., alias="query", description="")
-    advertiser_count: int = Field(..., alias="advertiserCount", description="")
-    advertisers: list[dict[str, Any]] = Field(..., alias="advertisers", description="")

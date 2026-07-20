@@ -135,10 +135,10 @@ def test_non_2xx_http_response_raises_memory_api_error():
     assert exc_info.value.http_status == 500
 
 
-def test_unified_bindings_contain_all_163_unique_tools():
-    assert MCP_TOOL_COUNT == 163
+def test_unified_bindings_contain_all_165_unique_tools():
+    assert MCP_TOOL_COUNT == 165
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
-    assert len(names) == 163
+    assert len(names) == 165
     assert {
         "export_connected_service_data",
         "export_search_console_table_data",
@@ -193,4 +193,4 @@ def test_memory_package_unified_client_calls_scraper_and_memory_tools():
     result = client.browser.list_sessions()
     sent_body = json.loads(responses.calls[0].request.body)
     assert sent_body["params"]["name"] == "browser_list_sessions"
-    assert result.model_dump(by_alias=True) == session_result
+    assert result == session_result

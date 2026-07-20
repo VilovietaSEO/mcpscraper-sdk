@@ -40,6 +40,8 @@ const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>
   graphUniverseTool: { category: 'graph', legacyId: 'memory-graph-universe' },
   graphPathTool: { category: 'graph', legacyId: 'memory-graph-path' },
   setScheduleDefaultsTool: { category: 'schedule', legacyId: 'set-schedule-defaults' },
+  getVaultAppLinkTool: { category: 'access', legacyId: 'get-vault-app-link' },
+  revokeVaultAppLinkTool: { category: 'access', legacyId: 'revoke-vault-app-link' },
 }
 
 async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {

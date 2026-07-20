@@ -12,8 +12,3 @@ class ReportArtifactReadInput(BaseModel):
 
 class ReportArtifactReadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    artifact_id: str = Field(..., alias="artifactId", description="")
-    text: str = Field(..., alias="text", description="")
-    total_bytes: int = Field(..., alias="totalBytes", description="")
-    next_offset: Any = Field(..., alias="nextOffset", description="")

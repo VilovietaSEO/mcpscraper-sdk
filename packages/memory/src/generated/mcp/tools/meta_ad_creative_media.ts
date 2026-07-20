@@ -17,40 +17,4 @@ export interface Input {
   maxInlineImages?: number;
 }
 
-export interface Output {
-  ok: boolean;
-  adId: string;
-  adName: string | null;
-  adAccountId: string | null;
-  creativeId: string;
-  creativeName: string | null;
-  effectiveObjectStoryId: string | null;
-  sourceFacebookPostId: string | null;
-  objectStoryId: string | null;
-  pageId: string | null;
-  postId: string | null;
-  publicPostCandidateUrl: string | null;
-  publicPostStatus: "unverified";
-  mediaType: "image" | "video" | "carousel" | "mixed" | "unknown";
-  images: {
-    [k: string]: unknown;
-  }[];
-  videos: {
-    [k: string]: unknown;
-  }[];
-  inlineImages: {
-    sourceUrl: string;
-    mimeType: string;
-    bytes: number;
-    contentIndex: number;
-  }[];
-  nextActions: {
-    tool: "facebook_ad_transcribe" | "facebook_video_transcribe" | "video_frame_analysis";
-    args: {
-      [k: string]: unknown;
-    };
-    reason: string;
-  }[];
-  warnings: string[];
-  limitations: string[];
-}
+export type Output = unknown

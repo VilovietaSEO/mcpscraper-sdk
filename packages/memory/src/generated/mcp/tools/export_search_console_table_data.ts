@@ -7221,22 +7221,4 @@ export interface Input {
   maxRows?: number;
 }
 
-export interface Output {
-  ok: boolean;
-  tableName?: string;
-  rowsExported?: number;
-  matchedRows?: number;
-  complete?: boolean;
-  artifact?: {
-    artifactId: string;
-    filename: string;
-    contentType: "application/x-ndjson";
-    bytes: number;
-    sha256: string;
-    expiresAt: string;
-    downloadUrl: string | null;
-    downloadUrlExpiresAt: string | null;
-  };
-  warnings?: string[];
-  error: string | null;
-}
+export type Output = unknown

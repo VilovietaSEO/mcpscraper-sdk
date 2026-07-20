@@ -15,22 +15,3 @@ class ImportServiceConnectionToMemoryInput(BaseModel):
 
 class ImportServiceConnectionToMemoryOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    ok: bool = Field(..., alias="ok", description="")
-    stored: bool | None = Field(None, alias="stored", description="")
-    status: Literal["search_ready", "stored_not_indexed"] | None = Field(None, alias="status", description="")
-    search_ready: bool | None = Field(None, alias="searchReady", description="")
-    provider_config_key: str | None = Field(None, alias="providerConfigKey", description="")
-    connection_id: str | None = Field(None, alias="connectionId", description="")
-    tool: str | None = Field(None, alias="tool", description="")
-    vault: str | None = Field(None, alias="vault", description="")
-    path: str | None = Field(None, alias="path", description="")
-    source_bytes: int | None = Field(None, alias="sourceBytes", description="")
-    content_sha256: str | None = Field(None, alias="contentSha256", description="")
-    indexed_chunks: int | None = Field(None, alias="indexedChunks", description="")
-    imported_at: str | None = Field(None, alias="importedAt", description="")
-    untrusted_content: bool | None = Field(None, alias="untrustedContent", description="")
-    warning: str | None = Field(None, alias="warning", description="")
-    error_code: str | None = Field(None, alias="errorCode", description="")
-    retryable: bool | None = Field(None, alias="retryable", description="")
-    error: Any = Field(..., alias="error", description="")

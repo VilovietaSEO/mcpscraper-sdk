@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED = 163
+EXPECTED = 165
 
 
 def load_bindings(package_src: Path, module_name: str) -> list[dict]:

@@ -9,18 +9,4 @@ export interface Input {
   maxComments?: number;
 }
 
-export interface Output {
-  sourceUrl: string | null;
-  oldRedditUrl: string | null;
-  title: string | null;
-  author: string | null;
-  score: string | null;
-  postBody: string | null;
-  numComments: number;
-  comments: {
-    author: string | null;
-    score: string | null;
-    depth: number;
-    body: string;
-  }[];
-}
+export type Output = unknown

@@ -13,10 +13,3 @@ class BrowserProfileListInput(BaseModel):
 
 class BrowserProfileListOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    ok: bool = Field(..., alias="ok", description="")
-    tool: str = Field(..., alias="tool", description="")
-    session_id: Any = Field(..., alias="session_id", description="")
-    profile: str = Field(..., alias="profile", description="Profile these logins belong to.")
-    connections: list[dict[str, Any]] = Field(..., alias="connections", description="All site logins saved in this profile, each with its current auth status and note.")
-    count: int = Field(..., alias="count", description="")

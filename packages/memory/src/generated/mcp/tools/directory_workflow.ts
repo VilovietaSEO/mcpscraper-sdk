@@ -40,7 +40,7 @@ export interface Input {
    */
   saveCsv?: boolean;
   /**
-   * Proxy targeting per city search. Defaults to location (city/ZIP-group residential targeting); configured forces the service proxy; none is local debugging only.
+   * Proxy behavior per city search. Leave unset for the direct localized Google route; location is an explicit residential-proxy override.
    */
   proxyMode?: "location" | "configured" | "none";
   /**
@@ -53,78 +53,4 @@ export interface Input {
   debug?: boolean;
 }
 
-export interface Output {
-  query: string;
-  state: string;
-  minPopulation: number;
-  populationYear: number;
-  maxResultsPerCity: number;
-  concurrency: number;
-  censusSourceUrl: string;
-  usZipsSourcePath: string | null;
-  warnings: string[];
-  extractedAt: string;
-  selectedCityCount: number;
-  totalResultCount: number;
-  csvPath: string | null;
-  cities: {
-    city: string;
-    state: string;
-    location: string;
-    cityKey: string;
-    censusName: string;
-    population: number;
-    populationYear: number;
-    zips: string[];
-    counties: string[];
-    status: "ok" | "empty" | "failed";
-    error: string | null;
-    resultCount: number;
-    durationMs: number;
-    attempts: {
-      attemptNumber: number;
-      maxAttempts: number;
-      status: "ok" | "failed";
-      outcome: string;
-      willRetry: boolean;
-      durationMs: number;
-      resultCount: number;
-      error: string | null;
-      proxyMode: "location" | "configured" | "none";
-      proxyResolutionSource:
-        ("disabled" | "location_reused" | "location_created" | "configured_fallback" | "unavailable") | null;
-      proxyIdSuffix: string | null;
-      proxyTargetLevel: ("zip" | "city" | "state") | null;
-      proxyTargetLocation: string | null;
-      proxyTargetZip: string | null;
-      browserSessionIdSuffix: string | null;
-      observedIp: string | null;
-      observedCity: string | null;
-      observedRegion: string | null;
-    }[];
-    results: {
-      position: number;
-      name: string;
-      placeUrl: string;
-      cid: string | null;
-      cidDecimal: string | null;
-      rating: string | null;
-      reviewCount: string | null;
-      category: string | null;
-      address: string | null;
-      phone: string | null;
-      hoursStatus: string | null;
-      websiteUrl: string | null;
-      directionsUrl: string | null;
-      metadata: string[];
-    }[];
-  }[];
-  durationMs: number;
-  truncatedCount?: number;
-  artifact?: {
-    artifactId: string;
-    bytes: number;
-    expiresAt: string;
-    preview: string;
-  };
-}
+export type Output = unknown
