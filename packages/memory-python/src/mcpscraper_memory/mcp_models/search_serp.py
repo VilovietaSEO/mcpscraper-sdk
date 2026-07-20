@@ -18,10 +18,3 @@ class SearchSerpInput(BaseModel):
 
 class SearchSerpOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    query: str = Field(..., alias="query", description="")
-    location: Any = Field(..., alias="location", description="")
-    organic_results: list[dict[str, Any]] = Field(..., alias="organicResults", description="")
-    local_pack: list[dict[str, Any]] = Field(..., alias="localPack", description="")
-    ai_overview: Any = Field(..., alias="aiOverview", description="")
-    entity_ids: Any = Field(..., alias="entityIds", description="")

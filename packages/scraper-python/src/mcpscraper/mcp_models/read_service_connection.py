@@ -12,7 +12,3 @@ class ReadServiceConnectionInput(BaseModel):
 
 class ReadServiceConnectionOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    ok: bool = Field(..., alias="ok", description="")
-    result: Any | None = Field(None, alias="result", description="")
-    error: Any = Field(..., alias="error", description="")

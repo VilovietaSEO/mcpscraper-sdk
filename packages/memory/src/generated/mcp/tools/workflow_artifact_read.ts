@@ -13,11 +13,4 @@ export interface Input {
   maxBytes?: number;
 }
 
-export interface Output {
-  runId: string;
-  artifactId: string;
-  contentType: string;
-  bytes: number;
-  truncated: boolean;
-  text: string;
-}
+export type Output = unknown

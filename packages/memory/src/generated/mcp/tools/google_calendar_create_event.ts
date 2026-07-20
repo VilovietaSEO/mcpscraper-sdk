@@ -48,8 +48,4 @@ export interface Input {
   }[];
 }
 
-export interface Output {
-  ok: boolean;
-  result?: unknown;
-  error: string | null;
-}
+export type Output = unknown

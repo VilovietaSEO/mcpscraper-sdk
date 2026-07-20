@@ -9,31 +9,4 @@ export interface Input {
   quality?: "best" | "hd" | "sd";
 }
 
-export interface Output {
-  sourceUrl: string;
-  pageUrl: string;
-  videoId: string | null;
-  ownerName: string | null;
-  selectedQuality: string;
-  bitrate: number | null;
-  videoDurationSec: number | null;
-  videoUrl: string;
-  wordCount: number;
-  chunkCount: number;
-  transcriptText: string;
-  chunks: {
-    startSec: number;
-    endSec: number;
-    text: string;
-  }[];
-  transcriptSignal: {
-    status: "speech_detected" | "low_speech_signal" | "empty";
-    speechDetected: boolean;
-    confidence: "medium" | "low";
-    basis: "transcript_word_count_and_timing";
-    mediaDurationSec: number | null;
-    wordsPerMinute: number | null;
-    retryRecommended: boolean;
-    warnings: string[];
-  };
-}
+export type Output = unknown

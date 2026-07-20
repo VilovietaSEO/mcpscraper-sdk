@@ -3622,8 +3622,4 @@ export interface Input {
       ];
 }
 
-export interface Output {
-  ok: boolean;
-  connections?: unknown[];
-  error: string | null;
-}
+export type Output = unknown

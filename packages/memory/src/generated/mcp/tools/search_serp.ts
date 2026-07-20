@@ -37,40 +37,4 @@ export interface Input {
   pages?: number;
 }
 
-export interface Output {
-  query: string;
-  location: string | null;
-  organicResults: {
-    position: number;
-    title: string;
-    url: string;
-    domain: string;
-    snippet: string | null;
-  }[];
-  localPack: {
-    position: number;
-    name: string;
-    rating: string | null;
-    reviewCount: string | null;
-    websiteUrl: string | null;
-  }[];
-  aiOverview: {
-    detected: boolean;
-    text: string | null;
-    shareUrl?: string | null;
-  } | null;
-  entityIds: {
-    /**
-     * Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility.
-     */
-    entities: {
-      name: string;
-      kgId: string | null;
-      cid: string | null;
-      gcid: string | null;
-    }[];
-    kgIds: string[];
-    cids: string[];
-    gcids: string[];
-  } | null;
-}
+export type Output = unknown

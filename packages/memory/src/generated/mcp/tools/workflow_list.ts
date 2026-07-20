@@ -5,21 +5,4 @@ export interface Input {
   includeRecipes?: boolean;
 }
 
-export interface Output {
-  workflows: {
-    id: string;
-    title: string;
-    description: string;
-  }[];
-  recipes: {
-    id: string;
-    title: string;
-    description: string;
-    primaryWorkflowId: string | null;
-    recommendedTools: string[];
-    requiredInputs: string[];
-    optionalInputs: string[];
-    produces: string[];
-    runHint: string;
-  }[];
-}
+export type Output = unknown

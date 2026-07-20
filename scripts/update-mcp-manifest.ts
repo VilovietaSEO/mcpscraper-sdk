@@ -4,7 +4,7 @@ import { join } from 'node:path'
 const ENDPOINT = 'https://mcpscraper.dev/mcp'
 const MANIFEST_PATH = join(process.cwd(), 'contracts/mcp.tools.json')
 const MEMORY_MANIFEST_PATH = join(process.cwd(), 'contracts/memory.tools.json')
-const REQUIRED_TOOL_COUNT = 163
+const REQUIRED_TOOL_COUNT = 165
 
 interface LiveTool {
   name: string

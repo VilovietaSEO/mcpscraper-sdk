@@ -13,15 +13,4 @@ export interface Input {
   maxResults?: number;
 }
 
-export interface Output {
-  query: string;
-  region: string;
-  advertiserCount: number;
-  advertisers: {
-    advertiserId: string | null;
-    name: string | null;
-    domain: string | null;
-    approxAdCount: number | null;
-    detailUrl: string | null;
-  }[];
-}
+export type Output = unknown

@@ -11,14 +11,3 @@ class MapSiteUrlsInput(BaseModel):
 
 class MapSiteUrlsOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    start_url: str = Field(..., alias="startUrl", description="")
-    total_found: int = Field(..., alias="totalFound", description="")
-    truncated: bool = Field(..., alias="truncated", description="")
-    ok_count: int = Field(..., alias="okCount", description="")
-    redirect_count: int = Field(..., alias="redirectCount", description="")
-    broken_count: int = Field(..., alias="brokenCount", description="")
-    urls: list[dict[str, Any]] = Field(..., alias="urls", description="")
-    duration_ms: float = Field(..., alias="durationMs", description="")
-    truncated_count: int | None = Field(None, alias="truncatedCount", description="")
-    artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")

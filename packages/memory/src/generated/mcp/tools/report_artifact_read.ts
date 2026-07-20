@@ -13,9 +13,4 @@ export interface Input {
   maxBytes?: number;
 }
 
-export interface Output {
-  artifactId: string;
-  text: string;
-  totalBytes: number;
-  nextOffset: number | null;
-}
+export type Output = unknown

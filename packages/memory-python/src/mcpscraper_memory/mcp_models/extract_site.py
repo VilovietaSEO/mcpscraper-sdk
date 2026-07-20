@@ -16,13 +16,3 @@ class ExtractSiteInput(BaseModel):
 
 class ExtractSiteOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    url: str = Field(..., alias="url", description="")
-    page_count: int | None = Field(None, alias="pageCount", description="Absent when background is true — the crawl has not finished yet.")
-    pages: list[dict[str, Any]] | None = Field(None, alias="pages", description="Absent when background is true — the crawl has not finished yet.")
-    duration_ms: float | None = Field(None, alias="durationMs", description="Absent when background is true — the crawl has not finished yet.")
-    truncated_count: int | None = Field(None, alias="truncatedCount", description="")
-    artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")
-    job_id: str | None = Field(None, alias="jobId", description="Present when background (or downloadImages) was set — poll with check_site_export.")
-    status: Literal["pending"] | None = Field(None, alias="status", description="Present when background (or downloadImages) was set.")
-    status_url: str | None = Field(None, alias="statusUrl", description="Present when background (or downloadImages) was set — informational; use check_site_export with jobId, not this URL directly.")

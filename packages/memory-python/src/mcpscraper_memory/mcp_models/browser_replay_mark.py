@@ -18,13 +18,3 @@ class BrowserReplayMarkInput(BaseModel):
 
 class BrowserReplayMarkOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    ok: bool = Field(..., alias="ok", description="Whether the browser-agent action succeeded.")
-    tool: str = Field(..., alias="tool", description="")
-    session_id: Any = Field(..., alias="session_id", description="Browser session id when the response is scoped to a session.")
-    replay_id: Any = Field(..., alias="replay_id", description="Replay id when the response is scoped to a replay.")
-    annotation: dict[str, Any] = Field(..., alias="annotation", description="")
-    source_width: Any = Field(..., alias="source_width", description="")
-    source_height: Any = Field(..., alias="source_height", description="")
-    target: Any = Field(..., alias="target", description="")
-    hint: str = Field(..., alias="hint", description="")

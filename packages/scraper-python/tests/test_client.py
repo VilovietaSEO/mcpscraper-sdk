@@ -255,10 +255,10 @@ def test_snake_case_kwargs_are_sent_as_camel_case():
     assert "max_pages" not in sent_body
 
 
-def test_unified_bindings_contain_all_163_unique_tools():
-    assert MCP_TOOL_COUNT == 163
+def test_unified_bindings_contain_all_165_unique_tools():
+    assert MCP_TOOL_COUNT == 165
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
-    assert len(names) == 163
+    assert len(names) == 165
     assert {
         "export_connected_service_data",
         "export_search_console_table_data",
@@ -269,7 +269,7 @@ def test_unified_bindings_contain_all_163_unique_tools():
 
 
 @responses.activate
-def test_typed_unified_tool_dispatches_through_mcp():
+def test_unified_tool_dispatches_through_mcp():
     search_result = {
         "query": "roofers denver",
         "location": None,
@@ -289,7 +289,7 @@ def test_typed_unified_tool_dispatches_through_mcp():
     sent_body = json.loads(responses.calls[0].request.body)
     assert sent_body["params"]["name"] == "search_serp"
     assert sent_body["params"]["arguments"] == {"query": "roofers denver"}
-    assert result.model_dump(by_alias=True) == search_result
+    assert result == search_result
 
 
 @responses.activate
@@ -319,9 +319,9 @@ def test_bulk_connected_data_export_dispatches_as_one_mcp_call():
         "lastDays": 30,
         "delivery": "artifact",
     }
-    assert result.ok is True
-    assert result.complete is True
-    assert result.error is None
+    assert result["ok"] is True
+    assert result["complete"] is True
+    assert result["error"] is None
 
 
 @responses.activate

@@ -17,19 +17,4 @@ export interface Input {
   maxVideos?: number;
 }
 
-export interface Output {
-  mode: string;
-  videoCount: number;
-  channel: {
-    title: string | null;
-    subscriberCount: string | null;
-  } | null;
-  videos: {
-    videoId: string;
-    title: string;
-    channelName: string | null;
-    views: string | null;
-    duration: string | null;
-    url: string | null;
-  }[];
-}
+export type Output = unknown

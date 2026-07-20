@@ -17,19 +17,3 @@ class InstagramProfileContentInput(BaseModel):
 
 class InstagramProfileContentOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    handle: str = Field(..., alias="handle", description="")
-    profile_url: str = Field(..., alias="profileUrl", description="")
-    page_url: str = Field(..., alias="pageUrl", description="")
-    browser: dict[str, Any] = Field(..., alias="browser", description="")
-    profile_name: Any = Field(..., alias="profileName", description="")
-    reported_post_count: Any = Field(..., alias="reportedPostCount", description="")
-    reported_post_count_text: Any = Field(..., alias="reportedPostCountText", description="")
-    follower_count_text: Any = Field(..., alias="followerCountText", description="")
-    following_count_text: Any = Field(..., alias="followingCountText", description="")
-    collected_content_count: int = Field(..., alias="collectedContentCount", description="")
-    type_counts: dict[str, Any] = Field(..., alias="typeCounts", description="")
-    pagination: dict[str, Any] = Field(..., alias="pagination", description="")
-    limited: bool = Field(..., alias="limited", description="")
-    limitations: list[str] = Field(..., alias="limitations", description="")
-    items: list[dict[str, Any]] = Field(..., alias="items", description="")
