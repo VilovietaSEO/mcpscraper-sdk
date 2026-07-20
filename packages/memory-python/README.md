@@ -7,7 +7,7 @@ This is a thin JSON-RPC client generated against [`../../contracts/memory.tools.
 ## Install
 
 ```bash
-pip install "mcpscraper-memory-sdk @ git+https://github.com/VilovietaSEO/mcpscraper-sdk.git#subdirectory=packages/memory-python"
+pip install mcpscraper-memory-sdk
 ```
 
 ## Usage
@@ -47,4 +47,4 @@ python scripts/generate_models.py
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` Python source package](../scraper-python) (also reaches these 89 tools via a scraper key) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) (also reaches these 89 tools via a scraper key) · [`mcpscraper-cli`](../cli)

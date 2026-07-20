@@ -10,8 +10,8 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 |---|---|---|
 | Node.js — scraper | [`mcpscraper-sdk`](./packages/scraper) | `npm install mcpscraper-sdk` |
 | Node.js — memory | [`mcpscraper-memory-sdk`](./packages/memory) | `npm install mcpscraper-memory-sdk` |
-| Python — scraper | [`mcpscraper-sdk`](./packages/scraper-python) (source package) | `pip install "mcpscraper-sdk @ git+https://github.com/VilovietaSEO/mcpscraper-sdk.git#subdirectory=packages/scraper-python"` |
-| Python — memory | [`mcpscraper-memory-sdk`](./packages/memory-python) (source package) | `pip install "mcpscraper-memory-sdk @ git+https://github.com/VilovietaSEO/mcpscraper-sdk.git#subdirectory=packages/memory-python"` |
+| Python — scraper | [`mcpscraper-sdk`](./packages/scraper-python) | `pip install mcpscraper-sdk` |
+| Python — memory | [`mcpscraper-memory-sdk`](./packages/memory-python) | `pip install mcpscraper-memory-sdk` |
 | CLI | [`mcpscraper-cli`](./packages/cli) | `npm install -g mcpscraper-cli` |
 
 ## Getting an API key

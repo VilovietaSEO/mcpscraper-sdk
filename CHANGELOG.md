@@ -4,6 +4,9 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## Python SDKs 0.13.1
+- Published both Python SDKs to PyPI and changed the public installation guidance from GitHub source URLs to `pip install` packages.
+
 ## mcpscraper-memory-sdk 0.15.1
 - Ensure the published package builds its declared `dist` entrypoints during `prepack`; 0.15.0 is deprecated because its tarball omitted them.
 
