@@ -110,4 +110,4 @@ npm run generate
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 89-tool typed surface) · [`mcpscraper-sdk` Python source package](../scraper-python) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 89-tool typed surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
