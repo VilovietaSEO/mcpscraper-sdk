@@ -1220,8 +1220,10 @@ export interface components {
             hl: string;
             /** @default 10 */
             maxResults: number;
+            /** @default false */
+            includeServices: boolean;
             /**
-             * @default location
+             * @default none
              * @enum {string}
              */
             proxyMode: "location" | "configured" | "none";

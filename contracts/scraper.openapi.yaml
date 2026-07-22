@@ -1520,7 +1520,8 @@ components:
         gl: { type: string, default: us }
         hl: { type: string, default: en }
         maxResults: { type: integer, minimum: 1, maximum: 50, default: 10 }
-        proxyMode: { type: string, enum: [location, configured, none], default: location }
+        includeServices: { type: boolean, default: false }
+        proxyMode: { type: string, enum: [location, configured, none], default: none }
         proxyZip: { type: string, pattern: '^\d{5}$' }
         debug: { type: boolean, default: false }
 

@@ -15,7 +15,7 @@ class DirectoryWorkflowInput(BaseModel):
     include_zip_groups: bool | None = Field(None, alias="includeZipGroups", description="Attach ZIP groups from a configured US ZIPS CSV when available (MCP_SCRAPER_USZIPS_CSV_PATH or usZipsCsvPath).")
     us_zips_csv_path: str | None = Field(None, alias="usZipsCsvPath", description="Local/test-only path to a US ZIPS CSV (state_abbr, zipcode, county, city columns). Deployed APIs should use MCP_SCRAPER_USZIPS_CSV_PATH instead. For ZIP enrichment, set MCP_SCRAPER_USZIPS_CSV_PATH on the server, or pass this in local/test mode.")
     save_csv: bool | None = Field(None, alias="saveCsv", description="Save a directory-ready CSV of results to the MCP Scraper output directory and return its path.")
-    proxy_mode: Literal["location", "configured", "none"] | None = Field(None, alias="proxyMode", description="Proxy behavior per city search. Leave unset for the direct localized Google route; location is an explicit residential-proxy override.")
+    proxy_mode: Literal["location", "configured", "none"] | None = Field(None, alias="proxyMode", description="Proxy behavior per city search. Leave unset for the default route (stealth browser on the managed ISP proxy, retried fresh on a Google block). location forces an explicit residential proxy — not recommended for Google.")
     proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional ZIP override for proxy targeting; normally omitted.")
     debug: bool | None = Field(None, alias="debug", description="Include sanitized browser/proxy diagnostics.")
 

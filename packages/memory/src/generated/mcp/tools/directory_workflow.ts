@@ -40,7 +40,7 @@ export interface Input {
    */
   saveCsv?: boolean;
   /**
-   * Proxy behavior per city search. Leave unset for the direct localized Google route; location is an explicit residential-proxy override.
+   * Proxy behavior per city search. Leave unset for the default route (stealth browser on the managed ISP proxy, retried fresh on a Google block). location forces an explicit residential proxy — not recommended for Google.
    */
   proxyMode?: "location" | "configured" | "none";
   /**

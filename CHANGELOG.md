@@ -4,6 +4,11 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-22 — verified against mcp-scraper 0.32.0
+
+- `maps_search` gains an optional `includeServices` input and its `proxyMode` default is now `none`; regenerated the MCP contract, OpenAPI, and all clients (scraper `0.17.0`, memory `0.17.0`, cli `0.15.0`, python packages `0.15.0`).
+- Reconciled a pre-existing CLI version drift (`CLI_VERSION` was `0.13.0` while `package.json` was `0.14.0`).
+
 ## 2026-07-21 — runtime 0.31.0 (Vault Taxonomy v2)
 - `contracts/mcp.tools.json` resynced from mcp-scraper 0.31.0's generated manifest (165 tools): 16-vault taxonomy (new Organizations vault, Examples and Inspirations and Communication renames with permanent aliases), required/recommended vault primitives, Inbox naming, richer output schemas.
 - `contracts/memory.tools.json` resynced from live memory.mcpscraper.dev (89 tools) with the same taxonomy.

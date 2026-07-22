@@ -273,7 +273,8 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
           gl: 'us',
           hl: 'en',
           maxResults: 10,
-          proxyMode: 'location',
+          includeServices: false,
+          proxyMode: 'none',
           debug: false,
         })
         printResult(result, Boolean(opts.json), (r) => {
