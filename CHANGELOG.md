@@ -4,6 +4,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-22 — verified against mcp-scraper 0.33.4
+
+- `proxyMode` on the search and maps tools now exposes `configured` and `none` only; a prior geo-targeted option was removed upstream. Regenerated the MCP contract, OpenAPI, and all clients.
+- Tightened tool and field descriptions across the contract to state intent without internal routing detail.
+- Corrected two fields to match the live API: a diagnostic session-id output field is now `browserSessionId`, and a non-existent fallback flag was removed from the crawl endpoints.
+- Refreshed the catalog to 166 unified tools (77 MCP Scraper + 89 memory), including the new `gmail_search_contacts`.
+- Published: `mcpscraper-sdk` 0.18.0, `mcpscraper-memory-sdk` 0.18.0, `mcpscraper-cli` 0.16.0, Python packages 0.16.0.
+
 ## 2026-07-22 — verified against mcp-scraper 0.32.0
 
 - `maps_search` gains an optional `includeServices` input and its `proxyMode` default is now `none`; regenerated the MCP contract, OpenAPI, and all clients (scraper `0.17.0`, memory `0.17.0`, cli `0.15.0`, python packages `0.15.0`).
@@ -56,7 +64,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 - Documented optional embedded page snapshots at 1 Credit per attempted URL, with requested capacity held up front and unused capacity refunded.
 
 ## mcpscraper-sdk 0.12.3
-- Updated `POST /harvest/sync`'s `serpOnly` description to match MCP Scraper 0.21.3's adaptive SERP pricing: 4 credits when served headless (typical), 14 credits if a CAPTCHA/block forces a headful retry (overestimate refunded). No shape change — description-only.
+- Updated `POST /harvest/sync`'s `serpOnly` description to match MCP Scraper 0.21.3's adaptive SERP pricing: 4 credits when served headless (typical), 14 credits if a block forces a fallback retry (overestimate refunded). No shape change — description-only.
 
 ## mcpscraper-memory-sdk 0.11.3 / mcpscraper-sdk 0.12.2 / Python SDKs 0.9.2 / mcpscraper-cli 0.9.2
 - Regenerated the direct Memory and unified 159-tool Node, Python, CLI, and cURL bindings against mcp-memory 1.9.1 and MCP Scraper 0.21.2.

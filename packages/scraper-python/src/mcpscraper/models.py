@@ -73,7 +73,6 @@ class Device(Enum):
 
 
 class ProxyMode(Enum):
-    location = 'location'
     configured = 'configured'
     none = 'none'
 
@@ -97,7 +96,7 @@ class HarvestSyncRequest(BaseModel):
     device: Device | None = 'desktop'
     proxyMode: ProxyMode | None = 'none'
     proxyZip: str | None = Field(
-        None, description='US ZIP to localize the proxy egress to.', pattern='^\\d{5}$'
+        None, description='Optional US ZIP override.', pattern='^\\d{5}$'
     )
     pages: int | None = Field(
         1, description='Organic result pages to fetch.', ge=1, le=2
@@ -203,7 +202,6 @@ class MapUrlsRequest(BaseModel):
     browserFallback: bool | None = Field(
         False, description='Use a real browser session for JS-heavy sites.'
     )
-    kernelFallback: bool | None = False
 
 
 class MapUrlsResponse(BaseModel):
@@ -235,7 +233,6 @@ class ExtractSiteRequest(BaseModel):
     rotateProxies: bool | None = False
     rotateProxyEvery: int | None = Field(30, ge=1, le=100)
     browserFallback: bool | None = False
-    kernelFallback: bool | None = False
     formats: list[Format] | None = Field(
         None,
         description='Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and\nreturns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).\n`images` performs the image audit and returns `imageAudit` — on the synchronous\npath too, not just background jobs.\n',
@@ -456,7 +453,8 @@ class MapsSearchRequest(BaseModel):
     gl: str | None = 'us'
     hl: str | None = 'en'
     maxResults: int | None = Field(10, ge=1, le=50)
-    proxyMode: ProxyMode | None = 'location'
+    includeServices: bool | None = False
+    proxyMode: ProxyMode | None = 'none'
     proxyZip: str | None = Field(None, pattern='^\\d{5}$')
     debug: bool | None = False
 
@@ -678,7 +676,7 @@ class SerpIntelligenceCaptureAttempt(BaseModel):
     durationMs: float | None = None
     problemCode: str | None = None
     message: str | None = None
-    kernelSessionId: str | None = None
+    browserSessionId: str | None = None
     cleanupSucceeded: bool | None = None
 
 

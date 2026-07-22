@@ -10,9 +10,9 @@ class SearchSerpInput(BaseModel):
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location or user language.")
     hl: str | None = Field(None, alias="hl", description="Google interface/content language inferred from user request.")
     device: Literal["desktop", "mobile"] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings.")
-    proxy_mode: Literal["location", "configured", "none"] | None = Field(None, alias="proxyMode", description="Leave unset (clean egress). Do NOT set \"location\" just because a city was named — that comes from city-in-query wording. \"location\" forces residential geo-IP for rank-tracking fidelity, is frequently CAPTCHA-blocked, and accepts failures.")
-    proxy_zip: str | None = Field(None, alias="proxyZip", description="US ZIP for residential geo-IP targeting. Only meaningful with proxyMode \"location\".")
-    debug: bool | None = Field(None, alias="debug", description="Include sanitized diagnostics for debugging localization, CAPTCHA, or proxy behavior.")
+    proxy_mode: Literal["configured", "none"] | None = Field(None, alias="proxyMode", description="Leave unset for the default route. Country/region localization comes from gl/hl plus the city or region in the query.")
+    proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override.")
+    debug: bool | None = Field(None, alias="debug", description="Include sanitized diagnostics for debugging.")
     pages: int | None = Field(None, alias="pages", description="Number of result pages to fetch (1–2).")
 
 

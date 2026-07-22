@@ -47,22 +47,21 @@ export const MCP_TOOL_CATALOG = [
         "proxyMode": {
           "type": "string",
           "enum": [
-            "location",
             "configured",
             "none"
           ],
           "default": "none",
-          "description": "Leave unset (clean egress). Do NOT set \"location\" just because a city was named — that comes from city-in-query wording. \"location\" forces residential geo-IP for rank-tracking fidelity, is frequently CAPTCHA-blocked, and accepts failures."
+          "description": "Leave unset for the default route. Country/region localization comes from gl/hl plus the city or region in the query."
         },
         "proxyZip": {
           "type": "string",
           "pattern": "^\\d{5}$",
-          "description": "US ZIP for residential geo-IP targeting. Only meaningful with proxyMode \"location\"."
+          "description": "Optional US ZIP override."
         },
         "debug": {
           "type": "boolean",
           "default": false,
-          "description": "Include sanitized diagnostics for debugging localization, CAPTCHA, or proxy behavior."
+          "description": "Include sanitized diagnostics for debugging."
         }
       },
       "required": [
@@ -120,22 +119,21 @@ export const MCP_TOOL_CATALOG = [
         "proxyMode": {
           "type": "string",
           "enum": [
-            "location",
             "configured",
             "none"
           ],
           "default": "none",
-          "description": "Leave unset (clean egress). Do NOT set \"location\" just because a city was named — that comes from city-in-query wording. \"location\" forces residential geo-IP for rank-tracking fidelity, is frequently CAPTCHA-blocked, and accepts failures."
+          "description": "Leave unset for the default route. Country/region localization comes from gl/hl plus the city or region in the query."
         },
         "proxyZip": {
           "type": "string",
           "pattern": "^\\d{5}$",
-          "description": "US ZIP for residential geo-IP targeting. Only meaningful with proxyMode \"location\"."
+          "description": "Optional US ZIP override."
         },
         "debug": {
           "type": "boolean",
           "default": false,
-          "description": "Include sanitized diagnostics for debugging localization, CAPTCHA, or proxy behavior."
+          "description": "Include sanitized diagnostics for debugging."
         },
         "pages": {
           "type": "integer",
@@ -337,7 +335,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "rotateProxies": {
           "type": "boolean",
-          "description": "Route page fetches through rotating residential proxies to defeat rate-limiting and bot blocks (403/429). Slower and pricier — use only when a site blocks normal crawling."
+          "description": "Use extra measures to get past sites that block normal crawling (403/429). Slower and pricier — use only when a site blocks normal crawling."
         },
         "rotateProxyEvery": {
           "type": "integer",
@@ -405,7 +403,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "rotateProxies": {
           "type": "boolean",
-          "description": "Route page fetches through rotating residential proxies to defeat rate-limiting and bot blocks. Slower/pricier — use only when a site blocks normal crawling."
+          "description": "Use extra measures to get past sites that block normal crawling. Slower/pricier — use only when a site blocks normal crawling."
         },
         "rotateProxyEvery": {
           "type": "integer",
@@ -1176,17 +1174,16 @@ export const MCP_TOOL_CATALOG = [
         "proxyMode": {
           "type": "string",
           "enum": [
-            "location",
             "configured",
             "none"
           ],
           "default": "none",
-          "description": "Leave unset for the default route (stealth browser on the managed ISP proxy, retried on a fresh session when Google blocks). Localization comes from the city in the query plus gl/hl. location forces an explicit residential proxy — not recommended for Google."
+          "description": "Leave unset for the default route. Country/region localization comes from the city or region in the query plus gl/hl."
         },
         "proxyZip": {
           "type": "string",
           "pattern": "^\\d{5}$",
-          "description": "Optional US ZIP override, only used when proxyMode is location."
+          "description": "Optional US ZIP override."
         },
         "debug": {
           "type": "boolean",
@@ -1348,17 +1345,16 @@ export const MCP_TOOL_CATALOG = [
         "proxyMode": {
           "type": "string",
           "enum": [
-            "location",
             "configured",
             "none"
           ],
           "default": "none",
-          "description": "Proxy behavior per city search. Leave unset for the default route (stealth browser on the managed ISP proxy, retried fresh on a Google block). location forces an explicit residential proxy — not recommended for Google."
+          "description": "Proxy behavior per city search. Leave unset for the default route. Country/region localization comes from the city or region in the query plus gl/hl."
         },
         "proxyZip": {
           "type": "string",
           "pattern": "^\\d{5}$",
-          "description": "Optional ZIP override for proxy targeting; normally omitted."
+          "description": "Optional US ZIP override."
         },
         "debug": {
           "type": "boolean",
@@ -2739,17 +2735,16 @@ export const MCP_TOOL_CATALOG = [
         "proxyMode": {
           "type": "string",
           "enum": [
-            "location",
             "configured",
             "none"
           ],
           "default": "none",
-          "description": "Leave unset (clean egress). Do NOT set \"location\" just because a city was named — that comes from city-in-query wording. \"location\" forces residential geo-IP, is frequently CAPTCHA-blocked, and accepts failures."
+          "description": "Leave unset for the default route. Country/region localization comes from gl/hl plus the city or region in the query."
         },
         "proxyZip": {
           "type": "string",
           "pattern": "^\\d{5}$",
-          "description": "US ZIP for residential geo-IP targeting. Only meaningful with proxyMode \"location\"."
+          "description": "Optional US ZIP override."
         },
         "pages": {
           "type": "integer",
@@ -7633,6 +7628,52 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": true,
       "idempotentHint": true,
       "openWorldHint": false
+    }
+  },
+  {
+    "name": "gmail_search_contacts",
+    "category": "connections",
+    "title": "Search Gmail Contacts",
+    "description": "Search Gmail with standard Gmail query syntax (e.g. \"from:acme.com after:2026/03/22\") and get back deduplicated sender contacts (email, name, domain, message count, first/last seen, sample subjects) instead of raw messages. Read-only — works on any connected Gmail connection from list_service_connections, no actionsEnabled required. Use this instead of looping list-messages/get-message yourself: those return bare message IDs and full raw MIME per message, which does not scale past a handful of messages. Reports totalMatches and truncated so incomplete coverage from a large result set is never silent — pass the returned nextPageToken to continue.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "A Gmail connectionId from list_service_connections. Read-only — does not require actionsEnabled."
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Gmail search syntax, e.g. \"from:brandnorth.com after:2026/03/22\" or \"brandnorth.com\"."
+        },
+        "maxMessages": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 150,
+          "default": 50,
+          "description": "Max messages to fetch and aggregate in this call. Paginate with pageToken for more; the response reports totalMatches and truncated so undercoverage is never silent."
+        },
+        "pageToken": {
+          "type": "string",
+          "description": "Continuation token from a prior response to fetch the next page."
+        }
+      },
+      "required": [
+        "connectionId",
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Search Gmail Contacts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
     }
   }
 ] as const

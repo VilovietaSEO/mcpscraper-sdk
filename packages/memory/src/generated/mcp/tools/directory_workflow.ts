@@ -40,11 +40,11 @@ export interface Input {
    */
   saveCsv?: boolean;
   /**
-   * Proxy behavior per city search. Leave unset for the default route (stealth browser on the managed ISP proxy, retried fresh on a Google block). location forces an explicit residential proxy — not recommended for Google.
+   * Proxy behavior per city search. Leave unset for the default route. Country/region localization comes from the city or region in the query plus gl/hl.
    */
-  proxyMode?: "location" | "configured" | "none";
+  proxyMode?: "configured" | "none";
   /**
-   * Optional ZIP override for proxy targeting; normally omitted.
+   * Optional US ZIP override.
    */
   proxyZip?: string;
   /**

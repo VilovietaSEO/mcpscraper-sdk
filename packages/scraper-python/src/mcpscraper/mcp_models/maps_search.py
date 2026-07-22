@@ -11,8 +11,8 @@ class MapsSearchInput(BaseModel):
     hl: str | None = Field(None, alias="hl", description="Language inferred from user request.")
     max_results: int | None = Field(None, alias="maxResults", description="Number of candidates to return. Default 10, maximum 50.")
     include_services: bool | None = Field(None, alias="includeServices", description="Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards.")
-    proxy_mode: Literal["location", "configured", "none"] | None = Field(None, alias="proxyMode", description="Leave unset for the default route (stealth browser on the managed ISP proxy, retried on a fresh session when Google blocks). Localization comes from the city in the query plus gl/hl. location forces an explicit residential proxy — not recommended for Google.")
-    proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override, only used when proxyMode is location.")
+    proxy_mode: Literal["configured", "none"] | None = Field(None, alias="proxyMode", description="Leave unset for the default route. Country/region localization comes from the city or region in the query plus gl/hl.")
+    proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override.")
     debug: bool | None = Field(None, alias="debug", description="Include sanitized browser/proxy diagnostics.")
 
 

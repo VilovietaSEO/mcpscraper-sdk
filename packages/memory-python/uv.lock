@@ -148,7 +148,7 @@ wheels = [
 
 [[package]]
 name = "mcpscraper-memory-sdk"
-version = "0.13.1"
+version = "0.16.0"
 source = { editable = "." }
 dependencies = [
     { name = "pydantic" },

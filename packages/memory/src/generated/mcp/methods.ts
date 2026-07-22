@@ -54,6 +54,7 @@ import * as ConnectionsExportSearchConsoleTableData from './tools/export_search_
 import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_data_download.js'
 import * as ConnectionsCallServiceConnectionAction from './tools/call_service_connection_action.js'
 import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
+import * as ConnectionsGmailSearchContacts from './tools/gmail_search_contacts.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as BrowserProfileConnect from './tools/browser_profile_connect.js'
@@ -991,6 +992,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "revoke-webhook",
     "category": "webhooks",
     "methodName": "revokeWebhook"
+  },
+  {
+    "name": "gmail_search_contacts",
+    "category": "connections",
+    "methodName": "gmailSearchContacts"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1268,6 +1274,10 @@ export class ConnectionsNamespace {
 
   async setScheduledActionConnections(input: ConnectionsSetScheduledActionConnections.Input): Promise<ConnectionsSetScheduledActionConnections.Output> {
     return this.callTool('set_scheduled_action_connections', input) as Promise<ConnectionsSetScheduledActionConnections.Output>
+  }
+
+  async gmailSearchContacts(input: ConnectionsGmailSearchContacts.Input): Promise<ConnectionsGmailSearchContacts.Output> {
+    return this.callTool('gmail_search_contacts', input) as Promise<ConnectionsGmailSearchContacts.Output>
   }
 }
 

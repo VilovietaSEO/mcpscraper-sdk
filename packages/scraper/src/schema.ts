@@ -884,8 +884,8 @@ export interface components {
              * @default none
              * @enum {string}
              */
-            proxyMode: "location" | "configured" | "none";
-            /** @description US ZIP to localize the proxy egress to. */
+            proxyMode: "configured" | "none";
+            /** @description Optional US ZIP override. */
             proxyZip?: string;
             /**
              * @description Organic result pages to fetch.
@@ -1013,8 +1013,6 @@ export interface components {
              * @default false
              */
             browserFallback: boolean;
-            /** @default false */
-            kernelFallback: boolean;
         };
         MapUrlsResponse: {
             urls?: string[];
@@ -1042,8 +1040,6 @@ export interface components {
             rotateProxyEvery: number;
             /** @default false */
             browserFallback: boolean;
-            /** @default false */
-            kernelFallback: boolean;
             /**
              * @description Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and
              *     returns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).
@@ -1226,7 +1222,7 @@ export interface components {
              * @default none
              * @enum {string}
              */
-            proxyMode: "location" | "configured" | "none";
+            proxyMode: "configured" | "none";
             proxyZip?: string;
             /** @default false */
             debug: boolean;
@@ -1259,7 +1255,7 @@ export interface components {
              * @default none
              * @enum {string}
              */
-            proxyMode: "location" | "configured" | "none";
+            proxyMode: "configured" | "none";
             proxyZip?: string;
             /** @default 1 */
             pages: number;
@@ -1408,7 +1404,7 @@ export interface components {
             durationMs?: number;
             problemCode?: string;
             message?: string;
-            kernelSessionId?: string | null;
+            browserSessionId?: string | null;
             cleanupSucceeded?: boolean | null;
         };
         SerpIntelligenceCaptureResponse: {
@@ -1854,7 +1850,7 @@ export interface operations {
             402: components["responses"]["InsufficientBalance"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
-            /** @description YouTube blocked the request (CAPTCHA) — billed amount was refunded. */
+            /** @description YouTube blocked the request — billed amount was refunded. */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -1975,7 +1971,7 @@ export interface operations {
             402: components["responses"]["InsufficientBalance"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
-            /** @description Facebook blocked the request (CAPTCHA/soft-block) — billed amount was refunded. */
+            /** @description Facebook blocked the request — billed amount was refunded. */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -2349,7 +2345,7 @@ export interface operations {
             402: components["responses"]["InsufficientBalance"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
-            /** @description Blocked/CAPTCHA. */
+            /** @description Blocked. */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -2408,7 +2404,7 @@ export interface operations {
             402: components["responses"]["InsufficientBalance"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
-            /** @description Blocked/CAPTCHA. */
+            /** @description Blocked. */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -2616,7 +2612,7 @@ export interface operations {
             402: components["responses"]["InsufficientBalance"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
-            /** @description CAPTCHA/blocked — retryable. */
+            /** @description Temporarily blocked — retryable. */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -2653,7 +2649,7 @@ export interface operations {
             402: components["responses"]["InsufficientBalance"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
-            /** @description CAPTCHA/blocked — retryable. */
+            /** @description Temporarily blocked — retryable. */
             503: {
                 headers: {
                     [name: string]: unknown;
