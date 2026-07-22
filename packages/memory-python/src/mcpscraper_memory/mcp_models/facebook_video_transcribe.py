@@ -11,3 +11,17 @@ class FacebookVideoTranscribeInput(BaseModel):
 
 class FacebookVideoTranscribeOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    source_url: str = Field(..., alias="sourceUrl", description="")
+    page_url: str = Field(..., alias="pageUrl", description="")
+    video_id: Any = Field(..., alias="videoId", description="")
+    owner_name: Any = Field(..., alias="ownerName", description="")
+    selected_quality: str = Field(..., alias="selectedQuality", description="")
+    bitrate: Any = Field(..., alias="bitrate", description="")
+    video_duration_sec: Any = Field(..., alias="videoDurationSec", description="")
+    video_url: str = Field(..., alias="videoUrl", description="")
+    word_count: int = Field(..., alias="wordCount", description="")
+    chunk_count: int = Field(..., alias="chunkCount", description="")
+    transcript_text: str = Field(..., alias="transcriptText", description="")
+    chunks: list[dict[str, Any]] = Field(..., alias="chunks", description="")
+    transcript_signal: dict[str, Any] = Field(..., alias="transcriptSignal", description="")

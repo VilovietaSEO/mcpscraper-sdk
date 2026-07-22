@@ -14,3 +14,15 @@ class CaptureSerpPageSnapshotsInput(BaseModel):
 
 class CaptureSerpPageSnapshotsOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    schema_version: str = Field(..., alias="schemaVersion", description="")
+    status: str = Field(..., alias="status", description="")
+    count: int = Field(..., alias="count", description="")
+    captured_count: int = Field(..., alias="capturedCount", description="")
+    failed_count: int = Field(..., alias="failedCount", description="")
+    skipped_count: int = Field(..., alias="skippedCount", description="")
+    captures: list[dict[str, Any]] = Field(..., alias="captures", description="")
+    attempts: list[dict[str, Any]] = Field(..., alias="attempts", description="")
+    resolved_inputs: dict[str, Any] = Field(..., alias="resolvedInputs", description="")
+    diagnostics: Any = Field(..., alias="diagnostics", description="")
+    provider_payload: dict[str, Any] = Field(..., alias="providerPayload", description="")

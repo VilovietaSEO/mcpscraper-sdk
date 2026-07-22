@@ -29,4 +29,41 @@ export interface Input {
   downloadImages?: boolean;
 }
 
-export type Output = unknown
+export interface Output {
+  url: string;
+  /**
+   * Absent when background is true — the crawl has not finished yet.
+   */
+  pageCount?: number;
+  /**
+   * Absent when background is true — the crawl has not finished yet.
+   */
+  pages?: {
+    url: string;
+    title: string | null;
+    schemaTypes: string[];
+  }[];
+  /**
+   * Absent when background is true — the crawl has not finished yet.
+   */
+  durationMs?: number;
+  truncatedCount?: number;
+  artifact?: {
+    artifactId: string;
+    bytes: number;
+    expiresAt: string;
+    preview: string;
+  };
+  /**
+   * Present when background (or downloadImages) was set — poll with check_site_export.
+   */
+  jobId?: string;
+  /**
+   * Present when background (or downloadImages) was set.
+   */
+  status?: "pending";
+  /**
+   * Present when background (or downloadImages) was set — informational; use check_site_export with jobId, not this URL directly.
+   */
+  statusUrl?: string;
+}

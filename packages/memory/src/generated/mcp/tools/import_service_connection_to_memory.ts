@@ -27,4 +27,23 @@ export interface Input {
   title?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  stored?: boolean;
+  status?: "search_ready" | "stored_not_indexed";
+  searchReady?: boolean;
+  providerConfigKey?: string;
+  connectionId?: string;
+  tool?: string;
+  vault?: string;
+  path?: string;
+  sourceBytes?: number;
+  contentSha256?: string;
+  indexedChunks?: number;
+  importedAt?: string;
+  untrustedContent?: true;
+  warning?: string;
+  errorCode?: string;
+  retryable?: boolean;
+  error: string | null;
+}

@@ -8,7 +8,7 @@ export interface Input {
    */
   sessionId?: string;
   /**
-   * Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 13-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects.
+   * Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 16-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Do not use this low-level tool to create ordinary People, Organizations, Deals, Projects, Tasks, or Communication records: first use prepare-memory-write then memory-capture so relationships and approval state are validated.
    */
   vault?: string;
   /**

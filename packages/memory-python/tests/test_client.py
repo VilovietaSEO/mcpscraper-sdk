@@ -193,4 +193,4 @@ def test_memory_package_unified_client_calls_scraper_and_memory_tools():
     result = client.browser.list_sessions()
     sent_body = json.loads(responses.calls[0].request.body)
     assert sent_body["params"]["name"] == "browser_list_sessions"
-    assert result == session_result
+    assert result.model_dump(by_alias=True) == session_result

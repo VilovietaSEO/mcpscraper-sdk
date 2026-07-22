@@ -10,3 +10,6 @@ class WorkflowStatusInput(BaseModel):
 
 class WorkflowStatusOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    run: dict[str, Any] | None = Field(None, alias="run", description="")
+    artifacts: list[dict[str, Any]] = Field(..., alias="artifacts", description="")

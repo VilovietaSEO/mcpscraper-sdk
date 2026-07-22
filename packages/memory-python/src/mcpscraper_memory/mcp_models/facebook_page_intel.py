@@ -14,3 +14,15 @@ class FacebookPageIntelInput(BaseModel):
 
 class FacebookPageIntelOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    advertiser_name: Any = Field(..., alias="advertiserName", description="")
+    input_mode: Literal["pageId", "libraryId", "query"] = Field(..., alias="inputMode", description="")
+    match_confidence: Literal["high", "medium", "low"] = Field(..., alias="matchConfidence", description="")
+    match_reason: str = Field(..., alias="matchReason", description="")
+    warnings: list[str] = Field(..., alias="warnings", description="")
+    matched_advertisers: list[dict[str, Any]] = Field(..., alias="matchedAdvertisers", description="")
+    total_ads: int = Field(..., alias="totalAds", description="")
+    active_count: int = Field(..., alias="activeCount", description="")
+    video_count: int = Field(..., alias="videoCount", description="")
+    image_count: int = Field(..., alias="imageCount", description="")
+    ads: list[dict[str, Any]] = Field(..., alias="ads", description="")

@@ -9,4 +9,23 @@ export interface Input {
   maxUrls?: number;
 }
 
-export type Output = unknown
+export interface Output {
+  startUrl: string;
+  totalFound: number;
+  truncated: boolean;
+  okCount: number;
+  redirectCount: number;
+  brokenCount: number;
+  urls: {
+    url: string;
+    status: number | null;
+  }[];
+  durationMs: number;
+  truncatedCount?: number;
+  artifact?: {
+    artifactId: string;
+    bytes: number;
+    expiresAt: string;
+    preview: string;
+  };
+}

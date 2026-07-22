@@ -21,4 +21,9 @@ export interface Input {
   vault?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  runId: string | null;
+  status: string | null;
+  message: string | null;
+}

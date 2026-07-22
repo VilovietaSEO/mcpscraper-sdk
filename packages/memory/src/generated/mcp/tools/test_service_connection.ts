@@ -9,4 +9,11 @@ export interface Input {
   providerConfigKey?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  operationalStatus?: "available" | "unavailable";
+  checkedAt?: string;
+  toolCount?: number;
+  code?: string;
+  error: string | null;
+}

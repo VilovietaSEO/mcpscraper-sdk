@@ -11,3 +11,10 @@ class TestServiceConnectionInput(BaseModel):
 
 class TestServiceConnectionOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="")
+    operational_status: Literal["available", "unavailable"] | None = Field(None, alias="operationalStatus", description="")
+    checked_at: str | None = Field(None, alias="checkedAt", description="")
+    tool_count: int | None = Field(None, alias="toolCount", description="")
+    code: str | None = Field(None, alias="code", description="")
+    error: Any = Field(..., alias="error", description="")

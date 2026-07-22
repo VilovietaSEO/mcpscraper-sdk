@@ -11,3 +11,12 @@ class RedditThreadInput(BaseModel):
 
 class RedditThreadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    source_url: Any = Field(..., alias="sourceUrl", description="")
+    old_reddit_url: Any = Field(..., alias="oldRedditUrl", description="")
+    title: Any = Field(..., alias="title", description="")
+    author: Any = Field(..., alias="author", description="")
+    score: Any = Field(..., alias="score", description="")
+    post_body: Any = Field(..., alias="postBody", description="")
+    num_comments: int = Field(..., alias="numComments", description="")
+    comments: list[dict[str, Any]] = Field(..., alias="comments", description="")

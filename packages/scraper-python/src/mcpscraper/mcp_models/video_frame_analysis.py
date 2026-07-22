@@ -14,3 +14,8 @@ class VideoFrameAnalysisInput(BaseModel):
 
 class VideoFrameAnalysisOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="")
+    run_id: Any = Field(..., alias="runId", description="")
+    status: Any = Field(..., alias="status", description="")
+    message: Any = Field(..., alias="message", description="")

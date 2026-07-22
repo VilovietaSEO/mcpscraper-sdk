@@ -289,7 +289,7 @@ def test_unified_tool_dispatches_through_mcp():
     sent_body = json.loads(responses.calls[0].request.body)
     assert sent_body["params"]["name"] == "search_serp"
     assert sent_body["params"]["arguments"] == {"query": "roofers denver"}
-    assert result == search_result
+    assert result.model_dump(by_alias=True) == search_result
 
 
 @responses.activate
@@ -319,9 +319,10 @@ def test_bulk_connected_data_export_dispatches_as_one_mcp_call():
         "lastDays": 30,
         "delivery": "artifact",
     }
-    assert result["ok"] is True
-    assert result["complete"] is True
-    assert result["error"] is None
+    dumped = result.model_dump(by_alias=True) if hasattr(result, "model_dump") else result
+    assert dumped["ok"] is True
+    assert dumped["complete"] is True
+    assert dumped["error"] is None
 
 
 @responses.activate

@@ -37,4 +37,53 @@ export interface Input {
   debug?: boolean;
 }
 
-export type Output = unknown
+export interface Output {
+  query: string;
+  location: string | null;
+  searchQuery: string;
+  searchUrl: string;
+  extractedAt: string;
+  requestedMaxResults: number;
+  resultCount: number;
+  results: {
+    position: number;
+    name: string;
+    placeUrl: string;
+    cid: string | null;
+    cidDecimal: string | null;
+    rating: string | null;
+    reviewCount: string | null;
+    category: string | null;
+    address: string | null;
+    phone: string | null;
+    hoursStatus: string | null;
+    websiteUrl: string | null;
+    directionsUrl: string | null;
+    metadata: string[];
+    services?: string[];
+    areasServed?: string[];
+    profileDetailsStatus?: "collected" | "none_exist" | "unavailable" | "not_requested";
+  }[];
+  attempts: {
+    attemptNumber: number;
+    maxAttempts: number;
+    status: "ok" | "failed";
+    outcome: string;
+    willRetry: boolean;
+    durationMs: number;
+    resultCount: number;
+    error: string | null;
+    proxyMode: "location" | "configured" | "none";
+    proxyResolutionSource:
+      ("disabled" | "location_reused" | "location_created" | "configured_fallback" | "unavailable") | null;
+    proxyIdSuffix: string | null;
+    proxyTargetLevel: ("zip" | "city" | "state") | null;
+    proxyTargetLocation: string | null;
+    proxyTargetZip: string | null;
+    browserSessionIdSuffix: string | null;
+    observedIp: string | null;
+    observedCity: string | null;
+    observedRegion: string | null;
+  }[];
+  durationMs: number;
+}

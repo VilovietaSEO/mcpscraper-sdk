@@ -1554,7 +1554,7 @@
     },
     {
       "name": "createChannelTool",
-      "description": "Create an Omni-Chat channel — a vault for threaded messages, reactions, and mentions instead of ordinary notes. Starts private to you; optionally invite initial members in the same call, each still gated by the normal sender-approval trust check. Requires write scope.",
+      "description": "Create an Inbox channel — a vault for threaded messages, reactions, and mentions instead of ordinary notes. Starts private to you; optionally invite initial members in the same call, each still gated by the normal sender-approval trust check. Requires write scope.",
       "category": "channels",
       "inputSchema": {
         "type": "object",
@@ -1666,7 +1666,7 @@
     },
     {
       "name": "postMessageTool",
-      "description": "Post a top-level message to an Omni-Chat channel. @mentioning a member's email surfaces it in their my-mentions inbox; attachNote auto-shares one of your notes with every current channel member. Requires write access on the channel.",
+      "description": "Post a top-level message to an Inbox channel. @mentioning a member's email surfaces it in their my-mentions inbox; attachNote auto-shares one of your notes with every current channel member. Requires write access on the channel.",
       "category": "channels",
       "inputSchema": {
         "type": "object",
@@ -1765,7 +1765,7 @@
     },
     {
       "name": "replyMessageTool",
-      "description": "Reply inside a top-level message's thread in an Omni-Chat channel — one level of nesting only, so always reply on the top-level parentMessageId. @mentions and attachNote behave as in post-message. Requires write access on the channel.",
+      "description": "Reply inside a top-level message's thread in an Inbox channel — one level of nesting only, so always reply on the top-level parentMessageId. @mentions and attachNote behave as in post-message. Requires write access on the channel.",
       "category": "channels",
       "inputSchema": {
         "type": "object",
@@ -1870,7 +1870,7 @@
     },
     {
       "name": "listChannelMessagesTool",
-      "description": "Read an Omni-Chat channel: top-level messages by default, or one thread's replies when parentMessageId is given. Every message returned is marked read for you, visible to other members via readBy. Requires read access on the channel.",
+      "description": "Read an Inbox channel: top-level messages by default, or one thread's replies when parentMessageId is given. Every message returned is marked read for you, visible to other members via readBy. Requires read access on the channel.",
       "category": "channels",
       "inputSchema": {
         "type": "object",
@@ -2111,7 +2111,7 @@
     },
     {
       "name": "myMentionsTool",
-      "description": "List every place you're @mentioned across all Omni-Chat channels you are CURRENTLY a member of, newest first — mentions in channels you've since left do not appear.",
+      "description": "List every place you're @mentioned across all Inbox channels you are CURRENTLY a member of, newest first — mentions in channels you've since left do not appear.",
       "category": "channels",
       "inputSchema": {
         "type": "object",
@@ -2612,7 +2612,7 @@
     },
     {
       "name": "getChatLinkTool",
-      "description": "Get your durable, bookmarkable link to the hosted Omni-Chat page — a login-free chat UI for every channel you're in. The embedded secret is shown only once, on first call; it cannot be re-shown, only revoked and reissued via revoke-chat-link. Anyone holding the link can post as you.",
+      "description": "Get your durable, bookmarkable link to the hosted Inbox chat page — a login-free chat UI for every channel you're in. The embedded secret is shown only once, on first call; it cannot be re-shown, only revoked and reissued via revoke-chat-link. Anyone holding the link can post as you.",
       "category": "access",
       "inputSchema": {
         "type": "object",
@@ -2702,7 +2702,7 @@
     },
     {
       "name": "getVaultAppLinkTool",
-      "description": "Get the durable, bookmarkable link to the mobile-first Vault App for People, Projects, and Tasks. The embedded secret is shown only once; revoke-vault-app-link then call this tool again to replace a link that was shared or leaked. This link is independent from Omni-Chat. Anyone holding it can use the Vault App as this identity.",
+      "description": "Get the durable, bookmarkable link to the mobile-first Vault App for People, Projects, and Tasks. The embedded secret is shown only once; revoke-vault-app-link then call this tool again to replace a link that was shared or leaked. This link is independent from the Inbox chat link. Anyone holding it can use the Vault App as this identity.",
       "category": "access",
       "inputSchema": {
         "type": "object",
@@ -2749,7 +2749,7 @@
     },
     {
       "name": "revokeVaultAppLinkTool",
-      "description": "Immediately revoke the current Vault App link without touching the separate Omni-Chat link. Call get-vault-app-link afterward to mint a replacement.",
+      "description": "Immediately revoke the current Vault App link without touching the separate Inbox chat link. Call get-vault-app-link afterward to mint a replacement.",
       "category": "access",
       "inputSchema": {
         "type": "object",
@@ -2922,7 +2922,7 @@
     },
     {
       "name": "prepareMemoryWriteTool",
-      "description": "Mandatory planning pass for a normal new memory. First inspect the complete tag vocabulary with list-memory-tags; then this pass routes the note, returns the live template and natural vault relationships, resolves proposed tags, and shortlists interlinks. Use hybrid memory-search (3 focused queries, 50 fused candidates, bounded graph expansion, rerank to 30 by default) and read strong related notes before capture. This is an explicit AI workflow directive, not a claim of persisted call-order enforcement.",
+      "description": "Mandatory planning pass for a normal new memory. First inspect the complete tag vocabulary with list-memory-tags; then this pass routes the note, returns the live template and natural vault relationships, resolves proposed tags, and shortlists interlinks. For People, Organizations, Deals, Projects, Tasks, and Communication, it also returns relationship and approval guidance: search existing records before linking, but do not invent a project or party. A Task can remain an independent Inbox todo. Use hybrid memory-search (3 focused queries, 50 fused candidates, bounded graph expansion, rerank to 30 by default) and read strong related notes before capture. This is an explicit AI workflow directive, not a claim of persisted call-order enforcement.",
       "category": "capture",
       "inputSchema": {
         "type": "object",
@@ -3209,7 +3209,7 @@
     },
     {
       "name": "memoryCaptureTool",
-      "description": "Strict normal-create path for durable memory. Before capture, list the complete tag vocabulary, call prepare-memory-write, run hybrid memory-search for related notes, and read the strongest link candidates. This tool refuses incomplete notes, writes through memory-put, registers canonical tags, and verifies persisted content and props. Reserve memory-put for low-level migrations or deliberate edits.",
+      "description": "Strict normal-create path for durable memory. Before capture, list the complete tag vocabulary, call prepare-memory-write, run hybrid memory-search for related notes, and read the strongest link candidates. This tool refuses incomplete notes and invalid relationship-domain writes: projects need a project kind, tasks may be independent Inbox todos but must use a matched project when linked, deals need a known party, and draft emails need a pending approval state. It writes through memory-put, registers canonical tags, and verifies persisted content and props. Reserve memory-put for low-level migrations or deliberate edits.",
       "category": "capture",
       "inputSchema": {
         "type": "object",
@@ -4046,7 +4046,7 @@
     },
     {
       "name": "putTool",
-      "description": "Create or edit one note at a path in a memory vault; content is persisted and indexed for search. For row-shaped datasets you'll filter/sort by exact value, use table-create/table-insert-rows/table-query instead. Ordinary vaults are indexed and shareable — never store real secrets there; use a secure vault (create-secure-vault) instead, which is never indexed or shareable and is encrypted at rest. Requires write scope.",
+      "description": "Create or deliberately edit one note at a path in a memory vault; content is persisted and indexed for search. For normal new People, Organizations, Deals, Projects, Tasks, or Communication records, use prepare-memory-write then memory-capture: People must be real people, Organizations must be real organizations, Deals need a known party, Projects need a supported kind, Tasks can be independent Inbox todos or use a verified Project when linked, and draft emails need pending approval. For row-shaped datasets you'll filter/sort by exact value, use table-create/table-insert-rows/table-query instead. Ordinary vaults are indexed and shareable — never store real secrets there; use a secure vault (create-secure-vault) instead, which is never indexed or shareable and is encrypted at rest. Requires write scope.",
       "category": "memory",
       "inputSchema": {
         "type": "object",
@@ -4061,7 +4061,7 @@
           },
           "vault": {
             "type": "string",
-            "description": "Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 13-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects."
+            "description": "Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 16-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Do not use this low-level tool to create ordinary People, Organizations, Deals, Projects, Tasks, or Communication records: first use prepare-memory-write then memory-capture so relationships and approval state are validated."
           },
           "path": {
             "type": "string",
@@ -5773,7 +5773,7 @@
                     "channel",
                     "secure"
                   ],
-                  "description": "\"channel\" for an Omni-Chat channel (created via create-channel); \"secure\" for a private, encrypted, unshareable, unindexed vault (created via create-secure-vault) — safe to store credentials there; \"notes\" for an ordinary vault."
+                  "description": "\"channel\" for an Inbox channel (created via create-channel); \"secure\" for a private, encrypted, unshareable, unindexed vault (created via create-secure-vault) — safe to store credentials there; \"notes\" for an ordinary vault."
                 }
               },
               "required": [
@@ -5977,7 +5977,7 @@
     },
     {
       "name": "provisionDefaultsTool",
-      "description": "Provision the standard 14-vault memory structure (Ideas, Inspiration, Knowledge, Library, People, Communications, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, Skills) for an identity. Idempotent — existing vaults are untouched. Optionally issues a fresh API key entitled to all 14. Requires admin scope.",
+      "description": "Provision the standard 16-vault memory structure (Ideas, Examples and Inspirations, Knowledge, Library, People, Organizations, Deals, Communication, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, Skills) for an identity. Idempotent — existing records are untouched and existing vault contracts are refreshed. Optionally issues a fresh API key entitled to all 16. Requires admin scope.",
       "category": "vaults",
       "inputSchema": {
         "type": "object",
@@ -5993,11 +5993,11 @@
           "granteeIdentity": {
             "type": "string",
             "minLength": 1,
-            "description": "Identity that should OWN the 14 default vaults (e.g. an email or user id)."
+            "description": "Identity that should OWN the 16 default vaults (e.g. an email or user id)."
           },
           "issueKey": {
             "type": "boolean",
-            "description": "When true, also issue a new API key for the identity entitled to all 14 vaults and return its secret once. Default false."
+            "description": "When true, also issue a new API key for the identity entitled to all 16 vaults and return its secret once. Default false."
           },
           "plan": {
             "type": "string",
@@ -6032,14 +6032,14 @@
             "items": {
               "type": "string"
             },
-            "description": "Vault names newly created on this call (empty when all 14 already existed)."
+            "description": "Vault names newly created on this call (empty when all 16 already existed)."
           },
           "vaults": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "All 14 default vault names the identity now owns."
+            "description": "All 16 default vault names the identity now owns."
           },
           "keyId": {
             "type": "string",
@@ -6068,7 +6068,7 @@
     },
     {
       "name": "getVaultContractTool",
-      "description": "Read the machine-enforced purpose, template, statuses, types, natural neighbor vaults, and typed relationship guidance for one of the 13 governed Obsidian-style vaults. Call before composing a note when the correct shape is uncertain.",
+      "description": "Read the machine-enforced purpose, template, statuses, types, required and recommended props, natural neighbor vaults, and typed relationship guidance for one of the 16 governed Obsidian-style vaults. Call before composing a note when the correct shape is uncertain.",
       "category": "vaults",
       "inputSchema": {
         "type": "object",
@@ -6081,7 +6081,7 @@
           },
           "vault": {
             "type": "string",
-            "description": "One governed vault: Ideas, Inspiration, Knowledge, Library, People, Communications, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, or Sprint."
+            "description": "One governed vault: Ideas, Examples and Inspirations, Knowledge, Library, People, Organizations, Deals, Communication, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, or Skills. Former names Inspiration and Communications still resolve."
           }
         },
         "required": [

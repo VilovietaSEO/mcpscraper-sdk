@@ -15,3 +15,15 @@ class AuditSiteInput(BaseModel):
 
 class AuditSiteOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    url: str = Field(..., alias="url", description="")
+    page_count: int | None = Field(None, alias="pageCount", description="Absent when background is true — the audit has not finished yet.")
+    duration_ms: float | None = Field(None, alias="durationMs", description="Absent when background is true — the audit has not finished yet.")
+    bulk_folder: Any | None = Field(None, alias="bulkFolder", description="Absent when background is true — the audit has not finished yet.")
+    issues: dict[str, Any] | None = Field(None, alias="issues", description="Absent when background is true — the audit has not finished yet.")
+    images: dict[str, Any] | None = Field(None, alias="images", description="Absent when background is true — the audit has not finished yet.")
+    links: dict[str, Any] | None = Field(None, alias="links", description="Absent when background is true — the audit has not finished yet.")
+    artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")
+    job_id: str | None = Field(None, alias="jobId", description="Present when background (or downloadImages) was set — poll with check_site_export.")
+    status: Literal["pending"] | None = Field(None, alias="status", description="Present when background (or downloadImages) was set.")
+    status_url: str | None = Field(None, alias="statusUrl", description="Present when background (or downloadImages) was set — informational; use check_site_export with jobId, not this URL directly.")

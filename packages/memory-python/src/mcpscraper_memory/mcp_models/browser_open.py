@@ -15,3 +15,12 @@ class BrowserOpenInput(BaseModel):
 
 class BrowserOpenOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="")
+    tool: str = Field(..., alias="tool", description="")
+    session_id: str = Field(..., alias="session_id", description="Session id returned by browser_open. Use only this exact value in later browser_* calls; do not construct one yourself.")
+    watch_url: str = Field(..., alias="watch_url", description="Human watch/takeover URL for this browser session on mcpscraper.dev.")
+    live_view_url: Any = Field(..., alias="live_view_url", description="Deprecated; always null. Open watch_url to view the live session.")
+    url: Any = Field(..., alias="url", description="Initial URL requested by the caller, when provided.")
+    hint: str = Field(..., alias="hint", description="")
+    raw: dict[str, Any] | None = Field(None, alias="raw", description="")
