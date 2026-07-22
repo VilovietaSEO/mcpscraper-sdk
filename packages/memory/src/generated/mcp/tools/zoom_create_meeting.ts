@@ -25,4 +25,8 @@ export interface Input {
   agenda: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  result?: unknown;
+  error: string | null;
+}

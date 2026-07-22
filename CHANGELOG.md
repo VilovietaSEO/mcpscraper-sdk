@@ -4,6 +4,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-21 — runtime 0.31.0 (Vault Taxonomy v2)
+- `contracts/mcp.tools.json` resynced from mcp-scraper 0.31.0's generated manifest (165 tools): 16-vault taxonomy (new Organizations vault, Examples and Inspirations and Communication renames with permanent aliases), required/recommended vault primitives, Inbox naming, richer output schemas.
+- `contracts/memory.tools.json` resynced from live memory.mcpscraper.dev (89 tools) with the same taxonomy.
+- Regenerated unified MCP clients (TS/Python/CLI) and direct-memory clients; typed outputs now parse where the runtime publishes structured schemas (e.g. `search_serp`), so results are pydantic models rather than raw dicts in Python.
+- Published: `mcpscraper-memory-sdk` 0.16.0, `mcpscraper-cli` 0.14.0; Python packages tagged 0.14.0. `mcpscraper-sdk` (TS scraper REST client) unchanged.
+
 ## Python SDKs 0.13.1
 - Published both Python SDKs to PyPI and changed the public installation guidance from GitHub source URLs to `pip install` packages.
 

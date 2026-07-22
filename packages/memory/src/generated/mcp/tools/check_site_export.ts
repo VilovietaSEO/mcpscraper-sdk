@@ -5,4 +5,22 @@ export interface Input {
   jobId: string;
 }
 
-export type Output = unknown
+export interface Output {
+  jobId: string;
+  status: "pending" | "running" | "complete" | "failed";
+  startUrl?: string;
+  totalUrls?: number;
+  doneUrls?: number;
+  /**
+   * Downloadable zip URL once status is complete; null otherwise.
+   */
+  bundleUrl: string | null;
+  /**
+   * Zip size in bytes once status is complete; null otherwise.
+   */
+  bundleBytes: number | null;
+  /**
+   * Present with a message when status is failed.
+   */
+  error?: string | null;
+}

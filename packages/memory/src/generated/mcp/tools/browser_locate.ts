@@ -4672,4 +4672,28 @@ export interface Input {
       ];
 }
 
-export type Output = unknown
+export interface Output {
+  /**
+   * Whether the browser-agent action succeeded.
+   */
+  ok: boolean;
+  tool: "browser_locate";
+  /**
+   * Browser session id when the response is scoped to a session.
+   */
+  session_id: string | null;
+  url: string | null;
+  title: string | null;
+  viewport: {
+    [k: string]: unknown;
+  } | null;
+  replay: {
+    [k: string]: unknown;
+  } | null;
+  targets: {
+    [k: string]: unknown;
+  }[];
+  raw?: {
+    [k: string]: unknown;
+  };
+}

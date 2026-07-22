@@ -12,3 +12,10 @@ class WorkflowArtifactReadInput(BaseModel):
 
 class WorkflowArtifactReadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    run_id: str = Field(..., alias="runId", description="")
+    artifact_id: str = Field(..., alias="artifactId", description="")
+    content_type: str = Field(..., alias="contentType", description="")
+    bytes: int = Field(..., alias="bytes", description="")
+    truncated: bool = Field(..., alias="truncated", description="")
+    text: str = Field(..., alias="text", description="")

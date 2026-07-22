@@ -29,4 +29,28 @@ export interface Input {
   includeServices?: boolean;
 }
 
-export type Output = unknown
+export interface Output {
+  name: string;
+  rating: string | null;
+  reviewCount: string | null;
+  category: string | null;
+  address: string | null;
+  phone: string | null;
+  website: string | null;
+  hoursSummary: string | null;
+  bookingUrl: string | null;
+  kgmid: string | null;
+  cidDecimal: string | null;
+  cidUrl: string | null;
+  lat: number | null;
+  lng: number | null;
+  reviewsStatus: string;
+  reviewsCollected: number;
+  reviewTopics: {
+    label: string;
+    count: string;
+  }[];
+  services: string[];
+  areasServed: string[];
+  servicesStatus: string;
+}

@@ -51,7 +51,7 @@ export interface Output {
      */
     bytes: number;
     /**
-     * "channel" for an Omni-Chat channel (created via create-channel); "secure" for a private, encrypted, unshareable, unindexed vault (created via create-secure-vault) — safe to store credentials there; "notes" for an ordinary vault.
+     * "channel" for an Inbox channel (created via create-channel); "secure" for a private, encrypted, unshareable, unindexed vault (created via create-secure-vault) — safe to store credentials there; "notes" for an ordinary vault.
      */
     kind: "notes" | "channel" | "secure";
   }[];

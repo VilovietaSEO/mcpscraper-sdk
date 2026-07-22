@@ -18,3 +18,14 @@ class MapsSearchInput(BaseModel):
 
 class MapsSearchOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    query: str = Field(..., alias="query", description="")
+    location: Any = Field(..., alias="location", description="")
+    search_query: str = Field(..., alias="searchQuery", description="")
+    search_url: str = Field(..., alias="searchUrl", description="")
+    extracted_at: str = Field(..., alias="extractedAt", description="")
+    requested_max_results: int = Field(..., alias="requestedMaxResults", description="")
+    result_count: int = Field(..., alias="resultCount", description="")
+    results: list[dict[str, Any]] = Field(..., alias="results", description="")
+    attempts: list[dict[str, Any]] = Field(..., alias="attempts", description="")
+    duration_ms: int = Field(..., alias="durationMs", description="")

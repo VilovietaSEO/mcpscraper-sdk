@@ -20,3 +20,21 @@ class CaptureSerpSnapshotInput(BaseModel):
 
 class CaptureSerpSnapshotOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    schema_version: str = Field(..., alias="schemaVersion", description="")
+    status: str = Field(..., alias="status", description="")
+    query: Any = Field(..., alias="query", description="")
+    location: Any = Field(..., alias="location", description="")
+    captured_at: Any = Field(..., alias="capturedAt", description="")
+    result_count: Any = Field(..., alias="resultCount", description="")
+    organic_result_count: int = Field(..., alias="organicResultCount", description="")
+    local_pack_result_count: int = Field(..., alias="localPackResultCount", description="")
+    page_snapshot_count: int = Field(..., alias="pageSnapshotCount", description="")
+    page_snapshot_failed_count: int = Field(..., alias="pageSnapshotFailedCount", description="")
+    snapshot_id: Any = Field(..., alias="snapshotId", description="")
+    resolved_inputs: dict[str, Any] = Field(..., alias="resolvedInputs", description="")
+    artifacts: list[dict[str, Any]] = Field(..., alias="artifacts", description="")
+    attempts: list[dict[str, Any]] = Field(..., alias="attempts", description="")
+    billing: Any = Field(..., alias="billing", description="")
+    diagnostics: Any = Field(..., alias="diagnostics", description="")
+    provider_payload: dict[str, Any] = Field(..., alias="providerPayload", description="")

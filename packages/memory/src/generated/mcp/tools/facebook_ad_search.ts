@@ -13,4 +13,15 @@ export interface Input {
   maxResults?: number;
 }
 
-export type Output = unknown
+export interface Output {
+  query: string;
+  advertiserCount: number;
+  advertisers: {
+    name: string | null;
+    pageId: string | null;
+    pageUrl: string | null;
+    adCount: number | null;
+    libraryId: string | null;
+    sampleLibraryId: string | null;
+  }[];
+}

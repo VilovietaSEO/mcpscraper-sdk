@@ -13,3 +13,13 @@ class GoogleAdsPageIntelInput(BaseModel):
 
 class GoogleAdsPageIntelOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    advertiser_id: Any = Field(..., alias="advertiserId", description="")
+    advertiser_name: Any = Field(..., alias="advertiserName", description="")
+    domain: Any = Field(..., alias="domain", description="")
+    region: str = Field(..., alias="region", description="")
+    total_creatives: int = Field(..., alias="totalCreatives", description="")
+    video_count: int = Field(..., alias="videoCount", description="")
+    image_count: int = Field(..., alias="imageCount", description="")
+    text_count: int = Field(..., alias="textCount", description="")
+    ads: list[dict[str, Any]] = Field(..., alias="ads", description="")

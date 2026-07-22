@@ -5,4 +5,10 @@ export interface Input {
   artifactId: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  artifactId: string;
+  downloadUrl: string;
+  downloadUrlExpiresAt: string;
+  expiresAt: string;
+}

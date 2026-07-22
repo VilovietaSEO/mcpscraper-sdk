@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-cli",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "Command-line interface for mcpscraper.dev and memory.mcpscraper.dev",
   "license": "MIT",
   "type": "module",

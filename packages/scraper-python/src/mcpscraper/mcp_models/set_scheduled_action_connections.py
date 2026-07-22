@@ -11,3 +11,7 @@ class SetScheduledActionConnectionsInput(BaseModel):
 
 class SetScheduledActionConnectionsOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="")
+    connections: list[Any] | None = Field(None, alias="connections", description="")
+    error: Any = Field(..., alias="error", description="")
