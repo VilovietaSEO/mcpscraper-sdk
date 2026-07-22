@@ -1,4 +1,4 @@
-# All 165 MCP tools with cURL
+# All 166 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (165)
+## Complete catalog (166)
 
 ## search
 
@@ -147,6 +147,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `renew_connected_data_download` — Renew Connected Data Download
 - `call_service_connection_action` — Run Connected Service Action
 - `set_scheduled_action_connections` — Set Scheduled Action Connections
+- `gmail_search_contacts` — Search Gmail Contacts
 
 ## serpIntelligence
 

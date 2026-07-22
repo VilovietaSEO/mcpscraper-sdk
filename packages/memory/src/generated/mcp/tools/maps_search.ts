@@ -24,11 +24,11 @@ export interface Input {
    */
   includeServices?: boolean;
   /**
-   * Leave unset for the default route (stealth browser on the managed ISP proxy, retried on a fresh session when Google blocks). Localization comes from the city in the query plus gl/hl. location forces an explicit residential proxy — not recommended for Google.
+   * Leave unset for the default route. Country/region localization comes from the city or region in the query plus gl/hl.
    */
-  proxyMode?: "location" | "configured" | "none";
+  proxyMode?: "configured" | "none";
   /**
-   * Optional US ZIP override, only used when proxyMode is location.
+   * Optional US ZIP override.
    */
   proxyZip?: string;
   /**

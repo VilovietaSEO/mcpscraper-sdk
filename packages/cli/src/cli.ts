@@ -231,7 +231,6 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
           rotateProxies: false,
           rotateProxyEvery: 30,
           browserFallback: false,
-          kernelFallback: false,
         })
         printResult(result, Boolean(opts.json), (r) => {
           const pages = (r as { pages?: unknown[] }).pages ?? []
@@ -251,7 +250,6 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
           maxUrls: 500,
           concurrency: 12,
           browserFallback: false,
-          kernelFallback: false,
         })
         printResult(result, Boolean(opts.json), (r) => {
           const urls = (r as { urls?: string[] }).urls ?? []

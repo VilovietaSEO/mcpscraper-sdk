@@ -8,7 +8,7 @@ export interface Input {
    */
   maxPages?: number;
   /**
-   * Route page fetches through rotating residential proxies to defeat rate-limiting and bot blocks (403/429). Slower and pricier — use only when a site blocks normal crawling.
+   * Use extra measures to get past sites that block normal crawling (403/429). Slower and pricier — use only when a site blocks normal crawling.
    */
   rotateProxies?: boolean;
   /**

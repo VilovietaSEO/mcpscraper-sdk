@@ -248,7 +248,7 @@ paths:
         '402': { $ref: '#/components/responses/InsufficientBalance' }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
-        '503': { description: YouTube blocked the request (CAPTCHA) — billed amount was refunded. }
+        '503': { description: YouTube blocked the request — billed amount was refunded. }
 
   /youtube/transcribe:
     post:
@@ -329,7 +329,7 @@ paths:
         '402': { $ref: '#/components/responses/InsufficientBalance' }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
-        '503': { description: Facebook blocked the request (CAPTCHA/soft-block) — billed amount was refunded. }
+        '503': { description: Facebook blocked the request — billed amount was refunded. }
 
   /facebook/page-intel:
     post:
@@ -588,7 +588,7 @@ paths:
         '402': { $ref: '#/components/responses/InsufficientBalance' }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
-        '503': { description: Blocked/CAPTCHA. }
+        '503': { description: Blocked. }
 
   /instagram/media-download:
     post:
@@ -619,7 +619,7 @@ paths:
         '402': { $ref: '#/components/responses/InsufficientBalance' }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
-        '503': { description: Blocked/CAPTCHA. }
+        '503': { description: Blocked. }
 
   /reddit/thread:
     post:
@@ -766,7 +766,7 @@ paths:
         '402': { $ref: '#/components/responses/InsufficientBalance' }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
-        '503': { description: CAPTCHA/blocked — retryable. }
+        '503': { description: Temporarily blocked — retryable. }
 
   /maps/place:
     post:
@@ -788,7 +788,7 @@ paths:
         '402': { $ref: '#/components/responses/InsufficientBalance' }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
-        '503': { description: CAPTCHA/blocked — retryable. }
+        '503': { description: Temporarily blocked — retryable. }
 
   /directory/run:
     post:
@@ -1220,8 +1220,8 @@ components:
         gl: { type: string, default: us, description: 'Google country code.' }
         hl: { type: string, default: en, description: 'Google language code.' }
         device: { type: string, enum: [desktop, mobile], default: desktop }
-        proxyMode: { type: string, enum: [location, configured, none], default: none }
-        proxyZip: { type: string, pattern: '^\d{5}$', description: 'US ZIP to localize the proxy egress to.' }
+        proxyMode: { type: string, enum: [configured, none], default: none }
+        proxyZip: { type: string, pattern: '^\d{5}$', description: 'Optional US ZIP override.' }
         pages: { type: integer, minimum: 1, maximum: 2, default: 1, description: 'Organic result pages to fetch.' }
         serpOnly: { type: boolean, default: false, description: 'true = pure SERP call (search_serp); false = full PAA harvest.' }
         debug: { type: boolean, default: false }
@@ -1303,7 +1303,6 @@ components:
         maxUrls: { type: integer, minimum: 1, maximum: 2000, default: 500 }
         concurrency: { type: integer, minimum: 1, maximum: 20, default: 12 }
         browserFallback: { type: boolean, default: false, description: 'Use a real browser session for JS-heavy sites.' }
-        kernelFallback: { type: boolean, default: false }
 
     MapUrlsResponse:
       type: object
@@ -1322,7 +1321,6 @@ components:
         rotateProxies: { type: boolean, default: false }
         rotateProxyEvery: { type: integer, minimum: 1, maximum: 100, default: 30 }
         browserFallback: { type: boolean, default: false }
-        kernelFallback: { type: boolean, default: false }
         formats:
           type: array
           items: { type: string, enum: [markdown, links, json, images, branding, issues] }
@@ -1521,7 +1519,7 @@ components:
         hl: { type: string, default: en }
         maxResults: { type: integer, minimum: 1, maximum: 50, default: 10 }
         includeServices: { type: boolean, default: false }
-        proxyMode: { type: string, enum: [location, configured, none], default: none }
+        proxyMode: { type: string, enum: [configured, none], default: none }
         proxyZip: { type: string, pattern: '^\d{5}$' }
         debug: { type: boolean, default: false }
 
@@ -1545,7 +1543,7 @@ components:
         gl: { type: string, default: us }
         hl: { type: string, default: en }
         device: { type: string, enum: [desktop, mobile], default: desktop }
-        proxyMode: { type: string, enum: [location, configured, none], default: none }
+        proxyMode: { type: string, enum: [configured, none], default: none }
         proxyZip: { type: string, pattern: '^\d{5}$' }
         pages: { type: integer, minimum: 1, maximum: 2, default: 1 }
         debug: { type: boolean, default: false }
@@ -1690,7 +1688,7 @@ components:
         durationMs: { type: number }
         problemCode: { type: string }
         message: { type: string }
-        kernelSessionId: { type: string, nullable: true }
+        browserSessionId: { type: string, nullable: true }
         cleanupSucceeded: { type: boolean, nullable: true }
 
     SerpIntelligenceCaptureResponse:

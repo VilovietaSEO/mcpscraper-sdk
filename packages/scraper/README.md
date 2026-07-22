@@ -40,7 +40,7 @@ Every non-2xx response throws a `ScraperApiError` with `status`, `code`, and the
 
 ## API surface
 
-`client.tools` is the generated, typed 165-tool MCP surface. It includes 76 MCP Scraper tools and all 89 mirrored memory tools from `contracts/mcp.tools.json`.
+`client.tools` is the generated, typed 166-tool MCP surface. It includes 77 MCP Scraper tools and all 89 mirrored memory tools from `contracts/mcp.tools.json`.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 

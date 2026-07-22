@@ -24,15 +24,15 @@ export interface Input {
    */
   device?: "desktop" | "mobile";
   /**
-   * Leave unset (clean egress). Do NOT set "location" just because a city was named — that comes from city-in-query wording. "location" forces residential geo-IP for rank-tracking fidelity, is frequently CAPTCHA-blocked, and accepts failures.
+   * Leave unset for the default route. Country/region localization comes from gl/hl plus the city or region in the query.
    */
-  proxyMode?: "location" | "configured" | "none";
+  proxyMode?: "configured" | "none";
   /**
-   * US ZIP for residential geo-IP targeting. Only meaningful with proxyMode "location".
+   * Optional US ZIP override.
    */
   proxyZip?: string;
   /**
-   * Include sanitized diagnostics for debugging localization, CAPTCHA, or proxy behavior.
+   * Include sanitized diagnostics for debugging.
    */
   debug?: boolean;
 }
