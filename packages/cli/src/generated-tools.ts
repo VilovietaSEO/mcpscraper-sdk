@@ -1134,7 +1134,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "maps_search",
     "category": "maps",
     "title": "Google Maps Business Search",
-    "description": "Search Google local results for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. It paginates the rendered local-results list, opens each exact business card, then closes the profile dialog before continuing. Set includeServices for services and areas served; review cards are never collected by this tool.",
+    "description": "Search Google local results for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. Reaches the local-results list from the organic page and paginates it, returning up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. Leave proxyMode unset. Set includeServices to also open each business profile for its services and areas served; review cards are never collected by this tool.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1171,7 +1171,7 @@ export const MCP_TOOL_CATALOG = [
         "includeServices": {
           "type": "boolean",
           "default": false,
-          "description": "Open each returned Google Business Profile and include configured services and areas served when available. Does not collect review cards."
+          "description": "Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards."
         },
         "proxyMode": {
           "type": "string",
@@ -1181,12 +1181,12 @@ export const MCP_TOOL_CATALOG = [
             "none"
           ],
           "default": "none",
-          "description": "Leave unset for the default direct browser route. Google localization comes from the city in the query plus UULE, gl, and hl. location is an explicit residential-proxy override."
+          "description": "Leave unset for the default route (stealth browser on the managed ISP proxy, retried on a fresh session when Google blocks). Localization comes from the city in the query plus gl/hl. location forces an explicit residential proxy — not recommended for Google."
         },
         "proxyZip": {
           "type": "string",
           "pattern": "^\\d{5}$",
-          "description": "Optional US ZIP override when proxyMode is location."
+          "description": "Optional US ZIP override, only used when proxyMode is location."
         },
         "debug": {
           "type": "boolean",
@@ -1353,7 +1353,7 @@ export const MCP_TOOL_CATALOG = [
             "none"
           ],
           "default": "none",
-          "description": "Proxy behavior per city search. Leave unset for the direct localized Google route; location is an explicit residential-proxy override."
+          "description": "Proxy behavior per city search. Leave unset for the default route (stealth browser on the managed ISP proxy, retried fresh on a Google block). location forces an explicit residential proxy — not recommended for Google."
         },
         "proxyZip": {
           "type": "string",

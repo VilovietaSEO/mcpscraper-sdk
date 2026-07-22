@@ -20,15 +20,15 @@ export interface Input {
    */
   maxResults?: number;
   /**
-   * Open each returned Google Business Profile and include configured services and areas served when available. Does not collect review cards.
+   * Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards.
    */
   includeServices?: boolean;
   /**
-   * Leave unset for the default direct browser route. Google localization comes from the city in the query plus UULE, gl, and hl. location is an explicit residential-proxy override.
+   * Leave unset for the default route (stealth browser on the managed ISP proxy, retried on a fresh session when Google blocks). Localization comes from the city in the query plus gl/hl. location forces an explicit residential proxy — not recommended for Google.
    */
   proxyMode?: "location" | "configured" | "none";
   /**
-   * Optional US ZIP override when proxyMode is location.
+   * Optional US ZIP override, only used when proxyMode is location.
    */
   proxyZip?: string;
   /**
