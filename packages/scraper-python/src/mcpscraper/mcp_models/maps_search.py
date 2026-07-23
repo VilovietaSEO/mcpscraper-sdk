@@ -27,5 +27,4 @@ class MapsSearchOutput(BaseModel):
     requested_max_results: int = Field(..., alias="requestedMaxResults", description="")
     result_count: int = Field(..., alias="resultCount", description="")
     results: list[dict[str, Any]] = Field(..., alias="results", description="")
-    attempts: list[dict[str, Any]] = Field(..., alias="attempts", description="")
     duration_ms: int = Field(..., alias="durationMs", description="")

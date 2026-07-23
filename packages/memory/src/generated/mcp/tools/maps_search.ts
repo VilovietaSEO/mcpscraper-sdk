@@ -64,26 +64,5 @@ export interface Output {
     areasServed?: string[];
     profileDetailsStatus?: "collected" | "none_exist" | "unavailable" | "not_requested";
   }[];
-  attempts: {
-    attemptNumber: number;
-    maxAttempts: number;
-    status: "ok" | "failed";
-    outcome: string;
-    willRetry: boolean;
-    durationMs: number;
-    resultCount: number;
-    error: string | null;
-    proxyMode: "location" | "configured" | "none";
-    proxyResolutionSource:
-      ("disabled" | "location_reused" | "location_created" | "configured_fallback" | "unavailable") | null;
-    proxyIdSuffix: string | null;
-    proxyTargetLevel: ("zip" | "city" | "state") | null;
-    proxyTargetLocation: string | null;
-    proxyTargetZip: string | null;
-    browserSessionIdSuffix: string | null;
-    observedIp: string | null;
-    observedCity: string | null;
-    observedRegion: string | null;
-  }[];
   durationMs: number;
 }

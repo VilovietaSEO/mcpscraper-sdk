@@ -22,7 +22,6 @@ class CaptureSerpPageSnapshotsOutput(BaseModel):
     failed_count: int = Field(..., alias="failedCount", description="")
     skipped_count: int = Field(..., alias="skippedCount", description="")
     captures: list[dict[str, Any]] = Field(..., alias="captures", description="")
-    attempts: list[dict[str, Any]] = Field(..., alias="attempts", description="")
     resolved_inputs: dict[str, Any] = Field(..., alias="resolvedInputs", description="")
     diagnostics: Any = Field(..., alias="diagnostics", description="")
     provider_payload: dict[str, Any] = Field(..., alias="providerPayload", description="")

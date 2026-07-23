@@ -63,9 +63,6 @@ export interface Output {
   artifacts: {
     [k: string]: unknown;
   }[];
-  attempts: {
-    [k: string]: unknown;
-  }[];
   billing: {
     creditsUsed: number | null;
     requestId: string | null;

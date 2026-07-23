@@ -34,7 +34,6 @@ class CaptureSerpSnapshotOutput(BaseModel):
     snapshot_id: Any = Field(..., alias="snapshotId", description="")
     resolved_inputs: dict[str, Any] = Field(..., alias="resolvedInputs", description="")
     artifacts: list[dict[str, Any]] = Field(..., alias="artifacts", description="")
-    attempts: list[dict[str, Any]] = Field(..., alias="attempts", description="")
     billing: Any = Field(..., alias="billing", description="")
     diagnostics: Any = Field(..., alias="diagnostics", description="")
     provider_payload: dict[str, Any] = Field(..., alias="providerPayload", description="")

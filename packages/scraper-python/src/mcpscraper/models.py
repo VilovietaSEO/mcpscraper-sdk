@@ -24,7 +24,6 @@ class StructuredError(BaseModel):
     error_type: str
     message: str
     retryable: bool
-    attempts: list[dict[str, Any]] | None = None
 
 
 class Error1(Enum):
@@ -120,7 +119,6 @@ class HarvestSyncResponse(BaseModel):
     result: dict[str, Any] | None = Field(
         None, description='Present when status is done — SERP/PAA harvest result.'
     )
-    attempts: list[dict[str, Any]] | None = None
     error: str | None = None
 
 
@@ -129,7 +127,6 @@ class JobRecord(BaseModel):
     status: str | None = None
     query: str | None = None
     result: dict[str, Any] | None = None
-    attempts: list[dict[str, Any]] | None = None
     created_at: str | None = None
 
 
@@ -668,18 +665,6 @@ class SerpPageSnapshotCapture(BaseModel):
     error: Error2 | None = None
 
 
-class SerpIntelligenceCaptureAttempt(BaseModel):
-    attemptNumber: int | None = None
-    outcome: str | None = None
-    startedAt: str | None = None
-    completedAt: str | None = None
-    durationMs: float | None = None
-    problemCode: str | None = None
-    message: str | None = None
-    browserSessionId: str | None = None
-    cleanupSucceeded: bool | None = None
-
-
 class Billing(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -689,7 +674,6 @@ class Billing(BaseModel):
 
 class SerpIntelligenceCaptureResponse(BaseModel):
     harvestResult: SerpIntelligenceHarvestResult | None = None
-    attempts: list[SerpIntelligenceCaptureAttempt] | None = None
     locationEvidence: dict[str, Any] | None = None
     pageSnapshotArtifacts: list[SerpPageSnapshotCapture] | None = None
     billing: Billing
@@ -697,7 +681,6 @@ class SerpIntelligenceCaptureResponse(BaseModel):
 
 class SerpIntelligencePageSnapshotsResponse(BaseModel):
     pageSnapshotArtifacts: list[SerpPageSnapshotCapture] | None = None
-    attempts: list[SerpIntelligenceCaptureAttempt] | None = None
 
 
 class Status3(Enum):

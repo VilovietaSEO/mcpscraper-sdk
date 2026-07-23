@@ -4,6 +4,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-23 — verified against mcp-scraper 0.33.5
+
+- Public output schemas no longer document internal diagnostic fields (per-attempt execution detail). The typed contract is leaner; response payloads are otherwise unchanged.
+- Made the tool-catalog sync **count-agnostic** — adding a tool no longer requires editing hardcoded counts across the generators, parity scripts, and tests, and an unmapped tool now falls back to an `other` category with a warning instead of failing the sync.
+- Regenerated all clients (166 tools). Published `mcpscraper-sdk` 0.19.0, `mcpscraper-memory-sdk` 0.19.0, `mcpscraper-cli` 0.17.0, Python packages 0.17.0.
+
 ## 2026-07-22 — verified against mcp-scraper 0.33.4
 
 - `proxyMode` on the search and maps tools now exposes `configured` and `none` only; a prior geo-targeted option was removed upstream. Regenerated the MCP contract, OpenAPI, and all clients.

@@ -819,9 +819,6 @@ export interface components {
             error_type: string;
             message: string;
             retryable: boolean;
-            attempts?: {
-                [key: string]: unknown;
-            }[];
         };
         InsufficientBalanceError: {
             /** @enum {string} */
@@ -908,9 +905,6 @@ export interface components {
             result?: {
                 [key: string]: unknown;
             };
-            attempts?: {
-                [key: string]: unknown;
-            }[];
             error?: string;
         };
         JobRecord: {
@@ -920,9 +914,6 @@ export interface components {
             result?: {
                 [key: string]: unknown;
             } | null;
-            attempts?: {
-                [key: string]: unknown;
-            }[];
             created_at?: string;
         };
         ExtractUrlRequest: {
@@ -1396,20 +1387,8 @@ export interface components {
                 message?: string;
             } | null;
         };
-        SerpIntelligenceCaptureAttempt: {
-            attemptNumber?: number;
-            outcome?: string;
-            startedAt?: string;
-            completedAt?: string;
-            durationMs?: number;
-            problemCode?: string;
-            message?: string;
-            browserSessionId?: string | null;
-            cleanupSucceeded?: boolean | null;
-        };
         SerpIntelligenceCaptureResponse: {
             harvestResult?: components["schemas"]["SerpIntelligenceHarvestResult"];
-            attempts?: components["schemas"]["SerpIntelligenceCaptureAttempt"][];
             locationEvidence?: {
                 [key: string]: unknown;
             } | null;
@@ -1420,7 +1399,6 @@ export interface components {
         };
         SerpIntelligencePageSnapshotsResponse: {
             pageSnapshotArtifacts?: components["schemas"]["SerpPageSnapshotCapture"][];
-            attempts?: components["schemas"]["SerpIntelligenceCaptureAttempt"][];
         };
         WorkflowRun: {
             id?: string;
