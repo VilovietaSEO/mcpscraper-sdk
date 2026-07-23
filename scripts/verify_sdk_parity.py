@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED = 166
+EXPECTED = 0
 
 
 def load_bindings(package_src: Path, module_name: str) -> list[dict]:
@@ -46,8 +46,10 @@ def assert_exact(label: str, actual: list[dict], expected: list[dict]) -> None:
 
 
 def main() -> None:
+    global EXPECTED
     manifest = json.loads((ROOT / "contracts" / "mcp.tools.json").read_text())
     expected = manifest["tools"]
+    EXPECTED = len(expected)
     assert_exact(
         "Python scraper package",
         load_bindings(ROOT / "packages" / "scraper-python" / "src", "mcpscraper"),

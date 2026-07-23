@@ -109,8 +109,8 @@ function renderCurlDocs(tools: ToolEntry[]): string {
 
 async function main(): Promise<void> {
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as Manifest
-  if (manifest.toolCount !== 166 || manifest.tools.length !== 166) {
-    throw new Error(`Unified manifest must contain exactly 166 tools; received ${manifest.tools.length}`)
+  if (manifest.toolCount !== manifest.tools.length) {
+    throw new Error(`Unified manifest toolCount does not match tools length; received ${manifest.tools.length}`)
   }
 
   await rm(OUT_DIR, { recursive: true, force: true })

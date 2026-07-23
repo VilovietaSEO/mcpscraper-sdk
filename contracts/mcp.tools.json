@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.33.4 dist/bin/mcp-stdio-server.js",
+  "generatedFrom": "mcp-scraper 0.33.5 dist/bin/mcp-stdio-server.js",
   "toolCount": 166,
   "tools": [
     {
@@ -3871,7 +3871,7 @@
     {
       "name": "maps_place_intel",
       "title": "Google Maps Business Profile Details",
-      "description": "Extract Google Maps business intelligence for one known/named business: rating, reviews, category, address, phone, hours, entity IDs. Not for category searches or multi-business prospect lists — use maps_search for those. Split business name from location.",
+      "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, full hours, About attributes, entity IDs/CID, and — with includeServices: true — the full configured services and areas-served lists. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
       "category": "maps",
       "methodName": "placeIntel",
       "inputSchema": {
@@ -4257,128 +4257,6 @@
               "additionalProperties": false
             }
           },
-          "attempts": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "attemptNumber": {
-                  "type": "integer",
-                  "minimum": 1
-                },
-                "maxAttempts": {
-                  "type": "integer",
-                  "minimum": 1
-                },
-                "status": {
-                  "type": "string",
-                  "enum": [
-                    "ok",
-                    "failed"
-                  ]
-                },
-                "outcome": {
-                  "type": "string"
-                },
-                "willRetry": {
-                  "type": "boolean"
-                },
-                "durationMs": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "resultCount": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "error": {
-                  "$ref": "#/properties/results/items/properties/cid"
-                },
-                "proxyMode": {
-                  "type": "string",
-                  "enum": [
-                    "location",
-                    "configured",
-                    "none"
-                  ]
-                },
-                "proxyResolutionSource": {
-                  "anyOf": [
-                    {
-                      "type": "string",
-                      "enum": [
-                        "disabled",
-                        "location_reused",
-                        "location_created",
-                        "configured_fallback",
-                        "unavailable"
-                      ]
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "proxyIdSuffix": {
-                  "$ref": "#/properties/results/items/properties/cid"
-                },
-                "proxyTargetLevel": {
-                  "anyOf": [
-                    {
-                      "type": "string",
-                      "enum": [
-                        "zip",
-                        "city",
-                        "state"
-                      ]
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ]
-                },
-                "proxyTargetLocation": {
-                  "$ref": "#/properties/results/items/properties/cid"
-                },
-                "proxyTargetZip": {
-                  "$ref": "#/properties/results/items/properties/cid"
-                },
-                "browserSessionIdSuffix": {
-                  "$ref": "#/properties/results/items/properties/cid"
-                },
-                "observedIp": {
-                  "$ref": "#/properties/results/items/properties/cid"
-                },
-                "observedCity": {
-                  "$ref": "#/properties/results/items/properties/cid"
-                },
-                "observedRegion": {
-                  "$ref": "#/properties/results/items/properties/cid"
-                }
-              },
-              "required": [
-                "attemptNumber",
-                "maxAttempts",
-                "status",
-                "outcome",
-                "willRetry",
-                "durationMs",
-                "resultCount",
-                "error",
-                "proxyMode",
-                "proxyResolutionSource",
-                "proxyIdSuffix",
-                "proxyTargetLevel",
-                "proxyTargetLocation",
-                "proxyTargetZip",
-                "browserSessionIdSuffix",
-                "observedIp",
-                "observedCity",
-                "observedRegion"
-              ],
-              "additionalProperties": false
-            }
-          },
           "durationMs": {
             "type": "integer",
             "minimum": 0
@@ -4393,7 +4271,6 @@
           "requestedMaxResults",
           "resultCount",
           "results",
-          "attempts",
           "durationMs"
         ],
         "additionalProperties": false,
@@ -5102,128 +4979,6 @@
                   "type": "integer",
                   "minimum": 0
                 },
-                "attempts": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "attemptNumber": {
-                        "type": "integer",
-                        "minimum": 1
-                      },
-                      "maxAttempts": {
-                        "type": "integer",
-                        "minimum": 1
-                      },
-                      "status": {
-                        "type": "string",
-                        "enum": [
-                          "ok",
-                          "failed"
-                        ]
-                      },
-                      "outcome": {
-                        "type": "string"
-                      },
-                      "willRetry": {
-                        "type": "boolean"
-                      },
-                      "durationMs": {
-                        "type": "integer",
-                        "minimum": 0
-                      },
-                      "resultCount": {
-                        "type": "integer",
-                        "minimum": 0
-                      },
-                      "error": {
-                        "$ref": "#/properties/usZipsSourcePath"
-                      },
-                      "proxyMode": {
-                        "type": "string",
-                        "enum": [
-                          "location",
-                          "configured",
-                          "none"
-                        ]
-                      },
-                      "proxyResolutionSource": {
-                        "anyOf": [
-                          {
-                            "type": "string",
-                            "enum": [
-                              "disabled",
-                              "location_reused",
-                              "location_created",
-                              "configured_fallback",
-                              "unavailable"
-                            ]
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
-                      },
-                      "proxyIdSuffix": {
-                        "$ref": "#/properties/usZipsSourcePath"
-                      },
-                      "proxyTargetLevel": {
-                        "anyOf": [
-                          {
-                            "type": "string",
-                            "enum": [
-                              "zip",
-                              "city",
-                              "state"
-                            ]
-                          },
-                          {
-                            "type": "null"
-                          }
-                        ]
-                      },
-                      "proxyTargetLocation": {
-                        "$ref": "#/properties/usZipsSourcePath"
-                      },
-                      "proxyTargetZip": {
-                        "$ref": "#/properties/usZipsSourcePath"
-                      },
-                      "browserSessionIdSuffix": {
-                        "$ref": "#/properties/usZipsSourcePath"
-                      },
-                      "observedIp": {
-                        "$ref": "#/properties/usZipsSourcePath"
-                      },
-                      "observedCity": {
-                        "$ref": "#/properties/usZipsSourcePath"
-                      },
-                      "observedRegion": {
-                        "$ref": "#/properties/usZipsSourcePath"
-                      }
-                    },
-                    "required": [
-                      "attemptNumber",
-                      "maxAttempts",
-                      "status",
-                      "outcome",
-                      "willRetry",
-                      "durationMs",
-                      "resultCount",
-                      "error",
-                      "proxyMode",
-                      "proxyResolutionSource",
-                      "proxyIdSuffix",
-                      "proxyTargetLevel",
-                      "proxyTargetLocation",
-                      "proxyTargetZip",
-                      "browserSessionIdSuffix",
-                      "observedIp",
-                      "observedCity",
-                      "observedRegion"
-                    ],
-                    "additionalProperties": false
-                  }
-                },
                 "results": {
                   "type": "array",
                   "items": {
@@ -5311,7 +5066,6 @@
                 "error",
                 "resultCount",
                 "durationMs",
-                "attempts",
                 "results"
               ],
               "additionalProperties": false
@@ -8904,13 +8658,6 @@
               "additionalProperties": {}
             }
           },
-          "attempts": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": {}
-            }
-          },
           "billing": {
             "anyOf": [
               {
@@ -8976,7 +8723,6 @@
           "snapshotId",
           "resolvedInputs",
           "artifacts",
-          "attempts",
           "billing",
           "diagnostics",
           "providerPayload"
@@ -9105,13 +8851,6 @@
               "additionalProperties": {}
             }
           },
-          "attempts": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": {}
-            }
-          },
           "resolvedInputs": {
             "type": "object",
             "additionalProperties": {}
@@ -9140,7 +8879,6 @@
           "failedCount",
           "skippedCount",
           "captures",
-          "attempts",
           "resolvedInputs",
           "diagnostics",
           "providerPayload"

@@ -66,9 +66,6 @@ export interface Output {
   captures: {
     [k: string]: unknown;
   }[];
-  attempts: {
-    [k: string]: unknown;
-  }[];
   resolvedInputs: {
     [k: string]: unknown;
   };

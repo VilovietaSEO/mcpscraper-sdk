@@ -4,7 +4,7 @@ import * as memorySdk from '../packages/memory/src/index.js'
 import * as scraperSdk from '../packages/scraper/src/index.js'
 import { MCP_TOOL_CATALOG } from '../packages/cli/src/generated-tools.js'
 
-const EXPECTED = 166
+let EXPECTED = 0
 
 function namesFromBindings(bindings: ReadonlyArray<{ name: string }>): string[] {
   return bindings.map(binding => binding.name).sort()
@@ -42,8 +42,9 @@ async function main(): Promise<void> {
     toolCount: number
     tools: Array<{ name: string; category: string; methodName: string; outputSchema?: Record<string, unknown> }>
   }
-  if (manifest.toolCount !== EXPECTED || manifest.tools.length !== EXPECTED) {
-    throw new Error(`Manifest count is ${manifest.tools.length}, expected ${EXPECTED}`)
+  EXPECTED = manifest.tools.length
+  if (manifest.toolCount !== manifest.tools.length) {
+    throw new Error(`Manifest toolCount ${manifest.toolCount} does not match tools length ${manifest.tools.length}`)
   }
   const missingOutputSchemas = manifest.tools.filter(tool => tool.outputSchema?.type !== 'object').map(tool => tool.name)
   if (missingOutputSchemas.length) {

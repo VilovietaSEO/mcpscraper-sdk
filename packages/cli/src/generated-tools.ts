@@ -1067,7 +1067,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "maps_place_intel",
     "category": "maps",
     "title": "Google Maps Business Profile Details",
-    "description": "Extract Google Maps business intelligence for one known/named business: rating, reviews, category, address, phone, hours, entity IDs. Not for category searches or multi-business prospect lists — use maps_search for those. Split business name from location.",
+    "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, full hours, About attributes, entity IDs/CID, and — with includeServices: true — the full configured services and areas-served lists. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
     "inputSchema": {
       "type": "object",
       "properties": {

@@ -1180,7 +1180,6 @@ components:
         error_type: { type: string }
         message: { type: string }
         retryable: { type: boolean }
-        attempts: { type: array, items: { type: object, additionalProperties: true } }
       required: [error_code, error_type, message, retryable]
 
     InsufficientBalanceError:
@@ -1232,7 +1231,6 @@ components:
         job_id: { type: string }
         status: { type: string, enum: [done, cancelled, failed] }
         result: { type: object, additionalProperties: true, description: 'Present when status is done — SERP/PAA harvest result.' }
-        attempts: { type: array, items: { type: object, additionalProperties: true } }
         error: { type: string }
       required: [job_id, status]
 
@@ -1243,7 +1241,6 @@ components:
         status: { type: string }
         query: { type: string }
         result: { type: object, additionalProperties: true, nullable: true }
-        attempts: { type: array, items: { type: object, additionalProperties: true } }
         created_at: { type: string }
 
     ExtractUrlRequest:
@@ -1678,25 +1675,11 @@ components:
           nullable: true
           properties: { code: { type: string }, message: { type: string } }
 
-    SerpIntelligenceCaptureAttempt:
-      type: object
-      properties:
-        attemptNumber: { type: integer }
-        outcome: { type: string }
-        startedAt: { type: string }
-        completedAt: { type: string }
-        durationMs: { type: number }
-        problemCode: { type: string }
-        message: { type: string }
-        browserSessionId: { type: string, nullable: true }
-        cleanupSucceeded: { type: boolean, nullable: true }
-
     SerpIntelligenceCaptureResponse:
       type: object
       required: [billing]
       properties:
         harvestResult: { $ref: '#/components/schemas/SerpIntelligenceHarvestResult' }
-        attempts: { type: array, items: { $ref: '#/components/schemas/SerpIntelligenceCaptureAttempt' } }
         locationEvidence: { type: object, additionalProperties: true, nullable: true }
         pageSnapshotArtifacts: { type: array, items: { $ref: '#/components/schemas/SerpPageSnapshotCapture' } }
         billing:
@@ -1710,7 +1693,6 @@ components:
       type: object
       properties:
         pageSnapshotArtifacts: { type: array, items: { $ref: '#/components/schemas/SerpPageSnapshotCapture' } }
-        attempts: { type: array, items: { $ref: '#/components/schemas/SerpIntelligenceCaptureAttempt' } }
 
     WorkflowRun:
       type: object

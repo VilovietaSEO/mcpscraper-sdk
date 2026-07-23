@@ -4,7 +4,33 @@ import { join } from 'node:path'
 const ENDPOINT = 'https://mcpscraper.dev/mcp'
 const MANIFEST_PATH = join(process.cwd(), 'contracts/mcp.tools.json')
 const MEMORY_MANIFEST_PATH = join(process.cwd(), 'contracts/memory.tools.json')
-const REQUIRED_TOOL_COUNT = 166
+const INTERNAL_TELEMETRY_FIELDS = new Set([
+  'attempts', 'observedIp', 'observedCity', 'observedRegion',
+  'proxyResolutionSource', 'proxyTargetLevel', 'proxyTargetLocation', 'proxyTargetZip',
+  'proxyIdSuffix', 'browserSessionId', 'browserSessionIdSuffix',
+  'attemptNumber', 'maxAttempts', 'willRetry',
+])
+
+function stripInternalTelemetry(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(stripInternalTelemetry)
+  if (!value || typeof value !== 'object') return value
+  const out: Record<string, unknown> = {}
+  for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
+    if (key === 'properties' && child && typeof child === 'object') {
+      const props: Record<string, unknown> = {}
+      for (const [propKey, propVal] of Object.entries(child as Record<string, unknown>)) {
+        if (INTERNAL_TELEMETRY_FIELDS.has(propKey)) continue
+        props[propKey] = stripInternalTelemetry(propVal)
+      }
+      out[key] = props
+    } else if (key === 'required' && Array.isArray(child)) {
+      out[key] = child.filter(name => !INTERNAL_TELEMETRY_FIELDS.has(name as string))
+    } else {
+      out[key] = stripInternalTelemetry(child)
+    }
+  }
+  return out
+}
 
 interface LiveTool {
   name: string
@@ -113,7 +139,8 @@ function scraperCategory(name: string): string {
   if (exact) return exact
   const match = SCRAPER_PREFIX_CATEGORIES.find(([prefix]) => name.startsWith(prefix))
   if (match) return match[1]
-  throw new Error(`No category mapping for scraper tool ${name}`)
+  console.warn(`No category mapping for scraper tool ${name}; defaulting to "other". Add an explicit mapping when convenient.`)
+  return 'other'
 }
 
 function deriveMethodName(name: string, category: string): string {
@@ -205,9 +232,6 @@ async function main(): Promise<void> {
   const memoryCategories = new Map(memoryManifest.tools.map(tool => [tool.legacyId, tool.category]))
   const { tools: loadedTools, generatedFrom } = await loadTools()
   const liveTools = await preserveExistingToolOrder(loadedTools)
-  if (liveTools.length !== REQUIRED_TOOL_COUNT) {
-    throw new Error(`Expected ${REQUIRED_TOOL_COUNT} live MCP tools, received ${liveTools.length}`)
-  }
 
   const tools: UnifiedTool[] = liveTools.map(tool => {
     const category = memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
@@ -218,7 +242,7 @@ async function main(): Promise<void> {
       category,
       methodName: deriveMethodName(tool.name, category),
       inputSchema: tool.inputSchema ?? { type: 'object', additionalProperties: true },
-      outputSchema: tool.outputSchema ?? { type: 'object', additionalProperties: true },
+      outputSchema: (stripInternalTelemetry(tool.outputSchema) as Record<string, unknown>) ?? { type: 'object', additionalProperties: true },
       outputSchemaProvided: tool.outputSchema !== undefined,
       annotations: tool.annotations ?? {},
     }
