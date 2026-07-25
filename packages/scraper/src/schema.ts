@@ -477,6 +477,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/reddit/trending": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Discover and rank the top recent Reddit threads for a topic
+         * @description Finds relevant recent Reddit threads via a Google site:reddit.com search over a week/month window,
+         *     then (by default) scrapes them all in parallel for real upvotes, comments, and the questions people
+         *     asked, and ranks by engagement (upvotes + 2x comments). Billing: one discovery debit plus, when
+         *     includeComments is true, 30 credits per scraped thread and 2 credits per captured comment, each
+         *     refunded on failure. Set includeComments:false for a cheap discovery-only sweep (thread list, no
+         *     engagement stats, no per-thread billing). Scraping respects a soft deadline and returns partial:true
+         *     if it stops early rather than exceeding the request limit.
+         */
+        post: operations["redditTrending"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/video/analyze": {
         parameters: {
             query?: never;
@@ -894,6 +920,11 @@ export interface components {
              * @default false
              */
             serpOnly: boolean;
+            /**
+             * @description Optional Google time filter (past day/week/month/year). Omit for all-time. Pairs well with a site: operator in the query.
+             * @enum {string}
+             */
+            recency?: "day" | "week" | "month" | "year";
             /** @default false */
             debug: boolean;
         };
@@ -2441,6 +2472,97 @@ export interface operations {
                 };
                 content?: never;
             };
+        };
+    };
+    redditTrending: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description Topic in plain words, e.g. "crm for small business". Not a URL. */
+                    topic: string;
+                    /** @description Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit. */
+                    subreddit?: string;
+                    /**
+                     * @description How recent the threads must be.
+                     * @default month
+                     * @enum {string}
+                     */
+                    window?: "week" | "month";
+                    /**
+                     * @description How many discovered threads to scrape and rank (scrape-all default). Lower to cap cost.
+                     * @default 20
+                     */
+                    maxThreads?: number;
+                    /**
+                     * @description true = scrape each thread for engagement + questions and rank; false = cheap discovery-only list.
+                     * @default true
+                     */
+                    includeComments?: boolean;
+                    /**
+                     * @description Comments captured (and billed) per scraped thread when includeComments is true.
+                     * @default 50
+                     */
+                    maxCommentsPerThread?: number;
+                };
+            };
+        };
+        responses: {
+            /** @description Ranked trending threads. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        topic?: string;
+                        subreddit?: string | null;
+                        /** @description Resolved window, e.g. "7d" or "30d". */
+                        window?: string;
+                        totals?: {
+                            threads?: number;
+                            upvotes?: number;
+                            comments?: number;
+                        };
+                        rankedThreads?: {
+                            title?: string;
+                            url?: string;
+                            subreddit?: string;
+                            score?: number;
+                            commentCount?: number;
+                            engagementScore?: number;
+                            ageText?: string;
+                            topQuestions?: string[];
+                        }[];
+                        questions?: {
+                            question?: string;
+                            threadUrl?: string;
+                        }[];
+                        threadsScraped?: number;
+                        candidatesFound?: number;
+                        /** @description true if scraping stopped early at the time limit. */
+                        partial?: boolean;
+                        /** @description The Google site:reddit.com query used for discovery. */
+                        searchQuery?: string;
+                    };
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            402: components["responses"]["InsufficientBalance"];
+            /** @description No Reddit threads found for that topic and window — billed amount was refunded. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            429: components["responses"]["ConcurrencyLimitExceeded"];
+            500: components["responses"]["ServerError"];
         };
     };
     videoAnalyze: {
