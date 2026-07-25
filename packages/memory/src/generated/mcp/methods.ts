@@ -15,6 +15,7 @@ import * as FacebookAdSearch from './tools/facebook_ad_search.js'
 import * as FacebookAdTranscribe from './tools/facebook_ad_transcribe.js'
 import * as FacebookVideoTranscribe from './tools/facebook_video_transcribe.js'
 import * as RedditThread from './tools/reddit_thread.js'
+import * as RedditTrending from './tools/reddit_trending.js'
 import * as VideoFrameAnalysis from './tools/video_frame_analysis.js'
 import * as VideoFrameAnalysisStatus from './tools/video_frame_analysis_status.js'
 import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
@@ -997,6 +998,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "gmail_search_contacts",
     "category": "connections",
     "methodName": "gmailSearchContacts"
+  },
+  {
+    "name": "reddit_trending",
+    "category": "reddit",
+    "methodName": "trending"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1078,6 +1084,10 @@ export class RedditNamespace {
 
   async thread(input: RedditThread.Input): Promise<RedditThread.Output> {
     return this.callTool('reddit_thread', input) as Promise<RedditThread.Output>
+  }
+
+  async trending(input: RedditTrending.Input): Promise<RedditTrending.Output> {
+    return this.callTool('reddit_trending', input) as Promise<RedditTrending.Output>
   }
 }
 

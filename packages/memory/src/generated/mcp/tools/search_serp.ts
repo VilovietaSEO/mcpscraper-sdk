@@ -35,6 +35,10 @@ export interface Input {
    * Number of result pages to fetch (1–2).
    */
   pages?: number;
+  /**
+   * Restrict results to a recent time window (Google "past day/week/month/year" filter). Omit for all-time. Useful for "what is being said this week" style queries; pairs well with a site: operator in the query.
+   */
+  recency?: "day" | "week" | "month" | "year";
 }
 
 export interface Output {

@@ -666,6 +666,80 @@ paths:
         '500': { $ref: '#/components/responses/ServerError' }
         '503': { description: Reddit blocked the request after retries — billed amount was refunded. }
 
+  /reddit/trending:
+    post:
+      tags: [Reddit]
+      operationId: redditTrending
+      summary: Discover and rank the top recent Reddit threads for a topic
+      description: |
+        Finds relevant recent Reddit threads via a Google site:reddit.com search over a week/month window,
+        then (by default) scrapes them all in parallel for real upvotes, comments, and the questions people
+        asked, and ranks by engagement (upvotes + 2x comments). Billing: one discovery debit plus, when
+        includeComments is true, 30 credits per scraped thread and 2 credits per captured comment, each
+        refunded on failure. Set includeComments:false for a cheap discovery-only sweep (thread list, no
+        engagement stats, no per-thread billing). Scraping respects a soft deadline and returns partial:true
+        if it stops early rather than exceeding the request limit.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [topic]
+              properties:
+                topic: { type: string, description: 'Topic in plain words, e.g. "crm for small business". Not a URL.' }
+                subreddit: { type: string, description: 'Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit.' }
+                window: { type: string, enum: [week, month], default: month, description: 'How recent the threads must be.' }
+                maxThreads: { type: integer, minimum: 1, maximum: 40, default: 20, description: 'How many discovered threads to scrape and rank (scrape-all default). Lower to cap cost.' }
+                includeComments: { type: boolean, default: true, description: 'true = scrape each thread for engagement + questions and rank; false = cheap discovery-only list.' }
+                maxCommentsPerThread: { type: integer, minimum: 1, maximum: 200, default: 50, description: 'Comments captured (and billed) per scraped thread when includeComments is true.' }
+      responses:
+        '200':
+          description: Ranked trending threads.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  topic: { type: string }
+                  subreddit: { type: string, nullable: true }
+                  window: { type: string, description: 'Resolved window, e.g. "7d" or "30d".' }
+                  totals:
+                    type: object
+                    properties:
+                      threads: { type: integer }
+                      upvotes: { type: integer }
+                      comments: { type: integer }
+                  rankedThreads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title: { type: string }
+                        url: { type: string }
+                        subreddit: { type: string }
+                        score: { type: integer }
+                        commentCount: { type: integer }
+                        engagementScore: { type: integer }
+                        ageText: { type: string }
+                        topQuestions: { type: array, items: { type: string } }
+                  questions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        question: { type: string }
+                        threadUrl: { type: string }
+                  threadsScraped: { type: integer }
+                  candidatesFound: { type: integer }
+                  partial: { type: boolean, description: 'true if scraping stopped early at the time limit.' }
+                  searchQuery: { type: string, description: 'The Google site:reddit.com query used for discovery.' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '404': { description: No Reddit threads found for that topic and window — billed amount was refunded. }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
   /video/analyze:
     post:
       tags: [Video]
@@ -1223,6 +1297,7 @@ components:
         proxyZip: { type: string, pattern: '^\d{5}$', description: 'Optional US ZIP override.' }
         pages: { type: integer, minimum: 1, maximum: 2, default: 1, description: 'Organic result pages to fetch.' }
         serpOnly: { type: boolean, default: false, description: 'true = pure SERP call (search_serp); false = full PAA harvest.' }
+        recency: { type: string, enum: [day, week, month, year], description: 'Optional Google time filter (past day/week/month/year). Omit for all-time. Pairs well with a site: operator in the query.' }
         debug: { type: boolean, default: false }
 
     HarvestSyncResponse:

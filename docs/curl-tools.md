@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (166)
+## Complete catalog (167)
 
 ## search
 
@@ -78,6 +78,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 ## reddit
 
 - `reddit_thread` — Reddit Thread + Comments
+- `reddit_trending` — Reddit Trending
 
 ## video
 

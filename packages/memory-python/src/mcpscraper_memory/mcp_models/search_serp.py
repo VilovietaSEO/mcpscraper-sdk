@@ -14,6 +14,7 @@ class SearchSerpInput(BaseModel):
     proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override.")
     debug: bool | None = Field(None, alias="debug", description="Include sanitized diagnostics for debugging.")
     pages: int | None = Field(None, alias="pages", description="Number of result pages to fetch (1–2).")
+    recency: Literal["day", "week", "month", "year"] | None = Field(None, alias="recency", description="Restrict results to a recent time window (Google \"past day/week/month/year\" filter). Omit for all-time. Useful for \"what is being said this week\" style queries; pairs well with a site: operator in the query.")
 
 
 class SearchSerpOutput(BaseModel):

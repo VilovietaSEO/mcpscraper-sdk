@@ -4,6 +4,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-24 — verified against mcp-scraper 0.34.0
+
+- `search_serp` (and the REST `/harvest/sync` body) gains an optional `recency` window (`day`|`week`|`month`|`year`) that applies Google's past-day/week/month/year time filter. Omit for all-time.
+- `reddit_trending` catches up to its live shape: added the `window` (`week`|`month`) input, raised `maxThreads` to a 40 max / 20 default (scrape-all), and the response now carries `candidatesFound`, `partial`, and `searchQuery` (was `searchUrl`). Fresh MCP client model files were generated for it (the contract had been 166 tools / one release behind; now 167).
+- Added the `/reddit/trending` path to the REST OpenAPI contract (it had never been documented).
+- Fixed the unified-manifest sync check, which still hardcoded `165` despite the prior "count-agnostic" pass — it now derives the expected count from the manifest itself.
+- Regenerated all clients (167 tools). Published `mcpscraper-sdk` 0.20.0, `mcpscraper-memory-sdk` 0.20.0, `mcpscraper-cli` 0.18.0, Python packages 0.18.0.
+
 ## 2026-07-23 — verified against mcp-scraper 0.33.5
 
 - Public output schemas no longer document internal diagnostic fields (per-attempt execution detail). The typed contract is leaner; response payloads are otherwise unchanged.

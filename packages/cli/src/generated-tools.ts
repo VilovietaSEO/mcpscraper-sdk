@@ -141,6 +141,16 @@ export const MCP_TOOL_CATALOG = [
           "maximum": 2,
           "default": 1,
           "description": "Number of result pages to fetch (1–2)."
+        },
+        "recency": {
+          "type": "string",
+          "enum": [
+            "day",
+            "week",
+            "month",
+            "year"
+          ],
+          "description": "Restrict results to a recent time window (Google \"past day/week/month/year\" filter). Omit for all-time. Useful for \"what is being said this week\" style queries; pairs well with a site: operator in the query."
         }
       },
       "required": [
@@ -7673,6 +7683,67 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "reddit_trending",
+    "category": "reddit",
+    "title": "Reddit Trending",
+    "description": "Discover the top Reddit conversations about a topic from the last week or month: finds relevant recent threads via a Google site:reddit.com search (optionally scoped to one subreddit), scrapes them for real upvotes, comments, and the questions people asked, and ranks by engagement (upvotes + 2x comments). Scraping runs in parallel across the discovered threads; set includeComments:false for a fast, cheap discovery-only sweep (relevant thread list, no engagement stats, no per-thread billing) and then read the ones you want with reddit_thread. Not for reading one known thread URL — use reddit_thread for that.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Topic to scan, in plain words (e.g. \"crm for small business\"). Not a URL — pass a known thread URL to reddit_thread instead."
+        },
+        "subreddit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Bare subreddit name to scope the scan to one community, e.g. \"SEO\" (no r/ prefix, no URL). Omit to scan all of Reddit."
+        },
+        "window": {
+          "type": "string",
+          "enum": [
+            "week",
+            "month"
+          ],
+          "default": "month",
+          "description": "How recent the threads must be: \"week\" or \"month\" (default). Applied via a Google time filter over reddit.com, so it reflects genuine recency."
+        },
+        "maxThreads": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 40,
+          "default": 20,
+          "description": "How many discovered threads to scrape and rank. Default 20 (scrape-all). Each scraped thread is billed like reddit_thread + its comments, so lower this to cap cost; raise toward 40 for a wider sweep. Scraping runs in parallel and stops early if it nears the request time limit (partial:true in the response)."
+        },
+        "includeComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scrape each discovered thread for real upvotes, comments, and the questions people asked, then rank by engagement. Set false for a fast, cheap discovery-only sweep — returns the discovered threads (title + url) in relevance order with NO engagement stats and NO per-thread billing, so you can then call reddit_thread on the ones you want."
+        },
+        "maxCommentsPerThread": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200,
+          "default": 50,
+          "description": "Comments captured per scraped thread when includeComments is true. Default 50. Billed per captured comment."
+        }
+      },
+      "required": [
+        "topic"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Reddit Trending",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
       "openWorldHint": true
     }
   }
