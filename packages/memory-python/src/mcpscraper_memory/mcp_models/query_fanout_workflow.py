@@ -10,7 +10,7 @@ class QueryFanoutWorkflowInput(BaseModel):
     wait_ms: int | None = Field(None, alias="wait_ms", description="How long to wait for the answer stream to finish. Defaults to 90000 when a prompt is sent, 8000 for passive capture.")
     first_party_domain: str | None = Field(None, alias="first_party_domain", description="The brand/site being researched, e.g. example.com — sources on this domain are tagged First-party/vendor.")
     reset: bool | None = Field(None, alias="reset", description="Clear any previously buffered stream for this page before capturing.")
-    export: bool | None = Field(None, alias="export", description="Write JSON/CSV/TSV/HTML exports to MCP_SCRAPER_OUTPUT_DIR/fanout, returning relative paths.")
+    export: bool | None = Field(None, alias="export", description="When using the installed local MCP server, write JSON/CSV/TSV/HTML exports to MCP_SCRAPER_OUTPUT_DIR/fanout. Hosted clients such as ChatGPT always receive the complete structured result inline and leave exports null.")
 
 
 class QueryFanoutWorkflowOutput(BaseModel):
@@ -31,5 +31,6 @@ class QueryFanoutWorkflowOutput(BaseModel):
     counts: dict[str, Any] = Field(..., alias="counts", description="")
     aggregates: dict[str, Any] = Field(..., alias="aggregates", description="Objective aggregates: top sourced sites by frequency, citation order, and URL-category counts.")
     first_party_domain: Any = Field(..., alias="first_party_domain", description="")
-    exports: Any = Field(..., alias="exports", description="Relative export paths when export=true, otherwise null. Paths are relative to MCP_SCRAPER_OUTPUT_DIR, or ~/Downloads/mcp-scraper when that env var is not set.")
+    export_error: Any | None = Field(None, alias="export_error", description="Non-fatal local export failure. The inline capture remains complete when this is present.")
+    exports: Any = Field(..., alias="exports", description="Local-only export paths when export=true, otherwise null. Hosted clients receive the complete structured result inline instead of inaccessible server paths.")
     debug: dict[str, Any] | None = Field(None, alias="debug", description="")

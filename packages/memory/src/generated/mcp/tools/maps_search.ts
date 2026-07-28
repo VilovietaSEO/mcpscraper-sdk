@@ -24,11 +24,11 @@ export interface Input {
    */
   includeServices?: boolean;
   /**
-   * Leave unset for the default route. Country/region localization comes from the city or region in the query plus gl/hl.
+   * Leave unset for direct egress. Set configured only when the installed server has a configured proxy and the user explicitly needs it; location remains in the Maps query.
    */
   proxyMode?: "configured" | "none";
   /**
-   * Optional US ZIP override.
+   * Optional US ZIP override for configured proxy routing.
    */
   proxyZip?: string;
   /**

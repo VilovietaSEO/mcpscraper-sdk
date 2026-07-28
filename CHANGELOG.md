@@ -4,6 +4,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-27 — verified against mcp-scraper 0.35.0
+
+- Regenerated the complete 170-tool Node, Python, CLI, and cURL surfaces, including typed `web.mapWaybackSnapshots`, `directory.workflowStatus`, and `directory.locationMarkets` methods.
+- Updated connected-service guidance and schemas for authenticated Zoom transcript export, server-side Gmail MIME construction, required Calendar invitees/context, and required Zoom agendas.
+- Preserved the accepted Google location contract: direct egress remains the default while location supplies UULE and missing city text; optional configured-proxy controls remain available.
+- Run SDK TypeScript generators, validators, and tests through Node's `--import tsx` hook so managed sandboxes do not fail on the `tsx` CLI's Unix IPC socket.
+- Prepared `mcpscraper-sdk` and `mcpscraper-memory-sdk` 0.21.0, `mcpscraper-cli` 0.19.0, and both Python packages 0.19.0.
+
 ## 2026-07-24 — verified against mcp-scraper 0.34.0
 
 - `search_serp` (and the REST `/harvest/sync` body) gains an optional `recency` window (`day`|`week`|`month`|`year`) that applies Google's past-day/week/month/year time filter. Omit for all-time.

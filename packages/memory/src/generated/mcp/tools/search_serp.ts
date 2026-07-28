@@ -1,10 +1,10 @@
 export interface Input {
   /**
-   * The search query. KEEP the place in the query text for localized results (e.g. "best dentist Brooklyn NY") and also set location — city-in-query is what localizes reliably.
+   * The search topic. When location is supplied, the server sets Google UULE and adds the location to the executed query only if its city is not already present; do not add it manually.
    */
   query: string;
   /**
-   * City, region, or country for geo signals. Set alongside city-in-query wording; alone it does NOT reliably localize.
+   * City, region, or country for localized Google results. It sets UULE and supplies the city text when missing from query; it does not select a proxy.
    */
   location?: string;
   /**
@@ -20,11 +20,11 @@ export interface Input {
    */
   device?: "desktop" | "mobile";
   /**
-   * Leave unset for the default route. Country/region localization comes from gl/hl plus the city or region in the query.
+   * Leave unset for direct egress. Set configured only when the installed server has a configured proxy and the user explicitly needs it; location is handled separately with UULE and query text.
    */
   proxyMode?: "configured" | "none";
   /**
-   * Optional US ZIP override.
+   * Optional US ZIP override for configured proxy routing.
    */
   proxyZip?: string;
   /**
@@ -44,6 +44,10 @@ export interface Input {
 export interface Output {
   query: string;
   location: string | null;
+  resultQuality: string | null;
+  degradedResult: boolean | null;
+  degradationReasons: string[];
+  retryRecommended: boolean | null;
   organicResults: {
     position: number;
     title: string;

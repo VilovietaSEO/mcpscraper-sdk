@@ -5,26 +5,7 @@ export interface Output {
     connectionId: string;
     providerConfigKey: string;
     provider?: string | null;
-    /**
-     * Best verified provider-side account label. This is never derived from the MCP Scraper login email.
-     */
     label: string;
-    /**
-     * Provider-side account or principal identifier when safely discoverable. This is not the MCP Scraper user id.
-     */
-    providerAccountId: string | null;
-    /**
-     * Actual provider-side email for the authorized account when the provider exposes and verifies it. Null for organization-only accounts or unavailable identity scopes.
-     */
-    providerAccountEmail: string | null;
-    /**
-     * Actual provider-side person, workspace, channel, or organization name when available.
-     */
-    providerAccountName: string | null;
-    /**
-     * Whether provider-side account identity discovery is pending, verified, or unavailable under the current OAuth grant. Reconnect when unavailable after identity scopes were added.
-     */
-    providerIdentityStatus: "pending" | "verified" | "unavailable";
     status: string;
     /**
      * Credential lifecycle. This is separate from current provider availability.

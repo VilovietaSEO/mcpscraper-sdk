@@ -4,6 +4,10 @@ export interface Input {
    */
   query: string;
   /**
+   * Required unique opaque ID for this intended directory job (a UUID is ideal). Reuse the same value only when retrying the same call after a timeout; use a new value for every intentional rerun. This prevents a lost response from creating or charging for a duplicate job.
+   */
+  idempotencyKey: string;
+  /**
    * US state abbreviation or name used to select Census places, e.g. TN.
    */
   state?: string;
@@ -28,23 +32,27 @@ export interface Input {
    */
   concurrency?: number;
   /**
-   * Attach ZIP groups from a configured US ZIPS CSV when available (MCP_SCRAPER_USZIPS_CSV_PATH or usZipsCsvPath).
+   * Attach ZIP and county groups from the active versioned hosted location dataset. Production never reads a server-local CSV.
    */
   includeZipGroups?: boolean;
   /**
-   * Local/test-only path to a US ZIPS CSV (state_abbr, zipcode, county, city columns). Deployed APIs should use MCP_SCRAPER_USZIPS_CSV_PATH instead. For ZIP enrichment, set MCP_SCRAPER_USZIPS_CSV_PATH on the server, or pass this in local/test mode.
+   * Local/test-only ZIP CSV override. Hosted MCP/API runs ignore filesystem paths and use the active hosted Census + ZIP dataset versions.
    */
   usZipsCsvPath?: string;
   /**
-   * Save a directory-ready CSV of results to the MCP Scraper output directory and return its path.
+   * Create a directory-ready CSV. Hosted runs return an owner-scoped artifact; local runs may also return a filesystem path.
    */
   saveCsv?: boolean;
   /**
-   * Proxy behavior per city search. Leave unset for the default route. Country/region localization comes from the city or region in the query plus gl/hl.
+   * Hosted MCP directory jobs always run durably in the background. Poll directory_workflow_status for progress, terminal billing, and the owner-scoped CSV artifact.
+   */
+  background?: true;
+  /**
+   * Proxy behavior per city search. Leave unset for direct egress; set configured only when the installed server has a configured proxy and the user explicitly needs it.
    */
   proxyMode?: "configured" | "none";
   /**
-   * Optional US ZIP override.
+   * Optional US ZIP override for configured proxy routing.
    */
   proxyZip?: string;
   /**
@@ -54,6 +62,9 @@ export interface Input {
 }
 
 export interface Output {
+  jobId: string | null;
+  status: "queued" | "running" | "complete" | "partial" | "empty" | "failed";
+  statusUrl: string | null;
   query: string;
   state: string;
   minPopulation: number;
@@ -67,6 +78,30 @@ export interface Output {
   selectedCityCount: number;
   totalResultCount: number;
   csvPath: string | null;
+  csvArtifact: {
+    artifactId: string;
+    filename: string;
+    contentType: string;
+    bytes: number;
+    rowCount: number;
+    sha256: string;
+    expiresAt: string;
+    downloadUrl: string | null;
+    downloadUrlExpiresAt: string | null;
+  } | null;
+  progress: {
+    completedCities: number;
+    totalCities: number;
+    failedCities: number;
+  };
+  billing: {
+    heldMc: number;
+    finalMc: number | null;
+    refundMc: number | null;
+  };
+  errorCode: string | null;
+  error: string | null;
+  retryable: boolean | null;
   cities: {
     city: string;
     state: string;
@@ -79,6 +114,8 @@ export interface Output {
     counties: string[];
     status: "ok" | "empty" | "failed";
     error: string | null;
+    errorCode?: string | null;
+    retryable?: boolean;
     resultCount: number;
     durationMs: number;
     results: {

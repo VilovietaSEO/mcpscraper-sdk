@@ -17,3 +17,4 @@ class CreditsInfoOutput(BaseModel):
     costs: list[dict[str, Any]] = Field(..., alias="costs", description="")
     ledger: list[dict[str, Any]] = Field(..., alias="ledger", description="")
     concurrency: Any = Field(..., alias="concurrency", description="")
+    connected_accounts: Any = Field(..., alias="connectedAccounts", description="")

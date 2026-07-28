@@ -1,10 +1,10 @@
 export interface Input {
   /**
-   * Search query to capture. KEEP the place in the query text for localized captures (e.g. "botox clinic austin tx") and also set location.
+   * Search topic to capture. When location is supplied, the server sets Google UULE and adds the location to the executed query only if its city is not already present; do not add it manually.
    */
   query: string;
   /**
-   * City, region, country, or service area for localized Google results.
+   * City, region, country, or service area for localized Google results. It sets UULE and supplies the city text when missing from query; it does not select a proxy.
    */
   location?: string;
   /**
@@ -20,21 +20,21 @@ export interface Input {
    */
   device?: "desktop" | "mobile";
   /**
-   * Leave unset for the default route. Country/region localization comes from gl/hl plus the city or region in the query.
+   * Leave unset for direct egress. Set configured only when the installed server has a configured proxy and the user explicitly needs it; location is handled separately with UULE and query text.
    */
   proxyMode?: "configured" | "none";
   /**
-   * Optional US ZIP override.
+   * Optional US ZIP override for configured proxy routing.
    */
   proxyZip?: string;
-  /**
-   * Google result pages to capture. Use 2 only for deeper ranking evidence.
-   */
-  pages?: number;
   /**
    * Include sanitized browser/proxy/location diagnostics.
    */
   debug?: boolean;
+  /**
+   * Google result pages to capture. Use 2 only for deeper ranking evidence.
+   */
+  pages?: number;
   /**
    * Also capture ranking-page snapshots for selected SERP URLs. Each attempted snapshot adds 1 Credit.
    */
