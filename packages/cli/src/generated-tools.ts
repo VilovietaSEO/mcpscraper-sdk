@@ -8152,6 +8152,65 @@ export const MCP_TOOL_CATALOG = [
       "idempotentHint": true,
       "openWorldHint": false
     }
+  },
+  {
+    "name": "archive_read",
+    "category": "web",
+    "title": "List or Read ZIP Archive",
+    "description": "Open any bounded public HTTPS ZIP, including a bundleUrl from check_site_export. Omit path to list files; pass an exact returned path to read a bounded UTF-8 text window. Set depositToLibrary true with a path to preserve the complete selected source file in the tenant Library vault. Rejects private-network URLs, unsafe paths, encrypted entries, symlinks, binary inline reads, and ZIP bombs.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Public HTTPS URL of a ZIP file, including a signed bundleUrl returned by check_site_export."
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "description": "Exact ZIP entry path to read. Omit to list the archive. Use a path returned by a previous archive_read listing."
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Byte offset for a text-file read. Continue from nextOffset until it is null. Ignored when path is omitted."
+        },
+        "maxBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200000,
+          "default": 50000,
+          "description": "Maximum UTF-8 bytes to return from the selected text file. Default 50,000; maximum 200,000."
+        },
+        "maxEntries": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 200,
+          "description": "Maximum entry rows returned when listing. The server still validates the complete archive. Default 200; maximum 1,000."
+        },
+        "depositToLibrary": {
+          "type": "boolean",
+          "default": false,
+          "description": "Store the complete selected text file in the tenant Library vault through library-ingest. Requires path. Preserves the ZIP URL and entry path as source provenance."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "List or Read ZIP Archive",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
   }
 ] as const
 export const MCP_TOOL_NAMES = MCP_TOOL_CATALOG.map(tool => tool.name)

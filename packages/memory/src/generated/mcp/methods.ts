@@ -9,6 +9,7 @@ import * as WebExtractSite from './tools/extract_site.js'
 import * as WebAuditSite from './tools/audit_site.js'
 import * as WebCheckSiteExport from './tools/check_site_export.js'
 import * as WebMapWaybackSnapshots from './tools/map_wayback_snapshots.js'
+import * as WebArchiveRead from './tools/archive_read.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
 import * as FacebookPageIntel from './tools/facebook_page_intel.js'
@@ -1027,6 +1028,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "merge-memory-tags",
     "category": "tags",
     "methodName": "mergeMemoryTags"
+  },
+  {
+    "name": "archive_read",
+    "category": "web",
+    "methodName": "archiveRead"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1072,6 +1078,10 @@ export class WebNamespace {
 
   async mapWaybackSnapshots(input: WebMapWaybackSnapshots.Input): Promise<WebMapWaybackSnapshots.Output> {
     return this.callTool('map_wayback_snapshots', input) as Promise<WebMapWaybackSnapshots.Output>
+  }
+
+  async archiveRead(input: WebArchiveRead.Input): Promise<WebArchiveRead.Output> {
+    return this.callTool('archive_read', input) as Promise<WebArchiveRead.Output>
   }
 }
 

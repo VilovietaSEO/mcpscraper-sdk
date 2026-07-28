@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-28 — verified against mcp-scraper 0.38.0 / mcp-memory 1.13.0
+
+### Added
+
+- Typed `web.archiveRead` (Node) and `web.archive_read` (Python) bindings for the new `archive_read` MCP tool. It lists bounded public ZIP files, reads selected UTF-8 entries with byte-window continuation, and can preserve the complete selected file in the tenant Library vault.
+- Runnable Node, Python, CLI, and cURL examples covering ZIP listing, selected-file reading, and opt-in Library deposit.
+
+### Changed
+
+- Regenerated the canonical unified contract and every generated client from MCP Scraper 0.38.0: 172 tools total, split between 82 scraper/browser/workflow/connection tools and 90 mirrored Memory tools.
+- Prepared `mcpscraper-memory-sdk` 0.23.0, `mcpscraper-sdk` 0.22.0, `mcpscraper-cli` 0.21.0, and both Python packages 0.21.0.
+
 ## [2026-07-28] - verified against mcp-scraper 0.37.0 / mcp-memory 1.13.0
 
 ### Added

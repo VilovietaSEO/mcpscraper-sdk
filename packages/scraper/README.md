@@ -40,12 +40,16 @@ Every non-2xx response throws a `ScraperApiError` with `status`, `code`, and the
 
 ## API surface
 
-`client.tools` is the generated, typed 166-tool MCP surface. It includes 77 MCP Scraper tools and all 89 mirrored memory tools from `contracts/mcp.tools.json`.
+`client.tools` is the generated, typed 172-tool MCP surface. It includes 82 MCP Scraper tools and all 90 mirrored Memory tools from `contracts/mcp.tools.json`.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
 ```ts
 await client.tools.search.searchSerp({ query: 'roof repair Denver' })
+await client.tools.web.archiveRead({
+  url: 'https://github.com/octocat/Hello-World/archive/refs/heads/master.zip',
+  path: 'Hello-World-master/README',
+})
 await client.tools.memory.search({ query: 'roofing warranty terms' })
 await client.tools.connections.exportConnectedServiceData({
   connectionId: 'conn_123',
@@ -110,4 +114,4 @@ npm run generate
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 89-tool typed surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 92-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)

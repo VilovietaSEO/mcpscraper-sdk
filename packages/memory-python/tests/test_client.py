@@ -135,7 +135,7 @@ def test_non_2xx_http_response_raises_memory_api_error():
     assert exc_info.value.http_status == 500
 
 
-def test_unified_bindings_contain_all_166_unique_tools():
+def test_unified_bindings_contain_every_contract_tool():
     assert MCP_TOOL_COUNT == len(MCP_TOOL_BINDINGS)
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
     assert len(set(names)) == MCP_TOOL_COUNT
@@ -145,6 +145,7 @@ def test_unified_bindings_contain_all_166_unique_tools():
         "renew_connected_data_download",
         "describe_service_connection_tool",
         "import_service_connection_to_memory",
+        "archive_read",
     } <= names
 
 

@@ -255,7 +255,7 @@ def test_snake_case_kwargs_are_sent_as_camel_case():
     assert "max_pages" not in sent_body
 
 
-def test_unified_bindings_contain_all_166_unique_tools():
+def test_unified_bindings_contain_every_contract_tool():
     assert MCP_TOOL_COUNT == len(MCP_TOOL_BINDINGS)
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
     assert len(set(names)) == MCP_TOOL_COUNT
@@ -265,6 +265,7 @@ def test_unified_bindings_contain_all_166_unique_tools():
         "renew_connected_data_download",
         "describe_service_connection_tool",
         "import_service_connection_to_memory",
+        "archive_read",
     } <= names
 
 
@@ -294,6 +295,47 @@ def test_unified_tool_dispatches_through_mcp():
     assert sent_body["params"]["name"] == "search_serp"
     assert sent_body["params"]["arguments"] == {"query": "roofers denver"}
     assert result.model_dump(by_alias=True) == search_result
+
+
+@responses.activate
+def test_archive_read_dispatches_snake_case_arguments_as_wire_aliases():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        json={
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+                "structuredContent": {
+                    "mode": "read",
+                    "archiveUrl": "https://example.com/archive.zip",
+                    "compressedBytes": 351,
+                    "entryCount": 2,
+                    "totalUncompressedBytes": 13,
+                    "path": "site/README",
+                    "contentType": "text/plain",
+                    "fileBytes": 13,
+                    "offset": 0,
+                    "content": "Hello World!\n",
+                    "nextOffset": None,
+                }
+            },
+        },
+        status=200,
+    )
+    client = ScraperClient(api_key="sk_test")
+    client.tools.web.archive_read(
+        url="https://example.com/archive.zip",
+        path="site/README",
+        deposit_to_library=True,
+    )
+    sent_body = json.loads(responses.calls[0].request.body)
+    assert sent_body["params"]["name"] == "archive_read"
+    assert sent_body["params"]["arguments"] == {
+        "url": "https://example.com/archive.zip",
+        "path": "site/README",
+        "depositToLibrary": True,
+    }
 
 
 @responses.activate

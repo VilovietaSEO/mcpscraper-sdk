@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 166 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 89-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official TypeScript/JavaScript clients for all 172 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 92-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
@@ -17,6 +17,9 @@ import { McpToolsClient } from 'mcpscraper-memory-sdk'
 
 const tools = new McpToolsClient({ apiKey: process.env.MCP_SCRAPER_API_KEY! })
 await tools.browser.listSessions()
+await tools.web.archiveRead({
+  url: 'https://github.com/octocat/Hello-World/archive/refs/heads/master.zip',
+})
 await tools.memory.search({ query: 'q3 roadmap decisions' })
 await tools.connections.exportConnectedServiceData({ connectionId: 'conn_123', lastDays: 7 })
 ```
@@ -49,7 +52,7 @@ try {
 
 ## Namespaces
 
-`MemoryClient` retains the direct 89-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 166 tools — 77 MCP Scraper tools plus 89 mirrored memory tools — across its generated namespaces.
+`MemoryClient` retains the direct 92-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 172 tools — 82 MCP Scraper tools plus 90 mirrored Memory tools — across its generated namespaces.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
@@ -65,4 +68,4 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 89 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 92 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
