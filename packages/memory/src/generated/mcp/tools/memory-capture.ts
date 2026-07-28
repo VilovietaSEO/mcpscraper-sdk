@@ -81,7 +81,7 @@ export interface Input {
   };
   baseRevision?: number;
   /**
-   * Required justification for any tag that does not already exist. Existing exact/alias/near tags are canonicalized automatically; a new tag is accepted only when its matching decision has central=true and reusable=true.
+   * Required justification for any tag that does not already exist. Tags resolve against the account's existing vocabulary; new tags require a one-line description.
    *
    * @maxItems 8
    */
@@ -93,6 +93,10 @@ export interface Input {
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         }
       ]
     | [
@@ -101,12 +105,20 @@ export interface Input {
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         }
       ]
     | [
@@ -115,18 +127,30 @@ export interface Input {
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         }
       ]
     | [
@@ -135,24 +159,40 @@ export interface Input {
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         }
       ]
     | [
@@ -161,30 +201,50 @@ export interface Input {
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         }
       ]
     | [
@@ -193,36 +253,60 @@ export interface Input {
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         }
       ]
     | [
@@ -231,42 +315,70 @@ export interface Input {
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         }
       ]
     | [
@@ -275,48 +387,80 @@ export interface Input {
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         },
         {
           tag: string;
           central: boolean;
           reusable: boolean;
           description?: string;
+          /**
+           * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
+           */
+          acceptCanonical?: string;
         }
       ];
 }
@@ -328,8 +472,14 @@ export interface Output {
   warnings?: string[];
   tagResolutions?: {
     candidate: string;
-    action: "reuse" | "create" | "omit";
+    action: "reuse" | "review" | "create" | "omit";
     tag?: string;
+    candidates?: {
+      tag: string;
+      matchedVia: string;
+      score: number;
+      description: string | null;
+    }[];
     reason: string;
   }[];
   note?: {

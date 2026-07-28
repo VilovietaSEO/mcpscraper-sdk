@@ -159,6 +159,7 @@ import * as TablesQuery from './tools/table-query.js'
 import * as TagsListMemoryTags from './tools/list-memory-tags.js'
 import * as TagsResolveMemoryTags from './tools/resolve-memory-tags.js'
 import * as TagsUpsertMemoryTag from './tools/upsert-memory-tag.js'
+import * as TagsMergeMemoryTags from './tools/merge-memory-tags.js'
 import * as VaultsAddVault from './tools/add-vault.js'
 import * as VaultsCreateSecureVault from './tools/create-secure-vault.js'
 import * as VaultsDeleteVault from './tools/delete-vault.js'
@@ -1021,6 +1022,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "map_wayback_snapshots",
     "category": "web",
     "methodName": "mapWaybackSnapshots"
+  },
+  {
+    "name": "merge-memory-tags",
+    "category": "tags",
+    "methodName": "mergeMemoryTags"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1774,6 +1780,10 @@ export class TagsNamespace {
 
   async upsertMemoryTag(input: TagsUpsertMemoryTag.Input): Promise<TagsUpsertMemoryTag.Output> {
     return this.callTool('upsert-memory-tag', input) as Promise<TagsUpsertMemoryTag.Output>
+  }
+
+  async mergeMemoryTags(input: TagsMergeMemoryTags.Input): Promise<TagsMergeMemoryTags.Output> {
+    return this.callTool('merge-memory-tags', input) as Promise<TagsMergeMemoryTags.Output>
   }
 }
 

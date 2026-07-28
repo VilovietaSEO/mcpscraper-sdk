@@ -12,6 +12,7 @@ class MemoryPutInput(BaseModel):
     content: str = Field(..., alias="content", description="The full note body to store and index for semantic search. Must be non-empty.")
     props: dict[str, Any] | None = Field(None, alias="props", description="Obsidian note primitives plus vault-specific template fields. On edits, supplied fields patch the stored props instead of replacing the whole object; pass an empty array to deliberately clear a link list. Type/domain/folder also steer routing when no vault is given.")
     base_revision: float | None = Field(None, alias="baseRevision", description="Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes).")
+    tag_descriptions: dict[str, Any] | None = Field(None, alias="tagDescriptions", description="One-line meaning for any tag in props.tags that is new to the account, keyed by tag. Tags resolve against the account's existing vocabulary; new tags require a one-line description.")
 
 
 class MemoryPutOutput(BaseModel):

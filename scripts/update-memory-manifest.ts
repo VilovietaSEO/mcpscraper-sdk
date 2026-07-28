@@ -36,10 +36,13 @@ const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>
   listTagsTool: { category: 'tags', legacyId: 'list-memory-tags' },
   resolveTagsTool: { category: 'tags', legacyId: 'resolve-memory-tags' },
   upsertTagTool: { category: 'tags', legacyId: 'upsert-memory-tag' },
+  mergeTagsTool: { category: 'tags', legacyId: 'merge-memory-tags' },
   noteBacklinksTool: { category: 'graph', legacyId: 'memory-backlinks' },
   graphUniverseTool: { category: 'graph', legacyId: 'memory-graph-universe' },
   graphPathTool: { category: 'graph', legacyId: 'memory-graph-path' },
   setScheduleDefaultsTool: { category: 'schedule', legacyId: 'set-schedule-defaults' },
+  updateScheduledActionTool: { category: 'schedule', legacyId: 'update-scheduled-action' },
+  listScheduledActionRunsTool: { category: 'schedule', legacyId: 'list-scheduled-action-runs' },
   getVaultAppLinkTool: { category: 'access', legacyId: 'get-vault-app-link' },
   revokeVaultAppLinkTool: { category: 'access', legacyId: 'revoke-vault-app-link' },
 }

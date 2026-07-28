@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [2026-07-28] - verified against mcp-scraper 0.37.0 / mcp-memory 1.13.0
+
+### Added
+
+- `merge-memory-tags` in the unified MCP contract and the generated TypeScript, Python, and CLI clients. It collapses a duplicate tag into the canonical one across an account, retagging every note and recording the retired spelling as an alias.
+- SDK category/legacyId mappings for `update-scheduled-action` and `list-scheduled-action-runs`, which shipped in mcp-memory but had no mapping here, so the memory manifest could not be regenerated at all until now.
+
+### Changed
+
+- Regenerated the unified contract from mcp-scraper 0.37.0 (previously 0.34.1) — 165 to 171 tools, memory 89 to 92. Catching up three product releases changed `search_serp`'s output contract, which now requires `resultQuality`, `degradedResult`, `degradationReasons`, and `retryRecommended`.
+- The unified-bindings test now asserts against the contract's own tool count rather than a frozen literal, which had been failing since the catalog grew past 165.
+
 ## 2026-07-27 — verified against mcp-scraper 0.35.0
 
 - Regenerated the complete 170-tool Node, Python, CLI, and cURL surfaces, including typed `web.mapWaybackSnapshots`, `directory.workflowStatus`, and `directory.locationMarkets` methods.

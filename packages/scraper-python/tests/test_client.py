@@ -277,6 +277,10 @@ def test_unified_tool_dispatches_through_mcp():
         "localPack": [],
         "aiOverview": None,
         "entityIds": None,
+        "resultQuality": None,
+        "degradedResult": False,
+        "degradationReasons": [],
+        "retryRecommended": False,
     }
     responses.add(
         responses.POST,
