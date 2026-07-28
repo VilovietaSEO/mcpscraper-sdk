@@ -1,14 +1,36 @@
 export interface Input {
   /**
-   * Public website URL or domain to crawl for page CONTENT (map + scrape). For a technical SEO audit use audit_site instead — this returns content only, not analysis.
+   * Public website URL/domain or web.archive.org replay URL. Without wayback, this crawls live content or one archived site snapshot. With wayback, it creates a multi-month archive timeline.
    */
   url: string;
   /**
-   * Maximum pages to extract. Bulk crawls (over 25 pages) switch to folder mode: each page saved as its own Markdown file, with a summary plus folder path returned instead of inlining content.
+   * Maximum pages per Wayback month, or maximum total pages for a normal crawl. Multi-month jobs remain capped at 10,000 total captures and 500 pages per month.
    */
   maxPages?: number;
   /**
-   * Use extra measures to get past sites that block normal crawling (403/429). Slower and pricier — use only when a site blocks normal crawling.
+   * Optional temporal archive plan. Provide explicit YYYY-MM months or a from/to range plus intervalMonths. Omit urls for whole-site monthly snapshots, provide one URL for a single-page timeline, or several URLs for selected-page timelines. All results share one durable export.
+   */
+  wayback?: {
+    /**
+     * @minItems 1
+     * @maxItems 60
+     */
+    months?: [string, ...string[]];
+    from?: string;
+    to?: string;
+    intervalMonths?: number;
+    /**
+     * @minItems 1
+     * @maxItems 100
+     */
+    urls?: [string, ...string[]];
+  };
+  /**
+   * Required unique opaque ID for this intended export (a UUID is ideal). Reuse the same value only when retrying the same call after a timeout; use a new value for every intentional rerun. This prevents a lost response from creating or charging for a duplicate job.
+   */
+  idempotencyKey: string;
+  /**
+   * Route page fetches through rotating residential proxies to defeat rate-limiting and bot blocks (403/429). Slower and pricier — use only when a site blocks normal crawling.
    */
   rotateProxies?: boolean;
   /**
@@ -20,9 +42,9 @@ export interface Input {
    */
   formats?: ("markdown" | "links" | "json" | "images" | "branding")[];
   /**
-   * Run the crawl as a background job instead of blocking this call, returning a jobId immediately — poll it with check_site_export to get a downloadable zip (all page content, plus real image files if downloadImages is set) once ready. Use for large sites where a synchronous call would be slow.
+   * MCP multi-page crawls always run as durable background jobs. Poll check_site_export for progress, outcome counters, and the hosted ZIP.
    */
-  background?: boolean;
+  background?: true;
   /**
    * Download every discovered image as a real file into the export bundle (not just image URLs/stats). OFF by default — must be explicitly set true. Implies background regardless of the background flag, since downloading a whole site's images is too slow to run synchronously. Capped at 20 images/page and 500 images/site.
    */
@@ -66,4 +88,8 @@ export interface Output {
    * Present when background (or downloadImages) was set — informational; use check_site_export with jobId, not this URL directly.
    */
   statusUrl?: string;
+  requestedMaxPages?: number;
+  effectiveMaxPages?: number;
+  creditLimited?: boolean;
+  creditTruncated?: boolean;
 }

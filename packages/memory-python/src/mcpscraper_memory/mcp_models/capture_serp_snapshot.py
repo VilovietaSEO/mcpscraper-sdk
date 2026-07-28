@@ -5,15 +5,15 @@ from pydantic import BaseModel, ConfigDict, Field
 class CaptureSerpSnapshotInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    query: str = Field(..., alias="query", description="Search query to capture. KEEP the place in the query text for localized captures (e.g. \"botox clinic austin tx\") and also set location.")
-    location: str | None = Field(None, alias="location", description="City, region, country, or service area for localized Google results.")
+    query: str = Field(..., alias="query", description="Search topic to capture. When location is supplied, the server sets Google UULE and adds the location to the executed query only if its city is not already present; do not add it manually.")
+    location: str | None = Field(None, alias="location", description="City, region, country, or service area for localized Google results. It sets UULE and supplies the city text when missing from query; it does not select a proxy.")
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from the requested market.")
     hl: str | None = Field(None, alias="hl", description="Google interface/content language inferred from the user request.")
     device: Literal["desktop", "mobile"] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings/evidence.")
-    proxy_mode: Literal["configured", "none"] | None = Field(None, alias="proxyMode", description="Leave unset for the default route. Country/region localization comes from gl/hl plus the city or region in the query.")
-    proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override.")
-    pages: int | None = Field(None, alias="pages", description="Google result pages to capture. Use 2 only for deeper ranking evidence.")
+    proxy_mode: Literal["configured", "none"] | None = Field(None, alias="proxyMode", description="Leave unset for direct egress. Set configured only when the installed server has a configured proxy and the user explicitly needs it; location is handled separately with UULE and query text.")
+    proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override for configured proxy routing.")
     debug: bool | None = Field(None, alias="debug", description="Include sanitized browser/proxy/location diagnostics.")
+    pages: int | None = Field(None, alias="pages", description="Google result pages to capture. Use 2 only for deeper ranking evidence.")
     include_page_snapshots: bool | None = Field(None, alias="includePageSnapshots", description="Also capture ranking-page snapshots for selected SERP URLs. Each attempted snapshot adds 1 Credit.")
     page_snapshot_limit: int | None = Field(None, alias="pageSnapshotLimit", description="Maximum ranking-page snapshots when includePageSnapshots is true. This capacity is held up front and unused capacity is refunded.")
 

@@ -20,7 +20,7 @@ export interface Input {
    */
   reset?: boolean;
   /**
-   * Write JSON/CSV/TSV/HTML exports to MCP_SCRAPER_OUTPUT_DIR/fanout, returning relative paths.
+   * When using the installed local MCP server, write JSON/CSV/TSV/HTML exports to MCP_SCRAPER_OUTPUT_DIR/fanout. Hosted clients such as ChatGPT always receive the complete structured result inline and leave exports null.
    */
   export?: boolean;
 }
@@ -101,7 +101,11 @@ export interface Output {
   };
   first_party_domain: string | null;
   /**
-   * Relative export paths when export=true, otherwise null. Paths are relative to MCP_SCRAPER_OUTPUT_DIR, or ~/Downloads/mcp-scraper when that env var is not set.
+   * Non-fatal local export failure. The inline capture remains complete when this is present.
+   */
+  export_error?: string | null;
+  /**
+   * Local-only export paths when export=true, otherwise null. Hosted clients receive the complete structured result inline instead of inaccessible server paths.
    */
   exports: {
     relativeTo: string;

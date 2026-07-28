@@ -1,14 +1,18 @@
 export interface Input {
   /**
-   * Public website URL or domain for a full technical SEO audit (issues, link graph, indexability, headings, images). For plain content use extract_site instead.
+   * Public website URL or domain for a full technical SEO audit (issues, link graph, indexability, headings, images). Bare domains default to https://. For plain content use extract_site instead.
    */
   url: string;
   /**
-   * Maximum pages to crawl and audit. Always writes a folder of analysis files plus per-page content, returning a summary plus the folder path.
+   * Maximum pages to crawl and audit. MCP audits always run as durable background exports and return a jobId; poll check_site_export for the hosted audit ZIP.
    */
   maxPages?: number;
   /**
-   * Use extra measures to get past sites that block normal crawling. Slower/pricier — use only when a site blocks normal crawling.
+   * Required unique opaque ID for this intended audit (a UUID is ideal). Reuse the same value only when retrying the same call after a timeout; use a new value for every intentional rerun. This prevents a lost response from creating or charging for a duplicate job.
+   */
+  idempotencyKey: string;
+  /**
+   * Route page fetches through rotating residential proxies to defeat rate-limiting and bot blocks. Slower/pricier — use only when a site blocks normal crawling.
    */
   rotateProxies?: boolean;
   /**
@@ -16,9 +20,9 @@ export interface Input {
    */
   rotateProxyEvery?: number;
   /**
-   * Run the audit as a background job instead of blocking this call, returning a jobId immediately — poll it with check_site_export to get a downloadable zip (full audit report, all page content, plus real image files if downloadImages is set) once ready. Use for large sites where a synchronous call would be slow.
+   * MCP technical audits always run as durable background jobs. Poll check_site_export for progress, outcome counters, and the hosted audit ZIP.
    */
-  background?: boolean;
+  background?: true;
   /**
    * Download every discovered image as a real file into the export bundle (not just image URLs/stats). OFF by default — must be explicitly set true. Implies background regardless of the background flag, since downloading a whole site's images is too slow to run synchronously. Capped at 20 images/page and 500 images/site.
    */
@@ -82,4 +86,8 @@ export interface Output {
    * Present when background (or downloadImages) was set — informational; use check_site_export with jobId, not this URL directly.
    */
   statusUrl?: string;
+  requestedMaxPages?: number;
+  effectiveMaxPages?: number;
+  creditLimited?: boolean;
+  creditTruncated?: boolean;
 }

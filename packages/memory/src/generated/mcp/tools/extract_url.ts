@@ -16,6 +16,10 @@ export interface Input {
    */
   extractBranding?: boolean;
   /**
+   * Return the best featured image from Open Graph, Twitter, JSON-LD, or page content. For Wayback replay URLs, also returns the timestamp-matched archived image URL when available.
+   */
+  includeFeaturedImage?: boolean;
+  /**
    * Extract and download page media (images/video/audio) to ~/Downloads/mcp-scraper/media/. Ad/tracking noise is filtered automatically.
    */
   downloadMedia?: boolean;
@@ -50,6 +54,17 @@ export interface Output {
   napScore: number | null;
   missingSchemaFields: string[];
   screenshotSaved: string | null;
+  archive: {
+    timestamp: string;
+    originalUrl: string;
+    replayUrl: string;
+    rawReplayUrl: string;
+  } | null;
+  featuredImage: {
+    url: string;
+    archivedUrl: string | null;
+    source: "og:image" | "twitter:image" | "json-ld" | "content-image";
+  } | null;
   memory?: {
     deposited: boolean;
     vault?: string;

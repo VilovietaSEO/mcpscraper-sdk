@@ -45,4 +45,11 @@ export interface Output {
       terminalCommandWithApiKeyEnv: string;
     };
   } | null;
+  connectedAccounts: {
+    monthlyUsdPerActiveNangoConnection: number;
+    functionCredits: number;
+    proxyCredits: number;
+    computeCreditsPerSecond: number;
+    billingUrl: string;
+  } | null;
 }

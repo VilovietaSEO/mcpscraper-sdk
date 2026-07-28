@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Public website URL or domain to crawl for internal URLs. Use before extract_site when the user asks to audit/map/crawl a site.
+   * Public website URL or domain to crawl for internal URLs. Bare domains default to https://. Use before extract_site when the user asks to audit/map/crawl a site.
    */
   url: string;
   /**

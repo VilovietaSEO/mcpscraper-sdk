@@ -8,6 +8,7 @@ import * as WebMapSiteUrls from './tools/map_site_urls.js'
 import * as WebExtractSite from './tools/extract_site.js'
 import * as WebAuditSite from './tools/audit_site.js'
 import * as WebCheckSiteExport from './tools/check_site_export.js'
+import * as WebMapWaybackSnapshots from './tools/map_wayback_snapshots.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
 import * as FacebookPageIntel from './tools/facebook_page_intel.js'
@@ -30,6 +31,8 @@ import * as MapsSearch from './tools/maps_search.js'
 import * as ReviewsTrustpilotReviews from './tools/trustpilot_reviews.js'
 import * as ReviewsG2Reviews from './tools/g2_reviews.js'
 import * as DirectoryRun from './tools/directory_workflow.js'
+import * as DirectoryWorkflowStatus from './tools/directory_workflow_status.js'
+import * as DirectoryLocationMarkets from './tools/location_markets.js'
 import * as WorkflowsList from './tools/workflow_list.js'
 import * as WorkflowsSuggest from './tools/workflow_suggest.js'
 import * as WorkflowsRun from './tools/workflow_run.js'
@@ -1003,6 +1006,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "reddit_trending",
     "category": "reddit",
     "methodName": "trending"
+  },
+  {
+    "name": "directory_workflow_status",
+    "category": "directory",
+    "methodName": "workflowStatus"
+  },
+  {
+    "name": "location_markets",
+    "category": "directory",
+    "methodName": "locationMarkets"
+  },
+  {
+    "name": "map_wayback_snapshots",
+    "category": "web",
+    "methodName": "mapWaybackSnapshots"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1044,6 +1062,10 @@ export class WebNamespace {
 
   async checkSiteExport(input: WebCheckSiteExport.Input): Promise<WebCheckSiteExport.Output> {
     return this.callTool('check_site_export', input) as Promise<WebCheckSiteExport.Output>
+  }
+
+  async mapWaybackSnapshots(input: WebMapWaybackSnapshots.Input): Promise<WebMapWaybackSnapshots.Output> {
+    return this.callTool('map_wayback_snapshots', input) as Promise<WebMapWaybackSnapshots.Output>
   }
 }
 
@@ -1168,6 +1190,14 @@ export class DirectoryNamespace {
 
   async run(input: DirectoryRun.Input): Promise<DirectoryRun.Output> {
     return this.callTool('directory_workflow', input) as Promise<DirectoryRun.Output>
+  }
+
+  async workflowStatus(input: DirectoryWorkflowStatus.Input): Promise<DirectoryWorkflowStatus.Output> {
+    return this.callTool('directory_workflow_status', input) as Promise<DirectoryWorkflowStatus.Output>
+  }
+
+  async locationMarkets(input: DirectoryLocationMarkets.Input = {} as DirectoryLocationMarkets.Input): Promise<DirectoryLocationMarkets.Output> {
+    return this.callTool('location_markets', input) as Promise<DirectoryLocationMarkets.Output>
   }
 }
 

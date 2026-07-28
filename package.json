@@ -16,13 +16,13 @@
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspaces",
     "test:python": "cd packages/scraper-python && uv run pytest && cd ../memory-python && uv run pytest",
-    "validate-contracts": "tsx scripts/validate-contracts.ts",
-    "smoke-test": "tsx scripts/smoke-test.ts",
-    "generate:memory": "tsx scripts/generate-memory-client.ts",
-    "update:memory-contract": "tsx scripts/update-memory-manifest.ts",
-    "update:mcp-contract": "tsx scripts/update-mcp-manifest.ts",
-    "generate:mcp": "tsx scripts/generate-mcp-client.ts && python3 scripts/generate-mcp-python.py",
-    "verify:parity": "npm run build --workspace=mcpscraper-memory-sdk && tsx scripts/verify-sdk-parity.ts && uv run --project packages/scraper-python python scripts/verify_sdk_parity.py"
+    "validate-contracts": "node --import tsx scripts/validate-contracts.ts",
+    "smoke-test": "node --import tsx scripts/smoke-test.ts",
+    "generate:memory": "node --import tsx scripts/generate-memory-client.ts",
+    "update:memory-contract": "node --import tsx scripts/update-memory-manifest.ts",
+    "update:mcp-contract": "node --import tsx scripts/update-mcp-manifest.ts",
+    "generate:mcp": "node --import tsx scripts/generate-mcp-client.ts && python3 scripts/generate-mcp-python.py",
+    "verify:parity": "npm run build --workspace=mcpscraper-memory-sdk && node --import tsx scripts/verify-sdk-parity.ts && uv run --project packages/scraper-python python scripts/verify_sdk_parity.py"
   },
   "devDependencies": {
     "typescript": "^5.6.0",
