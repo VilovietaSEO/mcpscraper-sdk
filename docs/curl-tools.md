@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (170)
+## Complete catalog (171)
 
 ## search
 
@@ -294,6 +294,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `list-memory-tags` — List Memory Tags
 - `resolve-memory-tags` — Resolve Memory Tags
 - `upsert-memory-tag` — Upsert Memory Tag
+- `merge-memory-tags` — Merge Memory Tags
 
 ## vaults
 

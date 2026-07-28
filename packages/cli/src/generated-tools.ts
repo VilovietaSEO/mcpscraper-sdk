@@ -5004,6 +5004,10 @@ export const MCP_TOOL_CATALOG = [
               },
               "description": {
                 "type": "string"
+              },
+              "acceptCanonical": {
+                "type": "string",
+                "description": "Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias."
               }
             },
             "required": [
@@ -5014,7 +5018,7 @@ export const MCP_TOOL_CATALOG = [
             "additionalProperties": false
           },
           "maxItems": 8,
-          "description": "Required justification for any tag that does not already exist. Existing exact/alias/near tags are canonicalized automatically; a new tag is accepted only when its matching decision has central=true and reusable=true."
+          "description": "Required justification for any tag that does not already exist. Tags resolve against the account's existing vocabulary; new tags require a one-line description."
         }
       },
       "required": [
@@ -5938,7 +5942,14 @@ export const MCP_TOOL_CATALOG = [
             "type": "string"
           },
           "maxItems": 8,
-          "description": "Reviewed canonical tags. Existing tags should be resolved first; when omitted, deterministic source/topic tags are generated."
+          "description": "Reviewed canonical tags. Tags resolve against the account's existing vocabulary; new tags require a one-line description. When omitted, only deterministic source-provenance tags are recorded."
+        },
+        "tagDescriptions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "One-line meaning for any supplied tag that is new to the account, keyed by tag."
         },
         "related": {
           "type": "array",
@@ -6325,6 +6336,13 @@ export const MCP_TOOL_CATALOG = [
         "baseRevision": {
           "type": "number",
           "description": "Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes)."
+        },
+        "tagDescriptions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "One-line meaning for any tag in props.tags that is new to the account, keyed by tag. Tags resolve against the account's existing vocabulary; new tags require a one-line description."
         }
       },
       "required": [
@@ -7341,7 +7359,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "resolve-memory-tags",
     "category": "tags",
     "title": "Resolve Memory Tags",
-    "description": "Resolve proposed concepts against the live tag vocabulary. Always inspect the complete vocabulary with list-memory-tags first. Returns reuse, create, or omit; a new tag is appropriate only when no equivalent exists and the concept is central and reusable.",
+    "description": "Resolve proposed concepts against the live tag vocabulary. Always inspect the complete vocabulary with list-memory-tags first. Returns reuse, review, create, or omit: spelling and singular/plural variants resolve to the canonical tag silently, while close and semantically related tags come back as ranked candidates for you to choose from. A new tag is appropriate only when no equivalent exists and the concept is central and reusable.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7371,6 +7389,13 @@ export const MCP_TOOL_CATALOG = [
           },
           "minItems": 1,
           "maxItems": 20
+        },
+        "accept": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Confirm a candidate returned by an earlier review, as {proposedTag: canonicalTag}. The proposed spelling is recorded as an alias of the canonical tag so the same judgement is never re-litigated."
         }
       },
       "required": [
@@ -8092,6 +8117,40 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": false,
       "openWorldHint": true
+    }
+  },
+  {
+    "name": "merge-memory-tags",
+    "category": "tags",
+    "title": "Merge Memory Tags",
+    "description": "Collapse a duplicate tag into the canonical one across the whole account: every note using \"from\" is retagged to \"into\", \"from\" is recorded as an alias of \"into\", and the duplicate is removed from the vocabulary. Use when list-memory-tags shows two spellings of one concept. Irreversible; requires write scope.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The duplicate tag to retire."
+        },
+        "into": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The canonical tag to keep. Every note using \"from\" is retagged to this."
+        }
+      },
+      "required": [
+        "from",
+        "into"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Merge Memory Tags",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
     }
   }
 ] as const

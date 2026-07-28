@@ -65,6 +65,7 @@ import * as TableDrop from './tools/table-drop.js'
 import * as TemporalRecall from './tools/temporal-recall.js'
 import * as ListMemoryTags from './tools/list-memory-tags.js'
 import * as ResolveMemoryTags from './tools/resolve-memory-tags.js'
+import * as MergeMemoryTags from './tools/merge-memory-tags.js'
 import * as UpsertMemoryTag from './tools/upsert-memory-tag.js'
 import * as MemoryBacklinks from './tools/memory-backlinks.js'
 import * as MemoryGraphUniverse from './tools/memory-graph-universe.js'
@@ -84,6 +85,8 @@ import * as SetScheduleDefaults from './tools/set-schedule-defaults.js'
 import * as ProposeScheduledAction from './tools/propose-scheduled-action.js'
 import * as GetScheduleLink from './tools/get-schedule-link.js'
 import * as RevokeScheduleLink from './tools/revoke-schedule-link.js'
+import * as UpdateScheduledAction from './tools/update-scheduled-action.js'
+import * as ListScheduledActionRuns from './tools/list-scheduled-action-runs.js'
 import * as CreateWebhook from './tools/create-webhook.js'
 import * as ListWebhooks from './tools/list-webhooks.js'
 import * as RevokeWebhook from './tools/revoke-webhook.js'
@@ -385,6 +388,10 @@ export class TagsNamespace {
     return this.callTool('resolveTagsTool', input) as Promise<ResolveMemoryTags.Output>
   }
 
+  async mergeMemoryTags(input: MergeMemoryTags.Input): Promise<MergeMemoryTags.Output> {
+    return this.callTool('mergeTagsTool', input) as Promise<MergeMemoryTags.Output>
+  }
+
   async upsertMemoryTag(input: UpsertMemoryTag.Input): Promise<UpsertMemoryTag.Output> {
     return this.callTool('upsertTagTool', input) as Promise<UpsertMemoryTag.Output>
   }
@@ -475,6 +482,14 @@ export class ScheduleNamespace {
 
   async revokeScheduleLink(input: RevokeScheduleLink.Input): Promise<RevokeScheduleLink.Output> {
     return this.callTool('revokeScheduleLinkTool', input) as Promise<RevokeScheduleLink.Output>
+  }
+
+  async updateScheduledAction(input: UpdateScheduledAction.Input): Promise<UpdateScheduledAction.Output> {
+    return this.callTool('updateScheduledActionTool', input) as Promise<UpdateScheduledAction.Output>
+  }
+
+  async listScheduledActionRuns(input: ListScheduledActionRuns.Input): Promise<ListScheduledActionRuns.Output> {
+    return this.callTool('listScheduledActionRunsTool', input) as Promise<ListScheduledActionRuns.Output>
   }
 }
 

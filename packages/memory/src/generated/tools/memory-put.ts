@@ -109,6 +109,12 @@ export interface Input {
    * Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes).
    */
   baseRevision?: number;
+  /**
+   * One-line meaning for any tag in props.tags that is new to the account, keyed by tag. Tags resolve against the account's existing vocabulary; new tags require a one-line description.
+   */
+  tagDescriptions?: {
+    [k: string]: string;
+  };
 }
 
 export interface Output {

@@ -32,7 +32,7 @@ export interface Input {
    */
   summary?: string;
   /**
-   * Reviewed canonical tags. Existing tags should be resolved first; when omitted, deterministic source/topic tags are generated.
+   * Reviewed canonical tags. Tags resolve against the account's existing vocabulary; new tags require a one-line description. When omitted, only deterministic source-provenance tags are recorded.
    *
    * @maxItems 8
    */
@@ -46,6 +46,12 @@ export interface Input {
     | [string, string, string, string, string, string]
     | [string, string, string, string, string, string, string]
     | [string, string, string, string, string, string, string, string];
+  /**
+   * One-line meaning for any supplied tag that is new to the account, keyed by tag.
+   */
+  tagDescriptions?: {
+    [k: string]: string;
+  };
   /**
    * Reviewed same-vault Library note paths.
    */
