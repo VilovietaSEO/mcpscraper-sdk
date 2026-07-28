@@ -132,6 +132,7 @@ test('unified MCP bindings contain every tool in the contract, with no duplicate
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'renew_connected_data_download'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'describe_service_connection_tool'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'import_service_connection_to_memory'))
+  assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'archive_read'))
 })
 
 test('McpToolsClient typed methods call the unified MCP wire name', async () => {
@@ -159,6 +160,51 @@ test('McpToolsClient typed methods call the unified MCP wire name', async () => 
   assert.equal(capturedBody.params.name, 'search_serp')
   assert.deepEqual(capturedBody.params.arguments, { query: 'roofers denver' })
   assert.deepEqual(result, { ok: true, results: [] })
+})
+
+test('McpToolsClient sends archiveRead through the exact archive_read contract', async () => {
+  let capturedBody: any
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: capturedBody.id,
+          result: {
+            structuredContent: {
+              mode: 'read',
+              archiveUrl: capturedBody.params.arguments.url,
+              compressedBytes: 351,
+              entryCount: 2,
+              totalUncompressedBytes: 13,
+              path: capturedBody.params.arguments.path,
+              contentType: 'text/plain',
+              fileBytes: 13,
+              offset: 0,
+              content: 'Hello World!\n',
+              nextOffset: null,
+            },
+          },
+        },
+      }
+    }),
+  })
+
+  await client.web.archiveRead({
+    url: 'https://example.com/archive.zip',
+    path: 'site/README',
+    depositToLibrary: true,
+  })
+
+  assert.equal(capturedBody.params.name, 'archive_read')
+  assert.deepEqual(capturedBody.params.arguments, {
+    url: 'https://example.com/archive.zip',
+    path: 'site/README',
+    depositToLibrary: true,
+  })
 })
 
 test('McpToolsClient callToolResult preserves native MCP image content', async () => {

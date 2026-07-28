@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.37.0 dist/bin/mcp-stdio-server.js",
-  "toolCount": 171,
+  "generatedFrom": "mcp-scraper 0.38.0 dist/bin/mcp-stdio-server.js",
+  "toolCount": 172,
   "tools": [
     {
       "name": "harvest_paa",
@@ -22286,6 +22286,207 @@
         "destructiveHint": true,
         "idempotentHint": true,
         "openWorldHint": false
+      }
+    },
+    {
+      "name": "archive_read",
+      "title": "List or Read ZIP Archive",
+      "description": "Open any bounded public HTTPS ZIP, including a bundleUrl from check_site_export. Omit path to list files; pass an exact returned path to read a bounded UTF-8 text window. Set depositToLibrary true with a path to preserve the complete selected source file in the tenant Library vault. Rejects private-network URLs, unsafe paths, encrypted entries, symlinks, binary inline reads, and ZIP bombs.",
+      "category": "web",
+      "methodName": "archiveRead",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public HTTPS URL of a ZIP file, including a signed bundleUrl returned by check_site_export."
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "description": "Exact ZIP entry path to read. Omit to list the archive. Use a path returned by a previous archive_read listing."
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "description": "Byte offset for a text-file read. Continue from nextOffset until it is null. Ignored when path is omitted."
+          },
+          "maxBytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 200000,
+            "default": 50000,
+            "description": "Maximum UTF-8 bytes to return from the selected text file. Default 50,000; maximum 200,000."
+          },
+          "maxEntries": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 200,
+            "description": "Maximum entry rows returned when listing. The server still validates the complete archive. Default 200; maximum 1,000."
+          },
+          "depositToLibrary": {
+            "type": "boolean",
+            "default": false,
+            "description": "Store the complete selected text file in the tenant Library vault through library-ingest. Requires path. Preserves the ZIP URL and entry path as source provenance."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "list",
+              "read"
+            ]
+          },
+          "archiveUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "compressedBytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "entryCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "totalUncompressedBytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "directory": {
+                  "type": "boolean"
+                },
+                "compressedBytes": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "uncompressedBytes": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "contentType": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "readable": {
+                  "type": "boolean"
+                },
+                "modifiedAt": {
+                  "$ref": "#/properties/entries/items/properties/contentType"
+                }
+              },
+              "required": [
+                "path",
+                "directory",
+                "compressedBytes",
+                "uncompressedBytes",
+                "contentType",
+                "readable",
+                "modifiedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "entriesTruncated": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "string"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "fileBytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "content": {
+            "type": "string"
+          },
+          "nextOffset": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "memory": {
+            "type": "object",
+            "properties": {
+              "deposited": {
+                "type": "boolean"
+              },
+              "vault": {
+                "type": "string"
+              },
+              "noteId": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "chunks": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "deposited"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "mode",
+          "archiveUrl",
+          "compressedBytes",
+          "entryCount",
+          "totalUncompressedBytes"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "List or Read ZIP Archive",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
       }
     }
   ]

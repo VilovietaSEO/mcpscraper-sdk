@@ -75,6 +75,7 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   extract_site: 'web',
   audit_site: 'web',
   check_site_export: 'web',
+  archive_read: 'web',
   credits_info: 'billing',
   list_service_connections: 'connections',
   test_service_connection: 'connections',

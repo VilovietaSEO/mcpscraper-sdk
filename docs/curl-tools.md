@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (171)
+## Complete catalog (172)
 
 ## search
 
@@ -63,6 +63,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `audit_site` — Technical SEO Audit
 - `check_site_export` — Check Site Export
 - `map_wayback_snapshots` — Wayback Snapshot Inventory
+- `archive_read` — List or Read ZIP Archive
 
 ## youtube
 

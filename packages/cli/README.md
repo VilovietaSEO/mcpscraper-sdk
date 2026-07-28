@@ -2,7 +2,7 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 166 unified MCP tools (77 MCP Scraper plus 89 mirrored memory tools).
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 172 unified MCP tools (82 MCP Scraper plus 90 mirrored Memory tools).
 
 ## Install
 
@@ -31,9 +31,10 @@ mcpscraper tools call export_connected_service_data --args '{"connectionId":"met
 mcpscraper tools call export_connected_service_data --args '{"connectionId":"gsc_conn_123","dataset":"search_console_performance","lastDays":28}' --json
 mcpscraper tools call describe_service_connection_tool --args '{"connectionId":"conn_123","tool":"provider-tool-name"}' --json
 mcpscraper tools call renew_connected_data_download --args '{"artifactId":"artifact_123"}' --json
+mcpscraper tools call archive_read --args '{"url":"https://github.com/octocat/Hello-World/archive/refs/heads/master.zip"}' --json
 ```
 
-`tools list` contains exactly 166 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 172 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release. Scheduled occurrences cost 75 Credits; agent-mode runs also add 1.5 times OpenRouter's actual reported cost. Inspect the live policy with `mcpscraper tools call get-schedule-status --args '{}'`.
 

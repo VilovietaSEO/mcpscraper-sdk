@@ -151,6 +151,7 @@ test('tools list exposes the complete generated CLI catalog', async () => {
   assert.ok(catalog.some(tool => tool.name === 'renew_connected_data_download'))
   assert.ok(catalog.some(tool => tool.name === 'describe_service_connection_tool'))
   assert.ok(catalog.some(tool => tool.name === 'import_service_connection_to_memory'))
+  assert.ok(catalog.some(tool => tool.name === 'archive_read'))
 })
 
 test('tools call saves inline MCP binary blocks and never prints base64', async () => {

@@ -40,12 +40,16 @@ Every non-2xx response raises a `ScraperApiError` with `.status`, `.code`, and t
 
 ## API surface
 
-`client.tools` is the generated 166-tool MCP surface — 77 MCP Scraper tools plus 89 mirrored memory tools — with one typed snake_case method per tool:
+`client.tools` is the generated 172-tool MCP surface — 82 MCP Scraper tools plus 90 mirrored Memory tools — with one typed snake_case method per tool:
 
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 
 ```python
 client.tools.search.search_serp(query="roof repair Denver")
+client.tools.web.archive_read(
+    url="https://github.com/octocat/Hello-World/archive/refs/heads/master.zip",
+    path="Hello-World-master/README",
+)
 client.tools.memory.search(query="roofing warranty terms")
 client.tools.connections.export_connected_service_data(
     connection_id="conn_123",
@@ -87,14 +91,14 @@ print(page["memory"])  # {"deposited": True, "vault": "competitors", "noteId": "
 
 ## Memory tools, using only this API key
 
-`client.memory_tools.call_tool(name, args)` dispatches to any of the 87 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
+`client.memory_tools.call_tool(name, args)` dispatches to any of the 92 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
 
 ```python
 hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing pages"})
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 166 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 172 unified MCP tools.
 
 ## Regenerating models
 
