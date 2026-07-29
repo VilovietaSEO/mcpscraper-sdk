@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 172 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 92-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official TypeScript/JavaScript clients for all 175 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 92-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
@@ -52,7 +52,7 @@ try {
 
 ## Namespaces
 
-`MemoryClient` retains the direct 92-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 172 tools — 82 MCP Scraper tools plus 90 mirrored Memory tools — across its generated namespaces.
+`MemoryClient` retains the direct 92-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 175 tools — 85 MCP Scraper tools plus 90 mirrored Memory tools — across its generated namespaces.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 

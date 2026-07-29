@@ -20,8 +20,14 @@ export interface Output {
   advertisers: {
     advertiserId: string | null;
     name: string | null;
+    basedIn: string | null;
     domain: string | null;
     approxAdCount: number | null;
     detailUrl: string | null;
+  }[];
+  websiteCount: number;
+  websites: {
+    domain: string;
+    detailUrl: string;
   }[];
 }

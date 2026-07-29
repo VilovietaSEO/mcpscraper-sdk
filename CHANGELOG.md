@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-28 — verified against mcp-scraper 0.39.0 / mcp-memory 1.13.0
+
+### Added
+
+- Typed `editorial.createReadingRoom`, `editorial.readingRoomGuide`, and `editorial.renewReadingRoomDownload` Node bindings, with matching Python, CLI, and cURL surfaces. Agents can first retrieve the editorial method, then render a source-grounded edition as a private hosted HTML artifact or a non-overwriting local stdio file.
+
+### Changed
+
+- Regenerated the canonical unified contract and every generated client from MCP Scraper 0.39.0: 175 tools total, split between 85 MCP Scraper tools and 90 mirrored Memory tools.
+- Prepared `mcpscraper-memory-sdk` 0.24.0, `mcpscraper-sdk` 0.23.0, `mcpscraper-cli` 0.22.0, and both Python packages 0.22.0.
+
 ## 2026-07-28 — verified against mcp-scraper 0.38.0 / mcp-memory 1.13.0
 
 ### Added

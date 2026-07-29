@@ -40,7 +40,7 @@ Every non-2xx response throws a `ScraperApiError` with `status`, `code`, and the
 
 ## API surface
 
-`client.tools` is the generated, typed 172-tool MCP surface. It includes 82 MCP Scraper tools and all 90 mirrored Memory tools from `contracts/mcp.tools.json`.
+`client.tools` is the generated, typed 175-tool MCP surface. It includes 85 MCP Scraper tools and all 90 mirrored Memory tools from `contracts/mcp.tools.json`.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
@@ -50,6 +50,7 @@ await client.tools.web.archiveRead({
   url: 'https://github.com/octocat/Hello-World/archive/refs/heads/master.zip',
   path: 'Hello-World-master/README',
 })
+const method = await client.tools.editorial.readingRoomGuide({ focus: 'workflow' })
 await client.tools.memory.search({ query: 'roofing warranty terms' })
 await client.tools.connections.exportConnectedServiceData({
   connectionId: 'conn_123',

@@ -1,12 +1,16 @@
 export interface Input {
   /**
-   * Google Ads Transparency advertiser ID (starts with AR...). Use one returned by google_ads_search; do not construct one yourself.
-   */
-  advertiserId?: string;
-  /**
-   * A domain (e.g. getviktor.com) whose primary advertiser to inspect when advertiserId is unknown. One of advertiserId or domain is required.
+   * A website from google_ads_search.websites (e.g. getviktor.com). Preferred input: people know the website, not the advertiser's registered name. Resolves to whichever advertiser account runs ads for that domain.
    */
   domain?: string;
+  /**
+   * An advertiser name exactly as returned in google_ads_search.advertisers[].name (e.g. "PPS Plumbing Services"). Use when the user picked an advertiser rather than a website.
+   */
+  advertiserName?: string;
+  /**
+   * Google Ads Transparency advertiser ID (starts with AR...). Only available if you already have one from a prior page-intel result — google_ads_search does NOT return advertiser IDs. Do not construct one yourself.
+   */
+  advertiserId?: string;
   /**
    * Two-letter region code for where the ads are shown. Default US.
    */

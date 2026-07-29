@@ -20,6 +20,7 @@ class ExtractSiteOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     url: str = Field(..., alias="url", description="")
+    stopped_early: Any | None = Field(None, alias="stoppedEarly", description="Present when the crawl stopped before finishing. The returned pages are everything that was captured, and billing covers only those pages - treat the result as partial, not as the whole site.")
     page_count: int | None = Field(None, alias="pageCount", description="Absent when background is true — the crawl has not finished yet.")
     pages: list[dict[str, Any]] | None = Field(None, alias="pages", description="Absent when background is true — the crawl has not finished yet.")
     duration_ms: float | None = Field(None, alias="durationMs", description="Absent when background is true — the crawl has not finished yet.")

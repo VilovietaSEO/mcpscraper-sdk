@@ -949,7 +949,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "google_ads_search",
     "category": "googleAds",
     "title": "Google Ads Transparency Search",
-    "description": "Search the Google Ads Transparency Center to find advertisers by domain or brand name. Returns advertisers with advertiser ID and approximate ad count, to pass to google_ads_page_intel.",
+    "description": "Search the Google Ads Transparency Center by brand, person, or website. Returns two lists: advertisers (name, country, approximate ad count) and websites (domains). Neither carries an advertiser ID. Pass a websites[].domain (preferred - users know the website, not the registered advertiser name) or an advertisers[].name to google_ads_page_intel to pull that advertiser's actual ads.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -991,17 +991,21 @@ export const MCP_TOOL_CATALOG = [
     "name": "google_ads_page_intel",
     "category": "googleAds",
     "title": "Google Ads Advertiser Intel",
-    "description": "Harvest an advertiser's ad creatives from the Google Ads Transparency Center: format, image URLs, and — for video ads — a YouTube video ID or direct video URL. Accepts advertiserId (from google_ads_search) or a domain.",
+    "description": "Harvest an advertiser's ad creatives from the Google Ads Transparency Center: format, image URLs, and — for video ads — a YouTube video ID or direct video URL. Accepts a domain or advertiserName from google_ads_search (google_ads_search does not return advertiser IDs). A domain may map to several advertiser accounts; this returns the primary one.",
     "inputSchema": {
       "type": "object",
       "properties": {
-        "advertiserId": {
-          "type": "string",
-          "description": "Google Ads Transparency advertiser ID (starts with AR...). Use one returned by google_ads_search; do not construct one yourself."
-        },
         "domain": {
           "type": "string",
-          "description": "A domain (e.g. getviktor.com) whose primary advertiser to inspect when advertiserId is unknown. One of advertiserId or domain is required."
+          "description": "A website from google_ads_search.websites (e.g. getviktor.com). Preferred input: people know the website, not the advertiser's registered name. Resolves to whichever advertiser account runs ads for that domain."
+        },
+        "advertiserName": {
+          "type": "string",
+          "description": "An advertiser name exactly as returned in google_ads_search.advertisers[].name (e.g. \"PPS Plumbing Services\"). Use when the user picked an advertiser rather than a website."
+        },
+        "advertiserId": {
+          "type": "string",
+          "description": "Google Ads Transparency advertiser ID (starts with AR...). Only available if you already have one from a prior page-intel result — google_ads_search does NOT return advertiser IDs. Do not construct one yourself."
         },
         "region": {
           "type": "string",
@@ -8210,6 +8214,260 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": false,
       "openWorldHint": true
+    }
+  },
+  {
+    "name": "create_editorial_reading_room",
+    "category": "editorial",
+    "title": "Create Editorial Reading Room",
+    "description": "Turn fully authored, source-grounded articles into a polished mobile-first editorial reading room with contents, search, hamburger navigation, article jump links, reading progress, text sizing, evening mode, and provenance. The calling AI must first read all in-scope material and use editorial_reading_room_guide when it has not already internalized the workflow; this renderer does not perform research or invent copy. Local stdio clients save one self-contained HTML file under the MCP Scraper output directory and return localPath.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "site": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "maxLength": 80,
+              "description": "Stable kebab-case identifier used for browser reading progress, for example \"customer-research-field-notes\"."
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 140,
+              "description": "Publication title shown in the page title and footer."
+            },
+            "product": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80,
+              "description": "Short product, organization, or collection name shown in the masthead."
+            },
+            "edition": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80,
+              "default": "Field Notes",
+              "description": "Short editorial edition name shown in the masthead."
+            },
+            "editionLabel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "default": "Reader’s edition",
+              "description": "Small label in the home-page issue line."
+            },
+            "issueLabel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "default": "Current edition",
+              "description": "Issue, date, or collection label in the home-page issue line."
+            },
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "default": "A guided collection",
+              "description": "Short editorial eyebrow above the home-page headline."
+            },
+            "heroTitle": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 180,
+              "description": "Outcome-led home-page headline for the whole reading room."
+            },
+            "startLabel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60,
+              "default": "Start reading",
+              "description": "Label for the primary start-reading button."
+            }
+          },
+          "required": [
+            "slug",
+            "title",
+            "product",
+            "heroTitle"
+          ],
+          "additionalProperties": false
+        },
+        "deck": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "description": "Two or three sentences that explain the collection’s value and scope without generic marketing language."
+        },
+        "articles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "slug": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                "maxLength": 80,
+                "description": "Unique kebab-case article identifier."
+              },
+              "category": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "description": "Repeated section label used to group related articles in navigation."
+              },
+              "kicker": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 140,
+                "description": "Short framing line above the article title."
+              },
+              "order": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000,
+                "description": "Reading order. Values must be unique."
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 180,
+                "description": "Article title that states the question, decision, or lesson."
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "description": "One or two sentences explaining what the reader will understand."
+              },
+              "sourceType": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "description": "Optional source class such as \"Conversation synthesis\", \"Research notes\", or \"Workshop guide\"."
+              },
+              "sourceLabel": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "description": "Visible provenance label naming the material this article was derived from. Do not invent a source."
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "description": "Optional revision identifier or version label."
+              },
+              "updatedAt": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "description": "Optional human-readable source update date."
+              },
+              "markdown": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100000,
+                "description": "Complete article body in Markdown. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison."
+              }
+            },
+            "required": [
+              "slug",
+              "category",
+              "kicker",
+              "order",
+              "title",
+              "summary",
+              "sourceLabel",
+              "markdown"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 40,
+          "description": "One to forty fully authored articles, with no more than 2,000,000 Markdown bytes combined. Read all in-scope source material before composing them; preserve distinctions, uncertainty, and provenance instead of flattening the corpus."
+        },
+        "filename": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*$",
+          "maxLength": 120,
+          "description": "Optional download filename. The server always normalizes it to a safe .html filename."
+        }
+      },
+      "required": [
+        "site",
+        "deck",
+        "articles"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Create Editorial Reading Room",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "editorial_reading_room_guide",
+    "category": "editorial",
+    "title": "Editorial Reading Room Guide",
+    "description": "Read the reusable composition contract before creating an editorial reading room. It tells the calling AI how to inventory the supplied corpus, preserve source truth, architect a coherent edition, write useful articles, and verify the finished page. Start with focus \"workflow\"; fetch \"content_contract\" or \"example\" only when needed. This does not research, write, or create a page.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "focus": {
+          "type": "string",
+          "enum": [
+            "workflow",
+            "content_contract",
+            "example"
+          ],
+          "default": "workflow",
+          "description": "Which part of the reusable editorial-reading-room guide to return. Start with workflow; fetch the content contract or compact example only when needed."
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Editorial Reading Room Guide",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "renew_editorial_reading_room_download",
+    "category": "editorial",
+    "title": "Renew Editorial Reading Room Download",
+    "description": "Create a fresh 15-minute signed download URL for a private editorial reading-room artifact owned by this caller. Use when the original create_editorial_reading_room URL expired; the HTML artifact itself is retained for seven days. Local files do not need renewal.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "artifactId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Private artifactId returned by create_editorial_reading_room."
+        }
+      },
+      "required": [
+        "artifactId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Renew Editorial Reading Room Download",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
     }
   }
 ] as const

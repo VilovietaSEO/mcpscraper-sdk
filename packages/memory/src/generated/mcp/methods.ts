@@ -172,6 +172,9 @@ import * as VaultsRouteMemory from './tools/route-memory.js'
 import * as WebhooksCreateWebhook from './tools/create-webhook.js'
 import * as WebhooksListWebhooks from './tools/list-webhooks.js'
 import * as WebhooksRevokeWebhook from './tools/revoke-webhook.js'
+import * as EditorialCreateReadingRoom from './tools/create_editorial_reading_room.js'
+import * as EditorialReadingRoomGuide from './tools/editorial_reading_room_guide.js'
+import * as EditorialRenewReadingRoomDownload from './tools/renew_editorial_reading_room_download.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -1033,6 +1036,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "archive_read",
     "category": "web",
     "methodName": "archiveRead"
+  },
+  {
+    "name": "create_editorial_reading_room",
+    "category": "editorial",
+    "methodName": "createReadingRoom"
+  },
+  {
+    "name": "editorial_reading_room_guide",
+    "category": "editorial",
+    "methodName": "readingRoomGuide"
+  },
+  {
+    "name": "renew_editorial_reading_room_download",
+    "category": "editorial",
+    "methodName": "renewReadingRoomDownload"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1849,6 +1867,22 @@ export class WebhooksNamespace {
   }
 }
 
+export class EditorialNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async createReadingRoom(input: EditorialCreateReadingRoom.Input): Promise<EditorialCreateReadingRoom.Output> {
+    return this.callTool('create_editorial_reading_room', input) as Promise<EditorialCreateReadingRoom.Output>
+  }
+
+  async readingRoomGuide(input: EditorialReadingRoomGuide.Input = {} as EditorialReadingRoomGuide.Input): Promise<EditorialReadingRoomGuide.Output> {
+    return this.callTool('editorial_reading_room_guide', input) as Promise<EditorialReadingRoomGuide.Output>
+  }
+
+  async renewReadingRoomDownload(input: EditorialRenewReadingRoomDownload.Input): Promise<EditorialRenewReadingRoomDownload.Output> {
+    return this.callTool('renew_editorial_reading_room_download', input) as Promise<EditorialRenewReadingRoomDownload.Output>
+  }
+}
+
 export class GeneratedMcpToolsClient {
   readonly search: SearchNamespace
   readonly web: WebNamespace
@@ -1881,6 +1915,7 @@ export class GeneratedMcpToolsClient {
   readonly tags: TagsNamespace
   readonly vaults: VaultsNamespace
   readonly webhooks: WebhooksNamespace
+  readonly editorial: EditorialNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.search = new SearchNamespace(callTool)
@@ -1914,5 +1949,6 @@ export class GeneratedMcpToolsClient {
     this.tags = new TagsNamespace(callTool)
     this.vaults = new VaultsNamespace(callTool)
     this.webhooks = new WebhooksNamespace(callTool)
+    this.editorial = new EditorialNamespace(callTool)
   }
 }
