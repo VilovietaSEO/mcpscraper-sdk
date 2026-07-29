@@ -207,6 +207,29 @@ test('McpToolsClient sends archiveRead through the exact archive_read contract',
   })
 })
 
+test('McpToolsClient sends readingRoomGuide through the editorial workflow contract', async () => {
+  let capturedBody: any
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: capturedBody.id,
+          result: { structuredContent: { ok: true, section: 'workflow' } },
+        },
+      }
+    }),
+  })
+
+  await client.editorial.readingRoomGuide({ focus: 'workflow' })
+
+  assert.equal(capturedBody.params.name, 'editorial_reading_room_guide')
+  assert.deepEqual(capturedBody.params.arguments, { focus: 'workflow' })
+})
+
 test('McpToolsClient callToolResult preserves native MCP image content', async () => {
   const client = new McpToolsClient({
     apiKey: 'sk_test',

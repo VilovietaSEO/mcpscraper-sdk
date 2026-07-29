@@ -66,6 +66,34 @@ def test_call_tool_result_preserves_native_image_content():
 
 
 @responses.activate
+def test_editorial_reading_room_guide_uses_exact_wire_contract():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        json={
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+                "structuredContent": {
+                    "ok": True,
+                    "focus": "workflow",
+                    "guide": "Read, structure, author, render.",
+                }
+            },
+        },
+        status=200,
+    )
+
+    client = ScraperClient(api_key="sk_test")
+    result = client.tools.editorial.reading_room_guide(focus="workflow")
+    sent_body = json.loads(responses.calls[0].request.body)
+
+    assert sent_body["params"]["name"] == "editorial_reading_room_guide"
+    assert sent_body["params"]["arguments"] == {"focus": "workflow"}
+    assert result.focus == "workflow"
+
+
+@responses.activate
 def test_non_2xx_response_raises_scraper_api_error():
     responses.add(
         responses.POST,

@@ -17,3 +17,5 @@ class GoogleAdsSearchOutput(BaseModel):
     region: str = Field(..., alias="region", description="")
     advertiser_count: int = Field(..., alias="advertiserCount", description="")
     advertisers: list[dict[str, Any]] = Field(..., alias="advertisers", description="")
+    website_count: int = Field(..., alias="websiteCount", description="")
+    websites: list[dict[str, Any]] = Field(..., alias="websites", description="")

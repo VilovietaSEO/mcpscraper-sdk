@@ -54,6 +54,13 @@ export interface Input {
 export interface Output {
   url: string;
   /**
+   * Present when the crawl stopped before finishing. The returned pages are everything that was captured, and billing covers only those pages - treat the result as partial, not as the whole site.
+   */
+  stoppedEarly?: {
+    code: string;
+    message: string;
+  } | null;
+  /**
    * Absent when background is true — the crawl has not finished yet.
    */
   pageCount?: number;

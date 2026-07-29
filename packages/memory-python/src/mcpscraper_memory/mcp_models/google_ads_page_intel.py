@@ -5,8 +5,9 @@ from pydantic import BaseModel, ConfigDict, Field
 class GoogleAdsPageIntelInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    advertiser_id: str | None = Field(None, alias="advertiserId", description="Google Ads Transparency advertiser ID (starts with AR...). Use one returned by google_ads_search; do not construct one yourself.")
-    domain: str | None = Field(None, alias="domain", description="A domain (e.g. getviktor.com) whose primary advertiser to inspect when advertiserId is unknown. One of advertiserId or domain is required.")
+    domain: str | None = Field(None, alias="domain", description="A website from google_ads_search.websites (e.g. getviktor.com). Preferred input: people know the website, not the advertiser's registered name. Resolves to whichever advertiser account runs ads for that domain.")
+    advertiser_name: str | None = Field(None, alias="advertiserName", description="An advertiser name exactly as returned in google_ads_search.advertisers[].name (e.g. \"PPS Plumbing Services\"). Use when the user picked an advertiser rather than a website.")
+    advertiser_id: str | None = Field(None, alias="advertiserId", description="Google Ads Transparency advertiser ID (starts with AR...). Only available if you already have one from a prior page-intel result — google_ads_search does NOT return advertiser IDs. Do not construct one yourself.")
     region: str | None = Field(None, alias="region", description="Two-letter region code for where the ads are shown. Default US.")
     max_ads: int | None = Field(None, alias="maxAds", description="Maximum creatives to inspect and hydrate. Default 50, maximum 200. Prefer 25-50 for focused scans.")
 

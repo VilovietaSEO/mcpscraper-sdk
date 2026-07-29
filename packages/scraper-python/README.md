@@ -40,7 +40,7 @@ Every non-2xx response raises a `ScraperApiError` with `.status`, `.code`, and t
 
 ## API surface
 
-`client.tools` is the generated 172-tool MCP surface — 82 MCP Scraper tools plus 90 mirrored Memory tools — with one typed snake_case method per tool:
+`client.tools` is the generated 175-tool MCP surface — 85 MCP Scraper tools plus 90 mirrored Memory tools — with one typed snake_case method per tool:
 
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 
@@ -50,6 +50,7 @@ client.tools.web.archive_read(
     url="https://github.com/octocat/Hello-World/archive/refs/heads/master.zip",
     path="Hello-World-master/README",
 )
+method = client.tools.editorial.reading_room_guide(focus="workflow")
 client.tools.memory.search(query="roofing warranty terms")
 client.tools.connections.export_connected_service_data(
     connection_id="conn_123",
@@ -98,7 +99,7 @@ hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 172 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 175 unified MCP tools.
 
 ## Regenerating models
 
