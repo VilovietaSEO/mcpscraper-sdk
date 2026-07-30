@@ -12,17 +12,32 @@ function readString(body: unknown, key: string): string | undefined {
   return undefined
 }
 
+const PUBLIC_SERVICE_UNAVAILABLE_MESSAGE = 'This operation is temporarily unavailable. Please retry later.'
+
+function publicErrorBody(status: number, body: unknown): unknown {
+  if (status < 500) return body
+  return {
+    error: 'service_unavailable',
+    error_code: 'service_unavailable',
+    error_type: 'service_unavailable',
+    retryable: true,
+    status,
+    message: PUBLIC_SERVICE_UNAVAILABLE_MESSAGE,
+  }
+}
+
 export class ScraperApiError extends Error {
   readonly status: number
   readonly code?: string
   readonly body: unknown
 
   constructor(status: number, body: unknown) {
-    super(readString(body, 'message') ?? `mcpscraper.dev API request failed with status ${status}`)
+    const safeBody = publicErrorBody(status, body)
+    super(readString(safeBody, 'message') ?? `mcpscraper.dev API request failed with status ${status}`)
     this.name = 'ScraperApiError'
     this.status = status
-    this.code = readString(body, 'error_code') ?? readString(body, 'error')
-    this.body = body
+    this.code = readString(safeBody, 'error_code') ?? readString(safeBody, 'error')
+    this.body = safeBody
   }
 
   isInsufficientBalance(): this is ScraperApiError & { body: InsufficientBalanceBody } {

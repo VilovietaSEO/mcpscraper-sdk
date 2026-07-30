@@ -113,6 +113,43 @@ def test_non_2xx_response_raises_scraper_api_error():
 
 
 @responses.activate
+def test_server_failures_do_not_expose_upstream_service_or_account_state():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/harvest/sync",
+        json={
+            "error": "403 Organization spending cap reached",
+            "message": "See https://dashboard.onkernel.com/billing",
+            "provider": "Kernel",
+        },
+        status=503,
+    )
+    client = ScraperClient(api_key="sk_test")
+
+    with pytest.raises(ScraperApiError) as exc_info:
+        client.harvest_paa(query="x")
+
+    err = exc_info.value
+    assert err.status == 503
+    assert err.code == "service_unavailable"
+    assert str(err) == "This operation is temporarily unavailable. Please retry later."
+    assert err.body == {
+        "error": "service_unavailable",
+        "error_code": "service_unavailable",
+        "error_type": "service_unavailable",
+        "retryable": True,
+        "status": 503,
+        "message": "This operation is temporarily unavailable. Please retry later.",
+    }
+    serialized = json.dumps(err.body).lower()
+    assert "kernel" not in serialized
+    assert "organization" not in serialized
+    assert "spending" not in serialized
+    assert "billing" not in serialized
+    assert "http" not in serialized
+
+
+@responses.activate
 def test_insufficient_balance_is_distinguishable():
     responses.add(
         responses.POST,

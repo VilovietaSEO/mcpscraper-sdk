@@ -57,6 +57,36 @@ test('non-2xx response throws ScraperApiError with status and code', async () =>
   )
 })
 
+test('server failures cannot expose an upstream service or account state', async () => {
+  const fetchImpl = async () =>
+    jsonResponse(503, {
+      error: '403 Organization spending cap reached',
+      message: 'See https://dashboard.onkernel.com/billing',
+      provider: 'Kernel',
+    })
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+
+  await assert.rejects(
+    () => client.harvestPaa({ query: 'x' }),
+    (err: unknown) => {
+      assert.ok(err instanceof ScraperApiError)
+      assert.equal(err.status, 503)
+      assert.equal(err.code, 'service_unavailable')
+      assert.equal(err.message, 'This operation is temporarily unavailable. Please retry later.')
+      assert.deepEqual(err.body, {
+        error: 'service_unavailable',
+        error_code: 'service_unavailable',
+        error_type: 'service_unavailable',
+        retryable: true,
+        status: 503,
+        message: 'This operation is temporarily unavailable. Please retry later.',
+      })
+      assert.doesNotMatch(JSON.stringify(err.body), /kernel|organization|spending|billing|https?:\/\//i)
+      return true
+    },
+  )
+})
+
 test('insufficient balance is distinguishable via isInsufficientBalance()', async () => {
   const fetchImpl = async () =>
     jsonResponse(402, {

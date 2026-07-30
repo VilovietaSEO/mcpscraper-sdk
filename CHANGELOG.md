@@ -4,6 +4,13 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-30 — verified against mcp-scraper 0.40.3
+
+### Security
+
+- Node and Python scraper clients now collapse every server-side 5xx response into the first-party `service_unavailable` contract. Upstream service names, provider URLs, organization/account billing state, and unreviewed infrastructure diagnostics cannot escape through `ScraperApiError`, even if a future backend route misses its own sanitizer.
+- Prepared `mcpscraper-sdk` 0.23.1 and Python `mcpscraper-sdk` 0.22.1. The CLI's existing `^0.23.0` dependency accepts the hardened Node client without a separate CLI release.
+
 ## 2026-07-28 — verified against mcp-scraper 0.39.0 / mcp-memory 1.13.0
 
 ### Added
