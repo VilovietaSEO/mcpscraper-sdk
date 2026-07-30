@@ -41,6 +41,83 @@ test('harvestPaa omits serpOnly', async () => {
   await client.harvestPaa({ query: 'roof repair cost' })
 })
 
+test('startHarvest uses the durable endpoint and returns its job id', async () => {
+  let capturedUrl = ''
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    capturedUrl = String(url)
+    const sentBody = JSON.parse(String(init?.body))
+    assert.equal(sentBody.serpOnly, true)
+    return jsonResponse(202, { job_id: 'job_async_1', status: 'pending' })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  const result = await client.startHarvest({ query: 'roofers denver', serpOnly: true })
+
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/harvest')
+  assert.equal(result.job_id, 'job_async_1')
+  assert.equal(result.status, 'pending')
+})
+
+test('extractSite sends the caller idempotency key and abort options', async () => {
+  let capturedInit: RequestInit | undefined
+  const controller = new AbortController()
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    capturedInit = init
+    return jsonResponse(202, {
+      jobId: 'extract_1',
+      status: 'pending',
+      statusUrl: '/extract-site/status/extract_1',
+    })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  await client.extractSite(
+    { url: 'https://example.com', background: true },
+    { idempotencyKey: 'foundation:crawl:1', signal: controller.signal, timeoutMs: 30_000 },
+  )
+
+  assert.equal((capturedInit?.headers as Record<string, string>)['Idempotency-Key'], 'foundation:crawl:1')
+  assert.ok(capturedInit?.signal)
+})
+
+test('archiveRead uses the public REST route for exact and prefix reads', async () => {
+  let capturedUrl = ''
+  const capturedBodies: unknown[] = []
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    capturedUrl = String(url)
+    capturedBodies.push(JSON.parse(String(init?.body ?? '{}')))
+    const body = capturedBodies.at(-1) as Record<string, unknown>
+    return body.pathPrefix
+      ? jsonResponse(200, {
+          mode: 'batch',
+          pathPrefix: body.pathPrefix,
+          matchedEntryCount: 1,
+          selectedEntryCount: 1,
+          selectedTotalBytes: 5,
+          entriesTruncated: false,
+          files: [{ path: 'pages/one.md', contentType: 'text/markdown', fileBytes: 5, content: '# One' }],
+        })
+      : jsonResponse(200, { mode: 'read', path: 'pages.jsonl', content: '{}', nextOffset: null })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  const result = await client.archiveRead({ url: 'https://example.com/bundle.zip', path: 'pages.jsonl' })
+  const batch = await client.archiveRead({
+    url: 'https://example.com/bundle.zip',
+    pathPrefix: 'pages/',
+    maxEntries: 100,
+    maxTotalBytes: 5_000_000,
+  })
+
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/archive/read')
+  assert.equal(result.mode, 'read')
+  assert.equal(result.content, '{}')
+  assert.equal(batch.mode, 'batch')
+  assert.deepEqual(capturedBodies[1], {
+    url: 'https://example.com/bundle.zip',
+    pathPrefix: 'pages/',
+    maxEntries: 100,
+    maxTotalBytes: 5_000_000,
+  })
+})
+
 test('non-2xx response throws ScraperApiError with status and code', async () => {
   const fetchImpl = async () => jsonResponse(400, { error: 'bad_request', error_code: 'invalid_query', message: 'query is required' })
   const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })

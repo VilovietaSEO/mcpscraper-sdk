@@ -41,6 +41,87 @@ def test_harvest_paa_omits_serp_only():
 
 
 @responses.activate
+def test_start_harvest_uses_durable_endpoint():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/harvest",
+        json={"job_id": "job_async_1", "status": "pending"},
+        status=202,
+    )
+    client = ScraperClient(api_key="sk_test")
+    result = client.start_harvest(query="roofers denver", serp_only=True)
+
+    sent_body = json.loads(responses.calls[0].request.body)
+    assert sent_body["serpOnly"] is True
+    assert result["job_id"] == "job_async_1"
+
+
+@responses.activate
+def test_extract_site_sends_idempotency_key():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/extract-site",
+        json={"jobId": "extract_1", "status": "pending", "statusUrl": "/extract-site/status/extract_1"},
+        status=202,
+    )
+    client = ScraperClient(api_key="sk_test")
+    client.extract_site(
+        "https://example.com",
+        background=True,
+        idempotency_key="foundation:crawl:1",
+    )
+
+    assert responses.calls[0].request.headers["Idempotency-Key"] == "foundation:crawl:1"
+
+
+@responses.activate
+def test_archive_read_uses_public_rest_route():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/archive/read",
+        json={"mode": "read", "path": "pages.jsonl", "content": "{}", "nextOffset": None},
+        status=200,
+    )
+    client = ScraperClient(api_key="sk_test")
+    result = client.archive_read(
+        "https://example.com/bundle.zip",
+        path="pages.jsonl",
+    )
+
+    assert result["mode"] == "read"
+    assert result["content"] == "{}"
+
+    responses.replace(
+        responses.POST,
+        "https://mcpscraper.dev/archive/read",
+        json={
+            "mode": "batch",
+            "pathPrefix": "pages/",
+            "matchedEntryCount": 1,
+            "selectedEntryCount": 1,
+            "selectedTotalBytes": 5,
+            "entriesTruncated": False,
+            "files": [{"path": "pages/one.md", "content": "# One"}],
+        },
+        status=200,
+    )
+    batch = client.archive_read(
+        "https://example.com/bundle.zip",
+        pathPrefix="pages/",
+        maxEntries=100,
+        maxTotalBytes=5_000_000,
+    )
+    assert batch["mode"] == "batch"
+    assert batch["entriesTruncated"] is False
+    assert json.loads(responses.calls[1].request.body) == {
+        "url": "https://example.com/bundle.zip",
+        "pathPrefix": "pages/",
+        "maxEntries": 100,
+        "maxTotalBytes": 5_000_000,
+    }
+
+
+@responses.activate
 def test_call_tool_result_preserves_native_image_content():
     responses.add(
         responses.POST,

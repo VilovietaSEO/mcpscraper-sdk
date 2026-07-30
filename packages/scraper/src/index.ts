@@ -1,6 +1,10 @@
 export { ScraperClient } from './client.js'
 export type {
   ScraperClientOptions,
+  ScraperRequestOptions,
+  ExtractSiteOptions,
+  HarvestParams,
+  ArchiveReadParams,
   SerpIntelligenceCaptureParams,
   SerpIntelligenceCaptureOptions,
   SerpIntelligenceCaptureReceipt,

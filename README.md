@@ -27,7 +27,7 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 | [Scrape](#scrape) | One page → markdown/HTML/headings, optional screenshot, optional deposit into your memory vault | `POST /extract-url` | 1 credit |
 | [Crawl](#crawl) | Every page of a site, one call | `POST /extract-site` | 1 credit/page |
 | [Map](#map) | Discover a site's full URL inventory | `POST /map-urls` | 5 credits flat |
-| [Read ZIP archives](#read-zip-archives) | List a public ZIP, read one text file, or preserve it in Library | MCP `archive_read` / `POST /archive/read` | — |
+| [Read ZIP archives](#read-zip-archives) | List a public ZIP, read one text file, read a bounded prefix batch, or preserve one file in Library | MCP `archive_read` / `POST /archive/read` | — |
 | [Maps search](#maps-search) | Local businesses via Google Maps | `POST /maps/search` | — |
 | [Memory search](#memory-search-using-only-your-scraper-key) | Semantic search across your mcp-memory vaults | `POST /memory/mcp-call` | — |
 | YouTube, Facebook/Google Ads, Instagram, Reddit, video, directory workflows | See [`packages/scraper`](./packages/scraper) and [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) for the full 43-operation REST contract | — | — |
@@ -48,6 +48,12 @@ const file = await client.tools.web.archiveRead({
   path: 'Hello-World-master/README',
   depositToLibrary: true,
 })
+const batch = await client.tools.web.archiveRead({
+  url: archiveUrl,
+  pathPrefix: 'Hello-World-master/',
+  maxEntries: 100,
+  maxTotalBytes: 2_000_000,
+})
 ```
 </details>
 
@@ -60,6 +66,12 @@ file = client.tools.web.archive_read(
     url=archive_url,
     path="Hello-World-master/README",
     deposit_to_library=True,
+)
+batch = client.tools.web.archive_read(
+    url=archive_url,
+    path_prefix="Hello-World-master/",
+    max_entries=100,
+    max_total_bytes=2_000_000,
 )
 ```
 </details>

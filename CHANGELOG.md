@@ -4,6 +4,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+### Added
+
+- Node and Python scraper clients can start durable SERP/PAA jobs through `POST /harvest`, poll them through the existing job methods, read crawl ZIPs through the public `/archive/read` route, and pass caller-owned idempotency keys to background site extraction.
+- Node REST calls used by long-running workflows accept request-scoped abort signals and timeout budgets without changing the default behavior of existing callers.
+- Node and Python archive readers accept bounded `pathPrefix` requests and expose typed file, byte, match, selection, and truncation receipts for one-download crawl corpus reads. The unpublished Node canary is `0.24.0-canary.2`.
+
 ## 2026-07-30 — verified against mcp-scraper 0.40.3
 
 ### Security

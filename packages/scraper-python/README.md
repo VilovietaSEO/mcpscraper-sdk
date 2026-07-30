@@ -50,6 +50,12 @@ client.tools.web.archive_read(
     url="https://github.com/octocat/Hello-World/archive/refs/heads/master.zip",
     path="Hello-World-master/README",
 )
+client.tools.web.archive_read(
+    url="https://github.com/octocat/Hello-World/archive/refs/heads/master.zip",
+    path_prefix="Hello-World-master/",
+    max_entries=100,
+    max_total_bytes=2_000_000,
+)
 method = client.tools.editorial.reading_room_guide(focus="workflow")
 client.tools.memory.search(query="roofing warranty terms")
 client.tools.connections.export_connected_service_data(
