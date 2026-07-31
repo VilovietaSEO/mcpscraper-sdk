@@ -11,6 +11,15 @@ export interface Output {
     vault: string;
     cadence: "once" | "daily" | "weekly" | "monthly";
     executionMode: "agent" | "connection_sync";
+    artifactSelection:
+      | {
+          mode: "none";
+        }
+      | {
+          mode: "saved_template";
+          templateId: string;
+          templateVersionId: string;
+        };
     timeOfDay: string | null;
     timezone: string;
     status: "active" | "paused" | "completed";

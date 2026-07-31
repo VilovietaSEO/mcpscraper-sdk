@@ -19,8 +19,10 @@ from .models.access_swap_vault import AccessSwapVaultInput, AccessSwapVaultOutpu
 from .models.access_switch_account import AccessSwitchAccountInput, AccessSwitchAccountOutput
 from .models.access_unlink_share import AccessUnlinkShareInput, AccessUnlinkShareOutput
 from .models.add_vault import AddVaultInput, AddVaultOutput
+from .models.answer_inbox_item import AnswerInboxItemInput, AnswerInboxItemOutput
 from .models.archive_artifact_template import ArchiveArtifactTemplateInput, ArchiveArtifactTemplateOutput
 from .models.archive_scheduled_run import ArchiveScheduledRunInput, ArchiveScheduledRunOutput
+from .models.auto_optimization import AutoOptimizationInput, AutoOptimizationOutput
 from .models.bulk_delete_notes import BulkDeleteNotesInput, BulkDeleteNotesOutput
 from .models.cost_usage import CostUsageInput, CostUsageOutput
 from .models.create_artifact_template import CreateArtifactTemplateInput, CreateArtifactTemplateOutput
@@ -413,6 +415,16 @@ class ScheduleNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
+    def answer_inbox_item(self, **kwargs: Any) -> AnswerInboxItemOutput:
+        payload = AnswerInboxItemInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("answerInboxItemTool", payload)
+        return AnswerInboxItemOutput.model_validate(result)
+
+    def auto_optimization(self, **kwargs: Any) -> AutoOptimizationOutput:
+        payload = AutoOptimizationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("autoOptimizationTool", payload)
+        return AutoOptimizationOutput.model_validate(result)
+
     def create_scheduled_action(self, **kwargs: Any) -> CreateScheduledActionOutput:
         payload = CreateScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("createScheduledActionTool", payload)
@@ -468,6 +480,56 @@ class ScheduleNamespace:
         result = self._call_tool("revokeScheduleLinkTool", payload)
         return RevokeScheduleLinkOutput.model_validate(result)
 
+    def list_artifact_templates(self, **kwargs: Any) -> ListArtifactTemplatesOutput:
+        payload = ListArtifactTemplatesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list_artifact_templates", payload)
+        return ListArtifactTemplatesOutput.model_validate(result)
+
+    def get_artifact_template(self, **kwargs: Any) -> GetArtifactTemplateOutput:
+        payload = GetArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get_artifact_template", payload)
+        return GetArtifactTemplateOutput.model_validate(result)
+
+    def create_artifact_template(self, **kwargs: Any) -> CreateArtifactTemplateOutput:
+        payload = CreateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("create_artifact_template", payload)
+        return CreateArtifactTemplateOutput.model_validate(result)
+
+    def update_artifact_template(self, **kwargs: Any) -> UpdateArtifactTemplateOutput:
+        payload = UpdateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("update_artifact_template", payload)
+        return UpdateArtifactTemplateOutput.model_validate(result)
+
+    def archive_artifact_template(self, **kwargs: Any) -> ArchiveArtifactTemplateOutput:
+        payload = ArchiveArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("archive_artifact_template", payload)
+        return ArchiveArtifactTemplateOutput.model_validate(result)
+
+    def list_scheduled_runs(self, **kwargs: Any) -> ListScheduledRunsOutput:
+        payload = ListScheduledRunsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list_scheduled_runs", payload)
+        return ListScheduledRunsOutput.model_validate(result)
+
+    def get_scheduled_run(self, **kwargs: Any) -> GetScheduledRunOutput:
+        payload = GetScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get_scheduled_run", payload)
+        return GetScheduledRunOutput.model_validate(result)
+
+    def mark_scheduled_run_opened(self, **kwargs: Any) -> MarkScheduledRunOpenedOutput:
+        payload = MarkScheduledRunOpenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("mark_scheduled_run_opened", payload)
+        return MarkScheduledRunOpenedOutput.model_validate(result)
+
+    def mark_scheduled_run_unopened(self, **kwargs: Any) -> MarkScheduledRunUnopenedOutput:
+        payload = MarkScheduledRunUnopenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("mark_scheduled_run_unopened", payload)
+        return MarkScheduledRunUnopenedOutput.model_validate(result)
+
+    def archive_scheduled_run(self, **kwargs: Any) -> ArchiveScheduledRunOutput:
+        payload = ArchiveScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("archive_scheduled_run", payload)
+        return ArchiveScheduledRunOutput.model_validate(result)
+
     def update_scheduled_action(self, **kwargs: Any) -> UpdateScheduledActionOutput:
         payload = UpdateScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("updateScheduledActionTool", payload)
@@ -477,56 +539,6 @@ class ScheduleNamespace:
         payload = ListScheduledActionRunsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("listScheduledActionRunsTool", payload)
         return ListScheduledActionRunsOutput.model_validate(result)
-
-    def list_artifact_templates(self, **kwargs: Any) -> ListArtifactTemplatesOutput:
-        payload = ListArtifactTemplatesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("listArtifactTemplatesTool", payload)
-        return ListArtifactTemplatesOutput.model_validate(result)
-
-    def get_artifact_template(self, **kwargs: Any) -> GetArtifactTemplateOutput:
-        payload = GetArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("getArtifactTemplateTool", payload)
-        return GetArtifactTemplateOutput.model_validate(result)
-
-    def create_artifact_template(self, **kwargs: Any) -> CreateArtifactTemplateOutput:
-        payload = CreateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("createArtifactTemplateTool", payload)
-        return CreateArtifactTemplateOutput.model_validate(result)
-
-    def update_artifact_template(self, **kwargs: Any) -> UpdateArtifactTemplateOutput:
-        payload = UpdateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("updateArtifactTemplateTool", payload)
-        return UpdateArtifactTemplateOutput.model_validate(result)
-
-    def archive_artifact_template(self, **kwargs: Any) -> ArchiveArtifactTemplateOutput:
-        payload = ArchiveArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("archiveArtifactTemplateTool", payload)
-        return ArchiveArtifactTemplateOutput.model_validate(result)
-
-    def list_scheduled_runs(self, **kwargs: Any) -> ListScheduledRunsOutput:
-        payload = ListScheduledRunsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("listScheduledRunsTool", payload)
-        return ListScheduledRunsOutput.model_validate(result)
-
-    def get_scheduled_run(self, **kwargs: Any) -> GetScheduledRunOutput:
-        payload = GetScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("getScheduledRunTool", payload)
-        return GetScheduledRunOutput.model_validate(result)
-
-    def mark_scheduled_run_opened(self, **kwargs: Any) -> MarkScheduledRunOpenedOutput:
-        payload = MarkScheduledRunOpenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("markScheduledRunOpenedTool", payload)
-        return MarkScheduledRunOpenedOutput.model_validate(result)
-
-    def mark_scheduled_run_unopened(self, **kwargs: Any) -> MarkScheduledRunUnopenedOutput:
-        payload = MarkScheduledRunUnopenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("markScheduledRunUnopenedTool", payload)
-        return MarkScheduledRunUnopenedOutput.model_validate(result)
-
-    def archive_scheduled_run(self, **kwargs: Any) -> ArchiveScheduledRunOutput:
-        payload = ArchiveScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("archiveScheduledRunTool", payload)
-        return ArchiveScheduledRunOutput.model_validate(result)
 
 
 class StorageNamespace:

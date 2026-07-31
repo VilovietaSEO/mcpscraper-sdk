@@ -10,7 +10,7 @@ function main(): void {
   const scheduledResultsOk = run(
     'Scheduled results contract source check',
     'node',
-    ['--import', 'tsx', 'scripts/apply-scheduled-results-contract.ts', '--check'],
+    ['--import', 'tsx', 'scripts/check-scheduled-results-contract.ts'],
   )
   const openapiOk = run('OpenAPI lint', 'npx', ['-y', '@redocly/cli', 'lint', 'contracts/scraper.openapi.yaml'])
   const manifestOk = run('Memory manifest drift check', 'npx', ['tsx', 'scripts/sync-memory-manifest.ts'])

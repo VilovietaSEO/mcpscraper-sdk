@@ -32,7 +32,7 @@ export interface Input {
    */
   timezone?: string;
   /**
-   * No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.
+   * Rich report selection. Use {mode:"none"} for no rendered artifact, or pin one saved template with {mode:"saved_template",templateId,templateVersionId}. This does not disable Memory-note or vault output. Omit to keep the current binding.
    */
   artifactSelection?:
     | {
@@ -65,9 +65,6 @@ export interface Output {
     nextRunAt: string;
     lastRunAt: string | null;
     lastRunStatus: string | null;
-    /**
-     * No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.
-     */
     artifactSelection:
       | {
           mode: "none";

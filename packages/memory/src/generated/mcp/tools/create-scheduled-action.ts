@@ -28,7 +28,7 @@ export interface Input {
    */
   deployDate?: string;
   /**
-   * No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.
+   * Presentation artifact selection. "none" means no HTML artifact; it does not disable writing the scheduled result to Memory. A saved_template selection pins one exact immutable template version.
    */
   artifactSelection?:
     | {
@@ -59,17 +59,9 @@ export interface Output {
    */
   executionMode?: "agent" | "connection_sync";
   /**
-   * Human-readable failure reason when ok is false.
+   * The exact stored artifact selection.
    */
-  error?: string;
-  /**
-   * Machine-readable denial code when creation is refused.
-   */
-  code?: string;
-  /**
-   * No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.
-   */
-  artifactSelection:
+  artifactSelection?:
     | {
         mode: "none";
       }
@@ -78,4 +70,12 @@ export interface Output {
         templateId: string;
         templateVersionId: string;
       };
+  /**
+   * Human-readable failure reason when ok is false.
+   */
+  error?: string;
+  /**
+   * Machine-readable denial code when creation is refused.
+   */
+  code?: string;
 }

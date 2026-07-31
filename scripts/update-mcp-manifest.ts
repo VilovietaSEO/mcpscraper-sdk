@@ -96,6 +96,8 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   export_connected_service_data: 'connections',
   export_search_console_table_data: 'connections',
   renew_connected_data_download: 'connections',
+  create_scheduled_run_view_link: 'schedule',
+  revoke_scheduled_run_view_link: 'schedule',
   directory_workflow: 'directory',
   directory_workflow_status: 'directory',
   location_markets: 'directory',
@@ -239,11 +241,14 @@ async function preserveExistingToolOrder(tools: LiveTool[]): Promise<LiveTool[]>
 
 async function main(): Promise<void> {
   const memoryManifest = JSON.parse(await readFile(MEMORY_MANIFEST_PATH, 'utf8')) as MemoryManifest
+  const existingManifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as UnifiedManifest
+  const existingTools = new Map(existingManifest.tools.map(tool => [tool.name, tool]))
   const memoryCategories = new Map(memoryManifest.tools.map(tool => [tool.legacyId, tool.category]))
   const { tools: loadedTools, generatedFrom } = await loadTools()
   const liveTools = await preserveExistingToolOrder(loadedTools)
 
   const tools: UnifiedTool[] = liveTools.map(tool => {
+    const prior = existingTools.get(tool.name)
     const category = memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
     return {
       name: tool.name,
@@ -252,8 +257,10 @@ async function main(): Promise<void> {
       category,
       methodName: deriveMethodName(tool.name, category),
       inputSchema: tool.inputSchema ?? { type: 'object', additionalProperties: true },
-      outputSchema: (stripInternalTelemetry(tool.outputSchema) as Record<string, unknown>) ?? { type: 'object', additionalProperties: true },
-      outputSchemaProvided: tool.outputSchema !== undefined,
+      outputSchema: (stripInternalTelemetry(tool.outputSchema) as Record<string, unknown>)
+        ?? prior?.outputSchema
+        ?? { type: 'object', additionalProperties: true },
+      outputSchemaProvided: tool.outputSchema !== undefined || prior?.outputSchemaProvided === true,
       annotations: tool.annotations ?? {},
     }
   })

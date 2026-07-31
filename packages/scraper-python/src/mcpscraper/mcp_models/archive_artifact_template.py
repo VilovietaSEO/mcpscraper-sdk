@@ -6,7 +6,7 @@ class ArchiveArtifactTemplateInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     template_id: str = Field(..., alias="templateId", description="")
-    archived: bool = Field(..., alias="archived", description="True to archive the template; false to restore it.")
+    archived: bool = Field(..., alias="archived", description="")
 
 
 class ArchiveArtifactTemplateOutput(BaseModel):

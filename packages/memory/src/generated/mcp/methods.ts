@@ -5,10 +5,10 @@ import * as SearchSearchSerp from './tools/search_serp.js'
 import * as WebExtractUrl from './tools/extract_url.js'
 import * as WebDiffPage from './tools/diff_page.js'
 import * as WebMapSiteUrls from './tools/map_site_urls.js'
+import * as WebMapWaybackSnapshots from './tools/map_wayback_snapshots.js'
 import * as WebExtractSite from './tools/extract_site.js'
 import * as WebAuditSite from './tools/audit_site.js'
 import * as WebCheckSiteExport from './tools/check_site_export.js'
-import * as WebMapWaybackSnapshots from './tools/map_wayback_snapshots.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
@@ -42,12 +42,16 @@ import * as WorkflowsStatus from './tools/workflow_status.js'
 import * as WorkflowsArtifactRead from './tools/workflow_artifact_read.js'
 import * as WorkflowsRankTracker from './tools/rank_tracker_workflow.js'
 import * as WorkflowsQueryFanout from './tools/query_fanout_workflow.js'
+import * as EditorialReadingRoomGuide from './tools/editorial_reading_room_guide.js'
+import * as EditorialCreateReadingRoom from './tools/create_editorial_reading_room.js'
+import * as EditorialRenewReadingRoomDownload from './tools/renew_editorial_reading_room_download.js'
 import * as ArtifactsRead from './tools/report_artifact_read.js'
 import * as BillingCreditsInfo from './tools/credits_info.js'
 import * as ConnectionsListServiceConnections from './tools/list_service_connections.js'
 import * as ConnectionsTestServiceConnection from './tools/test_service_connection.js'
 import * as ConnectionsSlackSendMessage from './tools/slack_send_message.js'
 import * as ConnectionsGmailSendMessage from './tools/gmail_send_message.js'
+import * as ConnectionsGmailSearchContacts from './tools/gmail_search_contacts.js'
 import * as ConnectionsGoogleCalendarCreateEvent from './tools/google_calendar_create_event.js'
 import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
 import * as ConnectionsReadServiceConnection from './tools/read_service_connection.js'
@@ -59,7 +63,6 @@ import * as ConnectionsExportSearchConsoleTableData from './tools/export_search_
 import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_data_download.js'
 import * as ConnectionsCallServiceConnectionAction from './tools/call_service_connection_action.js'
 import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
-import * as ConnectionsGmailSearchContacts from './tools/gmail_search_contacts.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as BrowserProfileConnect from './tools/browser_profile_connect.js'
@@ -84,6 +87,30 @@ import * as BrowserReplayMark from './tools/browser_replay_mark.js'
 import * as BrowserReplayAnnotate from './tools/browser_replay_annotate.js'
 import * as BrowserClose from './tools/browser_close.js'
 import * as BrowserListSessions from './tools/browser_list_sessions.js'
+import * as ScheduleListArtifactTemplates from './tools/list_artifact_templates.js'
+import * as ScheduleGetArtifactTemplate from './tools/get_artifact_template.js'
+import * as ScheduleCreateArtifactTemplate from './tools/create_artifact_template.js'
+import * as ScheduleUpdateArtifactTemplate from './tools/update_artifact_template.js'
+import * as ScheduleArchiveArtifactTemplate from './tools/archive_artifact_template.js'
+import * as ScheduleListScheduledRuns from './tools/list_scheduled_runs.js'
+import * as ScheduleGetScheduledRun from './tools/get_scheduled_run.js'
+import * as ScheduleMarkScheduledRunOpened from './tools/mark_scheduled_run_opened.js'
+import * as ScheduleMarkScheduledRunUnopened from './tools/mark_scheduled_run_unopened.js'
+import * as ScheduleArchiveScheduledRun from './tools/archive_scheduled_run.js'
+import * as ScheduleCreateScheduledRunViewLink from './tools/create_scheduled_run_view_link.js'
+import * as ScheduleRevokeScheduledRunViewLink from './tools/revoke_scheduled_run_view_link.js'
+import * as ScheduleCreateScheduledAction from './tools/create-scheduled-action.js'
+import * as ScheduleUpdateScheduledAction from './tools/update-scheduled-action.js'
+import * as ScheduleDeleteScheduledAction from './tools/delete-scheduled-action.js'
+import * as ScheduleGetScheduleLink from './tools/get-schedule-link.js'
+import * as ScheduleGetScheduleStatus from './tools/get-schedule-status.js'
+import * as ScheduleListScheduledActions from './tools/list-scheduled-actions.js'
+import * as SchedulePauseScheduledAction from './tools/pause-scheduled-action.js'
+import * as ScheduleProposeScheduledAction from './tools/propose-scheduled-action.js'
+import * as ScheduleResumeScheduledAction from './tools/resume-scheduled-action.js'
+import * as ScheduleRevokeScheduleLink from './tools/revoke-schedule-link.js'
+import * as ScheduleSetScheduleDefaults from './tools/set-schedule-defaults.js'
+import * as ScheduleSetScheduleEntitlement from './tools/set-schedule-entitlement.js'
 import * as AccessAcceptShare from './tools/access-accept-share.js'
 import * as AccessApproveSender from './tools/access-approve-sender.js'
 import * as AccessDeclineShare from './tools/access-decline-share.js'
@@ -137,30 +164,6 @@ import * as MemorySearch from './tools/memory-search.js'
 import * as MemorySuggest from './tools/memory-suggest.js'
 import * as MemoryUpload from './tools/memory-upload.js'
 import * as RecallTemporalRecall from './tools/temporal-recall.js'
-import * as ScheduleCreateScheduledAction from './tools/create-scheduled-action.js'
-import * as ScheduleDeleteScheduledAction from './tools/delete-scheduled-action.js'
-import * as ScheduleGetScheduleLink from './tools/get-schedule-link.js'
-import * as ScheduleGetScheduleStatus from './tools/get-schedule-status.js'
-import * as ScheduleListScheduledActions from './tools/list-scheduled-actions.js'
-import * as SchedulePauseScheduledAction from './tools/pause-scheduled-action.js'
-import * as ScheduleProposeScheduledAction from './tools/propose-scheduled-action.js'
-import * as ScheduleResumeScheduledAction from './tools/resume-scheduled-action.js'
-import * as ScheduleRevokeScheduleLink from './tools/revoke-schedule-link.js'
-import * as ScheduleSetScheduleDefaults from './tools/set-schedule-defaults.js'
-import * as ScheduleSetScheduleEntitlement from './tools/set-schedule-entitlement.js'
-import * as ScheduleUpdateScheduledAction from './tools/update-scheduled-action.js'
-import * as ScheduleListArtifactTemplates from './tools/list_artifact_templates.js'
-import * as ScheduleGetArtifactTemplate from './tools/get_artifact_template.js'
-import * as ScheduleCreateArtifactTemplate from './tools/create_artifact_template.js'
-import * as ScheduleUpdateArtifactTemplate from './tools/update_artifact_template.js'
-import * as ScheduleArchiveArtifactTemplate from './tools/archive_artifact_template.js'
-import * as ScheduleListScheduledRuns from './tools/list_scheduled_runs.js'
-import * as ScheduleGetScheduledRun from './tools/get_scheduled_run.js'
-import * as ScheduleMarkScheduledRunOpened from './tools/mark_scheduled_run_opened.js'
-import * as ScheduleMarkScheduledRunUnopened from './tools/mark_scheduled_run_unopened.js'
-import * as ScheduleArchiveScheduledRun from './tools/archive_scheduled_run.js'
-import * as ScheduleCreateScheduledRunViewLink from './tools/create_scheduled_run_view_link.js'
-import * as ScheduleRevokeScheduledRunViewLink from './tools/revoke_scheduled_run_view_link.js'
 import * as StorageCostUsage from './tools/cost-usage.js'
 import * as StorageUsage from './tools/storage-usage.js'
 import * as TablesCreate from './tools/table-create.js'
@@ -171,9 +174,9 @@ import * as TablesInsertRows from './tools/table-insert-rows.js'
 import * as TablesList from './tools/table-list.js'
 import * as TablesQuery from './tools/table-query.js'
 import * as TagsListMemoryTags from './tools/list-memory-tags.js'
+import * as TagsMergeMemoryTags from './tools/merge-memory-tags.js'
 import * as TagsResolveMemoryTags from './tools/resolve-memory-tags.js'
 import * as TagsUpsertMemoryTag from './tools/upsert-memory-tag.js'
-import * as TagsMergeMemoryTags from './tools/merge-memory-tags.js'
 import * as VaultsAddVault from './tools/add-vault.js'
 import * as VaultsCreateSecureVault from './tools/create-secure-vault.js'
 import * as VaultsDeleteVault from './tools/delete-vault.js'
@@ -185,9 +188,6 @@ import * as VaultsRouteMemory from './tools/route-memory.js'
 import * as WebhooksCreateWebhook from './tools/create-webhook.js'
 import * as WebhooksListWebhooks from './tools/list-webhooks.js'
 import * as WebhooksRevokeWebhook from './tools/revoke-webhook.js'
-import * as EditorialCreateReadingRoom from './tools/create_editorial_reading_room.js'
-import * as EditorialReadingRoomGuide from './tools/editorial_reading_room_guide.js'
-import * as EditorialRenewReadingRoomDownload from './tools/renew_editorial_reading_room_download.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -216,6 +216,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "mapSiteUrls"
   },
   {
+    "name": "map_wayback_snapshots",
+    "category": "web",
+    "methodName": "mapWaybackSnapshots"
+  },
+  {
     "name": "extract_site",
     "category": "web",
     "methodName": "extractSite"
@@ -229,6 +234,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "check_site_export",
     "category": "web",
     "methodName": "checkSiteExport"
+  },
+  {
+    "name": "archive_read",
+    "category": "web",
+    "methodName": "archiveRead"
   },
   {
     "name": "youtube_harvest",
@@ -254,6 +264,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "reddit_thread",
     "category": "reddit",
     "methodName": "thread"
+  },
+  {
+    "name": "reddit_trending",
+    "category": "reddit",
+    "methodName": "trending"
   },
   {
     "name": "video_frame_analysis",
@@ -326,6 +341,16 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "run"
   },
   {
+    "name": "directory_workflow_status",
+    "category": "directory",
+    "methodName": "workflowStatus"
+  },
+  {
+    "name": "location_markets",
+    "category": "directory",
+    "methodName": "locationMarkets"
+  },
+  {
     "name": "workflow_list",
     "category": "workflows",
     "methodName": "list"
@@ -354,6 +379,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "workflow_artifact_read",
     "category": "workflows",
     "methodName": "artifactRead"
+  },
+  {
+    "name": "editorial_reading_room_guide",
+    "category": "editorial",
+    "methodName": "readingRoomGuide"
+  },
+  {
+    "name": "create_editorial_reading_room",
+    "category": "editorial",
+    "methodName": "createReadingRoom"
+  },
+  {
+    "name": "renew_editorial_reading_room_download",
+    "category": "editorial",
+    "methodName": "renewReadingRoomDownload"
   },
   {
     "name": "report_artifact_read",
@@ -389,6 +429,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "gmail_send_message",
     "category": "connections",
     "methodName": "gmailSendMessage"
+  },
+  {
+    "name": "gmail_search_contacts",
+    "category": "connections",
+    "methodName": "gmailSearchContacts"
   },
   {
     "name": "google_calendar_create_event",
@@ -569,6 +614,66 @@ export const MCP_TOOL_BINDINGS = [
     "name": "query_fanout_workflow",
     "category": "workflows",
     "methodName": "queryFanout"
+  },
+  {
+    "name": "list_artifact_templates",
+    "category": "schedule",
+    "methodName": "listArtifactTemplates"
+  },
+  {
+    "name": "get_artifact_template",
+    "category": "schedule",
+    "methodName": "getArtifactTemplate"
+  },
+  {
+    "name": "create_artifact_template",
+    "category": "schedule",
+    "methodName": "createArtifactTemplate"
+  },
+  {
+    "name": "update_artifact_template",
+    "category": "schedule",
+    "methodName": "updateArtifactTemplate"
+  },
+  {
+    "name": "archive_artifact_template",
+    "category": "schedule",
+    "methodName": "archiveArtifactTemplate"
+  },
+  {
+    "name": "list_scheduled_runs",
+    "category": "schedule",
+    "methodName": "listScheduledRuns"
+  },
+  {
+    "name": "get_scheduled_run",
+    "category": "schedule",
+    "methodName": "getScheduledRun"
+  },
+  {
+    "name": "mark_scheduled_run_opened",
+    "category": "schedule",
+    "methodName": "markScheduledRunOpened"
+  },
+  {
+    "name": "mark_scheduled_run_unopened",
+    "category": "schedule",
+    "methodName": "markScheduledRunUnopened"
+  },
+  {
+    "name": "archive_scheduled_run",
+    "category": "schedule",
+    "methodName": "archiveScheduledRun"
+  },
+  {
+    "name": "create_scheduled_run_view_link",
+    "category": "schedule",
+    "methodName": "createScheduledRunViewLink"
+  },
+  {
+    "name": "revoke_scheduled_run_view_link",
+    "category": "schedule",
+    "methodName": "revokeScheduledRunViewLink"
   },
   {
     "name": "access-accept-share",
@@ -841,6 +946,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "createScheduledAction"
   },
   {
+    "name": "update-scheduled-action",
+    "category": "schedule",
+    "methodName": "updateScheduledAction"
+  },
+  {
     "name": "delete-scheduled-action",
     "category": "schedule",
     "methodName": "deleteScheduledAction"
@@ -941,6 +1051,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "listMemoryTags"
   },
   {
+    "name": "merge-memory-tags",
+    "category": "tags",
+    "methodName": "mergeMemoryTags"
+  },
+  {
     "name": "resolve-memory-tags",
     "category": "tags",
     "methodName": "resolveMemoryTags"
@@ -1014,121 +1129,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "revoke-webhook",
     "category": "webhooks",
     "methodName": "revokeWebhook"
-  },
-  {
-    "name": "gmail_search_contacts",
-    "category": "connections",
-    "methodName": "gmailSearchContacts"
-  },
-  {
-    "name": "reddit_trending",
-    "category": "reddit",
-    "methodName": "trending"
-  },
-  {
-    "name": "directory_workflow_status",
-    "category": "directory",
-    "methodName": "workflowStatus"
-  },
-  {
-    "name": "location_markets",
-    "category": "directory",
-    "methodName": "locationMarkets"
-  },
-  {
-    "name": "map_wayback_snapshots",
-    "category": "web",
-    "methodName": "mapWaybackSnapshots"
-  },
-  {
-    "name": "merge-memory-tags",
-    "category": "tags",
-    "methodName": "mergeMemoryTags"
-  },
-  {
-    "name": "archive_read",
-    "category": "web",
-    "methodName": "archiveRead"
-  },
-  {
-    "name": "create_editorial_reading_room",
-    "category": "editorial",
-    "methodName": "createReadingRoom"
-  },
-  {
-    "name": "editorial_reading_room_guide",
-    "category": "editorial",
-    "methodName": "readingRoomGuide"
-  },
-  {
-    "name": "renew_editorial_reading_room_download",
-    "category": "editorial",
-    "methodName": "renewReadingRoomDownload"
-  },
-  {
-    "name": "update-scheduled-action",
-    "category": "schedule",
-    "methodName": "updateScheduledAction"
-  },
-  {
-    "name": "list_artifact_templates",
-    "category": "schedule",
-    "methodName": "listArtifactTemplates"
-  },
-  {
-    "name": "get_artifact_template",
-    "category": "schedule",
-    "methodName": "getArtifactTemplate"
-  },
-  {
-    "name": "create_artifact_template",
-    "category": "schedule",
-    "methodName": "createArtifactTemplate"
-  },
-  {
-    "name": "update_artifact_template",
-    "category": "schedule",
-    "methodName": "updateArtifactTemplate"
-  },
-  {
-    "name": "archive_artifact_template",
-    "category": "schedule",
-    "methodName": "archiveArtifactTemplate"
-  },
-  {
-    "name": "list_scheduled_runs",
-    "category": "schedule",
-    "methodName": "listScheduledRuns"
-  },
-  {
-    "name": "get_scheduled_run",
-    "category": "schedule",
-    "methodName": "getScheduledRun"
-  },
-  {
-    "name": "mark_scheduled_run_opened",
-    "category": "schedule",
-    "methodName": "markScheduledRunOpened"
-  },
-  {
-    "name": "mark_scheduled_run_unopened",
-    "category": "schedule",
-    "methodName": "markScheduledRunUnopened"
-  },
-  {
-    "name": "archive_scheduled_run",
-    "category": "schedule",
-    "methodName": "archiveScheduledRun"
-  },
-  {
-    "name": "create_scheduled_run_view_link",
-    "category": "schedule",
-    "methodName": "createScheduledRunViewLink"
-  },
-  {
-    "name": "revoke_scheduled_run_view_link",
-    "category": "schedule",
-    "methodName": "revokeScheduledRunViewLink"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1160,6 +1160,10 @@ export class WebNamespace {
     return this.callTool('map_site_urls', input) as Promise<WebMapSiteUrls.Output>
   }
 
+  async mapWaybackSnapshots(input: WebMapWaybackSnapshots.Input): Promise<WebMapWaybackSnapshots.Output> {
+    return this.callTool('map_wayback_snapshots', input) as Promise<WebMapWaybackSnapshots.Output>
+  }
+
   async extractSite(input: WebExtractSite.Input): Promise<WebExtractSite.Output> {
     return this.callTool('extract_site', input) as Promise<WebExtractSite.Output>
   }
@@ -1170,10 +1174,6 @@ export class WebNamespace {
 
   async checkSiteExport(input: WebCheckSiteExport.Input): Promise<WebCheckSiteExport.Output> {
     return this.callTool('check_site_export', input) as Promise<WebCheckSiteExport.Output>
-  }
-
-  async mapWaybackSnapshots(input: WebMapWaybackSnapshots.Input): Promise<WebMapWaybackSnapshots.Output> {
-    return this.callTool('map_wayback_snapshots', input) as Promise<WebMapWaybackSnapshots.Output>
   }
 
   async archiveRead(input: WebArchiveRead.Input): Promise<WebArchiveRead.Output> {
@@ -1349,6 +1349,22 @@ export class WorkflowsNamespace {
   }
 }
 
+export class EditorialNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async readingRoomGuide(input: EditorialReadingRoomGuide.Input = {} as EditorialReadingRoomGuide.Input): Promise<EditorialReadingRoomGuide.Output> {
+    return this.callTool('editorial_reading_room_guide', input) as Promise<EditorialReadingRoomGuide.Output>
+  }
+
+  async createReadingRoom(input: EditorialCreateReadingRoom.Input): Promise<EditorialCreateReadingRoom.Output> {
+    return this.callTool('create_editorial_reading_room', input) as Promise<EditorialCreateReadingRoom.Output>
+  }
+
+  async renewReadingRoomDownload(input: EditorialRenewReadingRoomDownload.Input): Promise<EditorialRenewReadingRoomDownload.Output> {
+    return this.callTool('renew_editorial_reading_room_download', input) as Promise<EditorialRenewReadingRoomDownload.Output>
+  }
+}
+
 export class ArtifactsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -1382,6 +1398,10 @@ export class ConnectionsNamespace {
 
   async gmailSendMessage(input: ConnectionsGmailSendMessage.Input): Promise<ConnectionsGmailSendMessage.Output> {
     return this.callTool('gmail_send_message', input) as Promise<ConnectionsGmailSendMessage.Output>
+  }
+
+  async gmailSearchContacts(input: ConnectionsGmailSearchContacts.Input): Promise<ConnectionsGmailSearchContacts.Output> {
+    return this.callTool('gmail_search_contacts', input) as Promise<ConnectionsGmailSearchContacts.Output>
   }
 
   async googleCalendarCreateEvent(input: ConnectionsGoogleCalendarCreateEvent.Input): Promise<ConnectionsGoogleCalendarCreateEvent.Output> {
@@ -1426,10 +1446,6 @@ export class ConnectionsNamespace {
 
   async setScheduledActionConnections(input: ConnectionsSetScheduledActionConnections.Input): Promise<ConnectionsSetScheduledActionConnections.Output> {
     return this.callTool('set_scheduled_action_connections', input) as Promise<ConnectionsSetScheduledActionConnections.Output>
-  }
-
-  async gmailSearchContacts(input: ConnectionsGmailSearchContacts.Input): Promise<ConnectionsGmailSearchContacts.Output> {
-    return this.callTool('gmail_search_contacts', input) as Promise<ConnectionsGmailSearchContacts.Output>
   }
 }
 
@@ -1534,6 +1550,106 @@ export class BrowserNamespace {
 
   async listSessions(input: BrowserListSessions.Input = {} as BrowserListSessions.Input): Promise<BrowserListSessions.Output> {
     return this.callTool('browser_list_sessions', input) as Promise<BrowserListSessions.Output>
+  }
+}
+
+export class ScheduleNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async listArtifactTemplates(input: ScheduleListArtifactTemplates.Input = {} as ScheduleListArtifactTemplates.Input): Promise<ScheduleListArtifactTemplates.Output> {
+    return this.callTool('list_artifact_templates', input) as Promise<ScheduleListArtifactTemplates.Output>
+  }
+
+  async getArtifactTemplate(input: ScheduleGetArtifactTemplate.Input): Promise<ScheduleGetArtifactTemplate.Output> {
+    return this.callTool('get_artifact_template', input) as Promise<ScheduleGetArtifactTemplate.Output>
+  }
+
+  async createArtifactTemplate(input: ScheduleCreateArtifactTemplate.Input): Promise<ScheduleCreateArtifactTemplate.Output> {
+    return this.callTool('create_artifact_template', input) as Promise<ScheduleCreateArtifactTemplate.Output>
+  }
+
+  async updateArtifactTemplate(input: ScheduleUpdateArtifactTemplate.Input = {} as ScheduleUpdateArtifactTemplate.Input): Promise<ScheduleUpdateArtifactTemplate.Output> {
+    return this.callTool('update_artifact_template', input) as Promise<ScheduleUpdateArtifactTemplate.Output>
+  }
+
+  async archiveArtifactTemplate(input: ScheduleArchiveArtifactTemplate.Input): Promise<ScheduleArchiveArtifactTemplate.Output> {
+    return this.callTool('archive_artifact_template', input) as Promise<ScheduleArchiveArtifactTemplate.Output>
+  }
+
+  async listScheduledRuns(input: ScheduleListScheduledRuns.Input = {} as ScheduleListScheduledRuns.Input): Promise<ScheduleListScheduledRuns.Output> {
+    return this.callTool('list_scheduled_runs', input) as Promise<ScheduleListScheduledRuns.Output>
+  }
+
+  async getScheduledRun(input: ScheduleGetScheduledRun.Input): Promise<ScheduleGetScheduledRun.Output> {
+    return this.callTool('get_scheduled_run', input) as Promise<ScheduleGetScheduledRun.Output>
+  }
+
+  async markScheduledRunOpened(input: ScheduleMarkScheduledRunOpened.Input): Promise<ScheduleMarkScheduledRunOpened.Output> {
+    return this.callTool('mark_scheduled_run_opened', input) as Promise<ScheduleMarkScheduledRunOpened.Output>
+  }
+
+  async markScheduledRunUnopened(input: ScheduleMarkScheduledRunUnopened.Input): Promise<ScheduleMarkScheduledRunUnopened.Output> {
+    return this.callTool('mark_scheduled_run_unopened', input) as Promise<ScheduleMarkScheduledRunUnopened.Output>
+  }
+
+  async archiveScheduledRun(input: ScheduleArchiveScheduledRun.Input): Promise<ScheduleArchiveScheduledRun.Output> {
+    return this.callTool('archive_scheduled_run', input) as Promise<ScheduleArchiveScheduledRun.Output>
+  }
+
+  async createScheduledRunViewLink(input: ScheduleCreateScheduledRunViewLink.Input): Promise<ScheduleCreateScheduledRunViewLink.Output> {
+    return this.callTool('create_scheduled_run_view_link', input) as Promise<ScheduleCreateScheduledRunViewLink.Output>
+  }
+
+  async revokeScheduledRunViewLink(input: ScheduleRevokeScheduledRunViewLink.Input): Promise<ScheduleRevokeScheduledRunViewLink.Output> {
+    return this.callTool('revoke_scheduled_run_view_link', input) as Promise<ScheduleRevokeScheduledRunViewLink.Output>
+  }
+
+  async createScheduledAction(input: ScheduleCreateScheduledAction.Input): Promise<ScheduleCreateScheduledAction.Output> {
+    return this.callTool('create-scheduled-action', input) as Promise<ScheduleCreateScheduledAction.Output>
+  }
+
+  async updateScheduledAction(input: ScheduleUpdateScheduledAction.Input): Promise<ScheduleUpdateScheduledAction.Output> {
+    return this.callTool('update-scheduled-action', input) as Promise<ScheduleUpdateScheduledAction.Output>
+  }
+
+  async deleteScheduledAction(input: ScheduleDeleteScheduledAction.Input): Promise<ScheduleDeleteScheduledAction.Output> {
+    return this.callTool('delete-scheduled-action', input) as Promise<ScheduleDeleteScheduledAction.Output>
+  }
+
+  async getScheduleLink(input: ScheduleGetScheduleLink.Input = {} as ScheduleGetScheduleLink.Input): Promise<ScheduleGetScheduleLink.Output> {
+    return this.callTool('get-schedule-link', input) as Promise<ScheduleGetScheduleLink.Output>
+  }
+
+  async getScheduleStatus(input: ScheduleGetScheduleStatus.Input = {} as ScheduleGetScheduleStatus.Input): Promise<ScheduleGetScheduleStatus.Output> {
+    return this.callTool('get-schedule-status', input) as Promise<ScheduleGetScheduleStatus.Output>
+  }
+
+  async listScheduledActions(input: ScheduleListScheduledActions.Input = {} as ScheduleListScheduledActions.Input): Promise<ScheduleListScheduledActions.Output> {
+    return this.callTool('list-scheduled-actions', input) as Promise<ScheduleListScheduledActions.Output>
+  }
+
+  async pauseScheduledAction(input: SchedulePauseScheduledAction.Input): Promise<SchedulePauseScheduledAction.Output> {
+    return this.callTool('pause-scheduled-action', input) as Promise<SchedulePauseScheduledAction.Output>
+  }
+
+  async proposeScheduledAction(input: ScheduleProposeScheduledAction.Input): Promise<ScheduleProposeScheduledAction.Output> {
+    return this.callTool('propose-scheduled-action', input) as Promise<ScheduleProposeScheduledAction.Output>
+  }
+
+  async resumeScheduledAction(input: ScheduleResumeScheduledAction.Input): Promise<ScheduleResumeScheduledAction.Output> {
+    return this.callTool('resume-scheduled-action', input) as Promise<ScheduleResumeScheduledAction.Output>
+  }
+
+  async revokeScheduleLink(input: ScheduleRevokeScheduleLink.Input = {} as ScheduleRevokeScheduleLink.Input): Promise<ScheduleRevokeScheduleLink.Output> {
+    return this.callTool('revoke-schedule-link', input) as Promise<ScheduleRevokeScheduleLink.Output>
+  }
+
+  async setScheduleDefaults(input: ScheduleSetScheduleDefaults.Input): Promise<ScheduleSetScheduleDefaults.Output> {
+    return this.callTool('set-schedule-defaults', input) as Promise<ScheduleSetScheduleDefaults.Output>
+  }
+
+  async setScheduleEntitlement(input: ScheduleSetScheduleEntitlement.Input): Promise<ScheduleSetScheduleEntitlement.Output> {
+    return this.callTool('set-schedule-entitlement', input) as Promise<ScheduleSetScheduleEntitlement.Output>
   }
 }
 
@@ -1781,106 +1897,6 @@ export class RecallNamespace {
   }
 }
 
-export class ScheduleNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async createScheduledAction(input: ScheduleCreateScheduledAction.Input): Promise<ScheduleCreateScheduledAction.Output> {
-    return this.callTool('create-scheduled-action', input) as Promise<ScheduleCreateScheduledAction.Output>
-  }
-
-  async deleteScheduledAction(input: ScheduleDeleteScheduledAction.Input): Promise<ScheduleDeleteScheduledAction.Output> {
-    return this.callTool('delete-scheduled-action', input) as Promise<ScheduleDeleteScheduledAction.Output>
-  }
-
-  async getScheduleLink(input: ScheduleGetScheduleLink.Input = {} as ScheduleGetScheduleLink.Input): Promise<ScheduleGetScheduleLink.Output> {
-    return this.callTool('get-schedule-link', input) as Promise<ScheduleGetScheduleLink.Output>
-  }
-
-  async getScheduleStatus(input: ScheduleGetScheduleStatus.Input = {} as ScheduleGetScheduleStatus.Input): Promise<ScheduleGetScheduleStatus.Output> {
-    return this.callTool('get-schedule-status', input) as Promise<ScheduleGetScheduleStatus.Output>
-  }
-
-  async listScheduledActions(input: ScheduleListScheduledActions.Input = {} as ScheduleListScheduledActions.Input): Promise<ScheduleListScheduledActions.Output> {
-    return this.callTool('list-scheduled-actions', input) as Promise<ScheduleListScheduledActions.Output>
-  }
-
-  async pauseScheduledAction(input: SchedulePauseScheduledAction.Input): Promise<SchedulePauseScheduledAction.Output> {
-    return this.callTool('pause-scheduled-action', input) as Promise<SchedulePauseScheduledAction.Output>
-  }
-
-  async proposeScheduledAction(input: ScheduleProposeScheduledAction.Input): Promise<ScheduleProposeScheduledAction.Output> {
-    return this.callTool('propose-scheduled-action', input) as Promise<ScheduleProposeScheduledAction.Output>
-  }
-
-  async resumeScheduledAction(input: ScheduleResumeScheduledAction.Input): Promise<ScheduleResumeScheduledAction.Output> {
-    return this.callTool('resume-scheduled-action', input) as Promise<ScheduleResumeScheduledAction.Output>
-  }
-
-  async revokeScheduleLink(input: ScheduleRevokeScheduleLink.Input = {} as ScheduleRevokeScheduleLink.Input): Promise<ScheduleRevokeScheduleLink.Output> {
-    return this.callTool('revoke-schedule-link', input) as Promise<ScheduleRevokeScheduleLink.Output>
-  }
-
-  async setScheduleDefaults(input: ScheduleSetScheduleDefaults.Input): Promise<ScheduleSetScheduleDefaults.Output> {
-    return this.callTool('set-schedule-defaults', input) as Promise<ScheduleSetScheduleDefaults.Output>
-  }
-
-  async setScheduleEntitlement(input: ScheduleSetScheduleEntitlement.Input): Promise<ScheduleSetScheduleEntitlement.Output> {
-    return this.callTool('set-schedule-entitlement', input) as Promise<ScheduleSetScheduleEntitlement.Output>
-  }
-
-  async updateScheduledAction(input: ScheduleUpdateScheduledAction.Input): Promise<ScheduleUpdateScheduledAction.Output> {
-    return this.callTool('update-scheduled-action', input) as Promise<ScheduleUpdateScheduledAction.Output>
-  }
-
-  async listArtifactTemplates(input: ScheduleListArtifactTemplates.Input = {} as ScheduleListArtifactTemplates.Input): Promise<ScheduleListArtifactTemplates.Output> {
-    return this.callTool('list_artifact_templates', input) as Promise<ScheduleListArtifactTemplates.Output>
-  }
-
-  async getArtifactTemplate(input: ScheduleGetArtifactTemplate.Input): Promise<ScheduleGetArtifactTemplate.Output> {
-    return this.callTool('get_artifact_template', input) as Promise<ScheduleGetArtifactTemplate.Output>
-  }
-
-  async createArtifactTemplate(input: ScheduleCreateArtifactTemplate.Input): Promise<ScheduleCreateArtifactTemplate.Output> {
-    return this.callTool('create_artifact_template', input) as Promise<ScheduleCreateArtifactTemplate.Output>
-  }
-
-  async updateArtifactTemplate(input: ScheduleUpdateArtifactTemplate.Input): Promise<ScheduleUpdateArtifactTemplate.Output> {
-    return this.callTool('update_artifact_template', input) as Promise<ScheduleUpdateArtifactTemplate.Output>
-  }
-
-  async archiveArtifactTemplate(input: ScheduleArchiveArtifactTemplate.Input): Promise<ScheduleArchiveArtifactTemplate.Output> {
-    return this.callTool('archive_artifact_template', input) as Promise<ScheduleArchiveArtifactTemplate.Output>
-  }
-
-  async listScheduledRuns(input: ScheduleListScheduledRuns.Input = {} as ScheduleListScheduledRuns.Input): Promise<ScheduleListScheduledRuns.Output> {
-    return this.callTool('list_scheduled_runs', input) as Promise<ScheduleListScheduledRuns.Output>
-  }
-
-  async getScheduledRun(input: ScheduleGetScheduledRun.Input): Promise<ScheduleGetScheduledRun.Output> {
-    return this.callTool('get_scheduled_run', input) as Promise<ScheduleGetScheduledRun.Output>
-  }
-
-  async markScheduledRunOpened(input: ScheduleMarkScheduledRunOpened.Input): Promise<ScheduleMarkScheduledRunOpened.Output> {
-    return this.callTool('mark_scheduled_run_opened', input) as Promise<ScheduleMarkScheduledRunOpened.Output>
-  }
-
-  async markScheduledRunUnopened(input: ScheduleMarkScheduledRunUnopened.Input): Promise<ScheduleMarkScheduledRunUnopened.Output> {
-    return this.callTool('mark_scheduled_run_unopened', input) as Promise<ScheduleMarkScheduledRunUnopened.Output>
-  }
-
-  async archiveScheduledRun(input: ScheduleArchiveScheduledRun.Input): Promise<ScheduleArchiveScheduledRun.Output> {
-    return this.callTool('archive_scheduled_run', input) as Promise<ScheduleArchiveScheduledRun.Output>
-  }
-
-  async createScheduledRunViewLink(input: ScheduleCreateScheduledRunViewLink.Input): Promise<ScheduleCreateScheduledRunViewLink.Output> {
-    return this.callTool('create_scheduled_run_view_link', input) as Promise<ScheduleCreateScheduledRunViewLink.Output>
-  }
-
-  async revokeScheduledRunViewLink(input: ScheduleRevokeScheduledRunViewLink.Input): Promise<ScheduleRevokeScheduledRunViewLink.Output> {
-    return this.callTool('revoke_scheduled_run_view_link', input) as Promise<ScheduleRevokeScheduledRunViewLink.Output>
-  }
-}
-
 export class StorageNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -1932,16 +1948,16 @@ export class TagsNamespace {
     return this.callTool('list-memory-tags', input) as Promise<TagsListMemoryTags.Output>
   }
 
+  async mergeMemoryTags(input: TagsMergeMemoryTags.Input): Promise<TagsMergeMemoryTags.Output> {
+    return this.callTool('merge-memory-tags', input) as Promise<TagsMergeMemoryTags.Output>
+  }
+
   async resolveMemoryTags(input: TagsResolveMemoryTags.Input): Promise<TagsResolveMemoryTags.Output> {
     return this.callTool('resolve-memory-tags', input) as Promise<TagsResolveMemoryTags.Output>
   }
 
   async upsertMemoryTag(input: TagsUpsertMemoryTag.Input): Promise<TagsUpsertMemoryTag.Output> {
     return this.callTool('upsert-memory-tag', input) as Promise<TagsUpsertMemoryTag.Output>
-  }
-
-  async mergeMemoryTags(input: TagsMergeMemoryTags.Input): Promise<TagsMergeMemoryTags.Output> {
-    return this.callTool('merge-memory-tags', input) as Promise<TagsMergeMemoryTags.Output>
   }
 }
 
@@ -1997,22 +2013,6 @@ export class WebhooksNamespace {
   }
 }
 
-export class EditorialNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async createReadingRoom(input: EditorialCreateReadingRoom.Input): Promise<EditorialCreateReadingRoom.Output> {
-    return this.callTool('create_editorial_reading_room', input) as Promise<EditorialCreateReadingRoom.Output>
-  }
-
-  async readingRoomGuide(input: EditorialReadingRoomGuide.Input = {} as EditorialReadingRoomGuide.Input): Promise<EditorialReadingRoomGuide.Output> {
-    return this.callTool('editorial_reading_room_guide', input) as Promise<EditorialReadingRoomGuide.Output>
-  }
-
-  async renewReadingRoomDownload(input: EditorialRenewReadingRoomDownload.Input): Promise<EditorialRenewReadingRoomDownload.Output> {
-    return this.callTool('renew_editorial_reading_room_download', input) as Promise<EditorialRenewReadingRoomDownload.Output>
-  }
-}
-
 export class GeneratedMcpToolsClient {
   readonly search: SearchNamespace
   readonly web: WebNamespace
@@ -2026,11 +2026,13 @@ export class GeneratedMcpToolsClient {
   readonly reviews: ReviewsNamespace
   readonly directory: DirectoryNamespace
   readonly workflows: WorkflowsNamespace
+  readonly editorial: EditorialNamespace
   readonly artifacts: ArtifactsNamespace
   readonly billing: BillingNamespace
   readonly connections: ConnectionsNamespace
   readonly serpIntelligence: SerpIntelligenceNamespace
   readonly browser: BrowserNamespace
+  readonly schedule: ScheduleNamespace
   readonly access: AccessNamespace
   readonly capture: CaptureNamespace
   readonly channels: ChannelsNamespace
@@ -2039,13 +2041,11 @@ export class GeneratedMcpToolsClient {
   readonly library: LibraryNamespace
   readonly memory: MemoryNamespace
   readonly recall: RecallNamespace
-  readonly schedule: ScheduleNamespace
   readonly storage: StorageNamespace
   readonly tables: TablesNamespace
   readonly tags: TagsNamespace
   readonly vaults: VaultsNamespace
   readonly webhooks: WebhooksNamespace
-  readonly editorial: EditorialNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.search = new SearchNamespace(callTool)
@@ -2060,11 +2060,13 @@ export class GeneratedMcpToolsClient {
     this.reviews = new ReviewsNamespace(callTool)
     this.directory = new DirectoryNamespace(callTool)
     this.workflows = new WorkflowsNamespace(callTool)
+    this.editorial = new EditorialNamespace(callTool)
     this.artifacts = new ArtifactsNamespace(callTool)
     this.billing = new BillingNamespace(callTool)
     this.connections = new ConnectionsNamespace(callTool)
     this.serpIntelligence = new SerpIntelligenceNamespace(callTool)
     this.browser = new BrowserNamespace(callTool)
+    this.schedule = new ScheduleNamespace(callTool)
     this.access = new AccessNamespace(callTool)
     this.capture = new CaptureNamespace(callTool)
     this.channels = new ChannelsNamespace(callTool)
@@ -2073,12 +2075,10 @@ export class GeneratedMcpToolsClient {
     this.library = new LibraryNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
-    this.schedule = new ScheduleNamespace(callTool)
     this.storage = new StorageNamespace(callTool)
     this.tables = new TablesNamespace(callTool)
     this.tags = new TagsNamespace(callTool)
     this.vaults = new VaultsNamespace(callTool)
     this.webhooks = new WebhooksNamespace(callTool)
-    this.editorial = new EditorialNamespace(callTool)
   }
 }

@@ -19,8 +19,6 @@
     "validate-contracts": "node --import tsx scripts/validate-contracts.ts",
     "smoke-test": "node --import tsx scripts/smoke-test.ts",
     "generate:memory": "node --import tsx scripts/generate-memory-client.ts && python3 packages/memory-python/scripts/generate_models.py",
-    "apply:scheduled-results-contract": "node --import tsx scripts/apply-scheduled-results-contract.ts",
-    "check:scheduled-results-contract": "node --import tsx scripts/apply-scheduled-results-contract.ts --check",
     "update:memory-contract": "node --import tsx scripts/update-memory-manifest.ts",
     "update:mcp-contract": "node --import tsx scripts/update-mcp-manifest.ts",
     "generate:mcp": "node --import tsx scripts/generate-mcp-client.ts && python3 scripts/generate-mcp-python.py",

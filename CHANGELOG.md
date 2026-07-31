@@ -4,6 +4,8 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-07-30 — verified against mcp-scraper 0.42.0 / mcp-memory 1.15.0
+
 ### Added
 
 - Generated TypeScript, Python, CLI, and cURL bindings for the Scheduled Results Inbox and versioned artifact-template contracts: template list/get/create/version/archive, cross-automation run list/get/open/unopen/archive, and scoped run-artifact view-link create/revoke.
@@ -12,6 +14,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ### Changed
 
 - Expanded the direct hosted Memory contract to 102 tools and the unified MCP contract to 188 tools, with deterministic regeneration and parity checks for every public surface.
+- Prepared `mcpscraper-memory-sdk` 0.25.0, `mcpscraper-sdk` 0.24.0, `mcpscraper-cli` 0.23.0, and both Python packages 0.23.0.
 
 ## 2026-07-30 — verified against mcp-scraper 0.40.3
 

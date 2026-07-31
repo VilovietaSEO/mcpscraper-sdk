@@ -78,7 +78,7 @@ test('direct Memory client uses hosted tool names for result and template contra
     apiKey: 'mk_test',
     fetch: fakeFetch(body => {
       called.push(body.params.name)
-      if (body.params.name === 'listScheduledRunsTool') {
+      if (body.params.name === 'list_scheduled_runs') {
         return { ok: true, items: [], nextCursor: null }
       }
       return { ok: true, presets: [], templates: [] }
@@ -88,7 +88,7 @@ test('direct Memory client uses hosted tool names for result and template contra
   await client.schedule.listScheduledRuns({})
   await client.schedule.listArtifactTemplates({ status: 'all' })
 
-  assert.deepEqual(called, ['listScheduledRunsTool', 'listArtifactTemplatesTool'])
+  assert.deepEqual(called, ['list_scheduled_runs', 'list_artifact_templates'])
 })
 
 test('scheduled-action update sends one exact immutable artifact selection', async () => {

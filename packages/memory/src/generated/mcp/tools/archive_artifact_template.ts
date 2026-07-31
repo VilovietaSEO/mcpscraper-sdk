@@ -1,8 +1,5 @@
 export interface Input {
   templateId: string;
-  /**
-   * True to archive the template; false to restore it.
-   */
   archived: boolean;
 }
 

@@ -1,16 +1,4 @@
-export interface Input {
-  templateId: string;
-  name?: string;
-  description?: string;
-  config?: {
-    theme: "paper" | "ink" | "warm";
-    density: "comfortable" | "compact";
-    showSourceRail: boolean;
-    showGeneratedAt: boolean;
-    brandName?: string;
-  };
-  authoringInstructions?: string;
-}
+export interface Input {}
 
 export type Output = {
   [k: string]: unknown;

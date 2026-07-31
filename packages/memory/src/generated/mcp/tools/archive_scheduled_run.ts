@@ -1,8 +1,5 @@
 export interface Input {
   runId: string;
-  /**
-   * True to archive the result; false to restore it.
-   */
   archived: boolean;
 }
 

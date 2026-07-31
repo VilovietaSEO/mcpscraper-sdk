@@ -13,7 +13,7 @@ class UpdateScheduledActionInput(BaseModel):
     cadence: Literal["once", "daily", "weekly", "monthly"] | None = Field(None, alias="cadence", description="New cadence. Changing it recomputes the next run time fresh from now. Omit to keep the current one.")
     time_of_day: Any | None = Field(None, alias="timeOfDay", description="New 24-hour HH:MM clock time to run at, in the action's timezone. Pass null to clear it so the action runs at any time during the period. Omit to keep the current one.")
     timezone: str | None = Field(None, alias="timezone", description="New IANA timezone name, e.g. \"America/Denver\". Omit to keep the current one.")
-    artifact_selection: Any | None = Field(None, alias="artifactSelection", description="No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.")
+    artifact_selection: Any | None = Field(None, alias="artifactSelection", description="Rich report selection. Use {mode:\"none\"} for no rendered artifact, or pin one saved template with {mode:\"saved_template\",templateId,templateVersionId}. This does not disable Memory-note or vault output. Omit to keep the current binding.")
 
 
 class UpdateScheduledActionOutput(BaseModel):

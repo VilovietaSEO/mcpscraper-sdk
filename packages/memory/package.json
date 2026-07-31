@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-memory-sdk",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "description": "Official Node.js clients for all 188 mcpscraper.dev MCP tools and the direct 102-tool memory API",
   "license": "MIT",
   "type": "module",
