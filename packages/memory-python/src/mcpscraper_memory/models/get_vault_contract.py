@@ -7,7 +7,7 @@ class GetVaultContractInput(BaseModel):
 
     api_key: str | None = Field(None, alias="apiKey", description="")
     session_id: str | None = Field(None, alias="sessionId", description="")
-    vault: str = Field(..., alias="vault", description="One governed vault: Ideas, Inspiration, Knowledge, Library, People, Communications, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, or Sprint.")
+    vault: str = Field(..., alias="vault", description="One governed vault: Ideas, Examples and Inspirations, Knowledge, Library, People, Organizations, Deals, Communication, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, or Skills. Former names Inspiration and Communications still resolve.")
 
 
 class GetVaultContractOutput(BaseModel):

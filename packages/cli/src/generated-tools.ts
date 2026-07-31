@@ -6643,7 +6643,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "create-scheduled-action",
     "category": "schedule",
     "title": "Create Scheduled Action",
-    "description": "Create a Credit-metered scheduled action for an active MCP Scraper Starter plan or higher, in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
+    "description": "Create a Credit-metered scheduled action for an active MCP Scraper Starter plan or higher, in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault. Artifact selection defaults to No artifact, which disables only rendered HTML and does not disable Memory-note writing; a saved template binding always pins one exact immutable version.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6689,6 +6689,50 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
           "description": "Calendar date (YYYY-MM-DD, in the given timezone) this action should first become eligible to run — its deployment/start date. For recurring cadences, the first occurrence lands on or after this date; every later occurrence still follows the normal cadence. For cadence \"once\", this (combined with timeOfDay if given) is exactly what day it fires. Omit to start immediately."
+        },
+        "artifactSelection": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "none",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "mode"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "saved_template",
+                  "type": "string"
+                },
+                "templateId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "templateVersionId": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "required": [
+                "mode",
+                "templateId",
+                "templateVersionId"
+              ],
+              "additionalProperties": false
+            }
+          ],
+          "description": "No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.",
+          "default": {
+            "mode": "none"
+          }
         }
       },
       "required": [
@@ -8467,6 +8511,623 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "update-scheduled-action",
+    "category": "schedule",
+    "title": "Update Scheduled Action",
+    "description": "Edit an existing scheduled action in place — description, target vault, cadence, timeOfDay, and/or timezone — without changing its id, status, or run history. Changing cadence, timeOfDay, or timezone recomputes the next run time fresh from now, exactly like create-scheduled-action does. Requires write access to the new vault when changing it. System-managed scheduled actions cannot be edited. Artifact selection defaults to No artifact, which disables only rendered HTML and does not disable Memory-note writing; a saved template binding always pins one exact immutable version.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The scheduled action id, from create-scheduled-action or list-scheduled-actions."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "New free-text description of what this action should do each time it runs. Omit to keep the current one."
+        },
+        "vault": {
+          "type": "string",
+          "minLength": 1,
+          "description": "New vault this action writes its results into. You must already have write access to it. Omit to keep the current one."
+        },
+        "cadence": {
+          "type": "string",
+          "enum": [
+            "once",
+            "daily",
+            "weekly",
+            "monthly"
+          ],
+          "description": "New cadence. Changing it recomputes the next run time fresh from now. Omit to keep the current one."
+        },
+        "timeOfDay": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^([01]\\d|2[0-3]):([0-5]\\d)$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "New 24-hour HH:MM clock time to run at, in the action's timezone. Pass null to clear it so the action runs at any time during the period. Omit to keep the current one."
+        },
+        "timezone": {
+          "type": "string",
+          "description": "New IANA timezone name, e.g. \"America/Denver\". Omit to keep the current one."
+        },
+        "artifactSelection": {
+          "oneOf": [
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "none",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "mode"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "const": "saved_template",
+                  "type": "string"
+                },
+                "templateId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "templateVersionId": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "required": [
+                "mode",
+                "templateId",
+                "templateVersionId"
+              ],
+              "additionalProperties": false
+            }
+          ],
+          "description": "No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.",
+          "default": {
+            "mode": "none"
+          }
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Update Scheduled Action",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "list_artifact_templates",
+    "category": "schedule",
+    "title": "List Artifact Templates",
+    "description": "List approved built-in artifact presets and saved immutable template versions. A preset must be saved before an automation can select it.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "archived",
+            "all"
+          ],
+          "default": "active"
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "List Artifact Templates",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "get_artifact_template",
+    "category": "schedule",
+    "title": "Get Artifact Template",
+    "description": "Read one saved artifact template and its immutable version history.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "templateId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "templateId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Get Artifact Template",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "create_artifact_template",
+    "category": "schedule",
+    "title": "Save Artifact Template",
+    "description": "Save the approved Editorial Reading Room preset as a user-owned template version 1. Arbitrary HTML, JavaScript, and executable code are not accepted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "presetKey": {
+          "const": "editorial_reading_room_v1",
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500,
+          "default": ""
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "theme": {
+              "type": "string",
+              "enum": [
+                "paper",
+                "ink",
+                "warm"
+              ]
+            },
+            "density": {
+              "type": "string",
+              "enum": [
+                "comfortable",
+                "compact"
+              ]
+            },
+            "showSourceRail": {
+              "type": "boolean"
+            },
+            "showGeneratedAt": {
+              "type": "boolean"
+            },
+            "brandName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            }
+          },
+          "required": [
+            "theme",
+            "density",
+            "showSourceRail",
+            "showGeneratedAt"
+          ],
+          "additionalProperties": false
+        },
+        "authoringInstructions": {
+          "type": "string",
+          "maxLength": 4000
+        }
+      },
+      "required": [
+        "presetKey",
+        "name",
+        "config",
+        "authoringInstructions"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Save Artifact Template",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "update_artifact_template",
+    "category": "schedule",
+    "title": "Create Artifact Template Version",
+    "description": "Create the next immutable version of a saved artifact template. Existing automations remain pinned to their exact prior version until explicitly changed.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "templateId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "theme": {
+              "type": "string",
+              "enum": [
+                "paper",
+                "ink",
+                "warm"
+              ]
+            },
+            "density": {
+              "type": "string",
+              "enum": [
+                "comfortable",
+                "compact"
+              ]
+            },
+            "showSourceRail": {
+              "type": "boolean"
+            },
+            "showGeneratedAt": {
+              "type": "boolean"
+            },
+            "brandName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            }
+          },
+          "required": [
+            "theme",
+            "density",
+            "showSourceRail",
+            "showGeneratedAt"
+          ],
+          "additionalProperties": false
+        },
+        "authoringInstructions": {
+          "type": "string",
+          "maxLength": 4000
+        }
+      },
+      "required": [
+        "templateId"
+      ],
+      "additionalProperties": false,
+      "minProperties": 2,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Create Artifact Template Version",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "archive_artifact_template",
+    "category": "schedule",
+    "title": "Archive Artifact Template",
+    "description": "Archive or restore a caller-owned template identity without deleting immutable versions. Archived templates cannot be selected for a new or changed schedule binding.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "templateId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "archived": {
+          "type": "boolean",
+          "description": "True to archive the template; false to restore it."
+        }
+      },
+      "required": [
+        "templateId",
+        "archived"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Archive Artifact Template",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "list_scheduled_runs",
+    "category": "schedule",
+    "title": "List Scheduled Results",
+    "description": "List the scheduled-results inbox, all unarchived results, or archived results. Returns stable opaque run IDs and output pointers without storage-provider URLs.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "view": {
+          "type": "string",
+          "enum": [
+            "inbox",
+            "all",
+            "archived"
+          ],
+          "default": "inbox"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "running",
+            "succeeded",
+            "no_output",
+            "partial",
+            "billing_stopped",
+            "failed"
+          ]
+        },
+        "scheduleId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "templateId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "query": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "cursor": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 30
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "List Scheduled Results",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "get_scheduled_run",
+    "category": "schedule",
+    "title": "Get Scheduled Result",
+    "description": "Read complete metadata and durable output pointers for one opaque scheduled run ID.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "runId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Get Scheduled Result",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "mark_scheduled_run_opened",
+    "category": "schedule",
+    "title": "Mark Scheduled Result Opened",
+    "description": "Idempotently mark one owner-scoped scheduled result opened.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "runId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Mark Scheduled Result Opened",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "mark_scheduled_run_unopened",
+    "category": "schedule",
+    "title": "Mark Scheduled Result Unopened",
+    "description": "Idempotently return one owner-scoped scheduled result to the unopened inbox.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "runId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Mark Scheduled Result Unopened",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "archive_scheduled_run",
+    "category": "schedule",
+    "title": "Archive Scheduled Result",
+    "description": "Archive or restore one owner-scoped scheduled result without deleting its outputs.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "archived": {
+          "type": "boolean",
+          "description": "True to archive the result; false to restore it."
+        }
+      },
+      "required": [
+        "runId",
+        "archived"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Archive Scheduled Result",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "create_scheduled_run_view_link",
+    "category": "schedule",
+    "title": "Create Scheduled Result View Link",
+    "description": "Create a revocable, read-only bearer URL for exactly one artifact. The URL is returned once. It expires after 7 days by default and at most 30 days. Anyone holding it can view that artifact.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "artifactId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "expiresInDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30,
+          "default": 7
+        }
+      },
+      "required": [
+        "runId",
+        "artifactId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Create Scheduled Result View Link",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "revoke_scheduled_run_view_link",
+    "category": "schedule",
+    "title": "Revoke Scheduled Result View Link",
+    "description": "Immediately revoke one view link owned by the caller.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "shareId": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": [
+        "runId",
+        "shareId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Revoke Scheduled Result View Link",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
       "openWorldHint": false
     }
   }

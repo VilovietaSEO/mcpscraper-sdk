@@ -1,6 +1,7 @@
 import json
 import keyword
 import re
+import shutil
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -81,6 +82,7 @@ def main() -> None:
     manifest = json.loads(MANIFEST_PATH.read_text())
     tools = manifest["tools"]
 
+    shutil.rmtree(MODELS_DIR, ignore_errors=True)
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     (MODELS_DIR / "__init__.py").write_text("")
 

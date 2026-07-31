@@ -1,4 +1,4 @@
-# All 166 MCP tools with cURL
+# All 188 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (175)
+## Complete catalog (188)
 
 ## search
 
@@ -274,6 +274,19 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `revoke-schedule-link` — Revoke Schedule Link
 - `set-schedule-defaults` — Set Schedule Defaults
 - `set-schedule-entitlement` — Set Schedule Entitlement
+- `update-scheduled-action` — Update Scheduled Action
+- `list_artifact_templates` — List Artifact Templates
+- `get_artifact_template` — Get Artifact Template
+- `create_artifact_template` — Save Artifact Template
+- `update_artifact_template` — Create Artifact Template Version
+- `archive_artifact_template` — Archive Artifact Template
+- `list_scheduled_runs` — List Scheduled Results
+- `get_scheduled_run` — Get Scheduled Result
+- `mark_scheduled_run_opened` — Mark Scheduled Result Opened
+- `mark_scheduled_run_unopened` — Mark Scheduled Result Unopened
+- `archive_scheduled_run` — Archive Scheduled Result
+- `create_scheduled_run_view_link` — Create Scheduled Result View Link
+- `revoke_scheduled_run_view_link` — Revoke Scheduled Result View Link
 
 ## storage
 

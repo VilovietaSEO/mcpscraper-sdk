@@ -87,6 +87,16 @@ import * as GetScheduleLink from './tools/get-schedule-link.js'
 import * as RevokeScheduleLink from './tools/revoke-schedule-link.js'
 import * as UpdateScheduledAction from './tools/update-scheduled-action.js'
 import * as ListScheduledActionRuns from './tools/list-scheduled-action-runs.js'
+import * as ListArtifactTemplates from './tools/list_artifact_templates.js'
+import * as GetArtifactTemplate from './tools/get_artifact_template.js'
+import * as CreateArtifactTemplate from './tools/create_artifact_template.js'
+import * as UpdateArtifactTemplate from './tools/update_artifact_template.js'
+import * as ArchiveArtifactTemplate from './tools/archive_artifact_template.js'
+import * as ListScheduledRuns from './tools/list_scheduled_runs.js'
+import * as GetScheduledRun from './tools/get_scheduled_run.js'
+import * as MarkScheduledRunOpened from './tools/mark_scheduled_run_opened.js'
+import * as MarkScheduledRunUnopened from './tools/mark_scheduled_run_unopened.js'
+import * as ArchiveScheduledRun from './tools/archive_scheduled_run.js'
 import * as CreateWebhook from './tools/create-webhook.js'
 import * as ListWebhooks from './tools/list-webhooks.js'
 import * as RevokeWebhook from './tools/revoke-webhook.js'
@@ -490,6 +500,46 @@ export class ScheduleNamespace {
 
   async listScheduledActionRuns(input: ListScheduledActionRuns.Input): Promise<ListScheduledActionRuns.Output> {
     return this.callTool('listScheduledActionRunsTool', input) as Promise<ListScheduledActionRuns.Output>
+  }
+
+  async listArtifactTemplates(input: ListArtifactTemplates.Input): Promise<ListArtifactTemplates.Output> {
+    return this.callTool('listArtifactTemplatesTool', input) as Promise<ListArtifactTemplates.Output>
+  }
+
+  async getArtifactTemplate(input: GetArtifactTemplate.Input): Promise<GetArtifactTemplate.Output> {
+    return this.callTool('getArtifactTemplateTool', input) as Promise<GetArtifactTemplate.Output>
+  }
+
+  async createArtifactTemplate(input: CreateArtifactTemplate.Input): Promise<CreateArtifactTemplate.Output> {
+    return this.callTool('createArtifactTemplateTool', input) as Promise<CreateArtifactTemplate.Output>
+  }
+
+  async updateArtifactTemplate(input: UpdateArtifactTemplate.Input): Promise<UpdateArtifactTemplate.Output> {
+    return this.callTool('updateArtifactTemplateTool', input) as Promise<UpdateArtifactTemplate.Output>
+  }
+
+  async archiveArtifactTemplate(input: ArchiveArtifactTemplate.Input): Promise<ArchiveArtifactTemplate.Output> {
+    return this.callTool('archiveArtifactTemplateTool', input) as Promise<ArchiveArtifactTemplate.Output>
+  }
+
+  async listScheduledRuns(input: ListScheduledRuns.Input): Promise<ListScheduledRuns.Output> {
+    return this.callTool('listScheduledRunsTool', input) as Promise<ListScheduledRuns.Output>
+  }
+
+  async getScheduledRun(input: GetScheduledRun.Input): Promise<GetScheduledRun.Output> {
+    return this.callTool('getScheduledRunTool', input) as Promise<GetScheduledRun.Output>
+  }
+
+  async markScheduledRunOpened(input: MarkScheduledRunOpened.Input): Promise<MarkScheduledRunOpened.Output> {
+    return this.callTool('markScheduledRunOpenedTool', input) as Promise<MarkScheduledRunOpened.Output>
+  }
+
+  async markScheduledRunUnopened(input: MarkScheduledRunUnopened.Input): Promise<MarkScheduledRunUnopened.Output> {
+    return this.callTool('markScheduledRunUnopenedTool', input) as Promise<MarkScheduledRunUnopened.Output>
+  }
+
+  async archiveScheduledRun(input: ArchiveScheduledRun.Input): Promise<ArchiveScheduledRun.Output> {
+    return this.callTool('archiveScheduledRunTool', input) as Promise<ArchiveScheduledRun.Output>
   }
 }
 

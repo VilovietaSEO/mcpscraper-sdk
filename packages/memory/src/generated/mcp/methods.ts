@@ -148,6 +148,19 @@ import * as ScheduleResumeScheduledAction from './tools/resume-scheduled-action.
 import * as ScheduleRevokeScheduleLink from './tools/revoke-schedule-link.js'
 import * as ScheduleSetScheduleDefaults from './tools/set-schedule-defaults.js'
 import * as ScheduleSetScheduleEntitlement from './tools/set-schedule-entitlement.js'
+import * as ScheduleUpdateScheduledAction from './tools/update-scheduled-action.js'
+import * as ScheduleListArtifactTemplates from './tools/list_artifact_templates.js'
+import * as ScheduleGetArtifactTemplate from './tools/get_artifact_template.js'
+import * as ScheduleCreateArtifactTemplate from './tools/create_artifact_template.js'
+import * as ScheduleUpdateArtifactTemplate from './tools/update_artifact_template.js'
+import * as ScheduleArchiveArtifactTemplate from './tools/archive_artifact_template.js'
+import * as ScheduleListScheduledRuns from './tools/list_scheduled_runs.js'
+import * as ScheduleGetScheduledRun from './tools/get_scheduled_run.js'
+import * as ScheduleMarkScheduledRunOpened from './tools/mark_scheduled_run_opened.js'
+import * as ScheduleMarkScheduledRunUnopened from './tools/mark_scheduled_run_unopened.js'
+import * as ScheduleArchiveScheduledRun from './tools/archive_scheduled_run.js'
+import * as ScheduleCreateScheduledRunViewLink from './tools/create_scheduled_run_view_link.js'
+import * as ScheduleRevokeScheduledRunViewLink from './tools/revoke_scheduled_run_view_link.js'
 import * as StorageCostUsage from './tools/cost-usage.js'
 import * as StorageUsage from './tools/storage-usage.js'
 import * as TablesCreate from './tools/table-create.js'
@@ -1051,6 +1064,71 @@ export const MCP_TOOL_BINDINGS = [
     "name": "renew_editorial_reading_room_download",
     "category": "editorial",
     "methodName": "renewReadingRoomDownload"
+  },
+  {
+    "name": "update-scheduled-action",
+    "category": "schedule",
+    "methodName": "updateScheduledAction"
+  },
+  {
+    "name": "list_artifact_templates",
+    "category": "schedule",
+    "methodName": "listArtifactTemplates"
+  },
+  {
+    "name": "get_artifact_template",
+    "category": "schedule",
+    "methodName": "getArtifactTemplate"
+  },
+  {
+    "name": "create_artifact_template",
+    "category": "schedule",
+    "methodName": "createArtifactTemplate"
+  },
+  {
+    "name": "update_artifact_template",
+    "category": "schedule",
+    "methodName": "updateArtifactTemplate"
+  },
+  {
+    "name": "archive_artifact_template",
+    "category": "schedule",
+    "methodName": "archiveArtifactTemplate"
+  },
+  {
+    "name": "list_scheduled_runs",
+    "category": "schedule",
+    "methodName": "listScheduledRuns"
+  },
+  {
+    "name": "get_scheduled_run",
+    "category": "schedule",
+    "methodName": "getScheduledRun"
+  },
+  {
+    "name": "mark_scheduled_run_opened",
+    "category": "schedule",
+    "methodName": "markScheduledRunOpened"
+  },
+  {
+    "name": "mark_scheduled_run_unopened",
+    "category": "schedule",
+    "methodName": "markScheduledRunUnopened"
+  },
+  {
+    "name": "archive_scheduled_run",
+    "category": "schedule",
+    "methodName": "archiveScheduledRun"
+  },
+  {
+    "name": "create_scheduled_run_view_link",
+    "category": "schedule",
+    "methodName": "createScheduledRunViewLink"
+  },
+  {
+    "name": "revoke_scheduled_run_view_link",
+    "category": "schedule",
+    "methodName": "revokeScheduledRunViewLink"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1748,6 +1826,58 @@ export class ScheduleNamespace {
 
   async setScheduleEntitlement(input: ScheduleSetScheduleEntitlement.Input): Promise<ScheduleSetScheduleEntitlement.Output> {
     return this.callTool('set-schedule-entitlement', input) as Promise<ScheduleSetScheduleEntitlement.Output>
+  }
+
+  async updateScheduledAction(input: ScheduleUpdateScheduledAction.Input): Promise<ScheduleUpdateScheduledAction.Output> {
+    return this.callTool('update-scheduled-action', input) as Promise<ScheduleUpdateScheduledAction.Output>
+  }
+
+  async listArtifactTemplates(input: ScheduleListArtifactTemplates.Input = {} as ScheduleListArtifactTemplates.Input): Promise<ScheduleListArtifactTemplates.Output> {
+    return this.callTool('list_artifact_templates', input) as Promise<ScheduleListArtifactTemplates.Output>
+  }
+
+  async getArtifactTemplate(input: ScheduleGetArtifactTemplate.Input): Promise<ScheduleGetArtifactTemplate.Output> {
+    return this.callTool('get_artifact_template', input) as Promise<ScheduleGetArtifactTemplate.Output>
+  }
+
+  async createArtifactTemplate(input: ScheduleCreateArtifactTemplate.Input): Promise<ScheduleCreateArtifactTemplate.Output> {
+    return this.callTool('create_artifact_template', input) as Promise<ScheduleCreateArtifactTemplate.Output>
+  }
+
+  async updateArtifactTemplate(input: ScheduleUpdateArtifactTemplate.Input): Promise<ScheduleUpdateArtifactTemplate.Output> {
+    return this.callTool('update_artifact_template', input) as Promise<ScheduleUpdateArtifactTemplate.Output>
+  }
+
+  async archiveArtifactTemplate(input: ScheduleArchiveArtifactTemplate.Input): Promise<ScheduleArchiveArtifactTemplate.Output> {
+    return this.callTool('archive_artifact_template', input) as Promise<ScheduleArchiveArtifactTemplate.Output>
+  }
+
+  async listScheduledRuns(input: ScheduleListScheduledRuns.Input = {} as ScheduleListScheduledRuns.Input): Promise<ScheduleListScheduledRuns.Output> {
+    return this.callTool('list_scheduled_runs', input) as Promise<ScheduleListScheduledRuns.Output>
+  }
+
+  async getScheduledRun(input: ScheduleGetScheduledRun.Input): Promise<ScheduleGetScheduledRun.Output> {
+    return this.callTool('get_scheduled_run', input) as Promise<ScheduleGetScheduledRun.Output>
+  }
+
+  async markScheduledRunOpened(input: ScheduleMarkScheduledRunOpened.Input): Promise<ScheduleMarkScheduledRunOpened.Output> {
+    return this.callTool('mark_scheduled_run_opened', input) as Promise<ScheduleMarkScheduledRunOpened.Output>
+  }
+
+  async markScheduledRunUnopened(input: ScheduleMarkScheduledRunUnopened.Input): Promise<ScheduleMarkScheduledRunUnopened.Output> {
+    return this.callTool('mark_scheduled_run_unopened', input) as Promise<ScheduleMarkScheduledRunUnopened.Output>
+  }
+
+  async archiveScheduledRun(input: ScheduleArchiveScheduledRun.Input): Promise<ScheduleArchiveScheduledRun.Output> {
+    return this.callTool('archive_scheduled_run', input) as Promise<ScheduleArchiveScheduledRun.Output>
+  }
+
+  async createScheduledRunViewLink(input: ScheduleCreateScheduledRunViewLink.Input): Promise<ScheduleCreateScheduledRunViewLink.Output> {
+    return this.callTool('create_scheduled_run_view_link', input) as Promise<ScheduleCreateScheduledRunViewLink.Output>
+  }
+
+  async revokeScheduledRunViewLink(input: ScheduleRevokeScheduledRunViewLink.Input): Promise<ScheduleRevokeScheduledRunViewLink.Output> {
+    return this.callTool('revoke_scheduled_run_view_link', input) as Promise<ScheduleRevokeScheduledRunViewLink.Output>
   }
 }
 

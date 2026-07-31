@@ -31,6 +31,18 @@ export interface Input {
    * New IANA timezone name, e.g. "America/Denver". Omit to keep the current one.
    */
   timezone?: string;
+  /**
+   * No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.
+   */
+  artifactSelection?:
+    | {
+        mode: "none";
+      }
+    | {
+        mode: "saved_template";
+        templateId: string;
+        templateVersionId: string;
+      };
 }
 
 export interface Output {
@@ -53,6 +65,18 @@ export interface Output {
     nextRunAt: string;
     lastRunAt: string | null;
     lastRunStatus: string | null;
+    /**
+     * No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.
+     */
+    artifactSelection:
+      | {
+          mode: "none";
+        }
+      | {
+          mode: "saved_template";
+          templateId: string;
+          templateVersionId: string;
+        };
   };
   /**
    * When it will next run after this update.

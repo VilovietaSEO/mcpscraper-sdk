@@ -27,6 +27,18 @@ export interface Input {
    * Calendar date (YYYY-MM-DD, in the given timezone) this action should first become eligible to run — its deployment/start date. For recurring cadences, the first occurrence lands on or after this date; every later occurrence still follows the normal cadence. For cadence "once", this (combined with timeOfDay if given) is exactly what day it fires. Omit to start immediately.
    */
   deployDate?: string;
+  /**
+   * No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.
+   */
+  artifactSelection?:
+    | {
+        mode: "none";
+      }
+    | {
+        mode: "saved_template";
+        templateId: string;
+        templateVersionId: string;
+      };
 }
 
 export interface Output {
@@ -54,4 +66,16 @@ export interface Output {
    * Machine-readable denial code when creation is refused.
    */
   code?: string;
+  /**
+   * No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.
+   */
+  artifactSelection:
+    | {
+        mode: "none";
+      }
+    | {
+        mode: "saved_template";
+        templateId: string;
+        templateVersionId: string;
+      };
 }

@@ -14,6 +14,7 @@ class CreateScheduledActionInput(BaseModel):
     time_of_day: str | None = Field(None, alias="timeOfDay", description="24-hour HH:MM clock time to run at, in the given timezone. Optional — omit to run at any time during the period (matches prior default behavior).")
     timezone: str | None = Field(None, alias="timezone", description="IANA timezone name, e.g. \"America/Denver\". Only meaningful together with timeOfDay or deployDate. Omit to use the account's default timezone (set via set-schedule-defaults), falling back to UTC.")
     deploy_date: str | None = Field(None, alias="deployDate", description="Calendar date (YYYY-MM-DD, in the given timezone) this action should first become eligible to run — its deployment/start date. For recurring cadences, the first occurrence lands on or after this date; every later occurrence still follows the normal cadence. For cadence \"once\", this (combined with timeOfDay if given) is exactly what day it fires. Omit to start immediately.")
+    artifact_selection: Any | None = Field(None, alias="artifactSelection", description="No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.")
 
 
 class CreateScheduledActionOutput(BaseModel):
@@ -25,3 +26,4 @@ class CreateScheduledActionOutput(BaseModel):
     execution_mode: Literal["agent", "connection_sync"] | None = Field(None, alias="executionMode", description="The stored execution mode. Defaults to agent when omitted from the request.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")
     code: str | None = Field(None, alias="code", description="Machine-readable denial code when creation is refused.")
+    artifact_selection: Any = Field(..., alias="artifactSelection", description="No rendered artifact, or one exact immutable saved template version. This does not disable Memory-note output.")
