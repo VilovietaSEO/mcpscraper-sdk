@@ -71,7 +71,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
   ].join('\n'))
 
   return [
-    '# All 166 MCP tools with cURL',
+    `# All ${tools.length} MCP tools with cURL`,
     '',
     'This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.',
     '',

@@ -27,6 +27,18 @@ export interface Input {
    * Calendar date (YYYY-MM-DD, in the given timezone) this action should first become eligible to run — its deployment/start date. For recurring cadences, the first occurrence lands on or after this date; every later occurrence still follows the normal cadence. For cadence "once", this (combined with timeOfDay if given) is exactly what day it fires. Omit to start immediately.
    */
   deployDate?: string;
+  /**
+   * Presentation artifact selection. "none" means no HTML artifact; it does not disable writing the scheduled result to Memory. A saved_template selection pins one exact immutable template version.
+   */
+  artifactSelection?:
+    | {
+        mode: "none";
+      }
+    | {
+        mode: "saved_template";
+        templateId: string;
+        templateVersionId: string;
+      };
 }
 
 export interface Output {
@@ -46,6 +58,18 @@ export interface Output {
    * The stored execution mode. Defaults to agent when omitted from the request.
    */
   executionMode?: "agent" | "connection_sync";
+  /**
+   * The exact stored artifact selection.
+   */
+  artifactSelection?:
+    | {
+        mode: "none";
+      }
+    | {
+        mode: "saved_template";
+        templateId: string;
+        templateVersionId: string;
+      };
   /**
    * Human-readable failure reason when ok is false.
    */

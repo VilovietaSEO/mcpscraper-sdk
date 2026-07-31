@@ -27,6 +27,10 @@ export interface Output {
    */
   runs?: {
     /**
+     * Opaque stable run ID for durable result rows. Pass it unchanged to get_scheduled_run. Legacy receipt rows may not have one.
+     */
+    runId?: string;
+    /**
      * When this occurrence started executing (ISO timestamp).
      */
     ranAt: string;

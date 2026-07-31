@@ -18,6 +18,10 @@ export interface Output {
     vaultUsage: {
       [k: string]: number;
     };
+    /**
+     * True for reserved control tags such as delete-30. Filter these out of topical displays.
+     */
+    control: boolean;
   }[];
   error?: string;
 }

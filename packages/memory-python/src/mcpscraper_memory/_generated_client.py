@@ -19,7 +19,13 @@ from .models.access_swap_vault import AccessSwapVaultInput, AccessSwapVaultOutpu
 from .models.access_switch_account import AccessSwitchAccountInput, AccessSwitchAccountOutput
 from .models.access_unlink_share import AccessUnlinkShareInput, AccessUnlinkShareOutput
 from .models.add_vault import AddVaultInput, AddVaultOutput
+from .models.answer_inbox_item import AnswerInboxItemInput, AnswerInboxItemOutput
+from .models.archive_artifact_template import ArchiveArtifactTemplateInput, ArchiveArtifactTemplateOutput
+from .models.archive_scheduled_run import ArchiveScheduledRunInput, ArchiveScheduledRunOutput
+from .models.auto_optimization import AutoOptimizationInput, AutoOptimizationOutput
+from .models.bulk_delete_notes import BulkDeleteNotesInput, BulkDeleteNotesOutput
 from .models.cost_usage import CostUsageInput, CostUsageOutput
+from .models.create_artifact_template import CreateArtifactTemplateInput, CreateArtifactTemplateOutput
 from .models.create_channel import CreateChannelInput, CreateChannelOutput
 from .models.create_scheduled_action import CreateScheduledActionInput, CreateScheduledActionOutput
 from .models.create_secure_vault import CreateSecureVaultInput, CreateSecureVaultOutput
@@ -28,19 +34,27 @@ from .models.delete_note import DeleteNoteInput, DeleteNoteOutput
 from .models.delete_scheduled_action import DeleteScheduledActionInput, DeleteScheduledActionOutput
 from .models.delete_vault import DeleteVaultInput, DeleteVaultOutput
 from .models.fact_history import FactHistoryInput, FactHistoryOutput
+from .models.get_artifact_template import GetArtifactTemplateInput, GetArtifactTemplateOutput
 from .models.get_chat_link import GetChatLinkInput, GetChatLinkOutput
 from .models.get_message_note import GetMessageNoteInput, GetMessageNoteOutput
 from .models.get_schedule_link import GetScheduleLinkInput, GetScheduleLinkOutput
 from .models.get_schedule_status import GetScheduleStatusInput, GetScheduleStatusOutput
+from .models.get_scheduled_run import GetScheduledRunInput, GetScheduledRunOutput
+from .models.get_vault_app_link import GetVaultAppLinkInput, GetVaultAppLinkOutput
 from .models.get_vault_contract import GetVaultContractInput, GetVaultContractOutput
 from .models.library_ingest import LibraryIngestInput, LibraryIngestOutput
+from .models.list_artifact_templates import ListArtifactTemplatesInput, ListArtifactTemplatesOutput
 from .models.list_channel_members import ListChannelMembersInput, ListChannelMembersOutput
 from .models.list_channel_messages import ListChannelMessagesInput, ListChannelMessagesOutput
 from .models.list_memory_tags import ListMemoryTagsInput, ListMemoryTagsOutput
+from .models.list_scheduled_action_runs import ListScheduledActionRunsInput, ListScheduledActionRunsOutput
 from .models.list_scheduled_actions import ListScheduledActionsInput, ListScheduledActionsOutput
+from .models.list_scheduled_runs import ListScheduledRunsInput, ListScheduledRunsOutput
 from .models.list_shared_with_me import ListSharedWithMeInput, ListSharedWithMeOutput
 from .models.list_vaults import ListVaultsInput, ListVaultsOutput
 from .models.list_webhooks import ListWebhooksInput, ListWebhooksOutput
+from .models.mark_scheduled_run_opened import MarkScheduledRunOpenedInput, MarkScheduledRunOpenedOutput
+from .models.mark_scheduled_run_unopened import MarkScheduledRunUnopenedInput, MarkScheduledRunUnopenedOutput
 from .models.memory_backlinks import MemoryBacklinksInput, MemoryBacklinksOutput
 from .models.memory_capture import MemoryCaptureInput, MemoryCaptureOutput
 from .models.memory_export import MemoryExportInput, MemoryExportOutput
@@ -53,6 +67,7 @@ from .models.memory_questions import MemoryQuestionsInput, MemoryQuestionsOutput
 from .models.memory_search import MemorySearchInput, MemorySearchOutput
 from .models.memory_suggest import MemorySuggestInput, MemorySuggestOutput
 from .models.memory_upload import MemoryUploadInput, MemoryUploadOutput
+from .models.merge_memory_tags import MergeMemoryTagsInput, MergeMemoryTagsOutput
 from .models.my_mentions import MyMentionsInput, MyMentionsOutput
 from .models.pause_scheduled_action import PauseScheduledActionInput, PauseScheduledActionOutput
 from .models.poll_channel import PollChannelInput, PollChannelOutput
@@ -68,9 +83,11 @@ from .models.resolve_memory_tags import ResolveMemoryTagsInput, ResolveMemoryTag
 from .models.resume_scheduled_action import ResumeScheduledActionInput, ResumeScheduledActionOutput
 from .models.revoke_chat_link import RevokeChatLinkInput, RevokeChatLinkOutput
 from .models.revoke_schedule_link import RevokeScheduleLinkInput, RevokeScheduleLinkOutput
+from .models.revoke_vault_app_link import RevokeVaultAppLinkInput, RevokeVaultAppLinkOutput
 from .models.revoke_webhook import RevokeWebhookInput, RevokeWebhookOutput
 from .models.route_memory import RouteMemoryInput, RouteMemoryOutput
 from .models.set_agent_identity import SetAgentIdentityInput, SetAgentIdentityOutput
+from .models.set_schedule_defaults import SetScheduleDefaultsInput, SetScheduleDefaultsOutput
 from .models.set_schedule_entitlement import SetScheduleEntitlementInput, SetScheduleEntitlementOutput
 from .models.storage_usage import StorageUsageInput, StorageUsageOutput
 from .models.table_create import TableCreateInput, TableCreateOutput
@@ -81,6 +98,8 @@ from .models.table_insert_rows import TableInsertRowsInput, TableInsertRowsOutpu
 from .models.table_list import TableListInput, TableListOutput
 from .models.table_query import TableQueryInput, TableQueryOutput
 from .models.temporal_recall import TemporalRecallInput, TemporalRecallOutput
+from .models.update_artifact_template import UpdateArtifactTemplateInput, UpdateArtifactTemplateOutput
+from .models.update_scheduled_action import UpdateScheduledActionInput, UpdateScheduledActionOutput
 from .models.upsert_memory_tag import UpsertMemoryTagInput, UpsertMemoryTagOutput
 from .models.validate_memory_write import ValidateMemoryWriteInput, ValidateMemoryWriteOutput
 from .models.video_analyze_start import VideoAnalyzeStartInput, VideoAnalyzeStartOutput
@@ -190,6 +209,16 @@ class AccessNamespace:
         payload = RevokeChatLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("revokeChatLinkTool", payload)
         return RevokeChatLinkOutput.model_validate(result)
+
+    def get_vault_app_link(self, **kwargs: Any) -> GetVaultAppLinkOutput:
+        payload = GetVaultAppLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("getVaultAppLinkTool", payload)
+        return GetVaultAppLinkOutput.model_validate(result)
+
+    def revoke_vault_app_link(self, **kwargs: Any) -> RevokeVaultAppLinkOutput:
+        payload = RevokeVaultAppLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("revokeVaultAppLinkTool", payload)
+        return RevokeVaultAppLinkOutput.model_validate(result)
 
     def set_agent_identity(self, **kwargs: Any) -> SetAgentIdentityOutput:
         payload = SetAgentIdentityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -366,6 +395,11 @@ class MemoryNamespace:
         result = self._call_tool("deleteNoteTool", payload)
         return DeleteNoteOutput.model_validate(result)
 
+    def bulk_delete_notes(self, **kwargs: Any) -> BulkDeleteNotesOutput:
+        payload = BulkDeleteNotesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("bulkDeleteNotesTool", payload)
+        return BulkDeleteNotesOutput.model_validate(result)
+
 
 class RecallNamespace:
     def __init__(self, call_tool):
@@ -380,6 +414,16 @@ class RecallNamespace:
 class ScheduleNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
+
+    def answer_inbox_item(self, **kwargs: Any) -> AnswerInboxItemOutput:
+        payload = AnswerInboxItemInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("answerInboxItemTool", payload)
+        return AnswerInboxItemOutput.model_validate(result)
+
+    def auto_optimization(self, **kwargs: Any) -> AutoOptimizationOutput:
+        payload = AutoOptimizationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("autoOptimizationTool", payload)
+        return AutoOptimizationOutput.model_validate(result)
 
     def create_scheduled_action(self, **kwargs: Any) -> CreateScheduledActionOutput:
         payload = CreateScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -416,6 +460,11 @@ class ScheduleNamespace:
         result = self._call_tool("getScheduleStatusTool", payload)
         return GetScheduleStatusOutput.model_validate(result)
 
+    def set_schedule_defaults(self, **kwargs: Any) -> SetScheduleDefaultsOutput:
+        payload = SetScheduleDefaultsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("setScheduleDefaultsTool", payload)
+        return SetScheduleDefaultsOutput.model_validate(result)
+
     def propose_scheduled_action(self, **kwargs: Any) -> ProposeScheduledActionOutput:
         payload = ProposeScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("proposeScheduledActionTool", payload)
@@ -430,6 +479,66 @@ class ScheduleNamespace:
         payload = RevokeScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("revokeScheduleLinkTool", payload)
         return RevokeScheduleLinkOutput.model_validate(result)
+
+    def list_artifact_templates(self, **kwargs: Any) -> ListArtifactTemplatesOutput:
+        payload = ListArtifactTemplatesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list_artifact_templates", payload)
+        return ListArtifactTemplatesOutput.model_validate(result)
+
+    def get_artifact_template(self, **kwargs: Any) -> GetArtifactTemplateOutput:
+        payload = GetArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get_artifact_template", payload)
+        return GetArtifactTemplateOutput.model_validate(result)
+
+    def create_artifact_template(self, **kwargs: Any) -> CreateArtifactTemplateOutput:
+        payload = CreateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("create_artifact_template", payload)
+        return CreateArtifactTemplateOutput.model_validate(result)
+
+    def update_artifact_template(self, **kwargs: Any) -> UpdateArtifactTemplateOutput:
+        payload = UpdateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("update_artifact_template", payload)
+        return UpdateArtifactTemplateOutput.model_validate(result)
+
+    def archive_artifact_template(self, **kwargs: Any) -> ArchiveArtifactTemplateOutput:
+        payload = ArchiveArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("archive_artifact_template", payload)
+        return ArchiveArtifactTemplateOutput.model_validate(result)
+
+    def list_scheduled_runs(self, **kwargs: Any) -> ListScheduledRunsOutput:
+        payload = ListScheduledRunsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list_scheduled_runs", payload)
+        return ListScheduledRunsOutput.model_validate(result)
+
+    def get_scheduled_run(self, **kwargs: Any) -> GetScheduledRunOutput:
+        payload = GetScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get_scheduled_run", payload)
+        return GetScheduledRunOutput.model_validate(result)
+
+    def mark_scheduled_run_opened(self, **kwargs: Any) -> MarkScheduledRunOpenedOutput:
+        payload = MarkScheduledRunOpenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("mark_scheduled_run_opened", payload)
+        return MarkScheduledRunOpenedOutput.model_validate(result)
+
+    def mark_scheduled_run_unopened(self, **kwargs: Any) -> MarkScheduledRunUnopenedOutput:
+        payload = MarkScheduledRunUnopenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("mark_scheduled_run_unopened", payload)
+        return MarkScheduledRunUnopenedOutput.model_validate(result)
+
+    def archive_scheduled_run(self, **kwargs: Any) -> ArchiveScheduledRunOutput:
+        payload = ArchiveScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("archive_scheduled_run", payload)
+        return ArchiveScheduledRunOutput.model_validate(result)
+
+    def update_scheduled_action(self, **kwargs: Any) -> UpdateScheduledActionOutput:
+        payload = UpdateScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("updateScheduledActionTool", payload)
+        return UpdateScheduledActionOutput.model_validate(result)
+
+    def list_scheduled_action_runs(self, **kwargs: Any) -> ListScheduledActionRunsOutput:
+        payload = ListScheduledActionRunsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("listScheduledActionRunsTool", payload)
+        return ListScheduledActionRunsOutput.model_validate(result)
 
 
 class StorageNamespace:
@@ -500,6 +609,11 @@ class TagsNamespace:
         payload = ResolveMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("resolveTagsTool", payload)
         return ResolveMemoryTagsOutput.model_validate(result)
+
+    def merge_memory_tags(self, **kwargs: Any) -> MergeMemoryTagsOutput:
+        payload = MergeMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("mergeTagsTool", payload)
+        return MergeMemoryTagsOutput.model_validate(result)
 
     def upsert_memory_tag(self, **kwargs: Any) -> UpsertMemoryTagOutput:
         payload = UpsertMemoryTagInput(**kwargs).model_dump(by_alias=True, exclude_none=True)

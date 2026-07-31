@@ -4,7 +4,7 @@ export interface Input {
    */
   connectionId: string;
   /**
-   * Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, and Resend to resend_data. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
+   * Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
    */
   dataset?:
     | "auto"
@@ -12,6 +12,7 @@ export interface Input {
     | "calendar_events"
     | "zoom_recordings"
     | "zoom_transcripts"
+    | "slack_channel_messages"
     | "meta_ads_insights"
     | "search_console_performance"
     | "resend_data"
@@ -22,7 +23,19 @@ export interface Input {
     | "resend_broadcasts"
     | "resend_templates";
   /**
-   * Relative range ending at to (or now). Defaults to 7 when from is omitted. Do not pass together with from.
+   * Slack conversation ID to export. Required for a new slack_channel_messages export; preserved inside continuation on resume. The export never joins a channel.
+   */
+  channelId?: string;
+  /**
+   * For Slack exports, automatically fetch every threaded reply. Defaults to true.
+   */
+  includeThreads?: boolean;
+  /**
+   * For Slack exports only, read all accessible channel history instead of the default seven-day range. Do not combine with from, lastDays, or continuation.
+   */
+  allTime?: boolean;
+  /**
+   * Relative range ending at to (or now). Defaults to 7 when from is omitted. Do not pass together with from. Slack all-time exports use allTime instead.
    */
   lastDays?: number;
   /**
@@ -53,6 +66,7 @@ export interface Input {
       | "calendar_events"
       | "zoom_recordings"
       | "zoom_transcripts"
+      | "slack_channel_messages"
       | "meta_ads_insights"
       | "search_console_performance"
       | "resend_data"
@@ -62,6 +76,12 @@ export interface Input {
       | "resend_contacts"
       | "resend_broadcasts"
       | "resend_templates";
+    scope?: {
+      slack?: {
+        channelId: string;
+        includeThreads: boolean;
+      };
+    };
   };
   /**
    * Legacy resume input. When used, also pass the exact original from, to, and dataset. Prefer continuation.

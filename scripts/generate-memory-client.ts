@@ -1,5 +1,5 @@
 import { compile } from 'json-schema-to-typescript'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -63,6 +63,7 @@ async function compileSchema(schema: unknown, exportName: string, toolName: stri
 
 async function main(): Promise<void> {
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as Manifest
+  await rm(TOOLS_DIR, { recursive: true, force: true })
   await mkdir(TOOLS_DIR, { recursive: true })
 
   const byCategory = new Map<string, ToolEntry[]>()

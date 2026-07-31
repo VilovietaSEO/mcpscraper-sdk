@@ -40,7 +40,7 @@ Every non-2xx response raises a `ScraperApiError` with `.status`, `.code`, and t
 
 ## API surface
 
-`client.tools` is the generated 175-tool MCP surface — 85 MCP Scraper tools plus 90 mirrored Memory tools — with one typed snake_case method per tool:
+`client.tools` is the generated 188-tool MCP surface — 87 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool:
 
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 
@@ -57,6 +57,8 @@ client.tools.connections.export_connected_service_data(
     dataset="resend_data",
     last_days=7,
 )
+inbox = client.tools.schedule.list_scheduled_runs(view="inbox")
+templates = client.tools.schedule.list_artifact_templates(status="active")
 ```
 
 The connected-data export performs bounded Gmail, Calendar, Google Search Console, Zoom, Meta Marketing, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Use `search_console_performance` for bounded Search Analytics rows across every accessible property, and `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected Meta ad accounts. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renew_connected_data_download(artifact_id="artifact_123")`. Use `list_service_connections` for verified grants and per-tool permission blockers, then `describe_service_connection_tool` for the exact provider-native schema before calling through the generic connection bridges.
@@ -92,14 +94,14 @@ print(page["memory"])  # {"deposited": True, "vault": "competitors", "noteId": "
 
 ## Memory tools, using only this API key
 
-`client.memory_tools.call_tool(name, args)` dispatches to any of the 92 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
+`client.memory_tools.call_tool(name, args)` dispatches to any of the 102 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
 
 ```python
 hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing pages"})
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 175 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 188 unified MCP tools.
 
 ## Regenerating models
 

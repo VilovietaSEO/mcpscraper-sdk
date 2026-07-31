@@ -45,6 +45,31 @@ const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>
   listScheduledActionRunsTool: { category: 'schedule', legacyId: 'list-scheduled-action-runs' },
   getVaultAppLinkTool: { category: 'access', legacyId: 'get-vault-app-link' },
   revokeVaultAppLinkTool: { category: 'access', legacyId: 'revoke-vault-app-link' },
+  answerInboxItemTool: { category: 'schedule', legacyId: 'answer-inbox-item' },
+  autoOptimizationTool: { category: 'schedule', legacyId: 'auto-optimization' },
+  list_artifact_templates: { category: 'schedule', legacyId: 'list_artifact_templates' },
+  get_artifact_template: { category: 'schedule', legacyId: 'get_artifact_template' },
+  create_artifact_template: { category: 'schedule', legacyId: 'create_artifact_template' },
+  update_artifact_template: { category: 'schedule', legacyId: 'update_artifact_template' },
+  archive_artifact_template: { category: 'schedule', legacyId: 'archive_artifact_template' },
+  list_scheduled_runs: { category: 'schedule', legacyId: 'list_scheduled_runs' },
+  get_scheduled_run: { category: 'schedule', legacyId: 'get_scheduled_run' },
+  mark_scheduled_run_opened: { category: 'schedule', legacyId: 'mark_scheduled_run_opened' },
+  mark_scheduled_run_unopened: { category: 'schedule', legacyId: 'mark_scheduled_run_unopened' },
+  archive_scheduled_run: { category: 'schedule', legacyId: 'archive_scheduled_run' },
+}
+
+const PRE_RELEASE_NAME_ALIASES: Record<string, string> = {
+  list_artifact_templates: 'listArtifactTemplatesTool',
+  get_artifact_template: 'getArtifactTemplateTool',
+  create_artifact_template: 'createArtifactTemplateTool',
+  update_artifact_template: 'updateArtifactTemplateTool',
+  archive_artifact_template: 'archiveArtifactTemplateTool',
+  list_scheduled_runs: 'listScheduledRunsTool',
+  get_scheduled_run: 'getScheduledRunTool',
+  mark_scheduled_run_opened: 'markScheduledRunOpenedTool',
+  mark_scheduled_run_unopened: 'markScheduledRunUnopenedTool',
+  archive_scheduled_run: 'archiveScheduledRunTool',
 }
 
 async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {
@@ -71,7 +96,7 @@ async function main(): Promise<void> {
   const live = await fetchLiveTools(apiKey)
 
   const tools: ToolEntry[] = live.map(tool => {
-    const prior = existing.get(tool.name)
+    const prior = existing.get(tool.name) ?? existing.get(PRE_RELEASE_NAME_ALIASES[tool.name])
     const metadata = prior ?? NEW_TOOL_METADATA[tool.name]
     if (!metadata) throw new Error(`No SDK category/legacyId mapping for live tool ${tool.name}`)
     return {

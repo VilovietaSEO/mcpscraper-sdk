@@ -24,6 +24,18 @@ export interface Input {
    */
   executionMode?: "agent" | "connection_sync";
   /**
+   * HTML artifact behavior. "none" creates no HTML artifact but still permits Memory-note output. "saved_template" pins the exact saved template and immutable version IDs.
+   */
+  artifactSelection?:
+    | {
+        mode: "none";
+      }
+    | {
+        mode: "saved_template";
+        templateId: string;
+        templateVersionId: string;
+      };
+  /**
    * 24-hour HH:MM clock time to run at, in the given timezone. Optional — omit to run at any time during the period (matches prior default behavior).
    */
   timeOfDay?: string;
@@ -54,6 +66,18 @@ export interface Output {
    * The stored execution mode. Defaults to agent when omitted from the request.
    */
   executionMode?: "agent" | "connection_sync";
+  /**
+   * The exact stored artifact selection.
+   */
+  artifactSelection?:
+    | {
+        mode: "none";
+      }
+    | {
+        mode: "saved_template";
+        templateId: string;
+        templateVersionId: string;
+      };
   /**
    * Human-readable failure reason when ok is false.
    */

@@ -1,4 +1,4 @@
-# All 166 MCP tools with cURL
+# All 188 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (175)
+## Complete catalog (188)
 
 ## search
 
@@ -59,10 +59,10 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `extract_url` — Single URL Extract
 - `diff_page` — Page Change Check
 - `map_site_urls` — Site URL Map
+- `map_wayback_snapshots` — Wayback Snapshot Inventory
 - `extract_site` — Multi-Page Site Content Crawl
 - `audit_site` — Technical SEO Audit
 - `check_site_export` — Check Site Export
-- `map_wayback_snapshots` — Wayback Snapshot Inventory
 - `archive_read` — List or Read ZIP Archive
 
 ## youtube
@@ -127,6 +127,12 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `rank_tracker_workflow` — Rank Tracker Blueprint Builder
 - `query_fanout_workflow` — Capture AI Search Fan-Out
 
+## editorial
+
+- `editorial_reading_room_guide` — Editorial Reading Room Guide
+- `create_editorial_reading_room` — Create Editorial Reading Room
+- `renew_editorial_reading_room_download` — Renew Editorial Reading Room Download
+
 ## artifacts
 
 - `report_artifact_read` — Read Report Artifact
@@ -141,6 +147,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `test_service_connection` — Test Connected Service
 - `slack_send_message` — Send Slack Message
 - `gmail_send_message` — Send Gmail Message
+- `gmail_search_contacts` — Search Gmail Contacts
 - `google_calendar_create_event` — Create Calendar Event
 - `zoom_create_meeting` — Create Zoom Meeting
 - `read_service_connection` — Read Connected Service
@@ -152,7 +159,6 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `renew_connected_data_download` — Renew Connected Data Download
 - `call_service_connection_action` — Run Connected Service Action
 - `set_scheduled_action_connections` — Set Scheduled Action Connections
-- `gmail_search_contacts` — Search Gmail Contacts
 
 ## serpIntelligence
 
@@ -183,6 +189,33 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `browser_replay_annotate` — Annotate Replay MP4
 - `browser_close` — Close Browser Session
 - `browser_list_sessions` — List Browser Sessions
+
+## schedule
+
+- `list_artifact_templates` — List Artifact Templates
+- `get_artifact_template` — Get Artifact Template
+- `create_artifact_template` — Save Artifact Template
+- `update_artifact_template` — Create Artifact Template Version
+- `archive_artifact_template` — Archive Artifact Template
+- `list_scheduled_runs` — List Scheduled Results
+- `get_scheduled_run` — Get Scheduled Result
+- `mark_scheduled_run_opened` — Mark Scheduled Result Opened
+- `mark_scheduled_run_unopened` — Mark Scheduled Result Unopened
+- `archive_scheduled_run` — Archive Scheduled Result
+- `create_scheduled_run_view_link` — Create Scheduled Result View Link
+- `revoke_scheduled_run_view_link` — Revoke Scheduled Result View Link
+- `create-scheduled-action` — Create Scheduled Action
+- `update-scheduled-action` — Update Scheduled Action
+- `delete-scheduled-action` — Delete Scheduled Action
+- `get-schedule-link` — Get Schedule Link
+- `get-schedule-status` — Get Schedule Status
+- `list-scheduled-actions` — List Scheduled Actions
+- `pause-scheduled-action` — Pause Scheduled Action
+- `propose-scheduled-action` — Propose Scheduled Action
+- `resume-scheduled-action` — Resume Scheduled Action
+- `revoke-schedule-link` — Revoke Schedule Link
+- `set-schedule-defaults` — Set Schedule Defaults
+- `set-schedule-entitlement` — Set Schedule Entitlement
 
 ## access
 
@@ -261,20 +294,6 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 
 - `temporal-recall` — Temporal Memory Recall
 
-## schedule
-
-- `create-scheduled-action` — Create Scheduled Action
-- `delete-scheduled-action` — Delete Scheduled Action
-- `get-schedule-link` — Get Schedule Link
-- `get-schedule-status` — Get Schedule Status
-- `list-scheduled-actions` — List Scheduled Actions
-- `pause-scheduled-action` — Pause Scheduled Action
-- `propose-scheduled-action` — Propose Scheduled Action
-- `resume-scheduled-action` — Resume Scheduled Action
-- `revoke-schedule-link` — Revoke Schedule Link
-- `set-schedule-defaults` — Set Schedule Defaults
-- `set-schedule-entitlement` — Set Schedule Entitlement
-
 ## storage
 
 - `cost-usage` — Cost & Usage
@@ -293,9 +312,9 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 ## tags
 
 - `list-memory-tags` — List Memory Tags
+- `merge-memory-tags` — Merge Memory Tags
 - `resolve-memory-tags` — Resolve Memory Tags
 - `upsert-memory-tag` — Upsert Memory Tag
-- `merge-memory-tags` — Merge Memory Tags
 
 ## vaults
 
@@ -313,9 +332,3 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `create-webhook` — Create Webhook
 - `list-webhooks` — List Webhooks
 - `revoke-webhook` — Revoke Webhook
-
-## editorial
-
-- `create_editorial_reading_room` — Create Editorial Reading Room
-- `editorial_reading_room_guide` — Editorial Reading Room Guide
-- `renew_editorial_reading_room_download` — Renew Editorial Reading Room Download

@@ -67,13 +67,8 @@ import * as ListMemoryTags from './tools/list-memory-tags.js'
 import * as ResolveMemoryTags from './tools/resolve-memory-tags.js'
 import * as MergeMemoryTags from './tools/merge-memory-tags.js'
 import * as UpsertMemoryTag from './tools/upsert-memory-tag.js'
-import * as MemoryBacklinks from './tools/memory-backlinks.js'
-import * as MemoryGraphUniverse from './tools/memory-graph-universe.js'
-import * as MemoryGraphPath from './tools/memory-graph-path.js'
-import * as RecordFact from './tools/record-fact.js'
-import * as FactHistory from './tools/fact-history.js'
-import * as StorageUsage from './tools/storage-usage.js'
-import * as CostUsage from './tools/cost-usage.js'
+import * as AnswerInboxItem from './tools/answer-inbox-item.js'
+import * as AutoOptimization from './tools/auto-optimization.js'
 import * as CreateScheduledAction from './tools/create-scheduled-action.js'
 import * as ListScheduledActions from './tools/list-scheduled-actions.js'
 import * as PauseScheduledAction from './tools/pause-scheduled-action.js'
@@ -85,8 +80,25 @@ import * as SetScheduleDefaults from './tools/set-schedule-defaults.js'
 import * as ProposeScheduledAction from './tools/propose-scheduled-action.js'
 import * as GetScheduleLink from './tools/get-schedule-link.js'
 import * as RevokeScheduleLink from './tools/revoke-schedule-link.js'
+import * as ListArtifactTemplates from './tools/list_artifact_templates.js'
+import * as GetArtifactTemplate from './tools/get_artifact_template.js'
+import * as CreateArtifactTemplate from './tools/create_artifact_template.js'
+import * as UpdateArtifactTemplate from './tools/update_artifact_template.js'
+import * as ArchiveArtifactTemplate from './tools/archive_artifact_template.js'
+import * as ListScheduledRuns from './tools/list_scheduled_runs.js'
+import * as GetScheduledRun from './tools/get_scheduled_run.js'
+import * as MarkScheduledRunOpened from './tools/mark_scheduled_run_opened.js'
+import * as MarkScheduledRunUnopened from './tools/mark_scheduled_run_unopened.js'
+import * as ArchiveScheduledRun from './tools/archive_scheduled_run.js'
 import * as UpdateScheduledAction from './tools/update-scheduled-action.js'
 import * as ListScheduledActionRuns from './tools/list-scheduled-action-runs.js'
+import * as MemoryBacklinks from './tools/memory-backlinks.js'
+import * as MemoryGraphUniverse from './tools/memory-graph-universe.js'
+import * as MemoryGraphPath from './tools/memory-graph-path.js'
+import * as RecordFact from './tools/record-fact.js'
+import * as FactHistory from './tools/fact-history.js'
+import * as StorageUsage from './tools/storage-usage.js'
+import * as CostUsage from './tools/cost-usage.js'
 import * as CreateWebhook from './tools/create-webhook.js'
 import * as ListWebhooks from './tools/list-webhooks.js'
 import * as RevokeWebhook from './tools/revoke-webhook.js'
@@ -397,48 +409,16 @@ export class TagsNamespace {
   }
 }
 
-export class GraphNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async memoryBacklinks(input: MemoryBacklinks.Input): Promise<MemoryBacklinks.Output> {
-    return this.callTool('noteBacklinksTool', input) as Promise<MemoryBacklinks.Output>
-  }
-
-  async memoryGraphUniverse(input: MemoryGraphUniverse.Input): Promise<MemoryGraphUniverse.Output> {
-    return this.callTool('graphUniverseTool', input) as Promise<MemoryGraphUniverse.Output>
-  }
-
-  async memoryGraphPath(input: MemoryGraphPath.Input): Promise<MemoryGraphPath.Output> {
-    return this.callTool('graphPathTool', input) as Promise<MemoryGraphPath.Output>
-  }
-}
-
-export class FactsNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async recordFact(input: RecordFact.Input): Promise<RecordFact.Output> {
-    return this.callTool('recordFactTool', input) as Promise<RecordFact.Output>
-  }
-
-  async history(input: FactHistory.Input): Promise<FactHistory.Output> {
-    return this.callTool('factHistoryTool', input) as Promise<FactHistory.Output>
-  }
-}
-
-export class StorageNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async usage(input: StorageUsage.Input): Promise<StorageUsage.Output> {
-    return this.callTool('storageUsageTool', input) as Promise<StorageUsage.Output>
-  }
-
-  async costUsage(input: CostUsage.Input): Promise<CostUsage.Output> {
-    return this.callTool('costUsageTool', input) as Promise<CostUsage.Output>
-  }
-}
-
 export class ScheduleNamespace {
   constructor(private readonly callTool: CallToolFn) {}
+
+  async answerInboxItem(input: AnswerInboxItem.Input): Promise<AnswerInboxItem.Output> {
+    return this.callTool('answerInboxItemTool', input) as Promise<AnswerInboxItem.Output>
+  }
+
+  async autoOptimization(input: AutoOptimization.Input): Promise<AutoOptimization.Output> {
+    return this.callTool('autoOptimizationTool', input) as Promise<AutoOptimization.Output>
+  }
 
   async createScheduledAction(input: CreateScheduledAction.Input): Promise<CreateScheduledAction.Output> {
     return this.callTool('createScheduledActionTool', input) as Promise<CreateScheduledAction.Output>
@@ -484,12 +464,92 @@ export class ScheduleNamespace {
     return this.callTool('revokeScheduleLinkTool', input) as Promise<RevokeScheduleLink.Output>
   }
 
+  async listArtifactTemplates(input: ListArtifactTemplates.Input): Promise<ListArtifactTemplates.Output> {
+    return this.callTool('list_artifact_templates', input) as Promise<ListArtifactTemplates.Output>
+  }
+
+  async getArtifactTemplate(input: GetArtifactTemplate.Input): Promise<GetArtifactTemplate.Output> {
+    return this.callTool('get_artifact_template', input) as Promise<GetArtifactTemplate.Output>
+  }
+
+  async createArtifactTemplate(input: CreateArtifactTemplate.Input): Promise<CreateArtifactTemplate.Output> {
+    return this.callTool('create_artifact_template', input) as Promise<CreateArtifactTemplate.Output>
+  }
+
+  async updateArtifactTemplate(input: UpdateArtifactTemplate.Input): Promise<UpdateArtifactTemplate.Output> {
+    return this.callTool('update_artifact_template', input) as Promise<UpdateArtifactTemplate.Output>
+  }
+
+  async archiveArtifactTemplate(input: ArchiveArtifactTemplate.Input): Promise<ArchiveArtifactTemplate.Output> {
+    return this.callTool('archive_artifact_template', input) as Promise<ArchiveArtifactTemplate.Output>
+  }
+
+  async listScheduledRuns(input: ListScheduledRuns.Input): Promise<ListScheduledRuns.Output> {
+    return this.callTool('list_scheduled_runs', input) as Promise<ListScheduledRuns.Output>
+  }
+
+  async getScheduledRun(input: GetScheduledRun.Input): Promise<GetScheduledRun.Output> {
+    return this.callTool('get_scheduled_run', input) as Promise<GetScheduledRun.Output>
+  }
+
+  async markScheduledRunOpened(input: MarkScheduledRunOpened.Input): Promise<MarkScheduledRunOpened.Output> {
+    return this.callTool('mark_scheduled_run_opened', input) as Promise<MarkScheduledRunOpened.Output>
+  }
+
+  async markScheduledRunUnopened(input: MarkScheduledRunUnopened.Input): Promise<MarkScheduledRunUnopened.Output> {
+    return this.callTool('mark_scheduled_run_unopened', input) as Promise<MarkScheduledRunUnopened.Output>
+  }
+
+  async archiveScheduledRun(input: ArchiveScheduledRun.Input): Promise<ArchiveScheduledRun.Output> {
+    return this.callTool('archive_scheduled_run', input) as Promise<ArchiveScheduledRun.Output>
+  }
+
   async updateScheduledAction(input: UpdateScheduledAction.Input): Promise<UpdateScheduledAction.Output> {
     return this.callTool('updateScheduledActionTool', input) as Promise<UpdateScheduledAction.Output>
   }
 
   async listScheduledActionRuns(input: ListScheduledActionRuns.Input): Promise<ListScheduledActionRuns.Output> {
     return this.callTool('listScheduledActionRunsTool', input) as Promise<ListScheduledActionRuns.Output>
+  }
+}
+
+export class GraphNamespace {
+  constructor(private readonly callTool: CallToolFn) {}
+
+  async memoryBacklinks(input: MemoryBacklinks.Input): Promise<MemoryBacklinks.Output> {
+    return this.callTool('noteBacklinksTool', input) as Promise<MemoryBacklinks.Output>
+  }
+
+  async memoryGraphUniverse(input: MemoryGraphUniverse.Input): Promise<MemoryGraphUniverse.Output> {
+    return this.callTool('graphUniverseTool', input) as Promise<MemoryGraphUniverse.Output>
+  }
+
+  async memoryGraphPath(input: MemoryGraphPath.Input): Promise<MemoryGraphPath.Output> {
+    return this.callTool('graphPathTool', input) as Promise<MemoryGraphPath.Output>
+  }
+}
+
+export class FactsNamespace {
+  constructor(private readonly callTool: CallToolFn) {}
+
+  async recordFact(input: RecordFact.Input): Promise<RecordFact.Output> {
+    return this.callTool('recordFactTool', input) as Promise<RecordFact.Output>
+  }
+
+  async history(input: FactHistory.Input): Promise<FactHistory.Output> {
+    return this.callTool('factHistoryTool', input) as Promise<FactHistory.Output>
+  }
+}
+
+export class StorageNamespace {
+  constructor(private readonly callTool: CallToolFn) {}
+
+  async usage(input: StorageUsage.Input): Promise<StorageUsage.Output> {
+    return this.callTool('storageUsageTool', input) as Promise<StorageUsage.Output>
+  }
+
+  async costUsage(input: CostUsage.Input): Promise<CostUsage.Output> {
+    return this.callTool('costUsageTool', input) as Promise<CostUsage.Output>
   }
 }
 

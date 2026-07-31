@@ -7,7 +7,7 @@ class ListMemoryTagsInput(BaseModel):
 
     api_key: str | None = Field(None, alias="apiKey", description="")
     session_id: str | None = Field(None, alias="sessionId", description="")
-    include_deprecated: bool | None = Field(None, alias="includeDeprecated", description="")
+    include_deprecated: bool | None = Field(None, alias="includeDeprecated", description="Include deprecated tags as well as active tags. Defaults true so the AI sees the complete vocabulary; pass false only for an active-only display.")
 
 
 class ListMemoryTagsOutput(BaseModel):

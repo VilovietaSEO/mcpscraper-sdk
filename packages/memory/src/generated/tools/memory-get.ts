@@ -87,6 +87,10 @@ export interface Output {
        */
       pinned?: boolean;
       /**
+       * ISO-8601 deadline after which this note may be deleted. Set when a delete-N tag is applied; the tag alone is never the deadline.
+       */
+      delete_after?: string;
+      /**
        * Attribution kind: user, person, url, file, channel, thread, or note.
        */
       source_type?: string;

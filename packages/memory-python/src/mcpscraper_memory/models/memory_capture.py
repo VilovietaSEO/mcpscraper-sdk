@@ -14,7 +14,7 @@ class MemoryCaptureInput(BaseModel):
     content: str = Field(..., alias="content", description="")
     props: dict[str, Any] = Field(..., alias="props", description="")
     base_revision: float | None = Field(None, alias="baseRevision", description="")
-    tag_decisions: list[dict[str, Any]] | None = Field(None, alias="tagDecisions", description="Required justification for any tag that does not already exist. Existing exact/alias/near tags are canonicalized automatically; a new tag is accepted only when its matching decision has central=true and reusable=true.")
+    tag_decisions: list[dict[str, Any]] | None = Field(None, alias="tagDecisions", description="Required justification for any tag that does not already exist. Tags resolve against the account's existing vocabulary; new tags require a one-line description.")
 
 
 class MemoryCaptureOutput(BaseModel):
