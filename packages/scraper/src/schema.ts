@@ -15,8 +15,8 @@ export interface paths {
         put?: never;
         /**
          * Run a Google SERP search, or a full People-Also-Ask harvest
-         * @description Set `serpOnly: true` for a pure organic-results/SERP call (4 credits, headless —
-         *     14 credits if an anti-bot escalation forces a headful retry; overestimate refunded).
+         * @description Set `serpOnly: true` for a pure organic-results/SERP call (14 credits; runs headful so
+         *     Google serves a complete page).
          *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
          *     (55 credit base + 3 credits per question actually returned; unused estimate is
          *     refunded). Runs synchronously and returns the result inline.
@@ -617,7 +617,7 @@ export interface paths {
         /**
          * Structured SERP capture with AI Overview/AI Mode detection, entity IDs, and location-match evidence
          * @description Holds 14 credits for the SERP and settles to 4 credits when the capture is served
-         *     headless, or retains 14 credits when anti-bot escalation requires headful mode.
+         *     headless, or retains 14 credits when it runs headful.
          *     When `includePageSnapshots` is true, also holds 1 credit per requested
          *     `pageSnapshotLimit` slot and settles to 1 credit per URL actually attempted.
          *     Rate-limited to 60 requests/minute per account.

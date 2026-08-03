@@ -3519,7 +3519,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "capture_serp_snapshot",
     "category": "serpIntelligence",
     "title": "SERP Intelligence Snapshot",
-    "description": "Capture a structured SERP Intelligence snapshot of a Google query — the persistent evidence format used by rank-tracking and comparison pipelines. Use gl for country and location only when city or regional context matters. Costs 4 Credits when headless or 14 if anti-bot escalation requires headful mode; the 14-Credit hold is settled to the mode used. Optional page snapshots add 1 Credit per attempted URL.",
+    "description": "Capture a structured SERP Intelligence snapshot of a Google query — the persistent evidence format used by rank-tracking and comparison pipelines. Use gl for country and location only when city or regional context matters. Holds 14 Credits and settles to the render mode actually used: 4 Credits when the capture completed headless, 14 when it ran headful. Optional page snapshots add 1 Credit per attempted URL.",
     "inputSchema": {
       "type": "object",
       "properties": {
