@@ -3744,13 +3744,12 @@ export const MCP_TOOL_CATALOG = [
     "name": "validate-local-sourcebook-write",
     "category": "directory",
     "title": "Validate Local Sourcebook Write",
-    "description": "Validate a proposed new listing or complete owner draft revision without writing it. Checks identity or listing completeness, canonical tags, tag decisions, and baseRevision requirements. Capture only when valid is true.",
+    "description": "Validate a proposed new listing identity without writing it. Checks business identity, canonical tags, and explicit tag decisions. Public facts are compiled from MCP Scraper evidence rather than accepted from the owner. Capture only when valid is true.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "properties": {
         "identity": {
-          "description": "New-listing identity returned by prepare-local-sourcebook-write.",
           "type": "object",
           "properties": {
             "category": {
@@ -3806,26 +3805,8 @@ export const MCP_TOOL_CATALOG = [
             "businessName",
             "websiteUrl",
             "idempotencyKey"
-          ]
-        },
-        "listing": {
-          "description": "Complete replacement listing draft for an existing owner-scoped submission.",
-          "type": "object",
-          "propertyNames": {
-            "type": "string"
-          },
-          "additionalProperties": {}
-        },
-        "submissionId": {
-          "description": "Existing owner-scoped submission being revised. Omit for a new capture.",
-          "type": "string",
-          "minLength": 1
-        },
-        "baseRevision": {
-          "description": "Required current draft revision for an edit, preventing silent overwrites.",
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 9007199254740991
+          ],
+          "description": "New-listing identity returned by prepare-local-sourcebook-write. Evidence-bearing public fields are compiled by MCP Scraper and cannot be supplied here."
         },
         "tagCandidates": {
           "maxItems": 20,
@@ -3890,7 +3871,10 @@ export const MCP_TOOL_CATALOG = [
             ]
           }
         }
-      }
+      },
+      "required": [
+        "identity"
+      ]
     },
     "annotations": {
       "title": "Validate Local Sourcebook Write",
@@ -3904,13 +3888,12 @@ export const MCP_TOOL_CATALOG = [
     "name": "local-sourcebook-capture",
     "category": "directory",
     "title": "Capture Governed Local Sourcebook Listing",
-    "description": "Strict owner-scoped write path after list, contract, prepare, and validate. A new capture registers canonical tags and queues paid website, exact-place, review, service-area, staff, and genuine-media acquisition. An edit requires the current baseRevision. Capture never publishes; admin review remains required.",
+    "description": "Strict owner-scoped write path after list, contract, prepare, and validate. Capture registers canonical tags and queues paid website, exact-place, review, service-area, staff, and genuine-media acquisition. A successful system-compiled evidence revision publishes automatically; owner-authored public claims are not accepted.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "properties": {
         "identity": {
-          "description": "New-listing identity returned by prepare-local-sourcebook-write.",
           "type": "object",
           "properties": {
             "category": {
@@ -3966,26 +3949,8 @@ export const MCP_TOOL_CATALOG = [
             "businessName",
             "websiteUrl",
             "idempotencyKey"
-          ]
-        },
-        "listing": {
-          "description": "Complete replacement listing draft for an existing owner-scoped submission.",
-          "type": "object",
-          "propertyNames": {
-            "type": "string"
-          },
-          "additionalProperties": {}
-        },
-        "submissionId": {
-          "description": "Existing owner-scoped submission being revised. Omit for a new capture.",
-          "type": "string",
-          "minLength": 1
-        },
-        "baseRevision": {
-          "description": "Required current draft revision for an edit, preventing silent overwrites.",
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 9007199254740991
+          ],
+          "description": "New-listing identity returned by prepare-local-sourcebook-write. Evidence-bearing public fields are compiled by MCP Scraper and cannot be supplied here."
         },
         "tagCandidates": {
           "maxItems": 20,
@@ -4051,12 +4016,15 @@ export const MCP_TOOL_CATALOG = [
           }
         },
         "idempotencyKey": {
-          "description": "Stable retry key for a new capture. Required for new listings; omit only when revising an existing submissionId.",
+          "description": "Stable retry key for a new capture. Required either here or in identity.",
           "type": "string",
           "minLength": 8,
           "maxLength": 200
         }
-      }
+      },
+      "required": [
+        "identity"
+      ]
     },
     "annotations": {
       "title": "Capture Governed Local Sourcebook Listing",
@@ -4097,7 +4065,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "local_sourcebook_refresh",
     "category": "directory",
     "title": "Refresh a Local Sourcebook Listing",
-    "description": "Queue a new broad crawl and review/media acquisition pass for a listing owned by the authenticated MCP Scraper account.",
+    "description": "Queue a new broad crawl and review/media acquisition pass for a listing owned by the authenticated MCP Scraper account. The last published revision remains public until the refreshed evidence revision completes and auto-publishes.",
     "inputSchema": {
       "type": "object",
       "$schema": "https://json-schema.org/draft/2020-12/schema",

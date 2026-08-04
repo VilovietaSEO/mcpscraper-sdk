@@ -4,6 +4,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-08-04 — verified against mcp-scraper 0.44.2 / mcp-memory 1.15.0
+
+### Changed
+
+- Updated the Local Sourcebook v2 write contract so subscribers provide only business identity and canonical tags; generated Node, Python, CLI, and cURL bindings no longer expose owner-authored listing payloads, submission revisions, or direct public-claim edits.
+- Documented evidence-compiled automatic publication and refresh behavior across the generated contract surfaces.
+- Prepared `mcpscraper-memory-sdk` 0.26.1, `mcpscraper-sdk` 0.25.1, `mcpscraper-cli` 0.24.1, and both Python packages 0.24.1.
+
 ## 2026-08-04 — verified against mcp-scraper 0.44.1 / mcp-memory 1.15.0
 
 ### Added

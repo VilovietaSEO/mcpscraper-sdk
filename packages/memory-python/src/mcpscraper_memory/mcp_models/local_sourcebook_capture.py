@@ -5,13 +5,10 @@ from pydantic import BaseModel, ConfigDict, Field
 class LocalSourcebookCaptureInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    identity: dict[str, Any] | None = Field(None, alias="identity", description="New-listing identity returned by prepare-local-sourcebook-write.")
-    listing: dict[str, Any] | None = Field(None, alias="listing", description="Complete replacement listing draft for an existing owner-scoped submission.")
-    submission_id: str | None = Field(None, alias="submissionId", description="Existing owner-scoped submission being revised. Omit for a new capture.")
-    base_revision: int | None = Field(None, alias="baseRevision", description="Required current draft revision for an edit, preventing silent overwrites.")
+    identity: dict[str, Any] = Field(..., alias="identity", description="New-listing identity returned by prepare-local-sourcebook-write. Evidence-bearing public fields are compiled by MCP Scraper and cannot be supplied here.")
     tag_candidates: list[dict[str, Any]] | None = Field(None, alias="tagCandidates", description="")
     tag_decisions: list[dict[str, Any]] | None = Field(None, alias="tagDecisions", description="")
-    idempotency_key: str | None = Field(None, alias="idempotencyKey", description="Stable retry key for a new capture. Required for new listings; omit only when revising an existing submissionId.")
+    idempotency_key: str | None = Field(None, alias="idempotencyKey", description="Stable retry key for a new capture. Required either here or in identity.")
 
 
 class LocalSourcebookCaptureOutput(BaseModel):
