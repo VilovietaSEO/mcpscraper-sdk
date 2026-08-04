@@ -57,6 +57,16 @@ const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>
   mark_scheduled_run_opened: { category: 'schedule', legacyId: 'mark_scheduled_run_opened' },
   mark_scheduled_run_unopened: { category: 'schedule', legacyId: 'mark_scheduled_run_unopened' },
   archive_scheduled_run: { category: 'schedule', legacyId: 'archive_scheduled_run' },
+  image_project_create: { category: 'images', legacyId: 'image_project_create' },
+  image_project_list: { category: 'images', legacyId: 'image_project_list' },
+  image_folder_create: { category: 'images', legacyId: 'image_folder_create' },
+  image_folder_list: { category: 'images', legacyId: 'image_folder_list' },
+  image_asset_save: { category: 'images', legacyId: 'image_asset_save' },
+  image_asset_get: { category: 'images', legacyId: 'image_asset_get' },
+  image_asset_list: { category: 'images', legacyId: 'image_asset_list' },
+  image_asset_search: { category: 'images', legacyId: 'image_asset_search' },
+  image_asset_move: { category: 'images', legacyId: 'image_asset_move' },
+  image_asset_delete: { category: 'images', legacyId: 'image_asset_delete' },
 }
 
 const PRE_RELEASE_NAME_ALIASES: Record<string, string> = {

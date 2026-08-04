@@ -15,7 +15,6 @@ class LibraryIngestInput(BaseModel):
     tag_descriptions: dict[str, Any] | None = Field(None, alias="tagDescriptions", description="One-line meaning for any supplied tag that is new to the account, keyed by tag.")
     related: list[str] | None = Field(None, alias="related", description="Reviewed same-vault Library note paths.")
     related_vault_notes: list[str] | None = Field(None, alias="relatedVaultNotes", description="Reviewed cross-vault references in Vault::path.md form.")
-    local_vault_path: str | None = Field(None, alias="localVaultPath", description="Filesystem root to also mirror the item to. Optional; falls back to MEMORY_LOCAL_VAULT_ROOT env when set.")
 
 
 class LibraryIngestOutput(BaseModel):

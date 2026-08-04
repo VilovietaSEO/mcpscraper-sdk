@@ -23,18 +23,6 @@ export interface Input {
    * Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards.
    */
   includeServices?: boolean;
-  /**
-   * Leave unset for direct egress. Set configured only when the installed server has a configured proxy and the user explicitly needs it; location remains in the Maps query.
-   */
-  proxyMode?: "configured" | "none";
-  /**
-   * Optional US ZIP override for configured proxy routing.
-   */
-  proxyZip?: string;
-  /**
-   * Include sanitized browser/proxy diagnostics.
-   */
-  debug?: boolean;
 }
 
 export interface Output {

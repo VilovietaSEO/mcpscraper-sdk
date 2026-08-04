@@ -4,6 +4,22 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-08-04 — verified against mcp-scraper 0.44.1 / mcp-memory 1.15.0
+
+### Added
+
+- Generated TypeScript, Python, CLI, and cURL bindings for the complete Local Sourcebook contract/tag/prepare/validate/capture/status/refresh workflow and all nine Transparent Commons search, entity, proposal, ledger, and filter tools.
+- Added typed image project, folder, and asset namespaces from the direct Memory and unified MCP catalogs.
+
+### Fixed
+
+- Updated the live MCP manifest and drift readers to parse Streamable HTTP event-stream responses as well as plain JSON.
+
+### Changed
+
+- Regenerated every public client surface from the live 215-tool MCP Scraper 0.44.1 contract and the direct 114-tool Memory contract.
+- Prepared `mcpscraper-memory-sdk` 0.26.0, `mcpscraper-sdk` 0.25.0, `mcpscraper-cli` 0.24.0, and both Python packages 0.24.0.
+
 ## 2026-07-30 — verified against mcp-scraper 0.42.0 / mcp-memory 1.15.0
 
 ### Added

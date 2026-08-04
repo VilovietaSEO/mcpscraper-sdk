@@ -5,6 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class ZoomCreateMeetingInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
+    confirmed: bool | None = Field(None, alias="confirmed", description="Set true only when the person explicitly authorized creating this exact meeting. If omitted, a 2026-capable client may ask for confirmation.")
+    idempotency_key: str = Field(..., alias="idempotencyKey", description="Required stable key for this intended meeting. Reuse it only when retrying the same creation after a lost response.")
     connection_id: str = Field(..., alias="connectionId", description="A Zoom connectionId from list_service_connections, with actionsEnabled true.")
     topic: str = Field(..., alias="topic", description="Meeting topic/title.")
     start_date_time: str = Field(..., alias="startDateTime", description="Start time, ISO 8601, e.g. \"2026-07-15T09:00:00-06:00\".")

@@ -18,7 +18,7 @@ export interface Input {
       /**
        * Value to compare against. For "in", pass an array.
        */
-      value?: {
+      value: {
         [k: string]: unknown;
       };
     },
@@ -31,7 +31,7 @@ export interface Input {
       /**
        * Value to compare against. For "in", pass an array.
        */
-      value?: {
+      value: {
         [k: string]: unknown;
       };
     }[]

@@ -38,6 +38,10 @@ export interface Input {
    * Maximum individual capture rows returned when includeCaptures is true. Aggregated counts still use every scanned capture.
    */
   maxCaptureRows?: number;
+  /**
+   * auto returns bounded results and offloads large inventories; inline still offloads above the hard context limit; artifact always creates an owner-scoped report artifact.
+   */
+  delivery?: "auto" | "inline" | "artifact";
 }
 
 export interface Output {

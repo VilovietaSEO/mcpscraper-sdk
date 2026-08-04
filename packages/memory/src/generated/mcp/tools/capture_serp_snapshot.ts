@@ -20,18 +20,6 @@ export interface Input {
    */
   device?: "desktop" | "mobile";
   /**
-   * Leave unset for direct egress. Set configured only when the installed server has a configured proxy and the user explicitly needs it; location is handled separately with UULE and query text.
-   */
-  proxyMode?: "configured" | "none";
-  /**
-   * Optional US ZIP override for configured proxy routing.
-   */
-  proxyZip?: string;
-  /**
-   * Include sanitized browser/proxy/location diagnostics.
-   */
-  debug?: boolean;
-  /**
    * Google result pages to capture. Use 2 only for deeper ranking evidence.
    */
   pages?: number;

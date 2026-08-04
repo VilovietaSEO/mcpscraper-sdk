@@ -1,5 +1,13 @@
 export interface Input {
   /**
+   * Set true only when the person explicitly authorized creating this exact meeting. If omitted, a 2026-capable client may ask for confirmation.
+   */
+  confirmed?: boolean;
+  /**
+   * Required stable key for this intended meeting. Reuse it only when retrying the same creation after a lost response.
+   */
+  idempotencyKey: string;
+  /**
    * A Zoom connectionId from list_service_connections, with actionsEnabled true.
    */
   connectionId: string;

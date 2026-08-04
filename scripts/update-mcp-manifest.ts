@@ -106,6 +106,14 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   report_artifact_read: 'artifacts',
   trustpilot_reviews: 'reviews',
   g2_reviews: 'reviews',
+  'get-local-sourcebook-contract': 'directory',
+  'list-local-sourcebook-tags': 'directory',
+  'resolve-local-sourcebook-tags': 'directory',
+  'prepare-local-sourcebook-write': 'directory',
+  'validate-local-sourcebook-write': 'directory',
+  'local-sourcebook-capture': 'directory',
+  local_sourcebook_submission_status: 'directory',
+  local_sourcebook_refresh: 'directory',
 }
 
 const SCRAPER_PREFIX_CATEGORIES: Array<[string, string]> = [
@@ -119,6 +127,10 @@ const SCRAPER_PREFIX_CATEGORIES: Array<[string, string]> = [
   ['capture_serp_', 'serpIntelligence'],
   ['video_frame_', 'video'],
   ['workflow_', 'workflows'],
+  ['commons_', 'commons'],
+  ['image_project_', 'images'],
+  ['image_folder_', 'images'],
+  ['image_asset_', 'images'],
 ]
 
 const EXPLICIT_METHOD_NAMES: Record<string, string> = {
@@ -170,6 +182,8 @@ function deriveMethodName(name: string, category: string): string {
     reddit: ['reddit_'],
     video: ['video_', 'video-'],
     workflows: ['workflow_'],
+    commons: ['commons_'],
+    images: ['image_'],
     youtube: ['youtube_'],
   }
   for (const prefix of categoryPrefixes[category] ?? []) {
@@ -200,7 +214,12 @@ async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {
     signal: AbortSignal.timeout(30_000),
   })
   if (!response.ok) throw new Error(`tools/list failed: ${response.status} ${await response.text()}`)
-  const payload = (await response.json()) as { result?: { tools?: LiveTool[] }; error?: { message?: string } }
+  const raw = await response.text()
+  const dataLine = raw
+    .split(/\r?\n/)
+    .find(line => line.startsWith('data:'))
+  const payloadText = dataLine ? dataLine.slice('data:'.length).trim() : raw
+  const payload = JSON.parse(payloadText) as { result?: { tools?: LiveTool[] }; error?: { message?: string } }
   if (payload.error) throw new Error(payload.error.message ?? 'tools/list RPC error')
   return payload.result?.tools ?? []
 }

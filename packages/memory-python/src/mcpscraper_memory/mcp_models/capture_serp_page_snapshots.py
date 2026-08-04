@@ -9,7 +9,6 @@ class CaptureSerpPageSnapshotsInput(BaseModel):
     targets: list[dict[str, Any]] | None = Field(None, alias="targets", description="Structured targets. Provide exactly one of targets or urls; use targets when source kind or position should be preserved.")
     max_concurrency: int | None = Field(None, alias="maxConcurrency", description="Parallel page captures.")
     timeout_ms: int | None = Field(None, alias="timeoutMs", description="Per-page capture timeout in milliseconds; timeouts return as structured capture failures.")
-    debug: bool | None = Field(None, alias="debug", description="Include sanitized browser/proxy diagnostics.")
 
 
 class CaptureSerpPageSnapshotsOutput(BaseModel):

@@ -9,11 +9,12 @@ class MapWaybackSnapshotsInput(BaseModel):
     scope: Literal["exact", "prefix", "host", "domain"] | None = Field(None, alias="scope", description="exact = one page; prefix = one path tree; host = one hostname; domain = the domain plus subdomains. Ignored when urls is provided.")
     urls: list[str] | None = Field(None, alias="urls", description="Optional selected page URLs to inventory together using exact matching. Every URL must belong to the same site as url.")
     from_: str | None = Field(None, alias="from", description="Inclusive beginning of the archive range: YYYY, YYYY-MM, YYYY-MM-DD, or a 14-digit Wayback timestamp.")
-    to: Any | None = Field(None, alias="to", description="Inclusive end of the archive range: YYYY, YYYY-MM, YYYY-MM-DD, or a 14-digit Wayback timestamp.")
+    to: str | None = Field(None, alias="to", description="Inclusive end of the archive range: YYYY, YYYY-MM, YYYY-MM-DD, or a 14-digit Wayback timestamp.")
     successful_html_only: bool | None = Field(None, alias="successfulHtmlOnly", description="Count only HTTP 200 text/html captures. Set false to include redirects, errors, and archived assets.")
     max_captures: int | None = Field(None, alias="maxCaptures", description="Maximum CDX capture rows to scan. If reached, countType is lower_bound instead of exact. Narrow the range or raise this cap for an exact large inventory.")
     include_captures: bool | None = Field(None, alias="includeCaptures", description="Return individual timestamp rows in addition to aggregate counts. Leave false for a compact count-only inventory.")
     max_capture_rows: int | None = Field(None, alias="maxCaptureRows", description="Maximum individual capture rows returned when includeCaptures is true. Aggregated counts still use every scanned capture.")
+    delivery: Literal["auto", "inline", "artifact"] | None = Field(None, alias="delivery", description="auto returns bounded results and offloads large inventories; inline still offloads above the hard context limit; artifact always creates an owner-scoped report artifact.")
 
 
 class MapWaybackSnapshotsOutput(BaseModel):

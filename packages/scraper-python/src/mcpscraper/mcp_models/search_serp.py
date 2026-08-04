@@ -10,9 +10,6 @@ class SearchSerpInput(BaseModel):
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location or user language.")
     hl: str | None = Field(None, alias="hl", description="Google interface/content language inferred from user request.")
     device: Literal["desktop", "mobile"] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings.")
-    proxy_mode: Literal["configured", "none"] | None = Field(None, alias="proxyMode", description="Leave unset for direct egress. Set configured only when the installed server has a configured proxy and the user explicitly needs it; location is handled separately with UULE and query text.")
-    proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override for configured proxy routing.")
-    debug: bool | None = Field(None, alias="debug", description="Include sanitized diagnostics for debugging.")
     pages: int | None = Field(None, alias="pages", description="Number of result pages to fetch (1–2).")
     recency: Literal["day", "week", "month", "year"] | None = Field(None, alias="recency", description="Restrict results to a recent time window (Google \"past day/week/month/year\" filter). Omit for all-time. Useful for \"what is being said this week\" style queries; pairs well with a site: operator in the query.")
 

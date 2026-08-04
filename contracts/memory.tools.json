@@ -18,8 +18,8 @@
       "note": "Returns the live tool list; used by scripts/sync-memory-manifest.ts to detect drift against this file."
     }
   },
-  "generatedFrom": "mcp-memory live tools/list (104 registered tools)",
-  "toolCount": 104,
+  "generatedFrom": "mcp-memory live tools/list (114 registered tools)",
+  "toolCount": 114,
   "tools": [
     {
       "name": "issueKeyTool",
@@ -3544,7 +3544,7 @@
     },
     {
       "name": "libraryIngestTool",
-      "description": "Deposit a scrape, transcript, or generated output into the tenant Library vault for later semantic recall. Content is embedded for per-tenant search and best-effort mirrored to a local vault when configured. Requires write scope on the target vault.",
+      "description": "Deposit a scrape, transcript, or generated output into the hosted tenant Library vault for later semantic recall. Content is embedded for per-tenant search. Requires write scope on the target vault.",
       "category": "library",
       "inputSchema": {
         "type": "object",
@@ -3612,10 +3612,6 @@
               "type": "string"
             },
             "description": "Reviewed cross-vault references in Vault::path.md form."
-          },
-          "localVaultPath": {
-            "type": "string",
-            "description": "Filesystem root to also mirror the item to. Optional; falls back to MEMORY_LOCAL_VAULT_ROOT env when set."
           }
         },
         "required": [
@@ -3648,10 +3644,6 @@
           "indexed": {
             "type": "number",
             "description": "Number of search chunks indexed (0 if embedding failed but the note still saved)."
-          },
-          "dualWritten": {
-            "type": "boolean",
-            "description": "True if the item was also mirrored to the local filesystem vault."
           },
           "nextStep": {
             "type": "string",
@@ -12867,6 +12859,1724 @@
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "legacyId": "video-analyze-status"
+    },
+    {
+      "name": "image_project_create",
+      "description": "Create a stable image project inside a writable hosted Memory vault. Projects organize governed private image assets; they do not create local folders or change object keys.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string",
+            "description": "Writable logical Memory vault. Defaults to the active vault."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "project": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "description",
+                  "createdAt"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "project"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_project_create"
+    },
+    {
+      "name": "image_project_list",
+      "description": "List image projects in an accessible hosted Memory vault. Returns organization metadata only, never object-store keys.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "projects": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "status",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "ok",
+              "projects"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_project_list"
+    },
+    {
+      "name": "image_folder_create",
+      "description": "Create a nested image folder inside one writable Memory image project. Maximum nesting depth is eight; this changes logical organization only.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "parentId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        },
+        "required": [
+          "projectId",
+          "name"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "folder": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "projectId": {
+                    "type": "string"
+                  },
+                  "parentId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "depth": {
+                    "type": "number"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "projectId",
+                  "parentId",
+                  "name",
+                  "depth",
+                  "createdAt"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "folder"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_folder_create"
+    },
+    {
+      "name": "image_folder_list",
+      "description": "List the bounded folder tree for one accessible Memory image project.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "projectId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "folders": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "type": "string"
+                    },
+                    "parentId": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "depth": {
+                      "type": "number"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "projectId",
+                    "parentId",
+                    "name",
+                    "depth",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "ok",
+              "folders"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_folder_list"
+    },
+    {
+      "name": "image_asset_save",
+      "description": "Opt in to preserving one image in hosted Memory. Saves immutable private bytes, creates a sanitized preview, consumes storage/embedding quota, and queues visual plus useful fused embeddings. Use for durable image recall; do not use merely to view a transient scrape result.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "folderId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public HTTPS image URL. Private-network and redirect targets are rejected."
+          },
+          "artifactId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Owned MCP Scraper artifact ID. Available through the aggregate MCP handoff."
+          },
+          "imageBase64": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Bounded base64 image for clients without an upload transport; maximum decoded size is 20 MiB."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 4000
+          },
+          "altText": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "maxItems": 20
+          },
+          "sourceRef": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 1000
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200,
+            "description": "Stable key for this logical save. Retrying the same request returns the same asset without another write."
+          }
+        },
+        "required": [
+          "title",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "asset": {
+                "type": "object",
+                "properties": {
+                  "assetId": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "altText": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sourceUrl": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sourceKind": {
+                    "type": "string"
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  },
+                  "bytes": {
+                    "type": "number"
+                  },
+                  "width": {
+                    "type": "number"
+                  },
+                  "height": {
+                    "type": "number"
+                  },
+                  "projectId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "folderId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "embeddingStatus": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "preview": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "expiresAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "mimeType": {
+                        "type": "string",
+                        "const": "image/webp"
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "expiresAt",
+                      "mimeType"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "assetId",
+                  "title",
+                  "description",
+                  "altText",
+                  "sourceUrl",
+                  "sourceKind",
+                  "mimeType",
+                  "bytes",
+                  "width",
+                  "height",
+                  "projectId",
+                  "folderId",
+                  "tags",
+                  "status",
+                  "embeddingStatus",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "additionalProperties": false
+              },
+              "reusedObject": {
+                "type": "boolean"
+              },
+              "nextAction": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "asset",
+              "reusedObject",
+              "nextAction"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_asset_save"
+    },
+    {
+      "name": "image_asset_get",
+      "description": "Read one authorized private image asset and optionally mint a five-minute preview URL. The URL is never persisted; call again after expiry.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "includePreview": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": [
+          "assetId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "asset": {
+                "type": "object",
+                "properties": {
+                  "assetId": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "altText": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sourceUrl": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sourceKind": {
+                    "type": "string"
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  },
+                  "bytes": {
+                    "type": "number"
+                  },
+                  "width": {
+                    "type": "number"
+                  },
+                  "height": {
+                    "type": "number"
+                  },
+                  "projectId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "folderId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "embeddingStatus": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "preview": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "expiresAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "mimeType": {
+                        "type": "string",
+                        "const": "image/webp"
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "expiresAt",
+                      "mimeType"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "assetId",
+                  "title",
+                  "description",
+                  "altText",
+                  "sourceUrl",
+                  "sourceKind",
+                  "mimeType",
+                  "bytes",
+                  "width",
+                  "height",
+                  "projectId",
+                  "folderId",
+                  "tags",
+                  "status",
+                  "embeddingStatus",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "asset"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_asset_get"
+    },
+    {
+      "name": "image_asset_list",
+      "description": "List authorized private image metadata with exact location, provenance, media, tag, and creation-time filters. Use image_asset_search for semantic retrieval.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "folderId": {
+            "type": "string"
+          },
+          "sourceKind": {
+            "type": "string",
+            "enum": [
+              "upload",
+              "scrape",
+              "screenshot",
+              "instagram",
+              "external_url",
+              "import"
+            ]
+          },
+          "sourceHost": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 253
+          },
+          "mimeType": {
+            "type": "string",
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/gif"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "maxItems": 20
+          },
+          "createdAfter": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBefore": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 30
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "assets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "assetId": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "altText": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "sourceUrl": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "sourceKind": {
+                      "type": "string"
+                    },
+                    "mimeType": {
+                      "type": "string"
+                    },
+                    "bytes": {
+                      "type": "number"
+                    },
+                    "width": {
+                      "type": "number"
+                    },
+                    "height": {
+                      "type": "number"
+                    },
+                    "projectId": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "folderId": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "embeddingStatus": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    },
+                    "preview": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "expiresAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "mimeType": {
+                          "type": "string",
+                          "const": "image/webp"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "expiresAt",
+                        "mimeType"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "assetId",
+                    "title",
+                    "description",
+                    "altText",
+                    "sourceUrl",
+                    "sourceKind",
+                    "mimeType",
+                    "bytes",
+                    "width",
+                    "height",
+                    "projectId",
+                    "folderId",
+                    "tags",
+                    "status",
+                    "embeddingStatus",
+                    "createdAt",
+                    "updatedAt"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "count": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "ok",
+              "assets",
+              "count"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_asset_list"
+    },
+    {
+      "name": "image_asset_search",
+      "description": "Semantically search authorized private image Memory using text, a stored asset, a public HTTPS image, or bounded base64. Text plus one image performs a fused query. This consumes query-embedding usage.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "queryText": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "queryAssetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "queryUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "queryImageBase64": {
+            "type": "string",
+            "minLength": 1
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "folderId": {
+            "type": "string"
+          },
+          "sourceKind": {
+            "type": "string",
+            "enum": [
+              "upload",
+              "scrape",
+              "screenshot",
+              "instagram",
+              "external_url",
+              "import"
+            ]
+          },
+          "sourceHost": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 253
+          },
+          "mimeType": {
+            "type": "string",
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/gif"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "maxItems": 20
+          },
+          "createdAfter": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBefore": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 30,
+            "default": 10
+          },
+          "includePreview": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "results": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "asset": {
+                      "type": "object",
+                      "properties": {
+                        "assetId": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "altText": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "sourceUrl": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "sourceKind": {
+                          "type": "string"
+                        },
+                        "mimeType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "projectId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "folderId": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "embeddingStatus": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        },
+                        "preview": {
+                          "type": "object",
+                          "properties": {
+                            "url": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "expiresAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "mimeType": {
+                              "type": "string",
+                              "const": "image/webp"
+                            }
+                          },
+                          "required": [
+                            "url",
+                            "expiresAt",
+                            "mimeType"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "assetId",
+                        "title",
+                        "description",
+                        "altText",
+                        "sourceUrl",
+                        "sourceKind",
+                        "mimeType",
+                        "bytes",
+                        "width",
+                        "height",
+                        "projectId",
+                        "folderId",
+                        "tags",
+                        "status",
+                        "embeddingStatus",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "score": {
+                      "type": "number"
+                    },
+                    "matchRepresentations": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "visual",
+                          "fused"
+                        ]
+                      }
+                    },
+                    "embeddingModel": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "asset",
+                    "score",
+                    "matchRepresentations",
+                    "embeddingModel"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "count": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "ok",
+              "results",
+              "count"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_asset_search"
+    },
+    {
+      "name": "image_asset_move",
+      "description": "Move an image asset between project/folder locations in the same writable Memory vault. This updates metadata only and never copies private image bytes.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "projectId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "folderId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "assetId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "asset": {
+                "type": "object",
+                "properties": {
+                  "assetId": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "altText": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sourceUrl": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sourceKind": {
+                    "type": "string"
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  },
+                  "bytes": {
+                    "type": "number"
+                  },
+                  "width": {
+                    "type": "number"
+                  },
+                  "height": {
+                    "type": "number"
+                  },
+                  "projectId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "folderId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "embeddingStatus": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "preview": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "expiresAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "mimeType": {
+                        "type": "string",
+                        "const": "image/webp"
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "expiresAt",
+                      "mimeType"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "assetId",
+                  "title",
+                  "description",
+                  "altText",
+                  "sourceUrl",
+                  "sourceKind",
+                  "mimeType",
+                  "bytes",
+                  "width",
+                  "height",
+                  "projectId",
+                  "folderId",
+                  "tags",
+                  "status",
+                  "embeddingStatus",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "ok",
+              "asset"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_asset_move"
+    },
+    {
+      "name": "image_asset_delete",
+      "description": "DESTRUCTIVE: delete one governed image asset, remove its semantic vectors, and purge private bytes when no other logical asset uses them. Retry with the same assetId if an earlier response was lost.",
+      "category": "images",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "confirmDelete": {
+            "type": "boolean",
+            "const": true,
+            "description": "Must be true after the caller has confirmed deletion."
+          }
+        },
+        "required": [
+          "assetId",
+          "confirmDelete"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "deleted": {
+                "type": "boolean"
+              },
+              "assetId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "deleted",
+              "assetId"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": false
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "code",
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "image_asset_delete"
     }
   ]
 }

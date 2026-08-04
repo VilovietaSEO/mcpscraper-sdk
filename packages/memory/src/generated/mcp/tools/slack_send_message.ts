@@ -1,5 +1,13 @@
 export interface Input {
   /**
+   * Set true only when the person explicitly authorized sending this exact message. If omitted, a 2026-capable client may ask for confirmation.
+   */
+  confirmed?: boolean;
+  /**
+   * Required stable key for this intended message. Reuse it only when retrying the same send after a lost response.
+   */
+  idempotencyKey: string;
+  /**
    * A Slack connectionId from list_service_connections, with actionsEnabled true.
    */
   connectionId: string;
