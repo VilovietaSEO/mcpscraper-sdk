@@ -5,7 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class ArchiveReadInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    url: str = Field(..., alias="url", description="Public HTTPS URL of a ZIP file, including a signed bundleUrl returned by check_site_export.")
+    artifact_id: str | None = Field(None, alias="artifactId", description="Preferred: private artifactId returned by check_site_export. The server reauthorizes ownership on every read.")
+    url: str | None = Field(None, alias="url", description="Fallback: bounded public HTTPS ZIP URL. Use artifactId for MCP Scraper-owned exports.")
     path: str | None = Field(None, alias="path", description="Exact ZIP entry path to read. Omit to list the archive. Use a path returned by a previous archive_read listing.")
     offset: int | None = Field(None, alias="offset", description="Byte offset for a text-file read. Continue from nextOffset until it is null. Ignored when path is omitted.")
     max_bytes: int | None = Field(None, alias="maxBytes", description="Maximum UTF-8 bytes to return from the selected text file. Default 50,000; maximum 200,000.")

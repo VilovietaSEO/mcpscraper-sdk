@@ -46,7 +46,15 @@ export interface Input {
    */
   background?: true;
   /**
-   * Download every discovered image as a real file into the export bundle (not just image URLs/stats). OFF by default — must be explicitly set true. Implies background regardless of the background flag, since downloading a whole site's images is too slow to run synchronously. Capped at 20 images/page and 500 images/site.
+   * Multi-page crawls are durable exports. auto and artifact both return a job handle followed by an owner-scoped ZIP; artifact explicitly requests that durable destination.
+   */
+  delivery?: "auto" | "artifact";
+  /**
+   * Include supported images in the export bundle. This is the preferred replacement for downloadImages.
+   */
+  preserveMedia?: boolean;
+  /**
+   * Deprecated alias for preserveMedia. Omit when using preserveMedia; when omitted, image preservation defaults to false.
    */
   downloadImages?: boolean;
 }

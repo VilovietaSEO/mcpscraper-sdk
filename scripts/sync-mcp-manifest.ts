@@ -31,7 +31,12 @@ async function fetchLiveTools(apiKey: string): Promise<ToolSchema[]> {
     signal: AbortSignal.timeout(30_000),
   })
   if (!response.ok) throw new Error(`tools/list failed: ${response.status} ${await response.text()}`)
-  const payload = (await response.json()) as { result?: { tools?: ToolSchema[] }; error?: { message?: string } }
+  const raw = await response.text()
+  const dataLine = raw
+    .split(/\r?\n/)
+    .find(line => line.startsWith('data:'))
+  const payloadText = dataLine ? dataLine.slice('data:'.length).trim() : raw
+  const payload = JSON.parse(payloadText) as { result?: { tools?: ToolSchema[] }; error?: { message?: string } }
   if (payload.error) throw new Error(payload.error.message ?? 'tools/list RPC error')
   return payload.result?.tools ?? []
 }

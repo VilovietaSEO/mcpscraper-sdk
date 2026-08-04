@@ -41,7 +41,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -77,7 +77,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -111,111 +111,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        }
-      ]
-    | [
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -251,7 +147,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -285,7 +181,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -319,41 +215,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -389,7 +251,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -423,7 +285,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -457,7 +319,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -491,41 +353,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -561,7 +389,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -595,7 +423,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -629,7 +457,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -663,7 +491,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -697,41 +525,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -767,7 +561,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -801,7 +595,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -835,7 +629,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -869,7 +663,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -903,7 +697,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -937,41 +731,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -1007,7 +767,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1041,7 +801,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1075,7 +835,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1109,7 +869,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1143,7 +903,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1177,7 +937,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1211,41 +971,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -1281,7 +1007,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1315,7 +1041,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1349,7 +1075,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1383,7 +1109,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1417,7 +1143,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1451,7 +1177,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1485,7 +1211,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1519,41 +1245,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -1589,7 +1281,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1623,7 +1315,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1657,7 +1349,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1691,7 +1383,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1725,7 +1417,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1759,7 +1451,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1793,7 +1485,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1827,7 +1519,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1861,41 +1553,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -1931,7 +1589,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1965,7 +1623,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -1999,7 +1657,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2033,7 +1691,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2067,7 +1725,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2101,7 +1759,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2135,7 +1793,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2169,7 +1827,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2203,7 +1861,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2237,41 +1895,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -2307,7 +1931,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2341,7 +1965,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2375,7 +1999,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2409,7 +2033,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2443,7 +2067,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2477,7 +2101,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2511,7 +2135,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2545,7 +2169,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2579,7 +2203,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2613,7 +2237,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2647,41 +2271,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -2717,7 +2307,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2751,7 +2341,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2785,7 +2375,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2819,7 +2409,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2853,7 +2443,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2887,7 +2477,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2921,7 +2511,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2955,7 +2545,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -2989,7 +2579,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3023,7 +2613,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3057,7 +2647,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3091,41 +2681,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -3161,7 +2717,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3195,7 +2751,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3229,7 +2785,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3263,7 +2819,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3297,7 +2853,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3331,7 +2887,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3365,7 +2921,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3399,7 +2955,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3433,7 +2989,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3467,7 +3023,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3501,7 +3057,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3535,7 +3091,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3569,41 +3125,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -3639,7 +3161,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3673,7 +3195,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3707,7 +3229,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3741,7 +3263,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3775,7 +3297,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3809,7 +3331,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3843,7 +3365,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3877,7 +3399,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3911,7 +3433,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3945,7 +3467,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -3979,7 +3501,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4013,7 +3535,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4047,7 +3569,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4081,41 +3603,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -4151,7 +3639,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4185,7 +3673,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4219,7 +3707,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4253,7 +3741,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4287,7 +3775,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4321,7 +3809,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4355,7 +3843,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4389,7 +3877,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4423,7 +3911,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4457,7 +3945,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4491,7 +3979,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4525,7 +4013,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4559,7 +4047,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4593,7 +4081,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4627,41 +4115,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -4697,7 +4151,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4731,7 +4185,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4765,7 +4219,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4799,7 +4253,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4833,7 +4287,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4867,7 +4321,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4901,7 +4355,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4935,7 +4389,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -4969,7 +4423,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5003,7 +4457,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5037,7 +4491,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5071,7 +4525,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5105,7 +4559,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5139,7 +4593,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5173,7 +4627,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5207,41 +4661,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -5277,7 +4697,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5311,7 +4731,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5345,7 +4765,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5379,7 +4799,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5413,7 +4833,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5447,7 +4867,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5481,7 +4901,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5515,7 +4935,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5549,7 +4969,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5583,7 +5003,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5617,7 +5037,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5651,7 +5071,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5685,7 +5105,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5719,7 +5139,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5753,7 +5173,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5787,7 +5207,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5821,41 +5241,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -5891,7 +5277,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5925,7 +5311,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5959,7 +5345,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -5993,7 +5379,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6027,7 +5413,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6061,7 +5447,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6095,7 +5481,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6129,7 +5515,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6163,7 +5549,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6197,7 +5583,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6231,7 +5617,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6265,7 +5651,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6299,7 +5685,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6333,7 +5719,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6367,7 +5753,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6401,7 +5787,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6435,7 +5821,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6469,41 +5855,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
-            [k: string]: unknown;
-          };
-        },
-        {
-          /**
-           * Typed Search Console table column to filter.
-           */
-          column:
-            | "id"
-            | "provider_record_id"
-            | "connection_id"
-            | "site_url"
-            | "permission_level"
-            | "date"
-            | "query"
-            | "page"
-            | "country"
-            | "device"
-            | "clicks"
-            | "impressions"
-            | "ctr"
-            | "position"
-            | "captured_at"
-            | "content_hash"
-            | "created_at"
-            | "updated_at";
-          /**
-           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
-           */
-          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
-          /**
-           * Value to compare. For in, pass an array.
-           */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         }
@@ -6539,7 +5891,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6573,7 +5925,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6607,7 +5959,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6641,7 +5993,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6675,7 +6027,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6709,7 +6061,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6743,7 +6095,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6777,7 +6129,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6811,7 +6163,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6845,7 +6197,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6879,7 +6231,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6913,7 +6265,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6947,7 +6299,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -6981,7 +6333,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -7015,7 +6367,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -7049,7 +6401,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -7083,7 +6435,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -7117,7 +6469,7 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
             [k: string]: unknown;
           };
         },
@@ -7151,7 +6503,43 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
+            [k: string]: unknown;
+          };
+        }
+      ]
+    | [
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
             [k: string]: unknown;
           };
         },
@@ -7185,7 +6573,619 @@ export interface Input {
           /**
            * Value to compare. For in, pass an array.
            */
-          value?: {
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
+            [k: string]: unknown;
+          };
+        },
+        {
+          /**
+           * Typed Search Console table column to filter.
+           */
+          column:
+            | "id"
+            | "provider_record_id"
+            | "connection_id"
+            | "site_url"
+            | "permission_level"
+            | "date"
+            | "query"
+            | "page"
+            | "country"
+            | "device"
+            | "clicks"
+            | "impressions"
+            | "ctr"
+            | "position"
+            | "captured_at"
+            | "content_hash"
+            | "created_at"
+            | "updated_at";
+          /**
+           * Comparison operator. like performs a case-insensitive substring match; in requires an array value.
+           */
+          op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
+          /**
+           * Value to compare. For in, pass an array.
+           */
+          value: {
             [k: string]: unknown;
           };
         }

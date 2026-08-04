@@ -13,7 +13,9 @@ class ExtractSiteInput(BaseModel):
     rotate_proxy_every: int | None = Field(None, alias="rotateProxyEvery", description="When rotateProxies is on, pages fetched per proxy before rotating. Default 30.")
     formats: list[Literal["markdown", "links", "json", "images", "branding"]] | None = Field(None, alias="formats", description="Per-page output formats: markdown, links, json, images are captured cheaply from HTML; branding (site-level logo/colors/fonts) requires a browser and adds time. Defaults to markdown+links.")
     background: bool | None = Field(None, alias="background", description="MCP multi-page crawls always run as durable background jobs. Poll check_site_export for progress, outcome counters, and the hosted ZIP.")
-    download_images: bool | None = Field(None, alias="downloadImages", description="Download every discovered image as a real file into the export bundle (not just image URLs/stats). OFF by default — must be explicitly set true. Implies background regardless of the background flag, since downloading a whole site's images is too slow to run synchronously. Capped at 20 images/page and 500 images/site.")
+    delivery: Literal["auto", "artifact"] | None = Field(None, alias="delivery", description="Multi-page crawls are durable exports. auto and artifact both return a job handle followed by an owner-scoped ZIP; artifact explicitly requests that durable destination.")
+    preserve_media: bool | None = Field(None, alias="preserveMedia", description="Include supported images in the export bundle. This is the preferred replacement for downloadImages.")
+    download_images: bool | None = Field(None, alias="downloadImages", description="Deprecated alias for preserveMedia. Omit when using preserveMedia; when omitted, image preservation defaults to false.")
 
 
 class ExtractSiteOutput(BaseModel):

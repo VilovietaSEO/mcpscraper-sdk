@@ -36,10 +36,6 @@ export interface Input {
    */
   includeZipGroups?: boolean;
   /**
-   * Local/test-only ZIP CSV override. Hosted MCP/API runs ignore filesystem paths and use the active hosted Census + ZIP dataset versions.
-   */
-  usZipsCsvPath?: string;
-  /**
    * Create a directory-ready CSV. Hosted runs return an owner-scoped artifact; local runs may also return a filesystem path.
    */
   saveCsv?: boolean;
@@ -47,18 +43,6 @@ export interface Input {
    * Hosted MCP directory jobs always run durably in the background. Poll directory_workflow_status for progress, terminal billing, and the owner-scoped CSV artifact.
    */
   background?: true;
-  /**
-   * Proxy behavior per city search. Leave unset for direct egress; set configured only when the installed server has a configured proxy and the user explicitly needs it.
-   */
-  proxyMode?: "configured" | "none";
-  /**
-   * Optional US ZIP override for configured proxy routing.
-   */
-  proxyZip?: string;
-  /**
-   * Include sanitized browser/proxy diagnostics.
-   */
-  debug?: boolean;
 }
 
 export interface Output {

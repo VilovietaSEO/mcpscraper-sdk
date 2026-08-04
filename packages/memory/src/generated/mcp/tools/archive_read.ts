@@ -1,8 +1,12 @@
 export interface Input {
   /**
-   * Public HTTPS URL of a ZIP file, including a signed bundleUrl returned by check_site_export.
+   * Preferred: private artifactId returned by check_site_export. The server reauthorizes ownership on every read.
    */
-  url: string;
+  artifactId?: string;
+  /**
+   * Fallback: bounded public HTTPS ZIP URL. Use artifactId for MCP Scraper-owned exports.
+   */
+  url?: string;
   /**
    * Exact ZIP entry path to read. Omit to list the archive. Use a path returned by a previous archive_read listing.
    */

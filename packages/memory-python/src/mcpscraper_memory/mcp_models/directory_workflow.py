@@ -14,12 +14,8 @@ class DirectoryWorkflowInput(BaseModel):
     max_results_per_city: int | None = Field(None, alias="maxResultsPerCity", description="Google Maps candidates to collect per city.")
     concurrency: int | None = Field(None, alias="concurrency", description="City Maps searches to run in parallel.")
     include_zip_groups: bool | None = Field(None, alias="includeZipGroups", description="Attach ZIP and county groups from the active versioned hosted location dataset. Production never reads a server-local CSV.")
-    us_zips_csv_path: str | None = Field(None, alias="usZipsCsvPath", description="Local/test-only ZIP CSV override. Hosted MCP/API runs ignore filesystem paths and use the active hosted Census + ZIP dataset versions.")
     save_csv: bool | None = Field(None, alias="saveCsv", description="Create a directory-ready CSV. Hosted runs return an owner-scoped artifact; local runs may also return a filesystem path.")
     background: bool | None = Field(None, alias="background", description="Hosted MCP directory jobs always run durably in the background. Poll directory_workflow_status for progress, terminal billing, and the owner-scoped CSV artifact.")
-    proxy_mode: Literal["configured", "none"] | None = Field(None, alias="proxyMode", description="Proxy behavior per city search. Leave unset for direct egress; set configured only when the installed server has a configured proxy and the user explicitly needs it.")
-    proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override for configured proxy routing.")
-    debug: bool | None = Field(None, alias="debug", description="Include sanitized browser/proxy diagnostics.")
 
 
 class DirectoryWorkflowOutput(BaseModel):

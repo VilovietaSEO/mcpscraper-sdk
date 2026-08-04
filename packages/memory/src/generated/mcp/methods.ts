@@ -31,8 +31,25 @@ import * as MapsPlaceIntel from './tools/maps_place_intel.js'
 import * as MapsSearch from './tools/maps_search.js'
 import * as ReviewsTrustpilotReviews from './tools/trustpilot_reviews.js'
 import * as ReviewsG2Reviews from './tools/g2_reviews.js'
+import * as CommonsSearchEntities from './tools/commons_search_entities.js'
+import * as CommonsGetEntity from './tools/commons_get_entity.js'
+import * as CommonsListNeedsLinks from './tools/commons_list_needs_links.js'
+import * as CommonsPrepareEntity from './tools/commons_prepare_entity.js'
+import * as CommonsValidateEntity from './tools/commons_validate_entity.js'
+import * as CommonsSubmitEntity from './tools/commons_submit_entity.js'
+import * as CommonsGetEntityLedger from './tools/commons_get_entity_ledger.js'
+import * as CommonsSaveFilter from './tools/commons_save_filter.js'
+import * as CommonsListFilters from './tools/commons_list_filters.js'
 import * as DirectoryRun from './tools/directory_workflow.js'
 import * as DirectoryWorkflowStatus from './tools/directory_workflow_status.js'
+import * as DirectoryGetLocalSourcebookContract from './tools/get-local-sourcebook-contract.js'
+import * as DirectoryListLocalSourcebookTags from './tools/list-local-sourcebook-tags.js'
+import * as DirectoryResolveLocalSourcebookTags from './tools/resolve-local-sourcebook-tags.js'
+import * as DirectoryPrepareLocalSourcebookWrite from './tools/prepare-local-sourcebook-write.js'
+import * as DirectoryValidateLocalSourcebookWrite from './tools/validate-local-sourcebook-write.js'
+import * as DirectoryLocalSourcebookCapture from './tools/local-sourcebook-capture.js'
+import * as DirectoryLocalSourcebookSubmissionStatus from './tools/local_sourcebook_submission_status.js'
+import * as DirectoryLocalSourcebookRefresh from './tools/local_sourcebook_refresh.js'
 import * as DirectoryLocationMarkets from './tools/location_markets.js'
 import * as WorkflowsList from './tools/workflow_list.js'
 import * as WorkflowsSuggest from './tools/workflow_suggest.js'
@@ -188,6 +205,16 @@ import * as VaultsRouteMemory from './tools/route-memory.js'
 import * as WebhooksCreateWebhook from './tools/create-webhook.js'
 import * as WebhooksListWebhooks from './tools/list-webhooks.js'
 import * as WebhooksRevokeWebhook from './tools/revoke-webhook.js'
+import * as ImagesProjectCreate from './tools/image_project_create.js'
+import * as ImagesProjectList from './tools/image_project_list.js'
+import * as ImagesFolderCreate from './tools/image_folder_create.js'
+import * as ImagesFolderList from './tools/image_folder_list.js'
+import * as ImagesAssetSave from './tools/image_asset_save.js'
+import * as ImagesAssetGet from './tools/image_asset_get.js'
+import * as ImagesAssetList from './tools/image_asset_list.js'
+import * as ImagesAssetSearch from './tools/image_asset_search.js'
+import * as ImagesAssetMove from './tools/image_asset_move.js'
+import * as ImagesAssetDelete from './tools/image_asset_delete.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -336,6 +363,51 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "g2Reviews"
   },
   {
+    "name": "commons_search_entities",
+    "category": "commons",
+    "methodName": "searchEntities"
+  },
+  {
+    "name": "commons_get_entity",
+    "category": "commons",
+    "methodName": "getEntity"
+  },
+  {
+    "name": "commons_list_needs_links",
+    "category": "commons",
+    "methodName": "listNeedsLinks"
+  },
+  {
+    "name": "commons_prepare_entity",
+    "category": "commons",
+    "methodName": "prepareEntity"
+  },
+  {
+    "name": "commons_validate_entity",
+    "category": "commons",
+    "methodName": "validateEntity"
+  },
+  {
+    "name": "commons_submit_entity",
+    "category": "commons",
+    "methodName": "submitEntity"
+  },
+  {
+    "name": "commons_get_entity_ledger",
+    "category": "commons",
+    "methodName": "getEntityLedger"
+  },
+  {
+    "name": "commons_save_filter",
+    "category": "commons",
+    "methodName": "saveFilter"
+  },
+  {
+    "name": "commons_list_filters",
+    "category": "commons",
+    "methodName": "listFilters"
+  },
+  {
     "name": "directory_workflow",
     "category": "directory",
     "methodName": "run"
@@ -344,6 +416,46 @@ export const MCP_TOOL_BINDINGS = [
     "name": "directory_workflow_status",
     "category": "directory",
     "methodName": "workflowStatus"
+  },
+  {
+    "name": "get-local-sourcebook-contract",
+    "category": "directory",
+    "methodName": "getLocalSourcebookContract"
+  },
+  {
+    "name": "list-local-sourcebook-tags",
+    "category": "directory",
+    "methodName": "listLocalSourcebookTags"
+  },
+  {
+    "name": "resolve-local-sourcebook-tags",
+    "category": "directory",
+    "methodName": "resolveLocalSourcebookTags"
+  },
+  {
+    "name": "prepare-local-sourcebook-write",
+    "category": "directory",
+    "methodName": "prepareLocalSourcebookWrite"
+  },
+  {
+    "name": "validate-local-sourcebook-write",
+    "category": "directory",
+    "methodName": "validateLocalSourcebookWrite"
+  },
+  {
+    "name": "local-sourcebook-capture",
+    "category": "directory",
+    "methodName": "localSourcebookCapture"
+  },
+  {
+    "name": "local_sourcebook_submission_status",
+    "category": "directory",
+    "methodName": "localSourcebookSubmissionStatus"
+  },
+  {
+    "name": "local_sourcebook_refresh",
+    "category": "directory",
+    "methodName": "localSourcebookRefresh"
   },
   {
     "name": "location_markets",
@@ -1129,6 +1241,56 @@ export const MCP_TOOL_BINDINGS = [
     "name": "revoke-webhook",
     "category": "webhooks",
     "methodName": "revokeWebhook"
+  },
+  {
+    "name": "image_project_create",
+    "category": "images",
+    "methodName": "projectCreate"
+  },
+  {
+    "name": "image_project_list",
+    "category": "images",
+    "methodName": "projectList"
+  },
+  {
+    "name": "image_folder_create",
+    "category": "images",
+    "methodName": "folderCreate"
+  },
+  {
+    "name": "image_folder_list",
+    "category": "images",
+    "methodName": "folderList"
+  },
+  {
+    "name": "image_asset_save",
+    "category": "images",
+    "methodName": "assetSave"
+  },
+  {
+    "name": "image_asset_get",
+    "category": "images",
+    "methodName": "assetGet"
+  },
+  {
+    "name": "image_asset_list",
+    "category": "images",
+    "methodName": "assetList"
+  },
+  {
+    "name": "image_asset_search",
+    "category": "images",
+    "methodName": "assetSearch"
+  },
+  {
+    "name": "image_asset_move",
+    "category": "images",
+    "methodName": "assetMove"
+  },
+  {
+    "name": "image_asset_delete",
+    "category": "images",
+    "methodName": "assetDelete"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1176,7 +1338,7 @@ export class WebNamespace {
     return this.callTool('check_site_export', input) as Promise<WebCheckSiteExport.Output>
   }
 
-  async archiveRead(input: WebArchiveRead.Input): Promise<WebArchiveRead.Output> {
+  async archiveRead(input: WebArchiveRead.Input = {} as WebArchiveRead.Input): Promise<WebArchiveRead.Output> {
     return this.callTool('archive_read', input) as Promise<WebArchiveRead.Output>
   }
 }
@@ -1297,6 +1459,46 @@ export class ReviewsNamespace {
   }
 }
 
+export class CommonsNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async searchEntities(input: CommonsSearchEntities.Input = {} as CommonsSearchEntities.Input): Promise<CommonsSearchEntities.Output> {
+    return this.callTool('commons_search_entities', input) as Promise<CommonsSearchEntities.Output>
+  }
+
+  async getEntity(input: CommonsGetEntity.Input): Promise<CommonsGetEntity.Output> {
+    return this.callTool('commons_get_entity', input) as Promise<CommonsGetEntity.Output>
+  }
+
+  async listNeedsLinks(input: CommonsListNeedsLinks.Input = {} as CommonsListNeedsLinks.Input): Promise<CommonsListNeedsLinks.Output> {
+    return this.callTool('commons_list_needs_links', input) as Promise<CommonsListNeedsLinks.Output>
+  }
+
+  async prepareEntity(input: CommonsPrepareEntity.Input): Promise<CommonsPrepareEntity.Output> {
+    return this.callTool('commons_prepare_entity', input) as Promise<CommonsPrepareEntity.Output>
+  }
+
+  async validateEntity(input: CommonsValidateEntity.Input = {} as CommonsValidateEntity.Input): Promise<CommonsValidateEntity.Output> {
+    return this.callTool('commons_validate_entity', input) as Promise<CommonsValidateEntity.Output>
+  }
+
+  async submitEntity(input: CommonsSubmitEntity.Input): Promise<CommonsSubmitEntity.Output> {
+    return this.callTool('commons_submit_entity', input) as Promise<CommonsSubmitEntity.Output>
+  }
+
+  async getEntityLedger(input: CommonsGetEntityLedger.Input): Promise<CommonsGetEntityLedger.Output> {
+    return this.callTool('commons_get_entity_ledger', input) as Promise<CommonsGetEntityLedger.Output>
+  }
+
+  async saveFilter(input: CommonsSaveFilter.Input): Promise<CommonsSaveFilter.Output> {
+    return this.callTool('commons_save_filter', input) as Promise<CommonsSaveFilter.Output>
+  }
+
+  async listFilters(input: CommonsListFilters.Input = {} as CommonsListFilters.Input): Promise<CommonsListFilters.Output> {
+    return this.callTool('commons_list_filters', input) as Promise<CommonsListFilters.Output>
+  }
+}
+
 export class DirectoryNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -1306,6 +1508,38 @@ export class DirectoryNamespace {
 
   async workflowStatus(input: DirectoryWorkflowStatus.Input): Promise<DirectoryWorkflowStatus.Output> {
     return this.callTool('directory_workflow_status', input) as Promise<DirectoryWorkflowStatus.Output>
+  }
+
+  async getLocalSourcebookContract(input: DirectoryGetLocalSourcebookContract.Input = {} as DirectoryGetLocalSourcebookContract.Input): Promise<DirectoryGetLocalSourcebookContract.Output> {
+    return this.callTool('get-local-sourcebook-contract', input) as Promise<DirectoryGetLocalSourcebookContract.Output>
+  }
+
+  async listLocalSourcebookTags(input: DirectoryListLocalSourcebookTags.Input = {} as DirectoryListLocalSourcebookTags.Input): Promise<DirectoryListLocalSourcebookTags.Output> {
+    return this.callTool('list-local-sourcebook-tags', input) as Promise<DirectoryListLocalSourcebookTags.Output>
+  }
+
+  async resolveLocalSourcebookTags(input: DirectoryResolveLocalSourcebookTags.Input): Promise<DirectoryResolveLocalSourcebookTags.Output> {
+    return this.callTool('resolve-local-sourcebook-tags', input) as Promise<DirectoryResolveLocalSourcebookTags.Output>
+  }
+
+  async prepareLocalSourcebookWrite(input: DirectoryPrepareLocalSourcebookWrite.Input): Promise<DirectoryPrepareLocalSourcebookWrite.Output> {
+    return this.callTool('prepare-local-sourcebook-write', input) as Promise<DirectoryPrepareLocalSourcebookWrite.Output>
+  }
+
+  async validateLocalSourcebookWrite(input: DirectoryValidateLocalSourcebookWrite.Input = {} as DirectoryValidateLocalSourcebookWrite.Input): Promise<DirectoryValidateLocalSourcebookWrite.Output> {
+    return this.callTool('validate-local-sourcebook-write', input) as Promise<DirectoryValidateLocalSourcebookWrite.Output>
+  }
+
+  async localSourcebookCapture(input: DirectoryLocalSourcebookCapture.Input = {} as DirectoryLocalSourcebookCapture.Input): Promise<DirectoryLocalSourcebookCapture.Output> {
+    return this.callTool('local-sourcebook-capture', input) as Promise<DirectoryLocalSourcebookCapture.Output>
+  }
+
+  async localSourcebookSubmissionStatus(input: DirectoryLocalSourcebookSubmissionStatus.Input): Promise<DirectoryLocalSourcebookSubmissionStatus.Output> {
+    return this.callTool('local_sourcebook_submission_status', input) as Promise<DirectoryLocalSourcebookSubmissionStatus.Output>
+  }
+
+  async localSourcebookRefresh(input: DirectoryLocalSourcebookRefresh.Input): Promise<DirectoryLocalSourcebookRefresh.Output> {
+    return this.callTool('local_sourcebook_refresh', input) as Promise<DirectoryLocalSourcebookRefresh.Output>
   }
 
   async locationMarkets(input: DirectoryLocationMarkets.Input = {} as DirectoryLocationMarkets.Input): Promise<DirectoryLocationMarkets.Output> {
@@ -1568,7 +1802,7 @@ export class ScheduleNamespace {
     return this.callTool('create_artifact_template', input) as Promise<ScheduleCreateArtifactTemplate.Output>
   }
 
-  async updateArtifactTemplate(input: ScheduleUpdateArtifactTemplate.Input = {} as ScheduleUpdateArtifactTemplate.Input): Promise<ScheduleUpdateArtifactTemplate.Output> {
+  async updateArtifactTemplate(input: ScheduleUpdateArtifactTemplate.Input): Promise<ScheduleUpdateArtifactTemplate.Output> {
     return this.callTool('update_artifact_template', input) as Promise<ScheduleUpdateArtifactTemplate.Output>
   }
 
@@ -2013,6 +2247,50 @@ export class WebhooksNamespace {
   }
 }
 
+export class ImagesNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async projectCreate(input: ImagesProjectCreate.Input): Promise<ImagesProjectCreate.Output> {
+    return this.callTool('image_project_create', input) as Promise<ImagesProjectCreate.Output>
+  }
+
+  async projectList(input: ImagesProjectList.Input = {} as ImagesProjectList.Input): Promise<ImagesProjectList.Output> {
+    return this.callTool('image_project_list', input) as Promise<ImagesProjectList.Output>
+  }
+
+  async folderCreate(input: ImagesFolderCreate.Input): Promise<ImagesFolderCreate.Output> {
+    return this.callTool('image_folder_create', input) as Promise<ImagesFolderCreate.Output>
+  }
+
+  async folderList(input: ImagesFolderList.Input): Promise<ImagesFolderList.Output> {
+    return this.callTool('image_folder_list', input) as Promise<ImagesFolderList.Output>
+  }
+
+  async assetSave(input: ImagesAssetSave.Input): Promise<ImagesAssetSave.Output> {
+    return this.callTool('image_asset_save', input) as Promise<ImagesAssetSave.Output>
+  }
+
+  async assetGet(input: ImagesAssetGet.Input): Promise<ImagesAssetGet.Output> {
+    return this.callTool('image_asset_get', input) as Promise<ImagesAssetGet.Output>
+  }
+
+  async assetList(input: ImagesAssetList.Input = {} as ImagesAssetList.Input): Promise<ImagesAssetList.Output> {
+    return this.callTool('image_asset_list', input) as Promise<ImagesAssetList.Output>
+  }
+
+  async assetSearch(input: ImagesAssetSearch.Input = {} as ImagesAssetSearch.Input): Promise<ImagesAssetSearch.Output> {
+    return this.callTool('image_asset_search', input) as Promise<ImagesAssetSearch.Output>
+  }
+
+  async assetMove(input: ImagesAssetMove.Input): Promise<ImagesAssetMove.Output> {
+    return this.callTool('image_asset_move', input) as Promise<ImagesAssetMove.Output>
+  }
+
+  async assetDelete(input: ImagesAssetDelete.Input): Promise<ImagesAssetDelete.Output> {
+    return this.callTool('image_asset_delete', input) as Promise<ImagesAssetDelete.Output>
+  }
+}
+
 export class GeneratedMcpToolsClient {
   readonly search: SearchNamespace
   readonly web: WebNamespace
@@ -2024,6 +2302,7 @@ export class GeneratedMcpToolsClient {
   readonly instagram: InstagramNamespace
   readonly maps: MapsNamespace
   readonly reviews: ReviewsNamespace
+  readonly commons: CommonsNamespace
   readonly directory: DirectoryNamespace
   readonly workflows: WorkflowsNamespace
   readonly editorial: EditorialNamespace
@@ -2046,6 +2325,7 @@ export class GeneratedMcpToolsClient {
   readonly tags: TagsNamespace
   readonly vaults: VaultsNamespace
   readonly webhooks: WebhooksNamespace
+  readonly images: ImagesNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.search = new SearchNamespace(callTool)
@@ -2058,6 +2338,7 @@ export class GeneratedMcpToolsClient {
     this.instagram = new InstagramNamespace(callTool)
     this.maps = new MapsNamespace(callTool)
     this.reviews = new ReviewsNamespace(callTool)
+    this.commons = new CommonsNamespace(callTool)
     this.directory = new DirectoryNamespace(callTool)
     this.workflows = new WorkflowsNamespace(callTool)
     this.editorial = new EditorialNamespace(callTool)
@@ -2080,5 +2361,6 @@ export class GeneratedMcpToolsClient {
     this.tags = new TagsNamespace(callTool)
     this.vaults = new VaultsNamespace(callTool)
     this.webhooks = new WebhooksNamespace(callTool)
+    this.images = new ImagesNamespace(callTool)
   }
 }

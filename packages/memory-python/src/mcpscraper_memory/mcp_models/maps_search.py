@@ -11,9 +11,6 @@ class MapsSearchInput(BaseModel):
     hl: str | None = Field(None, alias="hl", description="Language inferred from user request.")
     max_results: int | None = Field(None, alias="maxResults", description="Number of candidates to return. Default 10, maximum 50.")
     include_services: bool | None = Field(None, alias="includeServices", description="Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards.")
-    proxy_mode: Literal["configured", "none"] | None = Field(None, alias="proxyMode", description="Leave unset for direct egress. Set configured only when the installed server has a configured proxy and the user explicitly needs it; location remains in the Maps query.")
-    proxy_zip: str | None = Field(None, alias="proxyZip", description="Optional US ZIP override for configured proxy routing.")
-    debug: bool | None = Field(None, alias="debug", description="Include sanitized browser/proxy diagnostics.")
 
 
 class MapsSearchOutput(BaseModel):

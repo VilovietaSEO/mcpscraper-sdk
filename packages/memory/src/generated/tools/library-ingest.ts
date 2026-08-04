@@ -60,10 +60,6 @@ export interface Input {
    * Reviewed cross-vault references in Vault::path.md form.
    */
   relatedVaultNotes?: string[];
-  /**
-   * Filesystem root to also mirror the item to. Optional; falls back to MEMORY_LOCAL_VAULT_ROOT env when set.
-   */
-  localVaultPath?: string;
 }
 
 export interface Output {
@@ -87,10 +83,6 @@ export interface Output {
    * Number of search chunks indexed (0 if embedding failed but the note still saved).
    */
   indexed?: number;
-  /**
-   * True if the item was also mirrored to the local filesystem vault.
-   */
-  dualWritten?: boolean;
   /**
    * Recommended extraction action after the raw Library source is safe.
    */

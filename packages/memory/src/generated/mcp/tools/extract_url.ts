@@ -4,7 +4,7 @@ export interface Input {
    */
   url: string;
   /**
-   * Capture a full-page screenshot, saved to ~/Downloads/mcp-scraper/screenshots/ and returned inline.
+   * Capture a full-page screenshot and return it through the result contract. Large captures may be offloaded to an owned artifact.
    */
   screenshot?: boolean;
   /**
@@ -20,7 +20,7 @@ export interface Input {
    */
   includeFeaturedImage?: boolean;
   /**
-   * Extract and download page media (images/video/audio) to ~/Downloads/mcp-scraper/media/. Ad/tracking noise is filtered automatically.
+   * Deprecated alias for preserveMedia. Omit when using preserveMedia; when omitted, media preservation defaults to false.
    */
   downloadMedia?: boolean;
   /**
@@ -28,9 +28,13 @@ export interface Input {
    */
   mediaTypes?: ("image" | "video" | "audio")[];
   /**
-   * Allow localhost and private-network URLs. Local development only.
+   * Where to deliver the result. auto keeps small results inline and offloads large ones; artifact always returns an owned artifact; memory stores the full page in hosted Memory; inline returns a bounded response.
    */
-  allowLocal?: boolean;
+  delivery?: "auto" | "inline" | "artifact" | "memory";
+  /**
+   * Preserve discovered media in the result workflow. This is the preferred replacement for downloadMedia.
+   */
+  preserveMedia?: boolean;
   /**
    * Save the full page content into the user's MCP Memory vault server-side, embedded for semantic recall — the full body is NOT returned to chat.
    */

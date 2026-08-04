@@ -50,10 +50,6 @@ export interface Input {
    * Per-page capture timeout in milliseconds; timeouts return as structured capture failures.
    */
   timeoutMs?: number;
-  /**
-   * Include sanitized browser/proxy diagnostics.
-   */
-  debug?: boolean;
 }
 
 export interface Output {

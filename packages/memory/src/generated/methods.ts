@@ -104,6 +104,16 @@ import * as ListWebhooks from './tools/list-webhooks.js'
 import * as RevokeWebhook from './tools/revoke-webhook.js'
 import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
 import * as VideoAnalyzeStatus from './tools/video-analyze-status.js'
+import * as ImageProjectCreate from './tools/image_project_create.js'
+import * as ImageProjectList from './tools/image_project_list.js'
+import * as ImageFolderCreate from './tools/image_folder_create.js'
+import * as ImageFolderList from './tools/image_folder_list.js'
+import * as ImageAssetSave from './tools/image_asset_save.js'
+import * as ImageAssetGet from './tools/image_asset_get.js'
+import * as ImageAssetList from './tools/image_asset_list.js'
+import * as ImageAssetSearch from './tools/image_asset_search.js'
+import * as ImageAssetMove from './tools/image_asset_move.js'
+import * as ImageAssetDelete from './tools/image_asset_delete.js'
 
 export class AccessNamespace {
   constructor(private readonly callTool: CallToolFn) {}
@@ -578,5 +588,49 @@ export class VideoNamespace {
 
   async analyzeStatus(input: VideoAnalyzeStatus.Input): Promise<VideoAnalyzeStatus.Output> {
     return this.callTool('videoAnalyzeStatusTool', input) as Promise<VideoAnalyzeStatus.Output>
+  }
+}
+
+export class ImagesNamespace {
+  constructor(private readonly callTool: CallToolFn) {}
+
+  async imageProjectCreate(input: ImageProjectCreate.Input): Promise<ImageProjectCreate.Output> {
+    return this.callTool('image_project_create', input) as Promise<ImageProjectCreate.Output>
+  }
+
+  async imageProjectList(input: ImageProjectList.Input): Promise<ImageProjectList.Output> {
+    return this.callTool('image_project_list', input) as Promise<ImageProjectList.Output>
+  }
+
+  async imageFolderCreate(input: ImageFolderCreate.Input): Promise<ImageFolderCreate.Output> {
+    return this.callTool('image_folder_create', input) as Promise<ImageFolderCreate.Output>
+  }
+
+  async imageFolderList(input: ImageFolderList.Input): Promise<ImageFolderList.Output> {
+    return this.callTool('image_folder_list', input) as Promise<ImageFolderList.Output>
+  }
+
+  async imageAssetSave(input: ImageAssetSave.Input): Promise<ImageAssetSave.Output> {
+    return this.callTool('image_asset_save', input) as Promise<ImageAssetSave.Output>
+  }
+
+  async imageAssetGet(input: ImageAssetGet.Input): Promise<ImageAssetGet.Output> {
+    return this.callTool('image_asset_get', input) as Promise<ImageAssetGet.Output>
+  }
+
+  async imageAssetList(input: ImageAssetList.Input): Promise<ImageAssetList.Output> {
+    return this.callTool('image_asset_list', input) as Promise<ImageAssetList.Output>
+  }
+
+  async imageAssetSearch(input: ImageAssetSearch.Input): Promise<ImageAssetSearch.Output> {
+    return this.callTool('image_asset_search', input) as Promise<ImageAssetSearch.Output>
+  }
+
+  async imageAssetMove(input: ImageAssetMove.Input): Promise<ImageAssetMove.Output> {
+    return this.callTool('image_asset_move', input) as Promise<ImageAssetMove.Output>
+  }
+
+  async imageAssetDelete(input: ImageAssetDelete.Input): Promise<ImageAssetDelete.Output> {
+    return this.callTool('image_asset_delete', input) as Promise<ImageAssetDelete.Output>
   }
 }

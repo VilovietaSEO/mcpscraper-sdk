@@ -52,10 +52,6 @@ export interface Input {
    * Reviewed cross-vault references in Vault::path.md form.
    */
   relatedVaultNotes?: string[];
-  /**
-   * Filesystem root to also mirror the item to. Optional; falls back to MEMORY_LOCAL_VAULT_ROOT env when set.
-   */
-  localVaultPath?: string;
 }
 
 export interface Output {

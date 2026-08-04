@@ -1,4 +1,4 @@
-# All 188 MCP tools with cURL
+# All 215 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (188)
+## Complete catalog (215)
 
 ## search
 
@@ -110,10 +110,30 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `trustpilot_reviews` — Trustpilot Review Harvest
 - `g2_reviews` — G2 Review Harvest
 
+## commons
+
+- `commons_search_entities` — Transparent Commons Entity Search
+- `commons_get_entity` — Transparent Commons Entity Lookup
+- `commons_list_needs_links` — Transparent Commons Needs-Link Backlog
+- `commons_prepare_entity` — Transparent Commons Prepare Entity
+- `commons_validate_entity` — Transparent Commons Validate Entity
+- `commons_submit_entity` — Transparent Commons Governed Entity Write
+- `commons_get_entity_ledger` — Transparent Commons Contribution Ledger
+- `commons_save_filter` — Transparent Commons Saved MCP Filter
+- `commons_list_filters` — Transparent Commons List Saved Filters
+
 ## directory
 
 - `directory_workflow` — Directory Workflow: Markets + Maps
 - `directory_workflow_status` — Directory Workflow Status
+- `get-local-sourcebook-contract` — Get Local Sourcebook Contract
+- `list-local-sourcebook-tags` — List Local Sourcebook Tags
+- `resolve-local-sourcebook-tags` — Resolve Local Sourcebook Tags
+- `prepare-local-sourcebook-write` — Prepare Local Sourcebook Write
+- `validate-local-sourcebook-write` — Validate Local Sourcebook Write
+- `local-sourcebook-capture` — Capture Governed Local Sourcebook Listing
+- `local_sourcebook_submission_status` — Local Sourcebook Submission Status
+- `local_sourcebook_refresh` — Refresh a Local Sourcebook Listing
 - `location_markets` — Hosted US Markets + ZIP Groups
 
 ## workflows
@@ -135,7 +155,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 
 ## artifacts
 
-- `report_artifact_read` — Read Report Artifact
+- `report_artifact_read` — Read Stored Artifact
 
 ## billing
 
@@ -332,3 +352,16 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `create-webhook` — Create Webhook
 - `list-webhooks` — List Webhooks
 - `revoke-webhook` — Revoke Webhook
+
+## images
+
+- `image_project_create` — Create Image Project
+- `image_project_list` — List Image Projects
+- `image_folder_create` — Create Image Folder
+- `image_folder_list` — List Image Folders
+- `image_asset_save` — Save Image Asset
+- `image_asset_get` — Get Image Asset
+- `image_asset_list` — List Image Assets
+- `image_asset_search` — Search Image Assets
+- `image_asset_move` — Move Image Asset
+- `image_asset_delete` — Delete Image Asset

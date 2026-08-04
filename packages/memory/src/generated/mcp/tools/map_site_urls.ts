@@ -7,6 +7,10 @@ export interface Input {
    * Maximum URLs to discover. Use 100 for normal maps, up to 10000 for a full inventory. Large maps (over 500 URLs) write the complete inventory to a local file and return only a summary plus the file path instead of the full list inline.
    */
   maxUrls?: number;
+  /**
+   * auto returns a bounded inline map and offloads large inventories; inline requests bounded inline delivery but still offloads above the hard context limit; artifact always creates an owner-scoped report artifact.
+   */
+  delivery?: "auto" | "inline" | "artifact";
 }
 
 export interface Output {

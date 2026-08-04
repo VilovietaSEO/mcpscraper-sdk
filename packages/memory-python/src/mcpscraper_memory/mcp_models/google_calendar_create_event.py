@@ -5,6 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class GoogleCalendarCreateEventInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
+    confirmed: bool | None = Field(None, alias="confirmed", description="Set true only when the person explicitly authorized creating this exact event and inviting these attendees. If omitted, a 2026-capable client may ask for confirmation.")
+    idempotency_key: str = Field(..., alias="idempotencyKey", description="Required stable key for this intended event. Reuse it only when retrying the same creation after a lost response.")
     connection_id: str = Field(..., alias="connectionId", description="A Google Calendar connectionId from list_service_connections, with actionsEnabled true.")
     calendar_id: str | None = Field(None, alias="calendarId", description="Calendar to create the event in. Default \"primary\".")
     summary: str = Field(..., alias="summary", description="Event title.")
