@@ -1,8 +1,8 @@
 export interface Input {
   /**
-   * New-listing identity returned by prepare-local-sourcebook-write.
+   * New-listing identity returned by prepare-local-sourcebook-write. Evidence-bearing public fields are compiled by MCP Scraper and cannot be supplied here.
    */
-  identity?: {
+  identity: {
     category: "home" | "professional" | "restaurants" | "financial" | "realestate" | "auto" | "wellness";
     state: string;
     businessName: string;
@@ -146,20 +146,6 @@ export interface Input {
         ];
     idempotencyKey: string;
   };
-  /**
-   * Complete replacement listing draft for an existing owner-scoped submission.
-   */
-  listing?: {
-    [k: string]: unknown;
-  };
-  /**
-   * Existing owner-scoped submission being revised. Omit for a new capture.
-   */
-  submissionId?: string;
-  /**
-   * Required current draft revision for an edit, preventing silent overwrites.
-   */
-  baseRevision?: number;
   /**
    * @maxItems 20
    */
@@ -2981,7 +2967,7 @@ export interface Input {
         }
       ];
   /**
-   * Stable retry key for a new capture. Required for new listings; omit only when revising an existing submissionId.
+   * Stable retry key for a new capture. Required either here or in identity.
    */
   idempotencyKey?: string;
 }

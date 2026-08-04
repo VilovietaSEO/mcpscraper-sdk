@@ -1526,11 +1526,11 @@ export class DirectoryNamespace {
     return this.callTool('prepare-local-sourcebook-write', input) as Promise<DirectoryPrepareLocalSourcebookWrite.Output>
   }
 
-  async validateLocalSourcebookWrite(input: DirectoryValidateLocalSourcebookWrite.Input = {} as DirectoryValidateLocalSourcebookWrite.Input): Promise<DirectoryValidateLocalSourcebookWrite.Output> {
+  async validateLocalSourcebookWrite(input: DirectoryValidateLocalSourcebookWrite.Input): Promise<DirectoryValidateLocalSourcebookWrite.Output> {
     return this.callTool('validate-local-sourcebook-write', input) as Promise<DirectoryValidateLocalSourcebookWrite.Output>
   }
 
-  async localSourcebookCapture(input: DirectoryLocalSourcebookCapture.Input = {} as DirectoryLocalSourcebookCapture.Input): Promise<DirectoryLocalSourcebookCapture.Output> {
+  async localSourcebookCapture(input: DirectoryLocalSourcebookCapture.Input): Promise<DirectoryLocalSourcebookCapture.Output> {
     return this.callTool('local-sourcebook-capture', input) as Promise<DirectoryLocalSourcebookCapture.Output>
   }
 
