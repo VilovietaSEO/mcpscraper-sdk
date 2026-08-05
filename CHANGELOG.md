@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-08-04 — verified against mcp-scraper 0.45.0 / mcp-memory 1.15.0
+
+### Added
+
+- Added governed Schema.org `LocalBusiness` subtype selection to the Local Sourcebook prepare, validate, and capture bindings for Node, Python, and the CLI contract catalog.
+
+### Changed
+
+- Documented the fixed 10-Credit create and 2-Credit edit prices for Local Sourcebook and Transparent Commons writes, including free validation, idempotent retry protection, and included Sourcebook acquisition.
+- Prepared `mcpscraper-memory-sdk` 0.26.2, `mcpscraper-sdk` 0.25.2, `mcpscraper-cli` 0.24.2, and both Python packages 0.24.2.
+
 ## 2026-08-04 — verified against mcp-scraper 0.44.2 / mcp-memory 1.15.0
 
 ### Changed
