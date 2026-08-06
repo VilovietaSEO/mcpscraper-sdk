@@ -10,7 +10,7 @@ class HarvestPaaInput(BaseModel):
     max_questions: int | None = Field(None, alias="maxQuestions", description="PAA questions to extract. Default 30, maximum 200. Use 10 for quick probes, 100-200 for deep research. Billed per extracted question; unused hold refunded.")
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location or user language.")
     hl: str | None = Field(None, alias="hl", description="Google interface/content language inferred from the user request.")
-    device: Literal["desktop", "mobile"] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings.")
+    device: Literal['desktop', 'mobile'] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings.")
 
 
 class HarvestPaaOutput(BaseModel):

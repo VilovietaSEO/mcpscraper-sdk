@@ -5,4 +5,6 @@ export interface Input {
   submissionId: string;
 }
 
-export type Output = unknown
+export interface Output {
+  [k: string]: unknown;
+}

@@ -17,8 +17,9 @@ class ArchiveReadInput(BaseModel):
 class ArchiveReadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    mode: Literal["list", "read"] = Field(..., alias="mode", description="")
-    archive_url: str = Field(..., alias="archiveUrl", description="")
+    mode: Literal['list', 'read'] = Field(..., alias="mode", description="")
+    archive_url: str = Field(..., alias="archiveUrl", description="Public ZIP URL or private artifactId used for this read.")
+    artifact_id: str | None = Field(None, alias="artifactId", description="")
     compressed_bytes: int = Field(..., alias="compressedBytes", description="")
     entry_count: int = Field(..., alias="entryCount", description="")
     total_uncompressed_bytes: int = Field(..., alias="totalUncompressedBytes", description="")

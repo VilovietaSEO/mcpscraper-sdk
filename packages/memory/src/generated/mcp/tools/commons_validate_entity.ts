@@ -235,6 +235,195 @@ export interface Input {
     description?: string;
   }[];
   /**
+   * Governed relationship assertions. Supplying claims replaces the accepted claim set for this entity; omitting claims preserves it. Only approved, active, non-disputed claims project into the RFC 9264 linkset.
+   *
+   * @maxItems 300
+   */
+  claims?: {
+    /**
+     * Registered link relation such as related, describedby, license, or type; alternatively an absolute HTTPS relation URI from a published vocabulary.
+     */
+    predicate: string;
+    /**
+     * Human-readable label for display and review. It does not replace the machine predicate.
+     */
+    predicateLabel?: string;
+    /**
+     * Existing Transparent Commons entity target. Use exactly one of objectEntityId or objectUrl.
+     */
+    objectEntityId?: string;
+    /**
+     * External or third-party target. Use exactly one of objectUrl or objectEntityId.
+     */
+    objectUrl?: string;
+    title?: string;
+    /**
+     * Optional RFC link target media type.
+     */
+    mediaType?: string;
+    /**
+     * Optional repeatable RFC link target language hints.
+     *
+     * @maxItems 20
+     */
+    hreflang?:
+      | []
+      | [string]
+      | [string, string]
+      | [string, string, string]
+      | [string, string, string, string]
+      | [string, string, string, string, string]
+      | [string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string, string, string, string, string, string]
+      | [
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string
+        ]
+      | [
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string
+        ]
+      | [
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string
+        ]
+      | [
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string
+        ]
+      | [
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string
+        ]
+      | [
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string,
+          string
+        ];
+    qualifiers?: {
+      [k: string]: string | number | boolean | null;
+    };
+    /**
+     * Evidence supporting the relationship assertion.
+     *
+     * @maxItems 50
+     */
+    references?: {
+      title: string;
+      url?: string;
+      source?: string;
+      note?: string;
+      accessedAt?: string;
+    }[];
+    rank?: "preferred" | "normal" | "deprecated";
+    confidence?: number;
+    confidenceReason?: string;
+    disputeState?: "undisputed" | "attributed" | "disputed" | "contested" | "needs_review" | "deprecated";
+    validFrom?: string;
+    validTo?: string;
+    asOf?: string;
+    sourceFamily?: "first_party" | "partner" | "independent" | "community" | "unknown";
+  }[];
+  /**
    * Structured encyclopedia body in neutral Markdown, not a raw scrape dump or blog essay. Use H2 for entity-profile sections and H3/H4/H5 for subtopics; every heading appears in the public page menu. Call commons_prepare_entity first for the live entity profile and commons_validate_entity before submit. Profile sections are adaptive: include History, Pricing, Reception, Timeline, Classification, or similar sections only when source evidence supports them; omit unsupported sections instead of adding empty/filler headings. Apply NPOV, verifiability, and no-original-research rules; self-published sources can support only uncontroversial source-owned facts.
    */
   bodyMarkdown?: string;
@@ -389,4 +578,9 @@ export interface Input {
   reviewPolicy?: "auto_publish_if_safe" | "always_review";
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  data?: unknown;
+  error?: string;
+  message?: string;
+}

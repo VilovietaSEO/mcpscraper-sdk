@@ -76,10 +76,6 @@ export interface Output {
    */
   indexed?: number;
   /**
-   * True if the item was also mirrored to the local filesystem vault.
-   */
-  dualWritten?: boolean;
-  /**
    * Recommended extraction action after the raw Library source is safe.
    */
   nextStep?: string;

@@ -8,7 +8,7 @@ class UpdateScheduledActionInput(BaseModel):
     id: str = Field(..., alias="id", description="The scheduled action id.")
     description: str | None = Field(None, alias="description", description="")
     vault: str | None = Field(None, alias="vault", description="")
-    cadence: Literal["once", "daily", "weekly", "monthly"] | None = Field(None, alias="cadence", description="")
+    cadence: Literal['once', 'daily', 'weekly', 'monthly'] | None = Field(None, alias="cadence", description="")
     time_of_day: Any | None = Field(None, alias="timeOfDay", description="")
     timezone: str | None = Field(None, alias="timezone", description="")
     artifact_selection: Any | None = Field(None, alias="artifactSelection", description="")

@@ -8,7 +8,7 @@ class UpsertMemoryTagInput(BaseModel):
     tag: str = Field(..., alias="tag", description="")
     description: str | None = Field(None, alias="description", description="")
     aliases: list[str] | None = Field(None, alias="aliases", description="")
-    status: Literal["active", "deprecated"] | None = Field(None, alias="status", description="")
+    status: Literal['active', 'deprecated'] | None = Field(None, alias="status", description="")
 
 
 class UpsertMemoryTagOutput(BaseModel):

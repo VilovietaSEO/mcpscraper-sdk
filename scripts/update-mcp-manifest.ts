@@ -104,6 +104,7 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   query_fanout_workflow: 'workflows',
   rank_tracker_workflow: 'workflows',
   report_artifact_read: 'artifacts',
+  get_artifact_template_example: 'artifacts',
   trustpilot_reviews: 'reviews',
   g2_reviews: 'reviews',
   'get-local-sourcebook-contract': 'directory',
@@ -117,6 +118,7 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
 }
 
 const SCRAPER_PREFIX_CATEGORIES: Array<[string, string]> = [
+  ['analytics_', 'analytics'],
   ['browser_', 'browser'],
   ['youtube_', 'youtube'],
   ['facebook_', 'facebook'],

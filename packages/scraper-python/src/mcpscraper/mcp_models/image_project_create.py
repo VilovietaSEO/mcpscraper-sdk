@@ -12,3 +12,8 @@ class ImageProjectCreateInput(BaseModel):
 
 class ImageProjectCreateOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: Literal[True, False] = Field(..., alias="ok", description="")
+    project: dict[str, Any] | None = Field(None, alias="project", description="")
+    code: str | None = Field(None, alias="code", description="")
+    error: str | None = Field(None, alias="error", description="")

@@ -5,7 +5,9 @@ from pydantic import BaseModel, ConfigDict, Field
 class ListArtifactTemplatesInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    status: Literal["active", "archived", "all"] | None = Field(None, alias="status", description="")
+    status: Literal['active', 'archived', 'all'] | None = Field(None, alias="status", description="")
+    query: str | None = Field(None, alias="query", description="Optional case-insensitive search text for preset and saved-template names, descriptions, renderer keys, and authoring guidance.")
+    preset_key: Literal['editorial_reading_room_v1', 'personal_authority_v1', 'newsroom_publisher_v1'] | None = Field(None, alias="presetKey", description="Optional renderer-family filter. Saved templates are matched through their current immutable version.")
 
 
 class ListArtifactTemplatesOutput(BaseModel):
@@ -15,5 +17,5 @@ class ListArtifactTemplatesOutput(BaseModel):
     presets: list[dict[str, Any]] | None = Field(None, alias="presets", description="")
     templates: list[dict[str, Any]] | None = Field(None, alias="templates", description="")
     error: str | None = Field(None, alias="error", description="")
-    error_code: Literal["invalid_request", "not_found", "conflict", "template_archived", "renderer_unavailable", "artifact_unavailable", "view_link_unavailable", "internal_error"] | None = Field(None, alias="errorCode", description="")
+    error_code: Literal['invalid_request', 'not_found', 'conflict', 'template_archived', 'renderer_unavailable', 'artifact_unavailable', 'view_link_unavailable', 'internal_error'] | None = Field(None, alias="errorCode", description="")
     request_id: str | None = Field(None, alias="requestId", description="")

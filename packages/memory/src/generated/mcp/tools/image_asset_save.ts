@@ -162,4 +162,34 @@ export interface Input {
   idempotencyKey: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: true | false;
+  asset?: {
+    assetId: string;
+    title: string;
+    description: string | null;
+    altText: string | null;
+    sourceUrl: string | null;
+    sourceKind: string;
+    mimeType: string;
+    bytes: number;
+    width: number;
+    height: number;
+    projectId: string | null;
+    folderId: string | null;
+    tags: string[];
+    status: string;
+    embeddingStatus: string;
+    createdAt: string;
+    updatedAt: string;
+    preview?: {
+      url: string;
+      expiresAt: string;
+      mimeType: "image/webp";
+    };
+  };
+  reusedObject?: boolean;
+  nextAction?: string;
+  code?: string;
+  error?: string;
+}

@@ -57,15 +57,51 @@ export interface Output {
   /**
    * Every researched URL, cited first.
    */
-  browsed_urls: Items[];
+  browsed_urls: {
+    url: string;
+    domain: string;
+    title: string;
+    cited: boolean;
+    timesCited: number;
+    snippet: string;
+    round: number | null;
+    /**
+     * URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog.
+     */
+    siteType: string;
+  }[];
   /**
    * Researched URLs cited in the final answer.
    */
-  cited_urls: Items[];
+  cited_urls: {
+    url: string;
+    domain: string;
+    title: string;
+    cited: boolean;
+    timesCited: number;
+    snippet: string;
+    round: number | null;
+    /**
+     * URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog.
+     */
+    siteType: string;
+  }[];
   /**
    * Researched URLs pulled but not cited.
    */
-  browsed_only: Items[];
+  browsed_only: {
+    url: string;
+    domain: string;
+    title: string;
+    cited: boolean;
+    timesCited: number;
+    snippet: string;
+    round: number | null;
+    /**
+     * URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog.
+     */
+    siteType: string;
+  }[];
   snippets: {
     url: string;
     domain: string;
@@ -126,17 +162,4 @@ export interface Output {
     unmappedKeys: string[];
     note: string;
   };
-}
-export interface Items {
-  url: string;
-  domain: string;
-  title: string;
-  cited: boolean;
-  timesCited: number;
-  snippet: string;
-  round: number | null;
-  /**
-   * URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog.
-   */
-  siteType: string;
 }

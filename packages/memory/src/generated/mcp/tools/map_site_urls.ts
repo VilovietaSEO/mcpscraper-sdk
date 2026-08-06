@@ -32,4 +32,10 @@ export interface Output {
     expiresAt: string;
     preview: string;
   };
+  delivery: {
+    requested: "auto" | "inline" | "artifact";
+    effective: "inline" | "artifact";
+    retained: boolean;
+    nextAction: string | null;
+  };
 }

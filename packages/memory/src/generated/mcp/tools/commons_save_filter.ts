@@ -346,4 +346,9 @@ export interface Input {
   };
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  data?: unknown;
+  error?: string;
+  message?: string;
+}

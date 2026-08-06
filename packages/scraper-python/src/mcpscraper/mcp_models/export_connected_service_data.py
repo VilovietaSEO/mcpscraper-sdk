@@ -6,7 +6,7 @@ class ExportConnectedServiceDataInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     connection_id: str = Field(..., alias="connectionId", description="A tenant-owned connectionId from list_service_connections.")
-    dataset: Literal["auto", "emails", "calendar_events", "zoom_recordings", "zoom_transcripts", "slack_channel_messages", "meta_ads_insights", "search_console_performance", "resend_data", "resend_emails", "resend_received_emails", "resend_logs", "resend_contacts", "resend_broadcasts", "resend_templates"] | None = Field(None, alias="dataset", description="Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.")
+    dataset: Literal['auto', 'emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'] | None = Field(None, alias="dataset", description="Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.")
     channel_id: str | None = Field(None, alias="channelId", description="Slack conversation ID to export. Required for a new slack_channel_messages export; preserved inside continuation on resume. The export never joins a channel.")
     include_threads: bool | None = Field(None, alias="includeThreads", description="For Slack exports, automatically fetch every threaded reply. Defaults to true.")
     all_time: bool | None = Field(None, alias="allTime", description="For Slack exports only, read all accessible channel history instead of the default seven-day range. Do not combine with from, lastDays, or continuation.")
@@ -14,7 +14,7 @@ class ExportConnectedServiceDataInput(BaseModel):
     from_: str | None = Field(None, alias="from", description="Inclusive RFC3339 range start. Use instead of lastDays.")
     to: str | None = Field(None, alias="to", description="Exclusive RFC3339 range end. Defaults to now.")
     max_items: int | None = Field(None, alias="maxItems", description="Maximum records to include in this export invocation. Pagination and detail retrieval happen server-side.")
-    delivery: Literal["auto", "artifact"] | None = Field(None, alias="delivery", description="auto returns small results inline and stores larger results in private Blob. artifact always creates a private downloadable JSONL artifact.")
+    delivery: Literal['auto', 'artifact'] | None = Field(None, alias="delivery", description="auto returns small results inline and stores larger results in private Blob. artifact always creates a private downloadable JSONL artifact.")
     continuation: dict[str, Any] | None = Field(None, alias="continuation", description="Preferred resume input. Pass the entire continuation object returned by a prior partial export unchanged; it preserves the exact original range and dataset.")
     cursor: str | None = Field(None, alias="cursor", description="Legacy resume input. When used, also pass the exact original from, to, and dataset. Prefer continuation.")
 
@@ -24,10 +24,11 @@ class ExportConnectedServiceDataOutput(BaseModel):
 
     ok: bool = Field(..., alias="ok", description="")
     export_id: str | None = Field(None, alias="exportId", description="")
-    status: Literal["complete", "partial"] | None = Field(None, alias="status", description="")
+    status: Literal['complete', 'partial'] | None = Field(None, alias="status", description="")
     provider_config_key: str | None = Field(None, alias="providerConfigKey", description="")
-    dataset: Literal["emails", "calendar_events", "zoom_recordings", "zoom_transcripts", "meta_ads_insights", "search_console_performance", "resend_data", "resend_emails", "resend_received_emails", "resend_logs", "resend_contacts", "resend_broadcasts", "resend_templates"] | None = Field(None, alias="dataset", description="")
+    dataset: Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'] | None = Field(None, alias="dataset", description="")
     range: dict[str, Any] | None = Field(None, alias="range", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
     counts: dict[str, Any] | None = Field(None, alias="counts", description="")
     complete: bool | None = Field(None, alias="complete", description="")
     records: list[Any] | None = Field(None, alias="records", description="")

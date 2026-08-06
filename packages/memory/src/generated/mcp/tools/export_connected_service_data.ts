@@ -99,6 +99,7 @@ export interface Output {
     | "calendar_events"
     | "zoom_recordings"
     | "zoom_transcripts"
+    | "slack_channel_messages"
     | "meta_ads_insights"
     | "search_console_performance"
     | "resend_data"
@@ -111,6 +112,12 @@ export interface Output {
   range?: {
     from: string;
     to: string;
+  };
+  scope?: {
+    slack?: {
+      channelId: string;
+      includeThreads: boolean;
+    };
   };
   counts?: {
     pages: number;
@@ -131,6 +138,15 @@ export interface Output {
     expiresAt: string;
     downloadUrl: string | null;
     downloadUrlExpiresAt: string | null;
+    readback: {
+      tool: "report_artifact_read";
+      arguments: {
+        artifactId: string;
+        offset: 0;
+        maxBytes: 20000;
+      };
+      continuation: string;
+    };
   };
   continuation?: {
     cursor: string;
@@ -141,6 +157,7 @@ export interface Output {
       | "calendar_events"
       | "zoom_recordings"
       | "zoom_transcripts"
+      | "slack_channel_messages"
       | "meta_ads_insights"
       | "search_console_performance"
       | "resend_data"
@@ -150,6 +167,12 @@ export interface Output {
       | "resend_contacts"
       | "resend_broadcasts"
       | "resend_templates";
+    scope?: {
+      slack?: {
+        channelId: string;
+        includeThreads: boolean;
+      };
+    };
   } | null;
   warnings?: string[];
   untrustedContent?: boolean;

@@ -7,7 +7,7 @@ class AccessSetScopeInput(BaseModel):
 
     key_id: str = Field(..., alias="keyId", description="Identifier of the key to modify (from access-list-keys). Must be a key the caller owns.")
     scope: dict[str, Any] | None = Field(None, alias="scope", description="New scope set. Partial; the provided keys are normalized and REPLACE the full existing scope. Optional, but supply scope and/or plan.")
-    plan: Literal["free", "pro", "team", "enterprise"] | None = Field(None, alias="plan", description="New subscription plan. Optional, but supply scope and/or plan.")
+    plan: Literal['free', 'pro', 'team', 'enterprise'] | None = Field(None, alias="plan", description="New subscription plan. Optional, but supply scope and/or plan.")
 
 
 class AccessSetScopeOutput(BaseModel):

@@ -162,6 +162,34 @@ test('McpToolsClient typed methods call the unified MCP wire name', async () => 
   assert.deepEqual(result, { ok: true, results: [] })
 })
 
+test('McpToolsClient reads a governed Commons RFC 9264 linkset', async () => {
+  let capturedBody: any
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: capturedBody.id,
+          result: {
+            structuredContent: {
+              ok: true,
+              data: { document: { linkset: [{ anchor: 'https://transparent-commons.cc/wiki/content-ledger' }] } },
+            },
+          },
+        },
+      }
+    }),
+  })
+
+  const result = await client.commons.getEntityLinkset({ idOrSlug: 'TPW-Q42' })
+  assert.equal(capturedBody.params.name, 'commons_get_entity_linkset')
+  assert.deepEqual(capturedBody.params.arguments, { idOrSlug: 'TPW-Q42' })
+  assert.equal(result.ok, true)
+})
+
 test('McpToolsClient sends archiveRead through the exact archive_read contract', async () => {
   let capturedBody: any
   const client = new McpToolsClient({

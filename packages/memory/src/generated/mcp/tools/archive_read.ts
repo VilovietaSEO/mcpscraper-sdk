@@ -31,7 +31,11 @@ export interface Input {
 
 export interface Output {
   mode: "list" | "read";
+  /**
+   * Public ZIP URL or private artifactId used for this read.
+   */
   archiveUrl: string;
+  artifactId?: string;
   compressedBytes: number;
   entryCount: number;
   totalUncompressedBytes: number;

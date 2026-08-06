@@ -18,7 +18,7 @@ class ImportServiceConnectionToMemoryOutput(BaseModel):
 
     ok: bool = Field(..., alias="ok", description="")
     stored: bool | None = Field(None, alias="stored", description="")
-    status: Literal["search_ready", "stored_not_indexed"] | None = Field(None, alias="status", description="")
+    status: Literal['search_ready', 'stored_not_indexed'] | None = Field(None, alias="status", description="")
     search_ready: bool | None = Field(None, alias="searchReady", description="")
     provider_config_key: str | None = Field(None, alias="providerConfigKey", description="")
     connection_id: str | None = Field(None, alias="connectionId", description="")

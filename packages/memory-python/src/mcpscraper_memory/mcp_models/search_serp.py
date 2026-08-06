@@ -9,9 +9,9 @@ class SearchSerpInput(BaseModel):
     location: str | None = Field(None, alias="location", description="City, region, or country for localized Google results. It sets UULE and supplies the city text when missing from query; it does not select a proxy.")
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location or user language.")
     hl: str | None = Field(None, alias="hl", description="Google interface/content language inferred from user request.")
-    device: Literal["desktop", "mobile"] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings.")
+    device: Literal['desktop', 'mobile'] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings.")
     pages: int | None = Field(None, alias="pages", description="Number of result pages to fetch (1–2).")
-    recency: Literal["day", "week", "month", "year"] | None = Field(None, alias="recency", description="Restrict results to a recent time window (Google \"past day/week/month/year\" filter). Omit for all-time. Useful for \"what is being said this week\" style queries; pairs well with a site: operator in the query.")
+    recency: Literal['day', 'week', 'month', 'year'] | None = Field(None, alias="recency", description="Restrict results to a recent time window (Google \"past day/week/month/year\" filter). Omit for all-time. Useful for \"what is being said this week\" style queries; pairs well with a site: operator in the query.")
 
 
 class SearchSerpOutput(BaseModel):

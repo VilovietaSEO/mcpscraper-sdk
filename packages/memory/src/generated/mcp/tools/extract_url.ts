@@ -58,6 +58,19 @@ export interface Output {
   napScore: number | null;
   missingSchemaFields: string[];
   screenshotSaved: string | null;
+  /**
+   * Owner-scoped private screenshot handoff created only when preserveMedia is true. Pass artifactId to image_asset_save to retain it in hosted Memory.
+   */
+  screenshotArtifact?: {
+    artifactId: string;
+    filename: string;
+    contentType: string;
+    bytes: number;
+    sha256: string;
+    expiresAt: string;
+    downloadUrl: string | null;
+    downloadUrlExpiresAt: string | null;
+  };
   archive: {
     timestamp: string;
     originalUrl: string;
@@ -78,5 +91,42 @@ export interface Output {
     fileUrl?: string;
     fileExpiresAt?: string;
     error?: string;
+  };
+  /**
+   * Governed hosted Memory image saves, present only for delivery:"memory" with preserveMedia:true.
+   */
+  memoryImages?: {
+    requested: number;
+    saved: number;
+    skipped: number;
+    assets: {
+      sourceUrl: string;
+      sourceKind: "screenshot" | "page_image";
+      saved: boolean;
+      assetId?: string;
+      error?: string;
+    }[];
+    error?: string;
+  };
+  delivery?: {
+    requested: "auto" | "inline" | "artifact" | "memory";
+    effective: "inline" | "artifact" | "memory" | "local_file";
+    retained: boolean;
+    nextAction: string | null;
+  };
+  /**
+   * Server-generated local report path, present only on an installed stdio server that successfully wrote the file.
+   */
+  localPath?: string;
+  artifact?: {
+    artifactId: string;
+    mimeType: string;
+    sizeBytes: number;
+    bytes: number;
+    sha256: string;
+    expiresAt: string;
+    downloadUrl: string | null;
+    downloadUrlExpiresAt: string | null;
+    preview: string;
   };
 }

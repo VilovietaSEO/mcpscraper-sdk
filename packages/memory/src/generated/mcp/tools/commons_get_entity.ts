@@ -9,4 +9,9 @@ export interface Input {
   includeWikiPage?: boolean;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: boolean;
+  data?: unknown;
+  error?: string;
+  message?: string;
+}

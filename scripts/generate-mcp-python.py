@@ -25,7 +25,7 @@ def to_pascal_case(value: str) -> str:
 
 def json_type_to_python(schema: dict) -> str:
     if "enum" in schema:
-        return "Literal[" + ", ".join(json.dumps(value) for value in schema["enum"]) + "]"
+        return "Literal[" + ", ".join(repr(value) for value in schema["enum"]) + "]"
     json_type = schema.get("type")
     if json_type == "string":
         return "str"

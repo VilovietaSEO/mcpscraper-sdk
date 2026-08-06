@@ -3036,4 +3036,6 @@ export interface Input {
   idempotencyKey?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  [k: string]: unknown;
+}

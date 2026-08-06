@@ -19,5 +19,5 @@ class BrowserLocateOutput(BaseModel):
     title: Any = Field(..., alias="title", description="")
     viewport: Any = Field(..., alias="viewport", description="")
     replay: Any = Field(..., alias="replay", description="")
-    targets: list[Any] = Field(..., alias="targets", description="")
-    raw: Any | None = Field(None, alias="raw", description="")
+    targets: list[dict[str, Any]] = Field(..., alias="targets", description="")
+    raw: dict[str, Any] | None = Field(None, alias="raw", description="")

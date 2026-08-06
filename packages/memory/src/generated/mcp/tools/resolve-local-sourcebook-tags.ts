@@ -1308,4 +1308,6 @@ export interface Input {
       ];
 }
 
-export type Output = unknown
+export interface Output {
+  [k: string]: unknown;
+}

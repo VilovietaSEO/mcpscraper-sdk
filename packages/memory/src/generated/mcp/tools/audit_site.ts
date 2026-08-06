@@ -98,4 +98,11 @@ export interface Output {
   effectiveMaxPages?: number;
   creditLimited?: boolean;
   creditTruncated?: boolean;
+  delivery?: {
+    requested: "auto" | "artifact";
+    effective: "artifact";
+    retained: boolean;
+    preserveMedia: boolean;
+    nextAction: string;
+  };
 }

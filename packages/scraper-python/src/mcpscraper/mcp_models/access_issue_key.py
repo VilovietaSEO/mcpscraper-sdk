@@ -8,7 +8,7 @@ class AccessIssueKeyInput(BaseModel):
     grantee_identity: str = Field(..., alias="granteeIdentity", description="Identity that will own the newly issued key (e.g. an email or user id).")
     vaults: list[str] = Field(..., alias="vaults", description="Vaults the new key is entitled to; the caller must already hold each. At least one required.")
     scope: dict[str, Any] | None = Field(None, alias="scope", description="Scope grant (read/write/export/index/admin/swap). Optional; omit for least-privilege read-only.")
-    plan: Literal["free", "pro", "team", "enterprise"] | None = Field(None, alias="plan", description="Subscription plan carried by the key. Optional; defaults to free.")
+    plan: Literal['free', 'pro', 'team', 'enterprise'] | None = Field(None, alias="plan", description="Subscription plan carried by the key. Optional; defaults to free.")
     expires_in_days: int | None = Field(None, alias="expiresInDays", description="Days until the key expires (1-3650). Optional; omit for a non-expiring key.")
 
 

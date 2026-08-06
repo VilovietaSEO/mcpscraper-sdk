@@ -15,5 +15,5 @@ class RevokeScheduledRunViewLinkOutput(BaseModel):
     ok: bool = Field(..., alias="ok", description="")
     revoked: bool | None = Field(None, alias="revoked", description="")
     error: str | None = Field(None, alias="error", description="")
-    error_code: Literal["invalid_request", "not_found", "conflict", "template_archived", "renderer_unavailable", "artifact_unavailable", "view_link_unavailable", "internal_error"] | None = Field(None, alias="errorCode", description="")
+    error_code: Literal['invalid_request', 'not_found', 'conflict', 'template_archived', 'renderer_unavailable', 'artifact_unavailable', 'view_link_unavailable', 'internal_error'] | None = Field(None, alias="errorCode", description="")
     request_id: str | None = Field(None, alias="requestId", description="")

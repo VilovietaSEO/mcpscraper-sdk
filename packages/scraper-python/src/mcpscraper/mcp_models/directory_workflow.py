@@ -22,7 +22,7 @@ class DirectoryWorkflowOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     job_id: Any = Field(..., alias="jobId", description="")
-    status: Literal["queued", "running", "complete", "partial", "empty", "failed"] = Field(..., alias="status", description="")
+    status: Literal['queued', 'running', 'complete', 'partial', 'empty', 'failed'] = Field(..., alias="status", description="")
     status_url: Any = Field(..., alias="statusUrl", description="")
     query: str = Field(..., alias="query", description="")
     state: str = Field(..., alias="state", description="")
