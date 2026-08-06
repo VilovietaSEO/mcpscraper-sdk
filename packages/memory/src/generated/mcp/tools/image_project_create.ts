@@ -7,4 +7,14 @@ export interface Input {
   description?: string;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: true | false;
+  project?: {
+    id: string;
+    name: string;
+    description: string | null;
+    createdAt: string;
+  };
+  code?: string;
+  error?: string;
+}

@@ -25,7 +25,6 @@ class LibraryIngestOutput(BaseModel):
     note_id: str | None = Field(None, alias="noteId", description="Internal id of the created note.")
     path: str | None = Field(None, alias="path", description="Vault-relative path the item was stored at (under library/...).")
     indexed: float | None = Field(None, alias="indexed", description="Number of search chunks indexed (0 if embedding failed but the note still saved).")
-    dual_written: bool | None = Field(None, alias="dualWritten", description="True if the item was also mirrored to the local filesystem vault.")
     next_step: str | None = Field(None, alias="nextStep", description="Recommended extraction action after the raw Library source is safe.")
     code: str | None = Field(None, alias="code", description="Machine-readable denial code when ok is false: quota_exceeded or free_cost_cap.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")

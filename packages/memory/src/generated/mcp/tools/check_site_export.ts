@@ -37,6 +37,10 @@ export interface Output {
    */
   bundleUrl: string | null;
   /**
+   * Owner-scoped artifact ID for archive_read. Prefer this over the temporary bundle URL.
+   */
+  artifactId?: string | null;
+  /**
    * ZIP size in bytes when a bundle is available; null otherwise.
    */
   bundleBytes: number | null;
@@ -53,4 +57,12 @@ export interface Output {
    */
   error?: string | null;
   updatedAt?: string;
+  /**
+   * Server-generated path when an installed stdio server mirrored the ZIP under MCP_SCRAPER_OUTPUT_DIR.
+   */
+  localPath?: string | null;
+  /**
+   * Why optional local mirroring failed; the owner-scoped artifact remains available.
+   */
+  localMirrorError?: string | null;
 }

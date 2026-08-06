@@ -14,7 +14,7 @@ class DiffPageOutput(BaseModel):
 
     url: str = Field(..., alias="url", description="")
     title: Any = Field(..., alias="title", description="")
-    status: Literal["baseline", "unchanged", "changed"] = Field(..., alias="status", description="\"baseline\" = first-ever check for this URL, or resetBaseline was used — nothing to compare against. \"unchanged\" = content hash matched the stored snapshot. \"changed\" = a diff was computed.")
+    status: Literal['baseline', 'unchanged', 'changed'] = Field(..., alias="status", description="\"baseline\" = first-ever check for this URL, or resetBaseline was used — nothing to compare against. \"unchanged\" = content hash matched the stored snapshot. \"changed\" = a diff was computed.")
     is_reset: bool = Field(..., alias="isReset", description="True only when resetBaseline discarded a real prior snapshot — distinguishes an explicit reset from a URL's true first-ever check.")
     previous_checked_at: Any = Field(..., alias="previousCheckedAt", description="ISO timestamp of the snapshot this was compared against, or null if there was none.")
     current_checked_at: str = Field(..., alias="currentCheckedAt", description="ISO timestamp of this check, now stored as the new snapshot.")

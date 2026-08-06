@@ -72,12 +72,13 @@ export interface Output {
    * Replay id when the response is scoped to a replay.
    */
   replay_id: string | null;
-  annotation: Annotation;
+  annotation: {
+    [k: string]: unknown;
+  };
   source_width: number | null;
   source_height: number | null;
-  target: Annotation | null;
+  target: {
+    [k: string]: unknown;
+  } | null;
   hint: string;
-}
-export interface Annotation {
-  [k: string]: unknown;
 }

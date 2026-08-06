@@ -40,6 +40,12 @@ import * as CommonsSubmitEntity from './tools/commons_submit_entity.js'
 import * as CommonsGetEntityLedger from './tools/commons_get_entity_ledger.js'
 import * as CommonsSaveFilter from './tools/commons_save_filter.js'
 import * as CommonsListFilters from './tools/commons_list_filters.js'
+import * as CommonsClaimPublication from './tools/commons_claim_publication.js'
+import * as CommonsGetEntityLinkset from './tools/commons_get_entity_linkset.js'
+import * as CommonsGetPublication from './tools/commons_get_publication.js'
+import * as CommonsPreparePublication from './tools/commons_prepare_publication.js'
+import * as CommonsPublishEditorial from './tools/commons_publish_editorial.js'
+import * as CommonsValidatePublication from './tools/commons_validate_publication.js'
 import * as DirectoryRun from './tools/directory_workflow.js'
 import * as DirectoryWorkflowStatus from './tools/directory_workflow_status.js'
 import * as DirectoryGetLocalSourcebookContract from './tools/get-local-sourcebook-contract.js'
@@ -63,6 +69,7 @@ import * as EditorialReadingRoomGuide from './tools/editorial_reading_room_guide
 import * as EditorialCreateReadingRoom from './tools/create_editorial_reading_room.js'
 import * as EditorialRenewReadingRoomDownload from './tools/renew_editorial_reading_room_download.js'
 import * as ArtifactsRead from './tools/report_artifact_read.js'
+import * as ArtifactsGetArtifactTemplateExample from './tools/get_artifact_template_example.js'
 import * as BillingCreditsInfo from './tools/credits_info.js'
 import * as ConnectionsListServiceConnections from './tools/list_service_connections.js'
 import * as ConnectionsTestServiceConnection from './tools/test_service_connection.js'
@@ -215,6 +222,30 @@ import * as ImagesAssetList from './tools/image_asset_list.js'
 import * as ImagesAssetSearch from './tools/image_asset_search.js'
 import * as ImagesAssetMove from './tools/image_asset_move.js'
 import * as ImagesAssetDelete from './tools/image_asset_delete.js'
+import * as AnalyticsCreateActivationDestination from './tools/analytics_create_activation_destination.js'
+import * as AnalyticsCreateCampaignLink from './tools/analytics_create_campaign_link.js'
+import * as AnalyticsCreateExport from './tools/analytics_create_export.js'
+import * as AnalyticsCreateForm from './tools/analytics_create_form.js'
+import * as AnalyticsGetAcquisition from './tools/analytics_get_acquisition.js'
+import * as AnalyticsGetBusinessMetrics from './tools/analytics_get_business_metrics.js'
+import * as AnalyticsGetChannelBreakdown from './tools/analytics_get_channel_breakdown.js'
+import * as AnalyticsGetContent from './tools/analytics_get_content.js'
+import * as AnalyticsGetConversions from './tools/analytics_get_conversions.js'
+import * as AnalyticsGetDimensions from './tools/analytics_get_dimensions.js'
+import * as AnalyticsGetEntitlement from './tools/analytics_get_entitlement.js'
+import * as AnalyticsGetEvents from './tools/analytics_get_events.js'
+import * as AnalyticsGetForecast from './tools/analytics_get_forecast.js'
+import * as AnalyticsGetHealth from './tools/analytics_get_health.js'
+import * as AnalyticsGetOverview from './tools/analytics_get_overview.js'
+import * as AnalyticsGetPaths from './tools/analytics_get_paths.js'
+import * as AnalyticsGetTimeseries from './tools/analytics_get_timeseries.js'
+import * as AnalyticsImportCrmCsv from './tools/analytics_import_crm_csv.js'
+import * as AnalyticsListActivationDestinations from './tools/analytics_list_activation_destinations.js'
+import * as AnalyticsListCampaignLinks from './tools/analytics_list_campaign_links.js'
+import * as AnalyticsListCrmImports from './tools/analytics_list_crm_imports.js'
+import * as AnalyticsListForms from './tools/analytics_list_forms.js'
+import * as AnalyticsListPixels from './tools/analytics_list_pixels.js'
+import * as AnalyticsListSites from './tools/analytics_list_sites.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -1291,6 +1322,161 @@ export const MCP_TOOL_BINDINGS = [
     "name": "image_asset_delete",
     "category": "images",
     "methodName": "assetDelete"
+  },
+  {
+    "name": "analytics_create_activation_destination",
+    "category": "analytics",
+    "methodName": "createActivationDestination"
+  },
+  {
+    "name": "analytics_create_campaign_link",
+    "category": "analytics",
+    "methodName": "createCampaignLink"
+  },
+  {
+    "name": "analytics_create_export",
+    "category": "analytics",
+    "methodName": "createExport"
+  },
+  {
+    "name": "analytics_create_form",
+    "category": "analytics",
+    "methodName": "createForm"
+  },
+  {
+    "name": "analytics_get_acquisition",
+    "category": "analytics",
+    "methodName": "getAcquisition"
+  },
+  {
+    "name": "analytics_get_business_metrics",
+    "category": "analytics",
+    "methodName": "getBusinessMetrics"
+  },
+  {
+    "name": "analytics_get_channel_breakdown",
+    "category": "analytics",
+    "methodName": "getChannelBreakdown"
+  },
+  {
+    "name": "analytics_get_content",
+    "category": "analytics",
+    "methodName": "getContent"
+  },
+  {
+    "name": "analytics_get_conversions",
+    "category": "analytics",
+    "methodName": "getConversions"
+  },
+  {
+    "name": "analytics_get_dimensions",
+    "category": "analytics",
+    "methodName": "getDimensions"
+  },
+  {
+    "name": "analytics_get_entitlement",
+    "category": "analytics",
+    "methodName": "getEntitlement"
+  },
+  {
+    "name": "analytics_get_events",
+    "category": "analytics",
+    "methodName": "getEvents"
+  },
+  {
+    "name": "analytics_get_forecast",
+    "category": "analytics",
+    "methodName": "getForecast"
+  },
+  {
+    "name": "analytics_get_health",
+    "category": "analytics",
+    "methodName": "getHealth"
+  },
+  {
+    "name": "analytics_get_overview",
+    "category": "analytics",
+    "methodName": "getOverview"
+  },
+  {
+    "name": "analytics_get_paths",
+    "category": "analytics",
+    "methodName": "getPaths"
+  },
+  {
+    "name": "analytics_get_timeseries",
+    "category": "analytics",
+    "methodName": "getTimeseries"
+  },
+  {
+    "name": "analytics_import_crm_csv",
+    "category": "analytics",
+    "methodName": "importCrmCsv"
+  },
+  {
+    "name": "analytics_list_activation_destinations",
+    "category": "analytics",
+    "methodName": "listActivationDestinations"
+  },
+  {
+    "name": "analytics_list_campaign_links",
+    "category": "analytics",
+    "methodName": "listCampaignLinks"
+  },
+  {
+    "name": "analytics_list_crm_imports",
+    "category": "analytics",
+    "methodName": "listCrmImports"
+  },
+  {
+    "name": "analytics_list_forms",
+    "category": "analytics",
+    "methodName": "listForms"
+  },
+  {
+    "name": "analytics_list_pixels",
+    "category": "analytics",
+    "methodName": "listPixels"
+  },
+  {
+    "name": "analytics_list_sites",
+    "category": "analytics",
+    "methodName": "listSites"
+  },
+  {
+    "name": "commons_claim_publication",
+    "category": "commons",
+    "methodName": "claimPublication"
+  },
+  {
+    "name": "commons_get_entity_linkset",
+    "category": "commons",
+    "methodName": "getEntityLinkset"
+  },
+  {
+    "name": "commons_get_publication",
+    "category": "commons",
+    "methodName": "getPublication"
+  },
+  {
+    "name": "commons_prepare_publication",
+    "category": "commons",
+    "methodName": "preparePublication"
+  },
+  {
+    "name": "commons_publish_editorial",
+    "category": "commons",
+    "methodName": "publishEditorial"
+  },
+  {
+    "name": "commons_validate_publication",
+    "category": "commons",
+    "methodName": "validatePublication"
+  },
+  {
+    "name": "get_artifact_template_example",
+    "category": "artifacts",
+    "methodName": "getArtifactTemplateExample"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1497,6 +1683,30 @@ export class CommonsNamespace {
   async listFilters(input: CommonsListFilters.Input = {} as CommonsListFilters.Input): Promise<CommonsListFilters.Output> {
     return this.callTool('commons_list_filters', input) as Promise<CommonsListFilters.Output>
   }
+
+  async claimPublication(input: CommonsClaimPublication.Input): Promise<CommonsClaimPublication.Output> {
+    return this.callTool('commons_claim_publication', input) as Promise<CommonsClaimPublication.Output>
+  }
+
+  async getEntityLinkset(input: CommonsGetEntityLinkset.Input): Promise<CommonsGetEntityLinkset.Output> {
+    return this.callTool('commons_get_entity_linkset', input) as Promise<CommonsGetEntityLinkset.Output>
+  }
+
+  async getPublication(input: CommonsGetPublication.Input = {} as CommonsGetPublication.Input): Promise<CommonsGetPublication.Output> {
+    return this.callTool('commons_get_publication', input) as Promise<CommonsGetPublication.Output>
+  }
+
+  async preparePublication(input: CommonsPreparePublication.Input): Promise<CommonsPreparePublication.Output> {
+    return this.callTool('commons_prepare_publication', input) as Promise<CommonsPreparePublication.Output>
+  }
+
+  async publishEditorial(input: CommonsPublishEditorial.Input): Promise<CommonsPublishEditorial.Output> {
+    return this.callTool('commons_publish_editorial', input) as Promise<CommonsPublishEditorial.Output>
+  }
+
+  async validatePublication(input: CommonsValidatePublication.Input): Promise<CommonsValidatePublication.Output> {
+    return this.callTool('commons_validate_publication', input) as Promise<CommonsValidatePublication.Output>
+  }
 }
 
 export class DirectoryNamespace {
@@ -1604,6 +1814,10 @@ export class ArtifactsNamespace {
 
   async read(input: ArtifactsRead.Input): Promise<ArtifactsRead.Output> {
     return this.callTool('report_artifact_read', input) as Promise<ArtifactsRead.Output>
+  }
+
+  async getArtifactTemplateExample(input: ArtifactsGetArtifactTemplateExample.Input): Promise<ArtifactsGetArtifactTemplateExample.Output> {
+    return this.callTool('get_artifact_template_example', input) as Promise<ArtifactsGetArtifactTemplateExample.Output>
   }
 }
 
@@ -1798,7 +2012,7 @@ export class ScheduleNamespace {
     return this.callTool('get_artifact_template', input) as Promise<ScheduleGetArtifactTemplate.Output>
   }
 
-  async createArtifactTemplate(input: ScheduleCreateArtifactTemplate.Input): Promise<ScheduleCreateArtifactTemplate.Output> {
+  async createArtifactTemplate(input: ScheduleCreateArtifactTemplate.Input = {} as ScheduleCreateArtifactTemplate.Input): Promise<ScheduleCreateArtifactTemplate.Output> {
     return this.callTool('create_artifact_template', input) as Promise<ScheduleCreateArtifactTemplate.Output>
   }
 
@@ -2291,6 +2505,106 @@ export class ImagesNamespace {
   }
 }
 
+export class AnalyticsNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async createActivationDestination(input: AnalyticsCreateActivationDestination.Input): Promise<AnalyticsCreateActivationDestination.Output> {
+    return this.callTool('analytics_create_activation_destination', input) as Promise<AnalyticsCreateActivationDestination.Output>
+  }
+
+  async createCampaignLink(input: AnalyticsCreateCampaignLink.Input): Promise<AnalyticsCreateCampaignLink.Output> {
+    return this.callTool('analytics_create_campaign_link', input) as Promise<AnalyticsCreateCampaignLink.Output>
+  }
+
+  async createExport(input: AnalyticsCreateExport.Input): Promise<AnalyticsCreateExport.Output> {
+    return this.callTool('analytics_create_export', input) as Promise<AnalyticsCreateExport.Output>
+  }
+
+  async createForm(input: AnalyticsCreateForm.Input): Promise<AnalyticsCreateForm.Output> {
+    return this.callTool('analytics_create_form', input) as Promise<AnalyticsCreateForm.Output>
+  }
+
+  async getAcquisition(input: AnalyticsGetAcquisition.Input): Promise<AnalyticsGetAcquisition.Output> {
+    return this.callTool('analytics_get_acquisition', input) as Promise<AnalyticsGetAcquisition.Output>
+  }
+
+  async getBusinessMetrics(input: AnalyticsGetBusinessMetrics.Input): Promise<AnalyticsGetBusinessMetrics.Output> {
+    return this.callTool('analytics_get_business_metrics', input) as Promise<AnalyticsGetBusinessMetrics.Output>
+  }
+
+  async getChannelBreakdown(input: AnalyticsGetChannelBreakdown.Input): Promise<AnalyticsGetChannelBreakdown.Output> {
+    return this.callTool('analytics_get_channel_breakdown', input) as Promise<AnalyticsGetChannelBreakdown.Output>
+  }
+
+  async getContent(input: AnalyticsGetContent.Input): Promise<AnalyticsGetContent.Output> {
+    return this.callTool('analytics_get_content', input) as Promise<AnalyticsGetContent.Output>
+  }
+
+  async getConversions(input: AnalyticsGetConversions.Input): Promise<AnalyticsGetConversions.Output> {
+    return this.callTool('analytics_get_conversions', input) as Promise<AnalyticsGetConversions.Output>
+  }
+
+  async getDimensions(input: AnalyticsGetDimensions.Input): Promise<AnalyticsGetDimensions.Output> {
+    return this.callTool('analytics_get_dimensions', input) as Promise<AnalyticsGetDimensions.Output>
+  }
+
+  async getEntitlement(input: AnalyticsGetEntitlement.Input = {} as AnalyticsGetEntitlement.Input): Promise<AnalyticsGetEntitlement.Output> {
+    return this.callTool('analytics_get_entitlement', input) as Promise<AnalyticsGetEntitlement.Output>
+  }
+
+  async getEvents(input: AnalyticsGetEvents.Input): Promise<AnalyticsGetEvents.Output> {
+    return this.callTool('analytics_get_events', input) as Promise<AnalyticsGetEvents.Output>
+  }
+
+  async getForecast(input: AnalyticsGetForecast.Input): Promise<AnalyticsGetForecast.Output> {
+    return this.callTool('analytics_get_forecast', input) as Promise<AnalyticsGetForecast.Output>
+  }
+
+  async getHealth(input: AnalyticsGetHealth.Input): Promise<AnalyticsGetHealth.Output> {
+    return this.callTool('analytics_get_health', input) as Promise<AnalyticsGetHealth.Output>
+  }
+
+  async getOverview(input: AnalyticsGetOverview.Input): Promise<AnalyticsGetOverview.Output> {
+    return this.callTool('analytics_get_overview', input) as Promise<AnalyticsGetOverview.Output>
+  }
+
+  async getPaths(input: AnalyticsGetPaths.Input): Promise<AnalyticsGetPaths.Output> {
+    return this.callTool('analytics_get_paths', input) as Promise<AnalyticsGetPaths.Output>
+  }
+
+  async getTimeseries(input: AnalyticsGetTimeseries.Input): Promise<AnalyticsGetTimeseries.Output> {
+    return this.callTool('analytics_get_timeseries', input) as Promise<AnalyticsGetTimeseries.Output>
+  }
+
+  async importCrmCsv(input: AnalyticsImportCrmCsv.Input): Promise<AnalyticsImportCrmCsv.Output> {
+    return this.callTool('analytics_import_crm_csv', input) as Promise<AnalyticsImportCrmCsv.Output>
+  }
+
+  async listActivationDestinations(input: AnalyticsListActivationDestinations.Input): Promise<AnalyticsListActivationDestinations.Output> {
+    return this.callTool('analytics_list_activation_destinations', input) as Promise<AnalyticsListActivationDestinations.Output>
+  }
+
+  async listCampaignLinks(input: AnalyticsListCampaignLinks.Input): Promise<AnalyticsListCampaignLinks.Output> {
+    return this.callTool('analytics_list_campaign_links', input) as Promise<AnalyticsListCampaignLinks.Output>
+  }
+
+  async listCrmImports(input: AnalyticsListCrmImports.Input): Promise<AnalyticsListCrmImports.Output> {
+    return this.callTool('analytics_list_crm_imports', input) as Promise<AnalyticsListCrmImports.Output>
+  }
+
+  async listForms(input: AnalyticsListForms.Input): Promise<AnalyticsListForms.Output> {
+    return this.callTool('analytics_list_forms', input) as Promise<AnalyticsListForms.Output>
+  }
+
+  async listPixels(input: AnalyticsListPixels.Input): Promise<AnalyticsListPixels.Output> {
+    return this.callTool('analytics_list_pixels', input) as Promise<AnalyticsListPixels.Output>
+  }
+
+  async listSites(input: AnalyticsListSites.Input = {} as AnalyticsListSites.Input): Promise<AnalyticsListSites.Output> {
+    return this.callTool('analytics_list_sites', input) as Promise<AnalyticsListSites.Output>
+  }
+}
+
 export class GeneratedMcpToolsClient {
   readonly search: SearchNamespace
   readonly web: WebNamespace
@@ -2326,6 +2640,7 @@ export class GeneratedMcpToolsClient {
   readonly vaults: VaultsNamespace
   readonly webhooks: WebhooksNamespace
   readonly images: ImagesNamespace
+  readonly analytics: AnalyticsNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.search = new SearchNamespace(callTool)
@@ -2362,5 +2677,6 @@ export class GeneratedMcpToolsClient {
     this.vaults = new VaultsNamespace(callTool)
     this.webhooks = new WebhooksNamespace(callTool)
     this.images = new ImagesNamespace(callTool)
+    this.analytics = new AnalyticsNamespace(callTool)
   }
 }

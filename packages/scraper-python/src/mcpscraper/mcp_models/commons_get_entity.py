@@ -11,3 +11,8 @@ class CommonsGetEntityInput(BaseModel):
 
 class CommonsGetEntityOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    ok: bool = Field(..., alias="ok", description="")
+    data: Any | None = Field(None, alias="data", description="")
+    error: str | None = Field(None, alias="error", description="")
+    message: str | None = Field(None, alias="message", description="")

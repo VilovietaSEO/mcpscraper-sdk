@@ -17,7 +17,7 @@ class CreateEditorialReadingRoomOutput(BaseModel):
     ok: bool = Field(..., alias="ok", description="")
     title: str = Field(..., alias="title", description="")
     filename: str = Field(..., alias="filename", description="")
-    delivery: Literal["artifact", "local_file"] = Field(..., alias="delivery", description="")
+    delivery: Literal['artifact', 'local_file'] = Field(..., alias="delivery", description="")
     article_count: int = Field(..., alias="articleCount", description="")
     word_count: int = Field(..., alias="wordCount", description="")
     bytes: int = Field(..., alias="bytes", description="")

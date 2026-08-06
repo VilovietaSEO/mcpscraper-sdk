@@ -7236,6 +7236,15 @@ export interface Output {
     expiresAt: string;
     downloadUrl: string | null;
     downloadUrlExpiresAt: string | null;
+    readback: {
+      tool: "report_artifact_read";
+      arguments: {
+        artifactId: string;
+        offset: 0;
+        maxBytes: 20000;
+      };
+      continuation: string;
+    };
   };
   warnings?: string[];
   error: string | null;

@@ -5,4 +5,6 @@ export interface Input {
   category?: "home" | "professional" | "restaurants" | "financial" | "realestate" | "auto" | "wellness";
 }
 
-export type Output = unknown
+export interface Output {
+  [k: string]: unknown;
+}

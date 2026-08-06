@@ -1,4 +1,4 @@
-# All 215 MCP tools with cURL
+# All 246 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (215)
+## Complete catalog (246)
 
 ## search
 
@@ -121,6 +121,12 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `commons_get_entity_ledger` — Transparent Commons Contribution Ledger
 - `commons_save_filter` — Transparent Commons Saved MCP Filter
 - `commons_list_filters` — Transparent Commons List Saved Filters
+- `commons_claim_publication` — Claim Transparent Commons Publication
+- `commons_get_entity_linkset` — Transparent Commons RFC 9264 Linkset
+- `commons_get_publication` — Get Transparent Commons Publication
+- `commons_prepare_publication` — Prepare Transparent Commons Publication
+- `commons_publish_editorial` — Publish Transparent Commons Editorial Edition
+- `commons_validate_publication` — Validate Transparent Commons Publication
 
 ## directory
 
@@ -156,6 +162,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 ## artifacts
 
 - `report_artifact_read` — Read Stored Artifact
+- `get_artifact_template_example` — Preview Template Example
 
 ## billing
 
@@ -212,11 +219,11 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 
 ## schedule
 
-- `list_artifact_templates` — List Artifact Templates
-- `get_artifact_template` — Get Artifact Template
-- `create_artifact_template` — Save Artifact Template
-- `update_artifact_template` — Create Artifact Template Version
-- `archive_artifact_template` — Archive Artifact Template
+- `list_artifact_templates` — Search Templates
+- `get_artifact_template` — Get Template
+- `create_artifact_template` — Save Template
+- `update_artifact_template` — Update Template
+- `archive_artifact_template` — Archive Template
 - `list_scheduled_runs` — List Scheduled Results
 - `get_scheduled_run` — Get Scheduled Result
 - `mark_scheduled_run_opened` — Mark Scheduled Result Opened
@@ -365,3 +372,30 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `image_asset_search` — Search Image Assets
 - `image_asset_move` — Move Image Asset
 - `image_asset_delete` — Delete Image Asset
+
+## analytics
+
+- `analytics_create_activation_destination` — Create Ad Activation Destination
+- `analytics_create_campaign_link` — Create Campaign Link
+- `analytics_create_export` — Create Analytics Export
+- `analytics_create_form` — Create Pixel-linked Form
+- `analytics_get_acquisition` — Analytics Acquisition
+- `analytics_get_business_metrics` — Analytics Business Metrics
+- `analytics_get_channel_breakdown` — Analytics Channel Breakdowns
+- `analytics_get_content` — Analytics Content
+- `analytics_get_conversions` — Analytics Conversions
+- `analytics_get_dimensions` — Analytics Dimensions
+- `analytics_get_entitlement` — Get X-Ray Pixel Access
+- `analytics_get_events` — Analytics Events
+- `analytics_get_forecast` — Analytics Forecast
+- `analytics_get_health` — Analytics Pixel Health
+- `analytics_get_overview` — Analytics Overview
+- `analytics_get_paths` — Analytics Conversion Paths
+- `analytics_get_timeseries` — Analytics Timeseries
+- `analytics_import_crm_csv` — Import CRM CSV
+- `analytics_list_activation_destinations` — List Ad Activation Destinations
+- `analytics_list_campaign_links` — List Campaign Links
+- `analytics_list_crm_imports` — List CRM Imports
+- `analytics_list_forms` — List Analytics Forms
+- `analytics_list_pixels` — List Analytics Pixels
+- `analytics_list_sites` — List Analytics Businesses

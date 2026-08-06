@@ -7,7 +7,7 @@ class BrowserReplayMarkInput(BaseModel):
 
     session_id: str = Field(..., alias="session_id", description="The session id returned by browser_open or browser_list_sessions. A replay must already be recording.")
     target: dict[str, Any] = Field(..., alias="target", description="The exact DOM element or text range to mark in the current viewport.")
-    type: Literal["box", "circle", "underline", "arrow"] | None = Field(None, alias="type", description="Annotation style to generate.")
+    type: Literal['box', 'circle', 'underline', 'arrow'] | None = Field(None, alias="type", description="Annotation style to generate.")
     label: str | None = Field(None, alias="label", description="Optional callout text to render near the target.")
     color: str | None = Field(None, alias="color", description="Annotation color as hex, e.g. #ff3b30.")
     thickness: float | None = Field(None, alias="thickness", description="Stroke thickness in pixels. Defaults to 5.")

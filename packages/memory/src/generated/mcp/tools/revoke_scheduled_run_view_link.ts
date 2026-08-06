@@ -3,9 +3,7 @@ export interface Input {
   shareId: string;
 }
 
-export type Output = {
-  [k: string]: unknown;
-} & {
+export interface Output {
   ok: boolean;
   revoked?: true;
   error?: string;
@@ -19,4 +17,4 @@ export type Output = {
     | "view_link_unavailable"
     | "internal_error";
   requestId?: string;
-};
+}

@@ -48,9 +48,9 @@ export interface Output {
     websiteUrl: string | null;
     directionsUrl: string | null;
     metadata: string[];
-    services?: string[];
-    areasServed?: string[];
-    profileDetailsStatus?: "collected" | "none_exist" | "unavailable" | "not_requested";
+    services: string[];
+    areasServed: string[];
+    profileDetailsStatus: "collected" | "none_exist" | "unavailable" | "not_requested";
   }[];
   durationMs: number;
 }

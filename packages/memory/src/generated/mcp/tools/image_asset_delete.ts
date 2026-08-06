@@ -7,4 +7,10 @@ export interface Input {
   confirmDelete: true;
 }
 
-export type Output = unknown
+export interface Output {
+  ok: true | false;
+  deleted?: boolean;
+  assetId?: string;
+  code?: string;
+  error?: string;
+}

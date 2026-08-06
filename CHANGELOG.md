@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-08-05 — verified against mcp-scraper 0.49.0 / mcp-memory 1.15.0
+
+### Added
+
+- Added typed Node, Python, CLI, and cURL bindings for `commons_get_entity_linkset`, including its read-only annotations and governed RFC 9264 input/output contract.
+- Caught every generated client up to the full 246-tool MCP Scraper catalog, including Transparent Commons publications, X-Ray analytics, registered artifact-template examples, and the current image and scheduled-result schemas.
+
+### Changed
+
+- Added first-class `analytics` and `artifacts` SDK namespaces for the newly synchronized tools instead of leaving them in the fallback category.
+- Prepared `mcpscraper-memory-sdk` 0.26.3, `mcpscraper-sdk` 0.25.3, `mcpscraper-cli` 0.24.3, and both Python packages 0.24.3.
+
 ## 2026-08-04 — verified against mcp-scraper 0.45.0 / mcp-memory 1.15.0
 
 ### Added

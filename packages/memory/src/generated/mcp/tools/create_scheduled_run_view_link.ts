@@ -4,9 +4,7 @@ export interface Input {
   expiresInDays?: number;
 }
 
-export type Output = {
-  [k: string]: unknown;
-} & {
+export interface Output {
   ok: boolean;
   shareId?: string;
   runId?: string;
@@ -25,4 +23,4 @@ export type Output = {
     | "view_link_unavailable"
     | "internal_error";
   requestId?: string;
-};
+}
