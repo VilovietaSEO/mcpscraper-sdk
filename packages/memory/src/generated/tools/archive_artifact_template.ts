@@ -17,40 +17,93 @@ export type Output =
         description: string;
         currentVersionId: string;
         status: "active" | "archived";
-        currentVersion?: {
-          templateVersionId: string;
-          templateId: string;
-          version: number;
-          rendererKey: "editorial_reading_room_v1";
-          rendererVersion: 1;
-          inputContractVersion: 1;
-          config: {
-            theme: "paper" | "ink" | "warm";
-            density: "comfortable" | "compact";
-            showSourceRail: boolean;
-            showGeneratedAt: boolean;
-            brandName?: string;
-          };
-          authoringInstructions: string;
-          createdAt: string;
-        };
-        versions?: {
-          templateVersionId: string;
-          templateId: string;
-          version: number;
-          rendererKey: "editorial_reading_room_v1";
-          rendererVersion: 1;
-          inputContractVersion: 1;
-          config: {
-            theme: "paper" | "ink" | "warm";
-            density: "comfortable" | "compact";
-            showSourceRail: boolean;
-            showGeneratedAt: boolean;
-            brandName?: string;
-          };
-          authoringInstructions: string;
-          createdAt: string;
-        }[];
+        currentVersion?:
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "editorial_reading_room_v1";
+              config: {
+                theme: "paper" | "ink" | "warm";
+                density: "comfortable" | "compact";
+                showSourceRail: boolean;
+                showGeneratedAt: boolean;
+                brandName?: string;
+              };
+            }
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "personal_authority_v1";
+              config: {
+                theme: "blue" | "slate" | "monochrome";
+                showGeneratedAt: boolean;
+                brandName?: string;
+                featureFlags: {
+                  navigation: boolean;
+                  socialLinks: boolean;
+                  authority: boolean;
+                  consultation: boolean;
+                  learning: boolean;
+                  services: boolean;
+                  proof: boolean;
+                  finalCta: boolean;
+                };
+              };
+            };
+        versions?: (
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "editorial_reading_room_v1";
+              config: {
+                theme: "paper" | "ink" | "warm";
+                density: "comfortable" | "compact";
+                showSourceRail: boolean;
+                showGeneratedAt: boolean;
+                brandName?: string;
+              };
+            }
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "personal_authority_v1";
+              config: {
+                theme: "blue" | "slate" | "monochrome";
+                showGeneratedAt: boolean;
+                brandName?: string;
+                featureFlags: {
+                  navigation: boolean;
+                  socialLinks: boolean;
+                  authority: boolean;
+                  consultation: boolean;
+                  learning: boolean;
+                  services: boolean;
+                  proof: boolean;
+                  finalCta: boolean;
+                };
+              };
+            }
+        )[];
         createdAt: string;
         updatedAt: string;
       };

@@ -185,6 +185,20 @@ export const MCP_TOOL_CATALOG = [
             ]
           }
         },
+        "maxMediaAssets": {
+          "default": 100,
+          "description": "Maximum media records to retain and attempt to download after filtering and responsive-variant collapse.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "maxInlineImages": {
+          "default": 3,
+          "description": "Maximum downloaded images to attach as AI-readable image content blocks. All successfully downloaded media remains available in the ZIP.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
         "delivery": {
           "default": "auto",
           "description": "Where to deliver the result. auto keeps small results inline and offloads large ones; artifact always returns an owned artifact; memory stores the full page in hosted Memory; inline returns a bounded response.",
@@ -198,7 +212,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "preserveMedia": {
           "default": false,
-          "description": "Preserve discovered media in the result workflow. This is the preferred replacement for downloadMedia.",
+          "description": "Collect media from static source plus a rendered, lazy-loaded page; collapse responsive variants; return provenance and completeness; attach bounded image previews; and create an owner-scoped ZIP readable with archive_read.",
           "type": "boolean"
         },
         "depositToVault": {
@@ -983,7 +997,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_trending",
     "category": "reddit",
     "title": "Reddit Trending",
-    "description": "Discover the top Reddit conversations about a topic from the last week or month: finds relevant recent threads via a Google site:reddit.com search (optionally scoped to one subreddit), scrapes them for real upvotes, comments, and the questions people asked, and ranks by engagement (upvotes + 2x comments). Scraping runs in parallel across the discovered threads; set includeComments:false for a fast, cheap discovery-only sweep (relevant thread list, no engagement stats, no per-thread billing) and then read the ones you want with reddit_thread. Not for reading one known thread URL — use reddit_thread for that.",
+    "description": "Discover top Reddit conversations from the last week or month. It tries Google site:reddit.com discovery, falls back to a bounded direct Reddit search when that SERP is empty or unavailable, then optionally scrapes threads for real upvotes, comments, questions, and engagement ranking. Inspect resultQuality, discoverySource, degradationReasons, retryRecommended, and billingRefunded before treating an empty result as a genuine lack of discussion. Set includeComments:false for a cheap discovery-only sweep; use reddit_thread for one known URL.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1439,7 +1453,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "maps_place_intel",
     "category": "maps",
     "title": "Google Maps Business Profile Details",
-    "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, full hours, About attributes, entity IDs/CID, and — with includeServices: true — the full configured services and areas-served lists. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
+    "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, website, full hours, About attributes, entity IDs/CID, configured services/areas, and optional photos. Set includeImages:true for a provenance-aware manifest, bounded AI image blocks, and an owner-scoped ZIP; choose imageScope:\"owner\" for listing-owner photos only. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1483,6 +1497,34 @@ export const MCP_TOOL_CATALOG = [
           "default": false,
           "description": "Fetch the business's configured services list and areas-served list, when the profile has them. Adds one extra page visit; not present for every business.",
           "type": "boolean"
+        },
+        "includeImages": {
+          "default": false,
+          "description": "Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.",
+          "type": "boolean"
+        },
+        "imageScope": {
+          "default": "all",
+          "description": "owner collects only the Google Maps By owner gallery. all collects the full gallery and labels exact owner matches versus other/unknown media.",
+          "type": "string",
+          "enum": [
+            "owner",
+            "all"
+          ]
+        },
+        "maxImages": {
+          "default": 100,
+          "description": "Maximum photos to collect when includeImages is true. Default 100, maximum 250.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "maxInlineImages": {
+          "default": 3,
+          "description": "Maximum downloaded photos attached as MCP image blocks for direct AI vision. The ZIP and structured manifest still contain the wider result.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
         }
       },
       "required": [
@@ -4919,7 +4961,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "editorial_reading_room_guide",
     "category": "editorial",
     "title": "Editorial Reading Room Guide",
-    "description": "Read the reusable composition contract before creating an editorial reading room. It tells the calling AI how to inventory the supplied corpus, preserve source truth, architect a coherent edition, write useful articles, and verify the finished page. Start with focus \"workflow\"; fetch \"content_contract\" or \"example\" only when needed. This does not research, write, or create a page.",
+    "description": "Read the reusable composition contract before creating an editorial reading room. It covers corpus inventory, source truth, coherent architecture, up to 100 articles, purposeful images, image provenance, collection/article Open Graph images, and finished-page verification. Start with focus \"workflow\"; fetch \"content_contract\" or \"example\" only when needed. This does not research, write, or create a page.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -4948,7 +4990,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "create_editorial_reading_room",
     "category": "editorial",
     "title": "Create Editorial Reading Room",
-    "description": "Turn fully authored, source-grounded articles into one polished mobile-first editorial report with contents, search, hamburger navigation, article jump links, reading progress, text sizing, evening mode, and provenance. Do not use this tool to discover, preview, save, or version reusable website templates; use list_artifact_templates and get_artifact_template_example for that workflow. The calling AI must first read all in-scope material and use editorial_reading_room_guide when it has not already internalized the workflow; this renderer does not perform research or invent copy. Local stdio clients save one self-contained HTML file under the MCP Scraper output directory and return localPath.",
+    "description": "Render up to 100 fully authored, source-grounded articles into one polished mobile-first editorial report with contents, search, navigation, jump links, progress, text sizing, evening mode, provenance, structured article/card images, Markdown body images, and collection/article Open Graph metadata. Public HTTP(S) image URLs require alt text; preserve caption, credit, source, and rights context when known. The static artifact carries collection OG tags and updates article tags in-browser; a publishing host must serve article-specific metadata for crawler-perfect per-article unfurls. This renderer does not research or invent copy. For reusable website templates use list_artifact_templates instead. Local stdio clients save one self-contained HTML file under the MCP Scraper output directory and return localPath.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5013,6 +5055,40 @@ export const MCP_TOOL_CATALOG = [
               "type": "string",
               "minLength": 1,
               "maxLength": 60
+            },
+            "ogImage": {
+              "description": "Optional collection-level Open Graph image. Individual articles may override it.",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Public HTTP(S) image URL used for the reading-room home page social preview."
+                },
+                "alt": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500,
+                  "description": "Accessible description and og:image:alt text."
+                },
+                "width": {
+                  "description": "Optional intrinsic width in pixels.",
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "height": {
+                  "description": "Optional intrinsic height in pixels.",
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "url",
+                "alt"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
@@ -5031,7 +5107,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "articles": {
           "minItems": 1,
-          "maxItems": 40,
+          "maxItems": 100,
           "type": "array",
           "items": {
             "type": "object",
@@ -5096,11 +5172,109 @@ export const MCP_TOOL_CATALOG = [
                 "minLength": 1,
                 "maxLength": 80
               },
+              "image": {
+                "description": "Optional article image shown on cards and above the article body. Markdown images remain supported inside the body.",
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Public HTTP(S) image URL."
+                  },
+                  "alt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Required accessible description of the image."
+                  },
+                  "caption": {
+                    "description": "Optional visible caption.",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "credit": {
+                    "description": "Optional visible creator, publisher, or rights credit.",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "sourceUrl": {
+                    "description": "Optional public HTTP(S) source page for provenance or rights context.",
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "width": {
+                    "description": "Optional intrinsic width in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "height": {
+                    "description": "Optional intrinsic height in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "url",
+                  "alt"
+                ],
+                "additionalProperties": false
+              },
+              "ogImage": {
+                "description": "Optional article-specific social preview image. Defaults to article.image, then site.ogImage.",
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Public HTTP(S) image URL."
+                  },
+                  "alt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Required accessible description of the image."
+                  },
+                  "caption": {
+                    "description": "Optional visible caption.",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "credit": {
+                    "description": "Optional visible creator, publisher, or rights credit.",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "sourceUrl": {
+                    "description": "Optional public HTTP(S) source page for provenance or rights context.",
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "width": {
+                    "description": "Optional intrinsic width in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "height": {
+                    "description": "Optional intrinsic height in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "url",
+                  "alt"
+                ],
+                "additionalProperties": false
+              },
               "markdown": {
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 100000,
-                "description": "Complete article body in Markdown. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison."
+                "description": "Complete article body in Markdown. Standard Markdown images are allowed with descriptive alt text. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison."
               }
             },
             "required": [
@@ -5115,7 +5289,7 @@ export const MCP_TOOL_CATALOG = [
             ],
             "additionalProperties": false
           },
-          "description": "One to forty fully authored articles, with no more than 2,000,000 Markdown bytes combined. Read all in-scope source material before composing them; preserve distinctions, uncertainty, and provenance instead of flattening the corpus."
+          "description": "One to one hundred fully authored articles, with no more than 2,000,000 Markdown bytes combined. Articles may include structured card/hero images, article-specific Open Graph images, and Markdown body images. Read all in-scope source material before composing them; preserve distinctions, uncertainty, image provenance, and rights context instead of flattening the corpus."
         },
         "filename": {
           "description": "Optional download filename. The server always normalizes it to a safe .html filename.",
@@ -10395,7 +10569,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "memory-export",
     "category": "memory",
     "title": "Export Vault",
-    "description": "Export every note in a vault as a full dump for backup, migration, or bulk download — path, title, full content, kind, and last-updated per note, plus a count. Defaults to the active (or first entitled) vault. Requires export scope; the export is logged to provenance.",
+    "description": "Export every full note in one vault for an explicitly requested backup, migration, or corpus-wide audit — path, title, content, kind, last-updated, and count. This can be large and is not the normal way to find or edit one note: use memory-list for complete metadata inventory, memory-search for ranked recall, and memory-get for exact content. Defaults to the active or first entitled vault. Requires export scope; the export is logged to provenance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -10418,7 +10592,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "memory-get",
     "category": "memory",
     "title": "Get Memory Note",
-    "description": "Read a single note from a vault by its exact path, or by shareId for a note shared with you and accepted. Owned notes include their stored Obsidian props so edits can preserve links and template metadata. Returns a revision number — pass it as baseRevision on a later memory-put/delete-note to detect a concurrent edit instead of silently overwriting it. Requires read scope.",
+    "description": "Read one complete note by exact vault+path, or by accepted shareId. After memory-search identifies a strong candidate, use this before relying on it for an answer, summary, edit, link, or durable write: search results are excerpts, not complete notes. Owned notes include stored Obsidian props so edits preserve links and template metadata. Returns the revision required as baseRevision on later edits/deletes. Requires read scope.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -10449,13 +10623,17 @@ export const MCP_TOOL_CATALOG = [
     "name": "memory-list",
     "category": "memory",
     "title": "List Memory Notes",
-    "description": "List notes in a vault — path, title, kind, tags, last-updated — optionally filtered by kind and/or tags (matches ANY given tag). Defaults to the active or first entitled vault; also returns vaults the caller is entitled to. Requires read scope.",
+    "description": "Return a complete note-and-folder metadata inventory without note bodies. Set allVaults:true when the user asks for every note or folder they have across their whole Memory account; the result is grouped by vault and includes aggregate totals. Otherwise list one exact vault, defaulting to the active or first entitled vault. Never report a single-vault count as the account total. Use memory-get for exact full content, memory-search for ranked semantic recall, or memory-export only when explicitly asked for every full note. Requires read scope.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "vault": {
           "description": "Vault to list. Optional; defaults to the session active vault, then the first vault the caller is entitled to.",
           "type": "string"
+        },
+        "allVaults": {
+          "description": "Set true for one complete account-wide inventory across every entitled vault. Omit or set false for one vault. When true, vault is ignored and reads run sequentially to avoid backend contention.",
+          "type": "boolean"
         },
         "kind": {
           "description": "Filter to a single note kind. Optional; omit to list every kind in the vault.",
@@ -10489,7 +10667,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "memory-put",
     "category": "memory",
     "title": "Put Memory Note",
-    "description": "Create or deliberately edit one note at a path in a memory vault; content is persisted and indexed for search. For normal new People, Organizations, Deals, Projects, Tasks, or Communication records, use prepare-memory-write then memory-capture: People must be real people, Organizations must be real organizations, Deals need a known party, Projects need a supported kind, Tasks can be independent Inbox todos or use a verified Project when linked, and draft emails need pending approval. For row-shaped datasets you'll filter/sort by exact value, use table-create/table-insert-rows/table-query instead. Ordinary vaults are indexed and shareable — never store real secrets there; use a secure vault (create-secure-vault) instead, which is never indexed or shareable and is encrypted at rest. Requires write scope.",
+    "description": "Create or deliberately edit one note at a stable vault+path. On an existing note, first call memory-get, merge the requested change into its full body, and pass that complete body plus baseRevision: content is replace-all, while supplied props patch the stored props. A conflict returns the current body for reconciliation; never retry the stale full body unchanged. Use purpose-built tools instead of rewriting system-managed Agent Inbox, optimizer, or channel backing notes. For normal new People, Organizations, Deals, Projects, Tasks, or Communication records, use prepare-memory-write then memory-capture. For row-shaped datasets use table tools. Ordinary vaults are indexed and shareable; store real secrets only in a secure vault. Requires write scope.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -10512,7 +10690,7 @@ export const MCP_TOOL_CATALOG = [
         "content": {
           "type": "string",
           "minLength": 1,
-          "description": "The full note body to store and index for semantic search. Must be non-empty."
+          "description": "The complete note body to store and index. On edit this replaces the prior body, so merge the requested change into the full memory-get content before calling; never pass only the changed fragment."
         },
         "props": {
           "description": "Obsidian note primitives plus vault-specific template fields. On edits, supplied fields patch the stored props instead of replacing the whole object; pass an empty array to deliberately clear a link list. Type/domain/folder also steer routing when no vault is given.",
@@ -10617,7 +10795,7 @@ export const MCP_TOOL_CATALOG = [
           "additionalProperties": {}
         },
         "baseRevision": {
-          "description": "Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes).",
+          "description": "Revision the edit is based on (from memory-get/put). Always supply it when an AI edits an existing note; a mismatch rejects the write and returns current content for reconciliation. Omit only for an intentional new note or explicit last-write-wins migration.",
           "type": "number"
         },
         "tagDescriptions": {
@@ -10648,7 +10826,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "memory-search",
     "category": "memory",
     "title": "Hybrid Smart RAG Memory Search",
-    "description": "Default Smart RAG search across accessible memory. Form 2-4 focused query variants, combine semantic matches with exact vault/tag/date/kind/type/metadata filters, expand one bounded hop of outgoing links and backlinks around strong seeds, then rerank. Defaults: retrieve/fuse 50 candidates, 8 graph seeds, 5 neighbors per seed, rerank to 30. Graph neighbors are candidates, never automatic winners or links. Before tagging or writing, also call list-memory-tags to inspect the complete vocabulary and reuse existing tags; read strong related notes before selecting links.",
+    "description": "Default first tool whenever the user wants to find, recall, understand, or connect Memory content without an exact vault+path. Hybrid Smart RAG combines 2-4 semantic query variants with exact vault/tag/date/kind/type/metadata matches, expands one bounded graph hop, then reranks. Results are ranked excerpts, never an exhaustive inventory or complete notes: deduplicate by vault/path and call memory-get on strong candidates before answering, summarizing, editing, linking, or writing. Use memory-list for every note, memory-suggest for title-only lookup, and memory-export only for explicit full-vault dumps. Before tagging or writing, also inspect list-memory-tags.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -15289,7 +15467,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_publish_editorial",
     "category": "commons",
     "title": "Publish Transparent Commons Editorial Edition",
-    "description": "Publish a fully authored editorial reading-room edition to the caller-owned Transparent Commons subdomain and return permanent root, archive, and edition URLs. The calling AI must research and author the source-grounded edition first; this tool validates, renders, and persists it. For an existing edition, pass its current baseRevision. Requires an idempotencyKey; this is not the neutral wiki write tool.",
+    "description": "Publish up to 100 fully authored editorial pieces, including optional article/card images, Markdown body images, and collection/article Open Graph images, to the caller-owned Transparent Commons subdomain. The calling AI must research and author the source-grounded edition first; image URLs need alt text and preserved provenance/rights context. The tool validates, renders, persists, and returns permanent root, archive, and edition URLs. Existing editions require current baseRevision. Requires idempotencyKey; this is not the neutral wiki write tool.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -15378,6 +15556,40 @@ export const MCP_TOOL_CATALOG = [
               "type": "string",
               "minLength": 1,
               "maxLength": 60
+            },
+            "ogImage": {
+              "description": "Optional collection-level Open Graph image. Individual articles may override it.",
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Public HTTP(S) image URL used for the reading-room home page social preview."
+                },
+                "alt": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500,
+                  "description": "Accessible description and og:image:alt text."
+                },
+                "width": {
+                  "description": "Optional intrinsic width in pixels.",
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "height": {
+                  "description": "Optional intrinsic height in pixels.",
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "url",
+                "alt"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
@@ -15396,7 +15608,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "articles": {
           "minItems": 1,
-          "maxItems": 40,
+          "maxItems": 100,
           "type": "array",
           "items": {
             "type": "object",
@@ -15461,11 +15673,109 @@ export const MCP_TOOL_CATALOG = [
                 "minLength": 1,
                 "maxLength": 80
               },
+              "image": {
+                "description": "Optional article image shown on cards and above the article body. Markdown images remain supported inside the body.",
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Public HTTP(S) image URL."
+                  },
+                  "alt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Required accessible description of the image."
+                  },
+                  "caption": {
+                    "description": "Optional visible caption.",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "credit": {
+                    "description": "Optional visible creator, publisher, or rights credit.",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "sourceUrl": {
+                    "description": "Optional public HTTP(S) source page for provenance or rights context.",
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "width": {
+                    "description": "Optional intrinsic width in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "height": {
+                    "description": "Optional intrinsic height in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "url",
+                  "alt"
+                ],
+                "additionalProperties": false
+              },
+              "ogImage": {
+                "description": "Optional article-specific social preview image. Defaults to article.image, then site.ogImage.",
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Public HTTP(S) image URL."
+                  },
+                  "alt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Required accessible description of the image."
+                  },
+                  "caption": {
+                    "description": "Optional visible caption.",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "credit": {
+                    "description": "Optional visible creator, publisher, or rights credit.",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "sourceUrl": {
+                    "description": "Optional public HTTP(S) source page for provenance or rights context.",
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "width": {
+                    "description": "Optional intrinsic width in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "height": {
+                    "description": "Optional intrinsic height in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "url",
+                  "alt"
+                ],
+                "additionalProperties": false
+              },
               "markdown": {
                 "type": "string",
                 "minLength": 1,
                 "maxLength": 100000,
-                "description": "Complete article body in Markdown. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison."
+                "description": "Complete article body in Markdown. Standard Markdown images are allowed with descriptive alt text. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison."
               }
             },
             "required": [
@@ -15480,7 +15790,7 @@ export const MCP_TOOL_CATALOG = [
             ],
             "additionalProperties": false
           },
-          "description": "One to forty fully authored articles, with no more than 2,000,000 Markdown bytes combined. Read all in-scope source material before composing them; preserve distinctions, uncertainty, and provenance instead of flattening the corpus."
+          "description": "One to one hundred fully authored articles, with no more than 2,000,000 Markdown bytes combined. Articles may include structured card/hero images, article-specific Open Graph images, and Markdown body images. Read all in-scope source material before composing them; preserve distinctions, uncertainty, image provenance, and rights context instead of flattening the corpus."
         },
         "filename": {
           "description": "Optional download filename. The server always normalizes it to a safe .html filename.",
@@ -15510,7 +15820,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_validate_publication",
     "category": "commons",
     "title": "Validate Transparent Commons Publication",
-    "description": "Validate a publication name claim or a complete source-grounded editorial edition without writing. Use operation claim before commons_claim_publication and operation publish before commons_publish_editorial. This uses the editorial reading-room contract and checks ownership plus revision conflicts.",
+    "description": "Validate a publication name claim or a complete source-grounded editorial edition without writing. Publish validation accepts up to 100 articles plus structured article/card images, Markdown body images, and collection/article Open Graph images under the editorial reading-room contract. Use operation claim before commons_claim_publication and operation publish before commons_publish_editorial; ownership and revision conflicts are checked.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -15608,6 +15918,40 @@ export const MCP_TOOL_CATALOG = [
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 60
+                },
+                "ogImage": {
+                  "description": "Optional collection-level Open Graph image. Individual articles may override it.",
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Public HTTP(S) image URL used for the reading-room home page social preview."
+                    },
+                    "alt": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500,
+                      "description": "Accessible description and og:image:alt text."
+                    },
+                    "width": {
+                      "description": "Optional intrinsic width in pixels.",
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "height": {
+                      "description": "Optional intrinsic height in pixels.",
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "alt"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "required": [
@@ -15626,7 +15970,7 @@ export const MCP_TOOL_CATALOG = [
             },
             "articles": {
               "minItems": 1,
-              "maxItems": 40,
+              "maxItems": 100,
               "type": "array",
               "items": {
                 "type": "object",
@@ -15691,11 +16035,109 @@ export const MCP_TOOL_CATALOG = [
                     "minLength": 1,
                     "maxLength": 80
                   },
+                  "image": {
+                    "description": "Optional article image shown on cards and above the article body. Markdown images remain supported inside the body.",
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Public HTTP(S) image URL."
+                      },
+                      "alt": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 500,
+                        "description": "Required accessible description of the image."
+                      },
+                      "caption": {
+                        "description": "Optional visible caption.",
+                        "type": "string",
+                        "maxLength": 1000
+                      },
+                      "credit": {
+                        "description": "Optional visible creator, publisher, or rights credit.",
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "sourceUrl": {
+                        "description": "Optional public HTTP(S) source page for provenance or rights context.",
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "width": {
+                        "description": "Optional intrinsic width in pixels.",
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "height": {
+                        "description": "Optional intrinsic height in pixels.",
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "alt"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "ogImage": {
+                    "description": "Optional article-specific social preview image. Defaults to article.image, then site.ogImage.",
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Public HTTP(S) image URL."
+                      },
+                      "alt": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 500,
+                        "description": "Required accessible description of the image."
+                      },
+                      "caption": {
+                        "description": "Optional visible caption.",
+                        "type": "string",
+                        "maxLength": 1000
+                      },
+                      "credit": {
+                        "description": "Optional visible creator, publisher, or rights credit.",
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "sourceUrl": {
+                        "description": "Optional public HTTP(S) source page for provenance or rights context.",
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "width": {
+                        "description": "Optional intrinsic width in pixels.",
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "height": {
+                        "description": "Optional intrinsic height in pixels.",
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "alt"
+                    ],
+                    "additionalProperties": false
+                  },
                   "markdown": {
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 100000,
-                    "description": "Complete article body in Markdown. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison."
+                    "description": "Complete article body in Markdown. Standard Markdown images are allowed with descriptive alt text. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison."
                   }
                 },
                 "required": [
@@ -15710,7 +16152,7 @@ export const MCP_TOOL_CATALOG = [
                 ],
                 "additionalProperties": false
               },
-              "description": "One to forty fully authored articles, with no more than 2,000,000 Markdown bytes combined. Read all in-scope source material before composing them; preserve distinctions, uncertainty, and provenance instead of flattening the corpus."
+              "description": "One to one hundred fully authored articles, with no more than 2,000,000 Markdown bytes combined. Articles may include structured card/hero images, article-specific Open Graph images, and Markdown body images. Read all in-scope source material before composing them; preserve distinctions, uncertainty, image provenance, and rights context instead of flattening the corpus."
             },
             "filename": {
               "description": "Optional download filename. The server always normalizes it to a safe .html filename.",

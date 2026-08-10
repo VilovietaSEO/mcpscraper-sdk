@@ -52,4 +52,10 @@ export interface Output {
   candidatesFound: number;
   partial: boolean;
   searchQuery: string;
+  discoverySource: "google_serp" | "reddit_search_fallback" | "none";
+  resultQuality: "complete" | "partial" | "degraded";
+  degradedResult: boolean;
+  degradationReasons: string[];
+  retryRecommended: boolean;
+  billingRefunded: boolean;
 }

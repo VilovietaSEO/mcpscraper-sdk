@@ -36,16 +36,37 @@ export interface Input {
      * Label for the primary start-reading button.
      */
     startLabel?: string;
+    /**
+     * Optional collection-level Open Graph image. Individual articles may override it.
+     */
+    ogImage?: {
+      /**
+       * Public HTTP(S) image URL used for the reading-room home page social preview.
+       */
+      url: string;
+      /**
+       * Accessible description and og:image:alt text.
+       */
+      alt: string;
+      /**
+       * Optional intrinsic width in pixels.
+       */
+      width?: number;
+      /**
+       * Optional intrinsic height in pixels.
+       */
+      height?: number;
+    };
   };
   /**
    * Two or three sentences that explain the collection’s value and scope without generic marketing language.
    */
   deck: string;
   /**
-   * One to forty fully authored articles, with no more than 2,000,000 Markdown bytes combined. Read all in-scope source material before composing them; preserve distinctions, uncertainty, and provenance instead of flattening the corpus.
+   * One to one hundred fully authored articles, with no more than 2,000,000 Markdown bytes combined. Articles may include structured card/hero images, article-specific Open Graph images, and Markdown body images. Read all in-scope source material before composing them; preserve distinctions, uncertainty, image provenance, and rights context instead of flattening the corpus.
    *
    * @minItems 1
-   * @maxItems 40
+   * @maxItems 100
    */
   articles: [
     {
@@ -90,7 +111,73 @@ export interface Input {
        */
       updatedAt?: string;
       /**
-       * Complete article body in Markdown. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison.
+       * Optional article image shown on cards and above the article body. Markdown images remain supported inside the body.
+       */
+      image?: {
+        /**
+         * Public HTTP(S) image URL.
+         */
+        url: string;
+        /**
+         * Required accessible description of the image.
+         */
+        alt: string;
+        /**
+         * Optional visible caption.
+         */
+        caption?: string;
+        /**
+         * Optional visible creator, publisher, or rights credit.
+         */
+        credit?: string;
+        /**
+         * Optional public HTTP(S) source page for provenance or rights context.
+         */
+        sourceUrl?: string;
+        /**
+         * Optional intrinsic width in pixels.
+         */
+        width?: number;
+        /**
+         * Optional intrinsic height in pixels.
+         */
+        height?: number;
+      };
+      /**
+       * Optional article-specific social preview image. Defaults to article.image, then site.ogImage.
+       */
+      ogImage?: {
+        /**
+         * Public HTTP(S) image URL.
+         */
+        url: string;
+        /**
+         * Required accessible description of the image.
+         */
+        alt: string;
+        /**
+         * Optional visible caption.
+         */
+        caption?: string;
+        /**
+         * Optional visible creator, publisher, or rights credit.
+         */
+        credit?: string;
+        /**
+         * Optional public HTTP(S) source page for provenance or rights context.
+         */
+        sourceUrl?: string;
+        /**
+         * Optional intrinsic width in pixels.
+         */
+        width?: number;
+        /**
+         * Optional intrinsic height in pixels.
+         */
+        height?: number;
+      };
+      /**
+       * Complete article body in Markdown. Standard Markdown images are allowed with descriptive alt text. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison.
        */
       markdown: string;
     },
@@ -136,7 +223,73 @@ export interface Input {
        */
       updatedAt?: string;
       /**
-       * Complete article body in Markdown. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison.
+       * Optional article image shown on cards and above the article body. Markdown images remain supported inside the body.
+       */
+      image?: {
+        /**
+         * Public HTTP(S) image URL.
+         */
+        url: string;
+        /**
+         * Required accessible description of the image.
+         */
+        alt: string;
+        /**
+         * Optional visible caption.
+         */
+        caption?: string;
+        /**
+         * Optional visible creator, publisher, or rights credit.
+         */
+        credit?: string;
+        /**
+         * Optional public HTTP(S) source page for provenance or rights context.
+         */
+        sourceUrl?: string;
+        /**
+         * Optional intrinsic width in pixels.
+         */
+        width?: number;
+        /**
+         * Optional intrinsic height in pixels.
+         */
+        height?: number;
+      };
+      /**
+       * Optional article-specific social preview image. Defaults to article.image, then site.ogImage.
+       */
+      ogImage?: {
+        /**
+         * Public HTTP(S) image URL.
+         */
+        url: string;
+        /**
+         * Required accessible description of the image.
+         */
+        alt: string;
+        /**
+         * Optional visible caption.
+         */
+        caption?: string;
+        /**
+         * Optional visible creator, publisher, or rights credit.
+         */
+        credit?: string;
+        /**
+         * Optional public HTTP(S) source page for provenance or rights context.
+         */
+        sourceUrl?: string;
+        /**
+         * Optional intrinsic width in pixels.
+         */
+        width?: number;
+        /**
+         * Optional intrinsic height in pixels.
+         */
+        height?: number;
+      };
+      /**
+       * Complete article body in Markdown. Standard Markdown images are allowed with descriptive alt text. Use H2/H3 headings for jump links, short paragraphs, concrete examples, and tables only where they improve comparison.
        */
       markdown: string;
     }[]

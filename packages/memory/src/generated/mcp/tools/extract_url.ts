@@ -28,11 +28,19 @@ export interface Input {
    */
   mediaTypes?: ("image" | "video" | "audio")[];
   /**
+   * Maximum media records to retain and attempt to download after filtering and responsive-variant collapse.
+   */
+  maxMediaAssets?: number;
+  /**
+   * Maximum downloaded images to attach as AI-readable image content blocks. All successfully downloaded media remains available in the ZIP.
+   */
+  maxInlineImages?: number;
+  /**
    * Where to deliver the result. auto keeps small results inline and offloads large ones; artifact always returns an owned artifact; memory stores the full page in hosted Memory; inline returns a bounded response.
    */
   delivery?: "auto" | "inline" | "artifact" | "memory";
   /**
-   * Preserve discovered media in the result workflow. This is the preferred replacement for downloadMedia.
+   * Collect media from static source plus a rendered, lazy-loaded page; collapse responsive variants; return provenance and completeness; attach bounded image previews; and create an owner-scoped ZIP readable with archive_read.
    */
   preserveMedia?: boolean;
   /**
@@ -55,6 +63,10 @@ export interface Output {
   schemaBlockCount: number;
   entityName: string | null;
   entityTypes: string[];
+  /**
+   * Logo declared by the selected Organization or LocalBusiness JSON-LD entity, separate from the rendered branding candidate ranking.
+   */
+  structuredDataLogo: string | null;
   napScore: number | null;
   missingSchemaFields: string[];
   screenshotSaved: string | null;
@@ -81,6 +93,189 @@ export interface Output {
     url: string;
     archivedUrl: string | null;
     source: "og:image" | "twitter:image" | "json-ld" | "content-image";
+  } | null;
+  /**
+   * Rendered brand and proof evidence. logo is the site identity, logoVariants are the same mark family, and proofImages are separately typed body trust signals. Inspect confidence and evidence rather than treating uncertain relationships as facts.
+   */
+  branding: {
+    colorScheme: ("light" | "dark") | null;
+    colors: {
+      primary: string | null;
+      accent: string | null;
+      background: string | null;
+      text: string | null;
+      heading: string | null;
+    };
+    /**
+     * Rendered provenance for each selected color so callers can distinguish explicit brand tokens and semantic elements from lower-confidence fallbacks.
+     */
+    colorEvidence: {
+      primary: {
+        value: string;
+        source:
+          | "css_variable"
+          | "theme_color"
+          | "visible_cta"
+          | "navigation_background"
+          | "header_svg"
+          | "visible_background"
+          | "body_background"
+          | "body_text"
+          | "heading_text";
+        confidence: "high" | "medium" | "low";
+        detail: string | null;
+      } | null;
+      accent: {
+        value: string;
+        source:
+          | "css_variable"
+          | "theme_color"
+          | "visible_cta"
+          | "navigation_background"
+          | "header_svg"
+          | "visible_background"
+          | "body_background"
+          | "body_text"
+          | "heading_text";
+        confidence: "high" | "medium" | "low";
+        detail: string | null;
+      } | null;
+      background: {
+        value: string;
+        source: "body_background";
+        confidence: "high" | "medium" | "low";
+        detail: string | null;
+      } | null;
+      text: {
+        value: string;
+        source: "body_text";
+        confidence: "high" | "medium" | "low";
+        detail: string | null;
+      } | null;
+      heading: {
+        value: string;
+        source: "heading_text";
+        confidence: "high" | "medium" | "low";
+        detail: string | null;
+      } | null;
+    };
+    fonts: {
+      heading: string | null;
+      body: string | null;
+    };
+    assets: {
+      logo: string | null;
+      favicon: string | null;
+      logoConfidence: ("high" | "medium" | "low") | null;
+      logoSelectionReason: string | null;
+      /**
+       * Responsive or original-size files from the same brand-logo family as logo; never partner, certification, award, press, or customer marks.
+       */
+      logoVariants: string[];
+      logoCandidates: {
+        url: string;
+        score: number;
+        confidence: "high" | "medium" | "low";
+        region: "json_ld" | "header" | "nav" | "footer" | "body" | "favicon";
+        evidence: string[];
+        alt: string | null;
+        width: number | null;
+        height: number | null;
+      }[];
+      /**
+       * Prominent body images supported by trust context, kept separate from the site logo. Classification is evidence-ranked rather than a claim that the depicted organization endorses the site.
+       */
+      proofImages: {
+        url: string;
+        proofType:
+          | "certification"
+          | "accreditation"
+          | "award"
+          | "membership"
+          | "partner_or_customer"
+          | "press_mention"
+          | "trust_mark";
+        score: number;
+        confidence: "high" | "medium" | "low";
+        evidence: string[];
+        alt: string | null;
+        context: string | null;
+        width: number | null;
+        height: number | null;
+      }[];
+    };
+  } | null;
+  /**
+   * Backward-compatible flattened page-media inventory. Use media for completeness, warnings, and artifact delivery.
+   */
+  mediaAssets:
+    | {
+        url: string;
+        type: "image" | "video" | "audio";
+        mimeType: string | null;
+        filename: string;
+        savedPath: string | null;
+        sizeBytes: number | null;
+        discoveryMethods: string[];
+        altTexts: string[];
+        contexts: string[];
+        width: number | null;
+        height: number | null;
+        variants: string[];
+        finalUrl?: string | null;
+        duplicateOf?: string | null;
+        sha256?: string | null;
+        downloadStatus?: "downloaded" | "failed" | "not_attempted";
+        downloadError?: string | null;
+        contentIndex: number | null;
+      }[]
+    | null;
+  /**
+   * Static-plus-rendered website media manifest with provenance, bounded image content-block indices, completion state, and owner-scoped ZIP delivery.
+   */
+  media: {
+    pageUrl: string;
+    staticFound: number;
+    renderedFound: number;
+    totalFound: number;
+    filteredCount: number;
+    retainedCount: number;
+    completeness: "complete" | "partial";
+    exhausted: boolean;
+    stopReason: "page_exhausted" | "asset_limit" | "scroll_round_limit" | "render_unavailable";
+    scrollRounds: number;
+    warnings: string[];
+    assets: {
+      url: string;
+      type: "image" | "video" | "audio";
+      mimeType: string | null;
+      filename: string;
+      savedPath: string | null;
+      sizeBytes: number | null;
+      discoveryMethods: string[];
+      altTexts: string[];
+      contexts: string[];
+      width: number | null;
+      height: number | null;
+      variants: string[];
+      finalUrl?: string | null;
+      duplicateOf?: string | null;
+      sha256?: string | null;
+      downloadStatus?: "downloaded" | "failed" | "not_attempted";
+      downloadError?: string | null;
+      contentIndex: number | null;
+    }[];
+    artifact: {
+      artifactId: string;
+      filename: string;
+      contentType: string;
+      bytes: number;
+      sha256: string;
+      expiresAt: string;
+      downloadUrl: string | null;
+      downloadUrlExpiresAt: string | null;
+      localPath: string | null;
+    } | null;
   } | null;
   memory?: {
     deposited: boolean;

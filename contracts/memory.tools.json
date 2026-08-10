@@ -8605,7 +8605,7 @@
     },
     {
       "name": "list_artifact_templates",
-      "description": "List the built-in Editorial Reading Room preset and your saved, versioned artifact templates. Presets must be saved before a scheduled action can select them.",
+      "description": "List registered template presets and your saved, versioned templates. A preset must be saved before a scheduled action can select it.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -8641,123 +8641,52 @@
               "presets": {
                 "type": "array",
                 "items": {
-                  "type": "object",
-                  "properties": {
-                    "presetKey": {
-                      "type": "string",
-                      "const": "editorial_reading_room_v1"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    },
-                    "defaultConfig": {
+                  "anyOf": [
+                    {
                       "type": "object",
                       "properties": {
-                        "theme": {
-                          "type": "string",
-                          "enum": [
-                            "paper",
-                            "ink",
-                            "warm"
-                          ]
+                        "name": {
+                          "type": "string"
                         },
-                        "density": {
-                          "type": "string",
-                          "enum": [
-                            "comfortable",
-                            "compact"
-                          ]
+                        "description": {
+                          "type": "string"
                         },
-                        "showSourceRail": {
-                          "type": "boolean"
-                        },
-                        "showGeneratedAt": {
-                          "type": "boolean"
-                        },
-                        "brandName": {
+                        "mark": {
                           "type": "string",
                           "minLength": 1,
-                          "maxLength": 80
-                        }
-                      },
-                      "required": [
-                        "theme",
-                        "density",
-                        "showSourceRail",
-                        "showGeneratedAt"
-                      ],
-                      "additionalProperties": false
-                    }
-                  },
-                  "required": [
-                    "presetKey",
-                    "name",
-                    "description",
-                    "defaultConfig"
-                  ],
-                  "additionalProperties": false
-                }
-              },
-              "templates": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "templateId": {
-                      "type": "string",
-                      "format": "uuid"
-                    },
-                    "name": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 120
-                    },
-                    "description": {
-                      "type": "string",
-                      "maxLength": 500
-                    },
-                    "currentVersionId": {
-                      "type": "string",
-                      "format": "uuid"
-                    },
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "active",
-                        "archived"
-                      ]
-                    },
-                    "currentVersion": {
-                      "type": "object",
-                      "properties": {
-                        "templateVersionId": {
-                          "type": "string",
-                          "format": "uuid"
+                          "maxLength": 4
                         },
-                        "templateId": {
-                          "type": "string",
-                          "format": "uuid"
+                        "featureFlags": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "label": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "description": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "key",
+                              "label",
+                              "description"
+                            ],
+                            "additionalProperties": false
+                          }
                         },
-                        "version": {
-                          "type": "integer",
-                          "exclusiveMinimum": 0
-                        },
-                        "rendererKey": {
+                        "presetKey": {
                           "type": "string",
                           "const": "editorial_reading_room_v1"
                         },
-                        "rendererVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "inputContractVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "config": {
+                        "defaultConfig": {
                           "type": "object",
                           "properties": {
                             "theme": {
@@ -8794,115 +8723,583 @@
                             "showGeneratedAt"
                           ],
                           "additionalProperties": false
-                        },
-                        "authoringInstructions": {
-                          "type": "string"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
                         }
                       },
                       "required": [
-                        "templateVersionId",
-                        "templateId",
-                        "version",
-                        "rendererKey",
-                        "rendererVersion",
-                        "inputContractVersion",
-                        "config",
-                        "authoringInstructions",
-                        "createdAt"
+                        "name",
+                        "description",
+                        "mark",
+                        "featureFlags",
+                        "presetKey",
+                        "defaultConfig"
                       ],
                       "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "mark": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 4
+                        },
+                        "featureFlags": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "label": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "description": {
+                                "type": "string",
+                                "minLength": 1
+                              }
+                            },
+                            "required": [
+                              "key",
+                              "label",
+                              "description"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "presetKey": {
+                          "type": "string",
+                          "const": "personal_authority_v1"
+                        },
+                        "defaultConfig": {
+                          "type": "object",
+                          "properties": {
+                            "theme": {
+                              "type": "string",
+                              "enum": [
+                                "blue",
+                                "slate",
+                                "monochrome"
+                              ]
+                            },
+                            "showGeneratedAt": {
+                              "type": "boolean"
+                            },
+                            "brandName": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 80
+                            },
+                            "featureFlags": {
+                              "type": "object",
+                              "properties": {
+                                "navigation": {
+                                  "type": "boolean"
+                                },
+                                "socialLinks": {
+                                  "type": "boolean"
+                                },
+                                "authority": {
+                                  "type": "boolean"
+                                },
+                                "consultation": {
+                                  "type": "boolean"
+                                },
+                                "learning": {
+                                  "type": "boolean"
+                                },
+                                "services": {
+                                  "type": "boolean"
+                                },
+                                "proof": {
+                                  "type": "boolean"
+                                },
+                                "finalCta": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "navigation",
+                                "socialLinks",
+                                "authority",
+                                "consultation",
+                                "learning",
+                                "services",
+                                "proof",
+                                "finalCta"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "theme",
+                            "showGeneratedAt",
+                            "featureFlags"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "description",
+                        "mark",
+                        "featureFlags",
+                        "presetKey",
+                        "defaultConfig"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "templates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "templateId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "description": {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    "currentVersionId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "active",
+                        "archived"
+                      ]
+                    },
+                    "currentVersion": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "templateVersionId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "templateId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
+                            },
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "editorial_reading_room_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "paper",
+                                    "ink",
+                                    "warm"
+                                  ]
+                                },
+                                "density": {
+                                  "type": "string",
+                                  "enum": [
+                                    "comfortable",
+                                    "compact"
+                                  ]
+                                },
+                                "showSourceRail": {
+                                  "type": "boolean"
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "density",
+                                "showSourceRail",
+                                "showGeneratedAt"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "templateVersionId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "templateId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
+                            },
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "personal_authority_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "blue",
+                                    "slate",
+                                    "monochrome"
+                                  ]
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                },
+                                "featureFlags": {
+                                  "type": "object",
+                                  "properties": {
+                                    "navigation": {
+                                      "type": "boolean"
+                                    },
+                                    "socialLinks": {
+                                      "type": "boolean"
+                                    },
+                                    "authority": {
+                                      "type": "boolean"
+                                    },
+                                    "consultation": {
+                                      "type": "boolean"
+                                    },
+                                    "learning": {
+                                      "type": "boolean"
+                                    },
+                                    "services": {
+                                      "type": "boolean"
+                                    },
+                                    "proof": {
+                                      "type": "boolean"
+                                    },
+                                    "finalCta": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "navigation",
+                                    "socialLinks",
+                                    "authority",
+                                    "consultation",
+                                    "learning",
+                                    "services",
+                                    "proof",
+                                    "finalCta"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "showGeneratedAt",
+                                "featureFlags"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
                     },
                     "versions": {
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "templateVersionId": {
-                            "type": "string",
-                            "format": "uuid"
-                          },
-                          "templateId": {
-                            "type": "string",
-                            "format": "uuid"
-                          },
-                          "version": {
-                            "type": "integer",
-                            "exclusiveMinimum": 0
-                          },
-                          "rendererKey": {
-                            "type": "string",
-                            "const": "editorial_reading_room_v1"
-                          },
-                          "rendererVersion": {
-                            "type": "number",
-                            "const": 1
-                          },
-                          "inputContractVersion": {
-                            "type": "number",
-                            "const": 1
-                          },
-                          "config": {
+                        "anyOf": [
+                          {
                             "type": "object",
                             "properties": {
-                              "theme": {
+                              "templateVersionId": {
                                 "type": "string",
-                                "enum": [
-                                  "paper",
-                                  "ink",
-                                  "warm"
-                                ]
+                                "format": "uuid"
                               },
-                              "density": {
+                              "templateId": {
                                 "type": "string",
-                                "enum": [
-                                  "comfortable",
-                                  "compact"
-                                ]
+                                "format": "uuid"
                               },
-                              "showSourceRail": {
-                                "type": "boolean"
+                              "version": {
+                                "type": "integer",
+                                "exclusiveMinimum": 0
                               },
-                              "showGeneratedAt": {
-                                "type": "boolean"
+                              "rendererVersion": {
+                                "type": "number",
+                                "const": 1
                               },
-                              "brandName": {
+                              "inputContractVersion": {
+                                "type": "number",
+                                "const": 1
+                              },
+                              "authoringInstructions": {
+                                "type": "string"
+                              },
+                              "createdAt": {
                                 "type": "string",
-                                "minLength": 1,
-                                "maxLength": 80
+                                "format": "date-time"
+                              },
+                              "rendererKey": {
+                                "type": "string",
+                                "const": "editorial_reading_room_v1"
+                              },
+                              "config": {
+                                "type": "object",
+                                "properties": {
+                                  "theme": {
+                                    "type": "string",
+                                    "enum": [
+                                      "paper",
+                                      "ink",
+                                      "warm"
+                                    ]
+                                  },
+                                  "density": {
+                                    "type": "string",
+                                    "enum": [
+                                      "comfortable",
+                                      "compact"
+                                    ]
+                                  },
+                                  "showSourceRail": {
+                                    "type": "boolean"
+                                  },
+                                  "showGeneratedAt": {
+                                    "type": "boolean"
+                                  },
+                                  "brandName": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                  }
+                                },
+                                "required": [
+                                  "theme",
+                                  "density",
+                                  "showSourceRail",
+                                  "showGeneratedAt"
+                                ],
+                                "additionalProperties": false
                               }
                             },
                             "required": [
-                              "theme",
-                              "density",
-                              "showSourceRail",
-                              "showGeneratedAt"
+                              "templateVersionId",
+                              "templateId",
+                              "version",
+                              "rendererVersion",
+                              "inputContractVersion",
+                              "authoringInstructions",
+                              "createdAt",
+                              "rendererKey",
+                              "config"
                             ],
                             "additionalProperties": false
                           },
-                          "authoringInstructions": {
-                            "type": "string"
-                          },
-                          "createdAt": {
-                            "type": "string",
-                            "format": "date-time"
+                          {
+                            "type": "object",
+                            "properties": {
+                              "templateVersionId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "templateId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "version": {
+                                "type": "integer",
+                                "exclusiveMinimum": 0
+                              },
+                              "rendererVersion": {
+                                "type": "number",
+                                "const": 1
+                              },
+                              "inputContractVersion": {
+                                "type": "number",
+                                "const": 1
+                              },
+                              "authoringInstructions": {
+                                "type": "string"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "rendererKey": {
+                                "type": "string",
+                                "const": "personal_authority_v1"
+                              },
+                              "config": {
+                                "type": "object",
+                                "properties": {
+                                  "theme": {
+                                    "type": "string",
+                                    "enum": [
+                                      "blue",
+                                      "slate",
+                                      "monochrome"
+                                    ]
+                                  },
+                                  "showGeneratedAt": {
+                                    "type": "boolean"
+                                  },
+                                  "brandName": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 80
+                                  },
+                                  "featureFlags": {
+                                    "type": "object",
+                                    "properties": {
+                                      "navigation": {
+                                        "type": "boolean"
+                                      },
+                                      "socialLinks": {
+                                        "type": "boolean"
+                                      },
+                                      "authority": {
+                                        "type": "boolean"
+                                      },
+                                      "consultation": {
+                                        "type": "boolean"
+                                      },
+                                      "learning": {
+                                        "type": "boolean"
+                                      },
+                                      "services": {
+                                        "type": "boolean"
+                                      },
+                                      "proof": {
+                                        "type": "boolean"
+                                      },
+                                      "finalCta": {
+                                        "type": "boolean"
+                                      }
+                                    },
+                                    "required": [
+                                      "navigation",
+                                      "socialLinks",
+                                      "authority",
+                                      "consultation",
+                                      "learning",
+                                      "services",
+                                      "proof",
+                                      "finalCta"
+                                    ],
+                                    "additionalProperties": false
+                                  }
+                                },
+                                "required": [
+                                  "theme",
+                                  "showGeneratedAt",
+                                  "featureFlags"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": [
+                              "templateVersionId",
+                              "templateId",
+                              "version",
+                              "rendererVersion",
+                              "inputContractVersion",
+                              "authoringInstructions",
+                              "createdAt",
+                              "rendererKey",
+                              "config"
+                            ],
+                            "additionalProperties": false
                           }
-                        },
-                        "required": [
-                          "templateVersionId",
-                          "templateId",
-                          "version",
-                          "rendererKey",
-                          "rendererVersion",
-                          "inputContractVersion",
-                          "config",
-                          "authoringInstructions",
-                          "createdAt"
-                        ],
-                        "additionalProperties": false
+                        ]
                       }
                     },
                     "createdAt": {
@@ -9037,178 +9434,416 @@
                     ]
                   },
                   "currentVersion": {
-                    "type": "object",
-                    "properties": {
-                      "templateVersionId": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "templateId": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "version": {
-                        "type": "integer",
-                        "exclusiveMinimum": 0
-                      },
-                      "rendererKey": {
-                        "type": "string",
-                        "const": "editorial_reading_room_v1"
-                      },
-                      "rendererVersion": {
-                        "type": "number",
-                        "const": 1
-                      },
-                      "inputContractVersion": {
-                        "type": "number",
-                        "const": 1
-                      },
-                      "config": {
+                    "anyOf": [
+                      {
                         "type": "object",
                         "properties": {
-                          "theme": {
+                          "templateVersionId": {
                             "type": "string",
-                            "enum": [
-                              "paper",
-                              "ink",
-                              "warm"
-                            ]
+                            "format": "uuid"
                           },
-                          "density": {
+                          "templateId": {
                             "type": "string",
-                            "enum": [
-                              "comfortable",
-                              "compact"
-                            ]
+                            "format": "uuid"
                           },
-                          "showSourceRail": {
-                            "type": "boolean"
+                          "version": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0
                           },
-                          "showGeneratedAt": {
-                            "type": "boolean"
+                          "rendererVersion": {
+                            "type": "number",
+                            "const": 1
                           },
-                          "brandName": {
+                          "inputContractVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "authoringInstructions": {
+                            "type": "string"
+                          },
+                          "createdAt": {
                             "type": "string",
-                            "minLength": 1,
-                            "maxLength": 80
+                            "format": "date-time"
+                          },
+                          "rendererKey": {
+                            "type": "string",
+                            "const": "editorial_reading_room_v1"
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "theme": {
+                                "type": "string",
+                                "enum": [
+                                  "paper",
+                                  "ink",
+                                  "warm"
+                                ]
+                              },
+                              "density": {
+                                "type": "string",
+                                "enum": [
+                                  "comfortable",
+                                  "compact"
+                                ]
+                              },
+                              "showSourceRail": {
+                                "type": "boolean"
+                              },
+                              "showGeneratedAt": {
+                                "type": "boolean"
+                              },
+                              "brandName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              }
+                            },
+                            "required": [
+                              "theme",
+                              "density",
+                              "showSourceRail",
+                              "showGeneratedAt"
+                            ],
+                            "additionalProperties": false
                           }
                         },
                         "required": [
-                          "theme",
-                          "density",
-                          "showSourceRail",
-                          "showGeneratedAt"
+                          "templateVersionId",
+                          "templateId",
+                          "version",
+                          "rendererVersion",
+                          "inputContractVersion",
+                          "authoringInstructions",
+                          "createdAt",
+                          "rendererKey",
+                          "config"
                         ],
                         "additionalProperties": false
                       },
-                      "authoringInstructions": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
+                      {
+                        "type": "object",
+                        "properties": {
+                          "templateVersionId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "templateId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "version": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0
+                          },
+                          "rendererVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "inputContractVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "authoringInstructions": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "rendererKey": {
+                            "type": "string",
+                            "const": "personal_authority_v1"
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "theme": {
+                                "type": "string",
+                                "enum": [
+                                  "blue",
+                                  "slate",
+                                  "monochrome"
+                                ]
+                              },
+                              "showGeneratedAt": {
+                                "type": "boolean"
+                              },
+                              "brandName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              },
+                              "featureFlags": {
+                                "type": "object",
+                                "properties": {
+                                  "navigation": {
+                                    "type": "boolean"
+                                  },
+                                  "socialLinks": {
+                                    "type": "boolean"
+                                  },
+                                  "authority": {
+                                    "type": "boolean"
+                                  },
+                                  "consultation": {
+                                    "type": "boolean"
+                                  },
+                                  "learning": {
+                                    "type": "boolean"
+                                  },
+                                  "services": {
+                                    "type": "boolean"
+                                  },
+                                  "proof": {
+                                    "type": "boolean"
+                                  },
+                                  "finalCta": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "navigation",
+                                  "socialLinks",
+                                  "authority",
+                                  "consultation",
+                                  "learning",
+                                  "services",
+                                  "proof",
+                                  "finalCta"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": [
+                              "theme",
+                              "showGeneratedAt",
+                              "featureFlags"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "templateVersionId",
+                          "templateId",
+                          "version",
+                          "rendererVersion",
+                          "inputContractVersion",
+                          "authoringInstructions",
+                          "createdAt",
+                          "rendererKey",
+                          "config"
+                        ],
+                        "additionalProperties": false
                       }
-                    },
-                    "required": [
-                      "templateVersionId",
-                      "templateId",
-                      "version",
-                      "rendererKey",
-                      "rendererVersion",
-                      "inputContractVersion",
-                      "config",
-                      "authoringInstructions",
-                      "createdAt"
-                    ],
-                    "additionalProperties": false
+                    ]
                   },
                   "versions": {
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "templateVersionId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "templateId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "version": {
-                          "type": "integer",
-                          "exclusiveMinimum": 0
-                        },
-                        "rendererKey": {
-                          "type": "string",
-                          "const": "editorial_reading_room_v1"
-                        },
-                        "rendererVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "inputContractVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "config": {
+                      "anyOf": [
+                        {
                           "type": "object",
                           "properties": {
-                            "theme": {
+                            "templateVersionId": {
                               "type": "string",
-                              "enum": [
-                                "paper",
-                                "ink",
-                                "warm"
-                              ]
+                              "format": "uuid"
                             },
-                            "density": {
+                            "templateId": {
                               "type": "string",
-                              "enum": [
-                                "comfortable",
-                                "compact"
-                              ]
+                              "format": "uuid"
                             },
-                            "showSourceRail": {
-                              "type": "boolean"
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
                             },
-                            "showGeneratedAt": {
-                              "type": "boolean"
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
                             },
-                            "brandName": {
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
                               "type": "string",
-                              "minLength": 1,
-                              "maxLength": 80
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "editorial_reading_room_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "paper",
+                                    "ink",
+                                    "warm"
+                                  ]
+                                },
+                                "density": {
+                                  "type": "string",
+                                  "enum": [
+                                    "comfortable",
+                                    "compact"
+                                  ]
+                                },
+                                "showSourceRail": {
+                                  "type": "boolean"
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "density",
+                                "showSourceRail",
+                                "showGeneratedAt"
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "required": [
-                            "theme",
-                            "density",
-                            "showSourceRail",
-                            "showGeneratedAt"
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
                           ],
                           "additionalProperties": false
                         },
-                        "authoringInstructions": {
-                          "type": "string"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
+                        {
+                          "type": "object",
+                          "properties": {
+                            "templateVersionId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "templateId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
+                            },
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "personal_authority_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "blue",
+                                    "slate",
+                                    "monochrome"
+                                  ]
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                },
+                                "featureFlags": {
+                                  "type": "object",
+                                  "properties": {
+                                    "navigation": {
+                                      "type": "boolean"
+                                    },
+                                    "socialLinks": {
+                                      "type": "boolean"
+                                    },
+                                    "authority": {
+                                      "type": "boolean"
+                                    },
+                                    "consultation": {
+                                      "type": "boolean"
+                                    },
+                                    "learning": {
+                                      "type": "boolean"
+                                    },
+                                    "services": {
+                                      "type": "boolean"
+                                    },
+                                    "proof": {
+                                      "type": "boolean"
+                                    },
+                                    "finalCta": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "navigation",
+                                    "socialLinks",
+                                    "authority",
+                                    "consultation",
+                                    "learning",
+                                    "services",
+                                    "proof",
+                                    "finalCta"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "showGeneratedAt",
+                                "featureFlags"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
+                          ],
+                          "additionalProperties": false
                         }
-                      },
-                      "required": [
-                        "templateVersionId",
-                        "templateId",
-                        "version",
-                        "rendererKey",
-                        "rendererVersion",
-                        "inputContractVersion",
-                        "config",
-                        "authoringInstructions",
-                        "createdAt"
-                      ],
-                      "additionalProperties": false
+                      ]
                     }
                   },
                   "createdAt": {
@@ -9282,80 +9917,188 @@
     },
     {
       "name": "create_artifact_template",
-      "description": "Save the registered Editorial Reading Room preset as a reusable artifact template. Raw HTML and JavaScript are not accepted.",
+      "description": "Create a reusable template from a registered preset. Name, guidance, branding, and supported feature flags may be customized; executable code is not accepted.",
       "category": "schedule",
       "inputSchema": {
-        "type": "object",
-        "properties": {
-          "apiKey": {
-            "type": "string"
-          },
-          "sessionId": {
-            "type": "string"
-          },
-          "presetKey": {
-            "type": "string",
-            "const": "editorial_reading_room_v1"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 120
-          },
-          "description": {
-            "type": "string",
-            "maxLength": 500,
-            "default": ""
-          },
-          "config": {
+        "anyOf": [
+          {
             "type": "object",
             "properties": {
-              "theme": {
+              "apiKey": {
+                "type": "string"
+              },
+              "sessionId": {
+                "type": "string"
+              },
+              "presetKey": {
                 "type": "string",
-                "enum": [
-                  "paper",
-                  "ink",
-                  "warm"
-                ]
+                "const": "editorial_reading_room_v1"
               },
-              "density": {
-                "type": "string",
-                "enum": [
-                  "comfortable",
-                  "compact"
-                ]
-              },
-              "showSourceRail": {
-                "type": "boolean"
-              },
-              "showGeneratedAt": {
-                "type": "boolean"
-              },
-              "brandName": {
+              "name": {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 80
+                "maxLength": 120
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 500,
+                "default": ""
+              },
+              "authoringInstructions": {
+                "type": "string",
+                "maxLength": 4000
+              },
+              "config": {
+                "type": "object",
+                "properties": {
+                  "theme": {
+                    "type": "string",
+                    "enum": [
+                      "paper",
+                      "ink",
+                      "warm"
+                    ]
+                  },
+                  "density": {
+                    "type": "string",
+                    "enum": [
+                      "comfortable",
+                      "compact"
+                    ]
+                  },
+                  "showSourceRail": {
+                    "type": "boolean"
+                  },
+                  "showGeneratedAt": {
+                    "type": "boolean"
+                  },
+                  "brandName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  }
+                },
+                "required": [
+                  "theme",
+                  "density",
+                  "showSourceRail",
+                  "showGeneratedAt"
+                ],
+                "additionalProperties": false
               }
             },
             "required": [
-              "theme",
-              "density",
-              "showSourceRail",
-              "showGeneratedAt"
+              "presetKey",
+              "name",
+              "authoringInstructions",
+              "config"
             ],
             "additionalProperties": false
           },
-          "authoringInstructions": {
-            "type": "string"
+          {
+            "type": "object",
+            "properties": {
+              "apiKey": {
+                "type": "string"
+              },
+              "sessionId": {
+                "type": "string"
+              },
+              "presetKey": {
+                "type": "string",
+                "const": "personal_authority_v1"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 500,
+                "default": ""
+              },
+              "authoringInstructions": {
+                "type": "string",
+                "maxLength": 4000
+              },
+              "config": {
+                "type": "object",
+                "properties": {
+                  "theme": {
+                    "type": "string",
+                    "enum": [
+                      "blue",
+                      "slate",
+                      "monochrome"
+                    ]
+                  },
+                  "showGeneratedAt": {
+                    "type": "boolean"
+                  },
+                  "brandName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "featureFlags": {
+                    "type": "object",
+                    "properties": {
+                      "navigation": {
+                        "type": "boolean"
+                      },
+                      "socialLinks": {
+                        "type": "boolean"
+                      },
+                      "authority": {
+                        "type": "boolean"
+                      },
+                      "consultation": {
+                        "type": "boolean"
+                      },
+                      "learning": {
+                        "type": "boolean"
+                      },
+                      "services": {
+                        "type": "boolean"
+                      },
+                      "proof": {
+                        "type": "boolean"
+                      },
+                      "finalCta": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "navigation",
+                      "socialLinks",
+                      "authority",
+                      "consultation",
+                      "learning",
+                      "services",
+                      "proof",
+                      "finalCta"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "theme",
+                  "showGeneratedAt",
+                  "featureFlags"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "presetKey",
+              "name",
+              "authoringInstructions",
+              "config"
+            ],
+            "additionalProperties": false
           }
-        },
-        "required": [
-          "presetKey",
-          "name",
-          "config",
-          "authoringInstructions"
         ],
-        "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "outputSchema": {
@@ -9395,178 +10138,416 @@
                     ]
                   },
                   "currentVersion": {
-                    "type": "object",
-                    "properties": {
-                      "templateVersionId": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "templateId": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "version": {
-                        "type": "integer",
-                        "exclusiveMinimum": 0
-                      },
-                      "rendererKey": {
-                        "type": "string",
-                        "const": "editorial_reading_room_v1"
-                      },
-                      "rendererVersion": {
-                        "type": "number",
-                        "const": 1
-                      },
-                      "inputContractVersion": {
-                        "type": "number",
-                        "const": 1
-                      },
-                      "config": {
+                    "anyOf": [
+                      {
                         "type": "object",
                         "properties": {
-                          "theme": {
+                          "templateVersionId": {
                             "type": "string",
-                            "enum": [
-                              "paper",
-                              "ink",
-                              "warm"
-                            ]
+                            "format": "uuid"
                           },
-                          "density": {
+                          "templateId": {
                             "type": "string",
-                            "enum": [
-                              "comfortable",
-                              "compact"
-                            ]
+                            "format": "uuid"
                           },
-                          "showSourceRail": {
-                            "type": "boolean"
+                          "version": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0
                           },
-                          "showGeneratedAt": {
-                            "type": "boolean"
+                          "rendererVersion": {
+                            "type": "number",
+                            "const": 1
                           },
-                          "brandName": {
+                          "inputContractVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "authoringInstructions": {
+                            "type": "string"
+                          },
+                          "createdAt": {
                             "type": "string",
-                            "minLength": 1,
-                            "maxLength": 80
+                            "format": "date-time"
+                          },
+                          "rendererKey": {
+                            "type": "string",
+                            "const": "editorial_reading_room_v1"
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "theme": {
+                                "type": "string",
+                                "enum": [
+                                  "paper",
+                                  "ink",
+                                  "warm"
+                                ]
+                              },
+                              "density": {
+                                "type": "string",
+                                "enum": [
+                                  "comfortable",
+                                  "compact"
+                                ]
+                              },
+                              "showSourceRail": {
+                                "type": "boolean"
+                              },
+                              "showGeneratedAt": {
+                                "type": "boolean"
+                              },
+                              "brandName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              }
+                            },
+                            "required": [
+                              "theme",
+                              "density",
+                              "showSourceRail",
+                              "showGeneratedAt"
+                            ],
+                            "additionalProperties": false
                           }
                         },
                         "required": [
-                          "theme",
-                          "density",
-                          "showSourceRail",
-                          "showGeneratedAt"
+                          "templateVersionId",
+                          "templateId",
+                          "version",
+                          "rendererVersion",
+                          "inputContractVersion",
+                          "authoringInstructions",
+                          "createdAt",
+                          "rendererKey",
+                          "config"
                         ],
                         "additionalProperties": false
                       },
-                      "authoringInstructions": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
+                      {
+                        "type": "object",
+                        "properties": {
+                          "templateVersionId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "templateId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "version": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0
+                          },
+                          "rendererVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "inputContractVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "authoringInstructions": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "rendererKey": {
+                            "type": "string",
+                            "const": "personal_authority_v1"
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "theme": {
+                                "type": "string",
+                                "enum": [
+                                  "blue",
+                                  "slate",
+                                  "monochrome"
+                                ]
+                              },
+                              "showGeneratedAt": {
+                                "type": "boolean"
+                              },
+                              "brandName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              },
+                              "featureFlags": {
+                                "type": "object",
+                                "properties": {
+                                  "navigation": {
+                                    "type": "boolean"
+                                  },
+                                  "socialLinks": {
+                                    "type": "boolean"
+                                  },
+                                  "authority": {
+                                    "type": "boolean"
+                                  },
+                                  "consultation": {
+                                    "type": "boolean"
+                                  },
+                                  "learning": {
+                                    "type": "boolean"
+                                  },
+                                  "services": {
+                                    "type": "boolean"
+                                  },
+                                  "proof": {
+                                    "type": "boolean"
+                                  },
+                                  "finalCta": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "navigation",
+                                  "socialLinks",
+                                  "authority",
+                                  "consultation",
+                                  "learning",
+                                  "services",
+                                  "proof",
+                                  "finalCta"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": [
+                              "theme",
+                              "showGeneratedAt",
+                              "featureFlags"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "templateVersionId",
+                          "templateId",
+                          "version",
+                          "rendererVersion",
+                          "inputContractVersion",
+                          "authoringInstructions",
+                          "createdAt",
+                          "rendererKey",
+                          "config"
+                        ],
+                        "additionalProperties": false
                       }
-                    },
-                    "required": [
-                      "templateVersionId",
-                      "templateId",
-                      "version",
-                      "rendererKey",
-                      "rendererVersion",
-                      "inputContractVersion",
-                      "config",
-                      "authoringInstructions",
-                      "createdAt"
-                    ],
-                    "additionalProperties": false
+                    ]
                   },
                   "versions": {
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "templateVersionId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "templateId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "version": {
-                          "type": "integer",
-                          "exclusiveMinimum": 0
-                        },
-                        "rendererKey": {
-                          "type": "string",
-                          "const": "editorial_reading_room_v1"
-                        },
-                        "rendererVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "inputContractVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "config": {
+                      "anyOf": [
+                        {
                           "type": "object",
                           "properties": {
-                            "theme": {
+                            "templateVersionId": {
                               "type": "string",
-                              "enum": [
-                                "paper",
-                                "ink",
-                                "warm"
-                              ]
+                              "format": "uuid"
                             },
-                            "density": {
+                            "templateId": {
                               "type": "string",
-                              "enum": [
-                                "comfortable",
-                                "compact"
-                              ]
+                              "format": "uuid"
                             },
-                            "showSourceRail": {
-                              "type": "boolean"
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
                             },
-                            "showGeneratedAt": {
-                              "type": "boolean"
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
                             },
-                            "brandName": {
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
                               "type": "string",
-                              "minLength": 1,
-                              "maxLength": 80
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "editorial_reading_room_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "paper",
+                                    "ink",
+                                    "warm"
+                                  ]
+                                },
+                                "density": {
+                                  "type": "string",
+                                  "enum": [
+                                    "comfortable",
+                                    "compact"
+                                  ]
+                                },
+                                "showSourceRail": {
+                                  "type": "boolean"
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "density",
+                                "showSourceRail",
+                                "showGeneratedAt"
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "required": [
-                            "theme",
-                            "density",
-                            "showSourceRail",
-                            "showGeneratedAt"
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
                           ],
                           "additionalProperties": false
                         },
-                        "authoringInstructions": {
-                          "type": "string"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
+                        {
+                          "type": "object",
+                          "properties": {
+                            "templateVersionId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "templateId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
+                            },
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "personal_authority_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "blue",
+                                    "slate",
+                                    "monochrome"
+                                  ]
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                },
+                                "featureFlags": {
+                                  "type": "object",
+                                  "properties": {
+                                    "navigation": {
+                                      "type": "boolean"
+                                    },
+                                    "socialLinks": {
+                                      "type": "boolean"
+                                    },
+                                    "authority": {
+                                      "type": "boolean"
+                                    },
+                                    "consultation": {
+                                      "type": "boolean"
+                                    },
+                                    "learning": {
+                                      "type": "boolean"
+                                    },
+                                    "services": {
+                                      "type": "boolean"
+                                    },
+                                    "proof": {
+                                      "type": "boolean"
+                                    },
+                                    "finalCta": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "navigation",
+                                    "socialLinks",
+                                    "authority",
+                                    "consultation",
+                                    "learning",
+                                    "services",
+                                    "proof",
+                                    "finalCta"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "showGeneratedAt",
+                                "featureFlags"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
+                          ],
+                          "additionalProperties": false
                         }
-                      },
-                      "required": [
-                        "templateVersionId",
-                        "templateId",
-                        "version",
-                        "rendererKey",
-                        "rendererVersion",
-                        "inputContractVersion",
-                        "config",
-                        "authoringInstructions",
-                        "createdAt"
-                      ],
-                      "additionalProperties": false
+                      ]
                     }
                   },
                   "createdAt": {
@@ -9665,45 +10646,117 @@
             "maxLength": 500
           },
           "config": {
-            "type": "object",
-            "properties": {
-              "theme": {
-                "type": "string",
-                "enum": [
-                  "paper",
-                  "ink",
-                  "warm"
-                ]
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "theme": {
+                    "type": "string",
+                    "enum": [
+                      "paper",
+                      "ink",
+                      "warm"
+                    ]
+                  },
+                  "density": {
+                    "type": "string",
+                    "enum": [
+                      "comfortable",
+                      "compact"
+                    ]
+                  },
+                  "showSourceRail": {
+                    "type": "boolean"
+                  },
+                  "showGeneratedAt": {
+                    "type": "boolean"
+                  },
+                  "brandName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  }
+                },
+                "required": [
+                  "theme",
+                  "density",
+                  "showSourceRail",
+                  "showGeneratedAt"
+                ],
+                "additionalProperties": false
               },
-              "density": {
-                "type": "string",
-                "enum": [
-                  "comfortable",
-                  "compact"
-                ]
-              },
-              "showSourceRail": {
-                "type": "boolean"
-              },
-              "showGeneratedAt": {
-                "type": "boolean"
-              },
-              "brandName": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 80
+              {
+                "type": "object",
+                "properties": {
+                  "theme": {
+                    "type": "string",
+                    "enum": [
+                      "blue",
+                      "slate",
+                      "monochrome"
+                    ]
+                  },
+                  "showGeneratedAt": {
+                    "type": "boolean"
+                  },
+                  "brandName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "featureFlags": {
+                    "type": "object",
+                    "properties": {
+                      "navigation": {
+                        "type": "boolean"
+                      },
+                      "socialLinks": {
+                        "type": "boolean"
+                      },
+                      "authority": {
+                        "type": "boolean"
+                      },
+                      "consultation": {
+                        "type": "boolean"
+                      },
+                      "learning": {
+                        "type": "boolean"
+                      },
+                      "services": {
+                        "type": "boolean"
+                      },
+                      "proof": {
+                        "type": "boolean"
+                      },
+                      "finalCta": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "navigation",
+                      "socialLinks",
+                      "authority",
+                      "consultation",
+                      "learning",
+                      "services",
+                      "proof",
+                      "finalCta"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "theme",
+                  "showGeneratedAt",
+                  "featureFlags"
+                ],
+                "additionalProperties": false
               }
-            },
-            "required": [
-              "theme",
-              "density",
-              "showSourceRail",
-              "showGeneratedAt"
-            ],
-            "additionalProperties": false
+            ]
           },
           "authoringInstructions": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 4000
           }
         },
         "required": [
@@ -9749,178 +10802,416 @@
                     ]
                   },
                   "currentVersion": {
-                    "type": "object",
-                    "properties": {
-                      "templateVersionId": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "templateId": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "version": {
-                        "type": "integer",
-                        "exclusiveMinimum": 0
-                      },
-                      "rendererKey": {
-                        "type": "string",
-                        "const": "editorial_reading_room_v1"
-                      },
-                      "rendererVersion": {
-                        "type": "number",
-                        "const": 1
-                      },
-                      "inputContractVersion": {
-                        "type": "number",
-                        "const": 1
-                      },
-                      "config": {
+                    "anyOf": [
+                      {
                         "type": "object",
                         "properties": {
-                          "theme": {
+                          "templateVersionId": {
                             "type": "string",
-                            "enum": [
-                              "paper",
-                              "ink",
-                              "warm"
-                            ]
+                            "format": "uuid"
                           },
-                          "density": {
+                          "templateId": {
                             "type": "string",
-                            "enum": [
-                              "comfortable",
-                              "compact"
-                            ]
+                            "format": "uuid"
                           },
-                          "showSourceRail": {
-                            "type": "boolean"
+                          "version": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0
                           },
-                          "showGeneratedAt": {
-                            "type": "boolean"
+                          "rendererVersion": {
+                            "type": "number",
+                            "const": 1
                           },
-                          "brandName": {
+                          "inputContractVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "authoringInstructions": {
+                            "type": "string"
+                          },
+                          "createdAt": {
                             "type": "string",
-                            "minLength": 1,
-                            "maxLength": 80
+                            "format": "date-time"
+                          },
+                          "rendererKey": {
+                            "type": "string",
+                            "const": "editorial_reading_room_v1"
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "theme": {
+                                "type": "string",
+                                "enum": [
+                                  "paper",
+                                  "ink",
+                                  "warm"
+                                ]
+                              },
+                              "density": {
+                                "type": "string",
+                                "enum": [
+                                  "comfortable",
+                                  "compact"
+                                ]
+                              },
+                              "showSourceRail": {
+                                "type": "boolean"
+                              },
+                              "showGeneratedAt": {
+                                "type": "boolean"
+                              },
+                              "brandName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              }
+                            },
+                            "required": [
+                              "theme",
+                              "density",
+                              "showSourceRail",
+                              "showGeneratedAt"
+                            ],
+                            "additionalProperties": false
                           }
                         },
                         "required": [
-                          "theme",
-                          "density",
-                          "showSourceRail",
-                          "showGeneratedAt"
+                          "templateVersionId",
+                          "templateId",
+                          "version",
+                          "rendererVersion",
+                          "inputContractVersion",
+                          "authoringInstructions",
+                          "createdAt",
+                          "rendererKey",
+                          "config"
                         ],
                         "additionalProperties": false
                       },
-                      "authoringInstructions": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
+                      {
+                        "type": "object",
+                        "properties": {
+                          "templateVersionId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "templateId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "version": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0
+                          },
+                          "rendererVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "inputContractVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "authoringInstructions": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "rendererKey": {
+                            "type": "string",
+                            "const": "personal_authority_v1"
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "theme": {
+                                "type": "string",
+                                "enum": [
+                                  "blue",
+                                  "slate",
+                                  "monochrome"
+                                ]
+                              },
+                              "showGeneratedAt": {
+                                "type": "boolean"
+                              },
+                              "brandName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              },
+                              "featureFlags": {
+                                "type": "object",
+                                "properties": {
+                                  "navigation": {
+                                    "type": "boolean"
+                                  },
+                                  "socialLinks": {
+                                    "type": "boolean"
+                                  },
+                                  "authority": {
+                                    "type": "boolean"
+                                  },
+                                  "consultation": {
+                                    "type": "boolean"
+                                  },
+                                  "learning": {
+                                    "type": "boolean"
+                                  },
+                                  "services": {
+                                    "type": "boolean"
+                                  },
+                                  "proof": {
+                                    "type": "boolean"
+                                  },
+                                  "finalCta": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "navigation",
+                                  "socialLinks",
+                                  "authority",
+                                  "consultation",
+                                  "learning",
+                                  "services",
+                                  "proof",
+                                  "finalCta"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": [
+                              "theme",
+                              "showGeneratedAt",
+                              "featureFlags"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "templateVersionId",
+                          "templateId",
+                          "version",
+                          "rendererVersion",
+                          "inputContractVersion",
+                          "authoringInstructions",
+                          "createdAt",
+                          "rendererKey",
+                          "config"
+                        ],
+                        "additionalProperties": false
                       }
-                    },
-                    "required": [
-                      "templateVersionId",
-                      "templateId",
-                      "version",
-                      "rendererKey",
-                      "rendererVersion",
-                      "inputContractVersion",
-                      "config",
-                      "authoringInstructions",
-                      "createdAt"
-                    ],
-                    "additionalProperties": false
+                    ]
                   },
                   "versions": {
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "templateVersionId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "templateId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "version": {
-                          "type": "integer",
-                          "exclusiveMinimum": 0
-                        },
-                        "rendererKey": {
-                          "type": "string",
-                          "const": "editorial_reading_room_v1"
-                        },
-                        "rendererVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "inputContractVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "config": {
+                      "anyOf": [
+                        {
                           "type": "object",
                           "properties": {
-                            "theme": {
+                            "templateVersionId": {
                               "type": "string",
-                              "enum": [
-                                "paper",
-                                "ink",
-                                "warm"
-                              ]
+                              "format": "uuid"
                             },
-                            "density": {
+                            "templateId": {
                               "type": "string",
-                              "enum": [
-                                "comfortable",
-                                "compact"
-                              ]
+                              "format": "uuid"
                             },
-                            "showSourceRail": {
-                              "type": "boolean"
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
                             },
-                            "showGeneratedAt": {
-                              "type": "boolean"
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
                             },
-                            "brandName": {
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
                               "type": "string",
-                              "minLength": 1,
-                              "maxLength": 80
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "editorial_reading_room_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "paper",
+                                    "ink",
+                                    "warm"
+                                  ]
+                                },
+                                "density": {
+                                  "type": "string",
+                                  "enum": [
+                                    "comfortable",
+                                    "compact"
+                                  ]
+                                },
+                                "showSourceRail": {
+                                  "type": "boolean"
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "density",
+                                "showSourceRail",
+                                "showGeneratedAt"
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "required": [
-                            "theme",
-                            "density",
-                            "showSourceRail",
-                            "showGeneratedAt"
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
                           ],
                           "additionalProperties": false
                         },
-                        "authoringInstructions": {
-                          "type": "string"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
+                        {
+                          "type": "object",
+                          "properties": {
+                            "templateVersionId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "templateId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
+                            },
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "personal_authority_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "blue",
+                                    "slate",
+                                    "monochrome"
+                                  ]
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                },
+                                "featureFlags": {
+                                  "type": "object",
+                                  "properties": {
+                                    "navigation": {
+                                      "type": "boolean"
+                                    },
+                                    "socialLinks": {
+                                      "type": "boolean"
+                                    },
+                                    "authority": {
+                                      "type": "boolean"
+                                    },
+                                    "consultation": {
+                                      "type": "boolean"
+                                    },
+                                    "learning": {
+                                      "type": "boolean"
+                                    },
+                                    "services": {
+                                      "type": "boolean"
+                                    },
+                                    "proof": {
+                                      "type": "boolean"
+                                    },
+                                    "finalCta": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "navigation",
+                                    "socialLinks",
+                                    "authority",
+                                    "consultation",
+                                    "learning",
+                                    "services",
+                                    "proof",
+                                    "finalCta"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "showGeneratedAt",
+                                "featureFlags"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
+                          ],
+                          "additionalProperties": false
                         }
-                      },
-                      "required": [
-                        "templateVersionId",
-                        "templateId",
-                        "version",
-                        "rendererKey",
-                        "rendererVersion",
-                        "inputContractVersion",
-                        "config",
-                        "authoringInstructions",
-                        "createdAt"
-                      ],
-                      "additionalProperties": false
+                      ]
                     }
                   },
                   "createdAt": {
@@ -10058,178 +11349,416 @@
                     ]
                   },
                   "currentVersion": {
-                    "type": "object",
-                    "properties": {
-                      "templateVersionId": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "templateId": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "version": {
-                        "type": "integer",
-                        "exclusiveMinimum": 0
-                      },
-                      "rendererKey": {
-                        "type": "string",
-                        "const": "editorial_reading_room_v1"
-                      },
-                      "rendererVersion": {
-                        "type": "number",
-                        "const": 1
-                      },
-                      "inputContractVersion": {
-                        "type": "number",
-                        "const": 1
-                      },
-                      "config": {
+                    "anyOf": [
+                      {
                         "type": "object",
                         "properties": {
-                          "theme": {
+                          "templateVersionId": {
                             "type": "string",
-                            "enum": [
-                              "paper",
-                              "ink",
-                              "warm"
-                            ]
+                            "format": "uuid"
                           },
-                          "density": {
+                          "templateId": {
                             "type": "string",
-                            "enum": [
-                              "comfortable",
-                              "compact"
-                            ]
+                            "format": "uuid"
                           },
-                          "showSourceRail": {
-                            "type": "boolean"
+                          "version": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0
                           },
-                          "showGeneratedAt": {
-                            "type": "boolean"
+                          "rendererVersion": {
+                            "type": "number",
+                            "const": 1
                           },
-                          "brandName": {
+                          "inputContractVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "authoringInstructions": {
+                            "type": "string"
+                          },
+                          "createdAt": {
                             "type": "string",
-                            "minLength": 1,
-                            "maxLength": 80
+                            "format": "date-time"
+                          },
+                          "rendererKey": {
+                            "type": "string",
+                            "const": "editorial_reading_room_v1"
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "theme": {
+                                "type": "string",
+                                "enum": [
+                                  "paper",
+                                  "ink",
+                                  "warm"
+                                ]
+                              },
+                              "density": {
+                                "type": "string",
+                                "enum": [
+                                  "comfortable",
+                                  "compact"
+                                ]
+                              },
+                              "showSourceRail": {
+                                "type": "boolean"
+                              },
+                              "showGeneratedAt": {
+                                "type": "boolean"
+                              },
+                              "brandName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              }
+                            },
+                            "required": [
+                              "theme",
+                              "density",
+                              "showSourceRail",
+                              "showGeneratedAt"
+                            ],
+                            "additionalProperties": false
                           }
                         },
                         "required": [
-                          "theme",
-                          "density",
-                          "showSourceRail",
-                          "showGeneratedAt"
+                          "templateVersionId",
+                          "templateId",
+                          "version",
+                          "rendererVersion",
+                          "inputContractVersion",
+                          "authoringInstructions",
+                          "createdAt",
+                          "rendererKey",
+                          "config"
                         ],
                         "additionalProperties": false
                       },
-                      "authoringInstructions": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
+                      {
+                        "type": "object",
+                        "properties": {
+                          "templateVersionId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "templateId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "version": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0
+                          },
+                          "rendererVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "inputContractVersion": {
+                            "type": "number",
+                            "const": 1
+                          },
+                          "authoringInstructions": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "rendererKey": {
+                            "type": "string",
+                            "const": "personal_authority_v1"
+                          },
+                          "config": {
+                            "type": "object",
+                            "properties": {
+                              "theme": {
+                                "type": "string",
+                                "enum": [
+                                  "blue",
+                                  "slate",
+                                  "monochrome"
+                                ]
+                              },
+                              "showGeneratedAt": {
+                                "type": "boolean"
+                              },
+                              "brandName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 80
+                              },
+                              "featureFlags": {
+                                "type": "object",
+                                "properties": {
+                                  "navigation": {
+                                    "type": "boolean"
+                                  },
+                                  "socialLinks": {
+                                    "type": "boolean"
+                                  },
+                                  "authority": {
+                                    "type": "boolean"
+                                  },
+                                  "consultation": {
+                                    "type": "boolean"
+                                  },
+                                  "learning": {
+                                    "type": "boolean"
+                                  },
+                                  "services": {
+                                    "type": "boolean"
+                                  },
+                                  "proof": {
+                                    "type": "boolean"
+                                  },
+                                  "finalCta": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "navigation",
+                                  "socialLinks",
+                                  "authority",
+                                  "consultation",
+                                  "learning",
+                                  "services",
+                                  "proof",
+                                  "finalCta"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": [
+                              "theme",
+                              "showGeneratedAt",
+                              "featureFlags"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "required": [
+                          "templateVersionId",
+                          "templateId",
+                          "version",
+                          "rendererVersion",
+                          "inputContractVersion",
+                          "authoringInstructions",
+                          "createdAt",
+                          "rendererKey",
+                          "config"
+                        ],
+                        "additionalProperties": false
                       }
-                    },
-                    "required": [
-                      "templateVersionId",
-                      "templateId",
-                      "version",
-                      "rendererKey",
-                      "rendererVersion",
-                      "inputContractVersion",
-                      "config",
-                      "authoringInstructions",
-                      "createdAt"
-                    ],
-                    "additionalProperties": false
+                    ]
                   },
                   "versions": {
                     "type": "array",
                     "items": {
-                      "type": "object",
-                      "properties": {
-                        "templateVersionId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "templateId": {
-                          "type": "string",
-                          "format": "uuid"
-                        },
-                        "version": {
-                          "type": "integer",
-                          "exclusiveMinimum": 0
-                        },
-                        "rendererKey": {
-                          "type": "string",
-                          "const": "editorial_reading_room_v1"
-                        },
-                        "rendererVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "inputContractVersion": {
-                          "type": "number",
-                          "const": 1
-                        },
-                        "config": {
+                      "anyOf": [
+                        {
                           "type": "object",
                           "properties": {
-                            "theme": {
+                            "templateVersionId": {
                               "type": "string",
-                              "enum": [
-                                "paper",
-                                "ink",
-                                "warm"
-                              ]
+                              "format": "uuid"
                             },
-                            "density": {
+                            "templateId": {
                               "type": "string",
-                              "enum": [
-                                "comfortable",
-                                "compact"
-                              ]
+                              "format": "uuid"
                             },
-                            "showSourceRail": {
-                              "type": "boolean"
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
                             },
-                            "showGeneratedAt": {
-                              "type": "boolean"
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
                             },
-                            "brandName": {
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
                               "type": "string",
-                              "minLength": 1,
-                              "maxLength": 80
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "editorial_reading_room_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "paper",
+                                    "ink",
+                                    "warm"
+                                  ]
+                                },
+                                "density": {
+                                  "type": "string",
+                                  "enum": [
+                                    "comfortable",
+                                    "compact"
+                                  ]
+                                },
+                                "showSourceRail": {
+                                  "type": "boolean"
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "density",
+                                "showSourceRail",
+                                "showGeneratedAt"
+                              ],
+                              "additionalProperties": false
                             }
                           },
                           "required": [
-                            "theme",
-                            "density",
-                            "showSourceRail",
-                            "showGeneratedAt"
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
                           ],
                           "additionalProperties": false
                         },
-                        "authoringInstructions": {
-                          "type": "string"
-                        },
-                        "createdAt": {
-                          "type": "string",
-                          "format": "date-time"
+                        {
+                          "type": "object",
+                          "properties": {
+                            "templateVersionId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "templateId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "version": {
+                              "type": "integer",
+                              "exclusiveMinimum": 0
+                            },
+                            "rendererVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "inputContractVersion": {
+                              "type": "number",
+                              "const": 1
+                            },
+                            "authoringInstructions": {
+                              "type": "string"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "rendererKey": {
+                              "type": "string",
+                              "const": "personal_authority_v1"
+                            },
+                            "config": {
+                              "type": "object",
+                              "properties": {
+                                "theme": {
+                                  "type": "string",
+                                  "enum": [
+                                    "blue",
+                                    "slate",
+                                    "monochrome"
+                                  ]
+                                },
+                                "showGeneratedAt": {
+                                  "type": "boolean"
+                                },
+                                "brandName": {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "maxLength": 80
+                                },
+                                "featureFlags": {
+                                  "type": "object",
+                                  "properties": {
+                                    "navigation": {
+                                      "type": "boolean"
+                                    },
+                                    "socialLinks": {
+                                      "type": "boolean"
+                                    },
+                                    "authority": {
+                                      "type": "boolean"
+                                    },
+                                    "consultation": {
+                                      "type": "boolean"
+                                    },
+                                    "learning": {
+                                      "type": "boolean"
+                                    },
+                                    "services": {
+                                      "type": "boolean"
+                                    },
+                                    "proof": {
+                                      "type": "boolean"
+                                    },
+                                    "finalCta": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "navigation",
+                                    "socialLinks",
+                                    "authority",
+                                    "consultation",
+                                    "learning",
+                                    "services",
+                                    "proof",
+                                    "finalCta"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "theme",
+                                "showGeneratedAt",
+                                "featureFlags"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": [
+                            "templateVersionId",
+                            "templateId",
+                            "version",
+                            "rendererVersion",
+                            "inputContractVersion",
+                            "authoringInstructions",
+                            "createdAt",
+                            "rendererKey",
+                            "config"
+                          ],
+                          "additionalProperties": false
                         }
-                      },
-                      "required": [
-                        "templateVersionId",
-                        "templateId",
-                        "version",
-                        "rendererKey",
-                        "rendererVersion",
-                        "inputContractVersion",
-                        "config",
-                        "authoringInstructions",
-                        "createdAt"
-                      ],
-                      "additionalProperties": false
+                      ]
                     }
                   },
                   "createdAt": {
@@ -10571,7 +12100,10 @@
                           },
                           "rendererKey": {
                             "type": "string",
-                            "const": "editorial_reading_room_v1"
+                            "enum": [
+                              "editorial_reading_room_v1",
+                              "personal_authority_v1"
+                            ]
                           },
                           "rendererVersion": {
                             "type": "number",
@@ -10940,7 +12472,10 @@
                         },
                         "rendererKey": {
                           "type": "string",
-                          "const": "editorial_reading_room_v1"
+                          "enum": [
+                            "editorial_reading_room_v1",
+                            "personal_authority_v1"
+                          ]
                         },
                         "rendererVersion": {
                           "type": "number",
@@ -11296,7 +12831,10 @@
                         },
                         "rendererKey": {
                           "type": "string",
-                          "const": "editorial_reading_room_v1"
+                          "enum": [
+                            "editorial_reading_room_v1",
+                            "personal_authority_v1"
+                          ]
                         },
                         "rendererVersion": {
                           "type": "number",
@@ -11652,7 +13190,10 @@
                         },
                         "rendererKey": {
                           "type": "string",
-                          "const": "editorial_reading_room_v1"
+                          "enum": [
+                            "editorial_reading_room_v1",
+                            "personal_authority_v1"
+                          ]
                         },
                         "rendererVersion": {
                           "type": "number",
@@ -12013,7 +13554,10 @@
                         },
                         "rendererKey": {
                           "type": "string",
-                          "const": "editorial_reading_room_v1"
+                          "enum": [
+                            "editorial_reading_room_v1",
+                            "personal_authority_v1"
+                          ]
                         },
                         "rendererVersion": {
                           "type": "number",
