@@ -4,6 +4,19 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-08-10 — verified against mcp-scraper 0.52.0 / mcp-memory 1.15.0
+
+### Added
+
+- Added typed Node, Python, CLI, and cURL inputs for opt-in Google Maps listing-photo collection, owner/all scopes, bounded gallery traversal, inline image previews, and owner-scoped archives.
+- Added typed website-media preservation controls and outputs for rendered/lazy-loaded media, completeness evidence, logo candidates, proof images, structured-data logos, and provenance-ranked brand colors.
+- Synchronized the direct 114-tool Memory clients with the live artifact-template contract, including registered preset metadata and renderer-specific create/update inputs.
+
+### Changed
+
+- Regenerated all 246 unified MCP bindings from MCP Scraper 0.52.0, including contract drift accumulated since the SDK's 0.49.0 snapshot while preserving the existing tool count and method namespaces; the direct Memory surface remains at 114 tools.
+- Prepared `mcpscraper-memory-sdk` 0.27.0, `mcpscraper-sdk` 0.26.0, `mcpscraper-cli` 0.25.0, and both Python packages 0.25.0.
+
 ## 2026-08-05 — verified against mcp-scraper 0.49.0 / mcp-memory 1.15.0
 
 ### Added

@@ -16,7 +16,7 @@ export interface Input {
    */
   title?: string;
   /**
-   * The full note body to store and index for semantic search. Must be non-empty.
+   * The complete note body to store and index. On edit this replaces the prior body, so merge the requested change into the full memory-get content before calling; never pass only the changed fragment.
    */
   content: string;
   /**
@@ -98,7 +98,7 @@ export interface Input {
     [k: string]: unknown;
   };
   /**
-   * Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes).
+   * Revision the edit is based on (from memory-get/put). Always supply it when an AI edits an existing note; a mismatch rejects the write and returns current content for reconciliation. Omit only for an intentional new note or explicit last-write-wins migration.
    */
   baseRevision?: number;
   /**

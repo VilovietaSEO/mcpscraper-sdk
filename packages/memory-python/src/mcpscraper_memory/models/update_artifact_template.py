@@ -10,7 +10,7 @@ class UpdateArtifactTemplateInput(BaseModel):
     template_id: str = Field(..., alias="templateId", description="")
     name: str | None = Field(None, alias="name", description="")
     description: str | None = Field(None, alias="description", description="")
-    config: dict[str, Any] | None = Field(None, alias="config", description="")
+    config: Any | None = Field(None, alias="config", description="")
     authoring_instructions: str | None = Field(None, alias="authoringInstructions", description="")
 
 
