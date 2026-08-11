@@ -2,6 +2,8 @@
 
 Official Python clients for all 246 unified [mcpscraper.dev](https://mcpscraper.dev) MCP tools plus the direct 114-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+
 This is a thin JSON-RPC client generated against [`../../contracts/memory.tools.json`](../../contracts/memory.tools.json), the public contract for the hosted API. It contains no product source — only typed request/response plumbing.
 
 ## Install

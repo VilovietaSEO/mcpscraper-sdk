@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-08-11 — verified against mcp-scraper 0.52.2 / mcp-memory 1.17.2
+
+### Changed
+
+- Regenerated all 246 unified MCP bindings and all 114 direct Memory bindings so embedded descriptions require hybrid Smart RAG before inventory tools for ordinary discovery; tool names and schemas are unchanged.
+- Added a durable release-history link to every packaged README so npm and PyPI consumers can inspect the audience-specific SDK changelog.
+- Prepared `mcpscraper-memory-sdk` 0.27.1, `mcpscraper-sdk` 0.26.1, `mcpscraper-cli` 0.25.1, and both Python packages 0.25.1.
+
+### Fixed
+
+- Closed the description-only contract gap left by the MCP Scraper 0.52.1 release, which updated the live servers without regenerating the SDK, CLI, and Python contract surfaces that embed tool guidance.
+
 ## 2026-08-10 — verified against mcp-scraper 0.52.0 / mcp-memory 1.15.0
 
 ### Added

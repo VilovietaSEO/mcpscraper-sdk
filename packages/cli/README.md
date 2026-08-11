@@ -2,6 +2,8 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+
 The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 246 unified MCP tools (145 MCP Scraper plus 101 mirrored Memory tools).
 
 ## Install
