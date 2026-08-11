@@ -4,6 +4,13 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-08-11 — verified against mcp-scraper 0.52.3 / mcp-memory 1.17.2
+
+### Fixed
+
+- Regenerated every unified client and catalog after the server removed the remaining anti-bot infrastructure brand from `browser_screenshot`; direct Memory bindings remain contract-identical.
+- Prepared `mcpscraper-memory-sdk` 0.27.2, `mcpscraper-sdk` 0.26.2, `mcpscraper-cli` 0.25.2, and both Python packages 0.25.2.
+
 ## 2026-08-11 — verified against mcp-scraper 0.52.2 / mcp-memory 1.17.2
 
 ### Changed
