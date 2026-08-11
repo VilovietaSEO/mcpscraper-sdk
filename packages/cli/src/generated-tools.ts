@@ -6940,7 +6940,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "browser_screenshot",
     "category": "browser",
     "title": "See Page (Screenshot + Elements)",
-    "description": "Capture what the browser currently shows: a screenshot plus a text snapshot of interactive elements with x,y coordinates, page url/title, and visible text. Primary way to perceive the page; click elements by their listed x,y. If a Cloudflare/CAPTCHA challenge is visible, wait and screenshot again rather than clicking it.",
+    "description": "Capture what the browser currently shows: a screenshot plus a text snapshot of interactive elements with x,y coordinates, page url/title, and visible text. Primary way to perceive the page; click elements by their listed x,y. If an anti-bot or CAPTCHA challenge is visible, wait and screenshot again rather than clicking it.",
     "inputSchema": {
       "type": "object",
       "properties": {
