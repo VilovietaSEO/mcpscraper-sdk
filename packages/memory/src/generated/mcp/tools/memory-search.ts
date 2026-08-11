@@ -341,7 +341,7 @@ export interface Input {
    */
   graphNeighborsPerSeed?: number;
   /**
-   * Final results retained after Jina reranking. Default 30.
+   * Final results retained after reranking. Default 30.
    */
   rerankTopN?: number;
   /**

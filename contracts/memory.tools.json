@@ -3981,7 +3981,7 @@
     },
     {
       "name": "listTool",
-      "description": "List notes in a vault — path, title, kind, tags, last-updated — optionally filtered by kind and/or tags (matches ANY given tag). Defaults to the active or first entitled vault; also returns vaults the caller is entitled to. Requires read scope.",
+      "description": "Exhaustive inventory only; never use this as the first step to find, recall, understand, or connect Memory content. Return note metadata without note bodies for one exact vault, defaulting to the active or first entitled vault. Never present that vault count as a complete account total. Start ordinary discovery with memory-search, then use memory-get for strong results. Use memory-export only for an explicit full-vault dump. Requires read scope.",
       "category": "memory",
       "inputSchema": {
         "type": "object",
@@ -4345,7 +4345,7 @@
     },
     {
       "name": "searchTool",
-      "description": "Default Smart RAG search across accessible memory. Form 2-4 focused query variants, combine semantic matches with exact vault/tag/date/kind/type/metadata filters, expand one bounded hop of outgoing links and backlinks around strong seeds, then rerank. Defaults: retrieve/fuse 50 candidates, 8 graph seeds, 5 neighbors per seed, rerank to 30. Graph neighbors are candidates, never automatic winners or links. Before tagging or writing, also call list-memory-tags to inspect the complete vocabulary and reuse existing tags; read strong related notes before selecting links.",
+      "description": "Required first tool whenever the user wants to find, recall, understand, or connect Memory content without an exact vault+path. Do not call list-vaults or memory-list first. Hybrid Smart RAG combines 2-4 semantic query variants with exact vault/tag/date/kind/type/metadata matches, expands one bounded graph hop, then reranks. Results are ranked excerpts, never complete notes: deduplicate by vault/path and call memory-get on strong candidates before answering, summarizing, editing, linking, or writing. Use memory-list only for an explicit exhaustive inventory, memory-suggest for title-only lookup, and memory-export only for an explicit full-vault dump. Before tagging or writing, also inspect list-memory-tags.",
       "category": "memory",
       "inputSchema": {
         "type": "object",
@@ -4477,7 +4477,7 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 50,
-            "description": "Final results retained after Jina reranking. Default 30."
+            "description": "Final results retained after reranking. Default 30."
           },
           "topK": {
             "type": "integer",
@@ -5758,7 +5758,7 @@
     },
     {
       "name": "listVaultsTool",
-      "description": "List every vault the caller can see — owned and shared — each annotated with role, sharer, and live storage usage. Notes only; for tabular datasets use table-list instead. Read-only, scoped to the caller's own entitlements.",
+      "description": "Vault inventory only; never use this as the first step to find, recall, understand, or connect Memory content. List every visible owned or shared vault with role, sharer, and live storage usage. Use memory-search first for ordinary retrieval, memory-list only for an explicit note inventory, and table-list for tabular datasets. Read-only and scoped to the caller's entitlements.",
       "category": "vaults",
       "inputSchema": {
         "type": "object",
@@ -7771,7 +7771,7 @@
     },
     {
       "name": "createScheduledActionTool",
-      "description": "Create a Credit-metered scheduled action for an active MCP Scraper Starter plan or higher, in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times OpenRouter's actual reported cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Choose artifactSelection mode \"none\" for no HTML artifact, or pin an exact saved template version. No artifact does not disable Memory-note or vault output. A built-in preset must be saved before selection. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
+      "description": "Create a Credit-metered scheduled action for an active MCP Scraper Starter plan or higher, in agent mode (default) or connection_sync mode. Each execution has a 75-Credit base charge; agent model usage is added at 1.5 times the underlying model cost. Agent mode follows the description and writes a result into the target vault. connection_sync deterministically runs the approved read-only tools on bound service connections and ingests their data; it requires at least one connection to be bound before execution. Choose artifactSelection mode \"none\" for no HTML artifact, or pin an exact saved template version. No artifact does not disable Memory-note or vault output. A built-in preset must be saved before selection. Cadence 'once' runs a single time then completes permanently. Requires write access to the target vault.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",
@@ -8320,7 +8320,7 @@
     },
     {
       "name": "getScheduleStatusTool",
-      "description": "Get the Credit-metered Scheduled Actions access, billing policy, and default timezone. Scheduling requires an active MCP Scraper Starter plan or higher but has no separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times OpenRouter's actual reported cost.",
+      "description": "Get the Credit-metered Scheduled Actions access, billing policy, and default timezone. Scheduling requires an active MCP Scraper Starter plan or higher but has no separate subscription: each execution has a 75-Credit base charge, and agent model usage is billed at 1.5 times the underlying model cost.",
       "category": "schedule",
       "inputSchema": {
         "type": "object",

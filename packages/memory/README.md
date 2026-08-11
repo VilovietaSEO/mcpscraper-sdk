@@ -2,6 +2,8 @@
 
 Official TypeScript/JavaScript clients for all 246 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 114-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+
 These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
 ## Install

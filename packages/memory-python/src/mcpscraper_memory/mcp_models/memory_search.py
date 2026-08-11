@@ -22,7 +22,7 @@ class MemorySearchInput(BaseModel):
     graph_seed_count: int | None = Field(None, alias="graphSeedCount", description="Strong preliminary notes whose graph neighborhoods are considered. Default 8.")
     graph_depth: float | None = Field(None, alias="graphDepth", description="Graph expansion depth. Bounded to exactly one hop.")
     graph_neighbors_per_seed: int | None = Field(None, alias="graphNeighborsPerSeed", description="Maximum outgoing-link plus backlink neighbors per seed. Default 5.")
-    rerank_top_n: int | None = Field(None, alias="rerankTopN", description="Final results retained after Jina reranking. Default 30.")
+    rerank_top_n: int | None = Field(None, alias="rerankTopN", description="Final results retained after reranking. Default 30.")
     top_k: int | None = Field(None, alias="topK", description="Deprecated compatibility alias for rerankTopN. Prefer rerankTopN; default remains 30.")
     include_shared: bool | None = Field(None, alias="includeShared", description="Also search individually accepted shares. Default true. Exact note metadata filters exclude shares without accessible metadata.")
 
