@@ -5,9 +5,9 @@ from pydantic import BaseModel, ConfigDict, Field
 class ImageAssetGetInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    vault: str | None = Field(None, alias="vault", description="")
-    asset_id: str = Field(..., alias="assetId", description="")
-    include_preview: bool | None = Field(None, alias="includePreview", description="")
+    vault: str | None = Field(None, alias="vault", description="Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.")
+    asset_id: str = Field(..., alias="assetId", description="Opaque image asset identifier returned by an image asset tool.")
+    include_preview: bool | None = Field(None, alias="includePreview", description="When true, mint a short-lived authorized preview URL with the metadata result.")
 
 
 class ImageAssetGetOutput(BaseModel):

@@ -15,6 +15,9 @@ export interface Input {
    * Required when revising an existing edition; use the current revision from commons_get_publication.
    */
   baseRevision?: number;
+  /**
+   * Complete editorial site payload containing the collection identity and authored articles.
+   */
   site: {
     /**
      * Stable kebab-case identifier used for browser reading progress, for example "customer-research-field-notes".

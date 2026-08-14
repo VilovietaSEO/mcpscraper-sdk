@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Topic to scan, in plain words (e.g. "crm for small business"). Not a URL — pass a known thread URL to reddit_thread instead.
+   * Topic to scan (e.g. "crm for small business"). Include quotation marks inside the value for an exact-phrase site search. Not a URL — pass a known thread URL to reddit_thread instead.
    */
   topic: string;
   /**
@@ -8,9 +8,9 @@ export interface Input {
    */
   subreddit?: string;
   /**
-   * How recent the threads must be: "week" or "month" (default). Applied via a Google time filter over reddit.com, so it reflects genuine recency.
+   * Discovery time range: "week", "month" (30 days, default), or "all" (no Google time filter).
    */
-  window?: "week" | "month";
+  window?: "week" | "month" | "all";
   /**
    * How many discovered threads to scrape and rank. Default 20 (scrape-all). Each scraped thread is billed like reddit_thread + its comments, so lower this to cap cost; raise toward 40 for a wider sweep. Scraping runs in parallel and stops early if it nears the request time limit (partial:true in the response).
    */

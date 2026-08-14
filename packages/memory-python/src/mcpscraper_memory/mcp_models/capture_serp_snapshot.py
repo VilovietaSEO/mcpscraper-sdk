@@ -5,8 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class CaptureSerpSnapshotInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    query: str = Field(..., alias="query", description="Search topic to capture. When location is supplied, the server sets Google UULE and adds the location to the executed query only if its city is not already present; do not add it manually.")
-    location: str | None = Field(None, alias="location", description="City, region, country, or service area for localized Google results. It sets UULE and supplies the city text when missing from query; it does not select a proxy.")
+    query: str = Field(..., alias="query", description="Search topic to capture, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.")
+    location: str | None = Field(None, alias="location", description="Where Google should think the searcher is. Sets the Google UULE parameter only — it never changes your query text and never selects a proxy. To put the place in the search terms too, write it into query.")
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from the requested market.")
     hl: str | None = Field(None, alias="hl", description="Google interface/content language inferred from the user request.")
     device: Literal['desktop', 'mobile'] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings/evidence.")

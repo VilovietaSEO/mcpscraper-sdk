@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class ImageProjectListInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    vault: str | None = Field(None, alias="vault", description="")
+    vault: str | None = Field(None, alias="vault", description="Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.")
 
 
 class ImageProjectListOutput(BaseModel):

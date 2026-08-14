@@ -15,8 +15,17 @@ export interface Input {
      * Optional; omit for read+write (can view and post, cannot manage membership).
      */
     scope?: {
+      /**
+       * Whether this scope permits reading.
+       */
       read?: boolean;
+      /**
+       * Whether this scope permits writing.
+       */
       write?: boolean;
+      /**
+       * Whether this scope grants administrative control.
+       */
       admin?: boolean;
     };
   }[];

@@ -5,10 +5,10 @@ from pydantic import BaseModel, ConfigDict, Field
 class RouteMemoryInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    title: str = Field(..., alias="title", description="")
-    content: str = Field(..., alias="content", description="")
-    type: str | None = Field(None, alias="type", description="")
-    source: str | None = Field(None, alias="source", description="")
+    title: str = Field(..., alias="title", description="Human-readable title for the proposed record or authored content.")
+    content: str = Field(..., alias="content", description="Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.")
+    type: str | None = Field(None, alias="type", description="Governed content or record type used for routing and validation.")
+    source: str | None = Field(None, alias="source", description="Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.")
 
 
 class RouteMemoryOutput(BaseModel):

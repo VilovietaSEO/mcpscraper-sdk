@@ -11,8 +11,8 @@ class CommonsListNeedsLinksInput(BaseModel):
     tags: list[str] | None = Field(None, alias="tags", description="Only return unresolved concepts found on source entities matching all supplied tags.")
     source_entity_id: str | None = Field(None, alias="sourceEntityId", description="Only return unresolved concepts from one source entity id.")
     source_slug: str | None = Field(None, alias="sourceSlug", description="Only return unresolved concepts from one /wiki/ source slug.")
-    limit: int | None = Field(None, alias="limit", description="")
-    offset: int | None = Field(None, alias="offset", description="")
+    limit: int | None = Field(None, alias="limit", description="Maximum rows or records to return on this page; use the returned cursor for more.")
+    offset: int | None = Field(None, alias="offset", description="Zero-based result offset; increase only when continuing the same bounded query.")
 
 
 class CommonsListNeedsLinksOutput(BaseModel):

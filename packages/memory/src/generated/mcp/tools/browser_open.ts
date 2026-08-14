@@ -12,6 +12,10 @@ export interface Input {
    */
   profile?: string;
   /**
+   * Optional persistent SERP identity. Loads its saved browser state and fixed network identity; do not combine with profile.
+   */
+  serp_identity?: string;
+  /**
    * Persist cookies/storage back to the named profile on close. Avoid parallel sessions writing to the same profile.
    */
   save_profile_changes?: boolean;

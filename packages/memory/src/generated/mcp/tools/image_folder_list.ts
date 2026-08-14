@@ -1,5 +1,11 @@
 export interface Input {
+  /**
+   * Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.
+   */
   vault?: string;
+  /**
+   * Opaque image project identifier returned by an image project tool.
+   */
   projectId: string;
 }
 

@@ -35,11 +35,29 @@ export interface Input {
      * Required public image URL for a publishable entity. Use extract_url includeFeaturedImage or preserved media when available.
      */
     url: string;
+    /**
+     * Accessible alternative text describing the image.
+     */
     alt?: string;
+    /**
+     * Visible image caption preserving useful context and credit.
+     */
     caption?: string;
+    /**
+     * Original public source URL supporting this image, claim, or article.
+     */
     sourceUrl?: string;
+    /**
+     * Known media or content license identifier; omit rather than guessing.
+     */
     license?: string;
+    /**
+     * Intrinsic image width in pixels when known.
+     */
     width?: number;
+    /**
+     * Intrinsic image height in pixels when known.
+     */
     height?: number;
   };
   /**
@@ -66,8 +84,13 @@ export interface Input {
      * Source byline/original author label.
      */
     sourceByline?: string;
+    /**
+     * Original publisher name preserved for attribution.
+     */
     publisher?: string;
     /**
+     * Original author names preserved for attribution.
+     *
      * @maxItems 20
      */
     authors?:
@@ -203,10 +226,25 @@ export interface Input {
           string,
           string
         ];
+    /**
+     * Original publication time or date preserved from the source.
+     */
     publishedAt?: string;
+    /**
+     * ISO 8601 time when the source evidence was captured.
+     */
     capturedAt?: string;
+    /**
+     * Known media or content license identifier; omit rather than guessing.
+     */
     license?: string;
+    /**
+     * Concise known rights context; omit unsupported assumptions.
+     */
     rightsSummary?: string;
+    /**
+     * Stable digest used to identify the captured source content.
+     */
     contentHash?: string;
   };
   /**
@@ -227,11 +265,29 @@ export interface Input {
    * @maxItems 200
    */
   relatedEntities?: {
+    /**
+     * Existing governed entity identifier for this relation or edit.
+     */
     entityId?: string;
+    /**
+     * Human-readable title for the proposed record or authored content.
+     */
     title: string;
+    /**
+     * Governed relationship type connecting the two entities.
+     */
     relationship?: string;
+    /**
+     * Optional stable public slug; omit only when the tool is documented to derive it.
+     */
     slug?: string;
+    /**
+     * Public HTTPS URL for this nested source, link, or media item.
+     */
     url?: string;
+    /**
+     * Human-readable summary that distinguishes this record from similarly named records.
+     */
     description?: string;
   }[];
   /**
@@ -256,6 +312,9 @@ export interface Input {
      * External or third-party target. Use exactly one of objectUrl or objectEntityId.
      */
     objectUrl?: string;
+    /**
+     * Human-readable title for the proposed record or authored content.
+     */
     title?: string;
     /**
      * Optional RFC link target media type.
@@ -399,6 +458,9 @@ export interface Input {
           string,
           string
         ];
+    /**
+     * Structured qualifiers that narrow the governed relationship claim.
+     */
     qualifiers?: {
       [k: string]: string | number | boolean | null;
     };
@@ -408,19 +470,58 @@ export interface Input {
      * @maxItems 50
      */
     references?: {
+      /**
+       * Human-readable title for the proposed record or authored content.
+       */
       title: string;
+      /**
+       * Public HTTPS URL for this nested source, link, or media item.
+       */
       url?: string;
+      /**
+       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       */
       source?: string;
+      /**
+       * Exact memory note path or resolvable note reference used as the graph target.
+       */
       note?: string;
+      /**
+       * ISO 8601 time when this source or record was accessed.
+       */
       accessedAt?: string;
     }[];
+    /**
+     * Relative ordering or prominence rank for this item.
+     */
     rank?: "preferred" | "normal" | "deprecated";
+    /**
+     * Bounded confidence value for the supplied assertion.
+     */
     confidence?: number;
+    /**
+     * Short evidence-based explanation for the confidence value.
+     */
     confidenceReason?: string;
+    /**
+     * Governance state describing whether the claim is disputed.
+     */
     disputeState?: "undisputed" | "attributed" | "disputed" | "contested" | "needs_review" | "deprecated";
+    /**
+     * ISO 8601 time when this governed assertion becomes active.
+     */
     validFrom?: string;
+    /**
+     * ISO 8601 time when this governed assertion stops being active.
+     */
     validTo?: string;
+    /**
+     * ISO 8601 date or time through which the supplied evidence is current.
+     */
     asOf?: string;
+    /**
+     * Normalized source-family classification for this evidence.
+     */
     sourceFamily?: "first_party" | "partner" | "independent" | "community" | "unknown";
   }[];
   /**
@@ -433,18 +534,47 @@ export interface Input {
    * @maxItems 80
    */
   contentSections?: {
+    /**
+     * Stable identifier for this nested record.
+     */
     id?: string;
+    /**
+     * Visible section heading used in navigation and presentation.
+     */
     heading: string;
+    /**
+     * Complete authored body content for this article or section.
+     */
     body: string;
+    /**
+     * Ordered display or ranking position for this item.
+     */
     position?: number;
     /**
+     * Source citations supporting the surrounding claim or article.
+     *
      * @maxItems 300
      */
     citations?: {
+      /**
+       * Human-readable title for the proposed record or authored content.
+       */
       title: string;
+      /**
+       * Public HTTPS URL for this nested source, link, or media item.
+       */
       url?: string;
+      /**
+       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       */
       source?: string;
+      /**
+       * Exact memory note path or resolvable note reference used as the graph target.
+       */
       note?: string;
+      /**
+       * ISO 8601 time when this source or record was accessed.
+       */
       accessedAt?: string;
     }[];
   }[];
@@ -492,31 +622,69 @@ export interface Input {
       needsLink?: boolean;
     }[];
     /**
+     * Optional operator or provenance notes attached to this nested record.
+     *
      * @maxItems 100
      */
     notes?: {
+      /**
+       * Visual marker or badge applied by the selected renderer.
+       */
       marker?: string;
+      /**
+       * Complete authored body content for this article or section.
+       */
       body: string;
     }[];
     /**
+     * Source citations supporting the surrounding claim or article.
+     *
      * @maxItems 300
      */
     citations?: {
+      /**
+       * Human-readable title for the proposed record or authored content.
+       */
       title: string;
+      /**
+       * Public HTTPS URL for this nested source, link, or media item.
+       */
       url?: string;
+      /**
+       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       */
       source?: string;
+      /**
+       * Exact memory note path or resolvable note reference used as the graph target.
+       */
       note?: string;
+      /**
+       * ISO 8601 time when this source or record was accessed.
+       */
       accessedAt?: string;
     }[];
     /**
+     * Curated public links associated with the article or entity.
+     *
      * @maxItems 100
      */
     externalLinks?: {
+      /**
+       * Human-readable title for the proposed record or authored content.
+       */
       title: string;
+      /**
+       * Public HTTPS URL for this nested source, link, or media item.
+       */
       url: string;
+      /**
+       * Concise retrieval-ready summary of the nested record.
+       */
       summary?: string;
     }[];
     /**
+     * Canonical categories assigned to the authored content.
+     *
      * @maxItems 50
      */
     categories?: string[];
@@ -527,15 +695,45 @@ export interface Input {
    * @maxItems 300
    */
   media?: {
+    /**
+     * Governed content or record type used for routing and validation.
+     */
     type: "image" | "video" | "audio";
+    /**
+     * Public HTTPS URL for this nested source, link, or media item.
+     */
     url: string;
+    /**
+     * Accessible alternative text describing the image.
+     */
     alt?: string;
+    /**
+     * Visible image caption preserving useful context and credit.
+     */
     caption?: string;
+    /**
+     * Public poster image URL for the referenced media.
+     */
     posterUrl?: string;
+    /**
+     * Original public source URL supporting this image, claim, or article.
+     */
     sourceUrl?: string;
+    /**
+     * Known media or content license identifier; omit rather than guessing.
+     */
     license?: string;
+    /**
+     * Intrinsic image width in pixels when known.
+     */
     width?: number;
+    /**
+     * Intrinsic image height in pixels when known.
+     */
     height?: number;
+    /**
+     * Media duration in whole or fractional seconds.
+     */
     durationSeconds?: number;
   }[];
   /**
@@ -548,12 +746,33 @@ export interface Input {
    * schema.org/SEO controls. Use relCanonical for substantial source republishing.
    */
   seo?: {
+    /**
+     * Canonical public URL for this article or entity.
+     */
     canonicalUrl?: string;
+    /**
+     * Whether the renderer should emit the supplied canonical relationship.
+     */
     relCanonical?: string;
+    /**
+     * Search and social title for the page; keep it faithful to visible content.
+     */
     metaTitle?: string;
+    /**
+     * Search and social summary for the page; keep it faithful to visible content.
+     */
     metaDescription?: string;
+    /**
+     * Open Graph image metadata for social previews.
+     */
     ogImage?: string;
+    /**
+     * Accepted Schema.org subtype supported by the listing evidence.
+     */
     schemaOrgType?: string;
+    /**
+     * When true, ask compliant crawlers not to index the rendered page.
+     */
     noIndex?: boolean;
   };
   /**

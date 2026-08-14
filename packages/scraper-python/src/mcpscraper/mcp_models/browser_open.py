@@ -8,6 +8,7 @@ class BrowserOpenInput(BaseModel):
     label: str | None = Field(None, alias="label", description="Optional human label for this session, shown in the watch console.")
     url: str | None = Field(None, alias="url", description="Optional URL to navigate to immediately after opening.")
     profile: str | None = Field(None, alias="profile", description="Optional saved hosted profile name to load a logged-in session for a site.")
+    serp_identity: str | None = Field(None, alias="serp_identity", description="Optional persistent SERP identity. Loads its saved browser state and fixed network identity; do not combine with profile.")
     save_profile_changes: bool | None = Field(None, alias="save_profile_changes", description="Persist cookies/storage back to the named profile on close. Avoid parallel sessions writing to the same profile.")
     timeout_seconds: int | None = Field(None, alias="timeout_seconds", description="Session lifetime before auto-termination. Defaults to 600.")
     extension_names: list[str] | None = Field(None, alias="extension_names", description="Names of extensions previously added with browser_extension_import (see browser_extension_list for what's available) to load into this session. Loading extensions restarts the browser, adding a few seconds to startup.")

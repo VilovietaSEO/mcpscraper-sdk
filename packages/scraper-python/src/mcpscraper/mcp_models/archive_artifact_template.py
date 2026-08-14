@@ -5,8 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class ArchiveArtifactTemplateInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    template_id: str = Field(..., alias="templateId", description="")
-    archived: bool = Field(..., alias="archived", description="")
+    template_id: str = Field(..., alias="templateId", description="Opaque saved-template identifier returned by an artifact-template tool.")
+    archived: bool = Field(..., alias="archived", description="Set true to archive the record or false to restore it.")
 
 
 class ArchiveArtifactTemplateOutput(BaseModel):

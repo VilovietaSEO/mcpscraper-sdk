@@ -5,9 +5,9 @@ from pydantic import BaseModel, ConfigDict, Field
 class ListArtifactTemplatesInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    status: Literal['active', 'archived', 'all'] | None = Field(None, alias="status", description="")
+    status: Literal['active', 'archived', 'all'] | None = Field(None, alias="status", description="Lifecycle status used to filter or update the selected records.")
     query: str | None = Field(None, alias="query", description="Optional case-insensitive search text for preset and saved-template names, descriptions, renderer keys, and authoring guidance.")
-    preset_key: Literal['editorial_reading_room_v1', 'personal_authority_v1', 'newsroom_publisher_v1'] | None = Field(None, alias="presetKey", description="Optional renderer-family filter. Saved templates are matched through their current immutable version.")
+    preset_key: Literal['editorial_reading_room_v1', 'personal_authority_v1', 'personal_authority_v2', 'newsroom_publisher_v1', 'blog_article_v1'] | None = Field(None, alias="presetKey", description="Optional renderer-family filter. Saved templates are matched through their current immutable version.")
 
 
 class ListArtifactTemplatesOutput(BaseModel):

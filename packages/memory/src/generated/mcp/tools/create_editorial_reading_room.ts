@@ -1,4 +1,7 @@
 export interface Input {
+  /**
+   * Complete editorial site payload containing the collection identity and authored articles.
+   */
   site: {
     /**
      * Stable kebab-case identifier used for browser reading progress, for example "customer-research-field-notes".

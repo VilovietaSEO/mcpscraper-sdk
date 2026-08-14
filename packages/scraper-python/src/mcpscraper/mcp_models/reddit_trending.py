@@ -5,9 +5,9 @@ from pydantic import BaseModel, ConfigDict, Field
 class RedditTrendingInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    topic: str = Field(..., alias="topic", description="Topic to scan, in plain words (e.g. \"crm for small business\"). Not a URL — pass a known thread URL to reddit_thread instead.")
+    topic: str = Field(..., alias="topic", description="Topic to scan (e.g. \"crm for small business\"). Include quotation marks inside the value for an exact-phrase site search. Not a URL — pass a known thread URL to reddit_thread instead.")
     subreddit: str | None = Field(None, alias="subreddit", description="Bare subreddit name to scope the scan to one community, e.g. \"SEO\" (no r/ prefix, no URL). Omit to scan all of Reddit.")
-    window: Literal['week', 'month'] | None = Field(None, alias="window", description="How recent the threads must be: \"week\" or \"month\" (default). Applied via a Google time filter over reddit.com, so it reflects genuine recency.")
+    window: Literal['week', 'month', 'all'] | None = Field(None, alias="window", description="Discovery time range: \"week\", \"month\" (30 days, default), or \"all\" (no Google time filter).")
     max_threads: int | None = Field(None, alias="maxThreads", description="How many discovered threads to scrape and rank. Default 20 (scrape-all). Each scraped thread is billed like reddit_thread + its comments, so lower this to cap cost; raise toward 40 for a wider sweep. Scraping runs in parallel and stops early if it nears the request time limit (partial:true in the response).")
     include_comments: bool | None = Field(None, alias="includeComments", description="Scrape each discovered thread for real upvotes, comments, and the questions people asked, then rank by engagement. Set false for a fast, cheap discovery-only sweep — returns the discovered threads (title + url) in relevance order with NO engagement stats and NO per-thread billing, so you can then call reddit_thread on the ones you want.")
     max_comments_per_thread: int | None = Field(None, alias="maxCommentsPerThread", description="Comments captured per scraped thread when includeComments is true. Default 50. Billed per captured comment.")

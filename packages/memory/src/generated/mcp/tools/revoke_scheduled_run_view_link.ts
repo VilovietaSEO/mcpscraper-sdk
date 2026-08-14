@@ -1,5 +1,11 @@
 export interface Input {
+  /**
+   * Opaque scheduled-run identifier returned by a scheduled-results tool.
+   */
   runId: string;
+  /**
+   * Opaque revocable share identifier returned when the view link was created.
+   */
   shareId: string;
 }
 

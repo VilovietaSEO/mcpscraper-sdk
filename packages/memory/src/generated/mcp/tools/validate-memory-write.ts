@@ -1,7 +1,19 @@
 export interface Input {
+  /**
+   * Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.
+   */
   vault: string;
+  /**
+   * Human-readable title for the proposed record or authored content.
+   */
   title: string;
+  /**
+   * Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.
+   */
   content: string;
+  /**
+   * Complete governed note properties required by the target vault contract.
+   */
   props: {
     /**
      * Status enum value from the target vault contract.

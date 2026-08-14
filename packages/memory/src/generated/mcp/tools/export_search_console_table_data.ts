@@ -7194,6 +7194,9 @@ export interface Input {
    * Optional row ordering for the JSONL download.
    */
   sort?: {
+    /**
+     * Exact table column name to filter.
+     */
     column:
       | "id"
       | "provider_record_id"
@@ -7213,6 +7216,9 @@ export interface Input {
       | "content_hash"
       | "created_at"
       | "updated_at";
+    /**
+     * Sort direction applied after filtering.
+     */
     direction?: "asc" | "desc";
   };
   /**

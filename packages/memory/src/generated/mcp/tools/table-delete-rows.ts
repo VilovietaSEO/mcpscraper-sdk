@@ -14,6 +14,9 @@ export interface Input {
        * Column name to filter on, from table-describe.
        */
       column: string;
+      /**
+       * Filter comparison operation applied to the selected column.
+       */
       op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
       /**
        * Value to compare against. For "in", pass an array.
@@ -27,6 +30,9 @@ export interface Input {
        * Column name to filter on, from table-describe.
        */
       column: string;
+      /**
+       * Filter comparison operation applied to the selected column.
+       */
       op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "in";
       /**
        * Value to compare against. For "in", pass an array.

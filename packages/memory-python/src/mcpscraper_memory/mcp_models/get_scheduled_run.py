@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class GetScheduledRunInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    run_id: str = Field(..., alias="runId", description="")
+    run_id: str = Field(..., alias="runId", description="Opaque scheduled-run identifier returned by a scheduled-results tool.")
 
 
 class GetScheduledRunOutput(BaseModel):

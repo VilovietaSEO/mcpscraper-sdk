@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class GetArtifactTemplateInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    template_id: str = Field(..., alias="templateId", description="")
+    template_id: str = Field(..., alias="templateId", description="Opaque saved-template identifier returned by an artifact-template tool.")
 
 
 class GetArtifactTemplateOutput(BaseModel):

@@ -2,6 +2,9 @@ export type McpToolCallFn = (name: string, args: unknown) => Promise<unknown>
 
 import * as SearchHarvestPaa from './tools/harvest_paa.js'
 import * as SearchSearchSerp from './tools/search_serp.js'
+import * as SearchSerpIdentityCreate from './tools/serp_identity_create.js'
+import * as SearchSerpIdentityDelete from './tools/serp_identity_delete.js'
+import * as SearchSerpIdentityList from './tools/serp_identity_list.js'
 import * as WebExtractUrl from './tools/extract_url.js'
 import * as WebDiffPage from './tools/diff_page.js'
 import * as WebMapSiteUrls from './tools/map_site_urls.js'
@@ -1477,6 +1480,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "get_artifact_template_example",
     "category": "artifacts",
     "methodName": "getArtifactTemplateExample"
+  },
+  {
+    "name": "serp_identity_create",
+    "category": "search",
+    "methodName": "serpIdentityCreate"
+  },
+  {
+    "name": "serp_identity_delete",
+    "category": "search",
+    "methodName": "serpIdentityDelete"
+  },
+  {
+    "name": "serp_identity_list",
+    "category": "search",
+    "methodName": "serpIdentityList"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1490,6 +1508,18 @@ export class SearchNamespace {
 
   async searchSerp(input: SearchSearchSerp.Input): Promise<SearchSearchSerp.Output> {
     return this.callTool('search_serp', input) as Promise<SearchSearchSerp.Output>
+  }
+
+  async serpIdentityCreate(input: SearchSerpIdentityCreate.Input): Promise<SearchSerpIdentityCreate.Output> {
+    return this.callTool('serp_identity_create', input) as Promise<SearchSerpIdentityCreate.Output>
+  }
+
+  async serpIdentityDelete(input: SearchSerpIdentityDelete.Input): Promise<SearchSerpIdentityDelete.Output> {
+    return this.callTool('serp_identity_delete', input) as Promise<SearchSerpIdentityDelete.Output>
+  }
+
+  async serpIdentityList(input: SearchSerpIdentityList.Input = {} as SearchSerpIdentityList.Input): Promise<SearchSerpIdentityList.Output> {
+    return this.callTool('serp_identity_list', input) as Promise<SearchSerpIdentityList.Output>
   }
 }
 
