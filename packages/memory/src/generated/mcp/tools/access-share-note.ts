@@ -19,8 +19,17 @@ export interface Input {
    * Permissions to grant beyond read (always granted): edit (write back to the canonical note), delete (destroy the canonical note — dangerous), reshare (grantee may re-share onward). All default false.
    */
   permissions?: {
+    /**
+     * Whether this scope permits editing.
+     */
     edit?: boolean;
+    /**
+     * Whether this scope permits deletion.
+     */
     delete?: boolean;
+    /**
+     * Whether this scope permits sharing an already shared record onward.
+     */
     reshare?: boolean;
   };
   /**

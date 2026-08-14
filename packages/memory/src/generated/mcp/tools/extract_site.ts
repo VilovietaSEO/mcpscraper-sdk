@@ -12,14 +12,27 @@ export interface Input {
    */
   wayback?: {
     /**
+     * Explicit year-month values included in the archive plan.
+     *
      * @minItems 1
      * @maxItems 60
      */
     months?: [string, ...string[]];
+    /**
+     * Inclusive ISO 8601 lower time bound.
+     */
     from?: string;
+    /**
+     * Exclusive ISO 8601 upper time bound.
+     */
     to?: string;
+    /**
+     * Explicit month interval used by the archive or timeline plan.
+     */
     intervalMonths?: number;
     /**
+     * Explicit public URLs included in this bounded operation.
+     *
      * @minItems 1
      * @maxItems 100
      */

@@ -157,7 +157,13 @@ export interface Input {
    * Only return unresolved concepts from one /wiki/ source slug.
    */
   sourceSlug?: string;
+  /**
+   * Maximum rows or records to return on this page; use the returned cursor for more.
+   */
   limit?: number;
+  /**
+   * Zero-based result offset; increase only when continuing the same bounded query.
+   */
   offset?: number;
 }
 

@@ -1,5 +1,11 @@
 export interface Input {
+  /**
+   * Exact memory note path or resolvable note reference used as the graph target.
+   */
   note: string;
+  /**
+   * Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.
+   */
   vault?: string;
 }
 

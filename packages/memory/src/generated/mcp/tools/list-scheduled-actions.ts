@@ -10,11 +10,23 @@ export interface Output {
     executionMode: "agent" | "connection_sync";
     artifactSelection:
       | {
+          /**
+           * Operation mode selected for this nested request branch.
+           */
           mode: "none";
         }
       | {
+          /**
+           * Operation mode selected for this nested request branch.
+           */
           mode: "saved_template";
+          /**
+           * Opaque saved-template identifier returned by an artifact-template tool.
+           */
           templateId: string;
+          /**
+           * Immutable saved-template version selected for rendering.
+           */
           templateVersionId: string;
         };
     timeOfDay: string | null;

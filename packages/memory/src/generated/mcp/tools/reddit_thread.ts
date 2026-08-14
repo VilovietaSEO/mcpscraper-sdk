@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * A reddit.com thread/post URL (www, old, new Reddit, or redd.it).
+   * A reddit.com thread/post URL. The reader opens normal Reddit first, waits through automatic browser challenges, and uses the equivalent old Reddit URL only if the normal page remains unavailable.
    */
   url: string;
   /**
@@ -11,7 +11,9 @@ export interface Input {
 
 export interface Output {
   sourceUrl: string | null;
+  canonicalUrl: string | null;
   oldRedditUrl: string | null;
+  retrievalSource: "www_reddit" | "old_reddit";
   title: string | null;
   author: string | null;
   score: string | null;

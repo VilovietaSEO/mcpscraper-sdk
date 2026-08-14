@@ -7,11 +7,29 @@ export interface Input {
    * Permissions to grant across your account. Optional; defaults to read+write (read, write, export, index, swap).
    */
   scope?: {
+    /**
+     * Whether this scope permits reading.
+     */
     read?: boolean;
+    /**
+     * Whether this scope permits writing.
+     */
     write?: boolean;
+    /**
+     * Whether this scope permits full-vault export.
+     */
     export?: boolean;
+    /**
+     * Ordered zero-based or one-based position defined by the surrounding collection.
+     */
     index?: boolean;
+    /**
+     * Whether this scope grants administrative control.
+     */
     admin?: boolean;
+    /**
+     * Whether this scope permits changing the account active vault.
+     */
     swap?: boolean;
   };
   /**

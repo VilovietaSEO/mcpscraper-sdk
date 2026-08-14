@@ -43,8 +43,13 @@ export interface Input {
      * Source byline/original author label.
      */
     sourceByline?: string;
+    /**
+     * Original publisher name preserved for attribution.
+     */
     publisher?: string;
     /**
+     * Original author names preserved for attribution.
+     *
      * @maxItems 20
      */
     authors?:
@@ -180,10 +185,25 @@ export interface Input {
           string,
           string
         ];
+    /**
+     * Original publication time or date preserved from the source.
+     */
     publishedAt?: string;
+    /**
+     * ISO 8601 time when the source evidence was captured.
+     */
     capturedAt?: string;
+    /**
+     * Known media or content license identifier; omit rather than guessing.
+     */
     license?: string;
+    /**
+     * Concise known rights context; omit unsupported assumptions.
+     */
     rightsSummary?: string;
+    /**
+     * Stable digest used to identify the captured source content.
+     */
     contentHash?: string;
   };
   /**
@@ -208,18 +228,47 @@ export interface Input {
    * @maxItems 80
    */
   contentSections?: {
+    /**
+     * Stable identifier for this nested record.
+     */
     id?: string;
+    /**
+     * Visible section heading used in navigation and presentation.
+     */
     heading: string;
+    /**
+     * Complete authored body content for this article or section.
+     */
     body: string;
+    /**
+     * Ordered display or ranking position for this item.
+     */
     position?: number;
     /**
+     * Source citations supporting the surrounding claim or article.
+     *
      * @maxItems 300
      */
     citations?: {
+      /**
+       * Human-readable title for the proposed record or authored content.
+       */
       title: string;
+      /**
+       * Public HTTPS URL for this nested source, link, or media item.
+       */
       url?: string;
+      /**
+       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       */
       source?: string;
+      /**
+       * Exact memory note path or resolvable note reference used as the graph target.
+       */
       note?: string;
+      /**
+       * ISO 8601 time when this source or record was accessed.
+       */
       accessedAt?: string;
     }[];
   }[];

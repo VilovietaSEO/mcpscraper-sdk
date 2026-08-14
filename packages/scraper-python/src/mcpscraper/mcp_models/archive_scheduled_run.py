@@ -5,8 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class ArchiveScheduledRunInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    run_id: str = Field(..., alias="runId", description="")
-    archived: bool = Field(..., alias="archived", description="")
+    run_id: str = Field(..., alias="runId", description="Opaque scheduled-run identifier returned by a scheduled-results tool.")
+    archived: bool = Field(..., alias="archived", description="Set true to archive the record or false to restore it.")
 
 
 class ArchiveScheduledRunOutput(BaseModel):

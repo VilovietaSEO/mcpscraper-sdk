@@ -1,4 +1,4 @@
-# All 246 MCP tools with cURL
+# All 249 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,12 +47,15 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (246)
+## Complete catalog (249)
 
 ## search
 
 - `harvest_paa` — Google PAA + SERP Harvest
 - `search_serp` — Google SERP Lookup
+- `serp_identity_create` — Create and Take Over Persistent SERP Identity
+- `serp_identity_delete` — Delete Persistent SERP Identity
+- `serp_identity_list` — List Persistent SERP Identities
 
 ## web
 

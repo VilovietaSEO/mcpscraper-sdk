@@ -13,11 +13,29 @@ export interface Input {
    * Scope grant (read/write/export/index/admin/swap). Optional; omit for least-privilege read-only.
    */
   scope?: {
+    /**
+     * Whether this scope permits reading.
+     */
     read?: boolean;
+    /**
+     * Whether this scope permits writing.
+     */
     write?: boolean;
+    /**
+     * Whether this scope permits full-vault export.
+     */
     export?: boolean;
+    /**
+     * Ordered zero-based or one-based position defined by the surrounding collection.
+     */
     index?: boolean;
+    /**
+     * Whether this scope grants administrative control.
+     */
     admin?: boolean;
+    /**
+     * Whether this scope permits changing the account active vault.
+     */
     swap?: boolean;
   };
   /**

@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class GetArtifactTemplateExampleInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    preset_key: Literal['editorial_reading_room_v1', 'personal_authority_v1', 'newsroom_publisher_v1'] = Field(..., alias="presetKey", description="")
+    preset_key: Literal['editorial_reading_room_v1', 'personal_authority_v1', 'personal_authority_v2', 'newsroom_publisher_v1', 'blog_article_v1'] = Field(..., alias="presetKey", description="Registered preset key returned by list_artifact_templates.")
 
 
 class GetArtifactTemplateExampleOutput(BaseModel):

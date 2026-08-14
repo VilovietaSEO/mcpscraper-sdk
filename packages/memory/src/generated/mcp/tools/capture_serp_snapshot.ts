@@ -1,10 +1,10 @@
 export interface Input {
   /**
-   * Search topic to capture. When location is supplied, the server sets Google UULE and adds the location to the executed query only if its city is not already present; do not add it manually.
+   * Search topic to capture, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.
    */
   query: string;
   /**
-   * City, region, country, or service area for localized Google results. It sets UULE and supplies the city text when missing from query; it does not select a proxy.
+   * Where Google should think the searcher is. Sets the Google UULE parameter only — it never changes your query text and never selects a proxy. To put the place in the search terms too, write it into query.
    */
   location?: string;
   /**

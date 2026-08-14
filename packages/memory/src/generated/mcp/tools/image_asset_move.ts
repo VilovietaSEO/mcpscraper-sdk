@@ -1,7 +1,19 @@
 export interface Input {
+  /**
+   * Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.
+   */
   vault?: string;
+  /**
+   * Opaque image asset identifier returned by an image asset tool.
+   */
   assetId: string;
+  /**
+   * Opaque image project identifier returned by an image project tool.
+   */
   projectId?: string | null;
+  /**
+   * Opaque image folder identifier; omit only when the project root is intended.
+   */
   folderId?: string | null;
 }
 

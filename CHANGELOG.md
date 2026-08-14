@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## 2026-08-14 — verified against mcp-scraper 0.54.2 / mcp-memory 1.17.2
+
+### Added
+
+- Added typed bindings for the three persistent SERP identity tools and synchronized the unified catalog from 246 to 249 tools.
+
+### Changed
+
+- Regenerated Node, Python, CLI, and cURL contracts for the managed Google SERP/PAA transport, unchanged-query location semantics, same-page SERP feature flags, and current Maps descriptions accumulated through MCP Scraper 0.54.2.
+- Updated `reddit_trending` with week, 30-day, and all-time discovery, exact quoted phrases, and the managed Google discovery contract; updated `reddit_thread` with canonical URLs and explicit normal/old Reddit retrieval sources.
+- Prepared `mcpscraper-memory-sdk` 0.27.3, `mcpscraper-sdk` 0.26.3, `mcpscraper-cli` 0.25.3, and both Python packages 0.25.3.
+
 ## 2026-08-11 — verified against mcp-scraper 0.52.3 / mcp-memory 1.17.2
 
 ### Fixed

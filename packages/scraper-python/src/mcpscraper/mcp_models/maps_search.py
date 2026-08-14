@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class MapsSearchInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    query: str = Field(..., alias="query", description="Business category, niche, or search term, e.g. \"roofers\". Do not include location here — use location instead.")
+    query: str = Field(..., alias="query", description="Business category, niche, or search term, e.g. \"roofers\". You may include the place here; Google Maps has no UULE, so the server appends location to the search text only when the query does not already name it.")
     location: str | None = Field(None, alias="location", description="City, region, country, or service area, e.g. \"Denver, CO\".")
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location.")
     hl: str | None = Field(None, alias="hl", description="Language inferred from user request.")

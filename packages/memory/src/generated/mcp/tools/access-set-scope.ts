@@ -7,11 +7,29 @@ export interface Input {
    * New scope set. Partial; the provided keys are normalized and REPLACE the full existing scope. Optional, but supply scope and/or plan.
    */
   scope?: {
+    /**
+     * Whether this scope permits reading.
+     */
     read?: boolean;
+    /**
+     * Whether this scope permits writing.
+     */
     write?: boolean;
+    /**
+     * Whether this scope permits full-vault export.
+     */
     export?: boolean;
+    /**
+     * Ordered zero-based or one-based position defined by the surrounding collection.
+     */
     index?: boolean;
+    /**
+     * Whether this scope grants administrative control.
+     */
     admin?: boolean;
+    /**
+     * Whether this scope permits changing the account active vault.
+     */
     swap?: boolean;
   };
   /**

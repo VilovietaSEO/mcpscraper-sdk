@@ -11,12 +11,21 @@ export interface Input {
    * Already claimed publication name to validate when operation is publish.
    */
   publicationSubdomain?: string;
+  /**
+   * Human-readable title for the proposed record or authored content.
+   */
   title?: string;
+  /**
+   * Human-readable summary that distinguishes this record from similarly named records.
+   */
   description?: string;
   /**
    * Complete source-grounded reading-room payload to validate when operation is publish.
    */
   edition?: {
+    /**
+     * Complete editorial site payload containing the collection identity and authored articles.
+     */
     site: {
       /**
        * Stable kebab-case identifier used for browser reading progress, for example "customer-research-field-notes".

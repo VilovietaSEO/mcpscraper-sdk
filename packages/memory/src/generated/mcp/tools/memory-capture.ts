@@ -1,9 +1,27 @@
 export interface Input {
+  /**
+   * Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.
+   */
   vault: string;
+  /**
+   * Optional governed folder override inside the selected vault.
+   */
   folder?: string;
+  /**
+   * Exact path value used by this tool; preserve its leading slash or vault-relative form as required.
+   */
   path: string;
+  /**
+   * Human-readable title for the proposed record or authored content.
+   */
   title: string;
+  /**
+   * Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.
+   */
   content: string;
+  /**
+   * Complete governed note properties required by the target vault contract.
+   */
   props: {
     /**
      * Status enum value from the target vault contract.
@@ -79,6 +97,9 @@ export interface Input {
     parentMessageId?: string;
     [k: string]: unknown;
   };
+  /**
+   * Last revision read by the caller; supply it to reject an update if the record changed meanwhile.
+   */
   baseRevision?: number;
   /**
    * Required justification for any tag that does not already exist. Tags resolve against the account's existing vocabulary; new tags require a one-line description.
@@ -89,9 +110,21 @@ export interface Input {
     | []
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -101,9 +134,21 @@ export interface Input {
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -111,9 +156,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -123,9 +180,21 @@ export interface Input {
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -133,9 +202,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -143,9 +224,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -155,9 +248,21 @@ export interface Input {
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -165,9 +270,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -175,9 +292,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -185,9 +314,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -197,9 +338,21 @@ export interface Input {
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -207,9 +360,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -217,9 +382,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -227,9 +404,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -237,9 +426,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -249,9 +450,21 @@ export interface Input {
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -259,9 +472,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -269,9 +494,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -279,9 +516,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -289,9 +538,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -299,9 +560,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -311,9 +584,21 @@ export interface Input {
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -321,9 +606,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -331,9 +628,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -341,9 +650,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -351,9 +672,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -361,9 +694,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -371,9 +716,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -383,9 +740,21 @@ export interface Input {
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -393,9 +762,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -403,9 +784,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -413,9 +806,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -423,9 +828,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -433,9 +850,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -443,9 +872,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.
@@ -453,9 +894,21 @@ export interface Input {
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
           /**
            * Reuse this existing tag instead of the proposed one, confirming a candidate returned by an earlier review. The proposed spelling is recorded as its alias.

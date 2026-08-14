@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Business category, niche, or search term, e.g. "roofers". Do not include location here — use location instead.
+   * Business category, niche, or search term, e.g. "roofers". You may include the place here; Google Maps has no UULE, so the server appends location to the search text only when the query does not already name it.
    */
   query: string;
   /**

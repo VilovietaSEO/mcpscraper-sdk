@@ -1,7 +1,19 @@
 export interface Input {
+  /**
+   * Exact memory note path or resolvable note reference used as the graph target.
+   */
   note: string;
+  /**
+   * Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.
+   */
   vault?: string;
+  /**
+   * Maximum graph traversal depth from the root note.
+   */
   depth?: number;
+  /**
+   * Maximum graph nodes to return before marking the result truncated.
+   */
   maxNodes?: number;
 }
 

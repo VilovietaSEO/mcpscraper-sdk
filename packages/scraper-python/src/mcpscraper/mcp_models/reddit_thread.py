@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class RedditThreadInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    url: str = Field(..., alias="url", description="A reddit.com thread/post URL (www, old, new Reddit, or redd.it).")
+    url: str = Field(..., alias="url", description="A reddit.com thread/post URL. The reader opens normal Reddit first, waits through automatic browser challenges, and uses the equivalent old Reddit URL only if the normal page remains unavailable.")
     max_comments: int | None = Field(None, alias="maxComments", description="Optional cap on comments returned. Omit to return all captured comments.")
 
 
@@ -13,7 +13,9 @@ class RedditThreadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     source_url: Any = Field(..., alias="sourceUrl", description="")
+    canonical_url: Any = Field(..., alias="canonicalUrl", description="")
     old_reddit_url: Any = Field(..., alias="oldRedditUrl", description="")
+    retrieval_source: Literal['www_reddit', 'old_reddit'] = Field(..., alias="retrievalSource", description="")
     title: Any = Field(..., alias="title", description="")
     author: Any = Field(..., alias="author", description="")
     score: Any = Field(..., alias="score", description="")

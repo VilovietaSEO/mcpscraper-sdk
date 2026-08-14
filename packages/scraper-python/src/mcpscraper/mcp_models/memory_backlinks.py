@@ -5,8 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class MemoryBacklinksInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    note: str = Field(..., alias="note", description="")
-    vault: str | None = Field(None, alias="vault", description="")
+    note: str = Field(..., alias="note", description="Exact memory note path or resolvable note reference used as the graph target.")
+    vault: str | None = Field(None, alias="vault", description="Exact accessible Memory vault name; omit only when this tool documents a safe active-vault default.")
 
 
 class MemoryBacklinksOutput(BaseModel):

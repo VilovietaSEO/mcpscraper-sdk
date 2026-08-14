@@ -3,10 +3,25 @@ export interface Input {
    * New-listing identity returned by prepare-local-sourcebook-write. Evidence-bearing public fields are compiled by MCP Scraper and cannot be supplied here.
    */
   identity: {
+    /**
+     * Canonical Local Sourcebook business category selected from the live contract.
+     */
     category: "home" | "professional" | "restaurants" | "financial" | "realestate" | "auto" | "wellness";
+    /**
+     * Two-letter US state for the Local Sourcebook listing market.
+     */
     state: string;
+    /**
+     * Public business name supported by the listing evidence.
+     */
     businessName: string;
+    /**
+     * Canonical public business website used for listing identity and evidence acquisition.
+     */
     websiteUrl: string;
+    /**
+     * Accepted Schema.org subtype supported by the listing evidence.
+     */
     schemaOrgType?:
       | "LocalBusiness"
       | "AnimalShelter"
@@ -71,8 +86,13 @@ export interface Input {
       | "Store"
       | "TouristInformationCenter"
       | "TravelAgency";
+    /**
+     * Optional stable public slug; omit only when the tool is documented to derive it.
+     */
     slug?: string;
     /**
+     * Canonical tag filter or tag set; use the appropriate vocabulary-listing tool before writing new tags.
+     *
      * @maxItems 20
      */
     tags?:
@@ -208,2825 +228,8502 @@ export interface Input {
           string,
           string
         ];
+    /**
+     * Caller-owned opaque key for this intended operation; reuse only when retrying the same operation.
+     */
     idempotencyKey: string;
   };
   /**
+   * Proposed listing or memory tags to resolve against the live canonical vocabulary.
+   *
    * @maxItems 20
    */
   tagCandidates?:
     | []
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
-          description?: string;
-        },
-        {
-          tag: string;
-          central?: boolean;
-          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central?: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable?: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
         }
       ];
   /**
+   * Explicit reuse, creation, or omission decisions for proposed non-canonical tags.
+   *
    * @maxItems 20
    */
   tagDecisions?:
     | []
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        }
-      ]
-    | [
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
-          acceptCanonical?: string;
-        },
-        {
-          tag: string;
-          central: boolean;
-          reusable: boolean;
-          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ]
     | [
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         },
         {
+          /**
+           * Canonical tag name to create or curate.
+           */
           tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
           central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
           reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
           description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        }
+      ]
+    | [
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
+          acceptCanonical?: string;
+        },
+        {
+          /**
+           * Canonical tag name to create or curate.
+           */
+          tag: string;
+          /**
+           * Whether the proposed tag is central to the record rather than incidental.
+           */
+          central: boolean;
+          /**
+           * Whether the proposed tag is useful across multiple future records.
+           */
+          reusable: boolean;
+          /**
+           * Human-readable summary that distinguishes this record from similarly named records.
+           */
+          description?: string;
+          /**
+           * Existing canonical tag to reuse instead of creating the proposed spelling.
+           */
           acceptCanonical?: string;
         }
       ];

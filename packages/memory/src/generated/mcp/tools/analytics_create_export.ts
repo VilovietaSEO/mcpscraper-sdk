@@ -287,21 +287,69 @@ export interface Input {
         string,
         string
       ];
+  /**
+   * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+   */
   source?: string;
+  /**
+   * Exact normalized campaign medium used to filter or label analytics data.
+   */
   medium?: string;
+  /**
+   * Exact normalized campaign value used to filter or label analytics data.
+   */
   campaign?: string;
+  /**
+   * Optional normalized analytics event-name filter.
+   */
   eventName?: string;
+  /**
+   * Attribution model applied to the report; defaults to first touch.
+   */
   attributionModel?: "first_touch" | "last_touch";
+  /**
+   * Optional normalized acquisition-channel family filter.
+   */
   channelFamily?: "llm" | "social" | "review" | "search" | "email" | "referral" | "direct" | "other";
+  /**
+   * Normalized external platform selected for this operation.
+   */
   platform?: string;
+  /**
+   * Optional exact or normalized referrer filter for analytics rows.
+   */
   referrer?: string;
+  /**
+   * Exact path value used by this tool; preserve its leading slash or vault-relative form as required.
+   */
   path?: string;
+  /**
+   * Optional normalized device-class filter.
+   */
   deviceClass?: "desktop" | "tablet" | "mobile" | "unknown";
+  /**
+   * Two-letter country code used to filter analytics rows.
+   */
   countryCode?: string;
+  /**
+   * Optional regional subdivision code filter.
+   */
   regionCode?: string;
+  /**
+   * Optional normalized conversion event kind filter.
+   */
   conversionKind?: string;
+  /**
+   * Analytics report family to render into the exported artifact.
+   */
   report?: "overview" | "acquisition" | "content" | "conversions";
+  /**
+   * Artifact serialization format to generate.
+   */
   format?: "csv" | "json" | "markdown";
+  /**
+   * Caller-owned opaque key for this intended operation; reuse only when retrying the same operation.
+   */
   idempotencyKey: string;
 }
 

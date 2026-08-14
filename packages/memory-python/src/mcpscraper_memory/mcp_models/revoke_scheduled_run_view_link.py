@@ -5,8 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class RevokeScheduledRunViewLinkInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    run_id: str = Field(..., alias="runId", description="")
-    share_id: str = Field(..., alias="shareId", description="")
+    run_id: str = Field(..., alias="runId", description="Opaque scheduled-run identifier returned by a scheduled-results tool.")
+    share_id: str = Field(..., alias="shareId", description="Opaque revocable share identifier returned when the view link was created.")
 
 
 class RevokeScheduledRunViewLinkOutput(BaseModel):

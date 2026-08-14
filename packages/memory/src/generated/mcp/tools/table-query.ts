@@ -26,7 +26,13 @@ export interface Input {
    * Column to sort by. Optional; defaults to id ascending (insertion order).
    */
   sort?: {
+    /**
+     * Exact table column name to filter.
+     */
     column: string;
+    /**
+     * Sort direction applied after filtering.
+     */
     direction?: "asc" | "desc";
   };
   /**

@@ -1,10 +1,10 @@
 export interface Input {
   /**
-   * The search topic. When location is supplied, the server sets Google UULE and adds the location to the executed query only if its city is not already present; do not add it manually.
+   * The search topic, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.
    */
   query: string;
   /**
-   * City, region, or country for localized Google results. It sets UULE and supplies the city text when missing from query; it does not select a proxy.
+   * Where Google should think the searcher is. Sets the Google UULE parameter only — it never changes your query text and never selects a proxy. To put the place in the search terms too, write it into query.
    */
   location?: string;
   /**
@@ -19,6 +19,34 @@ export interface Input {
    * SERP device context. Use mobile only for mobile rankings.
    */
   device?: "desktop" | "mobile";
+  /**
+   * Optional persistent SERP identity created with serp_identity_create. Reuses the same saved browser state and fixed network address across calls.
+   */
+  serpIdentity?: string;
+  /**
+   * Capture every optional same-page SERP surface: local pack, forums, videos, AI Overview/AI Mode, and What People Are Saying.
+   */
+  includeAllSerpFeatures?: boolean;
+  /**
+   * Include Google local/map-pack businesses and merge their entity IDs.
+   */
+  includeLocalPack?: boolean;
+  /**
+   * Include Discussions and Forums results.
+   */
+  includeForums?: boolean;
+  /**
+   * Include video result names and URLs present on the original SERP.
+   */
+  includeVideos?: boolean;
+  /**
+   * Include AI Overview and AI Mode text and citations when present.
+   */
+  includeAiOverview?: boolean;
+  /**
+   * Include the What People Are Saying social surface when present.
+   */
+  includeWhatPeopleSaying?: boolean;
   /**
    * Number of result pages to fetch (1–2).
    */
