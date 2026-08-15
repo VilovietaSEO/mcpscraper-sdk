@@ -23,7 +23,7 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 
 | Feature | What it does | REST endpoint | Cost |
 |---|---|---|---|
-| [Search](#search) | Google SERP + optional full People-Also-Ask harvest | `POST /harvest/sync` | 14 credits |
+| [Search](#search) | Google SERP + optional full People-Also-Ask harvest | `POST /harvest/sync` | 60 Credits for SERP; PAA is 400 Credits + 10 Credits per returned question |
 | [Scrape](#scrape) | One page → markdown/HTML/headings, optional screenshot, optional deposit into your memory vault | `POST /extract-url` | 1 credit |
 | [Crawl](#crawl) | Every page of a site, one call | `POST /extract-site` | 1 credit/page |
 | [Map](#map) | Discover a site's full URL inventory | `POST /map-urls` | 5 credits flat |
@@ -577,7 +577,9 @@ This is a one-result snapshot with a 1 MB limit—not whole-account pagination, 
 
 ## Errors
 
-Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Python, scraper) or `MemoryApiError` (Node/Python, memory), each carrying the HTTP status, an error code, and the raw response body. `ScraperApiError` adds `isInsufficientBalance()`/`isConcurrencyLimitExceeded()` narrowing helpers (`is_insufficient_balance()`/`is_concurrency_limit_exceeded()` in Python). The CLI catches these and prints a clean one-line message instead of a stack trace.
+Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Python, scraper) or `MemoryApiError` (Node/Python, memory), each carrying the HTTP status, an error code, and the safe public response body. The scraper envelope includes `error_code`, `error_type`, `message`, `retryable`, and—when known—retry timing, charge status, and bounded recovery details. `ScraperApiError` adds helpers for insufficient balance, concurrency, verification challenges, and timeouts. The CLI catches these and prints a clean one-line message instead of a stack trace.
+
+Concurrency is sold separately from the base plan in quantity-based packs: one $5/month pack adds two browser slots, so quantity `n` adds `2n` slots for `$5n` per month. Existing plan credits and included concurrency do not change when a pack is added.
 
 ## All 249 MCP tools
 

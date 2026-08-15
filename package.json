@@ -17,6 +17,7 @@
     "test": "npm run test --workspaces",
     "test:python": "node scripts/run-python-project.mjs packages/scraper-python -m pytest packages/scraper-python/tests && node scripts/run-python-project.mjs packages/memory-python -m pytest packages/memory-python/tests",
     "validate-contracts": "node --import tsx scripts/validate-contracts.ts",
+    "check:product-contract": "node --import tsx scripts/check-public-product-contract.ts",
     "smoke-test": "node --import tsx scripts/smoke-test.ts",
     "generate:memory": "node --import tsx scripts/generate-memory-client.ts && python3 packages/memory-python/scripts/generate_models.py",
     "update:memory-contract": "node --import tsx scripts/update-memory-manifest.ts",

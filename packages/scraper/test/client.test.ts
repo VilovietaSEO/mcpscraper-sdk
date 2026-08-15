@@ -87,6 +87,36 @@ test('server failures cannot expose an upstream service or account state', async
   )
 })
 
+test('recognized verification failures keep actionable public details without extra upstream fields', async () => {
+  const fetchImpl = async () =>
+    jsonResponse(503, {
+      error_code: 'captcha_or_blocked',
+      error_type: 'captcha',
+      message: 'The target site returned a verification challenge. Heavy traffic can temporarily increase these challenges; retry in a few minutes.',
+      retryable: true,
+      retry_after_seconds: 180,
+      charge_status: 'refunded',
+      details: { operation: 'harvest', provider: 'private upstream' },
+      provider: 'private upstream',
+    })
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+
+  await assert.rejects(
+    () => client.harvestPaa({ query: 'x' }),
+    (err: unknown) => {
+      assert.ok(err instanceof ScraperApiError)
+      assert.ok(err.isVerificationChallenge())
+      assert.equal(err.isTimeout(), false)
+      assert.equal(err.code, 'captcha_or_blocked')
+      assert.equal((err.body as Record<string, unknown>).retry_after_seconds, 180)
+      assert.equal((err.body as Record<string, unknown>).charge_status, 'refunded')
+      assert.deepEqual((err.body as Record<string, unknown>).details, { operation: 'harvest' })
+      assert.equal('provider' in (err.body as Record<string, unknown>), false)
+      return true
+    },
+  )
+})
+
 test('insufficient balance is distinguishable via isInsufficientBalance()', async () => {
   const fetchImpl = async () =>
     jsonResponse(402, {

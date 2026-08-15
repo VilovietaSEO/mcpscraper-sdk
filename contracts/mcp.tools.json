@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.54.2 dist/bin/mcp-stdio-server.js",
+  "generatedFrom": "mcp-scraper 0.54.4 dist/bin/mcp-stdio-server.js",
   "toolCount": 249,
   "tools": [
     {
@@ -16251,7 +16251,7 @@
     {
       "name": "credits_info",
       "title": "MCP Scraper Credits & Costs",
-      "description": "Answer questions about MCP Scraper credits, connected-account pricing, usage limits, and concurrency upgrades — balance, tool costs, the $3 active-connected-account fee, connected function/Proxy/compute rates, concurrency limits, and billing URL. Does not expose payment methods or card information.",
+      "description": "Answer questions about MCP Scraper credits, connected-account pricing, usage limits, and concurrency upgrades — balance, tool costs, the $3 active-connected-account fee, connected function/proxy/compute rates, current pack quantity, extra browser slots, monthly add-on amount, and the $5 two-browser concurrency-pack upgrade. Does not expose payment methods or card information.",
       "category": "billing",
       "methodName": "creditsInfo",
       "inputSchema": {
@@ -16397,6 +16397,29 @@
               {
                 "type": "object",
                 "properties": {
+                  "packQuantity": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991,
+                    "description": "Current number of active two-browser concurrency packs."
+                  },
+                  "slotsPerPack": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991,
+                    "description": "Extra browser slots granted by each concurrency pack."
+                  },
+                  "extraSlots": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991,
+                    "description": "Total extra browser slots granted by the active pack quantity."
+                  },
+                  "monthlyAmountUsd": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Current monthly concurrency-pack charge in US dollars."
+                  },
                   "currentExtraSlots": {
                     "type": "integer",
                     "minimum": 0,
@@ -16416,6 +16439,9 @@
                       "product": {
                         "type": "string"
                       },
+                      "ratePolicyVersion": {
+                        "type": "string"
+                      },
                       "priceLabel": {
                         "type": "string"
                       },
@@ -16427,6 +16453,25 @@
                       },
                       "interval": {
                         "type": "string"
+                      },
+                      "billingUnit": {
+                        "type": "string",
+                        "const": "pack"
+                      },
+                      "packQuantity": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 9007199254740991
+                      },
+                      "slotsPerPack": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 9007199254740991
+                      },
+                      "extraSlots": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 9007199254740991
                       },
                       "billingUrl": {
                         "type": "string",
@@ -16441,10 +16486,15 @@
                     },
                     "required": [
                       "product",
+                      "ratePolicyVersion",
                       "priceLabel",
                       "unitAmountUsd",
                       "currency",
                       "interval",
+                      "billingUnit",
+                      "packQuantity",
+                      "slotsPerPack",
+                      "extraSlots",
                       "billingUrl",
                       "terminalCommand",
                       "terminalCommandWithApiKeyEnv"
@@ -16453,6 +16503,10 @@
                   }
                 },
                 "required": [
+                  "packQuantity",
+                  "slotsPerPack",
+                  "extraSlots",
+                  "monthlyAmountUsd",
                   "currentExtraSlots",
                   "currentLimit",
                   "hasSubscription",
@@ -16470,7 +16524,7 @@
               {
                 "type": "object",
                 "properties": {
-                  "monthlyUsdPerActiveNangoConnection": {
+                  "monthlyUsdPerActiveConnection": {
                     "type": "number"
                   },
                   "functionCredits": {
@@ -16488,7 +16542,7 @@
                   }
                 },
                 "required": [
-                  "monthlyUsdPerActiveNangoConnection",
+                  "monthlyUsdPerActiveConnection",
                   "functionCredits",
                   "proxyCredits",
                   "computeCreditsPerSecond",
@@ -16590,10 +16644,10 @@
                 "transport": {
                   "type": "string",
                   "enum": [
-                    "nango",
+                    "managed_oauth",
                     "remote_mcp"
                   ],
-                  "description": "Credential transport behind this tenant-scoped connection. Tokens and API keys are never returned."
+                  "description": "Public credential transport category behind this tenant-scoped connection. Tokens, API keys, and replaceable infrastructure identifiers are never returned."
                 },
                 "actionsEnabled": {
                   "type": "boolean"
@@ -18193,9 +18247,10 @@
                 }
               },
               "transport": {
+                "description": "Public credential transport category. Internal routing identifiers are not exposed.",
                 "type": "string",
                 "enum": [
-                  "nango",
+                  "managed_oauth",
                   "remote_mcp"
                 ]
               },
@@ -19379,7 +19434,7 @@
     {
       "name": "capture_serp_snapshot",
       "title": "SERP Intelligence Snapshot",
-      "description": "Capture a structured SERP Intelligence snapshot of a Google query — the persistent evidence format used by rank-tracking and comparison pipelines. Use gl for country and location only when city or regional context matters. Holds 14 Credits and settles to the render mode actually used: 4 Credits when the capture completed headless, 14 when it ran headful. Optional page snapshots add 1 Credit per attempted URL.",
+      "description": "Capture a structured SERP Intelligence snapshot of a Google query — the persistent evidence format used by rank-tracking and comparison pipelines. Use gl for country and location only when city or regional context matters. Costs 60 Credits per snapshot regardless of render mode. Optional page snapshots add 1 Credit per attempted URL. Call credits_info for current pricing and balance.",
       "category": "serpIntelligence",
       "methodName": "snapshot",
       "inputSchema": {

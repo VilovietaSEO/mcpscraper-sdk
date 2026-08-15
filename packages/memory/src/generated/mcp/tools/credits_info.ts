@@ -31,22 +31,43 @@ export interface Output {
     description: string | null;
   }[];
   concurrency: {
+    /**
+     * Current number of active two-browser concurrency packs.
+     */
+    packQuantity: number;
+    /**
+     * Extra browser slots granted by each concurrency pack.
+     */
+    slotsPerPack: number;
+    /**
+     * Total extra browser slots granted by the active pack quantity.
+     */
+    extraSlots: number;
+    /**
+     * Current monthly concurrency-pack charge in US dollars.
+     */
+    monthlyAmountUsd: number;
     currentExtraSlots: number;
     currentLimit: number;
     hasSubscription: boolean;
     upgrade: {
       product: string;
+      ratePolicyVersion: string;
       priceLabel: string;
       unitAmountUsd: number;
       currency: string;
       interval: string;
+      billingUnit: "pack";
+      packQuantity: number;
+      slotsPerPack: number;
+      extraSlots: number;
       billingUrl: string;
       terminalCommand: string;
       terminalCommandWithApiKeyEnv: string;
     };
   } | null;
   connectedAccounts: {
-    monthlyUsdPerActiveNangoConnection: number;
+    monthlyUsdPerActiveConnection: number;
     functionCredits: number;
     proxyCredits: number;
     computeCreditsPerSecond: number;
