@@ -17,9 +17,9 @@ export interface Output {
     operationalStatus?: "unknown" | "available" | "degraded" | "unavailable";
     reconnectRequired?: boolean;
     /**
-     * Credential transport behind this tenant-scoped connection. Tokens and API keys are never returned.
+     * Public credential transport category behind this tenant-scoped connection. Tokens, API keys, and replaceable infrastructure identifiers are never returned.
      */
-    transport: "nango" | "remote_mcp";
+    transport: "managed_oauth" | "remote_mcp";
     actionsEnabled: boolean;
     /**
      * Tool names this connection can be read with via read_service_connection.

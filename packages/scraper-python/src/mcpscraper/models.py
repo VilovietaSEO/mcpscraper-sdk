@@ -3,67 +3,157 @@
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import Enum, IntEnum
 from typing import Any
 
 from pydantic import AnyUrl, AwareDatetime, BaseModel, ConfigDict, Field, RootModel
 
 
-class Error(BaseModel):
-    error: str
-    error_code: str | None = None
-    message: str | None = None
+class PublicChargeStatus(Enum):
+    not_charged = 'not_charged'
+    refunded = 'refunded'
+    charged = 'charged'
 
 
-class StructuredError(BaseModel):
+class PublicErrorDetails(RootModel[dict[str, str | float | bool]]):
+    """
+    Bounded, vendor-neutral recovery and account details safe for public clients.
+    """
+
+    root: dict[str, str | float | bool]
+
+
+class ErrorCode(Enum):
+    request_aborted = 'request_aborted'
+    captcha_exhausted = 'captcha_exhausted'
+    captcha_or_blocked = 'captcha_or_blocked'
+    location_mismatch = 'location_mismatch'
+    proxy_tunnel_failed = 'proxy_tunnel_failed'
+    proxy_unavailable = 'proxy_unavailable'
+    harvest_timeout = 'harvest_timeout'
+    mcp_request_timeout = 'mcp_request_timeout'
+    extraction_failed = 'extraction_failed'
+    concurrency_limit_exceeded = 'concurrency_limit_exceeded'
+    unauthorized = 'unauthorized'
+    forbidden = 'forbidden'
+    invalid_request = 'invalid_request'
+    rate_limited = 'rate_limited'
+    insufficient_balance = 'insufficient_balance'
+    service_unavailable = 'service_unavailable'
+
+
+class ErrorType(Enum):
+    request_aborted = 'request_aborted'
+    captcha = 'captcha'
+    location_mismatch = 'location_mismatch'
+    connection = 'connection'
+    timeout = 'timeout'
+    extraction = 'extraction'
+    concurrency_limit = 'concurrency_limit'
+    unauthorized = 'unauthorized'
+    forbidden = 'forbidden'
+    invalid_request = 'invalid_request'
+    rate_limit = 'rate_limit'
+    billing = 'billing'
+    service_unavailable = 'service_unavailable'
+
+
+class PublicErrorEnvelope(BaseModel):
+    """
+    Stable public failure envelope shared across REST and MCP operations.
+    """
+
+    error_code: ErrorCode
+    error_type: ErrorType
+    message: str
+    retryable: bool
+    retry_after_seconds: int | None = Field(None, ge=1, le=86400)
+    charge_status: PublicChargeStatus | None = None
+    details: PublicErrorDetails | None = None
+
+
+class StructuredError(PublicErrorEnvelope):
     """
     Shared structured error shape used by SERP Intelligence endpoints.
     """
-
-    error_code: str
-    error_type: str
-    message: str
-    retryable: bool
 
 
 class Error1(Enum):
     insufficient_balance = 'insufficient_balance'
 
 
-class ErrorCode(Enum):
+class ErrorCode1(Enum):
     insufficient_balance = 'insufficient_balance'
 
 
 class InsufficientBalanceError(BaseModel):
     error: Error1
-    error_code: ErrorCode
+    error_code: ErrorCode1
     message: str
     balance_credits: float
     required_credits: float
     topup_url: AnyUrl
 
 
-class ErrorCode1(Enum):
+class ErrorCode2(Enum):
     concurrency_limit_exceeded = 'concurrency_limit_exceeded'
 
 
-class ErrorType(Enum):
+class ErrorType1(Enum):
     concurrency_limit = 'concurrency_limit'
 
 
-class ConcurrencyLimitError(BaseModel):
-    error: str | None = None
-    message: str
-    error_code: ErrorCode1
-    error_type: ErrorType | None = None
-    retryable: bool | None = None
-    active: int
-    limit: int
-    operation: str
-    upgrade_url: AnyUrl | None = None
-    upgrade_command: str | None = Field(
-        None, description='CLI command to buy an extra concurrency slot.'
-    )
+class UnitAmountUsd(Enum):
+    number_5 = 5
+
+
+class Currency(Enum):
+    usd = 'usd'
+
+
+class Interval(Enum):
+    month = 'month'
+
+
+class BillingUnit(Enum):
+    pack = 'pack'
+
+
+class SlotsPerPack(IntEnum):
+    integer_2 = 2
+
+
+class ConcurrencyPack(BaseModel):
+    """
+    One $5 monthly pack adds exactly two concurrent browser slots. Quantity n adds 2n slots for $5n per month.
+    """
+
+    product: str
+    rate_policy_version: str
+    price_label: str
+    unit_amount_usd: UnitAmountUsd
+    currency: Currency
+    interval: Interval
+    billing_unit: BillingUnit
+    pack_quantity: int = Field(..., ge=0)
+    slots_per_pack: SlotsPerPack
+    extra_slots: int = Field(..., ge=0)
+    billing_url: AnyUrl
+    terminal_command: str
+    terminal_command_with_api_key_env: str
+
+
+class ConcurrencyAccountView(BaseModel):
+    """
+    Quantity-based add-on entitlement projected by account and billing endpoints.
+    """
+
+    pack_quantity: int = Field(..., ge=0)
+    slots_per_pack: SlotsPerPack
+    extra_concurrency_slots: int = Field(..., ge=0)
+    effective_limit: int = Field(..., ge=1)
+    monthly_amount_usd: float = Field(..., ge=0.0)
+    has_subscription: bool | None = None
 
 
 class Device(Enum):
@@ -74,6 +164,17 @@ class Device(Enum):
 class ProxyMode(Enum):
     configured = 'configured'
     none = 'none'
+
+
+class Recency(Enum):
+    """
+    Optional Google time filter (past day/week/month/year). Omit for all-time. Pairs well with a site: operator in the query.
+    """
+
+    day = 'day'
+    week = 'week'
+    month = 'month'
+    year = 'year'
 
 
 class HarvestSyncRequest(BaseModel):
@@ -103,6 +204,10 @@ class HarvestSyncRequest(BaseModel):
     serpOnly: bool | None = Field(
         False,
         description='true = pure SERP call (search_serp); false = full PAA harvest.',
+    )
+    recency: Recency | None = Field(
+        None,
+        description='Optional Google time filter (past day/week/month/year). Omit for all-time. Pairs well with a site: operator in the query.',
     )
     debug: bool | None = False
 
@@ -783,6 +888,33 @@ class CallMemoryToolResponse(BaseModel):
     )
     ok: bool | None = None
     error: str | None = Field(None, description='Present when ok is false.')
+
+
+class Error(BaseModel):
+    error: str
+    error_code: str | None = None
+    error_type: str | None = None
+    message: str | None = None
+    retryable: bool | None = None
+    retry_after_seconds: int | None = Field(None, ge=1, le=86400)
+    charge_status: PublicChargeStatus | None = None
+    details: PublicErrorDetails | None = None
+
+
+class ConcurrencyLimitError(PublicErrorEnvelope):
+    error: str | None = None
+    error_code: ErrorCode2
+    error_type: ErrorType1
+    active: int = Field(..., ge=0)
+    limit: int = Field(..., ge=1)
+    operation: str
+    upgrade: ConcurrencyPack
+    upgrade_url: AnyUrl | None = None
+    upgrade_command: str | None = Field(
+        None, description='CLI command to buy or update two-browser concurrency packs.'
+    )
+    message: str
+    retryable: bool
 
 
 class ExtractUrlResponse(BaseModel):

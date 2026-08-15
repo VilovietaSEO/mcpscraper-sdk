@@ -15,10 +15,9 @@ export interface paths {
         put?: never;
         /**
          * Run a Google SERP search, or a full People-Also-Ask harvest
-         * @description Set `serpOnly: true` for a pure organic-results/SERP call (14 credits; runs headful so
-         *     Google serves a complete page).
+         * @description Set `serpOnly: true` for a pure organic-results/SERP call (60 Credits).
          *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
-         *     (55 credit base + 3 credits per question actually returned; unused estimate is
+         *     (400 Credit base + 10 Credits per question actually returned; unused estimate is
          *     refunded). Runs synchronously and returns the result inline.
          */
         post: operations["harvestSync"];
@@ -616,8 +615,7 @@ export interface paths {
         put?: never;
         /**
          * Structured SERP capture with AI Overview/AI Mode detection, entity IDs, and location-match evidence
-         * @description Holds 14 credits for the SERP and settles to 4 credits when the capture is served
-         *     headless, or retains 14 credits when it runs headful.
+         * @description Costs 60 Credits for the base SERP capture.
          *     When `includePageSnapshots` is true, also holds 1 credit per requested
          *     `pageSnapshotLimit` slot and settles to 1 credit per URL actually attempted.
          *     Rate-limited to 60 requests/minute per account.
@@ -837,15 +835,33 @@ export interface components {
         Error: {
             error: string;
             error_code?: string;
+            error_type?: string;
             message?: string;
+            retryable?: boolean;
+            retry_after_seconds?: number;
+            charge_status?: components["schemas"]["PublicChargeStatus"];
+            details?: components["schemas"]["PublicErrorDetails"];
         };
-        /** @description Shared structured error shape used by SERP Intelligence endpoints. */
-        StructuredError: {
-            error_code: string;
-            error_type: string;
+        /** @enum {string} */
+        PublicChargeStatus: "not_charged" | "refunded" | "charged";
+        /** @description Bounded, vendor-neutral recovery and account details safe for public clients. */
+        PublicErrorDetails: {
+            [key: string]: string | number | boolean | (string | null);
+        };
+        /** @description Stable public failure envelope shared across REST and MCP operations. */
+        PublicErrorEnvelope: {
+            /** @enum {string} */
+            error_code: "request_aborted" | "captcha_exhausted" | "captcha_or_blocked" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "harvest_timeout" | "mcp_request_timeout" | "extraction_failed" | "concurrency_limit_exceeded" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limited" | "insufficient_balance" | "service_unavailable";
+            /** @enum {string} */
+            error_type: "request_aborted" | "captcha" | "location_mismatch" | "connection" | "timeout" | "extraction" | "concurrency_limit" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limit" | "billing" | "service_unavailable";
             message: string;
             retryable: boolean;
+            retry_after_seconds?: number;
+            charge_status?: components["schemas"]["PublicChargeStatus"];
+            details?: components["schemas"]["PublicErrorDetails"];
         };
+        /** @description Shared structured error shape used by SERP Intelligence endpoints. */
+        StructuredError: components["schemas"]["PublicErrorEnvelope"];
         InsufficientBalanceError: {
             /** @enum {string} */
             error: "insufficient_balance";
@@ -857,21 +873,52 @@ export interface components {
             /** Format: uri */
             topup_url: string;
         };
-        ConcurrencyLimitError: {
+        ConcurrencyLimitError: components["schemas"]["PublicErrorEnvelope"] & {
             error?: string;
-            message: string;
             /** @enum {string} */
             error_code: "concurrency_limit_exceeded";
             /** @enum {string} */
-            error_type?: "concurrency_limit";
-            retryable?: boolean;
+            error_type: "concurrency_limit";
             active: number;
             limit: number;
             operation: string;
+            upgrade: components["schemas"]["ConcurrencyPack"];
             /** Format: uri */
             upgrade_url?: string;
-            /** @description CLI command to buy an extra concurrency slot. */
+            /** @description CLI command to buy or update two-browser concurrency packs. */
             upgrade_command?: string;
+        };
+        /** @description One $5 monthly pack adds exactly two concurrent browser slots. Quantity n adds 2n slots for $5n per month. */
+        ConcurrencyPack: {
+            product: string;
+            rate_policy_version: string;
+            price_label: string;
+            /** @enum {number} */
+            unit_amount_usd: 5;
+            /** @enum {string} */
+            currency: "usd";
+            /** @enum {string} */
+            interval: "month";
+            /** @enum {string} */
+            billing_unit: "pack";
+            pack_quantity: number;
+            /** @enum {integer} */
+            slots_per_pack: 2;
+            extra_slots: number;
+            /** Format: uri */
+            billing_url: string;
+            terminal_command: string;
+            terminal_command_with_api_key_env: string;
+        };
+        /** @description Quantity-based add-on entitlement projected by account and billing endpoints. */
+        ConcurrencyAccountView: {
+            pack_quantity: number;
+            /** @enum {integer} */
+            slots_per_pack: 2;
+            extra_concurrency_slots: number;
+            effective_limit: number;
+            monthly_amount_usd: number;
+            has_subscription?: boolean;
         };
         HarvestSyncRequest: {
             /** @description Search query. */

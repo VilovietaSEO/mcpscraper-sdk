@@ -59,10 +59,9 @@ paths:
       operationId: harvestSync
       summary: Run a Google SERP search, or a full People-Also-Ask harvest
       description: |
-        Set `serpOnly: true` for a pure organic-results/SERP call (14 credits; runs headful so
-        Google serves a complete page).
+        Set `serpOnly: true` for a pure organic-results/SERP call (60 Credits).
         Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
-        (55 credit base + 3 credits per question actually returned; unused estimate is
+        (400 Credit base + 10 Credits per question actually returned; unused estimate is
         refunded). Runs synchronously and returns the result inline.
       requestBody:
         required: true
@@ -912,8 +911,7 @@ paths:
       operationId: serpIntelligenceCapture
       summary: Structured SERP capture with AI Overview/AI Mode detection, entity IDs, and location-match evidence
       description: |
-        Holds 14 credits for the SERP and settles to 4 credits when the capture is served
-        headless, or retains 14 credits when it runs headful.
+        Costs 60 Credits for the base SERP capture.
         When `includePageSnapshots` is true, also holds 1 credit per requested
         `pageSnapshotLimit` slot and settles to 1 credit per URL actually attempted.
         Rate-limited to 60 requests/minute per account.
@@ -1243,18 +1241,49 @@ components:
       properties:
         error: { type: string }
         error_code: { type: string }
-        message: { type: string }
-      required: [error]
-
-    StructuredError:
-      type: object
-      description: Shared structured error shape used by SERP Intelligence endpoints.
-      properties:
-        error_code: { type: string }
         error_type: { type: string }
         message: { type: string }
         retryable: { type: boolean }
+        retry_after_seconds: { type: integer, minimum: 1, maximum: 86400 }
+        charge_status: { $ref: '#/components/schemas/PublicChargeStatus' }
+        details: { $ref: '#/components/schemas/PublicErrorDetails' }
+      required: [error]
+
+    PublicChargeStatus:
+      type: string
+      enum: [not_charged, refunded, charged]
+
+    PublicErrorDetails:
+      type: object
+      description: Bounded, vendor-neutral recovery and account details safe for public clients.
+      additionalProperties:
+        oneOf:
+          - { type: string }
+          - { type: number }
+          - { type: boolean }
+          - { type: string, nullable: true }
+
+    PublicErrorEnvelope:
+      type: object
+      description: Stable public failure envelope shared across REST and MCP operations.
+      properties:
+        error_code:
+          type: string
+          enum: [request_aborted, captcha_exhausted, captcha_or_blocked, location_mismatch, proxy_tunnel_failed, proxy_unavailable, harvest_timeout, mcp_request_timeout, extraction_failed, concurrency_limit_exceeded, unauthorized, forbidden, invalid_request, rate_limited, insufficient_balance, service_unavailable]
+        error_type:
+          type: string
+          enum: [request_aborted, captcha, location_mismatch, connection, timeout, extraction, concurrency_limit, unauthorized, forbidden, invalid_request, rate_limit, billing, service_unavailable]
+        message: { type: string }
+        retryable: { type: boolean }
+        retry_after_seconds: { type: integer, minimum: 1, maximum: 86400 }
+        charge_status: { $ref: '#/components/schemas/PublicChargeStatus' }
+        details: { $ref: '#/components/schemas/PublicErrorDetails' }
       required: [error_code, error_type, message, retryable]
+
+    StructuredError:
+      description: Shared structured error shape used by SERP Intelligence endpoints.
+      allOf:
+        - { $ref: '#/components/schemas/PublicErrorEnvelope' }
 
     InsufficientBalanceError:
       type: object
@@ -1268,19 +1297,51 @@ components:
       required: [error, error_code, message, balance_credits, required_credits, topup_url]
 
     ConcurrencyLimitError:
+      allOf:
+        - { $ref: '#/components/schemas/PublicErrorEnvelope' }
+        - type: object
+          properties:
+            error: { type: string }
+            error_code: { type: string, enum: [concurrency_limit_exceeded] }
+            error_type: { type: string, enum: [concurrency_limit] }
+            active: { type: integer, minimum: 0 }
+            limit: { type: integer, minimum: 1 }
+            operation: { type: string }
+            upgrade: { $ref: '#/components/schemas/ConcurrencyPack' }
+            upgrade_url: { type: string, format: uri }
+            upgrade_command: { type: string, description: 'CLI command to buy or update two-browser concurrency packs.' }
+          required: [error_code, error_type, message, retryable, active, limit, operation, upgrade]
+
+    ConcurrencyPack:
       type: object
+      description: One $5 monthly pack adds exactly two concurrent browser slots. Quantity n adds 2n slots for $5n per month.
       properties:
-        error: { type: string }
-        message: { type: string }
-        error_code: { type: string, enum: [concurrency_limit_exceeded] }
-        error_type: { type: string, enum: [concurrency_limit] }
-        retryable: { type: boolean }
-        active: { type: integer }
-        limit: { type: integer }
-        operation: { type: string }
-        upgrade_url: { type: string, format: uri }
-        upgrade_command: { type: string, description: 'CLI command to buy an extra concurrency slot.' }
-      required: [error_code, message, active, limit, operation]
+        product: { type: string }
+        rate_policy_version: { type: string }
+        price_label: { type: string }
+        unit_amount_usd: { type: number, enum: [5] }
+        currency: { type: string, enum: [usd] }
+        interval: { type: string, enum: [month] }
+        billing_unit: { type: string, enum: [pack] }
+        pack_quantity: { type: integer, minimum: 0 }
+        slots_per_pack: { type: integer, enum: [2] }
+        extra_slots: { type: integer, minimum: 0 }
+        billing_url: { type: string, format: uri }
+        terminal_command: { type: string }
+        terminal_command_with_api_key_env: { type: string }
+      required: [product, rate_policy_version, price_label, unit_amount_usd, currency, interval, billing_unit, pack_quantity, slots_per_pack, extra_slots, billing_url, terminal_command, terminal_command_with_api_key_env]
+
+    ConcurrencyAccountView:
+      type: object
+      description: Quantity-based add-on entitlement projected by account and billing endpoints.
+      properties:
+        pack_quantity: { type: integer, minimum: 0 }
+        slots_per_pack: { type: integer, enum: [2] }
+        extra_concurrency_slots: { type: integer, minimum: 0 }
+        effective_limit: { type: integer, minimum: 1 }
+        monthly_amount_usd: { type: number, minimum: 0 }
+        has_subscription: { type: boolean }
+      required: [pack_quantity, slots_per_pack, extra_concurrency_slots, effective_limit, monthly_amount_usd]
 
     HarvestSyncRequest:
       type: object

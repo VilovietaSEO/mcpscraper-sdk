@@ -50,7 +50,10 @@ export interface Output {
      * Provider app capabilities not enabled for this deployment.
      */
     missingFeatures?: string[];
-    transport?: "nango" | "remote_mcp";
+    /**
+     * Public credential transport category. Internal routing identifiers are not exposed.
+     */
+    transport?: "managed_oauth" | "remote_mcp";
     providerConfigKey?: string;
     protocolVersion?: string | null;
     schemaSource?: "live_tools_list";

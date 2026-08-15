@@ -39,6 +39,8 @@ mcpscraper tools call list_scheduled_runs --args '{"view":"inbox","limit":30}' -
 
 `tools list` contains exactly 249 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
+Google SERP searches cost 60 Credits. PAA harvests cost 400 Credits plus 10 Credits per returned question. For additional throughput, one optional $5/month concurrency pack adds two browser slots; pack quantity scales both slots and monthly price linearly.
+
 Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release. Scheduled occurrences cost 75 Credits; agent-mode runs also add 1.5 times OpenRouter's actual reported cost. Inspect the live policy with `mcpscraper tools call get-schedule-status --args '{}'`.
 
 When a tool returns inline MCP media, the CLI writes each block to a private local file and prints its path instead of dumping base64. Use `--media-dir <path>` to choose the destination; the default is `~/Downloads/mcp-scraper`.

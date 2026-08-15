@@ -5824,7 +5824,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "credits_info",
     "category": "billing",
     "title": "MCP Scraper Credits & Costs",
-    "description": "Answer questions about MCP Scraper credits, connected-account pricing, usage limits, and concurrency upgrades — balance, tool costs, the $3 active-connected-account fee, connected function/Proxy/compute rates, concurrency limits, and billing URL. Does not expose payment methods or card information.",
+    "description": "Answer questions about MCP Scraper credits, connected-account pricing, usage limits, and concurrency upgrades — balance, tool costs, the $3 active-connected-account fee, connected function/proxy/compute rates, current pack quantity, extra browser slots, monthly add-on amount, and the $5 two-browser concurrency-pack upgrade. Does not expose payment methods or card information.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6880,7 +6880,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "capture_serp_snapshot",
     "category": "serpIntelligence",
     "title": "SERP Intelligence Snapshot",
-    "description": "Capture a structured SERP Intelligence snapshot of a Google query — the persistent evidence format used by rank-tracking and comparison pipelines. Use gl for country and location only when city or regional context matters. Holds 14 Credits and settles to the render mode actually used: 4 Credits when the capture completed headless, 14 when it ran headful. Optional page snapshots add 1 Credit per attempted URL.",
+    "description": "Capture a structured SERP Intelligence snapshot of a Google query — the persistent evidence format used by rank-tracking and comparison pipelines. Use gl for country and location only when city or regional context matters. Costs 60 Credits per snapshot regardless of render mode. Optional page snapshots add 1 Credit per attempted URL. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {

@@ -190,6 +190,38 @@ def test_server_failures_do_not_expose_upstream_service_or_account_state():
 
 
 @responses.activate
+def test_recognized_verification_failure_keeps_actionable_public_details_only():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/harvest/sync",
+        json={
+            "error_code": "captcha_or_blocked",
+            "error_type": "captcha",
+            "message": "The target site returned a verification challenge. Heavy traffic can temporarily increase these challenges; retry in a few minutes.",
+            "retryable": True,
+            "retry_after_seconds": 180,
+            "charge_status": "refunded",
+            "details": {"operation": "harvest", "provider": "private upstream"},
+            "provider": "private upstream",
+        },
+        status=503,
+    )
+    client = ScraperClient(api_key="sk_test")
+
+    with pytest.raises(ScraperApiError) as exc_info:
+        client.harvest_paa(query="x")
+
+    err = exc_info.value
+    assert err.is_verification_challenge()
+    assert not err.is_timeout()
+    assert err.code == "captcha_or_blocked"
+    assert err.body["retry_after_seconds"] == 180
+    assert err.body["charge_status"] == "refunded"
+    assert err.body["details"] == {"operation": "harvest"}
+    assert "provider" not in err.body
+
+
+@responses.activate
 def test_insufficient_balance_is_distinguishable():
     responses.add(
         responses.POST,

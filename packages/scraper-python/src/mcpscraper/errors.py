@@ -12,9 +12,87 @@ def _read_string(body: Any, key: str) -> str | None:
 
 
 _PUBLIC_SERVICE_UNAVAILABLE_MESSAGE = "This operation is temporarily unavailable. Please retry later."
+_PUBLIC_ERROR_CODES = {
+    "request_aborted",
+    "captcha_exhausted",
+    "captcha_or_blocked",
+    "location_mismatch",
+    "proxy_tunnel_failed",
+    "proxy_unavailable",
+    "harvest_timeout",
+    "mcp_request_timeout",
+    "extraction_failed",
+    "concurrency_limit_exceeded",
+    "unauthorized",
+    "forbidden",
+    "invalid_request",
+    "rate_limited",
+    "insufficient_balance",
+    "service_unavailable",
+}
+_PUBLIC_ERROR_FIELDS = {
+    "error",
+    "error_code",
+    "error_type",
+    "message",
+    "retryable",
+    "retry_after_seconds",
+    "charge_status",
+    "details",
+    "active",
+    "limit",
+    "operation",
+    "upgrade",
+    "upgrade_url",
+    "upgrade_command",
+    "balance_credits",
+    "required_credits",
+    "topup_url",
+}
+_PUBLIC_DETAIL_FIELDS = {
+    "active",
+    "limit",
+    "operation",
+    "upgrade_url",
+    "topup_url",
+    "upgrade_command",
+    "slots_per_pack",
+    "pack_price_usd",
+    "balance_credits",
+    "required_credits",
+}
+
+
+def _recognized_public_details(value: Any) -> dict[str, Any] | None:
+    if not isinstance(value, dict):
+        return None
+    details = {
+        key: child
+        for key, child in value.items()
+        if key in _PUBLIC_DETAIL_FIELDS and (child is None or isinstance(child, (str, int, float, bool)))
+    }
+    return details or None
+
+
+def _recognized_public_error_body(body: Any) -> dict[str, Any] | None:
+    if not isinstance(body, dict):
+        return None
+    code = _read_string(body, "error_code")
+    if code not in _PUBLIC_ERROR_CODES:
+        return None
+    safe = {key: value for key, value in body.items() if key in _PUBLIC_ERROR_FIELDS}
+    details = _recognized_public_details(body.get("details"))
+    if details is not None:
+        safe["details"] = details
+    else:
+        safe.pop("details", None)
+    return safe
 
 
 def _public_error_body(status: int, body: Any) -> Any:
+    recognized = _recognized_public_error_body(body)
+    if recognized is not None:
+        return recognized
     if status < 500:
         return body
     return {
@@ -44,3 +122,9 @@ class ScraperApiError(Exception):
 
     def is_structured_error(self) -> bool:
         return _read_string(self.body, "error_type") is not None
+
+    def is_verification_challenge(self) -> bool:
+        return self.code in {"captcha_exhausted", "captcha_or_blocked"}
+
+    def is_timeout(self) -> bool:
+        return self.code in {"harvest_timeout", "mcp_request_timeout"}

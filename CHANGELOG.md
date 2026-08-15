@@ -2,7 +2,19 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## [Unreleased]
+## 2026-08-14 — verified against mcp-scraper 0.55.0 / mcp-memory 1.17.2
+
+### Added
+
+- Added typed Node and Python public-error envelopes, verification-challenge and timeout helpers, and quantity-based concurrency pack and account models with actionable recovery details.
+- Added a deterministic public-product convergence check covering TypeScript, Python, CLI, and cURL projections so tool inventory, search rates, concurrency packs, and vendor-neutral schemas cannot silently drift.
+
+### Changed
+
+- Refreshed the generated 249-tool MCP projection across the canonical manifest and generated clients while preserving the 148 MCP Scraper plus 101 mirrored Memory split.
+- Updated public SDK and CLI documentation to the current 60-Credit SERP rate, 400 Credits plus 10 Credits per returned PAA question, and $5/month two-browser concurrency packs whose quantity scales slots and price linearly.
+- Replaced an infrastructure-specific connected-service transport value with the stable `managed_oauth` public category across generated contracts and bindings.
+- Prepared `mcpscraper-memory-sdk` 0.28.0, `mcpscraper-sdk` 0.27.0, `mcpscraper-cli` 0.26.0, and Python `mcpscraper-sdk` 0.26.0; Python `mcpscraper-memory-sdk` remains 0.25.3 because its packaged direct-Memory contract did not change.
 
 ## 2026-08-14 — verified against mcp-scraper 0.54.2 / mcp-memory 1.17.2
 

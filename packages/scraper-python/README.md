@@ -38,7 +38,10 @@ except ScraperApiError as err:
 Every non-2xx response raises a `ScraperApiError` with `.status`, `.code`, and the raw response `.body`. Two cases have narrowing helpers:
 
 - `err.is_insufficient_balance()` — `err.body` has `balance_credits`, `required_credits`, `topup_url`.
-- `err.is_concurrency_limit_exceeded()` — `err.body` has `active`, `limit`, `retryable`.
+- `err.is_concurrency_limit_exceeded()` — `err.body` has `active`, `limit`, `retryable`, and pack upgrade details.
+- `err.is_verification_challenge()` / `err.is_timeout()` — preserve actionable, vendor-neutral retry and charge details returned by the service.
+
+Current Google search pricing is 60 Credits per SERP search and 400 Credits plus 10 Credits per returned question for PAA. One optional concurrency pack adds two browser slots for $5/month; quantity `n` adds `2n` slots for `$5n` without changing the base plan.
 
 ## API surface
 
