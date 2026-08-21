@@ -44,6 +44,12 @@ export const MCP_TOOL_CATALOG = [
             "mobile"
           ]
         },
+        "idempotencyKey": {
+          "description": "Retry key: reuse after a timeout to avoid re-billing. New key per harvest.",
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200
+        },
         "serpIdentity": {
           "description": "Optional persistent SERP identity created with serp_identity_create. Reuses the same saved browser state and fixed network address across calls.",
           "type": "string",
@@ -131,6 +137,12 @@ export const MCP_TOOL_CATALOG = [
             "mobile"
           ]
         },
+        "idempotencyKey": {
+          "description": "Retry key: reuse after a timeout to avoid re-billing. New key per search.",
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200
+        },
         "serpIdentity": {
           "description": "Optional persistent SERP identity created with serp_identity_create. Reuses the same saved browser state and fixed network address across calls.",
           "type": "string",
@@ -201,7 +213,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "extract_url",
     "category": "web",
     "title": "Single URL Extract",
-    "description": "Extract structured data from one public URL: content, schema, headings, metadata, screenshots, branding, featured image, or media assets. Wayback replay URLs automatically return the archived page copy without playback chrome. Use delivery:auto for bounded inline results with automatic artifact offload, delivery:artifact for a durable owner-scoped report, or delivery:memory to save the full page into hosted MCP Memory. preserveMedia is the preferred media-retention flag; depositToVault and downloadMedia remain temporary compatibility aliases.",
+    "description": "Extract structured data from one public URL: content, schema, headings, metadata, screenshots, branding, featured image, or media assets. Tries a plain HTTP fetch first and only opens a stealth browser when that fetch is blocked, hits a bot check, or returns unusably thin content — most calls never need the browser, and a bot_check_unresolved error means the browser already tried and failed, not that a retry will help. Wayback replay URLs automatically return the archived page copy without playback chrome. Use delivery:auto for bounded inline results with automatic artifact offload, delivery:artifact for a durable owner-scoped report, or delivery:memory to save the full page into hosted MCP Memory. preserveMedia is the preferred media-retention flag; depositToVault and downloadMedia remain temporary compatibility aliases.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -212,12 +224,12 @@ export const MCP_TOOL_CATALOG = [
         },
         "screenshot": {
           "default": false,
-          "description": "Capture a full-page screenshot and return it through the result contract. Large captures may be offloaded to an owned artifact.",
+          "description": "Capture a full-page screenshot. Large captures may be offloaded to an owned artifact.",
           "type": "boolean"
         },
         "screenshotDevice": {
           "default": "desktop",
-          "description": "Viewport for screenshot. desktop = 1440×900, mobile = 390×844.",
+          "description": "Viewport: desktop = 1440×900, mobile = 390×844.",
           "type": "string",
           "enum": [
             "desktop",
@@ -226,16 +238,16 @@ export const MCP_TOOL_CATALOG = [
         },
         "extractBranding": {
           "default": false,
-          "description": "Extract brand colors, fonts, logo, and favicon via a rendered browser session.",
+          "description": "Extract brand colors, fonts, logo, and favicon via a rendered session.",
           "type": "boolean"
         },
         "includeFeaturedImage": {
           "default": false,
-          "description": "Return the best featured image from Open Graph, Twitter, JSON-LD, or page content. For Wayback replay URLs, also returns the timestamp-matched archived image URL when available.",
+          "description": "Return the best featured image from Open Graph, Twitter, JSON-LD, or page content. Wayback URLs get the timestamp-matched archived image.",
           "type": "boolean"
         },
         "downloadMedia": {
-          "description": "Deprecated alias for preserveMedia. Omit when using preserveMedia; when omitted, media preservation defaults to false.",
+          "description": "Deprecated alias for preserveMedia; omit when using preserveMedia.",
           "type": "boolean"
         },
         "mediaTypes": {
@@ -244,7 +256,7 @@ export const MCP_TOOL_CATALOG = [
             "video",
             "audio"
           ],
-          "description": "Which media types to download. Default all three.",
+          "description": "Media types to download. Default all three.",
           "type": "array",
           "items": {
             "type": "string",
@@ -257,21 +269,21 @@ export const MCP_TOOL_CATALOG = [
         },
         "maxMediaAssets": {
           "default": 100,
-          "description": "Maximum media records to retain and attempt to download after filtering and responsive-variant collapse.",
+          "description": "Maximum media records to retain after filtering and variant collapse.",
           "type": "integer",
           "minimum": 1,
           "maximum": 250
         },
         "maxInlineImages": {
           "default": 3,
-          "description": "Maximum downloaded images to attach as AI-readable image content blocks. All successfully downloaded media remains available in the ZIP.",
+          "description": "Maximum images attached as AI-readable content blocks. All downloaded media stays available in the ZIP.",
           "type": "integer",
           "minimum": 0,
           "maximum": 5
         },
         "delivery": {
           "default": "auto",
-          "description": "Where to deliver the result. auto keeps small results inline and offloads large ones; artifact always returns an owned artifact; memory stores the full page in hosted Memory; inline returns a bounded response.",
+          "description": "auto offloads large results; artifact always returns an artifact; memory stores in hosted Memory; inline is bounded.",
           "type": "string",
           "enum": [
             "auto",
@@ -282,19 +294,25 @@ export const MCP_TOOL_CATALOG = [
         },
         "preserveMedia": {
           "default": false,
-          "description": "Collect media from static source plus a rendered, lazy-loaded page; collapse responsive variants; return provenance and completeness; attach bounded image previews; and create an owner-scoped ZIP readable with archive_read.",
+          "description": "Collect media from static plus rendered page content, collapse responsive variants, attach bounded previews, and create an owner-scoped ZIP readable with archive_read.",
           "type": "boolean"
         },
         "depositToVault": {
           "default": false,
-          "description": "Save the full page content into the user's MCP Memory vault server-side, embedded for semantic recall — the full body is NOT returned to chat.",
+          "description": "Save the full page content into the user's MCP Memory vault, embedded for semantic recall — the full body is NOT returned to chat.",
           "type": "boolean"
         },
         "vaultName": {
-          "description": "Optional vault to deposit into. Defaults to the user's personal vault.",
+          "description": "Optional vault to deposit into; defaults to the personal vault.",
           "type": "string",
           "minLength": 1,
           "maxLength": 120
+        },
+        "idempotencyKey": {
+          "description": "Retry key: reuse after a timeout to avoid re-billing. New key per extraction.",
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200
         }
       },
       "required": [
@@ -481,7 +499,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "extract_site",
     "category": "web",
     "title": "Multi-Page Site Content Crawl",
-    "description": "Crawl a public website and return page CONTENT (Markdown) across multiple pages. A Wayback replay URL produces one archived site snapshot. The optional wayback plan produces whole-site, single-page, or selected-page timelines across explicit months or a month range, all in one export with a capture matrix. Pass a new idempotencyKey for each intended crawl and reuse it only when retrying that call. Every MCP crawl starts a durable export; poll check_site_export for honest outcome counters and the saved ZIP. Content only — for a technical SEO audit use audit_site instead.",
+    "description": "Crawl a public website and return page CONTENT (Markdown) across multiple pages. Each page is fetched with a plain HTTP request first; a browser retries only the pages that were blocked or hit a bot check, so a per-page bot_check_unresolved result means that specific page already failed the browser retry too. A Wayback replay URL produces one archived site snapshot. The optional wayback plan produces whole-site, single-page, or selected-page timelines across explicit months or a month range, all in one export with a capture matrix. Pass a new idempotencyKey for each intended crawl and reuse it only when retrying that call. Every MCP crawl starts a durable export; poll check_site_export for honest outcome counters and the saved ZIP. Content only — for a technical SEO audit use audit_site instead.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1746,10 +1764,19 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_search_entities",
     "category": "commons",
     "title": "Transparent Commons Entity Search",
-    "description": "Search the Transparent Commons public wiki graph using the same fields the public /wiki/ frontend uses: title, description, tags, keywords, JSON-LD, article body, citations, media, source metadata, related entities, trails, and saved account filters. This reads published Commons entities only.",
+    "description": "Search the Transparent Commons public wiki graph. Hybrid by default: meaning-based candidates fused with exact matching over title, description, tags, keywords, JSON-LD, body, citations, media, source metadata, related entities, trails, and saved filters, ranked title-first. Set mode:lexical for a quoted exact name or phrase. Reads published Commons entities only; never a personal Memory vault.",
     "inputSchema": {
       "type": "object",
       "properties": {
+        "mode": {
+          "description": "Retrieval mode. hybrid (default) fuses meaning-based candidates with exact term matching; lexical matches terms only, which is what you want when the caller quoted an exact name or phrase; semantic ignores term matching entirely.",
+          "type": "string",
+          "enum": [
+            "lexical",
+            "semantic",
+            "hybrid"
+          ]
+        },
         "query": {
           "description": "Search text matched against title, description, tags, keywords, JSON-LD, source metadata, citations, media, and article body.",
           "type": "string",
@@ -3018,7 +3045,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_submit_entity",
     "category": "commons",
     "title": "Transparent Commons Governed Entity Write",
-    "description": "Create or propose an edit to a Transparent Commons public wiki entity through the governed MCP Scraper write plane. A new entity costs 10 Credits; an edit to an existing entity costs 2 Credits. Preparation and validation are free, and idempotent retries are not charged twice. This never edits rendered HTML directly. Normal workflow is commons_prepare_entity, compose, commons_validate_entity, then submit. Choose a precise entityType and write a neutral encyclopedia projection with the matching entity structure, not a blog article or raw scrape dump. Use H2 sections and H3/H4/H5 subitems; every heading appears in the public page menu. Omit unsupported sections instead of publishing empty/filler headings. It writes a proposal, records a contribution ledger entry when accepted, and auto-publishes only safe non-conflicting changes with a featured image and source/body evidence. Existing entity edits require baseRevision to auto-publish. Requires idempotencyKey.",
+    "description": "Create or propose an edit to a Transparent Commons public wiki entity through the governed MCP Scraper write plane. A new entity costs 10 Credits; an edit to an existing entity costs 2 Credits. Preparation and validation are free, and idempotent retries are not charged twice. This never edits rendered HTML directly. Normal workflow is commons_prepare_entity, compose, commons_validate_entity, then submit. commons_prepare_entity returns the entity profile contract and section guidance to compose against. Transparent Commons is an open wiki: any account may edit any entity, and every edit publishes and is recorded on the public contribution ledger. Publishing requires a featured image and body/source evidence. Pass baseRevision when editing so the ledger can show whether the edit was written on top of a newer revision. Requires idempotencyKey.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -3900,6 +3927,15 @@ export const MCP_TOOL_CATALOG = [
         "filter": {
           "type": "object",
           "properties": {
+            "mode": {
+              "description": "Retrieval mode. hybrid (default) fuses meaning-based candidates with exact term matching; lexical matches terms only, which is what you want when the caller quoted an exact name or phrase; semantic ignores term matching entirely.",
+              "type": "string",
+              "enum": [
+                "lexical",
+                "semantic",
+                "hybrid"
+              ]
+            },
             "query": {
               "description": "Search text matched against title, description, tags, keywords, JSON-LD, source metadata, citations, media, and article body.",
               "type": "string",
@@ -4918,7 +4954,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "local_sourcebook_submission_status",
     "category": "directory",
     "title": "Local Sourcebook Submission Status",
-    "description": "Read the authenticated caller’s listing draft, enrichment coverage, immutable revision number, publication state, and exact live LocalSourcebook.com profile and reviews URLs.",
+    "description": "Read the caller’s listing draft, enrichment coverage, revision number, publication state, and live LocalSourcebook.com profile and reviews URLs. When status is failed, acquisitionError says why — read it before retrying, since a refresh repeats the same acquisition. Coverage counters are written only on success, so zeroed counters on a failed listing do not mean the crawl never ran.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -4945,7 +4981,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "local_sourcebook_refresh",
     "category": "directory",
     "title": "Refresh a Local Sourcebook Listing",
-    "description": "Queue a new broad crawl and review/media acquisition pass for a listing owned by the authenticated MCP Scraper account. A refresh costs 2 Credits total, including acquisition; idempotent retries are not charged twice. The last published revision remains public until the refreshed evidence revision completes and auto-publishes.",
+    "description": "Queue a new broad crawl and review/media acquisition pass for a listing owned by the authenticated MCP Scraper account. A refresh costs 2 Credits total, including acquisition; idempotent retries are not charged twice, and a replayed retry still re-runs the acquisition, so a failed listing is always recoverable. Read local_sourcebook_submission_status first: a refresh repeats the same acquisition, so fix whatever acquisitionError reports before spending another pass. The last published revision remains public until the refreshed evidence revision completes and auto-publishes.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -16684,10 +16720,14 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_get_publication",
     "category": "commons",
     "title": "Get Transparent Commons Publication",
-    "description": "Read a Transparent Commons publication and its latest edition revisions. Omit subdomain to inspect the caller-owned publication; pass a name to inspect a public publication. Returns the permanent public and archive URLs needed for sharing or later edits.",
+    "description": "Read a Transparent Commons publication and its latest edition revisions. Omit subdomain to inspect the caller-owned publication; pass a name to inspect a public publication. Returns the permanent public and archive URLs needed for sharing or later edits. Set includeArticles to also return every stored article’s Markdown source and slug, which is what commons_update_editorial_article edits — the payload is large, so request it only when you intend to edit.",
     "inputSchema": {
       "type": "object",
       "properties": {
+        "includeArticles": {
+          "description": "Return every stored article’s Markdown source alongside each edition. Large payload; request it only when you intend to edit an article. Owner-only: a publication read by name never returns sources.",
+          "type": "boolean"
+        },
         "subdomain": {
           "description": "Public publication name to inspect. Omit to return the publication owned by the authenticated account.",
           "type": "string",
@@ -17600,6 +17640,169 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "commons_get_proposal",
+    "category": "commons",
+    "title": "Transparent Commons Proposal Status",
+    "description": "Read one commons_submit_entity proposal owned by the calling account. Use it when submit returned a proposal that was held for review instead of published, to see the review reason and whether it has since been applied.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "proposalId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Proposal id returned by commons_submit_entity, in the form commons-proposal-<uuid>."
+        }
+      },
+      "required": [
+        "proposalId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Transparent Commons Proposal Status",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "commons_host_image",
+    "category": "commons",
+    "title": "Host a Transparent Commons Image",
+    "description": "Host an image from a public https URL or base64 bytes, returning a permanent Commons URL. Commons never serves a third-party image URL — commons_submit_entity hosts external images automatically, so use this only to host one before or independently of a write. JPEG, PNG, GIF, WebP up to 10 MB; SVG rejected. Identical bytes are stored once.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sourceUrl": {
+          "description": "Public https image URL to download and host. The wiki never serves a third-party URL directly, so pass the original source here rather than putting it on the entity.",
+          "type": "string",
+          "format": "uri"
+        },
+        "imageBase64": {
+          "description": "Base64 image bytes for an image you already hold. Use for images under about 3 MB; larger files should be published from a URL.",
+          "type": "string",
+          "minLength": 16
+        },
+        "alt": {
+          "description": "Alt text describing the image for readers who cannot see it.",
+          "type": "string",
+          "maxLength": 500
+        },
+        "license": {
+          "description": "License or usage terms of the original image, preserved with the hosted copy.",
+          "type": "string",
+          "maxLength": 240
+        },
+        "attribution": {
+          "description": "Credit line for the original photographer, publication, or archive.",
+          "type": "string",
+          "maxLength": 500
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Host a Transparent Commons Image",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "commons_update_editorial_article",
+    "category": "commons",
+    "title": "Edit One Transparent Commons Article",
+    "description": "Replace the Markdown of one article in a published edition without resupplying the others: it reads the stored sources, swaps the article you name, and publishes the next revision with the rest byte-identical. Read commons_get_publication with includeArticles first for the current source and revision. commons_publish_editorial is the full-replace path. Requires baseRevision and idempotencyKey.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "publicationSubdomain": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 50,
+          "description": "Publication owned by the authenticated account."
+        },
+        "editionSlug": {
+          "description": "Edition holding the article. Defaults to the publication’s latest edition.",
+          "type": "string",
+          "maxLength": 80,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "articleSlug": {
+          "type": "string",
+          "maxLength": 80,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "description": "Slug of the one article to replace, from commons_get_publication with includeArticles."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Unique key for this intended edit. Reuse it only when retrying the same edit."
+        },
+        "baseRevision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Current edition revision from commons_get_publication. The edit is refused if the edition moved on."
+        },
+        "markdown": {
+          "description": "Replacement Markdown body for this article. Omit to change only the metadata fields below.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400000
+        },
+        "title": {
+          "description": "Replacement article title.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "summary": {
+          "description": "Replacement one or two sentence summary.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "category": {
+          "description": "Replacement section label.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "kicker": {
+          "description": "Replacement framing line above the title.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "order": {
+          "description": "Replacement reading-order position.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        }
+      },
+      "required": [
+        "publicationSubdomain",
+        "articleSlug",
+        "idempotencyKey",
+        "baseRevision"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Edit One Transparent Commons Article",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
       "openWorldHint": true
     }
   }

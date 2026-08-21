@@ -4,7 +4,7 @@ Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 249 unified MCP tools (148 MCP Scraper plus 101 mirrored Memory tools).
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 252 unified MCP tools (151 MCP Scraper plus 101 mirrored Memory tools).
 
 ## Install
 
@@ -37,7 +37,7 @@ mcpscraper tools call archive_read --args '{"url":"https://github.com/octocat/He
 mcpscraper tools call list_scheduled_runs --args '{"view":"inbox","limit":30}' --json
 ```
 
-`tools list` contains exactly 249 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 252 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 Google SERP searches cost 60 Credits. PAA harvests cost 400 Credits plus 10 Credits per returned question. For additional throughput, one optional $5/month concurrency pack adds two browser slots; pack quantity scales both slots and monthly price linearly.
 

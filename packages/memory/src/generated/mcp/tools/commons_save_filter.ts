@@ -12,6 +12,10 @@ export interface Input {
    */
   filter: {
     /**
+     * Retrieval mode. hybrid (default) fuses meaning-based candidates with exact term matching; lexical matches terms only, which is what you want when the caller quoted an exact name or phrase; semantic ignores term matching entirely.
+     */
+    mode?: "lexical" | "semantic" | "hybrid";
+    /**
      * Search text matched against title, description, tags, keywords, JSON-LD, source metadata, citations, media, and article body.
      */
     query?: string;

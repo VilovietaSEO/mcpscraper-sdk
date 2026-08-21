@@ -11,8 +11,8 @@ function requireMatch(value: string, pattern: RegExp, label: string): void {
 
 async function main(): Promise<void> {
   const manifest = JSON.parse(await readFile('contracts/mcp.tools.json', 'utf8')) as ToolContract
-  if (manifest.toolCount !== 249 || manifest.tools.length !== 249) {
-    throw new Error(`MCP inventory must contain 249 tools; received ${manifest.toolCount}/${manifest.tools.length}`)
+  if (manifest.toolCount !== 252 || manifest.tools.length !== 252) {
+    throw new Error(`MCP inventory must contain 252 tools; received ${manifest.toolCount}/${manifest.tools.length}`)
   }
 
   const byName = new Map(manifest.tools.map(tool => [tool.name, tool]))
@@ -40,8 +40,9 @@ async function main(): Promise<void> {
     'docs/curl-tools.md',
   ].map(async path => ({ path, text: await readFile(path, 'utf8') })))
 
+  const toolCountPattern = new RegExp(String(manifest.toolCount))
   for (const { path, text } of docs) {
-    requireMatch(text, /249/, `${path} inventory`)
+    requireMatch(text, toolCountPattern, `${path} inventory`)
   }
   for (const { path, text } of docs.filter(entry => entry.path !== 'docs/curl-tools.md')) {
     requireMatch(text, /60 Credits/, `${path} SERP rate`)
@@ -51,7 +52,7 @@ async function main(): Promise<void> {
     requireMatch(text, /\$5(?:\/month| per month)/, `${path} concurrency pack price`)
   }
 
-  console.log('Public product contract matches 249 tools, current SERP/PAA rates, two-slot packs, and vendor-neutral error schemas.')
+  console.log(`Public product contract matches ${manifest.toolCount} tools, current SERP/PAA rates, two-slot packs, and vendor-neutral error schemas.`)
 }
 
 main().catch(error => {

@@ -10,6 +10,7 @@ class SearchSerpInput(BaseModel):
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location or user language.")
     hl: str | None = Field(None, alias="hl", description="Google interface/content language inferred from user request.")
     device: Literal['desktop', 'mobile'] | None = Field(None, alias="device", description="SERP device context. Use mobile only for mobile rankings.")
+    idempotency_key: str | None = Field(None, alias="idempotencyKey", description="Retry key: reuse after a timeout to avoid re-billing. New key per search.")
     serp_identity: str | None = Field(None, alias="serpIdentity", description="Optional persistent SERP identity created with serp_identity_create. Reuses the same saved browser state and fixed network address across calls.")
     include_all_serp_features: bool | None = Field(None, alias="includeAllSerpFeatures", description="Capture every optional same-page SERP surface: local pack, forums, videos, AI Overview/AI Mode, and What People Are Saying.")
     include_local_pack: bool | None = Field(None, alias="includeLocalPack", description="Include Google local/map-pack businesses and merge their entity IDs.")
