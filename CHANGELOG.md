@@ -2,7 +2,7 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## 2026-08-21 — verified against mcp-scraper 0.61.0 + pending PR #189 (commit 2c0d2d40) / mcp-memory 1.18.1
+## 2026-08-21 — verified against mcp-scraper 0.62.0 / mcp-memory 1.18.1
 
 ### Added
 
@@ -19,7 +19,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ### Note
 
-This sync's `contracts/mcp.tools.json` source reflects mcp-scraper `main` plus the not-yet-merged `codex/extract-transport-description-clarity` branch (PR #189: https://github.com/VilovietaSEO/mcp-scraper/pull/189), generated locally rather than from a numbered release, so that this SDK sync and that description-clarity PR don't need to be done twice. If #189's descriptions change materially before merge, re-sync before publishing.
+This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scraper's `codex/extract-transport-description-clarity` branch before it merged as [PR #189](https://github.com/VilovietaSEO/mcp-scraper/pull/189), so this SDK sync and that description-clarity work didn't need to happen twice. Confirmed zero diff in the tool schema/description source files between that generation point and the commit that actually merged (`b298a7ce`) and shipped as mcp-scraper 0.62.0 — this contract is accurate as published.
 
 ## 2026-08-14 — verified against mcp-scraper 0.55.0 / mcp-memory 1.17.2
 
