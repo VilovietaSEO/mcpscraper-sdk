@@ -1,4 +1,4 @@
-# All 249 MCP tools with cURL
+# All 252 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (249)
+## Complete catalog (252)
 
 ## search
 
@@ -130,6 +130,9 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `commons_prepare_publication` — Prepare Transparent Commons Publication
 - `commons_publish_editorial` — Publish Transparent Commons Editorial Edition
 - `commons_validate_publication` — Validate Transparent Commons Publication
+- `commons_get_proposal` — Transparent Commons Proposal Status
+- `commons_host_image` — Host a Transparent Commons Image
+- `commons_update_editorial_article` — Edit One Transparent Commons Article
 
 ## directory
 

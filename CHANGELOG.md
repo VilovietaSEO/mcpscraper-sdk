@@ -2,6 +2,25 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-21 — verified against mcp-scraper 0.61.0 + pending PR #189 (commit 2c0d2d40) / mcp-memory 1.18.1
+
+### Added
+
+- Added `idempotencyKey` to `extract_url`, `harvest_paa`, and `search_serp` across every generated surface.
+- Added `commons_update_editorial_article`, `commons_get_proposal`, and `commons_host_image` to the unified catalog.
+
+### Changed
+
+- Refreshed the generated 252-tool MCP projection (was 249), updating the split to 151 MCP Scraper plus 101 mirrored Memory tools across the canonical manifest and every generated client, CLI catalog, and cURL catalog.
+- Synced `extract_url` and `extract_site` descriptions with their real plain-fetch-first, browser-fallback-on-failure transport behavior.
+- Synced `commons_submit_entity`'s description with its current governed-write workflow.
+- Fixed a stale hardcoded tool count (`249`, and a separately stale `102` for the direct memory API's tool count in `packages/scraper-python/README.md`) across `README.md`, `packages/cli/README.md`, `packages/scraper/README.md`, `packages/scraper-python/README.md`, `packages/memory/README.md`, and `packages/memory-python/README.md`. The public-product-contract check's own count assertion (`scripts/check-public-product-contract.ts`) now derives its expected value from the manifest instead of hardcoding a second literal, so this class of drift can't silently reappear.
+- Prepared `mcpscraper-memory-sdk` 0.29.0, `mcpscraper-sdk` 0.28.0, `mcpscraper-cli` 0.27.0, Python `mcpscraper-sdk` 0.27.0, and Python `mcpscraper-memory-sdk` 0.26.0.
+
+### Note
+
+This sync's `contracts/mcp.tools.json` source reflects mcp-scraper `main` plus the not-yet-merged `codex/extract-transport-description-clarity` branch (PR #189: https://github.com/VilovietaSEO/mcp-scraper/pull/189), generated locally rather than from a numbered release, so that this SDK sync and that description-clarity PR don't need to be done twice. If #189's descriptions change materially before merge, re-sync before publishing.
+
 ## 2026-08-14 — verified against mcp-scraper 0.55.0 / mcp-memory 1.17.2
 
 ### Added

@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class CommonsSearchEntitiesInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
+    mode: Literal['lexical', 'semantic', 'hybrid'] | None = Field(None, alias="mode", description="Retrieval mode. hybrid (default) fuses meaning-based candidates with exact term matching; lexical matches terms only, which is what you want when the caller quoted an exact name or phrase; semantic ignores term matching entirely.")
     query: str | None = Field(None, alias="query", description="Search text matched against title, description, tags, keywords, JSON-LD, source metadata, citations, media, and article body.")
     entity_type: str | None = Field(None, alias="entityType", description="Optional entity type filter. \"Public Article\", \"PublicArticle\", \"Article\", and \"item\" normalize to PublicArticle.")
     tag: str | None = Field(None, alias="tag", description="Single canonical tag filter. Use tags for multiple tags.")

@@ -49,6 +49,9 @@ import * as CommonsGetPublication from './tools/commons_get_publication.js'
 import * as CommonsPreparePublication from './tools/commons_prepare_publication.js'
 import * as CommonsPublishEditorial from './tools/commons_publish_editorial.js'
 import * as CommonsValidatePublication from './tools/commons_validate_publication.js'
+import * as CommonsGetProposal from './tools/commons_get_proposal.js'
+import * as CommonsHostImage from './tools/commons_host_image.js'
+import * as CommonsUpdateEditorialArticle from './tools/commons_update_editorial_article.js'
 import * as DirectoryRun from './tools/directory_workflow.js'
 import * as DirectoryWorkflowStatus from './tools/directory_workflow_status.js'
 import * as DirectoryGetLocalSourcebookContract from './tools/get-local-sourcebook-contract.js'
@@ -1495,6 +1498,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "serp_identity_list",
     "category": "search",
     "methodName": "serpIdentityList"
+  },
+  {
+    "name": "commons_get_proposal",
+    "category": "commons",
+    "methodName": "getProposal"
+  },
+  {
+    "name": "commons_host_image",
+    "category": "commons",
+    "methodName": "hostImage"
+  },
+  {
+    "name": "commons_update_editorial_article",
+    "category": "commons",
+    "methodName": "updateEditorialArticle"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1736,6 +1754,18 @@ export class CommonsNamespace {
 
   async validatePublication(input: CommonsValidatePublication.Input): Promise<CommonsValidatePublication.Output> {
     return this.callTool('commons_validate_publication', input) as Promise<CommonsValidatePublication.Output>
+  }
+
+  async getProposal(input: CommonsGetProposal.Input): Promise<CommonsGetProposal.Output> {
+    return this.callTool('commons_get_proposal', input) as Promise<CommonsGetProposal.Output>
+  }
+
+  async hostImage(input: CommonsHostImage.Input = {} as CommonsHostImage.Input): Promise<CommonsHostImage.Output> {
+    return this.callTool('commons_host_image', input) as Promise<CommonsHostImage.Output>
+  }
+
+  async updateEditorialArticle(input: CommonsUpdateEditorialArticle.Input): Promise<CommonsUpdateEditorialArticle.Output> {
+    return this.callTool('commons_update_editorial_article', input) as Promise<CommonsUpdateEditorialArticle.Output>
   }
 }
 

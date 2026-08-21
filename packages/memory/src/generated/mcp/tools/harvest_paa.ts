@@ -24,6 +24,10 @@ export interface Input {
    */
   device?: "desktop" | "mobile";
   /**
+   * Retry key: reuse after a timeout to avoid re-billing. New key per harvest.
+   */
+  idempotencyKey?: string;
+  /**
    * Optional persistent SERP identity created with serp_identity_create. Reuses the same saved browser state and fixed network address across calls.
    */
   serpIdentity?: string;
