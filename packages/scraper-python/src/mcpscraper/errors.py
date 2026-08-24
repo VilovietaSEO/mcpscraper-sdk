@@ -43,6 +43,7 @@ _PUBLIC_ERROR_CODES = {
     "page_unreachable",
     "browser_session_interrupted",
     "site_export_not_found",
+    "site_export_format_unavailable",
     "site_export_read_failed",
     "site_export_image_not_found",
 }

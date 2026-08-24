@@ -2,7 +2,7 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## 2026-08-23 — verified against mcp-scraper 0.63.0 / mcp-memory 1.18.1
+## 2026-08-23 — verified against mcp-scraper 0.63.1 / mcp-memory 1.18.1
 
 ### Added
 
@@ -18,6 +18,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ### Fixed
 
+- Added `site_export_format_unavailable` to the generated and runtime-safe public error enums so older exports report a detailed, non-retryable representation mismatch instead of being collapsed into a generic client error.
 - Updated `mcpscraper-sdk` to resolve the current `mcpscraper-memory-sdk` workspace dependency; the stale nested 0.28.0 package silently removed five generated methods from the Node scraper surface.
 - Made the public product count check derive its invariant from the canonical manifest instead of maintaining a second hardcoded tool total.
 
