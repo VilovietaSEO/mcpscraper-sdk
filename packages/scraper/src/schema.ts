@@ -176,6 +176,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/extract-site/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List a site export or read complete page JSON, HTML, or Markdown */
+        post: operations["readExtractSiteExport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/extract-site/image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Read one owner-scoped downloaded image with provenance */
+        post: operations["readExtractSiteImage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/youtube/harvest": {
         parameters: {
             query?: never;
@@ -843,7 +877,7 @@ export interface components {
             details?: components["schemas"]["PublicErrorDetails"];
         };
         /** @enum {string} */
-        PublicChargeStatus: "not_charged" | "refunded" | "charged";
+        PublicChargeStatus: "not_charged" | "refund_pending" | "refunded" | "charged";
         /** @description Bounded, vendor-neutral recovery and account details safe for public clients. */
         PublicErrorDetails: {
             [key: string]: string | number | boolean | (string | null);
@@ -851,7 +885,7 @@ export interface components {
         /** @description Stable public failure envelope shared across REST and MCP operations. */
         PublicErrorEnvelope: {
             /** @enum {string} */
-            error_code: "request_aborted" | "captcha_exhausted" | "captcha_or_blocked" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "harvest_timeout" | "mcp_request_timeout" | "extraction_failed" | "concurrency_limit_exceeded" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limited" | "insufficient_balance" | "service_unavailable";
+            error_code: "request_aborted" | "captcha_exhausted" | "captcha_or_blocked" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "harvest_timeout" | "mcp_request_timeout" | "mcp_http_error" | "extraction_failed" | "concurrency_limit_exceeded" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limited" | "upstream_rate_limited" | "insufficient_balance" | "service_unavailable" | "response_lost" | "vendor_unavailable" | "page_not_found" | "page_forbidden" | "page_rate_limited" | "page_server_error" | "page_http_error" | "bot_check_unresolved" | "page_too_large" | "page_unreachable" | "browser_session_interrupted" | "site_export_not_found" | "site_export_format_unavailable" | "site_export_read_failed" | "site_export_image_not_found";
             /** @enum {string} */
             error_type: "request_aborted" | "captcha" | "location_mismatch" | "connection" | "timeout" | "extraction" | "concurrency_limit" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limit" | "billing" | "service_unavailable";
             message: string;
@@ -1041,8 +1075,18 @@ export interface components {
                 [key: string]: unknown;
             } | null;
             memory?: components["schemas"]["VaultDepositResult"];
+            warnings?: components["schemas"]["PublicWarning"][];
         } & {
             [key: string]: unknown;
+        };
+        /** @description A component-scoped optional-capability failure that does not invalidate the core extraction. */
+        PublicWarning: {
+            /** @enum {string} */
+            code: "render_unavailable" | "screenshot_unavailable" | "branding_unavailable" | "media_partial" | "media_packaging_failed";
+            /** @enum {string} */
+            component: "rendering" | "screenshot" | "branding" | "media";
+            message: string;
+            retryable: boolean;
         };
         /**
          * @description Present on ExtractUrlResponse only when the request set depositToVault: true.
@@ -1103,6 +1147,11 @@ export interface components {
              * @default false
              */
             downloadImages: boolean;
+            /**
+             * @description Preferred alias for downloadImages. Downloads supported images into owner-scoped artifacts and the ZIP.
+             * @default false
+             */
+            preserveMedia: boolean;
             /** @default false */
             rotateProxies: boolean;
             /** @default 30 */
@@ -1115,7 +1164,7 @@ export interface components {
              *     `images` performs the image audit and returns `imageAudit` — on the synchronous
              *     path too, not just background jobs.
              */
-            formats?: ("markdown" | "links" | "json" | "images" | "branding" | "issues")[];
+            formats?: ("markdown" | "html" | "links" | "json" | "images" | "branding" | "issues")[];
         };
         /** @description Full synchronous crawl result. */
         ExtractSiteResponse: {
@@ -1253,7 +1302,51 @@ export interface components {
                 [key: string]: unknown;
             }[];
             error?: string | null;
+            error_code?: string;
+            error_type?: string;
+            retryable?: boolean;
+            retry_after_seconds?: number;
+            charge_status?: components["schemas"]["PublicChargeStatus"];
             updatedAt?: string;
+        };
+        SiteExportReadRequest: {
+            jobId: string;
+            pageId?: string;
+            /**
+             * @default manifest
+             * @enum {string}
+             */
+            format: "manifest" | "json" | "html" | "markdown";
+            /** @default 0 */
+            offset: number;
+            /** @default 64000 */
+            maxBytes: number;
+        };
+        SiteExportReadResponse: {
+            jobId: string;
+            pageId: string | null;
+            /** @enum {string} */
+            format: "manifest" | "json" | "html" | "markdown";
+            sha256: string;
+            text: string;
+            offset: number;
+            totalBytes: number;
+            nextOffset: number | null;
+        };
+        SiteExportImageRequest: {
+            jobId: string;
+            imageId: string;
+        };
+        SiteExportImageResponse: {
+            jobId: string;
+            imageId: string;
+            sourcePage?: string;
+            sourceUrl?: string;
+            mimeType: string;
+            bytes: number;
+            sha256?: string;
+            /** Format: byte */
+            dataBase64: string;
         };
         YoutubeHarvestRequest: {
             /** @enum {string} */
@@ -1876,6 +1969,60 @@ export interface operations {
                 };
             };
             404: components["responses"]["NotFound"];
+        };
+    };
+    readExtractSiteExport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiteExportReadRequest"];
+            };
+        };
+        responses: {
+            /** @description One bounded UTF-8 window. Continue from nextOffset until null. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteExportReadResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            404: components["responses"]["NotFound"];
+            500: components["responses"]["ServerError"];
+        };
+    };
+    readExtractSiteImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiteExportImageRequest"];
+            };
+        };
+        responses: {
+            /** @description Downloaded image bytes encoded as base64 plus source provenance. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiteExportImageResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            404: components["responses"]["NotFound"];
+            500: components["responses"]["ServerError"];
         };
     };
     youtubeHarvest: {

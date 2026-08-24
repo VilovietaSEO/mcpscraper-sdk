@@ -27,10 +27,11 @@ def _camelize(value: Any) -> Any:
 
 
 class _Requester:
-    def __init__(self, api_key: str, base_url: str, session: requests.Session) -> None:
+    def __init__(self, api_key: str, base_url: str, session: requests.Session, timeout: float) -> None:
         self._api_key = api_key
         self._base_url = base_url.rstrip("/")
         self._session = session
+        self._timeout = timeout
 
     def call(
         self,
@@ -53,12 +54,22 @@ class _Requester:
         if headers:
             request_headers.update(headers)
         payload = _camelize(body) if body is not None else None
-        response = self._session.request(
-            method,
-            f"{self._base_url}{path}",
-            json=payload,
-            headers=request_headers,
-        )
+        try:
+            response = self._session.request(
+                method,
+                f"{self._base_url}{path}",
+                json=payload,
+                headers=request_headers,
+                timeout=self._timeout,
+            )
+        except requests.Timeout as error:
+            raise ScraperApiError(408, {
+                "error": "mcp_request_timeout",
+                "error_code": "mcp_request_timeout",
+                "error_type": "timeout",
+                "message": f"MCP Scraper request exceeded {self._timeout:g}s and was cancelled client-side. The operation may still be running; reuse the same Idempotency-Key or poll its job before starting another paid run.",
+                "retryable": True,
+            }) from error
         try:
             data = response.json()
         except ValueError:
@@ -69,7 +80,16 @@ class _Requester:
 
     def call_raw(self, method: str, path: str) -> bytes:
         headers = {"x-api-key": self._api_key}
-        response = self._session.request(method, f"{self._base_url}{path}", headers=headers)
+        try:
+            response = self._session.request(method, f"{self._base_url}{path}", headers=headers, timeout=self._timeout)
+        except requests.Timeout as error:
+            raise ScraperApiError(408, {
+                "error": "mcp_request_timeout",
+                "error_code": "mcp_request_timeout",
+                "error_type": "timeout",
+                "message": f"MCP Scraper request exceeded {self._timeout:g}s and was cancelled client-side.",
+                "retryable": True,
+            }) from error
         if not response.ok:
             try:
                 data = response.json()
@@ -273,10 +293,12 @@ class MemoryTools:
 
 
 class ScraperClient:
-    def __init__(self, api_key: str, base_url: str = "https://mcpscraper.dev", session: Optional[requests.Session] = None) -> None:
+    def __init__(self, api_key: str, base_url: str = "https://mcpscraper.dev", session: Optional[requests.Session] = None, request_timeout: float = 300.0) -> None:
+        if request_timeout <= 0:
+            raise ValueError("request_timeout must be positive")
         active_session = session or requests.Session()
-        self._r = _Requester(api_key, base_url, active_session)
-        self.tools = McpToolsClient(api_key, base_url, active_session)
+        self._r = _Requester(api_key, base_url, active_session, request_timeout)
+        self.tools = McpToolsClient(api_key, base_url, active_session, request_timeout=request_timeout)
         self.youtube = YoutubeNamespace(self._r)
         self.screenshot = ScreenshotNamespace(self._r)
         self.facebook = FacebookNamespace(self._r)
@@ -296,20 +318,28 @@ class ScraperClient:
     def harvest_paa(self, query: str, **kwargs: Any) -> Any:
         return self._r.call("POST", "/harvest/sync", {"query": query, **kwargs})
 
-    def extract_url(self, url: str, **kwargs: Any) -> Any:
-        return self._r.call("POST", "/extract-url", {"url": url, **kwargs})
+    def extract_url(self, url: str, *, idempotency_key: str | None = None, **kwargs: Any) -> Any:
+        headers = {} if idempotency_key is None else {"Idempotency-Key": idempotency_key}
+        return self._r.call("POST", "/extract-url", {"url": url, **kwargs}, headers)
 
     def map_site_urls(self, url: str, **kwargs: Any) -> Any:
         return self._r.call("POST", "/map-urls", {"url": url, **kwargs})
 
-    def extract_site(self, url: str, **kwargs: Any) -> Any:
-        return self._r.call("POST", "/extract-site", {"url": url, **kwargs})
+    def extract_site(self, url: str, *, idempotency_key: str | None = None, **kwargs: Any) -> Any:
+        headers = {} if idempotency_key is None else {"Idempotency-Key": idempotency_key}
+        return self._r.call("POST", "/extract-site", {"url": url, **kwargs}, headers)
 
-    def audit_site(self, url: str, **kwargs: Any) -> Any:
-        return self.extract_site(url, **kwargs)
+    def audit_site(self, url: str, *, idempotency_key: str | None = None, **kwargs: Any) -> Any:
+        return self.extract_site(url, idempotency_key=idempotency_key, **kwargs)
 
     def get_extract_site_status(self, job_id: str) -> Any:
         return self._r.call("GET", f"/extract-site/status/{quote(job_id)}")
+
+    def read_extract_site_export(self, job_id: str, **kwargs: Any) -> Any:
+        return self._r.call("POST", "/extract-site/read", {"jobId": job_id, **kwargs})
+
+    def read_extract_site_image(self, job_id: str, image_id: str) -> Any:
+        return self._r.call("POST", "/extract-site/image", {"jobId": job_id, "imageId": image_id})
 
     def list_jobs(self) -> Any:
         return self._r.call("GET", "/jobs")

@@ -38,6 +38,12 @@ export interface ScraperClientOptions {
   apiKey: string
   baseUrl?: string
   fetch?: typeof globalThis.fetch
+  /** Bounded HTTP deadline for every request. Defaults to 300 seconds. */
+  requestTimeoutMs?: number
+}
+
+export interface IdempotentRequestOptions {
+  idempotencyKey?: string
 }
 
 type SerpIntelligenceCaptureDefaultedKey =
@@ -68,7 +74,25 @@ class Requester {
     private readonly apiKey: string,
     private readonly baseUrl: string,
     private readonly fetchImpl: typeof globalThis.fetch,
+    private readonly timeoutMs: number,
   ) {}
+
+  private async request(url: string, init: RequestInit): Promise<Response> {
+    try {
+      return await this.fetchImpl(url, { ...init, signal: AbortSignal.timeout(this.timeoutMs) })
+    } catch (error) {
+      if (error instanceof DOMException && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
+        throw new ScraperApiError(408, {
+          error: 'mcp_request_timeout',
+          error_code: 'mcp_request_timeout',
+          error_type: 'timeout',
+          message: `MCP Scraper request exceeded ${Math.round(this.timeoutMs / 1000)}s and was cancelled client-side. The operation may still be running; use the same Idempotency-Key or poll a returned job before starting a new paid run.`,
+          retryable: true,
+        })
+      }
+      throw error
+    }
+  }
 
   async call<K extends OperationId>(
     method: string,
@@ -85,7 +109,7 @@ class Requester {
     body?: RequestBodyOf<K>,
     extraHeaders: Record<string, string> = {},
   ): Promise<{ data: SuccessBodyOf<K>; headers: Headers }> {
-    const res = await this.fetchImpl(`${this.baseUrl}${path}`, {
+    const res = await this.request(`${this.baseUrl}${path}`, {
       method,
       headers: {
         'x-api-key': this.apiKey,
@@ -100,7 +124,7 @@ class Requester {
   }
 
   async callRaw(method: string, path: string): Promise<ArrayBuffer> {
-    const res = await this.fetchImpl(`${this.baseUrl}${path}`, { method, headers: { 'x-api-key': this.apiKey } })
+    const res = await this.request(`${this.baseUrl}${path}`, { method, headers: { 'x-api-key': this.apiKey } })
     if (!res.ok) {
       const data = await res.json().catch(() => undefined)
       throw new ScraperApiError(res.status, data)
@@ -329,7 +353,9 @@ export class ScraperClient {
   readonly tools: McpToolsClient
 
   constructor(options: ScraperClientOptions) {
-    this.r = new Requester(options.apiKey, options.baseUrl ?? 'https://mcpscraper.dev', options.fetch ?? globalThis.fetch)
+    const requestTimeoutMs = options.requestTimeoutMs ?? 300_000
+    if (!Number.isFinite(requestTimeoutMs) || requestTimeoutMs <= 0) throw new TypeError('requestTimeoutMs must be a positive number')
+    this.r = new Requester(options.apiKey, options.baseUrl ?? 'https://mcpscraper.dev', options.fetch ?? globalThis.fetch, requestTimeoutMs)
     this.youtube = new YoutubeNamespace(this.r)
     this.screenshot = new ScreenshotNamespace(this.r)
     this.facebook = new FacebookNamespace(this.r)
@@ -346,6 +372,7 @@ export class ScraperClient {
       apiKey: options.apiKey,
       baseUrl: options.baseUrl ?? 'https://mcpscraper.dev',
       fetch: options.fetch,
+      requestTimeoutMs,
     })
   }
 
@@ -369,24 +396,32 @@ export class ScraperClient {
     return this.r.call<'harvestSync'>('POST', '/harvest/sync', params)
   }
 
-  extractUrl(params: RequestBodyOf<'extractUrl'>) {
-    return this.r.call<'extractUrl'>('POST', '/extract-url', params)
+  extractUrl(params: RequestBodyOf<'extractUrl'>, options: IdempotentRequestOptions = {}) {
+    return this.r.call<'extractUrl'>('POST', '/extract-url', params, options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {})
   }
 
   mapSiteUrls(params: RequestBodyOf<'mapSiteUrls'>) {
     return this.r.call<'mapSiteUrls'>('POST', '/map-urls', params)
   }
 
-  extractSite(params: RequestBodyOf<'extractSite'>) {
-    return this.r.call<'extractSite'>('POST', '/extract-site', params)
+  extractSite(params: RequestBodyOf<'extractSite'>, options: IdempotentRequestOptions = {}) {
+    return this.r.call<'extractSite'>('POST', '/extract-site', params, options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {})
   }
 
-  auditSite(params: RequestBodyOf<'extractSite'>) {
-    return this.extractSite(params)
+  auditSite(params: RequestBodyOf<'extractSite'>, options: IdempotentRequestOptions = {}) {
+    return this.extractSite(params, options)
   }
 
   getExtractSiteStatus(id: string) {
     return this.r.call<'getExtractSiteStatus'>('GET', `/extract-site/status/${encodeURIComponent(id)}`)
+  }
+
+  readExtractSiteExport(params: RequestBodyOf<'readExtractSiteExport'>) {
+    return this.r.call<'readExtractSiteExport'>('POST', '/extract-site/read', params)
+  }
+
+  readExtractSiteImage(params: RequestBodyOf<'readExtractSiteImage'>) {
+    return this.r.call<'readExtractSiteImage'>('POST', '/extract-site/image', params)
   }
 
   listJobs() {

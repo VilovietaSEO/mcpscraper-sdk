@@ -78,6 +78,8 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   extract_site: 'web',
   audit_site: 'web',
   check_site_export: 'web',
+  site_export_read: 'web',
+  site_export_image: 'web',
   archive_read: 'web',
   editorial_reading_room_guide: 'editorial',
   create_editorial_reading_room: 'editorial',

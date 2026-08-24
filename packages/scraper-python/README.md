@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated 252-tool MCP surface — 151 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool:
+`client.tools` is the generated 254-tool MCP surface — 153 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool:
 
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 
@@ -68,7 +68,7 @@ templates = client.tools.schedule.list_artifact_templates(status="active")
 
 The connected-data export performs bounded Gmail, Calendar, Google Search Console, Zoom, Meta Marketing, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Use `search_console_performance` for bounded Search Analytics rows across every accessible property, and `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected Meta ad accounts. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renew_connected_data_download(artifact_id="artifact_123")`. Use `list_service_connections` for verified grants and per-tool permission blockers, then `describe_service_connection_tool` for the exact provider-native schema before calling through the generic connection bridges.
 
-Core operations are flat on the client: `search_serp`, `harvest_paa`, `extract_url`, `map_site_urls`, `extract_site`, `audit_site`, `get_extract_site_status`, `list_jobs`, `get_job`, `get_history`, `get_ledger`.
+Core operations are flat on the client: `search_serp`, `harvest_paa`, `extract_url`, `map_site_urls`, `extract_site`, `audit_site`, `get_extract_site_status`, `read_extract_site_export`, `read_extract_site_image`, `list_jobs`, `get_job`, `get_history`, `get_ledger`.
 
 Everything else is namespaced by product area, matching the OpenAPI spec's tags: `client.youtube`, `client.screenshot`, `client.facebook`, `client.google_ads`, `client.instagram`, `client.reddit`, `client.video`, `client.maps`, `client.directory`, `client.serp_intelligence`, `client.workflows`.
 
@@ -106,7 +106,7 @@ hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 252 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 254 unified MCP tools.
 
 ## Regenerating models
 

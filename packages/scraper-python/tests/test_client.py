@@ -2,6 +2,7 @@ import json
 
 import pytest
 import responses
+import requests
 
 from mcpscraper import ScraperClient, ScraperApiError
 from mcpscraper._mcp_generated_client import MCP_TOOL_BINDINGS, MCP_TOOL_COUNT
@@ -339,6 +340,37 @@ def test_extract_url_with_deposit_to_vault_returns_memory_field():
     assert sent_body["vaultName"] == "research"
     assert result["memory"]["deposited"] is True
     assert result["memory"]["noteId"] == "note_1"
+
+
+@responses.activate
+def test_site_export_retry_key_and_direct_representation_reads():
+    responses.add(responses.POST, "https://mcpscraper.dev/extract-site", json={"jobId": "ext_1", "status": "pending"}, status=200)
+    responses.add(responses.POST, "https://mcpscraper.dev/extract-site/read", json={"jobId": "ext_1", "pageId": "a" * 64, "format": "html", "text": "<main>full</main>", "offset": 0, "totalBytes": 17, "nextOffset": None, "sha256": "b" * 64}, status=200)
+    responses.add(responses.POST, "https://mcpscraper.dev/extract-site/image", json={"jobId": "ext_1", "imageId": "c" * 64, "mimeType": "image/png", "bytes": 3, "dataBase64": "cG5n"}, status=200)
+    client = ScraperClient(api_key="sk_test")
+
+    client.extract_site("https://example.com", idempotency_key="stable-export-key", background=True, formats=["json", "html", "markdown"])
+    read = client.read_extract_site_export("ext_1", pageId="a" * 64, format="html")
+    image = client.read_extract_site_image("ext_1", "c" * 64)
+
+    assert responses.calls[0].request.headers["Idempotency-Key"] == "stable-export-key"
+    assert json.loads(responses.calls[0].request.body)["formats"] == ["json", "html", "markdown"]
+    assert read["text"] == "<main>full</main>"
+    assert image["dataBase64"] == "cG5n"
+
+
+def test_rest_timeout_has_shared_public_envelope():
+    class TimeoutSession(requests.Session):
+        def request(self, *args, **kwargs):  # type: ignore[override]
+            raise requests.Timeout("deadline")
+
+    client = ScraperClient(api_key="sk_test", session=TimeoutSession(), request_timeout=0.001)
+    with pytest.raises(ScraperApiError) as exc_info:
+        client.extract_url("https://example.com")
+
+    assert exc_info.value.status == 408
+    assert exc_info.value.code == "mcp_request_timeout"
+    assert exc_info.value.body["retryable"] is True
 
 
 @responses.activate

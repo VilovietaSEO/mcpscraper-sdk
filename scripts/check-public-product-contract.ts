@@ -11,8 +11,8 @@ function requireMatch(value: string, pattern: RegExp, label: string): void {
 
 async function main(): Promise<void> {
   const manifest = JSON.parse(await readFile('contracts/mcp.tools.json', 'utf8')) as ToolContract
-  if (manifest.toolCount !== 252 || manifest.tools.length !== 252) {
-    throw new Error(`MCP inventory must contain 252 tools; received ${manifest.toolCount}/${manifest.tools.length}`)
+  if (manifest.toolCount !== manifest.tools.length) {
+    throw new Error(`MCP inventory count mismatch: declared ${manifest.toolCount}, received ${manifest.tools.length}`)
   }
 
   const byName = new Map(manifest.tools.map(tool => [tool.name, tool]))

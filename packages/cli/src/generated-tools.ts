@@ -499,7 +499,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "extract_site",
     "category": "web",
     "title": "Multi-Page Site Content Crawl",
-    "description": "Crawl a public website and return page CONTENT (Markdown) across multiple pages. Each page is fetched with a plain HTTP request first; a browser retries only the pages that were blocked or hit a bot check, so a per-page bot_check_unresolved result means that specific page already failed the browser retry too. A Wayback replay URL produces one archived site snapshot. The optional wayback plan produces whole-site, single-page, or selected-page timelines across explicit months or a month range, all in one export with a capture matrix. Pass a new idempotencyKey for each intended crawl and reuse it only when retrying that call. Every MCP crawl starts a durable export; poll check_site_export for honest outcome counters and the saved ZIP. Content only — for a technical SEO audit use audit_site instead.",
+    "description": "Crawl a public website and durably retain complete per-page JSON, acquired HTML, and Markdown. Each page is fetched with a plain HTTP request first; a browser retries only pages that were blocked or hit a bot check. A Wayback replay URL produces one archived site snapshot; the optional wayback plan produces timelines across explicit months or a month range. Pass a new idempotencyKey for each intended crawl and reuse it only when retrying that call. Poll check_site_export, then use site_export_read for complete page representations and site_export_image for preserved images; a saved ZIP is also produced. For a technical SEO audit use audit_site instead.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -574,12 +574,13 @@ export const MCP_TOOL_CATALOG = [
           "maximum": 100
         },
         "formats": {
-          "description": "Per-page output formats: markdown, links, json, images are captured cheaply from HTML; branding (site-level logo/colors/fonts) requires a browser and adds time. Defaults to markdown+links.",
+          "description": "Requested export views. Every successful page is durably retained as complete JSON, acquired HTML, and Markdown; links and image references are included in page JSON. branding adds a browser-based site summary.",
           "type": "array",
           "items": {
             "type": "string",
             "enum": [
               "markdown",
+              "html",
               "links",
               "json",
               "images",
@@ -589,7 +590,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "background": {
           "default": true,
-          "description": "MCP multi-page crawls always run as durable background jobs. Poll check_site_export for progress, outcome counters, and the hosted ZIP.",
+          "description": "MCP multi-page crawls always run as durable background jobs. Poll check_site_export, then use site_export_read for complete JSON/HTML/Markdown and site_export_image for downloaded images.",
           "type": "boolean",
           "const": true
         },
@@ -704,7 +705,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "check_site_export",
     "category": "web",
     "title": "Check Site Export",
-    "description": "Poll a background extract_site or audit_site job. Reports discovered, attempted, successful, failed, and remaining pages. Complete and partial jobs return a downloadable ZIP; partial bundles include successful content plus per-page failure reasons.",
+    "description": "Poll a background extract_site or audit_site job. Reports discovered, attempted, successful, failed, and remaining pages plus a stable public error envelope when terminal. Complete and partial jobs expose direct AI readback through site_export_read/site_export_image and also return a downloadable ZIP.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -17803,6 +17804,96 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "site_export_image",
+    "category": "web",
+    "title": "Read Site Export Image",
+    "description": "Return one downloaded site-export image as a standard MCP image content block with source-page and source-URL provenance. Obtain imageId from site_export_read manifest.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Site export job ID returned by extract_site or audit_site."
+        },
+        "imageId": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Downloaded image ID returned by a site_export_read manifest."
+        }
+      },
+      "required": [
+        "jobId",
+        "imageId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Read Site Export Image",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "site_export_read",
+    "category": "web",
+    "title": "Read Site Export Page",
+    "description": "List a site export manifest or read complete JSON, HTML, or Markdown for one page in resumable UTF-8 windows. Uses owner-scoped durable content directly and does not load the final ZIP.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Site export job ID returned by extract_site or audit_site."
+        },
+        "pageId": {
+          "description": "Page ID returned by a manifest read. Omit to list the export manifest.",
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "format": {
+          "default": "manifest",
+          "description": "manifest lists page/image IDs; JSON, HTML, and Markdown read one page representation.",
+          "type": "string",
+          "enum": [
+            "manifest",
+            "json",
+            "html",
+            "markdown"
+          ]
+        },
+        "offset": {
+          "default": 0,
+          "description": "UTF-8 byte offset. Continue from nextOffset until it is null.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxBytes": {
+          "default": 64000,
+          "description": "Maximum UTF-8 bytes returned in this window.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        }
+      },
+      "required": [
+        "jobId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Read Site Export Page",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
       "openWorldHint": true
     }
   }

@@ -13,6 +13,8 @@ import * as WebExtractSite from './tools/extract_site.js'
 import * as WebAuditSite from './tools/audit_site.js'
 import * as WebCheckSiteExport from './tools/check_site_export.js'
 import * as WebArchiveRead from './tools/archive_read.js'
+import * as WebSiteExportImage from './tools/site_export_image.js'
+import * as WebSiteExportRead from './tools/site_export_read.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
 import * as FacebookPageIntel from './tools/facebook_page_intel.js'
@@ -1513,6 +1515,16 @@ export const MCP_TOOL_BINDINGS = [
     "name": "commons_update_editorial_article",
     "category": "commons",
     "methodName": "updateEditorialArticle"
+  },
+  {
+    "name": "site_export_image",
+    "category": "web",
+    "methodName": "siteExportImage"
+  },
+  {
+    "name": "site_export_read",
+    "category": "web",
+    "methodName": "siteExportRead"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -1574,6 +1586,14 @@ export class WebNamespace {
 
   async archiveRead(input: WebArchiveRead.Input = {} as WebArchiveRead.Input): Promise<WebArchiveRead.Output> {
     return this.callTool('archive_read', input) as Promise<WebArchiveRead.Output>
+  }
+
+  async siteExportImage(input: WebSiteExportImage.Input): Promise<WebSiteExportImage.Output> {
+    return this.callTool('site_export_image', input) as Promise<WebSiteExportImage.Output>
+  }
+
+  async siteExportRead(input: WebSiteExportRead.Input): Promise<WebSiteExportRead.Output> {
+    return this.callTool('site_export_read', input) as Promise<WebSiteExportRead.Output>
   }
 }
 

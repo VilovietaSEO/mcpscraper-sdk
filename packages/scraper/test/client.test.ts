@@ -218,6 +218,52 @@ test('extractUrl with depositToVault returns a memory field', async () => {
   assert.equal(result.memory?.noteId, 'note_1')
 })
 
+test('durable site exports send retry keys and expose direct JSON/HTML/Markdown and image reads', async () => {
+  const calls: Array<{ url: string; headers: Record<string, string>; body: any }> = []
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    calls.push({
+      url: String(url),
+      headers: init?.headers as Record<string, string>,
+      body: init?.body ? JSON.parse(String(init.body)) : null,
+    })
+    if (String(url).endsWith('/extract-site/read')) {
+      return jsonResponse(200, { jobId: 'ext_1', pageId: 'a'.repeat(64), format: 'html', sha256: 'b'.repeat(64), text: '<main>full</main>', offset: 0, totalBytes: 17, nextOffset: null })
+    }
+    if (String(url).endsWith('/extract-site/image')) {
+      return jsonResponse(200, { jobId: 'ext_1', imageId: 'c'.repeat(64), mimeType: 'image/png', bytes: 3, dataBase64: 'cG5n' })
+    }
+    return jsonResponse(200, { jobId: 'ext_1', status: 'pending', statusUrl: '/extract-site/status/ext_1' })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+
+  await client.extractSite({ url: 'https://example.com', background: true, formats: ['json', 'html', 'markdown'] }, { idempotencyKey: 'stable-export-key' })
+  const read = await client.readExtractSiteExport({ jobId: 'ext_1', pageId: 'a'.repeat(64), format: 'html' })
+  const image = await client.readExtractSiteImage({ jobId: 'ext_1', imageId: 'c'.repeat(64) })
+
+  assert.equal(calls[0].headers['Idempotency-Key'], 'stable-export-key')
+  assert.deepEqual(calls[0].body.formats, ['json', 'html', 'markdown'])
+  assert.equal(read.text, '<main>full</main>')
+  assert.equal(image.dataBase64, 'cG5n')
+})
+
+test('REST client applies a bounded timeout and returns the shared timeout envelope', async () => {
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => new Promise<Response>((_resolve, reject) => {
+    init?.signal?.addEventListener('abort', () => reject(init.signal?.reason), { once: true })
+  })
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch, requestTimeoutMs: 1 })
+
+  await assert.rejects(
+    () => client.extractUrl({ url: 'https://example.com' }),
+    (error: unknown) => {
+      assert.ok(error instanceof ScraperApiError)
+      assert.equal(error.status, 408)
+      assert.equal(error.code, 'mcp_request_timeout')
+      assert.equal((error.body as Record<string, unknown>).retryable, true)
+      return true
+    },
+  )
+})
+
 test('memoryTools dispatches through /memory/mcp-call with toolName and args', async () => {
   let capturedUrl = ''
   let capturedBody: unknown

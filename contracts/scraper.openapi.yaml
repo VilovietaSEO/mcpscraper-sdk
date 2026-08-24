@@ -226,6 +226,46 @@ paths:
               schema: { $ref: '#/components/schemas/ExtractSiteStatus' }
         '404': { $ref: '#/components/responses/NotFound' }
 
+  /extract-site/read:
+    post:
+      tags: [Core]
+      operationId: readExtractSiteExport
+      summary: List a site export or read complete page JSON, HTML, or Markdown
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SiteExportReadRequest' }
+      responses:
+        '200':
+          description: One bounded UTF-8 window. Continue from nextOffset until null.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SiteExportReadResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
+  /extract-site/image:
+    post:
+      tags: [Core]
+      operationId: readExtractSiteImage
+      summary: Read one owner-scoped downloaded image with provenance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/SiteExportImageRequest' }
+      responses:
+        '200':
+          description: Downloaded image bytes encoded as base64 plus source provenance.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SiteExportImageResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '500': { $ref: '#/components/responses/ServerError' }
+
   /youtube/harvest:
     post:
       tags: [YouTube]
@@ -1251,7 +1291,7 @@ components:
 
     PublicChargeStatus:
       type: string
-      enum: [not_charged, refunded, charged]
+      enum: [not_charged, refund_pending, refunded, charged]
 
     PublicErrorDetails:
       type: object
@@ -1269,7 +1309,7 @@ components:
       properties:
         error_code:
           type: string
-          enum: [request_aborted, captcha_exhausted, captcha_or_blocked, location_mismatch, proxy_tunnel_failed, proxy_unavailable, harvest_timeout, mcp_request_timeout, extraction_failed, concurrency_limit_exceeded, unauthorized, forbidden, invalid_request, rate_limited, insufficient_balance, service_unavailable]
+          enum: [request_aborted, captcha_exhausted, captcha_or_blocked, location_mismatch, proxy_tunnel_failed, proxy_unavailable, harvest_timeout, mcp_request_timeout, mcp_http_error, extraction_failed, concurrency_limit_exceeded, unauthorized, forbidden, invalid_request, rate_limited, upstream_rate_limited, insufficient_balance, service_unavailable, response_lost, vendor_unavailable, page_not_found, page_forbidden, page_rate_limited, page_server_error, page_http_error, bot_check_unresolved, page_too_large, page_unreachable, browser_session_interrupted, site_export_not_found, site_export_format_unavailable, site_export_read_failed, site_export_image_not_found]
         error_type:
           type: string
           enum: [request_aborted, captcha, location_mismatch, connection, timeout, extraction, concurrency_limit, unauthorized, forbidden, invalid_request, rate_limit, billing, service_unavailable]
@@ -1408,7 +1448,20 @@ components:
         branding: { type: object, additionalProperties: true, nullable: true }
         media: { type: object, additionalProperties: true, nullable: true }
         memory: { $ref: '#/components/schemas/VaultDepositResult' }
+        warnings:
+          type: array
+          items: { $ref: '#/components/schemas/PublicWarning' }
       additionalProperties: true
+
+    PublicWarning:
+      type: object
+      description: A component-scoped optional-capability failure that does not invalidate the core extraction.
+      properties:
+        code: { type: string, enum: [render_unavailable, screenshot_unavailable, branding_unavailable, media_partial, media_packaging_failed] }
+        component: { type: string, enum: [rendering, screenshot, branding, media] }
+        message: { type: string }
+        retryable: { type: boolean }
+      required: [code, component, message, retryable]
 
     VaultDepositResult:
       type: object
@@ -1451,12 +1504,13 @@ components:
         maxPages: { type: integer, minimum: 1, maximum: 10000, default: 100 }
         background: { type: boolean, default: false, description: 'Enqueue an async crawl instead of waiting inline.' }
         downloadImages: { type: boolean, default: false, description: 'Download every discovered image as a real file into the background job''s bundle.zip (under images/<page>/), not just image URLs/stats. OFF by default. Implies background regardless of the background flag — too slow to run inline. Capped at 20 images/page and 500 images/site.' }
+        preserveMedia: { type: boolean, default: false, description: 'Preferred alias for downloadImages. Downloads supported images into owner-scoped artifacts and the ZIP.' }
         rotateProxies: { type: boolean, default: false }
         rotateProxyEvery: { type: integer, minimum: 1, maximum: 100, default: 30 }
         browserFallback: { type: boolean, default: false }
         formats:
           type: array
-          items: { type: string, enum: [markdown, links, json, images, branding, issues] }
+          items: { type: string, enum: [markdown, html, links, json, images, branding, issues] }
           description: |
             Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and
             returns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).
@@ -1615,7 +1669,55 @@ components:
             `images-download-summary.json` entry reporting queued/downloaded/failed counts.
           items: { type: object, additionalProperties: true }
         error: { type: string, nullable: true }
+        error_code: { type: string }
+        error_type: { type: string }
+        retryable: { type: boolean }
+        retry_after_seconds: { type: integer, minimum: 1, maximum: 86400 }
+        charge_status: { $ref: '#/components/schemas/PublicChargeStatus' }
         updatedAt: { type: string }
+
+    SiteExportReadRequest:
+      type: object
+      required: [jobId]
+      properties:
+        jobId: { type: string }
+        pageId: { type: string, pattern: '^[a-f0-9]{64}$' }
+        format: { type: string, enum: [manifest, json, html, markdown], default: manifest }
+        offset: { type: integer, minimum: 0, default: 0 }
+        maxBytes: { type: integer, minimum: 1, maximum: 1000000, default: 64000 }
+
+    SiteExportReadResponse:
+      type: object
+      properties:
+        jobId: { type: string }
+        pageId: { type: string, nullable: true }
+        format: { type: string, enum: [manifest, json, html, markdown] }
+        sha256: { type: string }
+        text: { type: string }
+        offset: { type: integer, minimum: 0 }
+        totalBytes: { type: integer, minimum: 0 }
+        nextOffset: { type: integer, minimum: 0, nullable: true }
+      required: [jobId, pageId, format, sha256, text, offset, totalBytes, nextOffset]
+
+    SiteExportImageRequest:
+      type: object
+      required: [jobId, imageId]
+      properties:
+        jobId: { type: string }
+        imageId: { type: string, pattern: '^[a-f0-9]{64}$' }
+
+    SiteExportImageResponse:
+      type: object
+      properties:
+        jobId: { type: string }
+        imageId: { type: string }
+        sourcePage: { type: string }
+        sourceUrl: { type: string }
+        mimeType: { type: string }
+        bytes: { type: integer, minimum: 0 }
+        sha256: { type: string }
+        dataBase64: { type: string, format: byte }
+      required: [jobId, imageId, mimeType, bytes, dataBase64]
 
     YoutubeHarvestRequest:
       type: object
