@@ -3,7 +3,8 @@ import { Command } from 'commander'
 import { fileURLToPath } from 'node:url'
 import { mkdirSync, realpathSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
+import { randomUUID } from 'node:crypto'
 import { ScraperClient, ScraperApiError, type McpContentBlock, type McpToolCallResult } from 'mcpscraper-sdk'
 import { CLI_VERSION } from './version.js'
 import { MCP_TOOL_CATALOG, MCP_TOOL_COUNT } from './generated-tools.js'
@@ -218,24 +219,92 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
 
   program
     .command('crawl <url>')
-    .description('Crawl and extract every page of a site')
+    .description('Start a durable site export with complete per-page JSON, acquired HTML, and Markdown')
     .option('--max-pages <n>', 'maximum pages to crawl', (v) => parseInt(v, 10))
+    .option('--idempotency-key <key>', 'stable retry key; defaults to a new UUID for this intended crawl')
+    .option('--preserve-media', 'download supported images into the export')
     .option('--json', 'print raw JSON')
-    .action(async (url: string, opts: { maxPages?: number; json?: boolean }, cmd: Command) => {
+    .action(async (url: string, opts: { maxPages?: number; idempotencyKey?: string; preserveMedia?: boolean; json?: boolean }, cmd: Command) => {
       await run(async () => {
         const result = await client(cmd).extractSite({
           url,
           maxPages: opts.maxPages ?? 100,
-          background: false,
+          background: true,
           downloadImages: false,
+          preserveMedia: Boolean(opts.preserveMedia),
           rotateProxies: false,
           rotateProxyEvery: 30,
           browserFallback: false,
-        })
+          formats: ['json', 'html', 'markdown', 'links'],
+        }, { idempotencyKey: opts.idempotencyKey ?? randomUUID() })
         printResult(result, Boolean(opts.json), (r) => {
-          const pages = (r as { pages?: unknown[] }).pages ?? []
-          console.log(`Crawled ${pages.length} page(s).`)
+          const job = r as { jobId?: string; status?: string; statusUrl?: string }
+          console.log(`Export ${job.status ?? 'started'}: ${job.jobId ?? '(missing job id)'}`)
+          console.log(`Poll: mcpscraper export-status ${job.jobId ?? '<job-id>'}`)
         })
+      })
+    })
+
+  program
+    .command('export-status <job-id>')
+    .description('Poll a durable site export with progress, public errors, and artifact metadata')
+    .option('--json', 'print raw JSON')
+    .action(async (jobId: string, opts: { json?: boolean }, cmd: Command) => {
+      await run(async () => {
+        const result = await client(cmd).getExtractSiteStatus(jobId)
+        printResult(result, Boolean(opts.json), (value) => {
+          const status = value as { status?: string; discovered?: number; attempted?: number; successful?: number; failed?: number; remaining?: number; error?: string | null }
+          console.log(`${status.status ?? 'unknown'} · discovered ${status.discovered ?? 0} · attempted ${status.attempted ?? 0} · successful ${status.successful ?? 0} · failed ${status.failed ?? 0} · remaining ${status.remaining ?? 0}`)
+          if (status.error) console.log(status.error)
+          if (['complete', 'partial', 'failed'].includes(status.status ?? '')) console.log(`Manifest: mcpscraper export-read ${jobId}`)
+        })
+      })
+    })
+
+  program
+    .command('export-read <job-id>')
+    .description('List an export manifest or read one complete JSON, HTML, or Markdown representation')
+    .option('--page-id <id>', 'page ID returned by the manifest')
+    .option('--format <format>', 'manifest, json, html, or markdown', 'manifest')
+    .option('--offset <n>', 'UTF-8 byte offset', (value) => parseInt(value, 10), 0)
+    .option('--max-bytes <n>', 'maximum bytes in this window', (value) => parseInt(value, 10), 64_000)
+    .option('--output <path>', 'write the returned text window to a file')
+    .option('--json', 'print response metadata and text as JSON')
+    .action(async (jobId: string, opts: { pageId?: string; format: string; offset: number; maxBytes: number; output?: string; json?: boolean }, cmd: Command) => {
+      await run(async () => {
+        if (!['manifest', 'json', 'html', 'markdown'].includes(opts.format)) throw new Error('--format must be manifest, json, html, or markdown')
+        const result = await client(cmd).readExtractSiteExport({
+          jobId,
+          pageId: opts.pageId,
+          format: opts.format as 'manifest' | 'json' | 'html' | 'markdown',
+          offset: opts.offset,
+          maxBytes: opts.maxBytes,
+        })
+        if (opts.output) writeFileSync(opts.output, result.text, { mode: 0o600 })
+        if (opts.json) console.log(JSON.stringify(result, null, 2))
+        else {
+          if (opts.output) console.log(`Saved ${Buffer.byteLength(result.text)} bytes to ${opts.output}`)
+          else process.stdout.write(result.text)
+          if (result.nextOffset != null) console.error(`\nContinue with --offset ${result.nextOffset}`)
+        }
+      })
+    })
+
+  program
+    .command('export-image <job-id> <image-id>')
+    .description('Download one preserved site-export image by image ID')
+    .option('--output <path>', 'output path; defaults under ~/Downloads/mcp-scraper')
+    .option('--json', 'print image metadata after saving')
+    .action(async (jobId: string, imageId: string, opts: { output?: string; json?: boolean }, cmd: Command) => {
+      await run(async () => {
+        const result = await client(cmd).readExtractSiteImage({ jobId, imageId })
+        const target = opts.output ?? join(homedir(), 'Downloads', 'mcp-scraper', `${imageId}.${mediaExtension(result.mimeType)}`)
+        mkdirSync(dirname(target), { recursive: true })
+        const bytes = decodeBase64(result.dataBase64)
+        writeFileSync(target, bytes, { mode: 0o600 })
+        const metadata = { ...result, dataBase64: undefined, savedPath: target }
+        if (opts.json) console.log(JSON.stringify(metadata, null, 2))
+        else console.log(`Saved ${bytes.length} bytes to ${target}\nSource: ${result.sourceUrl ?? 'unknown'}`)
       })
     })
 

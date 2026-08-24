@@ -6,11 +6,20 @@ from __future__ import annotations
 from enum import Enum, IntEnum
 from typing import Any
 
-from pydantic import AnyUrl, AwareDatetime, BaseModel, ConfigDict, Field, RootModel
+from pydantic import (
+    AnyUrl,
+    AwareDatetime,
+    Base64Str,
+    BaseModel,
+    ConfigDict,
+    Field,
+    RootModel,
+)
 
 
 class PublicChargeStatus(Enum):
     not_charged = 'not_charged'
+    refund_pending = 'refund_pending'
     refunded = 'refunded'
     charged = 'charged'
 
@@ -32,14 +41,30 @@ class ErrorCode(Enum):
     proxy_unavailable = 'proxy_unavailable'
     harvest_timeout = 'harvest_timeout'
     mcp_request_timeout = 'mcp_request_timeout'
+    mcp_http_error = 'mcp_http_error'
     extraction_failed = 'extraction_failed'
     concurrency_limit_exceeded = 'concurrency_limit_exceeded'
     unauthorized = 'unauthorized'
     forbidden = 'forbidden'
     invalid_request = 'invalid_request'
     rate_limited = 'rate_limited'
+    upstream_rate_limited = 'upstream_rate_limited'
     insufficient_balance = 'insufficient_balance'
     service_unavailable = 'service_unavailable'
+    response_lost = 'response_lost'
+    vendor_unavailable = 'vendor_unavailable'
+    page_not_found = 'page_not_found'
+    page_forbidden = 'page_forbidden'
+    page_rate_limited = 'page_rate_limited'
+    page_server_error = 'page_server_error'
+    page_http_error = 'page_http_error'
+    bot_check_unresolved = 'bot_check_unresolved'
+    page_too_large = 'page_too_large'
+    page_unreachable = 'page_unreachable'
+    browser_session_interrupted = 'browser_session_interrupted'
+    site_export_not_found = 'site_export_not_found'
+    site_export_read_failed = 'site_export_read_failed'
+    site_export_image_not_found = 'site_export_image_not_found'
 
 
 class ErrorType(Enum):
@@ -268,6 +293,32 @@ class Screenshot(BaseModel):
     device: str | None = None
 
 
+class Code(Enum):
+    render_unavailable = 'render_unavailable'
+    screenshot_unavailable = 'screenshot_unavailable'
+    branding_unavailable = 'branding_unavailable'
+    media_partial = 'media_partial'
+    media_packaging_failed = 'media_packaging_failed'
+
+
+class Component(Enum):
+    rendering = 'rendering'
+    screenshot = 'screenshot'
+    branding = 'branding'
+    media = 'media'
+
+
+class PublicWarning(BaseModel):
+    """
+    A component-scoped optional-capability failure that does not invalidate the core extraction.
+    """
+
+    code: Code
+    component: Component
+    message: str
+    retryable: bool
+
+
 class VaultDepositResult(BaseModel):
     """
     Present on ExtractUrlResponse only when the request set depositToVault: true.
@@ -315,6 +366,7 @@ class MapUrlsResponse(BaseModel):
 
 class Format(Enum):
     markdown = 'markdown'
+    html = 'html'
     links = 'links'
     json = 'json'
     images = 'images'
@@ -331,6 +383,10 @@ class ExtractSiteRequest(BaseModel):
     downloadImages: bool | None = Field(
         False,
         description="Download every discovered image as a real file into the background job's bundle.zip (under images/<page>/), not just image URLs/stats. OFF by default. Implies background regardless of the background flag — too slow to run inline. Capped at 20 images/page and 500 images/site.",
+    )
+    preserveMedia: bool | None = Field(
+        False,
+        description='Preferred alias for downloadImages. Downloads supported images into owner-scoped artifacts and the ZIP.',
     )
     rotateProxies: bool | None = False
     rotateProxyEvery: int | None = Field(30, ge=1, le=100)
@@ -518,7 +574,54 @@ class ExtractSiteStatus(BaseModel):
         description='Produced files (name + MIME type). When the job requested formats including\n`issues`, this includes `seo-audit.json` (application/json — the same object as\nthe synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`. The\n`bundle.zip` entry is the full downloadable export — page Markdown under `pages/`,\nplus (when `downloadImages` was set) real image files under `images/<page>/` and an\n`images-download-summary.json` entry reporting queued/downloaded/failed counts.\n',
     )
     error: str | None = None
+    error_code: str | None = None
+    error_type: str | None = None
+    retryable: bool | None = None
+    retry_after_seconds: int | None = Field(None, ge=1, le=86400)
+    charge_status: PublicChargeStatus | None = None
     updatedAt: str | None = None
+
+
+class Format1(Enum):
+    manifest = 'manifest'
+    json = 'json'
+    html = 'html'
+    markdown = 'markdown'
+
+
+class SiteExportReadRequest(BaseModel):
+    jobId: str
+    pageId: str | None = Field(None, pattern='^[a-f0-9]{64}$')
+    format: Format1 | None = 'manifest'
+    offset: int | None = Field(0, ge=0)
+    maxBytes: int | None = Field(64000, ge=1, le=1000000)
+
+
+class SiteExportReadResponse(BaseModel):
+    jobId: str
+    pageId: str
+    format: Format1
+    sha256: str
+    text: str
+    offset: int = Field(..., ge=0)
+    totalBytes: int = Field(..., ge=0)
+    nextOffset: int = Field(..., ge=0)
+
+
+class SiteExportImageRequest(BaseModel):
+    jobId: str
+    imageId: str = Field(..., pattern='^[a-f0-9]{64}$')
+
+
+class SiteExportImageResponse(BaseModel):
+    jobId: str
+    imageId: str
+    sourcePage: str | None = None
+    sourceUrl: str | None = None
+    mimeType: str
+    bytes: int = Field(..., ge=0)
+    sha256: str | None = None
+    dataBase64: Base64Str
 
 
 class Mode(Enum):
@@ -933,3 +1036,4 @@ class ExtractUrlResponse(BaseModel):
     branding: dict[str, Any] | None = None
     media: dict[str, Any] | None = None
     memory: VaultDepositResult | None = None
+    warnings: list[PublicWarning] | None = None

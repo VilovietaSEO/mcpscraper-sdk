@@ -6,6 +6,8 @@ export interface McpToolsClientOptions {
   fetch?: typeof globalThis.fetch
   listRetries?: number
   retryDelayMs?: number
+  /** Bounded deadline for each MCP HTTP call. Defaults to 300 seconds. */
+  requestTimeoutMs?: number
 }
 
 export interface McpToolDescriptor {
@@ -75,6 +77,7 @@ class McpJsonRpcTransport {
   private readonly fetchImpl: typeof globalThis.fetch
   private readonly listRetries: number
   private readonly retryDelayMs: number
+  private readonly requestTimeoutMs: number
   private rpcId = 0
 
   constructor(options: McpToolsClientOptions) {
@@ -83,26 +86,42 @@ class McpJsonRpcTransport {
     this.fetchImpl = options.fetch ?? globalThis.fetch
     this.listRetries = options.listRetries ?? 2
     this.retryDelayMs = options.retryDelayMs ?? 250
+    this.requestTimeoutMs = options.requestTimeoutMs ?? 300_000
+    if (!Number.isFinite(this.requestTimeoutMs) || this.requestTimeoutMs <= 0) throw new TypeError('requestTimeoutMs must be a positive number')
   }
 
   private async request<T>(method: string, params?: Record<string, unknown>): Promise<T> {
     const attempts = method === 'tools/list' ? this.listRetries + 1 : 1
     let response: Response | undefined
     for (let attempt = 0; attempt < attempts; attempt += 1) {
-      response = await this.fetchImpl(`${this.baseUrl}/mcp`, {
-        method: 'POST',
-        headers: {
-          'x-api-key': this.apiKey,
-          'content-type': 'application/json',
-          accept: 'application/json, text/event-stream',
-        },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          id: ++this.rpcId,
-          method,
-          ...(params ? { params } : {}),
-        }),
-      })
+      try {
+        response = await this.fetchImpl(`${this.baseUrl}/mcp`, {
+          method: 'POST',
+          headers: {
+            'x-api-key': this.apiKey,
+            'content-type': 'application/json',
+            accept: 'application/json, text/event-stream',
+          },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: ++this.rpcId,
+            method,
+            ...(params ? { params } : {}),
+          }),
+          signal: AbortSignal.timeout(this.requestTimeoutMs),
+        })
+      } catch (error) {
+        if (error instanceof DOMException && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
+          const envelope = {
+            error_code: 'mcp_request_timeout',
+            error_type: 'timeout',
+            message: `MCP request exceeded ${Math.round(this.requestTimeoutMs / 1000)}s and was cancelled client-side. The operation may still be running; poll its durable job or retry with the same idempotency key.`,
+            retryable: true,
+          }
+          throw new McpToolError(envelope.message, { httpStatus: 408, toolError: envelope })
+        }
+        throw error
+      }
       const transientDiscoveryFailure = method === 'tools/list' && [502, 503, 504].includes(response.status)
       if (!transientDiscoveryFailure || attempt === attempts - 1) break
       await new Promise(resolve => setTimeout(resolve, this.retryDelayMs * (attempt + 1)))
@@ -111,10 +130,19 @@ class McpJsonRpcTransport {
     if (!response) throw new McpToolError(`MCP method "${method}" produced no HTTP response`)
 
     if (!response.ok) {
-      const data = await response.text().catch(() => undefined)
-      throw new McpToolError(`HTTP ${response.status} calling MCP method "${method}"`, {
+      const raw = await response.text().catch(() => '')
+      let data: unknown = raw
+      try { data = JSON.parse(raw) } catch { /** keep text */ }
+      const publicBody = data && typeof data === 'object' && typeof (data as Record<string, unknown>).error_code === 'string'
+        ? data as Record<string, unknown>
+        : null
+      const message = publicBody && typeof publicBody.message === 'string'
+        ? publicBody.message
+        : `HTTP ${response.status} calling MCP method "${method}"`
+      throw new McpToolError(message, {
         httpStatus: response.status,
         data,
+        ...(publicBody ? { toolError: publicBody } : {}),
       })
     }
 

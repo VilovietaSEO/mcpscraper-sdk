@@ -37,6 +37,7 @@ class McpToolsClient(GeneratedMcpToolsClient):
         session: requests.Session | None = None,
         list_retries: int = 2,
         retry_delay_s: float = 0.25,
+        request_timeout: float = 300.0,
     ) -> None:
         self._api_key = api_key
         self._base_url = base_url.rstrip("/")
@@ -44,6 +45,7 @@ class McpToolsClient(GeneratedMcpToolsClient):
         self._rpc_id = itertools.count(1)
         self._list_retries = list_retries
         self._retry_delay_s = retry_delay_s
+        self._request_timeout = request_timeout
         super().__init__(self._call_tool)
 
     def _request(self, method: str, params: dict[str, Any] | None = None) -> Any:
@@ -57,25 +59,45 @@ class McpToolsClient(GeneratedMcpToolsClient):
         attempts = self._list_retries + 1 if method == "tools/list" else 1
         response = None
         for attempt in range(attempts):
-            response = self._session.post(
-                f"{self._base_url}/mcp",
-                headers={
-                    "x-api-key": self._api_key,
-                    "content-type": "application/json",
-                    "accept": "application/json, text/event-stream",
-                },
-                json=payload,
-            )
+            try:
+                response = self._session.post(
+                    f"{self._base_url}/mcp",
+                    headers={
+                        "x-api-key": self._api_key,
+                        "content-type": "application/json",
+                        "accept": "application/json, text/event-stream",
+                    },
+                    json=payload,
+                    timeout=self._request_timeout,
+                )
+            except requests.Timeout as error:
+                envelope = {
+                    "error_code": "mcp_request_timeout",
+                    "error_type": "timeout",
+                    "message": f"MCP request exceeded {self._request_timeout:g}s and was cancelled client-side. The operation may still be running; poll its durable job or retry with the same idempotency key.",
+                    "retryable": True,
+                }
+                raise McpToolError(envelope["message"], http_status=408, tool_error=envelope) from error
             transient_discovery_failure = method == "tools/list" and response.status_code in (502, 503, 504)
             if not transient_discovery_failure or attempt == attempts - 1:
                 break
             time.sleep(self._retry_delay_s * (attempt + 1))
         assert response is not None
         if not response.ok:
+            try:
+                error_body = response.json()
+            except ValueError:
+                error_body = response.text
+            message = (
+                error_body.get("message")
+                if isinstance(error_body, dict) and isinstance(error_body.get("error_code"), str)
+                else f'HTTP {response.status_code} calling MCP method "{method}"'
+            )
             raise McpToolError(
-                f'HTTP {response.status_code} calling MCP method "{method}"',
+                message,
                 http_status=response.status_code,
-                data=response.text,
+                data=error_body,
+                tool_error=error_body if isinstance(error_body, dict) and isinstance(error_body.get("error_code"), str) else None,
             )
         body = response.json()
         if body.get("error"):

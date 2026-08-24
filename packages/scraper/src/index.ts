@@ -4,6 +4,7 @@ export type {
   SerpIntelligenceCaptureParams,
   SerpIntelligenceCaptureOptions,
   SerpIntelligenceCaptureReceipt,
+  IdempotentRequestOptions,
 } from './client.js'
 export { ScraperApiError } from './errors.js'
 export type {

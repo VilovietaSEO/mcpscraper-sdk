@@ -1,4 +1,4 @@
-# All 252 MCP tools with cURL
+# All 254 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (252)
+## Complete catalog (254)
 
 ## search
 
@@ -67,6 +67,8 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `audit_site` — Technical SEO Audit
 - `check_site_export` — Check Site Export
 - `archive_read` — List or Read ZIP Archive
+- `site_export_image` — Read Site Export Image
+- `site_export_read` — Read Site Export Page
 
 ## youtube
 

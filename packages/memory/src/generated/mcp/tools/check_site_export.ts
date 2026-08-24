@@ -56,6 +56,17 @@ export interface Output {
    * Terminal error or partial-delivery explanation, when present.
    */
   error?: string | null;
+  error_code?: string;
+  error_type?: string;
+  retryable?: boolean;
+  retry_after_seconds?: number;
+  charge_status?: "not_charged" | "refund_pending" | "refunded" | "charged";
+  /**
+   * Machine-readable next tool calls for polling, direct page reads, image reads, and human download.
+   */
+  nextActions?: {
+    [k: string]: unknown;
+  };
   updatedAt?: string;
   /**
    * Server-generated path when an installed stdio server mirrored the ZIP under MCP_SCRAPER_OUTPUT_DIR.

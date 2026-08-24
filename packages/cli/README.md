@@ -4,7 +4,7 @@ Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 252 unified MCP tools (151 MCP Scraper plus 101 mirrored Memory tools).
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 254 unified MCP tools (153 MCP Scraper plus 101 mirrored Memory tools).
 
 ## Install
 
@@ -37,7 +37,7 @@ mcpscraper tools call archive_read --args '{"url":"https://github.com/octocat/He
 mcpscraper tools call list_scheduled_runs --args '{"view":"inbox","limit":30}' --json
 ```
 
-`tools list` contains exactly 252 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 254 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 Google SERP searches cost 60 Credits. PAA harvests cost 400 Credits plus 10 Credits per returned question. For additional throughput, one optional $5/month concurrency pack adds two browser slots; pack quantity scales both slots and monthly price linearly.
 
@@ -71,7 +71,16 @@ Options: `--screenshot`, `--deposit-to-vault`, `--vault <name>`, `--json`.
 
 ### `mcpscraper crawl <url>`
 
-Crawls and extracts every page of a site. Options: `--max-pages <n>` (default 100), `--json`.
+Starts a durable background export that retains complete JSON, acquired HTML, and Markdown for every successful page. Options: `--max-pages <n>` (default 100), `--preserve-media`, `--idempotency-key <key>`, `--json`.
+
+Poll and read the export without downloading and unpacking the ZIP:
+
+```bash
+mcpscraper export-status <job-id>
+mcpscraper export-read <job-id> --representation manifest
+mcpscraper export-read <job-id> --representation html --page-id <page-id> --output page.html
+mcpscraper export-image <job-id> <image-id> --output image.jpg
+```
 
 ### `mcpscraper map <url>`
 

@@ -2,6 +2,25 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-23 — verified against mcp-scraper 0.63.0 / mcp-memory 1.18.1
+
+### Added
+
+- Added typed REST methods for direct site-export text and image reads, plus generated `site_export_read` and `site_export_image` bindings across Node, Python, CLI, and cURL surfaces.
+- Added CLI `export-status`, `export-read`, and `export-image` commands; `crawl` now starts a durable export that defaults to complete JSON, acquired HTML, Markdown, and links with retry-safe idempotency.
+
+### Changed
+
+- Standardized REST and MCP transport timeouts at 300 seconds in the Node and Python clients and preserve the service's structured timeout/error envelope when it is available.
+- Expanded extraction requests and models with HTML, media preservation, component warnings, detailed public error codes, and `refund_pending` settlement state.
+- Regenerated the unified catalog at 254 tools: 153 MCP Scraper tools plus 101 mirrored Memory tools, with exact parity across every generated interface.
+- Prepared `mcpscraper-memory-sdk` 0.30.0, `mcpscraper-sdk` 0.29.0, `mcpscraper-cli` 0.28.0, Python `mcpscraper-sdk` 0.28.0, and Python `mcpscraper-memory-sdk` 0.27.0.
+
+### Fixed
+
+- Updated `mcpscraper-sdk` to resolve the current `mcpscraper-memory-sdk` workspace dependency; the stale nested 0.28.0 package silently removed five generated methods from the Node scraper surface.
+- Made the public product count check derive its invariant from the canonical manifest instead of maintaining a second hardcoded tool total.
+
 ## 2026-08-21 — verified against mcp-scraper 0.62.0 / mcp-memory 1.18.1
 
 ### Added

@@ -51,11 +51,11 @@ export interface Input {
    */
   rotateProxyEvery?: number;
   /**
-   * Per-page output formats: markdown, links, json, images are captured cheaply from HTML; branding (site-level logo/colors/fonts) requires a browser and adds time. Defaults to markdown+links.
+   * Requested export views. Every successful page is durably retained as complete JSON, acquired HTML, and Markdown; links and image references are included in page JSON. branding adds a browser-based site summary.
    */
-  formats?: ("markdown" | "links" | "json" | "images" | "branding")[];
+  formats?: ("markdown" | "html" | "links" | "json" | "images" | "branding")[];
   /**
-   * MCP multi-page crawls always run as durable background jobs. Poll check_site_export for progress, outcome counters, and the hosted ZIP.
+   * MCP multi-page crawls always run as durable background jobs. Poll check_site_export, then use site_export_read for complete JSON/HTML/Markdown and site_export_image for downloaded images.
    */
   background?: true;
   /**

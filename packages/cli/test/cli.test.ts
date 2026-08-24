@@ -86,6 +86,60 @@ test('scrape passes depositToVault and vault name through', async () => {
   assert.ok(capture.logs.some((l) => l.includes('A Page')))
 })
 
+test('crawl always starts a durable complete-representation export with a retry key', async () => {
+  let capturedUrl = ''
+  let capturedBody: Record<string, unknown> = {}
+  let capturedHeaders: Headers | null = null
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    capturedUrl = String(url)
+    capturedBody = JSON.parse(String(init?.body))
+    capturedHeaders = new Headers(init?.headers)
+    return jsonResponse(202, { jobId: 'site_job_123', status: 'queued' })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'crawl', 'https://example.com',
+      '--max-pages', '12', '--idempotency-key', 'crawl-123', '--preserve-media', '--json',
+    ])
+  } finally {
+    capture.restore()
+  }
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/extract-site')
+  assert.equal(capturedHeaders?.get('idempotency-key'), 'crawl-123')
+  assert.deepEqual(capturedBody.formats, ['json', 'html', 'markdown', 'links'])
+  assert.equal(capturedBody.background, true)
+  assert.equal(capturedBody.preserveMedia, true)
+  assert.equal(capturedBody.maxPages, 12)
+})
+
+test('export-read requests a bounded page representation through the direct reader', async () => {
+  let capturedUrl = ''
+  let capturedBody: Record<string, unknown> = {}
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    capturedUrl = String(url)
+    capturedBody = JSON.parse(String(init?.body))
+    return jsonResponse(200, {
+      jobId: 'site_job_123', pageId: 'a'.repeat(64), format: 'html', sha256: 'b'.repeat(64),
+      text: '<main>complete</main>', offset: 0, totalBytes: 21, nextOffset: null,
+    })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'export-read', 'site_job_123',
+      '--page-id', 'a'.repeat(64), '--format', 'html', '--max-bytes', '1000000', '--json',
+    ])
+  } finally {
+    capture.restore()
+  }
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/extract-site/read')
+  assert.deepEqual(capturedBody, {
+    jobId: 'site_job_123', pageId: 'a'.repeat(64), format: 'html', offset: 0, maxBytes: 1_000_000,
+  })
+  assert.equal(JSON.parse(capture.logs.join('')).text, '<main>complete</main>')
+})
+
 test('memory search dispatches through /memory/mcp-call with the right tool name', async () => {
   let capturedUrl = ''
   let capturedBody: Record<string, unknown> = {}
