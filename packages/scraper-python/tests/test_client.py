@@ -67,6 +67,28 @@ def test_call_tool_result_preserves_native_image_content():
 
 
 @responses.activate
+def test_unified_tool_parses_hosted_mcp_sse_response():
+    structured = {
+        "balanceCredits": 100,
+        "matchedCost": None,
+        "costs": [],
+        "ledger": [],
+        "concurrency": None,
+        "connectedAccounts": None,
+    }
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        body=f'event: message\ndata: {json.dumps({"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": structured}})}\n\n',
+        status=200,
+        content_type="text/event-stream",
+    )
+
+    result = ScraperClient(api_key="sk_test").tools.billing.credits_info()
+    assert result.balance_credits == 100
+
+
+@responses.activate
 def test_editorial_reading_room_guide_uses_exact_wire_contract():
     responses.add(
         responses.POST,

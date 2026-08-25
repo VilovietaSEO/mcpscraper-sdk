@@ -698,7 +698,7 @@ route = client.tools.vaults.route_memory(title="Raw article", content=markdown, 
 method = client.tools.editorial.reading_room_guide(focus="workflow")
 ```
 
-The authoritative tool names, descriptions, schemas, annotations, categories, and generated method bindings live in [`contracts/mcp.tools.json`](./contracts/mcp.tools.json).
+The authoritative tool names, descriptions, complete input/output schemas, annotations, categories, and generated method bindings live in [`contracts/mcp.tools.json`](./contracts/mcp.tools.json). Runtime MCP discovery intentionally omits `outputSchema` to keep strict clients interoperable; SDK generation consumes the server's complete build manifest instead of reconstructing schemas from `tools/list`.
 
 ## The CLI
 
@@ -714,7 +714,7 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
 - [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 114 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
 
-The contracts are checked-in public release artifacts. The unified MCP and memory manifests are generated from their server tool inventories, while the REST OpenAPI contract is curated. Release validation (`npm run validate-contracts`) checks them against the live servers for drift.
+The contracts are checked-in public release artifacts. The unified MCP contract is generated only from the server's complete build manifest; the live runtime inventory is used for name and input-schema drift checks and is expected to advertise zero output schemas. The memory manifest is generated from its server inventory, while the REST OpenAPI contract is curated. Release validation (`npm run validate-contracts`) checks them against the live servers for drift.
 
 ## Development
 

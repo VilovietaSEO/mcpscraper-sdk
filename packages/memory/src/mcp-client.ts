@@ -71,6 +71,22 @@ interface JsonRpcResponse<T> {
   result?: T
 }
 
+function parseMcpJsonRpcResponse<T>(raw: string): JsonRpcResponse<T> {
+  const trimmed = raw.trim()
+  if (!trimmed) throw new McpToolError('MCP endpoint returned an empty response')
+  if (!trimmed.startsWith('event:') && !trimmed.startsWith('data:')) {
+    return JSON.parse(trimmed) as JsonRpcResponse<T>
+  }
+
+  const dataPayloads = trimmed
+    .split(/\r?\n/)
+    .filter(line => line.startsWith('data:'))
+    .map(line => line.slice('data:'.length).trim())
+    .filter(payload => payload && payload !== '[DONE]')
+  if (!dataPayloads.length) throw new McpToolError('MCP SSE response contained no JSON-RPC data event')
+  return JSON.parse(dataPayloads.at(-1)!) as JsonRpcResponse<T>
+}
+
 class McpJsonRpcTransport {
   private readonly apiKey: string
   private readonly baseUrl: string
@@ -146,7 +162,7 @@ class McpJsonRpcTransport {
       })
     }
 
-    const payload = (await response.json()) as JsonRpcResponse<T>
+    const payload = parseMcpJsonRpcResponse<T>(await response.text())
     if (payload.error) {
       throw new McpToolError(payload.error.message, {
         rpcCode: payload.error.code,

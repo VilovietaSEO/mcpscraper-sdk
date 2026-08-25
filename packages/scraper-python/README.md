@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated 259-tool MCP surface — 158 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool:
+`client.tools` is the generated 259-tool MCP surface — 158 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool. Its output models come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source:
 
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 

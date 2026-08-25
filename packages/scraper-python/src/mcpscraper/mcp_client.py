@@ -27,6 +27,22 @@ class McpToolError(RuntimeError):
         self.tool_error = tool_error
 
 
+def _parse_json_rpc_response(response: requests.Response) -> dict[str, Any]:
+    raw = response.text.strip()
+    if not raw:
+        raise McpToolError("MCP endpoint returned an empty response")
+    if not raw.startswith(("event:", "data:")):
+        return json.loads(raw)
+    data_payloads = [
+        line.removeprefix("data:").strip()
+        for line in raw.splitlines()
+        if line.startswith("data:") and line.removeprefix("data:").strip() not in ("", "[DONE]")
+    ]
+    if not data_payloads:
+        raise McpToolError("MCP SSE response contained no JSON-RPC data event")
+    return json.loads(data_payloads[-1])
+
+
 class McpToolsClient(GeneratedMcpToolsClient):
     """Typed access to every tool exposed by https://mcpscraper.dev/mcp."""
 
@@ -99,7 +115,7 @@ class McpToolsClient(GeneratedMcpToolsClient):
                 data=error_body,
                 tool_error=error_body if isinstance(error_body, dict) and isinstance(error_body.get("error_code"), str) else None,
             )
-        body = response.json()
+        body = _parse_json_rpc_response(response)
         if body.get("error"):
             error = body["error"]
             raise McpToolError(

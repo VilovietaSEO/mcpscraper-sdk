@@ -76,6 +76,28 @@ def test_mcp_tools_client_preserves_native_image_content():
 
 
 @responses.activate
+def test_mcp_tools_client_parses_hosted_sse_response():
+    structured = {
+        "balanceCredits": 100,
+        "matchedCost": None,
+        "costs": [],
+        "ledger": [],
+        "concurrency": None,
+        "connectedAccounts": None,
+    }
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/mcp",
+        body=f'event: message\ndata: {json.dumps({"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": structured}})}\n\n',
+        status=200,
+        content_type="text/event-stream",
+    )
+
+    result = McpToolsClient(api_key="sk_test").billing.credits_info()
+    assert result.balance_credits == 100
+
+
+@responses.activate
 def test_access_headers_include_accept_and_authorization():
     captured = {}
 

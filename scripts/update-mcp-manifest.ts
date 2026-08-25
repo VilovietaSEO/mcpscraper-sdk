@@ -3,7 +3,6 @@ import { createHash } from 'node:crypto'
 import { join } from 'node:path'
 import { stripInternalTelemetry } from './mcp-contract-telemetry.js'
 
-const ENDPOINT = 'https://mcpscraper.dev/mcp'
 const MANIFEST_PATH = join(process.cwd(), 'contracts/mcp.tools.json')
 const MEMORY_MANIFEST_PATH = join(process.cwd(), 'contracts/memory.tools.json')
 
@@ -215,46 +214,30 @@ function sourceContractSha256(tools: UnifiedTool[]): string {
   return createHash('sha256').update(canonicalJson(projected)).digest('hex')
 }
 
-async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {
-  const response = await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'content-type': 'application/json',
-      accept: 'application/json, text/event-stream',
-    },
-    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
-    signal: AbortSignal.timeout(30_000),
-  })
-  if (!response.ok) throw new Error(`tools/list failed: ${response.status} ${await response.text()}`)
-  const raw = await response.text()
-  const dataLine = raw
-    .split(/\r?\n/)
-    .find(line => line.startsWith('data:'))
-  const payloadText = dataLine ? dataLine.slice('data:'.length).trim() : raw
-  const payload = JSON.parse(payloadText) as { result?: { tools?: LiveTool[] }; error?: { message?: string } }
-  if (payload.error) throw new Error(payload.error.message ?? 'tools/list RPC error')
-  return payload.result?.tools ?? []
-}
-
 async function loadTools(): Promise<{ tools: LiveTool[]; generatedFrom: string }> {
   const localManifestPath = process.env.MCP_TOOL_MANIFEST_PATH
-  if (localManifestPath) {
-    const manifest = JSON.parse(await readFile(localManifestPath, 'utf8')) as GeneratedToolManifest
-    const tools = manifest.tools ?? []
-    if (manifest.counts?.unified_stdio !== tools.length) {
-      throw new Error(
-        `Local manifest count mismatch: counts.unified_stdio=${manifest.counts?.unified_stdio}, tools=${tools.length}`,
-      )
-    }
-    const server = [manifest.serverInfo?.name, manifest.serverInfo?.version].filter(Boolean).join(' ')
-    const source = manifest.generatedFrom ?? 'generated tools manifest'
-    return { tools, generatedFrom: `${server || 'mcp-scraper'} ${source}` }
+  if (!localManifestPath) {
+    throw new Error(
+      'MCP_TOOL_MANIFEST_PATH is required; SDK generation must use the complete server build manifest, not runtime tools/list',
+    )
   }
-
-  const apiKey = process.env.MCP_SCRAPER_API_KEY
-  if (!apiKey) throw new Error('MCP_SCRAPER_API_KEY or MCP_TOOL_MANIFEST_PATH is required')
-  return { tools: await fetchLiveTools(apiKey), generatedFrom: `${ENDPOINT} tools/list` }
+  const manifest = JSON.parse(await readFile(localManifestPath, 'utf8')) as GeneratedToolManifest
+  const tools = manifest.tools ?? []
+  if (manifest.counts?.unified_stdio !== tools.length) {
+    throw new Error(
+      `Local manifest count mismatch: counts.unified_stdio=${manifest.counts?.unified_stdio}, tools=${tools.length}`,
+    )
+  }
+  const missingOutputSchemas = tools.filter(tool => tool.outputSchema === undefined).map(tool => tool.name)
+  if (missingOutputSchemas.length) {
+    throw new Error(`Complete server manifest is missing outputSchema for: ${missingOutputSchemas.join(', ')}`)
+  }
+  if (!manifest.serverInfo?.name || !manifest.serverInfo.version) {
+    throw new Error('Complete server manifest must record serverInfo.name and serverInfo.version')
+  }
+  const server = `${manifest.serverInfo.name} ${manifest.serverInfo.version}`
+  const source = manifest.generatedFrom ?? 'generated tools manifest'
+  return { tools, generatedFrom: `${server} ${source}` }
 }
 
 async function preserveExistingToolOrder(tools: LiveTool[]): Promise<LiveTool[]> {
@@ -273,14 +256,11 @@ async function preserveExistingToolOrder(tools: LiveTool[]): Promise<LiveTool[]>
 
 async function main(): Promise<void> {
   const memoryManifest = JSON.parse(await readFile(MEMORY_MANIFEST_PATH, 'utf8')) as MemoryManifest
-  const existingManifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as UnifiedManifest
-  const existingTools = new Map(existingManifest.tools.map(tool => [tool.name, tool]))
   const memoryCategories = new Map(memoryManifest.tools.map(tool => [tool.legacyId, tool.category]))
   const { tools: loadedTools, generatedFrom } = await loadTools()
   const liveTools = await preserveExistingToolOrder(loadedTools)
 
   const tools: UnifiedTool[] = liveTools.map(tool => {
-    const prior = existingTools.get(tool.name)
     const category = memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
     return {
       name: tool.name,
@@ -289,10 +269,8 @@ async function main(): Promise<void> {
       category,
       methodName: deriveMethodName(tool.name, category),
       inputSchema: tool.inputSchema ?? { type: 'object', additionalProperties: true },
-      outputSchema: (stripInternalTelemetry(tool.outputSchema) as Record<string, unknown>)
-        ?? prior?.outputSchema
-        ?? { type: 'object', additionalProperties: true },
-      outputSchemaProvided: tool.outputSchema !== undefined || prior?.outputSchemaProvided === true,
+      outputSchema: stripInternalTelemetry(tool.outputSchema) as Record<string, unknown>,
+      outputSchemaProvided: true,
       annotations: tool.annotations ?? {},
     }
   })

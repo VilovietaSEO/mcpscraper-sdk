@@ -2,6 +2,17 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## Unreleased
+
+### Changed
+
+- Made the complete server build manifest the only accepted source for generated MCP output types. Runtime `tools/list` remains a compact discovery projection and is no longer treated as a schema source.
+
+### Fixed
+
+- Release validation now requires hosted runtime discovery to advertise zero output schemas while preserving the complete 259-tool output contract in Node, Python, CLI, and cURL artifacts.
+- The unified Node and Python MCP clients now parse production `text/event-stream` JSON-RPC envelopes as well as direct JSON responses, so generated typed methods work against the hosted MCP endpoint.
+
 ## 2026-08-24 — verified against mcp-scraper 0.66.2 / mcp-memory 1.18.1
 
 ### Changed
