@@ -1,4 +1,5 @@
 import { readFile, writeFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 import { join } from 'node:path'
 
 const ENDPOINT = 'https://mcpscraper.dev/mcp'
@@ -57,6 +58,7 @@ interface UnifiedTool extends LiveTool {
 interface UnifiedManifest {
   schemaVersion: number
   generatedFrom: string
+  sourceContractSha256?: string
   toolCount: number
   tools: UnifiedTool[]
 }
@@ -76,6 +78,7 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   map_site_urls: 'web',
   map_wayback_snapshots: 'web',
   extract_site: 'web',
+  analyze_site_similarity: 'web',
   audit_site: 'web',
   check_site_export: 'web',
   site_export_read: 'web',
@@ -120,6 +123,10 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   'local-sourcebook-capture': 'directory',
   local_sourcebook_submission_status: 'directory',
   local_sourcebook_refresh: 'directory',
+  lead_list_enrich: 'leads',
+  lead_list_enrich_status: 'leads',
+  lead_list_import: 'leads',
+  lead_list_upload_start: 'leads',
 }
 
 const SCRAPER_PREFIX_CATEGORIES: Array<[string, string]> = [
@@ -191,6 +198,7 @@ function deriveMethodName(name: string, category: string): string {
     workflows: ['workflow_'],
     commons: ['commons_'],
     images: ['image_'],
+    leads: ['lead_list_'],
     youtube: ['youtube_'],
   }
   for (const prefix of categoryPrefixes[category] ?? []) {
@@ -207,6 +215,30 @@ function deriveMethodName(name: string, category: string): string {
     }
   }
   return toCamelCase(name)
+}
+
+function canonicalJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`
+  if (value && typeof value === 'object') {
+    const entries = Object.entries(value as Record<string, unknown>)
+      .sort(([left], [right]) => left.localeCompare(right))
+    return `{${entries.map(([key, child]) => `${JSON.stringify(key)}:${canonicalJson(child)}`).join(',')}}`
+  }
+  return JSON.stringify(value)
+}
+
+function sourceContractSha256(tools: UnifiedTool[]): string {
+  const projected = tools
+    .map(({ name, title, description, inputSchema, outputSchema, annotations }) => ({
+      name,
+      ...(title ? { title } : {}),
+      description,
+      inputSchema,
+      outputSchema,
+      annotations: annotations ?? {},
+    }))
+    .sort((left, right) => left.name.localeCompare(right.name))
+  return createHash('sha256').update(canonicalJson(projected)).digest('hex')
 }
 
 async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {
@@ -304,6 +336,7 @@ async function main(): Promise<void> {
   const manifest: UnifiedManifest = {
     schemaVersion: 1,
     generatedFrom,
+    sourceContractSha256: sourceContractSha256(tools),
     toolCount: tools.length,
     tools,
   }

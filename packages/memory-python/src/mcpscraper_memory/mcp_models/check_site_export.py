@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class CheckSiteExportInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    job_id: str = Field(..., alias="jobId", description="The jobId returned by extract_site or audit_site. Poll until status is complete, partial, or failed; partial jobs still return a downloadable bundle with successful pages and failure details.")
+    job_id: str = Field(..., alias="jobId", description="The jobId returned by extract_site, analyze_site_similarity, or audit_site. Poll until status is complete, partial, or failed; partial jobs still return successful content and failure details.")
 
 
 class CheckSiteExportOutput(BaseModel):

@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * The jobId returned by extract_site or audit_site. Poll until status is complete, partial, or failed; partial jobs still return a downloadable bundle with successful pages and failure details.
+   * The jobId returned by extract_site, analyze_site_similarity, or audit_site. Poll until status is complete, partial, or failed; partial jobs still return successful content and failure details.
    */
   jobId: string;
 }

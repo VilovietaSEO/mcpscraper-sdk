@@ -33,6 +33,7 @@ class ExtractUrlOutput(BaseModel):
     structured_data_logo: Any = Field(..., alias="structuredDataLogo", description="Logo declared by the selected Organization or LocalBusiness JSON-LD entity, separate from the rendered branding candidate ranking.")
     nap_score: Any = Field(..., alias="napScore", description="")
     missing_schema_fields: list[str] = Field(..., alias="missingSchemaFields", description="")
+    contact_evidence: dict[str, Any] = Field(..., alias="contactEvidence", description="Bounded public contact occurrences extracted from the complete acquired document, including header and footer, while raw HTML remains omitted.")
     screenshot_saved: Any = Field(..., alias="screenshotSaved", description="")
     screenshot_artifact: dict[str, Any] | None = Field(None, alias="screenshotArtifact", description="Owner-scoped private screenshot handoff created only when preserveMedia is true. Pass artifactId to image_asset_save to retain it in hosted Memory.")
     archive: Any = Field(..., alias="archive", description="")

@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class SiteExportImageInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    job_id: str = Field(..., alias="jobId", description="Site export job ID returned by extract_site or audit_site.")
+    job_id: str = Field(..., alias="jobId", description="Site export job ID returned by extract_site, analyze_site_similarity, or audit_site.")
     image_id: str = Field(..., alias="imageId", description="Downloaded image ID returned by a site_export_read manifest.")
 
 

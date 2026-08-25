@@ -1,4 +1,5 @@
 import json
+import keyword
 import sys
 import re
 from pathlib import Path
@@ -21,7 +22,8 @@ def load_bindings(package_src: Path, module_name: str) -> list[dict]:
 
 def to_snake_case(value: str) -> str:
     value = re.sub(r"[-\s]+", "_", value)
-    return re.sub(r"(?<!^)(?=[A-Z])", "_", value).lower().strip("_")
+    snake = re.sub(r"(?<!^)(?=[A-Z])", "_", value).lower().strip("_")
+    return f"{snake}_" if keyword.iskeyword(snake) else snake
 
 
 def assert_exact(label: str, actual: list[dict], expected: list[dict]) -> None:

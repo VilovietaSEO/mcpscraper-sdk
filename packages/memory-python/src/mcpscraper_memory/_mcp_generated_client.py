@@ -43,6 +43,7 @@ from .mcp_models.analytics_list_crm_imports import AnalyticsListCrmImportsInput,
 from .mcp_models.analytics_list_forms import AnalyticsListFormsInput, AnalyticsListFormsOutput
 from .mcp_models.analytics_list_pixels import AnalyticsListPixelsInput, AnalyticsListPixelsOutput
 from .mcp_models.analytics_list_sites import AnalyticsListSitesInput, AnalyticsListSitesOutput
+from .mcp_models.analyze_site_similarity import AnalyzeSiteSimilarityInput, AnalyzeSiteSimilarityOutput
 from .mcp_models.archive_artifact_template import ArchiveArtifactTemplateInput, ArchiveArtifactTemplateOutput
 from .mcp_models.archive_read import ArchiveReadInput, ArchiveReadOutput
 from .mcp_models.archive_scheduled_run import ArchiveScheduledRunInput, ArchiveScheduledRunOutput
@@ -149,6 +150,10 @@ from .mcp_models.image_project_list import ImageProjectListInput, ImageProjectLi
 from .mcp_models.import_service_connection_to_memory import ImportServiceConnectionToMemoryInput, ImportServiceConnectionToMemoryOutput
 from .mcp_models.instagram_media_download import InstagramMediaDownloadInput, InstagramMediaDownloadOutput
 from .mcp_models.instagram_profile_content import InstagramProfileContentInput, InstagramProfileContentOutput
+from .mcp_models.lead_list_enrich import LeadListEnrichInput, LeadListEnrichOutput
+from .mcp_models.lead_list_enrich_status import LeadListEnrichStatusInput, LeadListEnrichStatusOutput
+from .mcp_models.lead_list_import import LeadListImportInput, LeadListImportOutput
+from .mcp_models.lead_list_upload_start import LeadListUploadStartInput, LeadListUploadStartOutput
 from .mcp_models.library_ingest import LibraryIngestInput, LibraryIngestOutput
 from .mcp_models.list_artifact_templates import ListArtifactTemplatesInput, ListArtifactTemplatesOutput
 from .mcp_models.list_channel_members import ListChannelMembersInput, ListChannelMembersOutput
@@ -256,823 +261,8 @@ from .mcp_models.youtube_transcribe import YoutubeTranscribeInput, YoutubeTransc
 from .mcp_models.zoom_create_meeting import ZoomCreateMeetingInput, ZoomCreateMeetingOutput
 
 
-MCP_TOOL_BINDINGS = [{'name': 'harvest_paa', 'category': 'search', 'method_name': 'harvest_paa'}, {'name': 'search_serp', 'category': 'search', 'method_name': 'search_serp'}, {'name': 'extract_url', 'category': 'web', 'method_name': 'extract_url'}, {'name': 'diff_page', 'category': 'web', 'method_name': 'diff_page'}, {'name': 'map_site_urls', 'category': 'web', 'method_name': 'map_site_urls'}, {'name': 'map_wayback_snapshots', 'category': 'web', 'method_name': 'map_wayback_snapshots'}, {'name': 'extract_site', 'category': 'web', 'method_name': 'extract_site'}, {'name': 'audit_site', 'category': 'web', 'method_name': 'audit_site'}, {'name': 'check_site_export', 'category': 'web', 'method_name': 'check_site_export'}, {'name': 'archive_read', 'category': 'web', 'method_name': 'archive_read'}, {'name': 'youtube_harvest', 'category': 'youtube', 'method_name': 'harvest'}, {'name': 'youtube_transcribe', 'category': 'youtube', 'method_name': 'transcribe'}, {'name': 'facebook_page_intel', 'category': 'facebook', 'method_name': 'page_intel'}, {'name': 'facebook_ad_search', 'category': 'facebook', 'method_name': 'ad_search'}, {'name': 'reddit_thread', 'category': 'reddit', 'method_name': 'thread'}, {'name': 'reddit_trending', 'category': 'reddit', 'method_name': 'trending'}, {'name': 'video_frame_analysis', 'category': 'video', 'method_name': 'frame_analysis'}, {'name': 'video_frame_analysis_status', 'category': 'video', 'method_name': 'frame_analysis_status'}, {'name': 'facebook_ad_transcribe', 'category': 'facebook', 'method_name': 'ad_transcribe'}, {'name': 'google_ads_search', 'category': 'googleAds', 'method_name': 'search'}, {'name': 'google_ads_page_intel', 'category': 'googleAds', 'method_name': 'page_intel'}, {'name': 'google_ads_transcribe', 'category': 'googleAds', 'method_name': 'transcribe'}, {'name': 'facebook_video_transcribe', 'category': 'facebook', 'method_name': 'video_transcribe'}, {'name': 'instagram_profile_content', 'category': 'instagram', 'method_name': 'profile_content'}, {'name': 'instagram_media_download', 'category': 'instagram', 'method_name': 'media_download'}, {'name': 'maps_place_intel', 'category': 'maps', 'method_name': 'place_intel'}, {'name': 'maps_search', 'category': 'maps', 'method_name': 'search'}, {'name': 'trustpilot_reviews', 'category': 'reviews', 'method_name': 'trustpilot_reviews'}, {'name': 'g2_reviews', 'category': 'reviews', 'method_name': 'g2_reviews'}, {'name': 'commons_search_entities', 'category': 'commons', 'method_name': 'search_entities'}, {'name': 'commons_get_entity', 'category': 'commons', 'method_name': 'get_entity'}, {'name': 'commons_list_needs_links', 'category': 'commons', 'method_name': 'list_needs_links'}, {'name': 'commons_prepare_entity', 'category': 'commons', 'method_name': 'prepare_entity'}, {'name': 'commons_validate_entity', 'category': 'commons', 'method_name': 'validate_entity'}, {'name': 'commons_submit_entity', 'category': 'commons', 'method_name': 'submit_entity'}, {'name': 'commons_get_entity_ledger', 'category': 'commons', 'method_name': 'get_entity_ledger'}, {'name': 'commons_save_filter', 'category': 'commons', 'method_name': 'save_filter'}, {'name': 'commons_list_filters', 'category': 'commons', 'method_name': 'list_filters'}, {'name': 'directory_workflow', 'category': 'directory', 'method_name': 'run'}, {'name': 'directory_workflow_status', 'category': 'directory', 'method_name': 'workflow_status'}, {'name': 'get-local-sourcebook-contract', 'category': 'directory', 'method_name': 'get_local_sourcebook_contract'}, {'name': 'list-local-sourcebook-tags', 'category': 'directory', 'method_name': 'list_local_sourcebook_tags'}, {'name': 'resolve-local-sourcebook-tags', 'category': 'directory', 'method_name': 'resolve_local_sourcebook_tags'}, {'name': 'prepare-local-sourcebook-write', 'category': 'directory', 'method_name': 'prepare_local_sourcebook_write'}, {'name': 'validate-local-sourcebook-write', 'category': 'directory', 'method_name': 'validate_local_sourcebook_write'}, {'name': 'local-sourcebook-capture', 'category': 'directory', 'method_name': 'local_sourcebook_capture'}, {'name': 'local_sourcebook_submission_status', 'category': 'directory', 'method_name': 'local_sourcebook_submission_status'}, {'name': 'local_sourcebook_refresh', 'category': 'directory', 'method_name': 'local_sourcebook_refresh'}, {'name': 'location_markets', 'category': 'directory', 'method_name': 'location_markets'}, {'name': 'workflow_list', 'category': 'workflows', 'method_name': 'list'}, {'name': 'workflow_suggest', 'category': 'workflows', 'method_name': 'suggest'}, {'name': 'workflow_run', 'category': 'workflows', 'method_name': 'run'}, {'name': 'workflow_step', 'category': 'workflows', 'method_name': 'step'}, {'name': 'workflow_status', 'category': 'workflows', 'method_name': 'status'}, {'name': 'workflow_artifact_read', 'category': 'workflows', 'method_name': 'artifact_read'}, {'name': 'editorial_reading_room_guide', 'category': 'editorial', 'method_name': 'reading_room_guide'}, {'name': 'create_editorial_reading_room', 'category': 'editorial', 'method_name': 'create_reading_room'}, {'name': 'renew_editorial_reading_room_download', 'category': 'editorial', 'method_name': 'renew_reading_room_download'}, {'name': 'report_artifact_read', 'category': 'artifacts', 'method_name': 'read'}, {'name': 'rank_tracker_workflow', 'category': 'workflows', 'method_name': 'rank_tracker'}, {'name': 'credits_info', 'category': 'billing', 'method_name': 'credits_info'}, {'name': 'list_service_connections', 'category': 'connections', 'method_name': 'list_service_connections'}, {'name': 'test_service_connection', 'category': 'connections', 'method_name': 'test_service_connection'}, {'name': 'slack_send_message', 'category': 'connections', 'method_name': 'slack_send_message'}, {'name': 'gmail_send_message', 'category': 'connections', 'method_name': 'gmail_send_message'}, {'name': 'gmail_search_contacts', 'category': 'connections', 'method_name': 'gmail_search_contacts'}, {'name': 'google_calendar_create_event', 'category': 'connections', 'method_name': 'google_calendar_create_event'}, {'name': 'zoom_create_meeting', 'category': 'connections', 'method_name': 'zoom_create_meeting'}, {'name': 'read_service_connection', 'category': 'connections', 'method_name': 'read_service_connection'}, {'name': 'meta_ad_creative_media', 'category': 'connections', 'method_name': 'meta_ad_creative_media'}, {'name': 'import_service_connection_to_memory', 'category': 'connections', 'method_name': 'import_service_connection_to_memory'}, {'name': 'describe_service_connection_tool', 'category': 'connections', 'method_name': 'describe_service_connection_tool'}, {'name': 'export_connected_service_data', 'category': 'connections', 'method_name': 'export_connected_service_data'}, {'name': 'export_search_console_table_data', 'category': 'connections', 'method_name': 'export_search_console_table_data'}, {'name': 'renew_connected_data_download', 'category': 'connections', 'method_name': 'renew_connected_data_download'}, {'name': 'call_service_connection_action', 'category': 'connections', 'method_name': 'call_service_connection_action'}, {'name': 'set_scheduled_action_connections', 'category': 'connections', 'method_name': 'set_scheduled_action_connections'}, {'name': 'capture_serp_snapshot', 'category': 'serpIntelligence', 'method_name': 'snapshot'}, {'name': 'capture_serp_page_snapshots', 'category': 'serpIntelligence', 'method_name': 'page_snapshots'}, {'name': 'browser_profile_connect', 'category': 'browser', 'method_name': 'profile_connect'}, {'name': 'browser_profile_list', 'category': 'browser', 'method_name': 'profile_list'}, {'name': 'browser_extension_import', 'category': 'browser', 'method_name': 'extension_import'}, {'name': 'browser_extension_list', 'category': 'browser', 'method_name': 'extension_list'}, {'name': 'browser_extension_delete', 'category': 'browser', 'method_name': 'extension_delete'}, {'name': 'browser_open', 'category': 'browser', 'method_name': 'open'}, {'name': 'browser_screenshot', 'category': 'browser', 'method_name': 'screenshot'}, {'name': 'browser_read', 'category': 'browser', 'method_name': 'read'}, {'name': 'browser_locate', 'category': 'browser', 'method_name': 'locate'}, {'name': 'browser_goto', 'category': 'browser', 'method_name': 'goto'}, {'name': 'browser_click', 'category': 'browser', 'method_name': 'click'}, {'name': 'browser_type', 'category': 'browser', 'method_name': 'type'}, {'name': 'browser_scroll', 'category': 'browser', 'method_name': 'scroll'}, {'name': 'browser_press', 'category': 'browser', 'method_name': 'press'}, {'name': 'browser_replay_start', 'category': 'browser', 'method_name': 'replay_start'}, {'name': 'browser_replay_stop', 'category': 'browser', 'method_name': 'replay_stop'}, {'name': 'browser_list_replays', 'category': 'browser', 'method_name': 'list_replays'}, {'name': 'browser_replay_download', 'category': 'browser', 'method_name': 'replay_download'}, {'name': 'browser_replay_mark', 'category': 'browser', 'method_name': 'replay_mark'}, {'name': 'browser_replay_annotate', 'category': 'browser', 'method_name': 'replay_annotate'}, {'name': 'browser_close', 'category': 'browser', 'method_name': 'close'}, {'name': 'browser_list_sessions', 'category': 'browser', 'method_name': 'list_sessions'}, {'name': 'query_fanout_workflow', 'category': 'workflows', 'method_name': 'query_fanout'}, {'name': 'list_artifact_templates', 'category': 'schedule', 'method_name': 'list_artifact_templates'}, {'name': 'get_artifact_template', 'category': 'schedule', 'method_name': 'get_artifact_template'}, {'name': 'create_artifact_template', 'category': 'schedule', 'method_name': 'create_artifact_template'}, {'name': 'update_artifact_template', 'category': 'schedule', 'method_name': 'update_artifact_template'}, {'name': 'archive_artifact_template', 'category': 'schedule', 'method_name': 'archive_artifact_template'}, {'name': 'list_scheduled_runs', 'category': 'schedule', 'method_name': 'list_scheduled_runs'}, {'name': 'get_scheduled_run', 'category': 'schedule', 'method_name': 'get_scheduled_run'}, {'name': 'mark_scheduled_run_opened', 'category': 'schedule', 'method_name': 'mark_scheduled_run_opened'}, {'name': 'mark_scheduled_run_unopened', 'category': 'schedule', 'method_name': 'mark_scheduled_run_unopened'}, {'name': 'archive_scheduled_run', 'category': 'schedule', 'method_name': 'archive_scheduled_run'}, {'name': 'create_scheduled_run_view_link', 'category': 'schedule', 'method_name': 'create_scheduled_run_view_link'}, {'name': 'revoke_scheduled_run_view_link', 'category': 'schedule', 'method_name': 'revoke_scheduled_run_view_link'}, {'name': 'access-accept-share', 'category': 'access', 'method_name': 'accept_share'}, {'name': 'access-approve-sender', 'category': 'access', 'method_name': 'approve_sender'}, {'name': 'access-decline-share', 'category': 'access', 'method_name': 'decline_share'}, {'name': 'get-chat-link', 'category': 'access', 'method_name': 'get_chat_link'}, {'name': 'get-vault-app-link', 'category': 'access', 'method_name': 'get_vault_app_link'}, {'name': 'access-inbox-settings', 'category': 'access', 'method_name': 'inbox_settings'}, {'name': 'access-invite-account', 'category': 'access', 'method_name': 'invite_account'}, {'name': 'access-issue-key', 'category': 'access', 'method_name': 'issue_key'}, {'name': 'access-list-approved-senders', 'category': 'access', 'method_name': 'list_approved_senders'}, {'name': 'access-list-keys', 'category': 'access', 'method_name': 'list_keys'}, {'name': 'access-note-inbox', 'category': 'access', 'method_name': 'note_inbox'}, {'name': 'access-remove-approved-sender', 'category': 'access', 'method_name': 'remove_approved_sender'}, {'name': 'revoke-chat-link', 'category': 'access', 'method_name': 'revoke_chat_link'}, {'name': 'access-revoke-key', 'category': 'access', 'method_name': 'revoke_key'}, {'name': 'access-revoke-share', 'category': 'access', 'method_name': 'revoke_share'}, {'name': 'revoke-vault-app-link', 'category': 'access', 'method_name': 'revoke_vault_app_link'}, {'name': 'set-agent-identity', 'category': 'access', 'method_name': 'set_agent_identity'}, {'name': 'access-set-scope', 'category': 'access', 'method_name': 'set_scope'}, {'name': 'access-share-note', 'category': 'access', 'method_name': 'share_note'}, {'name': 'access-share-vault', 'category': 'access', 'method_name': 'share_vault'}, {'name': 'access-swap-vault', 'category': 'access', 'method_name': 'swap_vault'}, {'name': 'access-switch-account', 'category': 'access', 'method_name': 'switch_account'}, {'name': 'access-unlink-share', 'category': 'access', 'method_name': 'unlink_share'}, {'name': 'memory-capture', 'category': 'capture', 'method_name': 'memory_capture'}, {'name': 'memory-questions', 'category': 'capture', 'method_name': 'memory_questions'}, {'name': 'prepare-memory-write', 'category': 'capture', 'method_name': 'prepare_memory_write'}, {'name': 'validate-memory-write', 'category': 'capture', 'method_name': 'validate_memory_write'}, {'name': 'create-channel', 'category': 'channels', 'method_name': 'create_channel'}, {'name': 'get-message-note', 'category': 'channels', 'method_name': 'get_message_note'}, {'name': 'list-channel-members', 'category': 'channels', 'method_name': 'list_channel_members'}, {'name': 'list-channel-messages', 'category': 'channels', 'method_name': 'list_channel_messages'}, {'name': 'my-mentions', 'category': 'channels', 'method_name': 'my_mentions'}, {'name': 'poll-channel', 'category': 'channels', 'method_name': 'poll_channel'}, {'name': 'post-message', 'category': 'channels', 'method_name': 'post_message'}, {'name': 'react-message', 'category': 'channels', 'method_name': 'react_message'}, {'name': 'remove-channel-member', 'category': 'channels', 'method_name': 'remove_channel_member'}, {'name': 'reply-message', 'category': 'channels', 'method_name': 'reply_message'}, {'name': 'fact-history', 'category': 'facts', 'method_name': 'history'}, {'name': 'record-fact', 'category': 'facts', 'method_name': 'record_fact'}, {'name': 'memory-backlinks', 'category': 'graph', 'method_name': 'memory_backlinks'}, {'name': 'memory-graph-path', 'category': 'graph', 'method_name': 'memory_graph_path'}, {'name': 'memory-graph-universe', 'category': 'graph', 'method_name': 'memory_graph_universe'}, {'name': 'library-ingest', 'category': 'library', 'method_name': 'ingest'}, {'name': 'bulk-delete-notes', 'category': 'memory', 'method_name': 'bulk_delete_notes'}, {'name': 'delete-note', 'category': 'memory', 'method_name': 'delete_note'}, {'name': 'memory-export', 'category': 'memory', 'method_name': 'export'}, {'name': 'memory-get', 'category': 'memory', 'method_name': 'get'}, {'name': 'memory-list', 'category': 'memory', 'method_name': 'list'}, {'name': 'memory-put', 'category': 'memory', 'method_name': 'put'}, {'name': 'memory-search', 'category': 'memory', 'method_name': 'search'}, {'name': 'memory-suggest', 'category': 'memory', 'method_name': 'suggest'}, {'name': 'memory-upload', 'category': 'memory', 'method_name': 'upload'}, {'name': 'temporal-recall', 'category': 'recall', 'method_name': 'temporal_recall'}, {'name': 'create-scheduled-action', 'category': 'schedule', 'method_name': 'create_scheduled_action'}, {'name': 'update-scheduled-action', 'category': 'schedule', 'method_name': 'update_scheduled_action'}, {'name': 'delete-scheduled-action', 'category': 'schedule', 'method_name': 'delete_scheduled_action'}, {'name': 'get-schedule-link', 'category': 'schedule', 'method_name': 'get_schedule_link'}, {'name': 'get-schedule-status', 'category': 'schedule', 'method_name': 'get_schedule_status'}, {'name': 'list-scheduled-actions', 'category': 'schedule', 'method_name': 'list_scheduled_actions'}, {'name': 'pause-scheduled-action', 'category': 'schedule', 'method_name': 'pause_scheduled_action'}, {'name': 'propose-scheduled-action', 'category': 'schedule', 'method_name': 'propose_scheduled_action'}, {'name': 'resume-scheduled-action', 'category': 'schedule', 'method_name': 'resume_scheduled_action'}, {'name': 'revoke-schedule-link', 'category': 'schedule', 'method_name': 'revoke_schedule_link'}, {'name': 'set-schedule-defaults', 'category': 'schedule', 'method_name': 'set_schedule_defaults'}, {'name': 'set-schedule-entitlement', 'category': 'schedule', 'method_name': 'set_schedule_entitlement'}, {'name': 'cost-usage', 'category': 'storage', 'method_name': 'cost_usage'}, {'name': 'storage-usage', 'category': 'storage', 'method_name': 'usage'}, {'name': 'table-create', 'category': 'tables', 'method_name': 'create'}, {'name': 'table-delete-rows', 'category': 'tables', 'method_name': 'delete_rows'}, {'name': 'table-describe', 'category': 'tables', 'method_name': 'describe'}, {'name': 'table-drop', 'category': 'tables', 'method_name': 'drop'}, {'name': 'table-insert-rows', 'category': 'tables', 'method_name': 'insert_rows'}, {'name': 'table-list', 'category': 'tables', 'method_name': 'list'}, {'name': 'table-query', 'category': 'tables', 'method_name': 'query'}, {'name': 'list-memory-tags', 'category': 'tags', 'method_name': 'list_memory_tags'}, {'name': 'merge-memory-tags', 'category': 'tags', 'method_name': 'merge_memory_tags'}, {'name': 'resolve-memory-tags', 'category': 'tags', 'method_name': 'resolve_memory_tags'}, {'name': 'upsert-memory-tag', 'category': 'tags', 'method_name': 'upsert_memory_tag'}, {'name': 'add-vault', 'category': 'vaults', 'method_name': 'add_vault'}, {'name': 'create-secure-vault', 'category': 'vaults', 'method_name': 'create_secure_vault'}, {'name': 'delete-vault', 'category': 'vaults', 'method_name': 'delete_vault'}, {'name': 'get-vault-contract', 'category': 'vaults', 'method_name': 'get_vault_contract'}, {'name': 'list-shared-with-me', 'category': 'vaults', 'method_name': 'list_shared_with_me'}, {'name': 'list-vaults', 'category': 'vaults', 'method_name': 'list_vaults'}, {'name': 'provision-defaults', 'category': 'vaults', 'method_name': 'provision_defaults'}, {'name': 'route-memory', 'category': 'vaults', 'method_name': 'route_memory'}, {'name': 'video-analyze-start', 'category': 'video', 'method_name': 'analyze_start'}, {'name': 'video-analyze-status', 'category': 'video', 'method_name': 'analyze_status'}, {'name': 'create-webhook', 'category': 'webhooks', 'method_name': 'create_webhook'}, {'name': 'list-webhooks', 'category': 'webhooks', 'method_name': 'list_webhooks'}, {'name': 'revoke-webhook', 'category': 'webhooks', 'method_name': 'revoke_webhook'}, {'name': 'image_project_create', 'category': 'images', 'method_name': 'project_create'}, {'name': 'image_project_list', 'category': 'images', 'method_name': 'project_list'}, {'name': 'image_folder_create', 'category': 'images', 'method_name': 'folder_create'}, {'name': 'image_folder_list', 'category': 'images', 'method_name': 'folder_list'}, {'name': 'image_asset_save', 'category': 'images', 'method_name': 'asset_save'}, {'name': 'image_asset_get', 'category': 'images', 'method_name': 'asset_get'}, {'name': 'image_asset_list', 'category': 'images', 'method_name': 'asset_list'}, {'name': 'image_asset_search', 'category': 'images', 'method_name': 'asset_search'}, {'name': 'image_asset_move', 'category': 'images', 'method_name': 'asset_move'}, {'name': 'image_asset_delete', 'category': 'images', 'method_name': 'asset_delete'}, {'name': 'analytics_create_activation_destination', 'category': 'analytics', 'method_name': 'create_activation_destination'}, {'name': 'analytics_create_campaign_link', 'category': 'analytics', 'method_name': 'create_campaign_link'}, {'name': 'analytics_create_export', 'category': 'analytics', 'method_name': 'create_export'}, {'name': 'analytics_create_form', 'category': 'analytics', 'method_name': 'create_form'}, {'name': 'analytics_get_acquisition', 'category': 'analytics', 'method_name': 'get_acquisition'}, {'name': 'analytics_get_business_metrics', 'category': 'analytics', 'method_name': 'get_business_metrics'}, {'name': 'analytics_get_channel_breakdown', 'category': 'analytics', 'method_name': 'get_channel_breakdown'}, {'name': 'analytics_get_content', 'category': 'analytics', 'method_name': 'get_content'}, {'name': 'analytics_get_conversions', 'category': 'analytics', 'method_name': 'get_conversions'}, {'name': 'analytics_get_dimensions', 'category': 'analytics', 'method_name': 'get_dimensions'}, {'name': 'analytics_get_entitlement', 'category': 'analytics', 'method_name': 'get_entitlement'}, {'name': 'analytics_get_events', 'category': 'analytics', 'method_name': 'get_events'}, {'name': 'analytics_get_forecast', 'category': 'analytics', 'method_name': 'get_forecast'}, {'name': 'analytics_get_health', 'category': 'analytics', 'method_name': 'get_health'}, {'name': 'analytics_get_overview', 'category': 'analytics', 'method_name': 'get_overview'}, {'name': 'analytics_get_paths', 'category': 'analytics', 'method_name': 'get_paths'}, {'name': 'analytics_get_timeseries', 'category': 'analytics', 'method_name': 'get_timeseries'}, {'name': 'analytics_import_crm_csv', 'category': 'analytics', 'method_name': 'import_crm_csv'}, {'name': 'analytics_list_activation_destinations', 'category': 'analytics', 'method_name': 'list_activation_destinations'}, {'name': 'analytics_list_campaign_links', 'category': 'analytics', 'method_name': 'list_campaign_links'}, {'name': 'analytics_list_crm_imports', 'category': 'analytics', 'method_name': 'list_crm_imports'}, {'name': 'analytics_list_forms', 'category': 'analytics', 'method_name': 'list_forms'}, {'name': 'analytics_list_pixels', 'category': 'analytics', 'method_name': 'list_pixels'}, {'name': 'analytics_list_sites', 'category': 'analytics', 'method_name': 'list_sites'}, {'name': 'commons_claim_publication', 'category': 'commons', 'method_name': 'claim_publication'}, {'name': 'commons_get_entity_linkset', 'category': 'commons', 'method_name': 'get_entity_linkset'}, {'name': 'commons_get_publication', 'category': 'commons', 'method_name': 'get_publication'}, {'name': 'commons_prepare_publication', 'category': 'commons', 'method_name': 'prepare_publication'}, {'name': 'commons_publish_editorial', 'category': 'commons', 'method_name': 'publish_editorial'}, {'name': 'commons_validate_publication', 'category': 'commons', 'method_name': 'validate_publication'}, {'name': 'get_artifact_template_example', 'category': 'artifacts', 'method_name': 'get_artifact_template_example'}, {'name': 'serp_identity_create', 'category': 'search', 'method_name': 'serp_identity_create'}, {'name': 'serp_identity_delete', 'category': 'search', 'method_name': 'serp_identity_delete'}, {'name': 'serp_identity_list', 'category': 'search', 'method_name': 'serp_identity_list'}, {'name': 'commons_get_proposal', 'category': 'commons', 'method_name': 'get_proposal'}, {'name': 'commons_host_image', 'category': 'commons', 'method_name': 'host_image'}, {'name': 'commons_update_editorial_article', 'category': 'commons', 'method_name': 'update_editorial_article'}, {'name': 'site_export_image', 'category': 'web', 'method_name': 'site_export_image'}, {'name': 'site_export_read', 'category': 'web', 'method_name': 'site_export_read'}]
+MCP_TOOL_BINDINGS = [{'name': 'access-accept-share', 'category': 'access', 'method_name': 'accept_share'}, {'name': 'access-approve-sender', 'category': 'access', 'method_name': 'approve_sender'}, {'name': 'access-decline-share', 'category': 'access', 'method_name': 'decline_share'}, {'name': 'access-inbox-settings', 'category': 'access', 'method_name': 'inbox_settings'}, {'name': 'access-invite-account', 'category': 'access', 'method_name': 'invite_account'}, {'name': 'access-issue-key', 'category': 'access', 'method_name': 'issue_key'}, {'name': 'access-list-approved-senders', 'category': 'access', 'method_name': 'list_approved_senders'}, {'name': 'access-list-keys', 'category': 'access', 'method_name': 'list_keys'}, {'name': 'access-note-inbox', 'category': 'access', 'method_name': 'note_inbox'}, {'name': 'access-remove-approved-sender', 'category': 'access', 'method_name': 'remove_approved_sender'}, {'name': 'access-revoke-key', 'category': 'access', 'method_name': 'revoke_key'}, {'name': 'access-revoke-share', 'category': 'access', 'method_name': 'revoke_share'}, {'name': 'access-set-scope', 'category': 'access', 'method_name': 'set_scope'}, {'name': 'access-share-note', 'category': 'access', 'method_name': 'share_note'}, {'name': 'access-share-vault', 'category': 'access', 'method_name': 'share_vault'}, {'name': 'access-swap-vault', 'category': 'access', 'method_name': 'swap_vault'}, {'name': 'access-switch-account', 'category': 'access', 'method_name': 'switch_account'}, {'name': 'access-unlink-share', 'category': 'access', 'method_name': 'unlink_share'}, {'name': 'add-vault', 'category': 'vaults', 'method_name': 'add_vault'}, {'name': 'analytics_create_activation_destination', 'category': 'analytics', 'method_name': 'create_activation_destination'}, {'name': 'analytics_create_campaign_link', 'category': 'analytics', 'method_name': 'create_campaign_link'}, {'name': 'analytics_create_export', 'category': 'analytics', 'method_name': 'create_export'}, {'name': 'analytics_create_form', 'category': 'analytics', 'method_name': 'create_form'}, {'name': 'analytics_get_acquisition', 'category': 'analytics', 'method_name': 'get_acquisition'}, {'name': 'analytics_get_business_metrics', 'category': 'analytics', 'method_name': 'get_business_metrics'}, {'name': 'analytics_get_channel_breakdown', 'category': 'analytics', 'method_name': 'get_channel_breakdown'}, {'name': 'analytics_get_content', 'category': 'analytics', 'method_name': 'get_content'}, {'name': 'analytics_get_conversions', 'category': 'analytics', 'method_name': 'get_conversions'}, {'name': 'analytics_get_dimensions', 'category': 'analytics', 'method_name': 'get_dimensions'}, {'name': 'analytics_get_entitlement', 'category': 'analytics', 'method_name': 'get_entitlement'}, {'name': 'analytics_get_events', 'category': 'analytics', 'method_name': 'get_events'}, {'name': 'analytics_get_forecast', 'category': 'analytics', 'method_name': 'get_forecast'}, {'name': 'analytics_get_health', 'category': 'analytics', 'method_name': 'get_health'}, {'name': 'analytics_get_overview', 'category': 'analytics', 'method_name': 'get_overview'}, {'name': 'analytics_get_paths', 'category': 'analytics', 'method_name': 'get_paths'}, {'name': 'analytics_get_timeseries', 'category': 'analytics', 'method_name': 'get_timeseries'}, {'name': 'analytics_import_crm_csv', 'category': 'analytics', 'method_name': 'import_crm_csv'}, {'name': 'analytics_list_activation_destinations', 'category': 'analytics', 'method_name': 'list_activation_destinations'}, {'name': 'analytics_list_campaign_links', 'category': 'analytics', 'method_name': 'list_campaign_links'}, {'name': 'analytics_list_crm_imports', 'category': 'analytics', 'method_name': 'list_crm_imports'}, {'name': 'analytics_list_forms', 'category': 'analytics', 'method_name': 'list_forms'}, {'name': 'analytics_list_pixels', 'category': 'analytics', 'method_name': 'list_pixels'}, {'name': 'analytics_list_sites', 'category': 'analytics', 'method_name': 'list_sites'}, {'name': 'analyze_site_similarity', 'category': 'web', 'method_name': 'analyze_site_similarity'}, {'name': 'archive_artifact_template', 'category': 'schedule', 'method_name': 'archive_artifact_template'}, {'name': 'archive_read', 'category': 'web', 'method_name': 'archive_read'}, {'name': 'archive_scheduled_run', 'category': 'schedule', 'method_name': 'archive_scheduled_run'}, {'name': 'audit_site', 'category': 'web', 'method_name': 'audit_site'}, {'name': 'browser_click', 'category': 'browser', 'method_name': 'click'}, {'name': 'browser_close', 'category': 'browser', 'method_name': 'close'}, {'name': 'browser_extension_delete', 'category': 'browser', 'method_name': 'extension_delete'}, {'name': 'browser_extension_import', 'category': 'browser', 'method_name': 'extension_import'}, {'name': 'browser_extension_list', 'category': 'browser', 'method_name': 'extension_list'}, {'name': 'browser_goto', 'category': 'browser', 'method_name': 'goto'}, {'name': 'browser_list_replays', 'category': 'browser', 'method_name': 'list_replays'}, {'name': 'browser_list_sessions', 'category': 'browser', 'method_name': 'list_sessions'}, {'name': 'browser_locate', 'category': 'browser', 'method_name': 'locate'}, {'name': 'browser_open', 'category': 'browser', 'method_name': 'open'}, {'name': 'browser_press', 'category': 'browser', 'method_name': 'press'}, {'name': 'browser_profile_connect', 'category': 'browser', 'method_name': 'profile_connect'}, {'name': 'browser_profile_list', 'category': 'browser', 'method_name': 'profile_list'}, {'name': 'browser_read', 'category': 'browser', 'method_name': 'read'}, {'name': 'browser_replay_annotate', 'category': 'browser', 'method_name': 'replay_annotate'}, {'name': 'browser_replay_download', 'category': 'browser', 'method_name': 'replay_download'}, {'name': 'browser_replay_mark', 'category': 'browser', 'method_name': 'replay_mark'}, {'name': 'browser_replay_start', 'category': 'browser', 'method_name': 'replay_start'}, {'name': 'browser_replay_stop', 'category': 'browser', 'method_name': 'replay_stop'}, {'name': 'browser_screenshot', 'category': 'browser', 'method_name': 'screenshot'}, {'name': 'browser_scroll', 'category': 'browser', 'method_name': 'scroll'}, {'name': 'browser_type', 'category': 'browser', 'method_name': 'type'}, {'name': 'bulk-delete-notes', 'category': 'memory', 'method_name': 'bulk_delete_notes'}, {'name': 'call_service_connection_action', 'category': 'connections', 'method_name': 'call_service_connection_action'}, {'name': 'capture_serp_page_snapshots', 'category': 'serpIntelligence', 'method_name': 'page_snapshots'}, {'name': 'capture_serp_snapshot', 'category': 'serpIntelligence', 'method_name': 'snapshot'}, {'name': 'check_site_export', 'category': 'web', 'method_name': 'check_site_export'}, {'name': 'commons_claim_publication', 'category': 'commons', 'method_name': 'claim_publication'}, {'name': 'commons_get_entity', 'category': 'commons', 'method_name': 'get_entity'}, {'name': 'commons_get_entity_ledger', 'category': 'commons', 'method_name': 'get_entity_ledger'}, {'name': 'commons_get_entity_linkset', 'category': 'commons', 'method_name': 'get_entity_linkset'}, {'name': 'commons_get_proposal', 'category': 'commons', 'method_name': 'get_proposal'}, {'name': 'commons_get_publication', 'category': 'commons', 'method_name': 'get_publication'}, {'name': 'commons_host_image', 'category': 'commons', 'method_name': 'host_image'}, {'name': 'commons_list_filters', 'category': 'commons', 'method_name': 'list_filters'}, {'name': 'commons_list_needs_links', 'category': 'commons', 'method_name': 'list_needs_links'}, {'name': 'commons_prepare_entity', 'category': 'commons', 'method_name': 'prepare_entity'}, {'name': 'commons_prepare_publication', 'category': 'commons', 'method_name': 'prepare_publication'}, {'name': 'commons_publish_editorial', 'category': 'commons', 'method_name': 'publish_editorial'}, {'name': 'commons_save_filter', 'category': 'commons', 'method_name': 'save_filter'}, {'name': 'commons_search_entities', 'category': 'commons', 'method_name': 'search_entities'}, {'name': 'commons_submit_entity', 'category': 'commons', 'method_name': 'submit_entity'}, {'name': 'commons_update_editorial_article', 'category': 'commons', 'method_name': 'update_editorial_article'}, {'name': 'commons_validate_entity', 'category': 'commons', 'method_name': 'validate_entity'}, {'name': 'commons_validate_publication', 'category': 'commons', 'method_name': 'validate_publication'}, {'name': 'cost-usage', 'category': 'storage', 'method_name': 'cost_usage'}, {'name': 'create_artifact_template', 'category': 'schedule', 'method_name': 'create_artifact_template'}, {'name': 'create_editorial_reading_room', 'category': 'editorial', 'method_name': 'create_reading_room'}, {'name': 'create_scheduled_run_view_link', 'category': 'schedule', 'method_name': 'create_scheduled_run_view_link'}, {'name': 'create-channel', 'category': 'channels', 'method_name': 'create_channel'}, {'name': 'create-scheduled-action', 'category': 'schedule', 'method_name': 'create_scheduled_action'}, {'name': 'create-secure-vault', 'category': 'vaults', 'method_name': 'create_secure_vault'}, {'name': 'create-webhook', 'category': 'webhooks', 'method_name': 'create_webhook'}, {'name': 'credits_info', 'category': 'billing', 'method_name': 'credits_info'}, {'name': 'delete-note', 'category': 'memory', 'method_name': 'delete_note'}, {'name': 'delete-scheduled-action', 'category': 'schedule', 'method_name': 'delete_scheduled_action'}, {'name': 'delete-vault', 'category': 'vaults', 'method_name': 'delete_vault'}, {'name': 'describe_service_connection_tool', 'category': 'connections', 'method_name': 'describe_service_connection_tool'}, {'name': 'diff_page', 'category': 'web', 'method_name': 'diff_page'}, {'name': 'directory_workflow', 'category': 'directory', 'method_name': 'run'}, {'name': 'directory_workflow_status', 'category': 'directory', 'method_name': 'workflow_status'}, {'name': 'editorial_reading_room_guide', 'category': 'editorial', 'method_name': 'reading_room_guide'}, {'name': 'export_connected_service_data', 'category': 'connections', 'method_name': 'export_connected_service_data'}, {'name': 'export_search_console_table_data', 'category': 'connections', 'method_name': 'export_search_console_table_data'}, {'name': 'extract_site', 'category': 'web', 'method_name': 'extract_site'}, {'name': 'extract_url', 'category': 'web', 'method_name': 'extract_url'}, {'name': 'facebook_ad_search', 'category': 'facebook', 'method_name': 'ad_search'}, {'name': 'facebook_ad_transcribe', 'category': 'facebook', 'method_name': 'ad_transcribe'}, {'name': 'facebook_page_intel', 'category': 'facebook', 'method_name': 'page_intel'}, {'name': 'facebook_video_transcribe', 'category': 'facebook', 'method_name': 'video_transcribe'}, {'name': 'fact-history', 'category': 'facts', 'method_name': 'history'}, {'name': 'g2_reviews', 'category': 'reviews', 'method_name': 'g2_reviews'}, {'name': 'get_artifact_template', 'category': 'schedule', 'method_name': 'get_artifact_template'}, {'name': 'get_artifact_template_example', 'category': 'artifacts', 'method_name': 'get_artifact_template_example'}, {'name': 'get_scheduled_run', 'category': 'schedule', 'method_name': 'get_scheduled_run'}, {'name': 'get-chat-link', 'category': 'access', 'method_name': 'get_chat_link'}, {'name': 'get-local-sourcebook-contract', 'category': 'directory', 'method_name': 'get_local_sourcebook_contract'}, {'name': 'get-message-note', 'category': 'channels', 'method_name': 'get_message_note'}, {'name': 'get-schedule-link', 'category': 'schedule', 'method_name': 'get_schedule_link'}, {'name': 'get-schedule-status', 'category': 'schedule', 'method_name': 'get_schedule_status'}, {'name': 'get-vault-app-link', 'category': 'access', 'method_name': 'get_vault_app_link'}, {'name': 'get-vault-contract', 'category': 'vaults', 'method_name': 'get_vault_contract'}, {'name': 'gmail_search_contacts', 'category': 'connections', 'method_name': 'gmail_search_contacts'}, {'name': 'gmail_send_message', 'category': 'connections', 'method_name': 'gmail_send_message'}, {'name': 'google_ads_page_intel', 'category': 'googleAds', 'method_name': 'page_intel'}, {'name': 'google_ads_search', 'category': 'googleAds', 'method_name': 'search'}, {'name': 'google_ads_transcribe', 'category': 'googleAds', 'method_name': 'transcribe'}, {'name': 'google_calendar_create_event', 'category': 'connections', 'method_name': 'google_calendar_create_event'}, {'name': 'harvest_paa', 'category': 'search', 'method_name': 'harvest_paa'}, {'name': 'image_asset_delete', 'category': 'images', 'method_name': 'asset_delete'}, {'name': 'image_asset_get', 'category': 'images', 'method_name': 'asset_get'}, {'name': 'image_asset_list', 'category': 'images', 'method_name': 'asset_list'}, {'name': 'image_asset_move', 'category': 'images', 'method_name': 'asset_move'}, {'name': 'image_asset_save', 'category': 'images', 'method_name': 'asset_save'}, {'name': 'image_asset_search', 'category': 'images', 'method_name': 'asset_search'}, {'name': 'image_folder_create', 'category': 'images', 'method_name': 'folder_create'}, {'name': 'image_folder_list', 'category': 'images', 'method_name': 'folder_list'}, {'name': 'image_project_create', 'category': 'images', 'method_name': 'project_create'}, {'name': 'image_project_list', 'category': 'images', 'method_name': 'project_list'}, {'name': 'import_service_connection_to_memory', 'category': 'connections', 'method_name': 'import_service_connection_to_memory'}, {'name': 'instagram_media_download', 'category': 'instagram', 'method_name': 'media_download'}, {'name': 'instagram_profile_content', 'category': 'instagram', 'method_name': 'profile_content'}, {'name': 'lead_list_enrich', 'category': 'leads', 'method_name': 'enrich'}, {'name': 'lead_list_enrich_status', 'category': 'leads', 'method_name': 'enrich_status'}, {'name': 'lead_list_import', 'category': 'leads', 'method_name': 'import_'}, {'name': 'lead_list_upload_start', 'category': 'leads', 'method_name': 'upload_start'}, {'name': 'library-ingest', 'category': 'library', 'method_name': 'ingest'}, {'name': 'list_artifact_templates', 'category': 'schedule', 'method_name': 'list_artifact_templates'}, {'name': 'list_scheduled_runs', 'category': 'schedule', 'method_name': 'list_scheduled_runs'}, {'name': 'list_service_connections', 'category': 'connections', 'method_name': 'list_service_connections'}, {'name': 'list-channel-members', 'category': 'channels', 'method_name': 'list_channel_members'}, {'name': 'list-channel-messages', 'category': 'channels', 'method_name': 'list_channel_messages'}, {'name': 'list-local-sourcebook-tags', 'category': 'directory', 'method_name': 'list_local_sourcebook_tags'}, {'name': 'list-memory-tags', 'category': 'tags', 'method_name': 'list_memory_tags'}, {'name': 'list-scheduled-actions', 'category': 'schedule', 'method_name': 'list_scheduled_actions'}, {'name': 'list-shared-with-me', 'category': 'vaults', 'method_name': 'list_shared_with_me'}, {'name': 'list-vaults', 'category': 'vaults', 'method_name': 'list_vaults'}, {'name': 'list-webhooks', 'category': 'webhooks', 'method_name': 'list_webhooks'}, {'name': 'local_sourcebook_refresh', 'category': 'directory', 'method_name': 'local_sourcebook_refresh'}, {'name': 'local_sourcebook_submission_status', 'category': 'directory', 'method_name': 'local_sourcebook_submission_status'}, {'name': 'local-sourcebook-capture', 'category': 'directory', 'method_name': 'local_sourcebook_capture'}, {'name': 'location_markets', 'category': 'directory', 'method_name': 'location_markets'}, {'name': 'map_site_urls', 'category': 'web', 'method_name': 'map_site_urls'}, {'name': 'map_wayback_snapshots', 'category': 'web', 'method_name': 'map_wayback_snapshots'}, {'name': 'maps_place_intel', 'category': 'maps', 'method_name': 'place_intel'}, {'name': 'maps_search', 'category': 'maps', 'method_name': 'search'}, {'name': 'mark_scheduled_run_opened', 'category': 'schedule', 'method_name': 'mark_scheduled_run_opened'}, {'name': 'mark_scheduled_run_unopened', 'category': 'schedule', 'method_name': 'mark_scheduled_run_unopened'}, {'name': 'memory-backlinks', 'category': 'graph', 'method_name': 'memory_backlinks'}, {'name': 'memory-capture', 'category': 'capture', 'method_name': 'memory_capture'}, {'name': 'memory-export', 'category': 'memory', 'method_name': 'export'}, {'name': 'memory-get', 'category': 'memory', 'method_name': 'get'}, {'name': 'memory-graph-path', 'category': 'graph', 'method_name': 'memory_graph_path'}, {'name': 'memory-graph-universe', 'category': 'graph', 'method_name': 'memory_graph_universe'}, {'name': 'memory-list', 'category': 'memory', 'method_name': 'list'}, {'name': 'memory-put', 'category': 'memory', 'method_name': 'put'}, {'name': 'memory-questions', 'category': 'capture', 'method_name': 'memory_questions'}, {'name': 'memory-search', 'category': 'memory', 'method_name': 'search'}, {'name': 'memory-suggest', 'category': 'memory', 'method_name': 'suggest'}, {'name': 'memory-upload', 'category': 'memory', 'method_name': 'upload'}, {'name': 'merge-memory-tags', 'category': 'tags', 'method_name': 'merge_memory_tags'}, {'name': 'meta_ad_creative_media', 'category': 'connections', 'method_name': 'meta_ad_creative_media'}, {'name': 'my-mentions', 'category': 'channels', 'method_name': 'my_mentions'}, {'name': 'pause-scheduled-action', 'category': 'schedule', 'method_name': 'pause_scheduled_action'}, {'name': 'poll-channel', 'category': 'channels', 'method_name': 'poll_channel'}, {'name': 'post-message', 'category': 'channels', 'method_name': 'post_message'}, {'name': 'prepare-local-sourcebook-write', 'category': 'directory', 'method_name': 'prepare_local_sourcebook_write'}, {'name': 'prepare-memory-write', 'category': 'capture', 'method_name': 'prepare_memory_write'}, {'name': 'propose-scheduled-action', 'category': 'schedule', 'method_name': 'propose_scheduled_action'}, {'name': 'provision-defaults', 'category': 'vaults', 'method_name': 'provision_defaults'}, {'name': 'query_fanout_workflow', 'category': 'workflows', 'method_name': 'query_fanout'}, {'name': 'rank_tracker_workflow', 'category': 'workflows', 'method_name': 'rank_tracker'}, {'name': 'react-message', 'category': 'channels', 'method_name': 'react_message'}, {'name': 'read_service_connection', 'category': 'connections', 'method_name': 'read_service_connection'}, {'name': 'record-fact', 'category': 'facts', 'method_name': 'record_fact'}, {'name': 'reddit_thread', 'category': 'reddit', 'method_name': 'thread'}, {'name': 'reddit_trending', 'category': 'reddit', 'method_name': 'trending'}, {'name': 'remove-channel-member', 'category': 'channels', 'method_name': 'remove_channel_member'}, {'name': 'renew_connected_data_download', 'category': 'connections', 'method_name': 'renew_connected_data_download'}, {'name': 'renew_editorial_reading_room_download', 'category': 'editorial', 'method_name': 'renew_reading_room_download'}, {'name': 'reply-message', 'category': 'channels', 'method_name': 'reply_message'}, {'name': 'report_artifact_read', 'category': 'artifacts', 'method_name': 'read'}, {'name': 'resolve-local-sourcebook-tags', 'category': 'directory', 'method_name': 'resolve_local_sourcebook_tags'}, {'name': 'resolve-memory-tags', 'category': 'tags', 'method_name': 'resolve_memory_tags'}, {'name': 'resume-scheduled-action', 'category': 'schedule', 'method_name': 'resume_scheduled_action'}, {'name': 'revoke_scheduled_run_view_link', 'category': 'schedule', 'method_name': 'revoke_scheduled_run_view_link'}, {'name': 'revoke-chat-link', 'category': 'access', 'method_name': 'revoke_chat_link'}, {'name': 'revoke-schedule-link', 'category': 'schedule', 'method_name': 'revoke_schedule_link'}, {'name': 'revoke-vault-app-link', 'category': 'access', 'method_name': 'revoke_vault_app_link'}, {'name': 'revoke-webhook', 'category': 'webhooks', 'method_name': 'revoke_webhook'}, {'name': 'route-memory', 'category': 'vaults', 'method_name': 'route_memory'}, {'name': 'search_serp', 'category': 'search', 'method_name': 'search_serp'}, {'name': 'serp_identity_create', 'category': 'search', 'method_name': 'serp_identity_create'}, {'name': 'serp_identity_delete', 'category': 'search', 'method_name': 'serp_identity_delete'}, {'name': 'serp_identity_list', 'category': 'search', 'method_name': 'serp_identity_list'}, {'name': 'set_scheduled_action_connections', 'category': 'connections', 'method_name': 'set_scheduled_action_connections'}, {'name': 'set-agent-identity', 'category': 'access', 'method_name': 'set_agent_identity'}, {'name': 'set-schedule-defaults', 'category': 'schedule', 'method_name': 'set_schedule_defaults'}, {'name': 'set-schedule-entitlement', 'category': 'schedule', 'method_name': 'set_schedule_entitlement'}, {'name': 'site_export_image', 'category': 'web', 'method_name': 'site_export_image'}, {'name': 'site_export_read', 'category': 'web', 'method_name': 'site_export_read'}, {'name': 'slack_send_message', 'category': 'connections', 'method_name': 'slack_send_message'}, {'name': 'storage-usage', 'category': 'storage', 'method_name': 'usage'}, {'name': 'table-create', 'category': 'tables', 'method_name': 'create'}, {'name': 'table-delete-rows', 'category': 'tables', 'method_name': 'delete_rows'}, {'name': 'table-describe', 'category': 'tables', 'method_name': 'describe'}, {'name': 'table-drop', 'category': 'tables', 'method_name': 'drop'}, {'name': 'table-insert-rows', 'category': 'tables', 'method_name': 'insert_rows'}, {'name': 'table-list', 'category': 'tables', 'method_name': 'list'}, {'name': 'table-query', 'category': 'tables', 'method_name': 'query'}, {'name': 'temporal-recall', 'category': 'recall', 'method_name': 'temporal_recall'}, {'name': 'test_service_connection', 'category': 'connections', 'method_name': 'test_service_connection'}, {'name': 'trustpilot_reviews', 'category': 'reviews', 'method_name': 'trustpilot_reviews'}, {'name': 'update_artifact_template', 'category': 'schedule', 'method_name': 'update_artifact_template'}, {'name': 'update-scheduled-action', 'category': 'schedule', 'method_name': 'update_scheduled_action'}, {'name': 'upsert-memory-tag', 'category': 'tags', 'method_name': 'upsert_memory_tag'}, {'name': 'validate-local-sourcebook-write', 'category': 'directory', 'method_name': 'validate_local_sourcebook_write'}, {'name': 'validate-memory-write', 'category': 'capture', 'method_name': 'validate_memory_write'}, {'name': 'video_frame_analysis', 'category': 'video', 'method_name': 'frame_analysis'}, {'name': 'video_frame_analysis_status', 'category': 'video', 'method_name': 'frame_analysis_status'}, {'name': 'video-analyze-start', 'category': 'video', 'method_name': 'analyze_start'}, {'name': 'video-analyze-status', 'category': 'video', 'method_name': 'analyze_status'}, {'name': 'workflow_artifact_read', 'category': 'workflows', 'method_name': 'artifact_read'}, {'name': 'workflow_list', 'category': 'workflows', 'method_name': 'list'}, {'name': 'workflow_run', 'category': 'workflows', 'method_name': 'run'}, {'name': 'workflow_status', 'category': 'workflows', 'method_name': 'status'}, {'name': 'workflow_step', 'category': 'workflows', 'method_name': 'step'}, {'name': 'workflow_suggest', 'category': 'workflows', 'method_name': 'suggest'}, {'name': 'youtube_harvest', 'category': 'youtube', 'method_name': 'harvest'}, {'name': 'youtube_transcribe', 'category': 'youtube', 'method_name': 'transcribe'}, {'name': 'zoom_create_meeting', 'category': 'connections', 'method_name': 'zoom_create_meeting'}]
 MCP_TOOL_COUNT = len(MCP_TOOL_BINDINGS)
-
-
-class SearchNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def harvest_paa(self, **kwargs: Any) -> HarvestPaaOutput:
-        payload = HarvestPaaInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("harvest_paa", payload)
-        return HarvestPaaOutput.model_validate(result)
-
-    def search_serp(self, **kwargs: Any) -> SearchSerpOutput:
-        payload = SearchSerpInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("search_serp", payload)
-        return SearchSerpOutput.model_validate(result)
-
-    def serp_identity_create(self, **kwargs: Any) -> SerpIdentityCreateOutput:
-        payload = SerpIdentityCreateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("serp_identity_create", payload)
-        return SerpIdentityCreateOutput.model_validate(result)
-
-    def serp_identity_delete(self, **kwargs: Any) -> SerpIdentityDeleteOutput:
-        payload = SerpIdentityDeleteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("serp_identity_delete", payload)
-        return SerpIdentityDeleteOutput.model_validate(result)
-
-    def serp_identity_list(self, **kwargs: Any) -> SerpIdentityListOutput:
-        payload = SerpIdentityListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("serp_identity_list", payload)
-        return SerpIdentityListOutput.model_validate(result)
-
-
-class WebNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def extract_url(self, **kwargs: Any) -> ExtractUrlOutput:
-        payload = ExtractUrlInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("extract_url", payload)
-        return ExtractUrlOutput.model_validate(result)
-
-    def diff_page(self, **kwargs: Any) -> DiffPageOutput:
-        payload = DiffPageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("diff_page", payload)
-        return DiffPageOutput.model_validate(result)
-
-    def map_site_urls(self, **kwargs: Any) -> MapSiteUrlsOutput:
-        payload = MapSiteUrlsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("map_site_urls", payload)
-        return MapSiteUrlsOutput.model_validate(result)
-
-    def map_wayback_snapshots(self, **kwargs: Any) -> MapWaybackSnapshotsOutput:
-        payload = MapWaybackSnapshotsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("map_wayback_snapshots", payload)
-        return MapWaybackSnapshotsOutput.model_validate(result)
-
-    def extract_site(self, **kwargs: Any) -> ExtractSiteOutput:
-        payload = ExtractSiteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("extract_site", payload)
-        return ExtractSiteOutput.model_validate(result)
-
-    def audit_site(self, **kwargs: Any) -> AuditSiteOutput:
-        payload = AuditSiteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("audit_site", payload)
-        return AuditSiteOutput.model_validate(result)
-
-    def check_site_export(self, **kwargs: Any) -> CheckSiteExportOutput:
-        payload = CheckSiteExportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("check_site_export", payload)
-        return CheckSiteExportOutput.model_validate(result)
-
-    def archive_read(self, **kwargs: Any) -> ArchiveReadOutput:
-        payload = ArchiveReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("archive_read", payload)
-        return ArchiveReadOutput.model_validate(result)
-
-    def site_export_image(self, **kwargs: Any) -> SiteExportImageOutput:
-        payload = SiteExportImageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("site_export_image", payload)
-        return SiteExportImageOutput.model_validate(result)
-
-    def site_export_read(self, **kwargs: Any) -> SiteExportReadOutput:
-        payload = SiteExportReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("site_export_read", payload)
-        return SiteExportReadOutput.model_validate(result)
-
-
-class YoutubeNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def harvest(self, **kwargs: Any) -> YoutubeHarvestOutput:
-        payload = YoutubeHarvestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("youtube_harvest", payload)
-        return YoutubeHarvestOutput.model_validate(result)
-
-    def transcribe(self, **kwargs: Any) -> YoutubeTranscribeOutput:
-        payload = YoutubeTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("youtube_transcribe", payload)
-        return YoutubeTranscribeOutput.model_validate(result)
-
-
-class FacebookNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def page_intel(self, **kwargs: Any) -> FacebookPageIntelOutput:
-        payload = FacebookPageIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("facebook_page_intel", payload)
-        return FacebookPageIntelOutput.model_validate(result)
-
-    def ad_search(self, **kwargs: Any) -> FacebookAdSearchOutput:
-        payload = FacebookAdSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("facebook_ad_search", payload)
-        return FacebookAdSearchOutput.model_validate(result)
-
-    def ad_transcribe(self, **kwargs: Any) -> FacebookAdTranscribeOutput:
-        payload = FacebookAdTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("facebook_ad_transcribe", payload)
-        return FacebookAdTranscribeOutput.model_validate(result)
-
-    def video_transcribe(self, **kwargs: Any) -> FacebookVideoTranscribeOutput:
-        payload = FacebookVideoTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("facebook_video_transcribe", payload)
-        return FacebookVideoTranscribeOutput.model_validate(result)
-
-
-class RedditNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def thread(self, **kwargs: Any) -> RedditThreadOutput:
-        payload = RedditThreadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("reddit_thread", payload)
-        return RedditThreadOutput.model_validate(result)
-
-    def trending(self, **kwargs: Any) -> RedditTrendingOutput:
-        payload = RedditTrendingInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("reddit_trending", payload)
-        return RedditTrendingOutput.model_validate(result)
-
-
-class VideoNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def frame_analysis(self, **kwargs: Any) -> VideoFrameAnalysisOutput:
-        payload = VideoFrameAnalysisInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("video_frame_analysis", payload)
-        return VideoFrameAnalysisOutput.model_validate(result)
-
-    def frame_analysis_status(self, **kwargs: Any) -> VideoFrameAnalysisStatusOutput:
-        payload = VideoFrameAnalysisStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("video_frame_analysis_status", payload)
-        return VideoFrameAnalysisStatusOutput.model_validate(result)
-
-    def analyze_start(self, **kwargs: Any) -> VideoAnalyzeStartOutput:
-        payload = VideoAnalyzeStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("video-analyze-start", payload)
-        return VideoAnalyzeStartOutput.model_validate(result)
-
-    def analyze_status(self, **kwargs: Any) -> VideoAnalyzeStatusOutput:
-        payload = VideoAnalyzeStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("video-analyze-status", payload)
-        return VideoAnalyzeStatusOutput.model_validate(result)
-
-
-class GoogleAdsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def search(self, **kwargs: Any) -> GoogleAdsSearchOutput:
-        payload = GoogleAdsSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("google_ads_search", payload)
-        return GoogleAdsSearchOutput.model_validate(result)
-
-    def page_intel(self, **kwargs: Any) -> GoogleAdsPageIntelOutput:
-        payload = GoogleAdsPageIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("google_ads_page_intel", payload)
-        return GoogleAdsPageIntelOutput.model_validate(result)
-
-    def transcribe(self, **kwargs: Any) -> GoogleAdsTranscribeOutput:
-        payload = GoogleAdsTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("google_ads_transcribe", payload)
-        return GoogleAdsTranscribeOutput.model_validate(result)
-
-
-class InstagramNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def profile_content(self, **kwargs: Any) -> InstagramProfileContentOutput:
-        payload = InstagramProfileContentInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("instagram_profile_content", payload)
-        return InstagramProfileContentOutput.model_validate(result)
-
-    def media_download(self, **kwargs: Any) -> InstagramMediaDownloadOutput:
-        payload = InstagramMediaDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("instagram_media_download", payload)
-        return InstagramMediaDownloadOutput.model_validate(result)
-
-
-class MapsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def place_intel(self, **kwargs: Any) -> MapsPlaceIntelOutput:
-        payload = MapsPlaceIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("maps_place_intel", payload)
-        return MapsPlaceIntelOutput.model_validate(result)
-
-    def search(self, **kwargs: Any) -> MapsSearchOutput:
-        payload = MapsSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("maps_search", payload)
-        return MapsSearchOutput.model_validate(result)
-
-
-class ReviewsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def trustpilot_reviews(self, **kwargs: Any) -> TrustpilotReviewsOutput:
-        payload = TrustpilotReviewsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("trustpilot_reviews", payload)
-        return TrustpilotReviewsOutput.model_validate(result)
-
-    def g2_reviews(self, **kwargs: Any) -> G2ReviewsOutput:
-        payload = G2ReviewsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("g2_reviews", payload)
-        return G2ReviewsOutput.model_validate(result)
-
-
-class CommonsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def search_entities(self, **kwargs: Any) -> CommonsSearchEntitiesOutput:
-        payload = CommonsSearchEntitiesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_search_entities", payload)
-        return CommonsSearchEntitiesOutput.model_validate(result)
-
-    def get_entity(self, **kwargs: Any) -> CommonsGetEntityOutput:
-        payload = CommonsGetEntityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_get_entity", payload)
-        return CommonsGetEntityOutput.model_validate(result)
-
-    def list_needs_links(self, **kwargs: Any) -> CommonsListNeedsLinksOutput:
-        payload = CommonsListNeedsLinksInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_list_needs_links", payload)
-        return CommonsListNeedsLinksOutput.model_validate(result)
-
-    def prepare_entity(self, **kwargs: Any) -> CommonsPrepareEntityOutput:
-        payload = CommonsPrepareEntityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_prepare_entity", payload)
-        return CommonsPrepareEntityOutput.model_validate(result)
-
-    def validate_entity(self, **kwargs: Any) -> CommonsValidateEntityOutput:
-        payload = CommonsValidateEntityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_validate_entity", payload)
-        return CommonsValidateEntityOutput.model_validate(result)
-
-    def submit_entity(self, **kwargs: Any) -> CommonsSubmitEntityOutput:
-        payload = CommonsSubmitEntityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_submit_entity", payload)
-        return CommonsSubmitEntityOutput.model_validate(result)
-
-    def get_entity_ledger(self, **kwargs: Any) -> CommonsGetEntityLedgerOutput:
-        payload = CommonsGetEntityLedgerInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_get_entity_ledger", payload)
-        return CommonsGetEntityLedgerOutput.model_validate(result)
-
-    def save_filter(self, **kwargs: Any) -> CommonsSaveFilterOutput:
-        payload = CommonsSaveFilterInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_save_filter", payload)
-        return CommonsSaveFilterOutput.model_validate(result)
-
-    def list_filters(self, **kwargs: Any) -> CommonsListFiltersOutput:
-        payload = CommonsListFiltersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_list_filters", payload)
-        return CommonsListFiltersOutput.model_validate(result)
-
-    def claim_publication(self, **kwargs: Any) -> CommonsClaimPublicationOutput:
-        payload = CommonsClaimPublicationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_claim_publication", payload)
-        return CommonsClaimPublicationOutput.model_validate(result)
-
-    def get_entity_linkset(self, **kwargs: Any) -> CommonsGetEntityLinksetOutput:
-        payload = CommonsGetEntityLinksetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_get_entity_linkset", payload)
-        return CommonsGetEntityLinksetOutput.model_validate(result)
-
-    def get_publication(self, **kwargs: Any) -> CommonsGetPublicationOutput:
-        payload = CommonsGetPublicationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_get_publication", payload)
-        return CommonsGetPublicationOutput.model_validate(result)
-
-    def prepare_publication(self, **kwargs: Any) -> CommonsPreparePublicationOutput:
-        payload = CommonsPreparePublicationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_prepare_publication", payload)
-        return CommonsPreparePublicationOutput.model_validate(result)
-
-    def publish_editorial(self, **kwargs: Any) -> CommonsPublishEditorialOutput:
-        payload = CommonsPublishEditorialInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_publish_editorial", payload)
-        return CommonsPublishEditorialOutput.model_validate(result)
-
-    def validate_publication(self, **kwargs: Any) -> CommonsValidatePublicationOutput:
-        payload = CommonsValidatePublicationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_validate_publication", payload)
-        return CommonsValidatePublicationOutput.model_validate(result)
-
-    def get_proposal(self, **kwargs: Any) -> CommonsGetProposalOutput:
-        payload = CommonsGetProposalInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_get_proposal", payload)
-        return CommonsGetProposalOutput.model_validate(result)
-
-    def host_image(self, **kwargs: Any) -> CommonsHostImageOutput:
-        payload = CommonsHostImageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_host_image", payload)
-        return CommonsHostImageOutput.model_validate(result)
-
-    def update_editorial_article(self, **kwargs: Any) -> CommonsUpdateEditorialArticleOutput:
-        payload = CommonsUpdateEditorialArticleInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("commons_update_editorial_article", payload)
-        return CommonsUpdateEditorialArticleOutput.model_validate(result)
-
-
-class DirectoryNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def run(self, **kwargs: Any) -> DirectoryWorkflowOutput:
-        payload = DirectoryWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("directory_workflow", payload)
-        return DirectoryWorkflowOutput.model_validate(result)
-
-    def workflow_status(self, **kwargs: Any) -> DirectoryWorkflowStatusOutput:
-        payload = DirectoryWorkflowStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("directory_workflow_status", payload)
-        return DirectoryWorkflowStatusOutput.model_validate(result)
-
-    def get_local_sourcebook_contract(self, **kwargs: Any) -> GetLocalSourcebookContractOutput:
-        payload = GetLocalSourcebookContractInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get-local-sourcebook-contract", payload)
-        return GetLocalSourcebookContractOutput.model_validate(result)
-
-    def list_local_sourcebook_tags(self, **kwargs: Any) -> ListLocalSourcebookTagsOutput:
-        payload = ListLocalSourcebookTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list-local-sourcebook-tags", payload)
-        return ListLocalSourcebookTagsOutput.model_validate(result)
-
-    def resolve_local_sourcebook_tags(self, **kwargs: Any) -> ResolveLocalSourcebookTagsOutput:
-        payload = ResolveLocalSourcebookTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("resolve-local-sourcebook-tags", payload)
-        return ResolveLocalSourcebookTagsOutput.model_validate(result)
-
-    def prepare_local_sourcebook_write(self, **kwargs: Any) -> PrepareLocalSourcebookWriteOutput:
-        payload = PrepareLocalSourcebookWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("prepare-local-sourcebook-write", payload)
-        return PrepareLocalSourcebookWriteOutput.model_validate(result)
-
-    def validate_local_sourcebook_write(self, **kwargs: Any) -> ValidateLocalSourcebookWriteOutput:
-        payload = ValidateLocalSourcebookWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("validate-local-sourcebook-write", payload)
-        return ValidateLocalSourcebookWriteOutput.model_validate(result)
-
-    def local_sourcebook_capture(self, **kwargs: Any) -> LocalSourcebookCaptureOutput:
-        payload = LocalSourcebookCaptureInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("local-sourcebook-capture", payload)
-        return LocalSourcebookCaptureOutput.model_validate(result)
-
-    def local_sourcebook_submission_status(self, **kwargs: Any) -> LocalSourcebookSubmissionStatusOutput:
-        payload = LocalSourcebookSubmissionStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("local_sourcebook_submission_status", payload)
-        return LocalSourcebookSubmissionStatusOutput.model_validate(result)
-
-    def local_sourcebook_refresh(self, **kwargs: Any) -> LocalSourcebookRefreshOutput:
-        payload = LocalSourcebookRefreshInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("local_sourcebook_refresh", payload)
-        return LocalSourcebookRefreshOutput.model_validate(result)
-
-    def location_markets(self, **kwargs: Any) -> LocationMarketsOutput:
-        payload = LocationMarketsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("location_markets", payload)
-        return LocationMarketsOutput.model_validate(result)
-
-
-class WorkflowsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def list(self, **kwargs: Any) -> WorkflowListOutput:
-        payload = WorkflowListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_list", payload)
-        return WorkflowListOutput.model_validate(result)
-
-    def suggest(self, **kwargs: Any) -> WorkflowSuggestOutput:
-        payload = WorkflowSuggestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_suggest", payload)
-        return WorkflowSuggestOutput.model_validate(result)
-
-    def run(self, **kwargs: Any) -> WorkflowRunOutput:
-        payload = WorkflowRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_run", payload)
-        return WorkflowRunOutput.model_validate(result)
-
-    def step(self, **kwargs: Any) -> WorkflowStepOutput:
-        payload = WorkflowStepInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_step", payload)
-        return WorkflowStepOutput.model_validate(result)
-
-    def status(self, **kwargs: Any) -> WorkflowStatusOutput:
-        payload = WorkflowStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_status", payload)
-        return WorkflowStatusOutput.model_validate(result)
-
-    def artifact_read(self, **kwargs: Any) -> WorkflowArtifactReadOutput:
-        payload = WorkflowArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("workflow_artifact_read", payload)
-        return WorkflowArtifactReadOutput.model_validate(result)
-
-    def rank_tracker(self, **kwargs: Any) -> RankTrackerWorkflowOutput:
-        payload = RankTrackerWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("rank_tracker_workflow", payload)
-        return RankTrackerWorkflowOutput.model_validate(result)
-
-    def query_fanout(self, **kwargs: Any) -> QueryFanoutWorkflowOutput:
-        payload = QueryFanoutWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("query_fanout_workflow", payload)
-        return QueryFanoutWorkflowOutput.model_validate(result)
-
-
-class EditorialNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def reading_room_guide(self, **kwargs: Any) -> EditorialReadingRoomGuideOutput:
-        payload = EditorialReadingRoomGuideInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("editorial_reading_room_guide", payload)
-        return EditorialReadingRoomGuideOutput.model_validate(result)
-
-    def create_reading_room(self, **kwargs: Any) -> CreateEditorialReadingRoomOutput:
-        payload = CreateEditorialReadingRoomInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("create_editorial_reading_room", payload)
-        return CreateEditorialReadingRoomOutput.model_validate(result)
-
-    def renew_reading_room_download(self, **kwargs: Any) -> RenewEditorialReadingRoomDownloadOutput:
-        payload = RenewEditorialReadingRoomDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("renew_editorial_reading_room_download", payload)
-        return RenewEditorialReadingRoomDownloadOutput.model_validate(result)
-
-
-class ArtifactsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def read(self, **kwargs: Any) -> ReportArtifactReadOutput:
-        payload = ReportArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("report_artifact_read", payload)
-        return ReportArtifactReadOutput.model_validate(result)
-
-    def get_artifact_template_example(self, **kwargs: Any) -> GetArtifactTemplateExampleOutput:
-        payload = GetArtifactTemplateExampleInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get_artifact_template_example", payload)
-        return GetArtifactTemplateExampleOutput.model_validate(result)
-
-
-class BillingNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def credits_info(self, **kwargs: Any) -> CreditsInfoOutput:
-        payload = CreditsInfoInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("credits_info", payload)
-        return CreditsInfoOutput.model_validate(result)
-
-
-class ConnectionsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def list_service_connections(self, **kwargs: Any) -> ListServiceConnectionsOutput:
-        payload = ListServiceConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list_service_connections", payload)
-        return ListServiceConnectionsOutput.model_validate(result)
-
-    def test_service_connection(self, **kwargs: Any) -> TestServiceConnectionOutput:
-        payload = TestServiceConnectionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("test_service_connection", payload)
-        return TestServiceConnectionOutput.model_validate(result)
-
-    def slack_send_message(self, **kwargs: Any) -> SlackSendMessageOutput:
-        payload = SlackSendMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("slack_send_message", payload)
-        return SlackSendMessageOutput.model_validate(result)
-
-    def gmail_send_message(self, **kwargs: Any) -> GmailSendMessageOutput:
-        payload = GmailSendMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("gmail_send_message", payload)
-        return GmailSendMessageOutput.model_validate(result)
-
-    def gmail_search_contacts(self, **kwargs: Any) -> GmailSearchContactsOutput:
-        payload = GmailSearchContactsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("gmail_search_contacts", payload)
-        return GmailSearchContactsOutput.model_validate(result)
-
-    def google_calendar_create_event(self, **kwargs: Any) -> GoogleCalendarCreateEventOutput:
-        payload = GoogleCalendarCreateEventInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("google_calendar_create_event", payload)
-        return GoogleCalendarCreateEventOutput.model_validate(result)
-
-    def zoom_create_meeting(self, **kwargs: Any) -> ZoomCreateMeetingOutput:
-        payload = ZoomCreateMeetingInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("zoom_create_meeting", payload)
-        return ZoomCreateMeetingOutput.model_validate(result)
-
-    def read_service_connection(self, **kwargs: Any) -> ReadServiceConnectionOutput:
-        payload = ReadServiceConnectionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("read_service_connection", payload)
-        return ReadServiceConnectionOutput.model_validate(result)
-
-    def meta_ad_creative_media(self, **kwargs: Any) -> MetaAdCreativeMediaOutput:
-        payload = MetaAdCreativeMediaInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("meta_ad_creative_media", payload)
-        return MetaAdCreativeMediaOutput.model_validate(result)
-
-    def import_service_connection_to_memory(self, **kwargs: Any) -> ImportServiceConnectionToMemoryOutput:
-        payload = ImportServiceConnectionToMemoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("import_service_connection_to_memory", payload)
-        return ImportServiceConnectionToMemoryOutput.model_validate(result)
-
-    def describe_service_connection_tool(self, **kwargs: Any) -> DescribeServiceConnectionToolOutput:
-        payload = DescribeServiceConnectionToolInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("describe_service_connection_tool", payload)
-        return DescribeServiceConnectionToolOutput.model_validate(result)
-
-    def export_connected_service_data(self, **kwargs: Any) -> ExportConnectedServiceDataOutput:
-        payload = ExportConnectedServiceDataInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("export_connected_service_data", payload)
-        return ExportConnectedServiceDataOutput.model_validate(result)
-
-    def export_search_console_table_data(self, **kwargs: Any) -> ExportSearchConsoleTableDataOutput:
-        payload = ExportSearchConsoleTableDataInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("export_search_console_table_data", payload)
-        return ExportSearchConsoleTableDataOutput.model_validate(result)
-
-    def renew_connected_data_download(self, **kwargs: Any) -> RenewConnectedDataDownloadOutput:
-        payload = RenewConnectedDataDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("renew_connected_data_download", payload)
-        return RenewConnectedDataDownloadOutput.model_validate(result)
-
-    def call_service_connection_action(self, **kwargs: Any) -> CallServiceConnectionActionOutput:
-        payload = CallServiceConnectionActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("call_service_connection_action", payload)
-        return CallServiceConnectionActionOutput.model_validate(result)
-
-    def set_scheduled_action_connections(self, **kwargs: Any) -> SetScheduledActionConnectionsOutput:
-        payload = SetScheduledActionConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("set_scheduled_action_connections", payload)
-        return SetScheduledActionConnectionsOutput.model_validate(result)
-
-
-class SerpIntelligenceNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def snapshot(self, **kwargs: Any) -> CaptureSerpSnapshotOutput:
-        payload = CaptureSerpSnapshotInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("capture_serp_snapshot", payload)
-        return CaptureSerpSnapshotOutput.model_validate(result)
-
-    def page_snapshots(self, **kwargs: Any) -> CaptureSerpPageSnapshotsOutput:
-        payload = CaptureSerpPageSnapshotsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("capture_serp_page_snapshots", payload)
-        return CaptureSerpPageSnapshotsOutput.model_validate(result)
-
-
-class BrowserNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def profile_connect(self, **kwargs: Any) -> BrowserProfileConnectOutput:
-        payload = BrowserProfileConnectInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_profile_connect", payload)
-        return BrowserProfileConnectOutput.model_validate(result)
-
-    def profile_list(self, **kwargs: Any) -> BrowserProfileListOutput:
-        payload = BrowserProfileListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_profile_list", payload)
-        return BrowserProfileListOutput.model_validate(result)
-
-    def extension_import(self, **kwargs: Any) -> BrowserExtensionImportOutput:
-        payload = BrowserExtensionImportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_extension_import", payload)
-        return BrowserExtensionImportOutput.model_validate(result)
-
-    def extension_list(self, **kwargs: Any) -> BrowserExtensionListOutput:
-        payload = BrowserExtensionListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_extension_list", payload)
-        return BrowserExtensionListOutput.model_validate(result)
-
-    def extension_delete(self, **kwargs: Any) -> BrowserExtensionDeleteOutput:
-        payload = BrowserExtensionDeleteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_extension_delete", payload)
-        return BrowserExtensionDeleteOutput.model_validate(result)
-
-    def open(self, **kwargs: Any) -> BrowserOpenOutput:
-        payload = BrowserOpenInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_open", payload)
-        return BrowserOpenOutput.model_validate(result)
-
-    def screenshot(self, **kwargs: Any) -> BrowserScreenshotOutput:
-        payload = BrowserScreenshotInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_screenshot", payload)
-        return BrowserScreenshotOutput.model_validate(result)
-
-    def read(self, **kwargs: Any) -> BrowserReadOutput:
-        payload = BrowserReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_read", payload)
-        return BrowserReadOutput.model_validate(result)
-
-    def locate(self, **kwargs: Any) -> BrowserLocateOutput:
-        payload = BrowserLocateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_locate", payload)
-        return BrowserLocateOutput.model_validate(result)
-
-    def goto(self, **kwargs: Any) -> BrowserGotoOutput:
-        payload = BrowserGotoInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_goto", payload)
-        return BrowserGotoOutput.model_validate(result)
-
-    def click(self, **kwargs: Any) -> BrowserClickOutput:
-        payload = BrowserClickInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_click", payload)
-        return BrowserClickOutput.model_validate(result)
-
-    def type(self, **kwargs: Any) -> BrowserTypeOutput:
-        payload = BrowserTypeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_type", payload)
-        return BrowserTypeOutput.model_validate(result)
-
-    def scroll(self, **kwargs: Any) -> BrowserScrollOutput:
-        payload = BrowserScrollInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_scroll", payload)
-        return BrowserScrollOutput.model_validate(result)
-
-    def press(self, **kwargs: Any) -> BrowserPressOutput:
-        payload = BrowserPressInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_press", payload)
-        return BrowserPressOutput.model_validate(result)
-
-    def replay_start(self, **kwargs: Any) -> BrowserReplayStartOutput:
-        payload = BrowserReplayStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_start", payload)
-        return BrowserReplayStartOutput.model_validate(result)
-
-    def replay_stop(self, **kwargs: Any) -> BrowserReplayStopOutput:
-        payload = BrowserReplayStopInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_stop", payload)
-        return BrowserReplayStopOutput.model_validate(result)
-
-    def list_replays(self, **kwargs: Any) -> BrowserListReplaysOutput:
-        payload = BrowserListReplaysInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_list_replays", payload)
-        return BrowserListReplaysOutput.model_validate(result)
-
-    def replay_download(self, **kwargs: Any) -> BrowserReplayDownloadOutput:
-        payload = BrowserReplayDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_download", payload)
-        return BrowserReplayDownloadOutput.model_validate(result)
-
-    def replay_mark(self, **kwargs: Any) -> BrowserReplayMarkOutput:
-        payload = BrowserReplayMarkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_mark", payload)
-        return BrowserReplayMarkOutput.model_validate(result)
-
-    def replay_annotate(self, **kwargs: Any) -> BrowserReplayAnnotateOutput:
-        payload = BrowserReplayAnnotateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_replay_annotate", payload)
-        return BrowserReplayAnnotateOutput.model_validate(result)
-
-    def close(self, **kwargs: Any) -> BrowserCloseOutput:
-        payload = BrowserCloseInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_close", payload)
-        return BrowserCloseOutput.model_validate(result)
-
-    def list_sessions(self, **kwargs: Any) -> BrowserListSessionsOutput:
-        payload = BrowserListSessionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("browser_list_sessions", payload)
-        return BrowserListSessionsOutput.model_validate(result)
-
-
-class ScheduleNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def list_artifact_templates(self, **kwargs: Any) -> ListArtifactTemplatesOutput:
-        payload = ListArtifactTemplatesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list_artifact_templates", payload)
-        return ListArtifactTemplatesOutput.model_validate(result)
-
-    def get_artifact_template(self, **kwargs: Any) -> GetArtifactTemplateOutput:
-        payload = GetArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get_artifact_template", payload)
-        return GetArtifactTemplateOutput.model_validate(result)
-
-    def create_artifact_template(self, **kwargs: Any) -> CreateArtifactTemplateOutput:
-        payload = CreateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("create_artifact_template", payload)
-        return CreateArtifactTemplateOutput.model_validate(result)
-
-    def update_artifact_template(self, **kwargs: Any) -> UpdateArtifactTemplateOutput:
-        payload = UpdateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("update_artifact_template", payload)
-        return UpdateArtifactTemplateOutput.model_validate(result)
-
-    def archive_artifact_template(self, **kwargs: Any) -> ArchiveArtifactTemplateOutput:
-        payload = ArchiveArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("archive_artifact_template", payload)
-        return ArchiveArtifactTemplateOutput.model_validate(result)
-
-    def list_scheduled_runs(self, **kwargs: Any) -> ListScheduledRunsOutput:
-        payload = ListScheduledRunsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list_scheduled_runs", payload)
-        return ListScheduledRunsOutput.model_validate(result)
-
-    def get_scheduled_run(self, **kwargs: Any) -> GetScheduledRunOutput:
-        payload = GetScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get_scheduled_run", payload)
-        return GetScheduledRunOutput.model_validate(result)
-
-    def mark_scheduled_run_opened(self, **kwargs: Any) -> MarkScheduledRunOpenedOutput:
-        payload = MarkScheduledRunOpenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("mark_scheduled_run_opened", payload)
-        return MarkScheduledRunOpenedOutput.model_validate(result)
-
-    def mark_scheduled_run_unopened(self, **kwargs: Any) -> MarkScheduledRunUnopenedOutput:
-        payload = MarkScheduledRunUnopenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("mark_scheduled_run_unopened", payload)
-        return MarkScheduledRunUnopenedOutput.model_validate(result)
-
-    def archive_scheduled_run(self, **kwargs: Any) -> ArchiveScheduledRunOutput:
-        payload = ArchiveScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("archive_scheduled_run", payload)
-        return ArchiveScheduledRunOutput.model_validate(result)
-
-    def create_scheduled_run_view_link(self, **kwargs: Any) -> CreateScheduledRunViewLinkOutput:
-        payload = CreateScheduledRunViewLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("create_scheduled_run_view_link", payload)
-        return CreateScheduledRunViewLinkOutput.model_validate(result)
-
-    def revoke_scheduled_run_view_link(self, **kwargs: Any) -> RevokeScheduledRunViewLinkOutput:
-        payload = RevokeScheduledRunViewLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("revoke_scheduled_run_view_link", payload)
-        return RevokeScheduledRunViewLinkOutput.model_validate(result)
-
-    def create_scheduled_action(self, **kwargs: Any) -> CreateScheduledActionOutput:
-        payload = CreateScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("create-scheduled-action", payload)
-        return CreateScheduledActionOutput.model_validate(result)
-
-    def update_scheduled_action(self, **kwargs: Any) -> UpdateScheduledActionOutput:
-        payload = UpdateScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("update-scheduled-action", payload)
-        return UpdateScheduledActionOutput.model_validate(result)
-
-    def delete_scheduled_action(self, **kwargs: Any) -> DeleteScheduledActionOutput:
-        payload = DeleteScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("delete-scheduled-action", payload)
-        return DeleteScheduledActionOutput.model_validate(result)
-
-    def get_schedule_link(self, **kwargs: Any) -> GetScheduleLinkOutput:
-        payload = GetScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get-schedule-link", payload)
-        return GetScheduleLinkOutput.model_validate(result)
-
-    def get_schedule_status(self, **kwargs: Any) -> GetScheduleStatusOutput:
-        payload = GetScheduleStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get-schedule-status", payload)
-        return GetScheduleStatusOutput.model_validate(result)
-
-    def list_scheduled_actions(self, **kwargs: Any) -> ListScheduledActionsOutput:
-        payload = ListScheduledActionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list-scheduled-actions", payload)
-        return ListScheduledActionsOutput.model_validate(result)
-
-    def pause_scheduled_action(self, **kwargs: Any) -> PauseScheduledActionOutput:
-        payload = PauseScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("pause-scheduled-action", payload)
-        return PauseScheduledActionOutput.model_validate(result)
-
-    def propose_scheduled_action(self, **kwargs: Any) -> ProposeScheduledActionOutput:
-        payload = ProposeScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("propose-scheduled-action", payload)
-        return ProposeScheduledActionOutput.model_validate(result)
-
-    def resume_scheduled_action(self, **kwargs: Any) -> ResumeScheduledActionOutput:
-        payload = ResumeScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("resume-scheduled-action", payload)
-        return ResumeScheduledActionOutput.model_validate(result)
-
-    def revoke_schedule_link(self, **kwargs: Any) -> RevokeScheduleLinkOutput:
-        payload = RevokeScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("revoke-schedule-link", payload)
-        return RevokeScheduleLinkOutput.model_validate(result)
-
-    def set_schedule_defaults(self, **kwargs: Any) -> SetScheduleDefaultsOutput:
-        payload = SetScheduleDefaultsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("set-schedule-defaults", payload)
-        return SetScheduleDefaultsOutput.model_validate(result)
-
-    def set_schedule_entitlement(self, **kwargs: Any) -> SetScheduleEntitlementOutput:
-        payload = SetScheduleEntitlementInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("set-schedule-entitlement", payload)
-        return SetScheduleEntitlementOutput.model_validate(result)
 
 
 class AccessNamespace:
@@ -1093,16 +283,6 @@ class AccessNamespace:
         payload = AccessDeclineShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("access-decline-share", payload)
         return AccessDeclineShareOutput.model_validate(result)
-
-    def get_chat_link(self, **kwargs: Any) -> GetChatLinkOutput:
-        payload = GetChatLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get-chat-link", payload)
-        return GetChatLinkOutput.model_validate(result)
-
-    def get_vault_app_link(self, **kwargs: Any) -> GetVaultAppLinkOutput:
-        payload = GetVaultAppLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get-vault-app-link", payload)
-        return GetVaultAppLinkOutput.model_validate(result)
 
     def inbox_settings(self, **kwargs: Any) -> AccessInboxSettingsOutput:
         payload = AccessInboxSettingsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -1139,11 +319,6 @@ class AccessNamespace:
         result = self._call_tool("access-remove-approved-sender", payload)
         return AccessRemoveApprovedSenderOutput.model_validate(result)
 
-    def revoke_chat_link(self, **kwargs: Any) -> RevokeChatLinkOutput:
-        payload = RevokeChatLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("revoke-chat-link", payload)
-        return RevokeChatLinkOutput.model_validate(result)
-
     def revoke_key(self, **kwargs: Any) -> AccessRevokeKeyOutput:
         payload = AccessRevokeKeyInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("access-revoke-key", payload)
@@ -1153,16 +328,6 @@ class AccessNamespace:
         payload = AccessRevokeShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("access-revoke-share", payload)
         return AccessRevokeShareOutput.model_validate(result)
-
-    def revoke_vault_app_link(self, **kwargs: Any) -> RevokeVaultAppLinkOutput:
-        payload = RevokeVaultAppLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("revoke-vault-app-link", payload)
-        return RevokeVaultAppLinkOutput.model_validate(result)
-
-    def set_agent_identity(self, **kwargs: Any) -> SetAgentIdentityOutput:
-        payload = SetAgentIdentityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("set-agent-identity", payload)
-        return SetAgentIdentityOutput.model_validate(result)
 
     def set_scope(self, **kwargs: Any) -> AccessSetScopeOutput:
         payload = AccessSetScopeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
@@ -1194,270 +359,30 @@ class AccessNamespace:
         result = self._call_tool("access-unlink-share", payload)
         return AccessUnlinkShareOutput.model_validate(result)
 
+    def get_chat_link(self, **kwargs: Any) -> GetChatLinkOutput:
+        payload = GetChatLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get-chat-link", payload)
+        return GetChatLinkOutput.model_validate(result)
 
-class CaptureNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
+    def get_vault_app_link(self, **kwargs: Any) -> GetVaultAppLinkOutput:
+        payload = GetVaultAppLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get-vault-app-link", payload)
+        return GetVaultAppLinkOutput.model_validate(result)
 
-    def memory_capture(self, **kwargs: Any) -> MemoryCaptureOutput:
-        payload = MemoryCaptureInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-capture", payload)
-        return MemoryCaptureOutput.model_validate(result)
+    def revoke_chat_link(self, **kwargs: Any) -> RevokeChatLinkOutput:
+        payload = RevokeChatLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("revoke-chat-link", payload)
+        return RevokeChatLinkOutput.model_validate(result)
 
-    def memory_questions(self, **kwargs: Any) -> MemoryQuestionsOutput:
-        payload = MemoryQuestionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-questions", payload)
-        return MemoryQuestionsOutput.model_validate(result)
+    def revoke_vault_app_link(self, **kwargs: Any) -> RevokeVaultAppLinkOutput:
+        payload = RevokeVaultAppLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("revoke-vault-app-link", payload)
+        return RevokeVaultAppLinkOutput.model_validate(result)
 
-    def prepare_memory_write(self, **kwargs: Any) -> PrepareMemoryWriteOutput:
-        payload = PrepareMemoryWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("prepare-memory-write", payload)
-        return PrepareMemoryWriteOutput.model_validate(result)
-
-    def validate_memory_write(self, **kwargs: Any) -> ValidateMemoryWriteOutput:
-        payload = ValidateMemoryWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("validate-memory-write", payload)
-        return ValidateMemoryWriteOutput.model_validate(result)
-
-
-class ChannelsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def create_channel(self, **kwargs: Any) -> CreateChannelOutput:
-        payload = CreateChannelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("create-channel", payload)
-        return CreateChannelOutput.model_validate(result)
-
-    def get_message_note(self, **kwargs: Any) -> GetMessageNoteOutput:
-        payload = GetMessageNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("get-message-note", payload)
-        return GetMessageNoteOutput.model_validate(result)
-
-    def list_channel_members(self, **kwargs: Any) -> ListChannelMembersOutput:
-        payload = ListChannelMembersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list-channel-members", payload)
-        return ListChannelMembersOutput.model_validate(result)
-
-    def list_channel_messages(self, **kwargs: Any) -> ListChannelMessagesOutput:
-        payload = ListChannelMessagesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list-channel-messages", payload)
-        return ListChannelMessagesOutput.model_validate(result)
-
-    def my_mentions(self, **kwargs: Any) -> MyMentionsOutput:
-        payload = MyMentionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("my-mentions", payload)
-        return MyMentionsOutput.model_validate(result)
-
-    def poll_channel(self, **kwargs: Any) -> PollChannelOutput:
-        payload = PollChannelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("poll-channel", payload)
-        return PollChannelOutput.model_validate(result)
-
-    def post_message(self, **kwargs: Any) -> PostMessageOutput:
-        payload = PostMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("post-message", payload)
-        return PostMessageOutput.model_validate(result)
-
-    def react_message(self, **kwargs: Any) -> ReactMessageOutput:
-        payload = ReactMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("react-message", payload)
-        return ReactMessageOutput.model_validate(result)
-
-    def remove_channel_member(self, **kwargs: Any) -> RemoveChannelMemberOutput:
-        payload = RemoveChannelMemberInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("remove-channel-member", payload)
-        return RemoveChannelMemberOutput.model_validate(result)
-
-    def reply_message(self, **kwargs: Any) -> ReplyMessageOutput:
-        payload = ReplyMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("reply-message", payload)
-        return ReplyMessageOutput.model_validate(result)
-
-
-class FactsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def history(self, **kwargs: Any) -> FactHistoryOutput:
-        payload = FactHistoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("fact-history", payload)
-        return FactHistoryOutput.model_validate(result)
-
-    def record_fact(self, **kwargs: Any) -> RecordFactOutput:
-        payload = RecordFactInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("record-fact", payload)
-        return RecordFactOutput.model_validate(result)
-
-
-class GraphNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def memory_backlinks(self, **kwargs: Any) -> MemoryBacklinksOutput:
-        payload = MemoryBacklinksInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-backlinks", payload)
-        return MemoryBacklinksOutput.model_validate(result)
-
-    def memory_graph_path(self, **kwargs: Any) -> MemoryGraphPathOutput:
-        payload = MemoryGraphPathInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-graph-path", payload)
-        return MemoryGraphPathOutput.model_validate(result)
-
-    def memory_graph_universe(self, **kwargs: Any) -> MemoryGraphUniverseOutput:
-        payload = MemoryGraphUniverseInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-graph-universe", payload)
-        return MemoryGraphUniverseOutput.model_validate(result)
-
-
-class LibraryNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def ingest(self, **kwargs: Any) -> LibraryIngestOutput:
-        payload = LibraryIngestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("library-ingest", payload)
-        return LibraryIngestOutput.model_validate(result)
-
-
-class MemoryNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def bulk_delete_notes(self, **kwargs: Any) -> BulkDeleteNotesOutput:
-        payload = BulkDeleteNotesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("bulk-delete-notes", payload)
-        return BulkDeleteNotesOutput.model_validate(result)
-
-    def delete_note(self, **kwargs: Any) -> DeleteNoteOutput:
-        payload = DeleteNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("delete-note", payload)
-        return DeleteNoteOutput.model_validate(result)
-
-    def export(self, **kwargs: Any) -> MemoryExportOutput:
-        payload = MemoryExportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-export", payload)
-        return MemoryExportOutput.model_validate(result)
-
-    def get(self, **kwargs: Any) -> MemoryGetOutput:
-        payload = MemoryGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-get", payload)
-        return MemoryGetOutput.model_validate(result)
-
-    def list(self, **kwargs: Any) -> MemoryListOutput:
-        payload = MemoryListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-list", payload)
-        return MemoryListOutput.model_validate(result)
-
-    def put(self, **kwargs: Any) -> MemoryPutOutput:
-        payload = MemoryPutInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-put", payload)
-        return MemoryPutOutput.model_validate(result)
-
-    def search(self, **kwargs: Any) -> MemorySearchOutput:
-        payload = MemorySearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-search", payload)
-        return MemorySearchOutput.model_validate(result)
-
-    def suggest(self, **kwargs: Any) -> MemorySuggestOutput:
-        payload = MemorySuggestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-suggest", payload)
-        return MemorySuggestOutput.model_validate(result)
-
-    def upload(self, **kwargs: Any) -> MemoryUploadOutput:
-        payload = MemoryUploadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("memory-upload", payload)
-        return MemoryUploadOutput.model_validate(result)
-
-
-class RecallNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def temporal_recall(self, **kwargs: Any) -> TemporalRecallOutput:
-        payload = TemporalRecallInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("temporal-recall", payload)
-        return TemporalRecallOutput.model_validate(result)
-
-
-class StorageNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def cost_usage(self, **kwargs: Any) -> CostUsageOutput:
-        payload = CostUsageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("cost-usage", payload)
-        return CostUsageOutput.model_validate(result)
-
-    def usage(self, **kwargs: Any) -> StorageUsageOutput:
-        payload = StorageUsageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("storage-usage", payload)
-        return StorageUsageOutput.model_validate(result)
-
-
-class TablesNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def create(self, **kwargs: Any) -> TableCreateOutput:
-        payload = TableCreateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("table-create", payload)
-        return TableCreateOutput.model_validate(result)
-
-    def delete_rows(self, **kwargs: Any) -> TableDeleteRowsOutput:
-        payload = TableDeleteRowsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("table-delete-rows", payload)
-        return TableDeleteRowsOutput.model_validate(result)
-
-    def describe(self, **kwargs: Any) -> TableDescribeOutput:
-        payload = TableDescribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("table-describe", payload)
-        return TableDescribeOutput.model_validate(result)
-
-    def drop(self, **kwargs: Any) -> TableDropOutput:
-        payload = TableDropInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("table-drop", payload)
-        return TableDropOutput.model_validate(result)
-
-    def insert_rows(self, **kwargs: Any) -> TableInsertRowsOutput:
-        payload = TableInsertRowsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("table-insert-rows", payload)
-        return TableInsertRowsOutput.model_validate(result)
-
-    def list(self, **kwargs: Any) -> TableListOutput:
-        payload = TableListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("table-list", payload)
-        return TableListOutput.model_validate(result)
-
-    def query(self, **kwargs: Any) -> TableQueryOutput:
-        payload = TableQueryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("table-query", payload)
-        return TableQueryOutput.model_validate(result)
-
-
-class TagsNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def list_memory_tags(self, **kwargs: Any) -> ListMemoryTagsOutput:
-        payload = ListMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list-memory-tags", payload)
-        return ListMemoryTagsOutput.model_validate(result)
-
-    def merge_memory_tags(self, **kwargs: Any) -> MergeMemoryTagsOutput:
-        payload = MergeMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("merge-memory-tags", payload)
-        return MergeMemoryTagsOutput.model_validate(result)
-
-    def resolve_memory_tags(self, **kwargs: Any) -> ResolveMemoryTagsOutput:
-        payload = ResolveMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("resolve-memory-tags", payload)
-        return ResolveMemoryTagsOutput.model_validate(result)
-
-    def upsert_memory_tag(self, **kwargs: Any) -> UpsertMemoryTagOutput:
-        payload = UpsertMemoryTagInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("upsert-memory-tag", payload)
-        return UpsertMemoryTagOutput.model_validate(result)
+    def set_agent_identity(self, **kwargs: Any) -> SetAgentIdentityOutput:
+        payload = SetAgentIdentityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("set-agent-identity", payload)
+        return SetAgentIdentityOutput.model_validate(result)
 
 
 class VaultsNamespace:
@@ -1503,81 +428,6 @@ class VaultsNamespace:
         payload = RouteMemoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("route-memory", payload)
         return RouteMemoryOutput.model_validate(result)
-
-
-class WebhooksNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def create_webhook(self, **kwargs: Any) -> CreateWebhookOutput:
-        payload = CreateWebhookInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("create-webhook", payload)
-        return CreateWebhookOutput.model_validate(result)
-
-    def list_webhooks(self, **kwargs: Any) -> ListWebhooksOutput:
-        payload = ListWebhooksInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("list-webhooks", payload)
-        return ListWebhooksOutput.model_validate(result)
-
-    def revoke_webhook(self, **kwargs: Any) -> RevokeWebhookOutput:
-        payload = RevokeWebhookInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("revoke-webhook", payload)
-        return RevokeWebhookOutput.model_validate(result)
-
-
-class ImagesNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
-    def project_create(self, **kwargs: Any) -> ImageProjectCreateOutput:
-        payload = ImageProjectCreateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_project_create", payload)
-        return ImageProjectCreateOutput.model_validate(result)
-
-    def project_list(self, **kwargs: Any) -> ImageProjectListOutput:
-        payload = ImageProjectListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_project_list", payload)
-        return ImageProjectListOutput.model_validate(result)
-
-    def folder_create(self, **kwargs: Any) -> ImageFolderCreateOutput:
-        payload = ImageFolderCreateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_folder_create", payload)
-        return ImageFolderCreateOutput.model_validate(result)
-
-    def folder_list(self, **kwargs: Any) -> ImageFolderListOutput:
-        payload = ImageFolderListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_folder_list", payload)
-        return ImageFolderListOutput.model_validate(result)
-
-    def asset_save(self, **kwargs: Any) -> ImageAssetSaveOutput:
-        payload = ImageAssetSaveInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_asset_save", payload)
-        return ImageAssetSaveOutput.model_validate(result)
-
-    def asset_get(self, **kwargs: Any) -> ImageAssetGetOutput:
-        payload = ImageAssetGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_asset_get", payload)
-        return ImageAssetGetOutput.model_validate(result)
-
-    def asset_list(self, **kwargs: Any) -> ImageAssetListOutput:
-        payload = ImageAssetListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_asset_list", payload)
-        return ImageAssetListOutput.model_validate(result)
-
-    def asset_search(self, **kwargs: Any) -> ImageAssetSearchOutput:
-        payload = ImageAssetSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_asset_search", payload)
-        return ImageAssetSearchOutput.model_validate(result)
-
-    def asset_move(self, **kwargs: Any) -> ImageAssetMoveOutput:
-        payload = ImageAssetMoveInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_asset_move", payload)
-        return ImageAssetMoveOutput.model_validate(result)
-
-    def asset_delete(self, **kwargs: Any) -> ImageAssetDeleteOutput:
-        payload = ImageAssetDeleteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
-        result = self._call_tool("image_asset_delete", payload)
-        return ImageAssetDeleteOutput.model_validate(result)
 
 
 class AnalyticsNamespace:
@@ -1705,41 +555,1227 @@ class AnalyticsNamespace:
         return AnalyticsListSitesOutput.model_validate(result)
 
 
+class WebNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def analyze_site_similarity(self, **kwargs: Any) -> AnalyzeSiteSimilarityOutput:
+        payload = AnalyzeSiteSimilarityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("analyze_site_similarity", payload)
+        return AnalyzeSiteSimilarityOutput.model_validate(result)
+
+    def archive_read(self, **kwargs: Any) -> ArchiveReadOutput:
+        payload = ArchiveReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("archive_read", payload)
+        return ArchiveReadOutput.model_validate(result)
+
+    def audit_site(self, **kwargs: Any) -> AuditSiteOutput:
+        payload = AuditSiteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("audit_site", payload)
+        return AuditSiteOutput.model_validate(result)
+
+    def check_site_export(self, **kwargs: Any) -> CheckSiteExportOutput:
+        payload = CheckSiteExportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("check_site_export", payload)
+        return CheckSiteExportOutput.model_validate(result)
+
+    def diff_page(self, **kwargs: Any) -> DiffPageOutput:
+        payload = DiffPageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("diff_page", payload)
+        return DiffPageOutput.model_validate(result)
+
+    def extract_site(self, **kwargs: Any) -> ExtractSiteOutput:
+        payload = ExtractSiteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("extract_site", payload)
+        return ExtractSiteOutput.model_validate(result)
+
+    def extract_url(self, **kwargs: Any) -> ExtractUrlOutput:
+        payload = ExtractUrlInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("extract_url", payload)
+        return ExtractUrlOutput.model_validate(result)
+
+    def map_site_urls(self, **kwargs: Any) -> MapSiteUrlsOutput:
+        payload = MapSiteUrlsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("map_site_urls", payload)
+        return MapSiteUrlsOutput.model_validate(result)
+
+    def map_wayback_snapshots(self, **kwargs: Any) -> MapWaybackSnapshotsOutput:
+        payload = MapWaybackSnapshotsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("map_wayback_snapshots", payload)
+        return MapWaybackSnapshotsOutput.model_validate(result)
+
+    def site_export_image(self, **kwargs: Any) -> SiteExportImageOutput:
+        payload = SiteExportImageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("site_export_image", payload)
+        return SiteExportImageOutput.model_validate(result)
+
+    def site_export_read(self, **kwargs: Any) -> SiteExportReadOutput:
+        payload = SiteExportReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("site_export_read", payload)
+        return SiteExportReadOutput.model_validate(result)
+
+
+class ScheduleNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def archive_artifact_template(self, **kwargs: Any) -> ArchiveArtifactTemplateOutput:
+        payload = ArchiveArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("archive_artifact_template", payload)
+        return ArchiveArtifactTemplateOutput.model_validate(result)
+
+    def archive_scheduled_run(self, **kwargs: Any) -> ArchiveScheduledRunOutput:
+        payload = ArchiveScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("archive_scheduled_run", payload)
+        return ArchiveScheduledRunOutput.model_validate(result)
+
+    def create_artifact_template(self, **kwargs: Any) -> CreateArtifactTemplateOutput:
+        payload = CreateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("create_artifact_template", payload)
+        return CreateArtifactTemplateOutput.model_validate(result)
+
+    def create_scheduled_run_view_link(self, **kwargs: Any) -> CreateScheduledRunViewLinkOutput:
+        payload = CreateScheduledRunViewLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("create_scheduled_run_view_link", payload)
+        return CreateScheduledRunViewLinkOutput.model_validate(result)
+
+    def create_scheduled_action(self, **kwargs: Any) -> CreateScheduledActionOutput:
+        payload = CreateScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("create-scheduled-action", payload)
+        return CreateScheduledActionOutput.model_validate(result)
+
+    def delete_scheduled_action(self, **kwargs: Any) -> DeleteScheduledActionOutput:
+        payload = DeleteScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("delete-scheduled-action", payload)
+        return DeleteScheduledActionOutput.model_validate(result)
+
+    def get_artifact_template(self, **kwargs: Any) -> GetArtifactTemplateOutput:
+        payload = GetArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get_artifact_template", payload)
+        return GetArtifactTemplateOutput.model_validate(result)
+
+    def get_scheduled_run(self, **kwargs: Any) -> GetScheduledRunOutput:
+        payload = GetScheduledRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get_scheduled_run", payload)
+        return GetScheduledRunOutput.model_validate(result)
+
+    def get_schedule_link(self, **kwargs: Any) -> GetScheduleLinkOutput:
+        payload = GetScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get-schedule-link", payload)
+        return GetScheduleLinkOutput.model_validate(result)
+
+    def get_schedule_status(self, **kwargs: Any) -> GetScheduleStatusOutput:
+        payload = GetScheduleStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get-schedule-status", payload)
+        return GetScheduleStatusOutput.model_validate(result)
+
+    def list_artifact_templates(self, **kwargs: Any) -> ListArtifactTemplatesOutput:
+        payload = ListArtifactTemplatesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list_artifact_templates", payload)
+        return ListArtifactTemplatesOutput.model_validate(result)
+
+    def list_scheduled_runs(self, **kwargs: Any) -> ListScheduledRunsOutput:
+        payload = ListScheduledRunsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list_scheduled_runs", payload)
+        return ListScheduledRunsOutput.model_validate(result)
+
+    def list_scheduled_actions(self, **kwargs: Any) -> ListScheduledActionsOutput:
+        payload = ListScheduledActionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list-scheduled-actions", payload)
+        return ListScheduledActionsOutput.model_validate(result)
+
+    def mark_scheduled_run_opened(self, **kwargs: Any) -> MarkScheduledRunOpenedOutput:
+        payload = MarkScheduledRunOpenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("mark_scheduled_run_opened", payload)
+        return MarkScheduledRunOpenedOutput.model_validate(result)
+
+    def mark_scheduled_run_unopened(self, **kwargs: Any) -> MarkScheduledRunUnopenedOutput:
+        payload = MarkScheduledRunUnopenedInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("mark_scheduled_run_unopened", payload)
+        return MarkScheduledRunUnopenedOutput.model_validate(result)
+
+    def pause_scheduled_action(self, **kwargs: Any) -> PauseScheduledActionOutput:
+        payload = PauseScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("pause-scheduled-action", payload)
+        return PauseScheduledActionOutput.model_validate(result)
+
+    def propose_scheduled_action(self, **kwargs: Any) -> ProposeScheduledActionOutput:
+        payload = ProposeScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("propose-scheduled-action", payload)
+        return ProposeScheduledActionOutput.model_validate(result)
+
+    def resume_scheduled_action(self, **kwargs: Any) -> ResumeScheduledActionOutput:
+        payload = ResumeScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("resume-scheduled-action", payload)
+        return ResumeScheduledActionOutput.model_validate(result)
+
+    def revoke_scheduled_run_view_link(self, **kwargs: Any) -> RevokeScheduledRunViewLinkOutput:
+        payload = RevokeScheduledRunViewLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("revoke_scheduled_run_view_link", payload)
+        return RevokeScheduledRunViewLinkOutput.model_validate(result)
+
+    def revoke_schedule_link(self, **kwargs: Any) -> RevokeScheduleLinkOutput:
+        payload = RevokeScheduleLinkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("revoke-schedule-link", payload)
+        return RevokeScheduleLinkOutput.model_validate(result)
+
+    def set_schedule_defaults(self, **kwargs: Any) -> SetScheduleDefaultsOutput:
+        payload = SetScheduleDefaultsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("set-schedule-defaults", payload)
+        return SetScheduleDefaultsOutput.model_validate(result)
+
+    def set_schedule_entitlement(self, **kwargs: Any) -> SetScheduleEntitlementOutput:
+        payload = SetScheduleEntitlementInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("set-schedule-entitlement", payload)
+        return SetScheduleEntitlementOutput.model_validate(result)
+
+    def update_artifact_template(self, **kwargs: Any) -> UpdateArtifactTemplateOutput:
+        payload = UpdateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("update_artifact_template", payload)
+        return UpdateArtifactTemplateOutput.model_validate(result)
+
+    def update_scheduled_action(self, **kwargs: Any) -> UpdateScheduledActionOutput:
+        payload = UpdateScheduledActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("update-scheduled-action", payload)
+        return UpdateScheduledActionOutput.model_validate(result)
+
+
+class BrowserNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def click(self, **kwargs: Any) -> BrowserClickOutput:
+        payload = BrowserClickInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_click", payload)
+        return BrowserClickOutput.model_validate(result)
+
+    def close(self, **kwargs: Any) -> BrowserCloseOutput:
+        payload = BrowserCloseInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_close", payload)
+        return BrowserCloseOutput.model_validate(result)
+
+    def extension_delete(self, **kwargs: Any) -> BrowserExtensionDeleteOutput:
+        payload = BrowserExtensionDeleteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_extension_delete", payload)
+        return BrowserExtensionDeleteOutput.model_validate(result)
+
+    def extension_import(self, **kwargs: Any) -> BrowserExtensionImportOutput:
+        payload = BrowserExtensionImportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_extension_import", payload)
+        return BrowserExtensionImportOutput.model_validate(result)
+
+    def extension_list(self, **kwargs: Any) -> BrowserExtensionListOutput:
+        payload = BrowserExtensionListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_extension_list", payload)
+        return BrowserExtensionListOutput.model_validate(result)
+
+    def goto(self, **kwargs: Any) -> BrowserGotoOutput:
+        payload = BrowserGotoInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_goto", payload)
+        return BrowserGotoOutput.model_validate(result)
+
+    def list_replays(self, **kwargs: Any) -> BrowserListReplaysOutput:
+        payload = BrowserListReplaysInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_list_replays", payload)
+        return BrowserListReplaysOutput.model_validate(result)
+
+    def list_sessions(self, **kwargs: Any) -> BrowserListSessionsOutput:
+        payload = BrowserListSessionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_list_sessions", payload)
+        return BrowserListSessionsOutput.model_validate(result)
+
+    def locate(self, **kwargs: Any) -> BrowserLocateOutput:
+        payload = BrowserLocateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_locate", payload)
+        return BrowserLocateOutput.model_validate(result)
+
+    def open(self, **kwargs: Any) -> BrowserOpenOutput:
+        payload = BrowserOpenInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_open", payload)
+        return BrowserOpenOutput.model_validate(result)
+
+    def press(self, **kwargs: Any) -> BrowserPressOutput:
+        payload = BrowserPressInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_press", payload)
+        return BrowserPressOutput.model_validate(result)
+
+    def profile_connect(self, **kwargs: Any) -> BrowserProfileConnectOutput:
+        payload = BrowserProfileConnectInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_profile_connect", payload)
+        return BrowserProfileConnectOutput.model_validate(result)
+
+    def profile_list(self, **kwargs: Any) -> BrowserProfileListOutput:
+        payload = BrowserProfileListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_profile_list", payload)
+        return BrowserProfileListOutput.model_validate(result)
+
+    def read(self, **kwargs: Any) -> BrowserReadOutput:
+        payload = BrowserReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_read", payload)
+        return BrowserReadOutput.model_validate(result)
+
+    def replay_annotate(self, **kwargs: Any) -> BrowserReplayAnnotateOutput:
+        payload = BrowserReplayAnnotateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_replay_annotate", payload)
+        return BrowserReplayAnnotateOutput.model_validate(result)
+
+    def replay_download(self, **kwargs: Any) -> BrowserReplayDownloadOutput:
+        payload = BrowserReplayDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_replay_download", payload)
+        return BrowserReplayDownloadOutput.model_validate(result)
+
+    def replay_mark(self, **kwargs: Any) -> BrowserReplayMarkOutput:
+        payload = BrowserReplayMarkInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_replay_mark", payload)
+        return BrowserReplayMarkOutput.model_validate(result)
+
+    def replay_start(self, **kwargs: Any) -> BrowserReplayStartOutput:
+        payload = BrowserReplayStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_replay_start", payload)
+        return BrowserReplayStartOutput.model_validate(result)
+
+    def replay_stop(self, **kwargs: Any) -> BrowserReplayStopOutput:
+        payload = BrowserReplayStopInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_replay_stop", payload)
+        return BrowserReplayStopOutput.model_validate(result)
+
+    def screenshot(self, **kwargs: Any) -> BrowserScreenshotOutput:
+        payload = BrowserScreenshotInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_screenshot", payload)
+        return BrowserScreenshotOutput.model_validate(result)
+
+    def scroll(self, **kwargs: Any) -> BrowserScrollOutput:
+        payload = BrowserScrollInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_scroll", payload)
+        return BrowserScrollOutput.model_validate(result)
+
+    def type(self, **kwargs: Any) -> BrowserTypeOutput:
+        payload = BrowserTypeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("browser_type", payload)
+        return BrowserTypeOutput.model_validate(result)
+
+
+class MemoryNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def bulk_delete_notes(self, **kwargs: Any) -> BulkDeleteNotesOutput:
+        payload = BulkDeleteNotesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("bulk-delete-notes", payload)
+        return BulkDeleteNotesOutput.model_validate(result)
+
+    def delete_note(self, **kwargs: Any) -> DeleteNoteOutput:
+        payload = DeleteNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("delete-note", payload)
+        return DeleteNoteOutput.model_validate(result)
+
+    def export(self, **kwargs: Any) -> MemoryExportOutput:
+        payload = MemoryExportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-export", payload)
+        return MemoryExportOutput.model_validate(result)
+
+    def get(self, **kwargs: Any) -> MemoryGetOutput:
+        payload = MemoryGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-get", payload)
+        return MemoryGetOutput.model_validate(result)
+
+    def list(self, **kwargs: Any) -> MemoryListOutput:
+        payload = MemoryListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-list", payload)
+        return MemoryListOutput.model_validate(result)
+
+    def put(self, **kwargs: Any) -> MemoryPutOutput:
+        payload = MemoryPutInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-put", payload)
+        return MemoryPutOutput.model_validate(result)
+
+    def search(self, **kwargs: Any) -> MemorySearchOutput:
+        payload = MemorySearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-search", payload)
+        return MemorySearchOutput.model_validate(result)
+
+    def suggest(self, **kwargs: Any) -> MemorySuggestOutput:
+        payload = MemorySuggestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-suggest", payload)
+        return MemorySuggestOutput.model_validate(result)
+
+    def upload(self, **kwargs: Any) -> MemoryUploadOutput:
+        payload = MemoryUploadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-upload", payload)
+        return MemoryUploadOutput.model_validate(result)
+
+
+class ConnectionsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def call_service_connection_action(self, **kwargs: Any) -> CallServiceConnectionActionOutput:
+        payload = CallServiceConnectionActionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("call_service_connection_action", payload)
+        return CallServiceConnectionActionOutput.model_validate(result)
+
+    def describe_service_connection_tool(self, **kwargs: Any) -> DescribeServiceConnectionToolOutput:
+        payload = DescribeServiceConnectionToolInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("describe_service_connection_tool", payload)
+        return DescribeServiceConnectionToolOutput.model_validate(result)
+
+    def export_connected_service_data(self, **kwargs: Any) -> ExportConnectedServiceDataOutput:
+        payload = ExportConnectedServiceDataInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("export_connected_service_data", payload)
+        return ExportConnectedServiceDataOutput.model_validate(result)
+
+    def export_search_console_table_data(self, **kwargs: Any) -> ExportSearchConsoleTableDataOutput:
+        payload = ExportSearchConsoleTableDataInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("export_search_console_table_data", payload)
+        return ExportSearchConsoleTableDataOutput.model_validate(result)
+
+    def gmail_search_contacts(self, **kwargs: Any) -> GmailSearchContactsOutput:
+        payload = GmailSearchContactsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("gmail_search_contacts", payload)
+        return GmailSearchContactsOutput.model_validate(result)
+
+    def gmail_send_message(self, **kwargs: Any) -> GmailSendMessageOutput:
+        payload = GmailSendMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("gmail_send_message", payload)
+        return GmailSendMessageOutput.model_validate(result)
+
+    def google_calendar_create_event(self, **kwargs: Any) -> GoogleCalendarCreateEventOutput:
+        payload = GoogleCalendarCreateEventInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("google_calendar_create_event", payload)
+        return GoogleCalendarCreateEventOutput.model_validate(result)
+
+    def import_service_connection_to_memory(self, **kwargs: Any) -> ImportServiceConnectionToMemoryOutput:
+        payload = ImportServiceConnectionToMemoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("import_service_connection_to_memory", payload)
+        return ImportServiceConnectionToMemoryOutput.model_validate(result)
+
+    def list_service_connections(self, **kwargs: Any) -> ListServiceConnectionsOutput:
+        payload = ListServiceConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list_service_connections", payload)
+        return ListServiceConnectionsOutput.model_validate(result)
+
+    def meta_ad_creative_media(self, **kwargs: Any) -> MetaAdCreativeMediaOutput:
+        payload = MetaAdCreativeMediaInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("meta_ad_creative_media", payload)
+        return MetaAdCreativeMediaOutput.model_validate(result)
+
+    def read_service_connection(self, **kwargs: Any) -> ReadServiceConnectionOutput:
+        payload = ReadServiceConnectionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("read_service_connection", payload)
+        return ReadServiceConnectionOutput.model_validate(result)
+
+    def renew_connected_data_download(self, **kwargs: Any) -> RenewConnectedDataDownloadOutput:
+        payload = RenewConnectedDataDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("renew_connected_data_download", payload)
+        return RenewConnectedDataDownloadOutput.model_validate(result)
+
+    def set_scheduled_action_connections(self, **kwargs: Any) -> SetScheduledActionConnectionsOutput:
+        payload = SetScheduledActionConnectionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("set_scheduled_action_connections", payload)
+        return SetScheduledActionConnectionsOutput.model_validate(result)
+
+    def slack_send_message(self, **kwargs: Any) -> SlackSendMessageOutput:
+        payload = SlackSendMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("slack_send_message", payload)
+        return SlackSendMessageOutput.model_validate(result)
+
+    def test_service_connection(self, **kwargs: Any) -> TestServiceConnectionOutput:
+        payload = TestServiceConnectionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("test_service_connection", payload)
+        return TestServiceConnectionOutput.model_validate(result)
+
+    def zoom_create_meeting(self, **kwargs: Any) -> ZoomCreateMeetingOutput:
+        payload = ZoomCreateMeetingInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("zoom_create_meeting", payload)
+        return ZoomCreateMeetingOutput.model_validate(result)
+
+
+class SerpIntelligenceNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def page_snapshots(self, **kwargs: Any) -> CaptureSerpPageSnapshotsOutput:
+        payload = CaptureSerpPageSnapshotsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("capture_serp_page_snapshots", payload)
+        return CaptureSerpPageSnapshotsOutput.model_validate(result)
+
+    def snapshot(self, **kwargs: Any) -> CaptureSerpSnapshotOutput:
+        payload = CaptureSerpSnapshotInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("capture_serp_snapshot", payload)
+        return CaptureSerpSnapshotOutput.model_validate(result)
+
+
+class CommonsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def claim_publication(self, **kwargs: Any) -> CommonsClaimPublicationOutput:
+        payload = CommonsClaimPublicationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_claim_publication", payload)
+        return CommonsClaimPublicationOutput.model_validate(result)
+
+    def get_entity(self, **kwargs: Any) -> CommonsGetEntityOutput:
+        payload = CommonsGetEntityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_get_entity", payload)
+        return CommonsGetEntityOutput.model_validate(result)
+
+    def get_entity_ledger(self, **kwargs: Any) -> CommonsGetEntityLedgerOutput:
+        payload = CommonsGetEntityLedgerInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_get_entity_ledger", payload)
+        return CommonsGetEntityLedgerOutput.model_validate(result)
+
+    def get_entity_linkset(self, **kwargs: Any) -> CommonsGetEntityLinksetOutput:
+        payload = CommonsGetEntityLinksetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_get_entity_linkset", payload)
+        return CommonsGetEntityLinksetOutput.model_validate(result)
+
+    def get_proposal(self, **kwargs: Any) -> CommonsGetProposalOutput:
+        payload = CommonsGetProposalInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_get_proposal", payload)
+        return CommonsGetProposalOutput.model_validate(result)
+
+    def get_publication(self, **kwargs: Any) -> CommonsGetPublicationOutput:
+        payload = CommonsGetPublicationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_get_publication", payload)
+        return CommonsGetPublicationOutput.model_validate(result)
+
+    def host_image(self, **kwargs: Any) -> CommonsHostImageOutput:
+        payload = CommonsHostImageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_host_image", payload)
+        return CommonsHostImageOutput.model_validate(result)
+
+    def list_filters(self, **kwargs: Any) -> CommonsListFiltersOutput:
+        payload = CommonsListFiltersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_list_filters", payload)
+        return CommonsListFiltersOutput.model_validate(result)
+
+    def list_needs_links(self, **kwargs: Any) -> CommonsListNeedsLinksOutput:
+        payload = CommonsListNeedsLinksInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_list_needs_links", payload)
+        return CommonsListNeedsLinksOutput.model_validate(result)
+
+    def prepare_entity(self, **kwargs: Any) -> CommonsPrepareEntityOutput:
+        payload = CommonsPrepareEntityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_prepare_entity", payload)
+        return CommonsPrepareEntityOutput.model_validate(result)
+
+    def prepare_publication(self, **kwargs: Any) -> CommonsPreparePublicationOutput:
+        payload = CommonsPreparePublicationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_prepare_publication", payload)
+        return CommonsPreparePublicationOutput.model_validate(result)
+
+    def publish_editorial(self, **kwargs: Any) -> CommonsPublishEditorialOutput:
+        payload = CommonsPublishEditorialInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_publish_editorial", payload)
+        return CommonsPublishEditorialOutput.model_validate(result)
+
+    def save_filter(self, **kwargs: Any) -> CommonsSaveFilterOutput:
+        payload = CommonsSaveFilterInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_save_filter", payload)
+        return CommonsSaveFilterOutput.model_validate(result)
+
+    def search_entities(self, **kwargs: Any) -> CommonsSearchEntitiesOutput:
+        payload = CommonsSearchEntitiesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_search_entities", payload)
+        return CommonsSearchEntitiesOutput.model_validate(result)
+
+    def submit_entity(self, **kwargs: Any) -> CommonsSubmitEntityOutput:
+        payload = CommonsSubmitEntityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_submit_entity", payload)
+        return CommonsSubmitEntityOutput.model_validate(result)
+
+    def update_editorial_article(self, **kwargs: Any) -> CommonsUpdateEditorialArticleOutput:
+        payload = CommonsUpdateEditorialArticleInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_update_editorial_article", payload)
+        return CommonsUpdateEditorialArticleOutput.model_validate(result)
+
+    def validate_entity(self, **kwargs: Any) -> CommonsValidateEntityOutput:
+        payload = CommonsValidateEntityInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_validate_entity", payload)
+        return CommonsValidateEntityOutput.model_validate(result)
+
+    def validate_publication(self, **kwargs: Any) -> CommonsValidatePublicationOutput:
+        payload = CommonsValidatePublicationInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("commons_validate_publication", payload)
+        return CommonsValidatePublicationOutput.model_validate(result)
+
+
+class StorageNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def cost_usage(self, **kwargs: Any) -> CostUsageOutput:
+        payload = CostUsageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("cost-usage", payload)
+        return CostUsageOutput.model_validate(result)
+
+    def usage(self, **kwargs: Any) -> StorageUsageOutput:
+        payload = StorageUsageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("storage-usage", payload)
+        return StorageUsageOutput.model_validate(result)
+
+
+class EditorialNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def create_reading_room(self, **kwargs: Any) -> CreateEditorialReadingRoomOutput:
+        payload = CreateEditorialReadingRoomInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("create_editorial_reading_room", payload)
+        return CreateEditorialReadingRoomOutput.model_validate(result)
+
+    def reading_room_guide(self, **kwargs: Any) -> EditorialReadingRoomGuideOutput:
+        payload = EditorialReadingRoomGuideInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("editorial_reading_room_guide", payload)
+        return EditorialReadingRoomGuideOutput.model_validate(result)
+
+    def renew_reading_room_download(self, **kwargs: Any) -> RenewEditorialReadingRoomDownloadOutput:
+        payload = RenewEditorialReadingRoomDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("renew_editorial_reading_room_download", payload)
+        return RenewEditorialReadingRoomDownloadOutput.model_validate(result)
+
+
+class ChannelsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def create_channel(self, **kwargs: Any) -> CreateChannelOutput:
+        payload = CreateChannelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("create-channel", payload)
+        return CreateChannelOutput.model_validate(result)
+
+    def get_message_note(self, **kwargs: Any) -> GetMessageNoteOutput:
+        payload = GetMessageNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get-message-note", payload)
+        return GetMessageNoteOutput.model_validate(result)
+
+    def list_channel_members(self, **kwargs: Any) -> ListChannelMembersOutput:
+        payload = ListChannelMembersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list-channel-members", payload)
+        return ListChannelMembersOutput.model_validate(result)
+
+    def list_channel_messages(self, **kwargs: Any) -> ListChannelMessagesOutput:
+        payload = ListChannelMessagesInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list-channel-messages", payload)
+        return ListChannelMessagesOutput.model_validate(result)
+
+    def my_mentions(self, **kwargs: Any) -> MyMentionsOutput:
+        payload = MyMentionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("my-mentions", payload)
+        return MyMentionsOutput.model_validate(result)
+
+    def poll_channel(self, **kwargs: Any) -> PollChannelOutput:
+        payload = PollChannelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("poll-channel", payload)
+        return PollChannelOutput.model_validate(result)
+
+    def post_message(self, **kwargs: Any) -> PostMessageOutput:
+        payload = PostMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("post-message", payload)
+        return PostMessageOutput.model_validate(result)
+
+    def react_message(self, **kwargs: Any) -> ReactMessageOutput:
+        payload = ReactMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("react-message", payload)
+        return ReactMessageOutput.model_validate(result)
+
+    def remove_channel_member(self, **kwargs: Any) -> RemoveChannelMemberOutput:
+        payload = RemoveChannelMemberInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("remove-channel-member", payload)
+        return RemoveChannelMemberOutput.model_validate(result)
+
+    def reply_message(self, **kwargs: Any) -> ReplyMessageOutput:
+        payload = ReplyMessageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("reply-message", payload)
+        return ReplyMessageOutput.model_validate(result)
+
+
+class WebhooksNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def create_webhook(self, **kwargs: Any) -> CreateWebhookOutput:
+        payload = CreateWebhookInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("create-webhook", payload)
+        return CreateWebhookOutput.model_validate(result)
+
+    def list_webhooks(self, **kwargs: Any) -> ListWebhooksOutput:
+        payload = ListWebhooksInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list-webhooks", payload)
+        return ListWebhooksOutput.model_validate(result)
+
+    def revoke_webhook(self, **kwargs: Any) -> RevokeWebhookOutput:
+        payload = RevokeWebhookInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("revoke-webhook", payload)
+        return RevokeWebhookOutput.model_validate(result)
+
+
+class BillingNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def credits_info(self, **kwargs: Any) -> CreditsInfoOutput:
+        payload = CreditsInfoInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("credits_info", payload)
+        return CreditsInfoOutput.model_validate(result)
+
+
+class DirectoryNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def run(self, **kwargs: Any) -> DirectoryWorkflowOutput:
+        payload = DirectoryWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("directory_workflow", payload)
+        return DirectoryWorkflowOutput.model_validate(result)
+
+    def workflow_status(self, **kwargs: Any) -> DirectoryWorkflowStatusOutput:
+        payload = DirectoryWorkflowStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("directory_workflow_status", payload)
+        return DirectoryWorkflowStatusOutput.model_validate(result)
+
+    def get_local_sourcebook_contract(self, **kwargs: Any) -> GetLocalSourcebookContractOutput:
+        payload = GetLocalSourcebookContractInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get-local-sourcebook-contract", payload)
+        return GetLocalSourcebookContractOutput.model_validate(result)
+
+    def list_local_sourcebook_tags(self, **kwargs: Any) -> ListLocalSourcebookTagsOutput:
+        payload = ListLocalSourcebookTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list-local-sourcebook-tags", payload)
+        return ListLocalSourcebookTagsOutput.model_validate(result)
+
+    def local_sourcebook_refresh(self, **kwargs: Any) -> LocalSourcebookRefreshOutput:
+        payload = LocalSourcebookRefreshInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("local_sourcebook_refresh", payload)
+        return LocalSourcebookRefreshOutput.model_validate(result)
+
+    def local_sourcebook_submission_status(self, **kwargs: Any) -> LocalSourcebookSubmissionStatusOutput:
+        payload = LocalSourcebookSubmissionStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("local_sourcebook_submission_status", payload)
+        return LocalSourcebookSubmissionStatusOutput.model_validate(result)
+
+    def local_sourcebook_capture(self, **kwargs: Any) -> LocalSourcebookCaptureOutput:
+        payload = LocalSourcebookCaptureInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("local-sourcebook-capture", payload)
+        return LocalSourcebookCaptureOutput.model_validate(result)
+
+    def location_markets(self, **kwargs: Any) -> LocationMarketsOutput:
+        payload = LocationMarketsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("location_markets", payload)
+        return LocationMarketsOutput.model_validate(result)
+
+    def prepare_local_sourcebook_write(self, **kwargs: Any) -> PrepareLocalSourcebookWriteOutput:
+        payload = PrepareLocalSourcebookWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("prepare-local-sourcebook-write", payload)
+        return PrepareLocalSourcebookWriteOutput.model_validate(result)
+
+    def resolve_local_sourcebook_tags(self, **kwargs: Any) -> ResolveLocalSourcebookTagsOutput:
+        payload = ResolveLocalSourcebookTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("resolve-local-sourcebook-tags", payload)
+        return ResolveLocalSourcebookTagsOutput.model_validate(result)
+
+    def validate_local_sourcebook_write(self, **kwargs: Any) -> ValidateLocalSourcebookWriteOutput:
+        payload = ValidateLocalSourcebookWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("validate-local-sourcebook-write", payload)
+        return ValidateLocalSourcebookWriteOutput.model_validate(result)
+
+
+class FacebookNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def ad_search(self, **kwargs: Any) -> FacebookAdSearchOutput:
+        payload = FacebookAdSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("facebook_ad_search", payload)
+        return FacebookAdSearchOutput.model_validate(result)
+
+    def ad_transcribe(self, **kwargs: Any) -> FacebookAdTranscribeOutput:
+        payload = FacebookAdTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("facebook_ad_transcribe", payload)
+        return FacebookAdTranscribeOutput.model_validate(result)
+
+    def page_intel(self, **kwargs: Any) -> FacebookPageIntelOutput:
+        payload = FacebookPageIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("facebook_page_intel", payload)
+        return FacebookPageIntelOutput.model_validate(result)
+
+    def video_transcribe(self, **kwargs: Any) -> FacebookVideoTranscribeOutput:
+        payload = FacebookVideoTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("facebook_video_transcribe", payload)
+        return FacebookVideoTranscribeOutput.model_validate(result)
+
+
+class FactsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def history(self, **kwargs: Any) -> FactHistoryOutput:
+        payload = FactHistoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("fact-history", payload)
+        return FactHistoryOutput.model_validate(result)
+
+    def record_fact(self, **kwargs: Any) -> RecordFactOutput:
+        payload = RecordFactInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("record-fact", payload)
+        return RecordFactOutput.model_validate(result)
+
+
+class ReviewsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def g2_reviews(self, **kwargs: Any) -> G2ReviewsOutput:
+        payload = G2ReviewsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("g2_reviews", payload)
+        return G2ReviewsOutput.model_validate(result)
+
+    def trustpilot_reviews(self, **kwargs: Any) -> TrustpilotReviewsOutput:
+        payload = TrustpilotReviewsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("trustpilot_reviews", payload)
+        return TrustpilotReviewsOutput.model_validate(result)
+
+
+class ArtifactsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def get_artifact_template_example(self, **kwargs: Any) -> GetArtifactTemplateExampleOutput:
+        payload = GetArtifactTemplateExampleInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("get_artifact_template_example", payload)
+        return GetArtifactTemplateExampleOutput.model_validate(result)
+
+    def read(self, **kwargs: Any) -> ReportArtifactReadOutput:
+        payload = ReportArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("report_artifact_read", payload)
+        return ReportArtifactReadOutput.model_validate(result)
+
+
+class GoogleAdsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def page_intel(self, **kwargs: Any) -> GoogleAdsPageIntelOutput:
+        payload = GoogleAdsPageIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("google_ads_page_intel", payload)
+        return GoogleAdsPageIntelOutput.model_validate(result)
+
+    def search(self, **kwargs: Any) -> GoogleAdsSearchOutput:
+        payload = GoogleAdsSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("google_ads_search", payload)
+        return GoogleAdsSearchOutput.model_validate(result)
+
+    def transcribe(self, **kwargs: Any) -> GoogleAdsTranscribeOutput:
+        payload = GoogleAdsTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("google_ads_transcribe", payload)
+        return GoogleAdsTranscribeOutput.model_validate(result)
+
+
+class SearchNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def harvest_paa(self, **kwargs: Any) -> HarvestPaaOutput:
+        payload = HarvestPaaInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("harvest_paa", payload)
+        return HarvestPaaOutput.model_validate(result)
+
+    def search_serp(self, **kwargs: Any) -> SearchSerpOutput:
+        payload = SearchSerpInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("search_serp", payload)
+        return SearchSerpOutput.model_validate(result)
+
+    def serp_identity_create(self, **kwargs: Any) -> SerpIdentityCreateOutput:
+        payload = SerpIdentityCreateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("serp_identity_create", payload)
+        return SerpIdentityCreateOutput.model_validate(result)
+
+    def serp_identity_delete(self, **kwargs: Any) -> SerpIdentityDeleteOutput:
+        payload = SerpIdentityDeleteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("serp_identity_delete", payload)
+        return SerpIdentityDeleteOutput.model_validate(result)
+
+    def serp_identity_list(self, **kwargs: Any) -> SerpIdentityListOutput:
+        payload = SerpIdentityListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("serp_identity_list", payload)
+        return SerpIdentityListOutput.model_validate(result)
+
+
+class ImagesNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def asset_delete(self, **kwargs: Any) -> ImageAssetDeleteOutput:
+        payload = ImageAssetDeleteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_asset_delete", payload)
+        return ImageAssetDeleteOutput.model_validate(result)
+
+    def asset_get(self, **kwargs: Any) -> ImageAssetGetOutput:
+        payload = ImageAssetGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_asset_get", payload)
+        return ImageAssetGetOutput.model_validate(result)
+
+    def asset_list(self, **kwargs: Any) -> ImageAssetListOutput:
+        payload = ImageAssetListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_asset_list", payload)
+        return ImageAssetListOutput.model_validate(result)
+
+    def asset_move(self, **kwargs: Any) -> ImageAssetMoveOutput:
+        payload = ImageAssetMoveInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_asset_move", payload)
+        return ImageAssetMoveOutput.model_validate(result)
+
+    def asset_save(self, **kwargs: Any) -> ImageAssetSaveOutput:
+        payload = ImageAssetSaveInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_asset_save", payload)
+        return ImageAssetSaveOutput.model_validate(result)
+
+    def asset_search(self, **kwargs: Any) -> ImageAssetSearchOutput:
+        payload = ImageAssetSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_asset_search", payload)
+        return ImageAssetSearchOutput.model_validate(result)
+
+    def folder_create(self, **kwargs: Any) -> ImageFolderCreateOutput:
+        payload = ImageFolderCreateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_folder_create", payload)
+        return ImageFolderCreateOutput.model_validate(result)
+
+    def folder_list(self, **kwargs: Any) -> ImageFolderListOutput:
+        payload = ImageFolderListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_folder_list", payload)
+        return ImageFolderListOutput.model_validate(result)
+
+    def project_create(self, **kwargs: Any) -> ImageProjectCreateOutput:
+        payload = ImageProjectCreateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_project_create", payload)
+        return ImageProjectCreateOutput.model_validate(result)
+
+    def project_list(self, **kwargs: Any) -> ImageProjectListOutput:
+        payload = ImageProjectListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("image_project_list", payload)
+        return ImageProjectListOutput.model_validate(result)
+
+
+class InstagramNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def media_download(self, **kwargs: Any) -> InstagramMediaDownloadOutput:
+        payload = InstagramMediaDownloadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("instagram_media_download", payload)
+        return InstagramMediaDownloadOutput.model_validate(result)
+
+    def profile_content(self, **kwargs: Any) -> InstagramProfileContentOutput:
+        payload = InstagramProfileContentInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("instagram_profile_content", payload)
+        return InstagramProfileContentOutput.model_validate(result)
+
+
+class LeadsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def enrich(self, **kwargs: Any) -> LeadListEnrichOutput:
+        payload = LeadListEnrichInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("lead_list_enrich", payload)
+        return LeadListEnrichOutput.model_validate(result)
+
+    def enrich_status(self, **kwargs: Any) -> LeadListEnrichStatusOutput:
+        payload = LeadListEnrichStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("lead_list_enrich_status", payload)
+        return LeadListEnrichStatusOutput.model_validate(result)
+
+    def import_(self, **kwargs: Any) -> LeadListImportOutput:
+        payload = LeadListImportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("lead_list_import", payload)
+        return LeadListImportOutput.model_validate(result)
+
+    def upload_start(self, **kwargs: Any) -> LeadListUploadStartOutput:
+        payload = LeadListUploadStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("lead_list_upload_start", payload)
+        return LeadListUploadStartOutput.model_validate(result)
+
+
+class LibraryNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def ingest(self, **kwargs: Any) -> LibraryIngestOutput:
+        payload = LibraryIngestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("library-ingest", payload)
+        return LibraryIngestOutput.model_validate(result)
+
+
+class TagsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def list_memory_tags(self, **kwargs: Any) -> ListMemoryTagsOutput:
+        payload = ListMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("list-memory-tags", payload)
+        return ListMemoryTagsOutput.model_validate(result)
+
+    def merge_memory_tags(self, **kwargs: Any) -> MergeMemoryTagsOutput:
+        payload = MergeMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("merge-memory-tags", payload)
+        return MergeMemoryTagsOutput.model_validate(result)
+
+    def resolve_memory_tags(self, **kwargs: Any) -> ResolveMemoryTagsOutput:
+        payload = ResolveMemoryTagsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("resolve-memory-tags", payload)
+        return ResolveMemoryTagsOutput.model_validate(result)
+
+    def upsert_memory_tag(self, **kwargs: Any) -> UpsertMemoryTagOutput:
+        payload = UpsertMemoryTagInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("upsert-memory-tag", payload)
+        return UpsertMemoryTagOutput.model_validate(result)
+
+
+class MapsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def place_intel(self, **kwargs: Any) -> MapsPlaceIntelOutput:
+        payload = MapsPlaceIntelInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("maps_place_intel", payload)
+        return MapsPlaceIntelOutput.model_validate(result)
+
+    def search(self, **kwargs: Any) -> MapsSearchOutput:
+        payload = MapsSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("maps_search", payload)
+        return MapsSearchOutput.model_validate(result)
+
+
+class GraphNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def memory_backlinks(self, **kwargs: Any) -> MemoryBacklinksOutput:
+        payload = MemoryBacklinksInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-backlinks", payload)
+        return MemoryBacklinksOutput.model_validate(result)
+
+    def memory_graph_path(self, **kwargs: Any) -> MemoryGraphPathOutput:
+        payload = MemoryGraphPathInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-graph-path", payload)
+        return MemoryGraphPathOutput.model_validate(result)
+
+    def memory_graph_universe(self, **kwargs: Any) -> MemoryGraphUniverseOutput:
+        payload = MemoryGraphUniverseInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-graph-universe", payload)
+        return MemoryGraphUniverseOutput.model_validate(result)
+
+
+class CaptureNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def memory_capture(self, **kwargs: Any) -> MemoryCaptureOutput:
+        payload = MemoryCaptureInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-capture", payload)
+        return MemoryCaptureOutput.model_validate(result)
+
+    def memory_questions(self, **kwargs: Any) -> MemoryQuestionsOutput:
+        payload = MemoryQuestionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("memory-questions", payload)
+        return MemoryQuestionsOutput.model_validate(result)
+
+    def prepare_memory_write(self, **kwargs: Any) -> PrepareMemoryWriteOutput:
+        payload = PrepareMemoryWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("prepare-memory-write", payload)
+        return PrepareMemoryWriteOutput.model_validate(result)
+
+    def validate_memory_write(self, **kwargs: Any) -> ValidateMemoryWriteOutput:
+        payload = ValidateMemoryWriteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("validate-memory-write", payload)
+        return ValidateMemoryWriteOutput.model_validate(result)
+
+
+class WorkflowsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def query_fanout(self, **kwargs: Any) -> QueryFanoutWorkflowOutput:
+        payload = QueryFanoutWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("query_fanout_workflow", payload)
+        return QueryFanoutWorkflowOutput.model_validate(result)
+
+    def rank_tracker(self, **kwargs: Any) -> RankTrackerWorkflowOutput:
+        payload = RankTrackerWorkflowInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("rank_tracker_workflow", payload)
+        return RankTrackerWorkflowOutput.model_validate(result)
+
+    def artifact_read(self, **kwargs: Any) -> WorkflowArtifactReadOutput:
+        payload = WorkflowArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("workflow_artifact_read", payload)
+        return WorkflowArtifactReadOutput.model_validate(result)
+
+    def list(self, **kwargs: Any) -> WorkflowListOutput:
+        payload = WorkflowListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("workflow_list", payload)
+        return WorkflowListOutput.model_validate(result)
+
+    def run(self, **kwargs: Any) -> WorkflowRunOutput:
+        payload = WorkflowRunInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("workflow_run", payload)
+        return WorkflowRunOutput.model_validate(result)
+
+    def status(self, **kwargs: Any) -> WorkflowStatusOutput:
+        payload = WorkflowStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("workflow_status", payload)
+        return WorkflowStatusOutput.model_validate(result)
+
+    def step(self, **kwargs: Any) -> WorkflowStepOutput:
+        payload = WorkflowStepInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("workflow_step", payload)
+        return WorkflowStepOutput.model_validate(result)
+
+    def suggest(self, **kwargs: Any) -> WorkflowSuggestOutput:
+        payload = WorkflowSuggestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("workflow_suggest", payload)
+        return WorkflowSuggestOutput.model_validate(result)
+
+
+class RedditNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def thread(self, **kwargs: Any) -> RedditThreadOutput:
+        payload = RedditThreadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("reddit_thread", payload)
+        return RedditThreadOutput.model_validate(result)
+
+    def trending(self, **kwargs: Any) -> RedditTrendingOutput:
+        payload = RedditTrendingInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("reddit_trending", payload)
+        return RedditTrendingOutput.model_validate(result)
+
+
+class TablesNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def create(self, **kwargs: Any) -> TableCreateOutput:
+        payload = TableCreateInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("table-create", payload)
+        return TableCreateOutput.model_validate(result)
+
+    def delete_rows(self, **kwargs: Any) -> TableDeleteRowsOutput:
+        payload = TableDeleteRowsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("table-delete-rows", payload)
+        return TableDeleteRowsOutput.model_validate(result)
+
+    def describe(self, **kwargs: Any) -> TableDescribeOutput:
+        payload = TableDescribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("table-describe", payload)
+        return TableDescribeOutput.model_validate(result)
+
+    def drop(self, **kwargs: Any) -> TableDropOutput:
+        payload = TableDropInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("table-drop", payload)
+        return TableDropOutput.model_validate(result)
+
+    def insert_rows(self, **kwargs: Any) -> TableInsertRowsOutput:
+        payload = TableInsertRowsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("table-insert-rows", payload)
+        return TableInsertRowsOutput.model_validate(result)
+
+    def list(self, **kwargs: Any) -> TableListOutput:
+        payload = TableListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("table-list", payload)
+        return TableListOutput.model_validate(result)
+
+    def query(self, **kwargs: Any) -> TableQueryOutput:
+        payload = TableQueryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("table-query", payload)
+        return TableQueryOutput.model_validate(result)
+
+
+class RecallNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def temporal_recall(self, **kwargs: Any) -> TemporalRecallOutput:
+        payload = TemporalRecallInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("temporal-recall", payload)
+        return TemporalRecallOutput.model_validate(result)
+
+
+class VideoNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def frame_analysis(self, **kwargs: Any) -> VideoFrameAnalysisOutput:
+        payload = VideoFrameAnalysisInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("video_frame_analysis", payload)
+        return VideoFrameAnalysisOutput.model_validate(result)
+
+    def frame_analysis_status(self, **kwargs: Any) -> VideoFrameAnalysisStatusOutput:
+        payload = VideoFrameAnalysisStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("video_frame_analysis_status", payload)
+        return VideoFrameAnalysisStatusOutput.model_validate(result)
+
+    def analyze_start(self, **kwargs: Any) -> VideoAnalyzeStartOutput:
+        payload = VideoAnalyzeStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("video-analyze-start", payload)
+        return VideoAnalyzeStartOutput.model_validate(result)
+
+    def analyze_status(self, **kwargs: Any) -> VideoAnalyzeStatusOutput:
+        payload = VideoAnalyzeStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("video-analyze-status", payload)
+        return VideoAnalyzeStatusOutput.model_validate(result)
+
+
+class YoutubeNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def harvest(self, **kwargs: Any) -> YoutubeHarvestOutput:
+        payload = YoutubeHarvestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("youtube_harvest", payload)
+        return YoutubeHarvestOutput.model_validate(result)
+
+    def transcribe(self, **kwargs: Any) -> YoutubeTranscribeOutput:
+        payload = YoutubeTranscribeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("youtube_transcribe", payload)
+        return YoutubeTranscribeOutput.model_validate(result)
+
+
 
 class GeneratedMcpToolsClient:
     def __init__(self, call_tool):
-        self.search = SearchNamespace(call_tool)
+        self.access = AccessNamespace(call_tool)
+        self.vaults = VaultsNamespace(call_tool)
+        self.analytics = AnalyticsNamespace(call_tool)
         self.web = WebNamespace(call_tool)
-        self.youtube = YoutubeNamespace(call_tool)
-        self.facebook = FacebookNamespace(call_tool)
-        self.reddit = RedditNamespace(call_tool)
-        self.video = VideoNamespace(call_tool)
-        self.google_ads = GoogleAdsNamespace(call_tool)
-        self.instagram = InstagramNamespace(call_tool)
-        self.maps = MapsNamespace(call_tool)
-        self.reviews = ReviewsNamespace(call_tool)
-        self.commons = CommonsNamespace(call_tool)
-        self.directory = DirectoryNamespace(call_tool)
-        self.workflows = WorkflowsNamespace(call_tool)
-        self.editorial = EditorialNamespace(call_tool)
-        self.artifacts = ArtifactsNamespace(call_tool)
-        self.billing = BillingNamespace(call_tool)
+        self.schedule = ScheduleNamespace(call_tool)
+        self.browser = BrowserNamespace(call_tool)
+        self.memory = MemoryNamespace(call_tool)
         self.connections = ConnectionsNamespace(call_tool)
         self.serp_intelligence = SerpIntelligenceNamespace(call_tool)
-        self.browser = BrowserNamespace(call_tool)
-        self.schedule = ScheduleNamespace(call_tool)
-        self.access = AccessNamespace(call_tool)
-        self.capture = CaptureNamespace(call_tool)
-        self.channels = ChannelsNamespace(call_tool)
-        self.facts = FactsNamespace(call_tool)
-        self.graph = GraphNamespace(call_tool)
-        self.library = LibraryNamespace(call_tool)
-        self.memory = MemoryNamespace(call_tool)
-        self.recall = RecallNamespace(call_tool)
+        self.commons = CommonsNamespace(call_tool)
         self.storage = StorageNamespace(call_tool)
-        self.tables = TablesNamespace(call_tool)
-        self.tags = TagsNamespace(call_tool)
-        self.vaults = VaultsNamespace(call_tool)
+        self.editorial = EditorialNamespace(call_tool)
+        self.channels = ChannelsNamespace(call_tool)
         self.webhooks = WebhooksNamespace(call_tool)
+        self.billing = BillingNamespace(call_tool)
+        self.directory = DirectoryNamespace(call_tool)
+        self.facebook = FacebookNamespace(call_tool)
+        self.facts = FactsNamespace(call_tool)
+        self.reviews = ReviewsNamespace(call_tool)
+        self.artifacts = ArtifactsNamespace(call_tool)
+        self.google_ads = GoogleAdsNamespace(call_tool)
+        self.search = SearchNamespace(call_tool)
         self.images = ImagesNamespace(call_tool)
-        self.analytics = AnalyticsNamespace(call_tool)
+        self.instagram = InstagramNamespace(call_tool)
+        self.leads = LeadsNamespace(call_tool)
+        self.library = LibraryNamespace(call_tool)
+        self.tags = TagsNamespace(call_tool)
+        self.maps = MapsNamespace(call_tool)
+        self.graph = GraphNamespace(call_tool)
+        self.capture = CaptureNamespace(call_tool)
+        self.workflows = WorkflowsNamespace(call_tool)
+        self.reddit = RedditNamespace(call_tool)
+        self.tables = TablesNamespace(call_tool)
+        self.recall = RecallNamespace(call_tool)
+        self.video = VideoNamespace(call_tool)
+        self.youtube = YoutubeNamespace(call_tool)

@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Site export job ID returned by extract_site or audit_site.
+   * Site export job ID returned by extract_site, analyze_site_similarity, or audit_site.
    */
   jobId: string;
   /**

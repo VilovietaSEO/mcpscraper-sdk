@@ -2,6 +2,23 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-24 — verified against mcp-scraper 0.66.0 / mcp-memory 1.18.1
+
+### Added
+
+- Added generated Node and Python bindings, CLI forms, and cURL catalog entries for durable lead-list upload, import, enrichment, and status workflows, including model-authored owner/leadership query templates and bounded AI Overview citation evidence.
+- Added typed `analyze_site_similarity` inputs and outputs across every unified client surface.
+
+### Changed
+
+- Regenerated the unified catalog directly from the final 0.66.0 server artifact at 259 tools: 158 MCP Scraper tools plus 101 mirrored Memory tools.
+- Prepared `mcpscraper-memory-sdk` 0.31.0, `mcpscraper-sdk` 0.30.0, `mcpscraper-cli` 0.29.0, Python `mcpscraper-sdk` 0.29.0, and Python `mcpscraper-memory-sdk` 0.28.0.
+
+### Fixed
+
+- Added a source-contract SHA-256 and release check that fails when the SDK's tool count, generated-from version, or normalized tool contract differs from the final MCP server manifest.
+- Made Python parity verification apply the generator's reserved-keyword escape, so `lead_list_import` correctly verifies its callable `import_` method instead of failing after successful generation.
+
 ## 2026-08-23 — verified against mcp-scraper 0.63.1 / mcp-memory 1.18.1
 
 ### Added
