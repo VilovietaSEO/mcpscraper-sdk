@@ -2,11 +2,12 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## Unreleased
+## 2026-08-25 — verified against mcp-scraper 0.66.3 / mcp-memory 1.18.1
 
 ### Changed
 
 - Made the complete server build manifest the only accepted source for generated MCP output types. Runtime `tools/list` remains a compact discovery projection and is no longer treated as a schema source.
+- Prepared `mcpscraper-memory-sdk` 0.31.3, `mcpscraper-sdk` 0.30.3, `mcpscraper-cli` 0.29.3, Python `mcpscraper-sdk` 0.29.3, and Python `mcpscraper-memory-sdk` 0.28.3.
 
 ### Fixed
 
