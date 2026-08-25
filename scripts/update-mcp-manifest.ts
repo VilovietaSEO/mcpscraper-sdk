@@ -1,37 +1,11 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { join } from 'node:path'
+import { stripInternalTelemetry } from './mcp-contract-telemetry.js'
 
 const ENDPOINT = 'https://mcpscraper.dev/mcp'
 const MANIFEST_PATH = join(process.cwd(), 'contracts/mcp.tools.json')
 const MEMORY_MANIFEST_PATH = join(process.cwd(), 'contracts/memory.tools.json')
-const INTERNAL_TELEMETRY_FIELDS = new Set([
-  'attempts', 'observedIp', 'observedCity', 'observedRegion',
-  'proxyResolutionSource', 'proxyTargetLevel', 'proxyTargetLocation', 'proxyTargetZip',
-  'proxyIdSuffix', 'browserSessionId', 'browserSessionIdSuffix',
-  'attemptNumber', 'maxAttempts', 'willRetry',
-])
-
-function stripInternalTelemetry(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(stripInternalTelemetry)
-  if (!value || typeof value !== 'object') return value
-  const out: Record<string, unknown> = {}
-  for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
-    if (key === 'properties' && child && typeof child === 'object') {
-      const props: Record<string, unknown> = {}
-      for (const [propKey, propVal] of Object.entries(child as Record<string, unknown>)) {
-        if (INTERNAL_TELEMETRY_FIELDS.has(propKey)) continue
-        props[propKey] = stripInternalTelemetry(propVal)
-      }
-      out[key] = props
-    } else if (key === 'required' && Array.isArray(child)) {
-      out[key] = child.filter(name => !INTERNAL_TELEMETRY_FIELDS.has(name as string))
-    } else {
-      out[key] = stripInternalTelemetry(child)
-    }
-  }
-  return out
-}
 
 interface LiveTool {
   name: string
