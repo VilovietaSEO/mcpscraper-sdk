@@ -37,7 +37,7 @@ class McpToolsClient(GeneratedMcpToolsClient):
         session: requests.Session | None = None,
         list_retries: int = 2,
         retry_delay_s: float = 0.25,
-        request_timeout: float = 300.0,
+        request_timeout: float = 590.0,
     ) -> None:
         self._api_key = api_key
         self._base_url = base_url.rstrip("/")
@@ -74,7 +74,7 @@ class McpToolsClient(GeneratedMcpToolsClient):
                 envelope = {
                     "error_code": "mcp_request_timeout",
                     "error_type": "timeout",
-                    "message": f"MCP request exceeded {self._request_timeout:g}s and was cancelled client-side. The operation may still be running; poll its durable job or retry with the same idempotency key.",
+                    "message": f"The client stopped waiting after {self._request_timeout:g}s. This does not prove server-side work stopped; poll a known job or retry with the same idempotency key.",
                     "retryable": True,
                 }
                 raise McpToolError(envelope["message"], http_status=408, tool_error=envelope) from error

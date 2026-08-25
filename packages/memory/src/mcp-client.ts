@@ -6,7 +6,7 @@ export interface McpToolsClientOptions {
   fetch?: typeof globalThis.fetch
   listRetries?: number
   retryDelayMs?: number
-  /** Bounded deadline for each MCP HTTP call. Defaults to 300 seconds. */
+  /** Bounded wait window for each MCP HTTP call. Defaults to 590 seconds. */
   requestTimeoutMs?: number
 }
 
@@ -86,7 +86,7 @@ class McpJsonRpcTransport {
     this.fetchImpl = options.fetch ?? globalThis.fetch
     this.listRetries = options.listRetries ?? 2
     this.retryDelayMs = options.retryDelayMs ?? 250
-    this.requestTimeoutMs = options.requestTimeoutMs ?? 300_000
+    this.requestTimeoutMs = options.requestTimeoutMs ?? 590_000
     if (!Number.isFinite(this.requestTimeoutMs) || this.requestTimeoutMs <= 0) throw new TypeError('requestTimeoutMs must be a positive number')
   }
 
@@ -115,7 +115,7 @@ class McpJsonRpcTransport {
           const envelope = {
             error_code: 'mcp_request_timeout',
             error_type: 'timeout',
-            message: `MCP request exceeded ${Math.round(this.requestTimeoutMs / 1000)}s and was cancelled client-side. The operation may still be running; poll its durable job or retry with the same idempotency key.`,
+            message: `The client stopped waiting after ${Math.round(this.requestTimeoutMs / 1000)}s. This does not prove server-side work stopped; poll a known job or retry with the same idempotency key.`,
             retryable: true,
           }
           throw new McpToolError(envelope.message, { httpStatus: 408, toolError: envelope })

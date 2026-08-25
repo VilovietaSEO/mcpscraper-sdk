@@ -38,7 +38,7 @@ export interface ScraperClientOptions {
   apiKey: string
   baseUrl?: string
   fetch?: typeof globalThis.fetch
-  /** Bounded HTTP deadline for every request. Defaults to 300 seconds. */
+  /** Bounded HTTP wait window for every request. Defaults to 590 seconds. */
   requestTimeoutMs?: number
 }
 
@@ -86,7 +86,7 @@ class Requester {
           error: 'mcp_request_timeout',
           error_code: 'mcp_request_timeout',
           error_type: 'timeout',
-          message: `MCP Scraper request exceeded ${Math.round(this.timeoutMs / 1000)}s and was cancelled client-side. The operation may still be running; use the same Idempotency-Key or poll a returned job before starting a new paid run.`,
+          message: `The client stopped waiting after ${Math.round(this.timeoutMs / 1000)}s. This does not prove server-side work stopped; use the same Idempotency-Key or poll a returned job before starting a new paid run.`,
           retryable: true,
         })
       }
@@ -353,7 +353,7 @@ export class ScraperClient {
   readonly tools: McpToolsClient
 
   constructor(options: ScraperClientOptions) {
-    const requestTimeoutMs = options.requestTimeoutMs ?? 300_000
+    const requestTimeoutMs = options.requestTimeoutMs ?? 590_000
     if (!Number.isFinite(requestTimeoutMs) || requestTimeoutMs <= 0) throw new TypeError('requestTimeoutMs must be a positive number')
     this.r = new Requester(options.apiKey, options.baseUrl ?? 'https://mcpscraper.dev', options.fetch ?? globalThis.fetch, requestTimeoutMs)
     this.youtube = new YoutubeNamespace(this.r)
