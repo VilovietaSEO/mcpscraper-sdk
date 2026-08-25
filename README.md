@@ -2,7 +2,7 @@
 
 Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, ZIP archive reading, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 114 tools).
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **254 unified MCP tools** — 153 MCP Scraper tools plus 101 mirrored Memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **259 unified MCP tools** — 158 MCP Scraper tools plus 101 mirrored Memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Install
 
@@ -29,10 +29,111 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 | [Map](#map) | Discover a site's full URL inventory | `POST /map-urls` | 5 credits flat |
 | [Read ZIP archives](#read-zip-archives) | List a public ZIP, read one text file, or preserve it in Library | MCP `archive_read` / `POST /archive/read` | — |
 | [Maps search](#maps-search) | Local businesses via Google Maps | `POST /maps/search` | — |
+| [Lead-list enrichment](#lead-list-enrichment) | Enrich pasted rows or imported CSV/TSV/XLSX files with business contacts and optional owner/leadership evidence | MCP `lead_list_*` tools | Underlying Maps, page, and SERP attempts |
 | [Memory search](#memory-search-using-only-your-scraper-key) | Semantic search across your mcp-memory vaults | `POST /memory/mcp-call` | — |
 | YouTube, Facebook/Google Ads, Instagram, Reddit, video, directory workflows | See [`packages/scraper`](./packages/scraper) and [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) for the full 43-operation REST contract | — | — |
 
 Every example below runs the *same* operation four ways.
+
+### Lead-list enrichment
+
+Pass already-mapped rows directly to `lead_list_enrich`. For a supplied CSV, TSV, or XLSX file, call `lead_list_import` first, review its headers and suggested mapping, then enrich the returned `leadListId`. Results can include private seven-day CSV and XLSX artifacts.
+
+When owner or leadership discovery is enabled, the calling AI should write one to three narrow search templates using `{business}`, `{city}`, `{region}`, or `{location}`. Use one role intent per template. The service reads AI Overview and organic-result evidence, then searches for a company-matched LinkedIn result without opening LinkedIn pages; public occurrences are candidates, not verified current employment.
+
+<details open><summary>Node.js</summary>
+
+```ts
+import { randomUUID } from 'node:crypto'
+import { ScraperClient } from 'mcpscraper-sdk'
+
+const client = new ScraperClient({ apiKey: process.env.MCPSCRAPER_API_KEY! })
+const job = await client.tools.leads.enrich({
+  idempotencyKey: randomUUID(),
+  source: {
+    kind: 'rows',
+    rows: [{ Business: 'White Rock Roofing', City: 'Dallas', State: 'TX', Website: 'https://roofwhiterock.com' }],
+  },
+  columnMap: { name: 'Business', city: 'City', region: 'State', websiteUrl: 'Website' },
+  defaultEntityType: 'business',
+  emailSearchFallback: 'serp_snippets',
+  peopleDiscovery: 'owners',
+  peopleQueryTemplates: [
+    '{business} owner of company {city} {region}',
+    '{business} founder {city} {region}',
+  ],
+  maxPeoplePerLead: 2,
+  outputFormats: ['csv', 'xlsx'],
+})
+
+const status = await client.tools.leads.enrichStatus({ jobId: job.jobId })
+```
+</details>
+
+<details><summary>Python</summary>
+
+```python
+from uuid import uuid4
+from mcpscraper import ScraperClient
+
+client = ScraperClient(api_key="sk_live_your_key")
+job = client.tools.leads.enrich(
+    idempotency_key=str(uuid4()),
+    source={
+        "kind": "rows",
+        "rows": [{"Business": "White Rock Roofing", "City": "Dallas", "State": "TX", "Website": "https://roofwhiterock.com"}],
+    },
+    column_map={"name": "Business", "city": "City", "region": "State", "websiteUrl": "Website"},
+    default_entity_type="business",
+    email_search_fallback="serp_snippets",
+    people_discovery="owners",
+    people_query_templates=[
+        "{business} owner of company {city} {region}",
+        "{business} founder {city} {region}",
+    ],
+    max_people_per_lead=2,
+    output_formats=["csv", "xlsx"],
+)
+
+status = client.tools.leads.enrich_status(job_id=job.job_id)
+```
+</details>
+
+<details><summary>CLI</summary>
+
+```bash
+mcpscraper tools call lead_list_enrich --args '{
+  "idempotencyKey":"roofing-dallas-001",
+  "source":{"kind":"rows","rows":[{"Business":"White Rock Roofing","City":"Dallas","State":"TX","Website":"https://roofwhiterock.com"}]},
+  "columnMap":{"name":"Business","city":"City","region":"State","websiteUrl":"Website"},
+  "defaultEntityType":"business",
+  "emailSearchFallback":"serp_snippets",
+  "peopleDiscovery":"owners",
+  "peopleQueryTemplates":["{business} owner of company {city} {region}","{business} founder {city} {region}"],
+  "outputFormats":["csv","xlsx"]
+}' --json
+```
+</details>
+
+<details><summary>cURL</summary>
+
+```bash
+curl https://mcpscraper.dev/mcp \
+  -H "x-api-key: $MCPSCRAPER_API_KEY" \
+  -H "content-type: application/json" \
+  -H "accept: application/json, text/event-stream" \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"lead_list_enrich","arguments":{"idempotencyKey":"roofing-dallas-001","source":{"kind":"rows","rows":[{"Business":"White Rock Roofing","City":"Dallas","State":"TX","Website":"https://roofwhiterock.com"}]},"columnMap":{"name":"Business","city":"City","region":"State","websiteUrl":"Website"},"defaultEntityType":"business","emailSearchFallback":"serp_snippets","peopleDiscovery":"owners","peopleQueryTemplates":["{business} owner of company {city} {region}","{business} founder {city} {region}"],"outputFormats":["csv","xlsx"]}}}'
+```
+</details>
+
+To inspect pasted CSV text before spending enrichment credits:
+
+```ts
+const imported = await client.tools.leads.import({
+  idempotencyKey: randomUUID(),
+  source: { kind: 'csv_text', csvText: 'Business,City,State,Website\nWhite Rock Roofing,Dallas,TX,https://roofwhiterock.com' },
+})
+```
 
 ### Read ZIP archives
 
@@ -380,7 +481,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 254 unified tools in both Node and Python, including all 101 mirrored Memory tools.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 259 unified tools in both Node and Python, including all 101 mirrored Memory tools.
 
 ## Scheduled results and artifact templates
 
@@ -581,7 +682,7 @@ Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Pyt
 
 Concurrency is sold separately from the base plan in quantity-based packs: one $5/month pack adds two browser slots, so quantity `n` adds `2n` slots for `$5n` per month. Existing plan credits and included concurrency do not change when a pack is added.
 
-## All 254 MCP tools
+## All 259 MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -601,7 +702,7 @@ The authoritative tool names, descriptions, schemas, annotations, categories, an
 
 ## The CLI
 
-`mcpscraper-cli` keeps ergonomic shortcuts for common operations and also reaches all 254 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps ergonomic shortcuts for common operations and also reaches all 259 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -609,7 +710,7 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 254 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 259 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
 - [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 114 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
 

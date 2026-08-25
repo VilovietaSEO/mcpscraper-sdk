@@ -1,4 +1,4 @@
-# All 254 MCP tools with cURL
+# All 259 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,218 +47,13 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (254)
-
-## search
-
-- `harvest_paa` — Google PAA + SERP Harvest
-- `search_serp` — Google SERP Lookup
-- `serp_identity_create` — Create and Take Over Persistent SERP Identity
-- `serp_identity_delete` — Delete Persistent SERP Identity
-- `serp_identity_list` — List Persistent SERP Identities
-
-## web
-
-- `extract_url` — Single URL Extract
-- `diff_page` — Page Change Check
-- `map_site_urls` — Site URL Map
-- `map_wayback_snapshots` — Wayback Snapshot Inventory
-- `extract_site` — Multi-Page Site Content Crawl
-- `audit_site` — Technical SEO Audit
-- `check_site_export` — Check Site Export
-- `archive_read` — List or Read ZIP Archive
-- `site_export_image` — Read Site Export Image
-- `site_export_read` — Read Site Export Page
-
-## youtube
-
-- `youtube_harvest` — YouTube Video Harvest
-- `youtube_transcribe` — YouTube Transcription
-
-## facebook
-
-- `facebook_page_intel` — Facebook Advertiser Ad Intel
-- `facebook_ad_search` — Facebook Ad Library Search
-- `facebook_ad_transcribe` — Facebook Ad Transcription
-- `facebook_video_transcribe` — Facebook Organic Video Transcription
-
-## reddit
-
-- `reddit_thread` — Reddit Thread + Comments
-- `reddit_trending` — Reddit Trending
-
-## video
-
-- `video_frame_analysis` — Video Breakdown (frame-by-frame + transcript)
-- `video_frame_analysis_status` — Video Breakdown Status
-- `video-analyze-start` — Start Video Breakdown
-- `video-analyze-status` — Video Breakdown Status
-
-## googleAds
-
-- `google_ads_search` — Google Ads Transparency Search
-- `google_ads_page_intel` — Google Ads Advertiser Intel
-- `google_ads_transcribe` — Google Ad Video Transcription
-
-## instagram
-
-- `instagram_profile_content` — Instagram Profile Content Discovery
-- `instagram_media_download` — Instagram Post/Reel Media Download
-
-## maps
-
-- `maps_place_intel` — Google Maps Business Profile Details
-- `maps_search` — Google Maps Business Search
-
-## reviews
-
-- `trustpilot_reviews` — Trustpilot Review Harvest
-- `g2_reviews` — G2 Review Harvest
-
-## commons
-
-- `commons_search_entities` — Transparent Commons Entity Search
-- `commons_get_entity` — Transparent Commons Entity Lookup
-- `commons_list_needs_links` — Transparent Commons Needs-Link Backlog
-- `commons_prepare_entity` — Transparent Commons Prepare Entity
-- `commons_validate_entity` — Transparent Commons Validate Entity
-- `commons_submit_entity` — Transparent Commons Governed Entity Write
-- `commons_get_entity_ledger` — Transparent Commons Contribution Ledger
-- `commons_save_filter` — Transparent Commons Saved MCP Filter
-- `commons_list_filters` — Transparent Commons List Saved Filters
-- `commons_claim_publication` — Claim Transparent Commons Publication
-- `commons_get_entity_linkset` — Transparent Commons RFC 9264 Linkset
-- `commons_get_publication` — Get Transparent Commons Publication
-- `commons_prepare_publication` — Prepare Transparent Commons Publication
-- `commons_publish_editorial` — Publish Transparent Commons Editorial Edition
-- `commons_validate_publication` — Validate Transparent Commons Publication
-- `commons_get_proposal` — Transparent Commons Proposal Status
-- `commons_host_image` — Host a Transparent Commons Image
-- `commons_update_editorial_article` — Edit One Transparent Commons Article
-
-## directory
-
-- `directory_workflow` — Directory Workflow: Markets + Maps
-- `directory_workflow_status` — Directory Workflow Status
-- `get-local-sourcebook-contract` — Get Local Sourcebook Contract
-- `list-local-sourcebook-tags` — List Local Sourcebook Tags
-- `resolve-local-sourcebook-tags` — Resolve Local Sourcebook Tags
-- `prepare-local-sourcebook-write` — Prepare Local Sourcebook Write
-- `validate-local-sourcebook-write` — Validate Local Sourcebook Write
-- `local-sourcebook-capture` — Capture Governed Local Sourcebook Listing
-- `local_sourcebook_submission_status` — Local Sourcebook Submission Status
-- `local_sourcebook_refresh` — Refresh a Local Sourcebook Listing
-- `location_markets` — Hosted US Markets + ZIP Groups
-
-## workflows
-
-- `workflow_list` — Workflow Catalog
-- `workflow_suggest` — Workflow Intent Router
-- `workflow_run` — Run Workflow
-- `workflow_step` — Advance Workflow Step
-- `workflow_status` — Workflow Status
-- `workflow_artifact_read` — Read Workflow Artifact
-- `rank_tracker_workflow` — Rank Tracker Blueprint Builder
-- `query_fanout_workflow` — Capture AI Search Fan-Out
-
-## editorial
-
-- `editorial_reading_room_guide` — Editorial Reading Room Guide
-- `create_editorial_reading_room` — Create Editorial Reading Room
-- `renew_editorial_reading_room_download` — Renew Editorial Reading Room Download
-
-## artifacts
-
-- `report_artifact_read` — Read Stored Artifact
-- `get_artifact_template_example` — Preview Template Example
-
-## billing
-
-- `credits_info` — MCP Scraper Credits & Costs
-
-## connections
-
-- `list_service_connections` — List Connected Services
-- `test_service_connection` — Test Connected Service
-- `slack_send_message` — Send Slack Message
-- `gmail_send_message` — Send Gmail Message
-- `gmail_search_contacts` — Search Gmail Contacts
-- `google_calendar_create_event` — Create Calendar Event
-- `zoom_create_meeting` — Create Zoom Meeting
-- `read_service_connection` — Read Connected Service
-- `meta_ad_creative_media` — View Meta Ad Creative Media
-- `import_service_connection_to_memory` — Import Connected Service Snapshot to Memory
-- `describe_service_connection_tool` — Describe Connected Service Tool
-- `export_connected_service_data` — Export Connected Service Data
-- `export_search_console_table_data` — Download Filtered Search Console Table Data
-- `renew_connected_data_download` — Renew Connected Data Download
-- `call_service_connection_action` — Run Connected Service Action
-- `set_scheduled_action_connections` — Set Scheduled Action Connections
-
-## serpIntelligence
-
-- `capture_serp_snapshot` — SERP Intelligence Snapshot
-- `capture_serp_page_snapshots` — SERP Intelligence Page Snapshots
-
-## browser
-
-- `browser_profile_connect` — Save a Site Login to a Profile
-- `browser_profile_list` — List Saved Logins in a Profile
-- `browser_extension_import` — Add Browser Extension
-- `browser_extension_list` — List Browser Extensions
-- `browser_extension_delete` — Remove Browser Extension
-- `browser_open` — Open Browser Session
-- `browser_screenshot` — See Page (Screenshot + Elements)
-- `browser_read` — Read Page Text + Elements
-- `browser_locate` — Locate DOM Targets
-- `browser_goto` — Navigate To URL
-- `browser_click` — Click
-- `browser_type` — Type Text
-- `browser_scroll` — Scroll
-- `browser_press` — Press Keys
-- `browser_replay_start` — Start Recording
-- `browser_replay_stop` — Stop Recording
-- `browser_list_replays` — List Replay Videos
-- `browser_replay_download` — Download Replay MP4
-- `browser_replay_mark` — Mark Replay Annotation
-- `browser_replay_annotate` — Annotate Replay MP4
-- `browser_close` — Close Browser Session
-- `browser_list_sessions` — List Browser Sessions
-
-## schedule
-
-- `list_artifact_templates` — Search Templates
-- `get_artifact_template` — Get Template
-- `create_artifact_template` — Save Template
-- `update_artifact_template` — Update Template
-- `archive_artifact_template` — Archive Template
-- `list_scheduled_runs` — List Scheduled Results
-- `get_scheduled_run` — Get Scheduled Result
-- `mark_scheduled_run_opened` — Mark Scheduled Result Opened
-- `mark_scheduled_run_unopened` — Mark Scheduled Result Unopened
-- `archive_scheduled_run` — Archive Scheduled Result
-- `create_scheduled_run_view_link` — Create Scheduled Result View Link
-- `revoke_scheduled_run_view_link` — Revoke Scheduled Result View Link
-- `create-scheduled-action` — Create Scheduled Action
-- `update-scheduled-action` — Update Scheduled Action
-- `delete-scheduled-action` — Delete Scheduled Action
-- `get-schedule-link` — Get Schedule Link
-- `get-schedule-status` — Get Schedule Status
-- `list-scheduled-actions` — List Scheduled Actions
-- `pause-scheduled-action` — Pause Scheduled Action
-- `propose-scheduled-action` — Propose Scheduled Action
-- `resume-scheduled-action` — Resume Scheduled Action
-- `revoke-schedule-link` — Revoke Schedule Link
-- `set-schedule-defaults` — Set Schedule Defaults
-- `set-schedule-entitlement` — Set Schedule Entitlement
+## Complete catalog (259)
 
 ## access
 
 - `access-accept-share` — Accept Shared Note
 - `access-approve-sender` — Approve Sender
 - `access-decline-share` — Decline Shared Note
-- `get-chat-link` — Get Chat Link
-- `get-vault-app-link` — Get Vault App Link
 - `access-inbox-settings` — Inbox Settings
 - `access-invite-account` — Invite To Account
 - `access-issue-key` — Issue API Key
@@ -266,90 +61,19 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `access-list-keys` — List API Keys
 - `access-note-inbox` — Note Inbox
 - `access-remove-approved-sender` — Remove Approved Sender
-- `revoke-chat-link` — Revoke Chat Link
 - `access-revoke-key` — Revoke API Key
 - `access-revoke-share` — Revoke Note Share
-- `revoke-vault-app-link` — Revoke Vault App Link
-- `set-agent-identity` — Set Agent Identity
 - `access-set-scope` — Set Key Scope / Plan
 - `access-share-note` — Share Note
 - `access-share-vault` — Share Vault Entitlement
 - `access-swap-vault` — Swap Active Vault
 - `access-switch-account` — Switch Active Account
 - `access-unlink-share` — Unlink Shared Note
-
-## capture
-
-- `memory-capture` — Capture Governed Memory
-- `memory-questions` — Daily Memory Questions
-- `prepare-memory-write` — Prepare Memory Write
-- `validate-memory-write` — Validate Memory Write
-
-## channels
-
-- `create-channel` — Create Channel
-- `get-message-note` — Get Message Attachment
-- `list-channel-members` — List Channel Members
-- `list-channel-messages` — List Channel Messages
-- `my-mentions` — My Mentions
-- `poll-channel` — Poll Channel
-- `post-message` — Post Message
-- `react-message` — React To Message
-- `remove-channel-member` — Remove Channel Member
-- `reply-message` — Reply To Message
-
-## facts
-
-- `fact-history` — Fact History
-- `record-fact` — Record Fact
-
-## graph
-
-- `memory-backlinks` — Memory Backlinks
-- `memory-graph-path` — Memory Graph Path
-- `memory-graph-universe` — Memory Graph Universe
-
-## library
-
-- `library-ingest` — Library Ingest
-
-## memory
-
-- `bulk-delete-notes` — Bulk Delete Notes
-- `delete-note` — Delete Memory Note
-- `memory-export` — Export Vault
-- `memory-get` — Get Memory Note
-- `memory-list` — List Memory Notes
-- `memory-put` — Put Memory Note
-- `memory-search` — Hybrid Smart RAG Memory Search
-- `memory-suggest` — Suggest Notes (typeahead)
-- `memory-upload` — Upload Document to Vault
-
-## recall
-
-- `temporal-recall` — Temporal Memory Recall
-
-## storage
-
-- `cost-usage` — Cost & Usage
-- `storage-usage` — Storage Usage
-
-## tables
-
-- `table-create` — Create Table
-- `table-delete-rows` — Delete Table Rows
-- `table-describe` — Describe Table
-- `table-drop` — Drop Table
-- `table-insert-rows` — Insert Table Rows
-- `table-list` — List Tables
-- `table-query` — Query Table
-
-## tags
-
-- `list-memory-tags` — List Memory Tags
-- `merge-memory-tags` — Merge Memory Tags
-- `resolve-memory-tags` — Resolve Memory Tags
-- `upsert-memory-tag` — Upsert Memory Tag
+- `get-chat-link` — Get Chat Link
+- `get-vault-app-link` — Get Vault App Link
+- `revoke-chat-link` — Revoke Chat Link
+- `revoke-vault-app-link` — Revoke Vault App Link
+- `set-agent-identity` — Set Agent Identity
 
 ## vaults
 
@@ -361,25 +85,6 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `list-vaults` — List Vaults
 - `provision-defaults` — Provision Default Vaults
 - `route-memory` — Route Memory
-
-## webhooks
-
-- `create-webhook` — Create Webhook
-- `list-webhooks` — List Webhooks
-- `revoke-webhook` — Revoke Webhook
-
-## images
-
-- `image_project_create` — Create Image Project
-- `image_project_list` — List Image Projects
-- `image_folder_create` — Create Image Folder
-- `image_folder_list` — List Image Folders
-- `image_asset_save` — Save Image Asset
-- `image_asset_get` — Get Image Asset
-- `image_asset_list` — List Image Assets
-- `image_asset_search` — Search Image Assets
-- `image_asset_move` — Move Image Asset
-- `image_asset_delete` — Delete Image Asset
 
 ## analytics
 
@@ -407,3 +112,306 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `analytics_list_forms` — List Analytics Forms
 - `analytics_list_pixels` — List Analytics Pixels
 - `analytics_list_sites` — List Analytics Businesses
+
+## web
+
+- `analyze_site_similarity` — Rendered Site Content Similarity
+- `archive_read` — List or Read ZIP Archive
+- `audit_site` — Technical SEO Audit
+- `check_site_export` — Check Site Export
+- `diff_page` — Page Change Check
+- `extract_site` — Multi-Page Site Content Crawl
+- `extract_url` — Single URL Extract
+- `map_site_urls` — Site URL Map
+- `map_wayback_snapshots` — Wayback Snapshot Inventory
+- `site_export_image` — Read Site Export Image
+- `site_export_read` — Read Site Export Page
+
+## schedule
+
+- `archive_artifact_template` — Archive Template
+- `archive_scheduled_run` — Archive Scheduled Result
+- `create_artifact_template` — Save Template
+- `create_scheduled_run_view_link` — Create Scheduled Result View Link
+- `create-scheduled-action` — Create Scheduled Action
+- `delete-scheduled-action` — Delete Scheduled Action
+- `get_artifact_template` — Get Template
+- `get_scheduled_run` — Get Scheduled Result
+- `get-schedule-link` — Get Schedule Link
+- `get-schedule-status` — Get Schedule Status
+- `list_artifact_templates` — Search Templates
+- `list_scheduled_runs` — List Scheduled Results
+- `list-scheduled-actions` — List Scheduled Actions
+- `mark_scheduled_run_opened` — Mark Scheduled Result Opened
+- `mark_scheduled_run_unopened` — Mark Scheduled Result Unopened
+- `pause-scheduled-action` — Pause Scheduled Action
+- `propose-scheduled-action` — Propose Scheduled Action
+- `resume-scheduled-action` — Resume Scheduled Action
+- `revoke_scheduled_run_view_link` — Revoke Scheduled Result View Link
+- `revoke-schedule-link` — Revoke Schedule Link
+- `set-schedule-defaults` — Set Schedule Defaults
+- `set-schedule-entitlement` — Set Schedule Entitlement
+- `update_artifact_template` — Update Template
+- `update-scheduled-action` — Update Scheduled Action
+
+## browser
+
+- `browser_click` — Click
+- `browser_close` — Close Browser Session
+- `browser_extension_delete` — Remove Browser Extension
+- `browser_extension_import` — Add Browser Extension
+- `browser_extension_list` — List Browser Extensions
+- `browser_goto` — Navigate To URL
+- `browser_list_replays` — List Replay Videos
+- `browser_list_sessions` — List Browser Sessions
+- `browser_locate` — Locate DOM Targets
+- `browser_open` — Open Browser Session
+- `browser_press` — Press Keys
+- `browser_profile_connect` — Save a Site Login to a Profile
+- `browser_profile_list` — List Saved Logins in a Profile
+- `browser_read` — Read Page Text + Elements
+- `browser_replay_annotate` — Annotate Replay MP4
+- `browser_replay_download` — Download Replay MP4
+- `browser_replay_mark` — Mark Replay Annotation
+- `browser_replay_start` — Start Recording
+- `browser_replay_stop` — Stop Recording
+- `browser_screenshot` — See Page (Screenshot + Elements)
+- `browser_scroll` — Scroll
+- `browser_type` — Type Text
+
+## memory
+
+- `bulk-delete-notes` — Bulk Delete Notes
+- `delete-note` — Delete Memory Note
+- `memory-export` — Export Vault
+- `memory-get` — Get Memory Note
+- `memory-list` — List Memory Notes
+- `memory-put` — Put Memory Note
+- `memory-search` — Hybrid Smart RAG Memory Search
+- `memory-suggest` — Suggest Notes (typeahead)
+- `memory-upload` — Upload Document to Vault
+
+## connections
+
+- `call_service_connection_action` — Run Connected Service Action
+- `describe_service_connection_tool` — Describe Connected Service Tool
+- `export_connected_service_data` — Export Connected Service Data
+- `export_search_console_table_data` — Download Filtered Search Console Table Data
+- `gmail_search_contacts` — Search Gmail Contacts
+- `gmail_send_message` — Send Gmail Message
+- `google_calendar_create_event` — Create Calendar Event
+- `import_service_connection_to_memory` — Import Connected Service Snapshot to Memory
+- `list_service_connections` — List Connected Services
+- `meta_ad_creative_media` — View Meta Ad Creative Media
+- `read_service_connection` — Read Connected Service
+- `renew_connected_data_download` — Renew Connected Data Download
+- `set_scheduled_action_connections` — Set Scheduled Action Connections
+- `slack_send_message` — Send Slack Message
+- `test_service_connection` — Test Connected Service
+- `zoom_create_meeting` — Create Zoom Meeting
+
+## serpIntelligence
+
+- `capture_serp_page_snapshots` — SERP Intelligence Page Snapshots
+- `capture_serp_snapshot` — SERP Intelligence Snapshot
+
+## commons
+
+- `commons_claim_publication` — Claim Transparent Commons Publication
+- `commons_get_entity` — Transparent Commons Entity Lookup
+- `commons_get_entity_ledger` — Transparent Commons Contribution Ledger
+- `commons_get_entity_linkset` — Transparent Commons RFC 9264 Linkset
+- `commons_get_proposal` — Transparent Commons Proposal Status
+- `commons_get_publication` — Get Transparent Commons Publication
+- `commons_host_image` — Host a Transparent Commons Image
+- `commons_list_filters` — Transparent Commons List Saved Filters
+- `commons_list_needs_links` — Transparent Commons Needs-Link Backlog
+- `commons_prepare_entity` — Transparent Commons Prepare Entity
+- `commons_prepare_publication` — Prepare Transparent Commons Publication
+- `commons_publish_editorial` — Publish Transparent Commons Editorial Edition
+- `commons_save_filter` — Transparent Commons Saved MCP Filter
+- `commons_search_entities` — Transparent Commons Entity Search
+- `commons_submit_entity` — Transparent Commons Governed Entity Write
+- `commons_update_editorial_article` — Edit One Transparent Commons Article
+- `commons_validate_entity` — Transparent Commons Validate Entity
+- `commons_validate_publication` — Validate Transparent Commons Publication
+
+## storage
+
+- `cost-usage` — Cost & Usage
+- `storage-usage` — Storage Usage
+
+## editorial
+
+- `create_editorial_reading_room` — Create Editorial Reading Room
+- `editorial_reading_room_guide` — Editorial Reading Room Guide
+- `renew_editorial_reading_room_download` — Renew Editorial Reading Room Download
+
+## channels
+
+- `create-channel` — Create Channel
+- `get-message-note` — Get Message Attachment
+- `list-channel-members` — List Channel Members
+- `list-channel-messages` — List Channel Messages
+- `my-mentions` — My Mentions
+- `poll-channel` — Poll Channel
+- `post-message` — Post Message
+- `react-message` — React To Message
+- `remove-channel-member` — Remove Channel Member
+- `reply-message` — Reply To Message
+
+## webhooks
+
+- `create-webhook` — Create Webhook
+- `list-webhooks` — List Webhooks
+- `revoke-webhook` — Revoke Webhook
+
+## billing
+
+- `credits_info` — MCP Scraper Credits & Costs
+
+## directory
+
+- `directory_workflow` — Directory Workflow: Markets + Maps
+- `directory_workflow_status` — Directory Workflow Status
+- `get-local-sourcebook-contract` — Get Local Sourcebook Contract
+- `list-local-sourcebook-tags` — List Local Sourcebook Tags
+- `local_sourcebook_refresh` — Refresh a Local Sourcebook Listing
+- `local_sourcebook_submission_status` — Local Sourcebook Submission Status
+- `local-sourcebook-capture` — Capture Governed Local Sourcebook Listing
+- `location_markets` — Hosted US Markets + ZIP Groups
+- `prepare-local-sourcebook-write` — Prepare Local Sourcebook Write
+- `resolve-local-sourcebook-tags` — Resolve Local Sourcebook Tags
+- `validate-local-sourcebook-write` — Validate Local Sourcebook Write
+
+## facebook
+
+- `facebook_ad_search` — Facebook Ad Library Search
+- `facebook_ad_transcribe` — Facebook Ad Transcription
+- `facebook_page_intel` — Facebook Advertiser Ad Intel
+- `facebook_video_transcribe` — Facebook Organic Video Transcription
+
+## facts
+
+- `fact-history` — Fact History
+- `record-fact` — Record Fact
+
+## reviews
+
+- `g2_reviews` — G2 Review Harvest
+- `trustpilot_reviews` — Trustpilot Review Harvest
+
+## artifacts
+
+- `get_artifact_template_example` — Preview Template Example
+- `report_artifact_read` — Read Stored Artifact
+
+## googleAds
+
+- `google_ads_page_intel` — Google Ads Advertiser Intel
+- `google_ads_search` — Google Ads Transparency Search
+- `google_ads_transcribe` — Google Ad Video Transcription
+
+## search
+
+- `harvest_paa` — Google PAA + SERP Harvest
+- `search_serp` — Google SERP Lookup
+- `serp_identity_create` — Create and Take Over Persistent SERP Identity
+- `serp_identity_delete` — Delete Persistent SERP Identity
+- `serp_identity_list` — List Persistent SERP Identities
+
+## images
+
+- `image_asset_delete` — Delete Image Asset
+- `image_asset_get` — Get Image Asset
+- `image_asset_list` — List Image Assets
+- `image_asset_move` — Move Image Asset
+- `image_asset_save` — Save Image Asset
+- `image_asset_search` — Search Image Assets
+- `image_folder_create` — Create Image Folder
+- `image_folder_list` — List Image Folders
+- `image_project_create` — Create Image Project
+- `image_project_list` — List Image Projects
+
+## instagram
+
+- `instagram_media_download` — Instagram Post/Reel Media Download
+- `instagram_profile_content` — Instagram Profile Content Discovery
+
+## leads
+
+- `lead_list_enrich` — Enrich a Lead List
+- `lead_list_enrich_status` — Lead List Enrichment Status
+- `lead_list_import` — Import a Lead List
+- `lead_list_upload_start` — Upload a Lead List
+
+## library
+
+- `library-ingest` — Library Ingest
+
+## tags
+
+- `list-memory-tags` — List Memory Tags
+- `merge-memory-tags` — Merge Memory Tags
+- `resolve-memory-tags` — Resolve Memory Tags
+- `upsert-memory-tag` — Upsert Memory Tag
+
+## maps
+
+- `maps_place_intel` — Google Maps Business Profile Details
+- `maps_search` — Google Maps Business Search
+
+## graph
+
+- `memory-backlinks` — Memory Backlinks
+- `memory-graph-path` — Memory Graph Path
+- `memory-graph-universe` — Memory Graph Universe
+
+## capture
+
+- `memory-capture` — Capture Governed Memory
+- `memory-questions` — Daily Memory Questions
+- `prepare-memory-write` — Prepare Memory Write
+- `validate-memory-write` — Validate Memory Write
+
+## workflows
+
+- `query_fanout_workflow` — Capture AI Search Fan-Out
+- `rank_tracker_workflow` — Rank Tracker Blueprint Builder
+- `workflow_artifact_read` — Read Workflow Artifact
+- `workflow_list` — Workflow Catalog
+- `workflow_run` — Run Workflow
+- `workflow_status` — Workflow Status
+- `workflow_step` — Advance Workflow Step
+- `workflow_suggest` — Workflow Intent Router
+
+## reddit
+
+- `reddit_thread` — Reddit Thread + Comments
+- `reddit_trending` — Reddit Trending
+
+## tables
+
+- `table-create` — Create Table
+- `table-delete-rows` — Delete Table Rows
+- `table-describe` — Describe Table
+- `table-drop` — Drop Table
+- `table-insert-rows` — Insert Table Rows
+- `table-list` — List Tables
+- `table-query` — Query Table
+
+## recall
+
+- `temporal-recall` — Temporal Memory Recall
+
+## video
+
+- `video_frame_analysis` — Video Breakdown (frame-by-frame + transcript)
+- `video_frame_analysis_status` — Video Breakdown Status
+- `video-analyze-start` — Start Video Breakdown
+- `video-analyze-status` — Video Breakdown Status
+
+## youtube
+
+- `youtube_harvest` — YouTube Video Harvest
+- `youtube_transcribe` — YouTube Transcription

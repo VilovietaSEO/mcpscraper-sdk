@@ -22,6 +22,7 @@
     "generate:memory": "node --import tsx scripts/generate-memory-client.ts && python3 packages/memory-python/scripts/generate_models.py",
     "update:memory-contract": "node --import tsx scripts/update-memory-manifest.ts",
     "update:mcp-contract": "node --import tsx scripts/update-mcp-manifest.ts",
+    "verify:mcp-source-contract": "node --import tsx scripts/check-mcp-source-contract.ts",
     "generate:mcp": "node --import tsx scripts/generate-mcp-client.ts && python3 scripts/generate-mcp-python.py",
     "verify:parity": "npm run build --workspace=mcpscraper-memory-sdk && node --import tsx scripts/verify-sdk-parity.ts && node scripts/run-python-project.mjs packages/scraper-python scripts/verify_sdk_parity.py"
   },

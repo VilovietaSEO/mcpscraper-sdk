@@ -73,6 +73,4436 @@ export interface Output {
   structuredDataLogo: string | null;
   napScore: number | null;
   missingSchemaFields: string[];
+  /**
+   * Bounded public contact occurrences extracted from the complete acquired document, including header and footer, while raw HTML remains omitted.
+   */
+  contactEvidence: {
+    /**
+     * @maxItems 20
+     */
+    emails:
+      | []
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ]
+      | [
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          },
+          {
+            value: string;
+            sourceUrl: string;
+            context: string;
+            sourceType: "first_party_page" | "structured_data" | "provided" | "serp_snippet";
+            sourceTitle?: string;
+            sourcePosition?: number;
+          }
+        ];
+    /**
+     * @maxItems 20
+     */
+    socialProfiles:
+      | []
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            network: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ];
+    /**
+     * @maxItems 10
+     */
+    contactForms:
+      | []
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ];
+    /**
+     * @maxItems 20
+     */
+    candidatePageUrls:
+      | []
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ]
+      | [
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          },
+          {
+            url: string;
+            sourceUrl: string;
+            context: string;
+          }
+        ];
+  };
   screenshotSaved: string | null;
   /**
    * Owner-scoped private screenshot handoff created only when preserveMedia is true. Pass artifactId to image_asset_save to retain it in hosted Memory.

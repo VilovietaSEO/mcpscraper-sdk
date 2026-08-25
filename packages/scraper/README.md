@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated, typed 254-tool MCP surface. It includes 153 MCP Scraper tools and all 101 mirrored Memory tools from `contracts/mcp.tools.json`.
+`client.tools` is the generated, typed 259-tool MCP surface. It includes 158 MCP Scraper tools and all 101 mirrored Memory tools from `contracts/mcp.tools.json`.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
@@ -64,6 +64,21 @@ await client.tools.connections.exportConnectedServiceData({
 })
 const inbox = await client.tools.schedule.listScheduledRuns({ view: 'inbox' })
 const templates = await client.tools.schedule.listArtifactTemplates({ status: 'active' })
+```
+
+Lead enrichment is available through the same generated surface. Supply mapped rows directly, or call `client.tools.leads.import(...)` first for CSV/TSV/XLSX input:
+
+```ts
+const job = await client.tools.leads.enrich({
+  idempotencyKey: crypto.randomUUID(),
+  source: { kind: 'rows', rows: [{ Business: 'White Rock Roofing', City: 'Dallas', Website: 'https://roofwhiterock.com' }] },
+  columnMap: { name: 'Business', city: 'City', websiteUrl: 'Website' },
+  defaultEntityType: 'business',
+  emailSearchFallback: 'serp_snippets',
+  peopleDiscovery: 'owners',
+  peopleQueryTemplates: ['{business} owner of company {city}', '{business} founder {city}'],
+  outputFormats: ['csv', 'xlsx'],
+})
 ```
 
 The connected-data export performs bounded Gmail, Calendar, Google Search Console, Zoom, Meta Marketing, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Use `exportConnectedServiceData({ dataset: 'search_console_performance' })` for a fresh Search Console API extract. A scheduled `connection_sync` maintains a typed `gsc_performance_*` table exposed as `listServiceConnections().tableName`; use `exportSearchConsoleTableData` for a server-filtered download from that persisted table. Use `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected Meta ad accounts. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renewConnectedDataDownload({ artifactId })`. Use `listServiceConnections` for verified grants and per-tool permission blockers, then `describeServiceConnectionTool` for the exact provider-native schema before calling through the generic connection bridges.
