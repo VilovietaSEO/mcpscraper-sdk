@@ -5,7 +5,30 @@ export interface Output {
     connectionId: string;
     providerConfigKey: string;
     provider?: string | null;
+    /**
+     * Best available human-facing account label: a userLabel when set, otherwise verified provider identity, then a stable fallback.
+     */
     label: string;
+    /**
+     * Optional tenant-owned name set in the dashboard to distinguish this connection. This is not asserted provider identity.
+     */
+    userLabel?: string | null;
+    /**
+     * Stable provider-side account, user, workspace, channel, or tenant identifier when the provider exposes one.
+     */
+    providerAccountId?: string | null;
+    /**
+     * Verified provider-side email when the provider exposes one. This is never inferred from the MCP Scraper login.
+     */
+    providerAccountEmail?: string | null;
+    /**
+     * Provider-side account, user, workspace, channel, or tenant name when the provider exposes one.
+     */
+    providerAccountName?: string | null;
+    /**
+     * Whether provider identity discovery is pending, returned at least one verified provider identifier, or completed without one.
+     */
+    providerIdentityStatus?: "pending" | "verified" | "unavailable";
     status: string;
     /**
      * Credential lifecycle. This is separate from current provider availability.

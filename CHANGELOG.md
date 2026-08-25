@@ -2,6 +2,13 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-25 — verified against mcp-scraper 0.66.4 / mcp-memory 1.18.1
+
+### Changed
+
+- Added typed `userLabel`, `providerAccountId`, `providerAccountEmail`, `providerAccountName`, and `providerIdentityStatus` results to `list_service_connections` so programmatic clients can distinguish multiple accounts connected to one provider.
+- Prepared `mcpscraper-memory-sdk` 0.31.4, `mcpscraper-sdk` 0.30.4, `mcpscraper-cli` 0.29.4, Python `mcpscraper-sdk` 0.29.4, and Python `mcpscraper-memory-sdk` 0.28.4.
+
 ## 2026-08-25 — verified against mcp-scraper 0.66.3 / mcp-memory 1.18.1
 
 ### Changed
