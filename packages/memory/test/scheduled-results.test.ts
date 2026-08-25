@@ -6,15 +6,16 @@ import { McpToolsClient } from '../src/mcp-client.js'
 function fakeFetch(handler: (body: any) => unknown) {
   return (async (_url: string | URL, init?: RequestInit) => {
     const body = JSON.parse(String(init?.body))
+    const payload = {
+      jsonrpc: '2.0',
+      id: body.id,
+      result: { structuredContent: handler(body) },
+    }
     return {
       ok: true,
       status: 200,
-      json: async () => ({
-        jsonrpc: '2.0',
-        id: body.id,
-        result: { structuredContent: handler(body) },
-      }),
-      text: async () => '',
+      json: async () => payload,
+      text: async () => JSON.stringify(payload),
     } as Response
   }) as typeof globalThis.fetch
 }

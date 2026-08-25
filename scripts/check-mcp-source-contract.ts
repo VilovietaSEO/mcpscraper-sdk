@@ -19,7 +19,7 @@ function projectedDigest(tools: Array<Record<string, unknown>>): string {
     ...(tool.title ? { title: tool.title } : {}),
     description: tool.description ?? '',
     inputSchema: tool.inputSchema ?? { type: 'object', additionalProperties: true },
-    outputSchema: stripInternalTelemetry(tool.outputSchema) ?? { type: 'object', additionalProperties: true },
+    outputSchema: stripInternalTelemetry(tool.outputSchema),
     annotations: tool.annotations ?? {},
   })).sort((left, right) => String(left.name).localeCompare(String(right.name)))
   return createHash('sha256').update(canonicalJson(projected)).digest('hex')
@@ -41,6 +41,10 @@ async function main(): Promise<void> {
 
   if (!sourceVersion) throw new Error('Source manifest has no serverInfo.version')
   if (sourceTools.length !== expectedCount) throw new Error(`Source manifest count mismatch: ${expectedCount} vs ${sourceTools.length}`)
+  const missingSourceOutputSchemas = sourceTools.filter(tool => tool.outputSchema === undefined).map(tool => String(tool.name))
+  if (missingSourceOutputSchemas.length) {
+    throw new Error(`Source manifest is incomplete; missing outputSchema for ${missingSourceOutputSchemas.join(', ')}`)
+  }
   if (sdkTools.length !== sourceTools.length || Number(sdk.toolCount) !== sourceTools.length) {
     throw new Error(`SDK tool count ${sdkTools.length}/${String(sdk.toolCount)} does not match source ${sourceTools.length}`)
   }

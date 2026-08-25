@@ -47,6 +47,7 @@ async function main(): Promise<void> {
   if (!apiKey) throw new Error('MCP_SCRAPER_API_KEY is required')
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as { toolCount: number; tools: ToolSchema[] }
   const live = await fetchLiveTools(apiKey)
+  const liveOutputSchemaCount = live.filter(tool => tool.outputSchema !== undefined).length
   const expectedByName = new Map(manifest.tools.map(tool => [tool.name, tool]))
   const liveByName = new Map(live.map(tool => [tool.name, tool]))
   const missing = manifest.tools.map(tool => tool.name).filter(name => !liveByName.has(name))
@@ -63,14 +64,14 @@ async function main(): Promise<void> {
       schemaDrift.push(`${liveTool.name}:output`)
     }
   }
-  console.log(`Live tools: ${live.length} | Unified manifest: ${manifest.tools.length}`)
+  console.log(`Live tools: ${live.length} | Runtime output schemas: ${liveOutputSchemaCount} | Unified manifest: ${manifest.tools.length}`)
   if (missing.length) console.log(`Missing live: ${missing.join(', ')}`)
   if (extra.length) console.log(`Missing manifest: ${extra.join(', ')}`)
   if (schemaDrift.length) console.log(`Schema drift: ${schemaDrift.join(', ')}`)
   const ok = live.length === manifest.tools.length && manifest.toolCount === manifest.tools.length
-    && !missing.length && !extra.length && !schemaDrift.length
+    && liveOutputSchemaCount === 0 && !missing.length && !extra.length && !schemaDrift.length
   if (!ok) process.exitCode = 1
-  else console.log(`OK — unified manifest matches all ${live.length} live MCP tools.`)
+  else console.log(`OK — runtime discovery matches all ${live.length} manifest tools and advertises no output schemas.`)
 }
 
 main().catch(error => {

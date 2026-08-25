@@ -162,6 +162,29 @@ test('McpToolsClient typed methods call the unified MCP wire name', async () => 
   assert.deepEqual(result, { ok: true, results: [] })
 })
 
+test('McpToolsClient parses a hosted MCP SSE response', async () => {
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: (async (_url: string | URL, init?: RequestInit) => {
+      const request = JSON.parse(String(init?.body))
+      return new Response(
+        `event: message\ndata: ${JSON.stringify({
+          jsonrpc: '2.0',
+          id: request.id,
+          result: {
+            content: [{ type: 'text', text: JSON.stringify({ ok: true, balanceCredits: 100 }) }],
+            structuredContent: { ok: true, balanceCredits: 100 },
+          },
+        })}\n\n`,
+        { status: 200, headers: { 'content-type': 'text/event-stream' } },
+      )
+    }) as typeof globalThis.fetch,
+  })
+
+  const result = await client.billing.creditsInfo({})
+  assert.deepEqual(result, { ok: true, balanceCredits: 100 })
+})
+
 test('McpToolsClient reads a governed Commons RFC 9264 linkset', async () => {
   let capturedBody: any
   const client = new McpToolsClient({

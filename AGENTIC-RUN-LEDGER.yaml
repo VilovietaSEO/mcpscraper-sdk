@@ -1,0 +1,215 @@
+schema_version: 1.0.0
+project:
+  id: project:mcpscraper-sdk-output-schema-worktree:3637f94725f2
+  name: mcpscraper-sdk-output-schema-worktree
+  slug: mcpscraper-sdk-output-schema-worktree
+  repo_root: .
+  repo_url: https://github.com/VilovietaSEO/mcpscraper-sdk.git
+  default_branch: main
+ledger:
+  created_at: '2026-08-25T18:04:46Z'
+  updated_at: '2026-08-25T18:36:31Z'
+  id_prefix: ARL
+  next_sequence: 3
+  writer_policy: single-writer
+  managed_by: agentic-run-ledger
+runs:
+- id: sdk-output-schema-projection-20260825
+  kind: live-system-test
+  workflow: test
+  objective: Verify complete generated MCP types and one live typed Node SDK call
+  started_at: '2026-08-25T18:04:46Z'
+  finished_at: '2026-08-25T18:05:07Z'
+  status: completed
+  summary: Complete manifest generation, all-surface SDK parity, SSE transport repair, and live typed Node call verified.
+  orchestrator:
+    name: Codex
+    role: orchestrator
+    thread_id: null
+  source:
+    working_directory: .
+    branch: codex/runtime-output-schema-projection-sdk
+    commit: f50f9f0318cf49f0c7154782ad79cf46aeaa163f
+    upstream: origin/main
+    dirty: true
+  environment:
+    platform: Darwin
+    platform_release: 24.6.0
+    architecture: arm64
+    shell: /bin/zsh
+    runtimes:
+      python: 3.9.6
+      node: v24.18.0
+      npm: 11.16.0
+      pnpm: 10.23.0
+      yarn: null
+      bun: 1.3.5
+      ruby: ruby 2.6.10p210 (2022-04-12 revision 67958) [universal.arm64e-darwin24]
+  context:
+    skills:
+    - agentic-run-ledger
+    - make-changelog
+    - mcp-design
+    command: null
+    plan: null
+    task_store: null
+    parent_run_id: null
+- id: sdk-output-schema-release-20260825
+  kind: live-system-test
+  workflow: test
+  objective: Release and verify complete typed MCP SDK contracts and hosted SSE transport support
+  started_at: '2026-08-25T18:21:55Z'
+  finished_at: null
+  status: running
+  summary: null
+  orchestrator:
+    name: Codex
+    role: orchestrator
+    thread_id: null
+  source:
+    working_directory: .
+    branch: codex/runtime-output-schema-projection-sdk
+    commit: 6036c15e3f00ed417a644571ef7ee4bdcf4bfa4f
+    upstream: origin/main
+    dirty: false
+  environment:
+    platform: Darwin
+    platform_release: 24.6.0
+    architecture: arm64
+    shell: /bin/zsh
+    runtimes:
+      python: 3.9.6
+      node: v24.18.0
+      npm: 11.16.0
+      pnpm: 10.23.0
+      yarn: null
+      bun: 1.3.5
+      ruby: ruby 2.6.10p210 (2022-04-12 revision 67958) [universal.arm64e-darwin24]
+  context:
+    skills:
+    - agentic-run-ledger
+    - make-pr
+    - make-release
+    - mcp-release
+    command: null
+    plan: null
+    task_store: null
+    parent_run_id: null
+entries:
+- id: ARL-0001
+  fingerprint: 58f190af7063ee34
+  title: Unified Node MCP client could not parse hosted SSE responses
+  scope: product-under-test
+  category: failure
+  layers:
+  - contract
+  - runtime
+  severity: high
+  max_run_impact: recovered
+  status: resolved
+  first_observed_at: '2026-08-25T18:04:47Z'
+  last_observed_at: '2026-08-25T18:04:47Z'
+  occurrence_count: 1
+  tags: []
+  resolution:
+    resolved_at: '2026-08-25T18:07:09Z'
+    summary: Added direct JSON and SSE JSON-RPC parsing to Node and Python unified clients, regression tests for both, and
+      verified live typed credits_info calls in both languages.
+    verified_by:
+    - Node and Python SDK tests
+    - live Node credits_info probe
+    - live Python credits_info probe
+    graduated_to: null
+  history:
+  - at: '2026-08-25T18:04:47Z'
+    event: opened
+    detail: First observed in run sdk-output-schema-projection-20260825.
+  - at: '2026-08-25T18:05:07Z'
+    event: resolved
+    detail: Added direct JSON and SSE JSON-RPC parsing, a hosted-SSE regression test, and verified a live typed credits_info
+      call.
+  - at: '2026-08-25T18:07:09Z'
+    event: resolved
+    detail: Added direct JSON and SSE JSON-RPC parsing to Node and Python unified clients, regression tests for both, and
+      verified live typed credits_info calls in both languages.
+  occurrences:
+  - observed_at: '2026-08-25T18:04:47Z'
+    run_id: sdk-output-schema-projection-20260825
+    reporter:
+      type: orchestrator
+      name: Codex
+      role: primary
+      thread_id: null
+    context:
+      workflow: test
+      phase: null
+      task: null
+      operation: null
+    run_impact: recovered
+    observation:
+      symptom: A generated typed credits_info call failed before reading its successful MCP result.
+      expected: The typed Node MCP client should accept the hosted endpoint response and return structuredContent.
+      actual: 'The client called response.json() on a text/event-stream body beginning with event: message and threw SyntaxError.'
+      evidence:
+      - kind: test
+        ref: packages/memory/test/client.test.ts
+        detail: Live reproduction failed on the SSE envelope; a new SSE regression test and repeated live typed call passed
+          after the parser fix.
+      root_cause:
+        confidence: confirmed
+        detail: McpJsonRpcTransport assumed every successful HTTP response body was direct JSON despite advertising text/event-stream.
+      workaround: Parse the final JSON data event for SSE responses while retaining direct JSON support.
+      suggested_fix: Keep the new hosted SSE regression test in the SDK transport suite.
+- id: ARL-0002
+  fingerprint: 7816965286888b3a
+  title: npm init prefix mutated release workspace manifests
+  scope: agentic-system
+  category: failure
+  layers:
+  - runtime
+  - tool
+  severity: medium
+  max_run_impact: recovered
+  status: open
+  first_observed_at: '2026-08-25T18:36:31Z'
+  last_observed_at: '2026-08-25T18:36:31Z'
+  occurrence_count: 1
+  tags: []
+  resolution:
+    resolved_at: null
+    summary: null
+    verified_by: []
+    graduated_to: null
+  history:
+  - at: '2026-08-25T18:36:31Z'
+    event: opened
+    detail: First observed in run sdk-output-schema-release-20260825.
+  occurrences:
+  - observed_at: '2026-08-25T18:36:31Z'
+    run_id: sdk-output-schema-release-20260825
+    reporter:
+      type: orchestrator
+      name: Codex
+      role: release-orchestrator
+      thread_id: null
+    context:
+      workflow: test
+      phase: null
+      task: null
+      operation: null
+    run_impact: recovered
+    observation:
+      symptom: Fresh-install smoke setup unexpectedly added npm defaults and dependencies to both repository root package
+        manifests.
+      expected: npm init with a temporary prefix should initialize only the temporary install directory.
+      actual: The npm CLI wrote to the current workspace package.json despite the prefix argument.
+      evidence:
+      - kind: source
+        ref: package.json
+        detail: Git diff exposed unrelated main, dependency, author, license, and repository normalization fields before commit.
+      root_cause:
+        confidence: confirmed
+        detail: npm init did not use prefix as the package creation target in this invocation.
+      workaround: Removed the exact accidental diff and retained only intended package version changes.
+      suggested_fix: Create the temporary package.json explicitly inside the temp directory or run npm init with that directory
+        as cwd.
