@@ -24,7 +24,7 @@ export interface Input {
    */
   device?: "desktop" | "mobile";
   /**
-   * Retry key: reuse after a timeout to avoid re-billing. New key per harvest.
+   * Optional duplicate-start key. Reuse it only after an uncertain or lost response to the same logical call; use a new key for an intentional retry after a terminal failure. This is not the run identifier.
    */
   idempotencyKey?: string;
   /**

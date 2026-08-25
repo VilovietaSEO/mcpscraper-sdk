@@ -1,6 +1,6 @@
 [project]
 name = "mcpscraper-memory-sdk"
-version = "0.28.1"
+version = "0.28.2"
 description = "Official Python clients for all 259 mcpscraper.dev MCP tools and the direct 114-tool memory API"
 readme = "README.md"
 license = "MIT"
@@ -27,4 +27,4 @@ build-backend = "hatchling.build"
 packages = ["src/mcpscraper_memory"]
 
 [tool.hatch.build.targets.sdist]
-exclude = ["tests"]
+include = ["src/mcpscraper_memory", "README.md", "pyproject.toml"]

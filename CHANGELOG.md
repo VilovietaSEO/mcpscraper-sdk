@@ -2,6 +2,15 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-24 — verified against mcp-scraper 0.66.2 / mcp-memory 1.18.1
+
+### Changed
+
+- Regenerated the canonical 259-tool MCP contract and its Node, Python, and CLI projections from the final mcp-scraper 0.66.2 server manifest; the cURL catalog remains contract-identical because tool names and top-level descriptions did not change.
+- Clarified `harvest_paa` idempotency across generated forms: reuse an optional key only after an uncertain or lost response to the same logical call, and use a new key for an intentional retry after terminal failure. The key suppresses duplicate starts; it is not the run identifier.
+- Removed repository-only lockfiles and generator scripts from Python source distributions; wheels and sdists continue to contain only the public client contract and required packaging metadata.
+- Prepared `mcpscraper-memory-sdk` 0.31.2, `mcpscraper-sdk` 0.30.2, `mcpscraper-cli` 0.29.2, Python `mcpscraper-sdk` 0.29.2, and Python `mcpscraper-memory-sdk` 0.28.2.
+
 ## 2026-08-24 — verified against mcp-scraper 0.66.1 / mcp-memory 1.18.1
 
 ### Changed

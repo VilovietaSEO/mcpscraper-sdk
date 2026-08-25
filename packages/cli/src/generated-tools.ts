@@ -11118,7 +11118,7 @@ export const MCP_TOOL_CATALOG = [
           ]
         },
         "idempotencyKey": {
-          "description": "Retry key: reuse after a timeout to avoid re-billing. New key per harvest.",
+          "description": "Optional duplicate-start key. Reuse it only after an uncertain or lost response to the same logical call; use a new key for an intentional retry after a terminal failure. This is not the run identifier.",
           "type": "string",
           "minLength": 8,
           "maxLength": 200
