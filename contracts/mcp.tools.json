@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.66.3 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "da6aac989fb905963e7420eead299ae25c61e6181d7a68d10ccb689415728d4c",
+  "generatedFrom": "mcp-scraper 0.66.4 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "1c17dcfec30d135b733a4409ea2ec860d4fcd42f150407bba212dae6c5b69598",
   "toolCount": 259,
   "tools": [
     {
@@ -36084,7 +36084,7 @@
     {
       "name": "list_service_connections",
       "title": "List Connected Services",
-      "description": "List every service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, Google Search Console, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Google Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId, credential transport, exact live readTools and gated actionTools, permission-aware toolCapabilities with missing OAuth-grant or provider-app-feature blockers, permanently blocked administrative tools, and schema-discovery metadata. Get a connectionId and exact tool name here before calling describe_service_connection_tool, read_service_connection, or call_service_connection_action. Managed OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. A scheduled Search Console connection_sync creates a typed tenant-owned performance table; after it runs, use the returned tableName with table-describe and table-query instead of repeatedly calling Google for historical filtering.",
+      "description": "List every service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, Google Search Console, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Google Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId; a tenant-owned userLabel; verified provider-side account ID, email, or name when available; credential transport; exact live readTools and gated actionTools; permission-aware toolCapabilities with missing OAuth-grant or provider-app-feature blockers; permanently blocked administrative tools; and schema-discovery metadata. Get a connectionId and exact tool name here before calling describe_service_connection_tool, read_service_connection, or call_service_connection_action. Managed OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. A scheduled Search Console connection_sync creates a typed tenant-owned performance table; after it runs, use the returned tableName with table-describe and table-query instead of repeatedly calling Google for historical filtering.",
       "category": "connections",
       "methodName": "listServiceConnections",
       "inputSchema": {
@@ -36117,7 +36117,63 @@
                   ]
                 },
                 "label": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "Best available human-facing account label: a userLabel when set, otherwise verified provider identity, then a stable fallback."
+                },
+                "userLabel": {
+                  "description": "Optional tenant-owned name set in the dashboard to distinguish this connection. This is not asserted provider identity.",
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerAccountId": {
+                  "description": "Stable provider-side account, user, workspace, channel, or tenant identifier when the provider exposes one.",
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerAccountEmail": {
+                  "description": "Verified provider-side email when the provider exposes one. This is never inferred from the MCP Scraper login.",
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "format": "email",
+                      "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerAccountName": {
+                  "description": "Provider-side account, user, workspace, channel, or tenant name when the provider exposes one.",
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "providerIdentityStatus": {
+                  "description": "Whether provider identity discovery is pending, returned at least one verified provider identifier, or completed without one.",
+                  "type": "string",
+                  "enum": [
+                    "pending",
+                    "verified",
+                    "unavailable"
+                  ]
                 },
                 "status": {
                   "type": "string"

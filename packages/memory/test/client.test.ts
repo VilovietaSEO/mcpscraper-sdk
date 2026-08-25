@@ -438,7 +438,12 @@ test('McpToolsClient exposes permission-aware connection inventory', async () =>
             connections: [{
               connectionId: 'meta_conn_123',
               providerConfigKey: 'meta-marketing-api',
-              label: 'Meta Marketing',
+              label: 'Client ads',
+              userLabel: 'Client ads',
+              providerAccountId: 'business_123',
+              providerAccountEmail: 'ads@example.com',
+              providerAccountName: 'Example Business',
+              providerIdentityStatus: 'verified',
               status: 'connected',
               transport: 'nango',
               actionsEnabled: false,
@@ -468,6 +473,9 @@ test('McpToolsClient exposes permission-aware connection inventory', async () =>
   })
 
   const result = await client.connections.listServiceConnections()
+  assert.equal(result.connections[0]?.userLabel, 'Client ads')
+  assert.equal(result.connections[0]?.providerAccountEmail, 'ads@example.com')
+  assert.equal(result.connections[0]?.providerIdentityStatus, 'verified')
   assert.equal(result.connections[0]?.permissionVerification, 'verified')
   assert.deepEqual(result.connections[0]?.grantedPermissions, ['ads_read', 'ads_management', 'business_management'])
   assert.equal(result.connections[0]?.toolCapabilities[0]?.blockedReason, 'missing_permission')
