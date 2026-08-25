@@ -2,6 +2,13 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-25 — verified against mcp-scraper 0.66.5 / mcp-memory 1.18.1
+
+### Changed
+
+- Local Sourcebook capture and status guidance now distinguishes accepted processing from publication, requires terminal status checking, and tells callers to present the exact live profile URL when publication succeeds.
+- Prepared `mcpscraper-memory-sdk` 0.31.5, `mcpscraper-sdk` 0.30.5, `mcpscraper-cli` 0.29.5, Python `mcpscraper-sdk` 0.29.5, and Python `mcpscraper-memory-sdk` 0.28.5.
+
 ## 2026-08-25 — verified against mcp-scraper 0.66.4 / mcp-memory 1.18.1
 
 ### Changed

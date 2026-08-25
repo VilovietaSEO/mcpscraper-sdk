@@ -12833,7 +12833,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "local_sourcebook_submission_status",
     "category": "directory",
     "title": "Local Sourcebook Submission Status",
-    "description": "Read the caller’s listing draft, enrichment coverage, revision number, publication state, and live LocalSourcebook.com profile and reviews URLs. When status is failed, acquisitionError says why — read it before retrying, since a refresh repeats the same acquisition. Coverage counters are written only on success, so zeroed counters on a failed listing do not mean the crawl never ran.",
+    "description": "Read the caller’s listing draft, enrichment coverage, revision number, publication state, and LocalSourcebook.com profile and reviews URLs. While statusCheck.required is true, wait the returned interval and check again before giving the user a final completion answer. When published, present the returned message and exact clickable publicUrls.profileUrl. When failed, present the failure message and read acquisitionError before retrying, since a refresh repeats the same acquisition. Coverage counters are written only on success, so zeroed counters on a failed listing do not mean the crawl never ran.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -12860,7 +12860,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "local-sourcebook-capture",
     "category": "directory",
     "title": "Capture Governed Local Sourcebook Listing",
-    "description": "Strict owner-scoped LocalBusiness write path after list, contract, prepare, and validate. Creating a listing costs 10 Credits total, including website, exact-place, review, service-area, staff, genuine-media, and structured-data compilation; preparation and validation are free, and idempotent retries are not charged twice. Capture registers canonical tags and the accepted Schema.org LocalBusiness subtype, returns the exact LocalSourcebook.com profile and reviews URLs, and queues acquisition. MCP Scraper generates the final JSON-LD from source-backed evidence. A successful system-compiled evidence revision publishes automatically; owner-authored public claims and arbitrary JSON-LD are not accepted.",
+    "description": "Strict owner-scoped LocalBusiness write path after list, contract, prepare, and validate. Creating a listing costs 10 Credits total, including website, exact-place, review, service-area, staff, genuine-media, and structured-data compilation; preparation and validation are free, and idempotent retries are not charged twice. Capture registers canonical tags and the accepted Schema.org LocalBusiness subtype, then queues acquisition; an accepted capture is not yet live. Poll local_sourcebook_submission_status using statusCheck until it is terminal. When published, tell the user the returned message and exact publicUrls.profileUrl. MCP Scraper generates the final JSON-LD from source-backed evidence and publishes a successful system-compiled revision automatically; owner-authored public claims and arbitrary JSON-LD are not accepted.",
     "inputSchema": {
       "type": "object",
       "properties": {
