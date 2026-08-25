@@ -8,7 +8,7 @@ project:
   default_branch: main
 ledger:
   created_at: '2026-08-25T18:04:46Z'
-  updated_at: '2026-08-25T18:36:31Z'
+  updated_at: '2026-08-25T18:50:15Z'
   id_prefix: ARL
   next_sequence: 3
   writer_policy: single-writer
@@ -59,9 +59,10 @@ runs:
   workflow: test
   objective: Release and verify complete typed MCP SDK contracts and hosted SSE transport support
   started_at: '2026-08-25T18:21:55Z'
-  finished_at: null
-  status: running
-  summary: null
+  finished_at: '2026-08-25T18:50:15Z'
+  status: completed
+  summary: Released Node SDK 0.30.3, Memory SDK 0.31.3, CLI 0.29.3, Python SDK 0.29.3, and Python Memory SDK 0.28.3 with public-registry
+    live proofs.
   orchestrator:
     name: Codex
     role: orchestrator
