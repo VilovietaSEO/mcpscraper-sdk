@@ -11,6 +11,10 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 - Removed repository-only lockfiles and generator scripts from Python source distributions; wheels and sdists continue to contain only the public client contract and required packaging metadata.
 - Prepared `mcpscraper-memory-sdk` 0.31.2, `mcpscraper-sdk` 0.30.2, `mcpscraper-cli` 0.29.2, Python `mcpscraper-sdk` 0.29.2, and Python `mcpscraper-memory-sdk` 0.28.2.
 
+### Fixed
+
+- Live contract verification now applies the same shared public-telemetry projection used by generation and source-manifest verification, so internal attempt diagnostics neither leak into SDK forms nor create false hosted-versus-generated schema drift.
+
 ## 2026-08-24 — verified against mcp-scraper 0.66.1 / mcp-memory 1.18.1
 
 ### Changed

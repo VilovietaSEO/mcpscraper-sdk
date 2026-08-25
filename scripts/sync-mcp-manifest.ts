@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import { stripInternalTelemetry } from './mcp-contract-telemetry.js'
 
 const ENDPOINT = 'https://mcpscraper.dev/mcp'
 const MANIFEST_PATH = join(process.cwd(), 'contracts/mcp.tools.json')
@@ -55,7 +56,10 @@ async function main(): Promise<void> {
     const expected = expectedByName.get(liveTool.name)
     if (!expected) continue
     if (stable(expected.inputSchema) !== stable(liveTool.inputSchema)) schemaDrift.push(`${liveTool.name}:input`)
-    if (liveTool.outputSchema !== undefined && stable(expected.outputSchema) !== stable(liveTool.outputSchema)) {
+    if (
+      liveTool.outputSchema !== undefined
+      && stable(expected.outputSchema) !== stable(stripInternalTelemetry(liveTool.outputSchema))
+    ) {
       schemaDrift.push(`${liveTool.name}:output`)
     }
   }
