@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.66.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "cd1edb0e3ea23cc421dbb6ed6c464b3253a22e5ee2064b8509bb57706210725c",
+  "generatedFrom": "mcp-scraper 0.66.2 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "da6aac989fb905963e7420eead299ae25c61e6181d7a68d10ccb689415728d4c",
   "toolCount": 259,
   "tools": [
     {
@@ -28546,7 +28546,7 @@
             ]
           },
           "idempotencyKey": {
-            "description": "Retry key: reuse after a timeout to avoid re-billing. New key per harvest.",
+            "description": "Optional duplicate-start key. Reuse it only after an uncertain or lost response to the same logical call; use a new key for an intentional retry after a terminal failure. This is not the run identifier.",
             "type": "string",
             "minLength": 8,
             "maxLength": 200
