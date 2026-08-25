@@ -2,6 +2,14 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-24 — verified against mcp-scraper 0.66.1 / mcp-memory 1.18.1
+
+### Changed
+
+- Raised the default Node and Python REST/MCP client wait window from 300 to 590 seconds while leaving an operator override, matching the server's compatibility ceiling without claiming that an active durable operation was cancelled.
+- Timeout errors now distinguish a client that stopped waiting from durable server work that may still be running and direct callers to the existing job or idempotency key.
+- Prepared `mcpscraper-memory-sdk` 0.31.1, `mcpscraper-sdk` 0.30.1, `mcpscraper-cli` 0.29.1, Python `mcpscraper-sdk` 0.29.1, and Python `mcpscraper-memory-sdk` 0.28.1.
+
 ## 2026-08-24 — verified against mcp-scraper 0.66.0 / mcp-memory 1.18.1
 
 ### Added

@@ -67,7 +67,7 @@ class _Requester:
                 "error": "mcp_request_timeout",
                 "error_code": "mcp_request_timeout",
                 "error_type": "timeout",
-                "message": f"MCP Scraper request exceeded {self._timeout:g}s and was cancelled client-side. The operation may still be running; reuse the same Idempotency-Key or poll its job before starting another paid run.",
+                "message": f"The client stopped waiting after {self._timeout:g}s. This does not prove server-side work stopped; reuse the same Idempotency-Key or poll its job before starting another paid run.",
                 "retryable": True,
             }) from error
         try:
@@ -87,7 +87,7 @@ class _Requester:
                 "error": "mcp_request_timeout",
                 "error_code": "mcp_request_timeout",
                 "error_type": "timeout",
-                "message": f"MCP Scraper request exceeded {self._timeout:g}s and was cancelled client-side.",
+                "message": f"The client stopped waiting after {self._timeout:g}s. This does not prove server-side work stopped.",
                 "retryable": True,
             }) from error
         if not response.ok:
@@ -293,7 +293,7 @@ class MemoryTools:
 
 
 class ScraperClient:
-    def __init__(self, api_key: str, base_url: str = "https://mcpscraper.dev", session: Optional[requests.Session] = None, request_timeout: float = 300.0) -> None:
+    def __init__(self, api_key: str, base_url: str = "https://mcpscraper.dev", session: Optional[requests.Session] = None, request_timeout: float = 590.0) -> None:
         if request_timeout <= 0:
             raise ValueError("request_timeout must be positive")
         active_session = session or requests.Session()
