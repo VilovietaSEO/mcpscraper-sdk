@@ -2,6 +2,13 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-26 — verified against mcp-scraper 0.66.7 / mcp-memory 1.18.1
+
+### Changed
+
+- Regenerated the Commons host, validate, and submit contracts so Node, Python, CLI, and cURL consumers receive the image-first workflow, permanent-image field guidance, and typed validation readiness diagnostics.
+- Prepared `mcpscraper-memory-sdk` 0.31.6, `mcpscraper-sdk` 0.30.6, `mcpscraper-cli` 0.29.6, Python `mcpscraper-sdk` 0.29.6, and Python `mcpscraper-memory-sdk` 0.28.6.
+
 ## 2026-08-25 — verified against mcp-scraper 0.66.5 / mcp-memory 1.18.1
 
 ### Changed

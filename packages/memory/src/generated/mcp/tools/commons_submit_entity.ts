@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Required unique opaque ID for this intended Commons write. Reuse only when retrying the same write after a timeout; use a new value for each intentional create or edit.
+   * Required unique opaque ID for this intended Commons write. Reuse it when retrying the same intended write after a timeout or after correcting a pre-persistence image-ingress failure; use a new value for each intentional create or edit.
    */
   idempotencyKey: string;
   /**
@@ -28,11 +28,11 @@ export interface Input {
    */
   disambiguationName?: string;
   /**
-   * Required for auto-published public entities. The image is also added to the media manifest if absent.
+   * Required for auto-published public entities. First call commons_host_image and place its returned permanent URL here; validation does not fetch external images and reports unregistered URLs as not publishable. Submit retains a compatibility fallback that auto-hosts a stable direct public HTTPS image URL. The image is also added to the media manifest if absent.
    */
   featuredImage?: {
     /**
-     * Required public image URL for a publishable entity. Use extract_url includeFeaturedImage or preserved media when available.
+     * For a publish-ready entity, use the permanent URL returned by commons_host_image. Submit can auto-host a stable direct public HTTPS image URL as a compatibility fallback, but validation reports any unregistered external URL as not ready. Do not use a chat attachment reference, caller-local path, temporary or signed URL, private URL, or HTML page URL.
      */
     url: string;
     /**
