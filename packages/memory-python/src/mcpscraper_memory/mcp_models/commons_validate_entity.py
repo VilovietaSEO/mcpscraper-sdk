@@ -12,7 +12,7 @@ class CommonsValidateEntityInput(BaseModel):
     entity_id: str | None = Field(None, alias="entityId", description="Existing Transparent Public Wiki entity id when proposing an edit. New entities normally omit this and receive a TPW-Q id.")
     entity_type: str | None = Field(None, alias="entityType", description="Backend Wikidata-style type. Prefer precise entity classes such as SoftwareApplication, Organization, Person, Event, Place, Taxon, ScienceConcept, MathConcept, TechArticle, or PublicArticle; the public article structure should match the selected type.")
     disambiguation_name: str | None = Field(None, alias="disambiguationName", description="Clarifying name used when the concept could be confused with another entity.")
-    featured_image: dict[str, Any] | None = Field(None, alias="featuredImage", description="Required for auto-published public entities. The image is also added to the media manifest if absent.")
+    featured_image: dict[str, Any] | None = Field(None, alias="featuredImage", description="Required for auto-published public entities. First call commons_host_image and place its returned permanent URL here; validation does not fetch external images and reports unregistered URLs as not publishable. Submit retains a compatibility fallback that auto-hosts a stable direct public HTTPS image URL. The image is also added to the media manifest if absent.")
     source: dict[str, Any] | None = Field(None, alias="source", description="Source provenance. Store original URL, source byline, and origin canonical here; canonical does not replace rights review.")
     tags: list[str] | None = Field(None, alias="tags", description="Standardized topic tags. Use existing/searchable concepts when possible.")
     keywords: list[str] | None = Field(None, alias="keywords", description="SEO and retrieval keywords.")
@@ -35,6 +35,6 @@ class CommonsValidateEntityOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
-    data: Any | None = Field(None, alias="data", description="")
+    data: dict[str, Any] | None = Field(None, alias="data", description="")
     error: str | None = Field(None, alias="error", description="")
     message: str | None = Field(None, alias="message", description="")

@@ -4991,17 +4991,17 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_host_image",
     "category": "commons",
     "title": "Host a Transparent Commons Image",
-    "description": "Host an image from a public https URL or base64 bytes, returning a permanent Commons URL. Commons never serves a third-party image URL — commons_submit_entity hosts external images automatically, so use this only to host one before or independently of a write. JPEG, PNG, GIF, WebP up to 10 MB; SVG rejected. Identical bytes are stored once.",
+    "description": "Normal prerequisite for any featured image whose URL was not already returned by commons_host_image. Host image bytes from imageBase64 when you already have an attachment and the serialized request stays under about 3 MB, or from a stable direct public HTTPS image URL; do not pass a webpage, caller-local path, private URL, or temporary/signed attachment URL. Returns the permanent Commons URL to place in featuredImage.url before commons_validate_entity and commons_submit_entity. Submit can still auto-host a stable public source as a compatibility fallback. JPEG, PNG, GIF, and WebP are accepted up to 10 MB; SVG is rejected. Identical bytes are stored once.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "sourceUrl": {
-          "description": "Public https image URL to download and host. The wiki never serves a third-party URL directly, so pass the original source here rather than putting it on the entity.",
+          "description": "Stable direct public HTTPS URL whose response is the image bytes to host. Do not pass an HTML webpage, chat attachment reference, caller-local path, temporary or signed URL, or private/authenticated URL.",
           "type": "string",
           "format": "uri"
         },
         "imageBase64": {
-          "description": "Base64 image bytes for an image you already hold. Use for images under about 3 MB; larger files should be published from a URL.",
+          "description": "Base64 image bytes for an image you already hold, including forwarded chat attachment bytes. Prefer this over a temporary attachment URL when the serialized request remains under about 3 MB; larger files require a stable direct public HTTPS source URL.",
           "type": "string",
           "minLength": 16
         },
@@ -6013,7 +6013,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_submit_entity",
     "category": "commons",
     "title": "Transparent Commons Governed Entity Write",
-    "description": "Create or propose an edit to a Transparent Commons public wiki entity through the governed MCP Scraper write plane. A new entity costs 10 Credits; an edit to an existing entity costs 2 Credits. Preparation and validation are free, and idempotent retries are not charged twice. This never edits rendered HTML directly. Normal workflow is commons_prepare_entity, compose, commons_validate_entity, then submit. commons_prepare_entity returns the entity profile contract and section guidance to compose against. Transparent Commons is an open wiki: any account may edit any entity, and every edit publishes and is recorded on the public contribution ledger. Publishing requires a featured image and body/source evidence. Pass baseRevision when editing so the ledger can show whether the edit was written on top of a newer revision. Requires idempotencyKey.",
+    "description": "Charged governed write that creates or proposes an edit to a Transparent Commons public wiki entity. A new entity costs 10 Credits; an edit costs 2 Credits. Preparation, image hosting, and validation are free, and idempotent retries are not charged twice. Normal workflow is commons_prepare_entity, compose the page, commons_host_image, commons_validate_entity, then submit with the returned permanent featuredImage.url. Submit retains a compatibility fallback that auto-hosts a stable direct public HTTPS image URL; if image ingress fails, it returns an actionable image tool error so you can host different bytes or a different stable source, replace the URL, validate again, and retry the same intended write with the same idempotencyKey. This never edits rendered HTML directly. Transparent Commons is an open wiki: any account may edit any entity, and every applied edit is recorded on the public contribution ledger. Publishing requires a ready featured image and body/source evidence. Pass baseRevision when editing so the ledger can show whether the edit was written on top of a newer revision. Requires idempotencyKey.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6021,7 +6021,7 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "minLength": 8,
           "maxLength": 200,
-          "description": "Required unique opaque ID for this intended Commons write. Reuse only when retrying the same write after a timeout; use a new value for each intentional create or edit."
+          "description": "Required unique opaque ID for this intended Commons write. Reuse it when retrying the same intended write after a timeout or after correcting a pre-persistence image-ingress failure; use a new value for each intentional create or edit."
         },
         "title": {
           "type": "string",
@@ -6057,13 +6057,13 @@ export const MCP_TOOL_CATALOG = [
           "maxLength": 240
         },
         "featuredImage": {
-          "description": "Required for auto-published public entities. The image is also added to the media manifest if absent.",
+          "description": "Required for auto-published public entities. First call commons_host_image and place its returned permanent URL here; validation does not fetch external images and reports unregistered URLs as not publishable. Submit retains a compatibility fallback that auto-hosts a stable direct public HTTPS image URL. The image is also added to the media manifest if absent.",
           "type": "object",
           "properties": {
             "url": {
               "type": "string",
               "format": "uri",
-              "description": "Required public image URL for a publishable entity. Use extract_url includeFeaturedImage or preserved media when available."
+              "description": "For a publish-ready entity, use the permanent URL returned by commons_host_image. Submit can auto-host a stable direct public HTTPS image URL as a compatibility fallback, but validation reports any unregistered external URL as not ready. Do not use a chat attachment reference, caller-local path, temporary or signed URL, private URL, or HTML page URL."
             },
             "alt": {
               "description": "Accessible alternative text describing the image.",
@@ -6940,7 +6940,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_validate_entity",
     "category": "commons",
     "title": "Transparent Commons Validate Entity",
-    "description": "Validate a proposed Transparent Commons entity payload without writing. Checks publishable basics, featured image, source/body evidence, existing-entity conflict state, heading profile alignment, and unsupported placeholder sections. Call this after composing the page and before commons_submit_entity.",
+    "description": "Read-only validation for a proposed Transparent Commons entity payload. Call it after commons_prepare_entity, composing the page, and commons_host_image. It does not fetch or store image bytes: an external or otherwise unregistered featured image remains not publishable until commons_host_image returns the permanent Commons URL. Inspect imageDiagnostics for readiness and the required action before commons_submit_entity. Also checks source/body evidence, existing-entity conflict state, heading profile alignment, and unsupported placeholder sections.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6982,13 +6982,13 @@ export const MCP_TOOL_CATALOG = [
           "maxLength": 240
         },
         "featuredImage": {
-          "description": "Required for auto-published public entities. The image is also added to the media manifest if absent.",
+          "description": "Required for auto-published public entities. First call commons_host_image and place its returned permanent URL here; validation does not fetch external images and reports unregistered URLs as not publishable. Submit retains a compatibility fallback that auto-hosts a stable direct public HTTPS image URL. The image is also added to the media manifest if absent.",
           "type": "object",
           "properties": {
             "url": {
               "type": "string",
               "format": "uri",
-              "description": "Required public image URL for a publishable entity. Use extract_url includeFeaturedImage or preserved media when available."
+              "description": "For a publish-ready entity, use the permanent URL returned by commons_host_image. Submit can auto-host a stable direct public HTTPS image URL as a compatibility fallback, but validation reports any unregistered external URL as not ready. Do not use a chat attachment reference, caller-local path, temporary or signed URL, private URL, or HTML page URL."
             },
             "alt": {
               "description": "Accessible alternative text describing the image.",

@@ -1,10 +1,10 @@
 export interface Input {
   /**
-   * Public https image URL to download and host. The wiki never serves a third-party URL directly, so pass the original source here rather than putting it on the entity.
+   * Stable direct public HTTPS URL whose response is the image bytes to host. Do not pass an HTML webpage, chat attachment reference, caller-local path, temporary or signed URL, or private/authenticated URL.
    */
   sourceUrl?: string;
   /**
-   * Base64 image bytes for an image you already hold. Use for images under about 3 MB; larger files should be published from a URL.
+   * Base64 image bytes for an image you already hold, including forwarded chat attachment bytes. Prefer this over a temporary attachment URL when the serialized request remains under about 3 MB; larger files require a stable direct public HTTPS source URL.
    */
   imageBase64?: string;
   /**
