@@ -111,6 +111,9 @@ import * as AnalyticsUpdateEventDefinition from './tools/analytics_update_event_
 import * as AnalyticsUpdateOnboardingPreferences from './tools/analytics_update_onboarding_preferences.js'
 import * as AnalyticsValidateActivationMapping from './tools/analytics_validate_activation_mapping.js'
 import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js'
+import * as AnalyticsListCrmOutboundPolicies from './tools/analytics_list_crm_outbound_policies.js'
+import * as AnalyticsListCrmOutboundReceipts from './tools/analytics_list_crm_outbound_receipts.js'
+import * as AnalyticsUpsertCrmOutboundPolicy from './tools/analytics_upsert_crm_outbound_policy.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -1891,6 +1894,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "zoom_create_meeting",
     "category": "connections",
     "methodName": "zoomCreateMeeting"
+  },
+  {
+    "name": "analytics_list_crm_outbound_policies",
+    "category": "analytics",
+    "methodName": "listCrmOutboundPolicies"
+  },
+  {
+    "name": "analytics_list_crm_outbound_receipts",
+    "category": "analytics",
+    "methodName": "listCrmOutboundReceipts"
+  },
+  {
+    "name": "analytics_upsert_crm_outbound_policy",
+    "category": "analytics",
+    "methodName": "upsertCrmOutboundPolicy"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2348,6 +2366,18 @@ export class AnalyticsNamespace {
 
   async withdrawConsent(input: AnalyticsWithdrawConsent.Input): Promise<AnalyticsWithdrawConsent.Output> {
     return this.callTool('analytics_withdraw_consent', input) as Promise<AnalyticsWithdrawConsent.Output>
+  }
+
+  async listCrmOutboundPolicies(input: AnalyticsListCrmOutboundPolicies.Input): Promise<AnalyticsListCrmOutboundPolicies.Output> {
+    return this.callTool('analytics_list_crm_outbound_policies', input) as Promise<AnalyticsListCrmOutboundPolicies.Output>
+  }
+
+  async listCrmOutboundReceipts(input: AnalyticsListCrmOutboundReceipts.Input): Promise<AnalyticsListCrmOutboundReceipts.Output> {
+    return this.callTool('analytics_list_crm_outbound_receipts', input) as Promise<AnalyticsListCrmOutboundReceipts.Output>
+  }
+
+  async upsertCrmOutboundPolicy(input: AnalyticsUpsertCrmOutboundPolicy.Input): Promise<AnalyticsUpsertCrmOutboundPolicy.Output> {
+    return this.callTool('analytics_upsert_crm_outbound_policy', input) as Promise<AnalyticsUpsertCrmOutboundPolicy.Output>
   }
 }
 

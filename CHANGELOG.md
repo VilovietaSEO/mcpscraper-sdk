@@ -2,6 +2,17 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-27 — verified against mcp-scraper 0.70.0 / mcp-memory 1.18.1
+
+### Added
+
+- Added typed Node, Python, CLI, and cURL operations for listing and updating X-Ray CRM outbound policies and reading durable outbound receipts.
+
+### Changed
+
+- Regenerated the complete 318-tool contract with strict CRM provisioning, sync, policy, receipt, and activation-discovery schemas while preserving compact runtime discovery.
+- Prepared `mcpscraper-memory-sdk` 0.31.11, `mcpscraper-sdk` 0.32.0, `mcpscraper-cli` 0.31.0, Python `mcpscraper-sdk` 0.31.0, and Python `mcpscraper-memory-sdk` 0.28.11.
+
 ## 2026-08-27 — verified against mcp-scraper 0.69.1 / mcp-memory 1.18.1
 
 ### Fixed

@@ -17,3 +17,4 @@ class AnalyticsPlanCrmProvisioningOutput(BaseModel):
 
     ok: bool = Field(..., alias="ok", description="")
     plan: dict[str, Any] = Field(..., alias="plan", description="")
+    reused: bool = Field(..., alias="reused", description="")

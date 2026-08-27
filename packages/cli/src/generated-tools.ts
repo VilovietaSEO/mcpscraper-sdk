@@ -742,53 +742,87 @@ export const MCP_TOOL_CATALOG = [
             "identityTier": {
               "type": "string",
               "const": "confirmed",
-              "description": "Candidate identities are forbidden."
+              "description": "Confirmed or candidate identity tier; provider mutations require confirmed."
             },
             "personId": {
               "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-              "description": "Confirmed person id."
+              "minLength": 1,
+              "maxLength": 240,
+              "description": "Opaque X-Ray person identifier returned by an attributed-people or journey result."
+            },
+            "deterministicIdentity": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "email",
+                    "phone",
+                    "crm_id",
+                    "customer_id"
+                  ],
+                  "description": "Governed type discriminator for this rule, score, event, or record."
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500,
+                  "description": "Typed bounded comparison or field value for this declarative rule."
+                }
+              },
+              "required": [
+                "kind",
+                "value"
+              ],
+              "additionalProperties": false,
+              "description": "Verified email, phone, CRM, or customer identity used only for a confirmed person."
+            },
+            "consentReceiptRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240,
+              "description": "Opaque consent receipt reference proving the required purpose at execution time."
             }
           },
           "required": [
             "identityTier",
-            "personId"
+            "personId",
+            "deterministicIdentity",
+            "consentReceiptRef"
           ],
           "additionalProperties": false,
-          "description": "Confirmed person associated with the pipeline event."
+          "description": "Confirmed person associated with the pipeline event; candidate identity is schema-invalid."
         },
         "event": {
           "type": "object",
           "properties": {
             "eventId": {
               "type": "string",
-              "minLength": 8,
+              "minLength": 1,
               "maxLength": 240,
-              "description": "Stable pipeline event id."
+              "description": "Caller-owned canonical event identifier used for end-to-end deduplication."
             },
             "eventName": {
               "type": "string",
               "pattern": "^[a-z][a-z0-9_]{1,79}$",
-              "description": "Canonical stage/revenue event."
+              "description": "Optional normalized analytics event-name filter."
             },
             "occurredAt": {
               "type": "string",
               "format": "date-time",
               "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-              "description": "Event occurrence time."
+              "description": "ISO 8601 timestamp when the source event actually occurred."
             },
-            "valueMinor": {
-              "description": "Optional verified revenue in minor units.",
+            "verifiedRevenueMinor": {
+              "description": "Verified revenue in integer currency minor units; inferred values are forbidden.",
               "type": "integer",
               "minimum": 0,
               "maximum": 9007199254740991
             },
             "currency": {
-              "description": "ISO 4217 currency for verified revenue.",
+              "description": "Three-letter ISO currency code for the event value.",
               "type": "string",
-              "minLength": 3,
-              "maxLength": 3
+              "pattern": "^[A-Z]{3}$"
             }
           },
           "required": [
@@ -801,10 +835,61 @@ export const MCP_TOOL_CATALOG = [
         },
         "mapping": {
           "type": "object",
-          "propertyNames": {
-            "type": "string"
+          "properties": {
+            "version": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Immutable positive version used for replay-safe mapping or policy evolution."
+            },
+            "eventName": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{1,79}$",
+              "description": "Optional normalized analytics event-name filter."
+            },
+            "pipelineId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240,
+              "description": "Exact CRM pipeline identifier selected from authorized tenant discovery."
+            },
+            "stageId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240,
+              "description": "Exact CRM stage identifier required for the conversion rule to match."
+            },
+            "operation": {
+              "type": "string",
+              "enum": [
+                "create_or_update_deal",
+                "update_stage"
+              ],
+              "description": "Whether a matched score group adds or subtracts points."
+            },
+            "valueSource": {
+              "type": "string",
+              "enum": [
+                "none",
+                "verified_revenue"
+              ],
+              "description": "Whether the pipeline mapping uses no value or verified revenue only."
+            },
+            "activationEligible": {
+              "type": "boolean",
+              "description": "Whether the confirmed mapped event may enter the separate consent-gated ad activation lane."
+            }
           },
-          "additionalProperties": {},
+          "required": [
+            "version",
+            "eventName",
+            "pipelineId",
+            "stageId",
+            "operation",
+            "valueSource",
+            "activationEligible"
+          ],
+          "additionalProperties": false,
           "description": "Active versioned Pipeline Event Mapping; Person Sync alone cannot create a deal."
         },
         "idempotencyKey": {
@@ -849,11 +934,153 @@ export const MCP_TOOL_CATALOG = [
         },
         "plan": {
           "type": "object",
-          "propertyNames": {
-            "type": "string"
+          "properties": {
+            "planId": {
+              "type": "string",
+              "pattern": "^crmplan_[a-f0-9]{24}$",
+              "description": "Durable CRM provisioning-plan identifier returned by the planning operation."
+            },
+            "provider": {
+              "type": "string",
+              "enum": [
+                "hubspot",
+                "salesforce",
+                "highlevel",
+                "zoho",
+                "pipedrive",
+                "keap"
+              ],
+              "description": "Supported phone, CRM, or advertising provider for this governed connection."
+            },
+            "connectionId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240,
+              "description": "Existing authorized service-connection reference; never supply credentials or tokens."
+            },
+            "personObject": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "Authorized provider object that stores confirmed people."
+            },
+            "existingMappings": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "additionalProperties": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "description": "Existing writable provider fields already mapped to namespaced X-Ray fields."
+            },
+            "proposedFields": {
+              "maxItems": 50,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "object": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "description": "Provider object selected for this explicit CRM mapping."
+                  },
+                  "internalName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "description": "Provider field internal name discovered from the authorized tenant."
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "description": "Human-readable label displayed for this field, link, or section."
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "string",
+                      "number",
+                      "datetime",
+                      "url",
+                      "boolean"
+                    ],
+                    "description": "Governed content or record type used for routing and validation."
+                  },
+                  "writable": {
+                    "type": "boolean",
+                    "description": "Whether the authorized tenant reports this provider field as writable."
+                  },
+                  "required": {
+                    "description": "Whether the form field must be completed before submission.",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "object",
+                  "internalName",
+                  "label",
+                  "type",
+                  "writable"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Missing namespaced fields proposed by the no-write provisioning plan."
+            },
+            "fallback": {
+              "type": "string",
+              "enum": [
+                "note",
+                "activity"
+              ],
+              "description": "Safe provider activity or note fallback selected by the canonical provider contract."
+            },
+            "permissionRequirements": {
+              "maxItems": 50,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "description": "Provider permissions required before approving this exact plan."
+            },
+            "schemaFingerprint": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$",
+              "description": "Tenant schema fingerprint bound to the tested provisioning receipt."
+            },
+            "requestFingerprint": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$",
+              "description": "Server-computed immutable request fingerprint used to detect conflicting reuse."
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+              "description": "ISO 8601 creation time recorded by the server."
+            }
           },
-          "additionalProperties": {},
-          "description": "Exact normalized plan returned by analytics_plan_crm_provisioning."
+          "required": [
+            "planId",
+            "provider",
+            "connectionId",
+            "personObject",
+            "existingMappings",
+            "proposedFields",
+            "fallback",
+            "permissionRequirements",
+            "schemaFingerprint",
+            "requestFingerprint",
+            "createdAt"
+          ],
+          "additionalProperties": false,
+          "description": "Exact durable plan returned by analytics_plan_crm_provisioning; altered plans are rejected."
         },
         "approvedFieldInternalNames": {
           "maxItems": 50,
@@ -939,9 +1166,8 @@ export const MCP_TOOL_CATALOG = [
         },
         "syncId": {
           "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Sync id returned by analytics_start_crm_sync."
+          "pattern": "^crmsync_[a-f0-9]{24}$",
+          "description": "Durable sync id returned by analytics_start_crm_sync."
         }
       },
       "required": [
@@ -3201,9 +3427,15 @@ export const MCP_TOOL_CATALOG = [
         },
         "provider": {
           "type": "string",
-          "minLength": 1,
-          "maxLength": 80,
-          "description": "CRM or call provider."
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider."
         },
         "connectionId": {
           "description": "Optional service connection for tenant discovery.",
@@ -4615,9 +4847,8 @@ export const MCP_TOOL_CATALOG = [
         },
         "syncId": {
           "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Sync id returned by analytics_start_crm_sync."
+          "pattern": "^crmsync_[a-f0-9]{24}$",
+          "description": "Durable sync id returned by analytics_start_crm_sync."
         }
       },
       "required": [
@@ -6664,15 +6895,15 @@ export const MCP_TOOL_CATALOG = [
           "type": "object",
           "properties": {
             "email": {
-              "description": "CSV column containing the contact email value.",
+              "description": "Confirmed contact email authorized for this CRM operation.",
               "type": "string"
             },
             "firstName": {
-              "description": "CSV column containing the contact first-name value.",
+              "description": "Confirmed contact first name authorized for this CRM operation.",
               "type": "string"
             },
             "lastName": {
-              "description": "CSV column containing the contact last-name value.",
+              "description": "Confirmed contact last name authorized for this CRM operation.",
               "type": "string"
             },
             "name": {
@@ -6680,7 +6911,7 @@ export const MCP_TOOL_CATALOG = [
               "type": "string"
             },
             "phone": {
-              "description": "CSV column containing the contact phone value.",
+              "description": "Confirmed contact phone authorized for this CRM operation.",
               "type": "string"
             },
             "company": {
@@ -8390,9 +8621,15 @@ export const MCP_TOOL_CATALOG = [
         },
         "provider": {
           "type": "string",
-          "minLength": 1,
-          "maxLength": 80,
-          "description": "Normalized CRM provider."
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider; tenant evidence may narrow this provider to webhook or manual mode."
         },
         "connectionId": {
           "type": "string",
@@ -8411,11 +8648,65 @@ export const MCP_TOOL_CATALOG = [
         },
         "mapping": {
           "type": "object",
-          "propertyNames": {
-            "type": "string"
+          "properties": {
+            "object": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "Provider object selected for this explicit CRM mapping."
+            },
+            "sourceEventIdField": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "description": "Provider field containing the stable source-event identifier."
+            },
+            "occurredAtField": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "description": "Provider field containing the source event occurrence time."
+            },
+            "personIdField": {
+              "description": "Optional provider field containing the confirmed-person association.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "dealIdField": {
+              "description": "Optional provider field containing the deal association.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "stageField": {
+              "description": "Optional provider field containing the pipeline stage.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "valueField": {
+              "description": "Optional provider field containing verified revenue.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "currencyField": {
+              "description": "Optional provider field containing the ISO currency code.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "eventName": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 80,
+              "description": "Optional normalized analytics event-name filter."
+            }
           },
-          "additionalProperties": {},
-          "description": "Mapping that passed analytics_test_crm_sync_mapping."
+          "required": [
+            "object",
+            "sourceEventIdField",
+            "occurredAtField",
+            "eventName"
+          ],
+          "additionalProperties": false,
+          "description": "Typed mapping that passed analytics_test_crm_sync_mapping."
         },
         "backfillFrom": {
           "description": "Optional lower timestamp for an authorized initial backfill.",
@@ -8485,36 +8776,139 @@ export const MCP_TOOL_CATALOG = [
             "identityTier": {
               "type": "string",
               "const": "confirmed",
-              "description": "Only a deterministically confirmed person may be synchronized."
+              "description": "Confirmed or candidate identity tier; provider mutations require confirmed."
             },
             "personId": {
               "type": "string",
-              "format": "uuid",
-              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-              "description": "Internal confirmed person id resolved by the authorized REST service."
-            },
-            "externalId": {
-              "description": "Optional provider external id.",
-              "type": "string",
               "minLength": 1,
+              "maxLength": 240,
+              "description": "Opaque X-Ray person identifier returned by an attributed-people or journey result."
+            },
+            "deterministicIdentity": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "email",
+                    "phone",
+                    "crm_id",
+                    "customer_id"
+                  ],
+                  "description": "Governed type discriminator for this rule, score, event, or record."
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500,
+                  "description": "Typed bounded comparison or field value for this declarative rule."
+                }
+              },
+              "required": [
+                "kind",
+                "value"
+              ],
+              "additionalProperties": false,
+              "description": "Verified email, phone, CRM, or customer identity used only for a confirmed person."
+            },
+            "contact": {
+              "description": "Purpose-authorized confirmed contact projection; candidate evidence is forbidden.",
+              "type": "object",
+              "properties": {
+                "email": {
+                  "description": "Confirmed contact email authorized for this CRM operation.",
+                  "type": "string",
+                  "maxLength": 320,
+                  "format": "email",
+                  "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                },
+                "phone": {
+                  "description": "Confirmed contact phone authorized for this CRM operation.",
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 50
+                },
+                "firstName": {
+                  "description": "Confirmed contact first name authorized for this CRM operation.",
+                  "type": "string",
+                  "maxLength": 160
+                },
+                "lastName": {
+                  "description": "Confirmed contact last name authorized for this CRM operation.",
+                  "type": "string",
+                  "maxLength": 160
+                }
+              },
+              "additionalProperties": false
+            },
+            "firstTouch": {
+              "description": "Bounded first-touch attribution summary authorized by the selected policy.",
+              "type": "string",
+              "maxLength": 1000
+            },
+            "lastNonDirectTouch": {
+              "description": "Bounded last non-direct attribution summary authorized by the selected policy.",
+              "type": "string",
+              "maxLength": 1000
+            },
+            "convertingTouch": {
+              "description": "Bounded converting-touch attribution summary authorized by the selected policy.",
+              "type": "string",
+              "maxLength": 1000
+            },
+            "landingPage": {
+              "description": "Canonical attributed landing-page URL authorized by the selected policy.",
+              "type": "string",
+              "maxLength": 2000,
+              "format": "uri"
+            },
+            "conversionPage": {
+              "description": "Canonical conversion-page URL authorized by the selected policy.",
+              "type": "string",
+              "maxLength": 2000,
+              "format": "uri"
+            },
+            "sessionCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Aggregate confirmed-person session count; no session identifiers are included."
+            },
+            "eventCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Aggregate confirmed-person event count; no unrestricted event history is included."
+            },
+            "campaignClickCoverage": {
+              "description": "Bounded campaign-click coverage summary; raw click identifiers require their own allowed policy fields.",
+              "type": "string",
               "maxLength": 240
             },
-            "fields": {
-              "type": "object",
-              "propertyNames": {
-                "type": "string"
-              },
-              "additionalProperties": {},
-              "description": "Approved provisioned person fields. Candidate evidence is not accepted."
+            "consentReceiptRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240,
+              "description": "Opaque consent receipt reference proving the required purpose at execution time."
+            },
+            "detailedJourneyUrl": {
+              "type": "string",
+              "maxLength": 2000,
+              "format": "uri",
+              "description": "Authorized first-party URL for the confirmed person journey; it is not a bearer credential."
             }
           },
           "required": [
             "identityTier",
             "personId",
-            "fields"
+            "deterministicIdentity",
+            "sessionCount",
+            "eventCount",
+            "consentReceiptRef",
+            "detailedJourneyUrl"
           ],
           "additionalProperties": false,
-          "description": "Confirmed-person projection only."
+          "description": "Confirmed-person projection only. Candidate identity and evidence are schema-invalid."
         },
         "mapping": {
           "description": "Approved provider field mapping.",
@@ -8614,11 +9008,140 @@ export const MCP_TOOL_CATALOG = [
         },
         "receipt": {
           "type": "object",
-          "propertyNames": {
-            "type": "string"
+          "properties": {
+            "receiptId": {
+              "type": "string",
+              "pattern": "^crmreceipt_[a-f0-9]{24}$",
+              "description": "Durable redacted receipt identifier returned by the provider operation."
+            },
+            "planId": {
+              "type": "string",
+              "pattern": "^crmplan_[a-f0-9]{24}$",
+              "description": "Durable CRM provisioning-plan identifier returned by the planning operation."
+            },
+            "provider": {
+              "type": "string",
+              "enum": [
+                "hubspot",
+                "salesforce",
+                "highlevel",
+                "zoho",
+                "pipedrive",
+                "keap"
+              ],
+              "description": "Supported phone, CRM, or advertising provider for this governed connection."
+            },
+            "connectionId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240,
+              "description": "Existing authorized service-connection reference; never supply credentials or tokens."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "approved",
+                "tested",
+                "failed"
+              ],
+              "description": "Lifecycle status used to filter or update the selected records."
+            },
+            "createdFields": {
+              "maxItems": 50,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "object": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "description": "Provider object selected for this explicit CRM mapping."
+                  },
+                  "internalName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "description": "Provider field internal name discovered from the authorized tenant."
+                  },
+                  "providerFieldId": {
+                    "description": "Opaque provider field reference returned after field creation.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 240
+                  }
+                },
+                "required": [
+                  "object",
+                  "internalName"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Exact namespaced provider fields created by the approved provisioning operation."
+            },
+            "existingMappings": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "additionalProperties": {
+                "type": "string",
+                "maxLength": 160
+              },
+              "description": "Existing writable provider fields already mapped to namespaced X-Ray fields."
+            },
+            "cleanup": {
+              "type": "object",
+              "properties": {
+                "supported": {
+                  "type": "boolean",
+                  "description": "Whether the provider supports the described governed operation."
+                },
+                "instructions": {
+                  "type": "string",
+                  "maxLength": 1000,
+                  "description": "Safe operator-facing recovery or cleanup instructions without credentials or provider bodies."
+                }
+              },
+              "required": [
+                "supported",
+                "instructions"
+              ],
+              "additionalProperties": false,
+              "description": "Bounded cleanup support and instructions for a provisioning test or field creation."
+            },
+            "planFingerprint": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$",
+              "description": "Server-computed fingerprint binding a provisioning receipt to its approved plan."
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+              "description": "ISO 8601 timestamp when the source event actually occurred."
+            },
+            "errorCode": {
+              "description": "Safe bounded error code; provider messages and record bodies are omitted.",
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_:-]{1,120}$"
+            }
           },
-          "additionalProperties": {},
-          "description": "Exact approval receipt returned by analytics_approve_crm_provisioning."
+          "required": [
+            "receiptId",
+            "planId",
+            "provider",
+            "connectionId",
+            "status",
+            "createdFields",
+            "existingMappings",
+            "cleanup",
+            "planFingerprint",
+            "occurredAt"
+          ],
+          "additionalProperties": false,
+          "description": "Exact durable approval receipt returned by analytics_approve_crm_provisioning; altered receipts are rejected."
         },
         "idempotencyKey": {
           "type": "string",
@@ -8658,9 +9181,15 @@ export const MCP_TOOL_CATALOG = [
         },
         "provider": {
           "type": "string",
-          "minLength": 1,
-          "maxLength": 80,
-          "description": "CRM or call provider."
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider."
         },
         "mapping": {
           "type": "object",
@@ -8669,42 +9198,42 @@ export const MCP_TOOL_CATALOG = [
               "type": "string",
               "minLength": 1,
               "maxLength": 100,
-              "description": "Provider object to read."
+              "description": "Provider object selected for this explicit CRM mapping."
             },
             "sourceEventIdField": {
               "type": "string",
               "minLength": 1,
               "maxLength": 160,
-              "description": "Stable external event id field."
+              "description": "Provider field containing the stable source-event identifier."
             },
             "occurredAtField": {
               "type": "string",
               "minLength": 1,
               "maxLength": 160,
-              "description": "Event occurrence timestamp field."
+              "description": "Provider field containing the source event occurrence time."
             },
             "personIdField": {
-              "description": "Optional confirmed-person foreign key field.",
+              "description": "Optional provider field containing the confirmed-person association.",
               "type": "string",
               "maxLength": 160
             },
             "dealIdField": {
-              "description": "Optional deal foreign key field.",
+              "description": "Optional provider field containing the deal association.",
               "type": "string",
               "maxLength": 160
             },
             "stageField": {
-              "description": "Optional pipeline stage field.",
+              "description": "Optional provider field containing the pipeline stage.",
               "type": "string",
               "maxLength": 160
             },
             "valueField": {
-              "description": "Optional verified-revenue field.",
+              "description": "Optional provider field containing verified revenue.",
               "type": "string",
               "maxLength": 160
             },
             "currencyField": {
-              "description": "Optional ISO currency field.",
+              "description": "Optional provider field containing the ISO currency code.",
               "type": "string",
               "maxLength": 160
             },
@@ -8712,7 +9241,7 @@ export const MCP_TOOL_CATALOG = [
               "type": "string",
               "minLength": 2,
               "maxLength": 80,
-              "description": "Canonical event name emitted by this mapping."
+              "description": "Optional normalized analytics event-name filter."
             }
           },
           "required": [
@@ -8730,10 +9259,29 @@ export const MCP_TOOL_CATALOG = [
           "type": "array",
           "items": {
             "type": "object",
-            "propertyNames": {
-              "type": "string"
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100,
+                "description": "Human-readable name for the record being created or updated."
+              },
+              "fields": {
+                "maxItems": 1000,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "description": "Ordered form-field definitions to render and validate for submissions."
+              }
             },
-            "additionalProperties": {}
+            "required": [
+              "name",
+              "fields"
+            ],
+            "additionalProperties": false
           }
         }
       },
@@ -9111,15 +9659,20 @@ export const MCP_TOOL_CATALOG = [
         },
         "syncId": {
           "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Sync id returned by analytics_start_crm_sync."
+          "pattern": "^crmsync_[a-f0-9]{24}$",
+          "description": "Durable sync id returned by analytics_start_crm_sync."
         },
         "provider": {
           "type": "string",
-          "minLength": 1,
-          "maxLength": 80,
-          "description": "Normalized CRM provider."
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider; scheduling fails closed unless effective capability permits polling."
         },
         "connectionId": {
           "type": "string",
@@ -24658,6 +25211,283 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_list_crm_outbound_policies",
+    "category": "analytics",
+    "title": "List CRM Outbound Policies",
+    "description": "List durable purpose-scoped CRM person-summary and pipeline-event policies. Policies cannot grant visitor consent or make candidate identity actionable.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List CRM Outbound Policies",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_crm_outbound_receipts",
+    "category": "analytics",
+    "title": "List CRM Outbound Receipts",
+    "description": "List bounded redacted delivery receipts for durable CRM outbound jobs. Provider request bodies and contact data are omitted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 25,
+          "description": "Maximum safe receipts to return.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List CRM Outbound Receipts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_upsert_crm_outbound_policy",
+    "category": "analytics",
+    "title": "Configure CRM Outbound Policy",
+    "description": "Create or update one immutable-version CRM outbound policy. Policies are disabled unless explicitly enabled, cannot grant visitor consent, and reject candidate identity, raw IP/device signals, and unrestricted journey data.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider."
+        },
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Verified service connection reference."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "person_summary",
+            "pipeline_event"
+          ],
+          "description": "Person summaries never create deals; pipeline events require an explicit versioned mapping."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Policies are disabled by default and must be explicitly enabled after provisioning and consent checks."
+        },
+        "version": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Immutable policy version used for replay and conflict protection."
+        },
+        "provisioningReceiptId": {
+          "type": "string",
+          "pattern": "^crmreceipt_[a-f0-9]{24}$",
+          "description": "Tested provisioning receipt authorizing the selected fields."
+        },
+        "schemaFingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Tenant schema fingerprint bound to the provisioning receipt."
+        },
+        "mappingVersion": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Pipeline mapping version, or null for a person-summary policy."
+        },
+        "mapping": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "version": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991,
+                  "description": "Immutable positive version used for replay-safe mapping or policy evolution."
+                },
+                "eventName": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_]{1,79}$",
+                  "description": "Optional normalized analytics event-name filter."
+                },
+                "pipelineId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240,
+                  "description": "Exact CRM pipeline identifier selected from authorized tenant discovery."
+                },
+                "stageId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240,
+                  "description": "Exact CRM stage identifier required for the conversion rule to match."
+                },
+                "operation": {
+                  "type": "string",
+                  "enum": [
+                    "create_or_update_deal",
+                    "update_stage"
+                  ],
+                  "description": "Whether a matched score group adds or subtracts points."
+                },
+                "valueSource": {
+                  "type": "string",
+                  "enum": [
+                    "none",
+                    "verified_revenue"
+                  ],
+                  "description": "Whether the pipeline mapping uses no value or verified revenue only."
+                },
+                "activationEligible": {
+                  "type": "boolean",
+                  "description": "Whether the confirmed mapped event may enter the separate consent-gated ad activation lane."
+                }
+              },
+              "required": [
+                "version",
+                "eventName",
+                "pipelineId",
+                "stageId",
+                "operation",
+                "valueSource",
+                "activationEligible"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Explicit pipeline mapping, or null for a person-summary policy."
+        },
+        "allowedFields": {
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "contact.email",
+              "contact.phone",
+              "contact.firstName",
+              "contact.lastName",
+              "attribution.firstTouch",
+              "attribution.lastNonDirectTouch",
+              "attribution.convertingTouch",
+              "attribution.landingPage",
+              "attribution.conversionPage",
+              "clickIds.gclid",
+              "clickIds.gbraid",
+              "clickIds.wbraid",
+              "events.selected",
+              "revenue.verified"
+            ]
+          },
+          "description": "Purpose-scoped CRM projection allowlist; raw device, IP, candidate evidence, and unrestricted journeys are unavailable."
+        },
+        "selectedEvents": {
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{1,79}$"
+          },
+          "description": "Canonical events eligible for this policy."
+        },
+        "purpose": {
+          "type": "string",
+          "enum": [
+            "necessary_form_fulfillment",
+            "site_analytics",
+            "advertising_measurement"
+          ],
+          "description": "Declared processing purpose; this cannot grant visitor consent."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "provider",
+        "connectionId",
+        "kind",
+        "enabled",
+        "version",
+        "provisioningReceiptId",
+        "schemaFingerprint",
+        "mappingVersion",
+        "mapping",
+        "allowedFields",
+        "selectedEvents",
+        "purpose",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Configure CRM Outbound Policy",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
     }
   }
 ] as const

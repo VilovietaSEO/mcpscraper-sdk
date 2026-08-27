@@ -15,3 +15,4 @@ class AnalyticsDiscoverCrmCapabilitiesOutput(BaseModel):
 
     ok: bool = Field(..., alias="ok", description="")
     profile: dict[str, Any] = Field(..., alias="profile", description="")
+    capability: dict[str, Any] = Field(..., alias="capability", description="")

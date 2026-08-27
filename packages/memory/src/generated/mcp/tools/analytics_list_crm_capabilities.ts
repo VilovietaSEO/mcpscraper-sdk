@@ -15,7 +15,5208 @@ export interface Input {
 
 export interface Output {
   ok: boolean;
-  providers: {
-    [k: string]: unknown;
-  }[];
+  /**
+   * @maxItems 6
+   */
+  providers:
+    | []
+    | [
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        }
+      ]
+    | [
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        }
+      ]
+    | [
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        }
+      ]
+    | [
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        }
+      ]
+    | [
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        }
+      ]
+    | [
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        },
+        {
+          profile: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            displayName: string;
+            /**
+             * @maxItems 20
+             */
+            providerConfigKeys:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ]
+              | [
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string,
+                  string
+                ];
+            auth: "oauth2" | "api_key" | "account_token";
+            operations: {
+              describe: boolean;
+              discover_schema: boolean;
+              incremental_read: boolean;
+              webhook: boolean;
+              create_fields: boolean;
+              upsert_person: boolean;
+              append_activity: boolean;
+              test_write: boolean;
+              list_outcomes: boolean;
+              pipeline_write: boolean;
+            };
+            personObject: string | null;
+            pipelineObject: string | null;
+            activityObject: string | null;
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            metadataEndpoint: string | null;
+            customFieldEndpoint: string | null;
+            externalIdStrategy: string | null;
+            /**
+             * @maxItems 100
+             */
+            writablePersonFields: string[];
+            /**
+             * @maxItems 100
+             */
+            requiredPersonFields: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            associations: string[];
+            pagination: "cursor" | "offset" | "page" | "webhook_only";
+            batchLimit: number | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            /**
+             * @maxItems 100
+             */
+            caveats: string[];
+            safeFallback: "note" | "activity" | "webhook_only";
+          };
+          sync: {
+            provider:
+              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
+            canSyncNow: boolean;
+            canSchedule: boolean;
+            cursorStrategy: "cursor" | "offset" | "page" | "webhook_only";
+            /**
+             * @maxItems 100
+             */
+            supportedObjects: string[];
+            stageField: string | null;
+            valueField: string | null;
+            /**
+             * @maxItems 100
+             */
+            rateLimitHeaders: string[];
+            action: string | null;
+            /**
+             * @maxItems 200
+             */
+            caveats: string[];
+            evidence?: {
+              documented: boolean;
+              normalizedAdapter: boolean;
+              /**
+               * @maxItems 100
+               */
+              advertisedTools: string[];
+              /**
+               * @maxItems 200
+               */
+              grantedScopes: string[];
+              /**
+               * @maxItems 100
+               */
+              missingRequirements: string[];
+              tenantSchemaFingerprint: string | null;
+              evaluatedAt: string;
+            };
+          };
+        }
+      ];
 }

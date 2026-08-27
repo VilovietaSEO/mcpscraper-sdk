@@ -4,13 +4,13 @@ export interface Input {
    */
   siteId: string;
   /**
-   * Sync id returned by analytics_start_crm_sync.
+   * Durable sync id returned by analytics_start_crm_sync.
    */
   syncId: string;
   /**
-   * Normalized CRM provider.
+   * Supported CRM provider; scheduling fails closed unless effective capability permits polling.
    */
-  provider: string;
+  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
   /**
    * Verified service connection reference.
    */
@@ -28,6 +28,8 @@ export interface Input {
 export interface Output {
   ok: boolean;
   schedule: {
-    [k: string]: unknown;
+    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+    intervalSeconds: number | null;
+    nextRunAt: string | null;
   };
 }

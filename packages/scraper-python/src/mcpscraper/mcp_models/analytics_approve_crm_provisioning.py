@@ -6,7 +6,7 @@ class AnalyticsApproveCrmProvisioningInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     site_id: str = Field(..., alias="siteId", description="Analytics Site id returned by analytics_list_sites.")
-    plan: dict[str, Any] = Field(..., alias="plan", description="Exact normalized plan returned by analytics_plan_crm_provisioning.")
+    plan: dict[str, Any] = Field(..., alias="plan", description="Exact durable plan returned by analytics_plan_crm_provisioning; altered plans are rejected.")
     approved_field_internal_names: list[str] = Field(..., alias="approvedFieldInternalNames", description="Exact proposed namespaced provider fields approved for creation.")
     idempotency_key: str = Field(..., alias="idempotencyKey", description="Caller-owned idempotency key. Reuse it only when retrying the same logical mutation.")
 

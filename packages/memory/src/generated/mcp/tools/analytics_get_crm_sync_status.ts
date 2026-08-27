@@ -4,7 +4,7 @@ export interface Input {
    */
   siteId: string;
   /**
-   * Sync id returned by analytics_start_crm_sync.
+   * Durable sync id returned by analytics_start_crm_sync.
    */
   syncId: string;
 }
@@ -12,6 +12,23 @@ export interface Input {
 export interface Output {
   ok: boolean;
   sync: {
-    [k: string]: unknown;
+    syncId: string;
+    siteId: string;
+    connectionId: string;
+    /**
+     * Supported phone, CRM, or advertising provider for this governed connection.
+     */
+    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    state: "queued" | "running" | "completed" | "degraded" | "cancelled" | "webhook_only";
+    mode: "initial" | "incremental" | "webhook";
+    cursor: string | null;
+    lastStartedAt: string | null;
+    lastSuccessAt: string | null;
+    nextRunAt: string | null;
+    imported: number;
+    deduplicated: number;
+    rejected: number;
+    lastErrorCode: string | null;
+    requestFingerprint: string;
   };
 }
