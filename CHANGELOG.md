@@ -2,6 +2,17 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-26 — verified against mcp-scraper 0.68.0 / mcp-memory 1.18.1
+
+### Added
+
+- Added typed Node, Python, CLI, and cURL bindings for X-Ray event-definition listing, creation, updates, archival, and safe dry-run matching across browser and CMS hosts.
+
+### Changed
+
+- Regenerated the unified contract at 275 tools, including the new X-Ray conversion-management surface, while preserving 101 mirrored Memory tools.
+- Prepared `mcpscraper-memory-sdk` 0.31.8, `mcpscraper-sdk` 0.30.8, `mcpscraper-cli` 0.29.8, Python `mcpscraper-sdk` 0.29.8, and Python `mcpscraper-memory-sdk` 0.28.8.
+
 ## 2026-08-26 — verified against mcp-scraper 0.67.1 / mcp-memory 1.18.1
 
 ### Changed

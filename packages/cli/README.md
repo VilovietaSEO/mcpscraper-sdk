@@ -4,7 +4,7 @@ Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 259 unified MCP tools (158 MCP Scraper plus 101 mirrored Memory tools).
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 275 unified MCP tools (174 MCP Scraper plus 101 mirrored Memory tools).
 
 ## Install
 
@@ -38,7 +38,7 @@ mcpscraper tools call list_scheduled_runs --args '{"view":"inbox","limit":30}' -
 mcpscraper tools call lead_list_enrich --args '{"idempotencyKey":"roofing-dallas-001","source":{"kind":"rows","rows":[{"Business":"White Rock Roofing","City":"Dallas","Website":"https://roofwhiterock.com"}]},"columnMap":{"name":"Business","city":"City","websiteUrl":"Website"},"defaultEntityType":"business","emailSearchFallback":"serp_snippets","peopleDiscovery":"owners","peopleQueryTemplates":["{business} owner of company {city}","{business} founder {city}"],"outputFormats":["csv","xlsx"]}' --json
 ```
 
-`tools list` contains exactly 259 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 275 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 Google SERP searches cost 60 Credits. PAA harvests cost 400 Credits plus 10 Credits per returned question. For additional throughput, one optional $5/month concurrency pack adds two browser slots; pack quantity scales both slots and monthly price linearly.
 
