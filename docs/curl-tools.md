@@ -1,4 +1,4 @@
-# All 315 MCP tools with cURL
+# All 318 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (315)
+## Complete catalog (318)
 
 ## access
 
@@ -168,6 +168,9 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `analytics_update_onboarding_preferences` — Update X-Ray Setup Preferences
 - `analytics_validate_activation_mapping` — Validate Activation Event Mapping
 - `analytics_withdraw_consent` — Withdraw Analytics Consent
+- `analytics_list_crm_outbound_policies` — List CRM Outbound Policies
+- `analytics_list_crm_outbound_receipts` — List CRM Outbound Receipts
+- `analytics_upsert_crm_outbound_policy` — Configure CRM Outbound Policy
 
 ## web
 

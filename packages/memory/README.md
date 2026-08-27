@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 315 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 114-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official TypeScript/JavaScript clients for all 318 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 114-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
@@ -54,7 +54,7 @@ try {
 
 ## Namespaces
 
-`MemoryClient` retains the direct 114-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 315 tools — 214 MCP Scraper tools plus 101 mirrored Memory tools — across its generated namespaces. Scheduled results and saved artifact templates are available under `client.schedule`; run IDs and cursors remain opaque, and `artifactSelection: { mode: 'none' }` does not disable Memory-note writing.
+`MemoryClient` retains the direct 114-tool memory namespaces. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 318 tools — 217 MCP Scraper tools plus 101 mirrored Memory tools — across its generated namespaces. Scheduled results and saved artifact templates are available under `client.schedule`; run IDs and cursors remain opaque, and `artifactSelection: { mode: 'none' }` does not disable Memory-note writing.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 

@@ -4,9 +4,9 @@ export interface Input {
    */
   siteId: string;
   /**
-   * Normalized CRM provider.
+   * Supported CRM provider; tenant evidence may narrow this provider to webhook or manual mode.
    */
-  provider: string;
+  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
   /**
    * Verified service connection reference.
    */
@@ -16,10 +16,45 @@ export interface Input {
    */
   mode?: "initial" | "incremental";
   /**
-   * Mapping that passed analytics_test_crm_sync_mapping.
+   * Typed mapping that passed analytics_test_crm_sync_mapping.
    */
   mapping: {
-    [k: string]: unknown;
+    /**
+     * Provider object selected for this explicit CRM mapping.
+     */
+    object: string;
+    /**
+     * Provider field containing the stable source-event identifier.
+     */
+    sourceEventIdField: string;
+    /**
+     * Provider field containing the source event occurrence time.
+     */
+    occurredAtField: string;
+    /**
+     * Optional provider field containing the confirmed-person association.
+     */
+    personIdField?: string;
+    /**
+     * Optional provider field containing the deal association.
+     */
+    dealIdField?: string;
+    /**
+     * Optional provider field containing the pipeline stage.
+     */
+    stageField?: string;
+    /**
+     * Optional provider field containing verified revenue.
+     */
+    valueField?: string;
+    /**
+     * Optional provider field containing the ISO currency code.
+     */
+    currencyField?: string;
+    /**
+     * Optional normalized analytics event-name filter.
+     */
+    eventName: string;
   };
   /**
    * Optional lower timestamp for an authorized initial backfill.
@@ -34,6 +69,8 @@ export interface Input {
 export interface Output {
   ok: boolean;
   sync: {
-    [k: string]: unknown;
+    syncId: string;
+    reused: boolean;
+    state: "queued" | "running" | "completed" | "degraded" | "cancelled" | "webhook_only";
   };
 }

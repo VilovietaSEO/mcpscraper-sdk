@@ -4,7 +4,7 @@ export interface Input {
    */
   siteId: string;
   /**
-   * Sync id returned by analytics_start_crm_sync.
+   * Durable sync id returned by analytics_start_crm_sync.
    */
   syncId: string;
 }

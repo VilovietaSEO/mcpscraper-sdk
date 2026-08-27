@@ -15,7 +15,9 @@ class AnalyticsDiscoverActivationAssetsOutput(BaseModel):
 
     ok: bool = Field(..., alias="ok", description="")
     platform: Literal['meta', 'google', 'tiktok', 'reddit'] = Field(..., alias="platform", description="")
-    required_destination_field: str = Field(..., alias="requiredDestinationField", description="")
+    required_destination_field: Literal['datasetId', 'conversionActionId', 'pixelCode', 'pixelId'] = Field(..., alias="requiredDestinationField", description="")
     assets: list[dict[str, Any]] = Field(..., alias="assets", description="")
     manual_entry_allowed: bool = Field(..., alias="manualEntryAllowed", description="")
-    discovery: Literal['not_advertised', 'authorized_provider'] = Field(..., alias="discovery", description="")
+    discovery: Literal['discovered', 'permission_limited', 'not_advertised', 'provider_error', 'manual_entry'] = Field(..., alias="discovery", description="")
+    diagnostic: dict[str, Any] = Field(..., alias="diagnostic", description="")
+    next_action: Literal['select_asset', 'reconnect_permissions', 'retry_discovery', 'enter_manual_id'] = Field(..., alias="nextAction", description="")

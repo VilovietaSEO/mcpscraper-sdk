@@ -4,47 +4,47 @@ export interface Input {
    */
   siteId: string;
   /**
-   * CRM or call provider.
+   * Supported CRM provider.
    */
-  provider: string;
+  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
   /**
    * Proposed typed CRM event mapping.
    */
   mapping: {
     /**
-     * Provider object to read.
+     * Provider object selected for this explicit CRM mapping.
      */
     object: string;
     /**
-     * Stable external event id field.
+     * Provider field containing the stable source-event identifier.
      */
     sourceEventIdField: string;
     /**
-     * Event occurrence timestamp field.
+     * Provider field containing the source event occurrence time.
      */
     occurredAtField: string;
     /**
-     * Optional confirmed-person foreign key field.
+     * Optional provider field containing the confirmed-person association.
      */
     personIdField?: string;
     /**
-     * Optional deal foreign key field.
+     * Optional provider field containing the deal association.
      */
     dealIdField?: string;
     /**
-     * Optional pipeline stage field.
+     * Optional provider field containing the pipeline stage.
      */
     stageField?: string;
     /**
-     * Optional verified-revenue field.
+     * Optional provider field containing verified revenue.
      */
     valueField?: string;
     /**
-     * Optional ISO currency field.
+     * Optional provider field containing the ISO currency code.
      */
     currencyField?: string;
     /**
-     * Canonical event name emitted by this mapping.
+     * Optional normalized analytics event-name filter.
      */
     eventName: string;
   };
@@ -54,13 +54,68 @@ export interface Input {
    * @maxItems 100
    */
   availableObjects?: {
-    [k: string]: unknown;
+    /**
+     * Human-readable name for the record being created or updated.
+     */
+    name: string;
+    /**
+     * Ordered form-field definitions to render and validate for submissions.
+     *
+     * @maxItems 1000
+     */
+    fields: string[];
   }[];
 }
 
 export interface Output {
   ok: boolean;
   test: {
-    [k: string]: unknown;
+    valid: boolean;
+    /**
+     * @maxItems 200
+     */
+    errors: string[];
+    /**
+     * @maxItems 200
+     */
+    warnings: string[];
+    normalizedMapping: {
+      /**
+       * Provider object selected for this explicit CRM mapping.
+       */
+      object: string;
+      /**
+       * Provider field containing the stable source-event identifier.
+       */
+      sourceEventIdField: string;
+      /**
+       * Provider field containing the source event occurrence time.
+       */
+      occurredAtField: string;
+      /**
+       * Optional provider field containing the confirmed-person association.
+       */
+      personIdField?: string;
+      /**
+       * Optional provider field containing the deal association.
+       */
+      dealIdField?: string;
+      /**
+       * Optional provider field containing the pipeline stage.
+       */
+      stageField?: string;
+      /**
+       * Optional provider field containing verified revenue.
+       */
+      valueField?: string;
+      /**
+       * Optional provider field containing the ISO currency code.
+       */
+      currencyField?: string;
+      /**
+       * Optional normalized analytics event-name filter.
+       */
+      eventName: string;
+    };
   };
 }

@@ -12,40 +12,57 @@ export interface Input {
    */
   connectionId: string;
   /**
-   * Confirmed person associated with the pipeline event.
+   * Confirmed person associated with the pipeline event; candidate identity is schema-invalid.
    */
   person: {
     /**
-     * Candidate identities are forbidden.
+     * Confirmed or candidate identity tier; provider mutations require confirmed.
      */
     identityTier: "confirmed";
     /**
-     * Confirmed person id.
+     * Opaque X-Ray person identifier returned by an attributed-people or journey result.
      */
     personId: string;
+    /**
+     * Verified email, phone, CRM, or customer identity used only for a confirmed person.
+     */
+    deterministicIdentity: {
+      /**
+       * Governed type discriminator for this rule, score, event, or record.
+       */
+      kind: "email" | "phone" | "crm_id" | "customer_id";
+      /**
+       * Typed bounded comparison or field value for this declarative rule.
+       */
+      value: string;
+    };
+    /**
+     * Opaque consent receipt reference proving the required purpose at execution time.
+     */
+    consentReceiptRef: string;
   };
   /**
    * Canonical stage or verified-revenue event.
    */
   event: {
     /**
-     * Stable pipeline event id.
+     * Caller-owned canonical event identifier used for end-to-end deduplication.
      */
     eventId: string;
     /**
-     * Canonical stage/revenue event.
+     * Optional normalized analytics event-name filter.
      */
     eventName: string;
     /**
-     * Event occurrence time.
+     * ISO 8601 timestamp when the source event actually occurred.
      */
     occurredAt: string;
     /**
-     * Optional verified revenue in minor units.
+     * Verified revenue in integer currency minor units; inferred values are forbidden.
      */
-    valueMinor?: number;
+    verifiedRevenueMinor?: number;
     /**
-     * ISO 4217 currency for verified revenue.
+     * Three-letter ISO currency code for the event value.
      */
     currency?: string;
   };
@@ -53,7 +70,34 @@ export interface Input {
    * Active versioned Pipeline Event Mapping; Person Sync alone cannot create a deal.
    */
   mapping: {
-    [k: string]: unknown;
+    /**
+     * Immutable positive version used for replay-safe mapping or policy evolution.
+     */
+    version: number;
+    /**
+     * Optional normalized analytics event-name filter.
+     */
+    eventName: string;
+    /**
+     * Exact CRM pipeline identifier selected from authorized tenant discovery.
+     */
+    pipelineId: string;
+    /**
+     * Exact CRM stage identifier required for the conversion rule to match.
+     */
+    stageId: string;
+    /**
+     * Whether a matched score group adds or subtracts points.
+     */
+    operation: "create_or_update_deal" | "update_stage";
+    /**
+     * Whether the pipeline mapping uses no value or verified revenue only.
+     */
+    valueSource: "none" | "verified_revenue";
+    /**
+     * Whether the confirmed mapped event may enter the separate consent-gated ad activation lane.
+     */
+    activationEligible: boolean;
   };
   /**
    * Caller-owned idempotency key. Reuse it only when retrying the same logical mutation.
@@ -64,6 +108,12 @@ export interface Input {
 export interface Output {
   ok: boolean;
   receipt: {
-    [k: string]: unknown;
+    receiptId: string;
+    /**
+     * Supported phone, CRM, or advertising provider for this governed connection.
+     */
+    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    operation: "pipeline_event";
+    dealCreatedOrUpdated: true;
   };
 }

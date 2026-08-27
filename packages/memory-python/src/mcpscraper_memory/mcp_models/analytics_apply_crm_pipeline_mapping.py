@@ -8,7 +8,7 @@ class AnalyticsApplyCrmPipelineMappingInput(BaseModel):
     site_id: str = Field(..., alias="siteId", description="Analytics Site id returned by analytics_list_sites.")
     provider: Literal['hubspot', 'salesforce', 'highlevel', 'zoho', 'pipedrive', 'keap'] = Field(..., alias="provider", description="Supported CRM provider.")
     connection_id: str = Field(..., alias="connectionId", description="Verified service connection reference.")
-    person: dict[str, Any] = Field(..., alias="person", description="Confirmed person associated with the pipeline event.")
+    person: dict[str, Any] = Field(..., alias="person", description="Confirmed person associated with the pipeline event; candidate identity is schema-invalid.")
     event: dict[str, Any] = Field(..., alias="event", description="Canonical stage or verified-revenue event.")
     mapping: dict[str, Any] = Field(..., alias="mapping", description="Active versioned Pipeline Event Mapping; Person Sync alone cannot create a deal.")
     idempotency_key: str = Field(..., alias="idempotencyKey", description="Caller-owned idempotency key. Reuse it only when retrying the same logical mutation.")

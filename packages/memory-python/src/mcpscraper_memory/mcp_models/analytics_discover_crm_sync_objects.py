@@ -6,7 +6,7 @@ class AnalyticsDiscoverCrmSyncObjectsInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     site_id: str = Field(..., alias="siteId", description="Analytics Site id returned by analytics_list_sites.")
-    provider: str = Field(..., alias="provider", description="CRM or call provider.")
+    provider: Literal['hubspot', 'salesforce', 'highlevel', 'zoho', 'pipedrive', 'keap'] = Field(..., alias="provider", description="Supported CRM provider.")
     connection_id: str | None = Field(None, alias="connectionId", description="Optional service connection for tenant discovery.")
 
 

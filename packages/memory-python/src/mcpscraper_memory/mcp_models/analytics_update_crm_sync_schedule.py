@@ -6,8 +6,8 @@ class AnalyticsUpdateCrmSyncScheduleInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     site_id: str = Field(..., alias="siteId", description="Analytics Site id returned by analytics_list_sites.")
-    sync_id: str = Field(..., alias="syncId", description="Sync id returned by analytics_start_crm_sync.")
-    provider: str = Field(..., alias="provider", description="Normalized CRM provider.")
+    sync_id: str = Field(..., alias="syncId", description="Durable sync id returned by analytics_start_crm_sync.")
+    provider: Literal['hubspot', 'salesforce', 'highlevel', 'zoho', 'pipedrive', 'keap'] = Field(..., alias="provider", description="Supported CRM provider; scheduling fails closed unless effective capability permits polling.")
     connection_id: str = Field(..., alias="connectionId", description="Verified service connection reference.")
     interval_seconds: Any = Field(..., alias="intervalSeconds", description="Bounded synchronization interval; null disables the schedule.")
     idempotency_key: str = Field(..., alias="idempotencyKey", description="Caller-owned idempotency key. Reuse it only when retrying the same logical mutation.")

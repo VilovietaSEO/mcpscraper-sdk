@@ -20,15 +20,15 @@ export interface Input {
    */
   mapping: {
     /**
-     * CSV column containing the contact email value.
+     * Confirmed contact email authorized for this CRM operation.
      */
     email?: string;
     /**
-     * CSV column containing the contact first-name value.
+     * Confirmed contact first name authorized for this CRM operation.
      */
     firstName?: string;
     /**
-     * CSV column containing the contact last-name value.
+     * Confirmed contact last name authorized for this CRM operation.
      */
     lastName?: string;
     /**
@@ -36,7 +36,7 @@ export interface Input {
      */
     name?: string;
     /**
-     * CSV column containing the contact phone value.
+     * Confirmed contact phone authorized for this CRM operation.
      */
     phone?: string;
     /**
