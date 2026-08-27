@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.69.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "cfd5c215259ef57b890647c525d976cee18ce0ab8456ecaba5d5111599d40f41",
+  "generatedFrom": "mcp-scraper 0.69.1 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "b5979efc8ae5553e0d4f9fc0a6cd1e2c5a583aa45fe7fbf71a908ad6d81a2ac8",
   "toolCount": 315,
   "tools": [
     {
@@ -11262,7 +11262,7 @@
     {
       "name": "analytics_test_activation_destination",
       "title": "Test Ad Activation Destination",
-      "description": "Send the provider-specific verification test for a configured activation destination and return its safe receipt.",
+      "description": "Send the provider-specific verification test for a configured activation destination and return its safe receipt. Meta and TikTok require testEventCode; Reddit requires testId.",
       "category": "analytics",
       "methodName": "testActivationDestination",
       "inputSchema": {
@@ -11279,6 +11279,18 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Activation destination id returned by analytics_list_activation_destinations."
+          },
+          "testEventCode": {
+            "description": "Provider test event code required by Meta and TikTok. Obtain it from the authorized provider test-events screen; it is sent only to that configured destination.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "testId": {
+            "description": "Provider test ID required by Reddit Conversions API. It is sent only to that configured destination.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
           }
         },
         "required": [
