@@ -1,4 +1,4 @@
-# All 259 MCP tools with cURL
+# All 275 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (259)
+## Complete catalog (275)
 
 ## access
 
@@ -88,8 +88,12 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 
 ## analytics
 
+- `analytics_archive_event_definition` — Archive Browser Event Definition
 - `analytics_create_activation_destination` — Create Ad Activation Destination
 - `analytics_create_campaign_link` — Create Campaign Link
+- `analytics_create_connection` — Create X-Ray Connection
+- `analytics_create_conversion_rule` — Create Conversion Rule
+- `analytics_create_event_definition` — Create Browser Event Definition
 - `analytics_create_export` — Create Analytics Export
 - `analytics_create_form` — Create Pixel-linked Form
 - `analytics_get_acquisition` — Analytics Acquisition
@@ -97,6 +101,7 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `analytics_get_channel_breakdown` — Analytics Channel Breakdowns
 - `analytics_get_content` — Analytics Content
 - `analytics_get_conversions` — Analytics Conversions
+- `analytics_get_coverage` — Get Attribution Coverage
 - `analytics_get_dimensions` — Analytics Dimensions
 - `analytics_get_entitlement` — Get X-Ray Pixel Access
 - `analytics_get_events` — Analytics Events
@@ -104,14 +109,25 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `analytics_get_health` — Analytics Pixel Health
 - `analytics_get_overview` — Analytics Overview
 - `analytics_get_paths` — Analytics Conversion Paths
+- `analytics_get_person_journey` — Get Person Journey
 - `analytics_get_timeseries` — Analytics Timeseries
 - `analytics_import_crm_csv` — Import CRM CSV
 - `analytics_list_activation_destinations` — List Ad Activation Destinations
+- `analytics_list_activation_receipts` — List Ad Activation Receipts
 - `analytics_list_campaign_links` — List Campaign Links
+- `analytics_list_connections` — List X-Ray Connections
+- `analytics_list_conversion_rules` — List Conversion Rules
 - `analytics_list_crm_imports` — List CRM Imports
+- `analytics_list_event_definitions` — List Browser Event Definitions
 - `analytics_list_forms` — List Analytics Forms
 - `analytics_list_pixels` — List Analytics Pixels
 - `analytics_list_sites` — List Analytics Businesses
+- `analytics_reconcile_connection` — Reconcile X-Ray Connection
+- `analytics_record_external_event` — Record Server Event
+- `analytics_retry_activation_delivery` — Retry Ad Activation Delivery
+- `analytics_test_activation_destination` — Test Ad Activation Destination
+- `analytics_test_event_definition` — Test Browser Event Definition
+- `analytics_update_event_definition` — Update Browser Event Definition
 
 ## web
 

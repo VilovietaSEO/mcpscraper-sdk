@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated 259-tool MCP surface — 158 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool. Its output models come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source:
+`client.tools` is the generated 275-tool MCP surface — 174 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool. Its output models come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source:
 
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 
@@ -121,7 +121,7 @@ hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 259 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 275 unified MCP tools.
 
 ## Regenerating models
 

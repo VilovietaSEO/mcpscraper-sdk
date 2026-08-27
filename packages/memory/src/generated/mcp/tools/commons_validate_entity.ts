@@ -747,7 +747,7 @@ export interface Input {
    */
   seo?: {
     /**
-     * Canonical public URL for this article or entity.
+     * Canonical public page URL associated with the event.
      */
     canonicalUrl?: string;
     /**

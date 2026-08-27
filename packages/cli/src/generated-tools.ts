@@ -705,6 +705,41 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_archive_event_definition",
+    "category": "analytics",
+    "title": "Archive Browser Event Definition",
+    "description": "Idempotently archive a browser event definition so the Pixel no longer receives it.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "definitionId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Event definition id returned by analytics_list_event_definitions."
+        }
+      },
+      "required": [
+        "siteId",
+        "definitionId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Archive Browser Event Definition",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_create_activation_destination",
     "category": "analytics",
     "title": "Create Ad Activation Destination",
@@ -735,20 +770,24 @@ export const MCP_TOOL_CATALOG = [
           "description": "Human-readable name for the record being created or updated."
         },
         "connectionRef": {
-          "description": "Existing provider connection reference authorized for this analytics account.",
           "type": "string",
-          "maxLength": 240
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Existing provider connection reference authorized for this analytics account."
         },
         "externalDatasetId": {
-          "description": "Optional provider dataset identifier already owned by the connected account.",
           "type": "string",
-          "maxLength": 240
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Provider destination identifier already owned by the connected account."
         }
       },
       "required": [
         "siteId",
         "platform",
-        "name"
+        "name",
+        "connectionRef",
+        "externalDatasetId"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -848,6 +887,347 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Create Campaign Link",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_create_connection",
+    "category": "analytics",
+    "title": "Create X-Ray Connection",
+    "description": "Create a CallRail, CallTrackingMetrics, Twilio, HubSpot, HighLevel, or generic CRM connection. Creation is configured-unverified until a signed receipt succeeds.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "callrail",
+            "calltrackingmetrics",
+            "twilio",
+            "hubspot",
+            "highlevel",
+            "generic_crm"
+          ],
+          "description": "Supported phone, CRM, or advertising provider for this governed connection."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Human-readable name for the record being created or updated."
+        },
+        "sourceAccountRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Stable non-secret account identifier at the phone, CRM, or event source."
+        },
+        "serviceConnectionRef": {
+          "description": "Optional MCP Scraper connected-service identifier used for governed provider actions.",
+          "type": "string",
+          "maxLength": 240
+        },
+        "webhookSecret": {
+          "description": "Provider webhook validation secret; it is encrypted at rest and never returned.",
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 1000
+        },
+        "config": {
+          "description": "Validated renderer configuration for the new immutable template version; arbitrary code is rejected.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "siteId",
+        "provider",
+        "name",
+        "sourceAccountRef"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create X-Ray Connection",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_create_conversion_rule",
+    "category": "analytics",
+    "title": "Create Conversion Rule",
+    "description": "Create a versioned declarative conversion rule. This is a safe event-routing layer, not arbitrary JavaScript like Google Tag Manager.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Human-readable name for the record being created or updated."
+        },
+        "conversionKind": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$",
+          "description": "Optional normalized conversion event kind filter."
+        },
+        "condition": {
+          "type": "object",
+          "properties": {
+            "eventName": {
+              "description": "Optional normalized analytics event-name filter.",
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{1,79}$"
+            },
+            "eventKind": {
+              "description": "Canonical event family used for journey storage and conversion-rule evaluation.",
+              "type": "string",
+              "enum": [
+                "browser",
+                "form",
+                "call",
+                "crm",
+                "transaction",
+                "custom_server",
+                "conversion",
+                "delivery"
+              ]
+            },
+            "source": {
+              "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "stageId": {
+              "description": "Exact CRM stage identifier required for the conversion rule to match.",
+              "type": "string",
+              "maxLength": 240
+            },
+            "status": {
+              "description": "Lifecycle status used to filter or update the selected records.",
+              "type": "string",
+              "enum": [
+                "open",
+                "won",
+                "lost",
+                "spam",
+                "unknown"
+              ]
+            },
+            "answered": {
+              "description": "Optional call-answer state required for this conversion rule to match.",
+              "type": "boolean"
+            },
+            "minimumCallDurationSeconds": {
+              "description": "Minimum connected call duration required for the conversion rule to match.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 86400
+            },
+            "excludedTags": {
+              "default": [],
+              "description": "Event tags that prevent this conversion rule from matching, such as spam.",
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 80
+              }
+            },
+            "requiredTags": {
+              "default": [],
+              "description": "Event tags that must all be present before this conversion rule matches.",
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          },
+          "description": "Declarative event conditions that must match before X-Ray creates a conversion."
+        },
+        "defaultValueMinor": {
+          "description": "Optional default conversion value in the currency minor unit.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "defaultCurrency": {
+          "default": "USD",
+          "description": "Three-letter default currency code used when a matched event has no value currency.",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 3
+        },
+        "enabled": {
+          "default": true,
+          "description": "Whether the new rule should begin evaluating events immediately.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "siteId",
+        "name",
+        "conversionKind",
+        "condition"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create Conversion Rule",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_create_event_definition",
+    "category": "analytics",
+    "title": "Create Browser Event Definition",
+    "description": "Create a declarative page, click, or third-party form-submit event tag without injecting arbitrary JavaScript or capturing form fields.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Human-readable definition name unique within the Site."
+        },
+        "eventName": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$",
+          "description": "Canonical event name emitted when this definition matches."
+        },
+        "triggerKind": {
+          "type": "string",
+          "enum": [
+            "page",
+            "click",
+            "form",
+            "semantic"
+          ],
+          "description": "Declarative browser trigger. Semantic uses a data-xray-event tag."
+        },
+        "path": {
+          "description": "URL path required for page triggers.",
+          "type": "string",
+          "maxLength": 2000,
+          "pattern": "^\\/.*"
+        },
+        "pathMatch": {
+          "default": "exact",
+          "description": "Whether the page path must equal or begin with path.",
+          "type": "string",
+          "enum": [
+            "exact",
+            "prefix"
+          ]
+        },
+        "selector": {
+          "description": "CSS selector evaluated only by the first-party Pixel for click or form triggers.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "hostnames": {
+          "default": [],
+          "description": "Optional approved bare hostnames. Empty applies across the Site Pixel hosts.",
+          "maxItems": 25,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 253
+          }
+        },
+        "metadata": {
+          "description": "Safe fixed event metadata; never form field values or arbitrary code.",
+          "type": "object",
+          "properties": {
+            "value": {
+              "description": "Optional non-negative conversion value in major currency units.",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000000
+            },
+            "currency": {
+              "description": "ISO 4217 currency code for value.",
+              "type": "string",
+              "pattern": "^[A-Za-z]{3}$"
+            },
+            "orderId": {
+              "description": "Optional stable order identifier.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "contentId": {
+              "description": "Optional product or content identifier.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "contentType": {
+              "description": "Optional bounded content category.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            }
+          },
+          "additionalProperties": false
+        },
+        "oncePerSession": {
+          "default": false,
+          "description": "Emit at most once per browser session when true.",
+          "type": "boolean"
+        },
+        "enabled": {
+          "default": true,
+          "description": "Whether the Pixel may emit this definition.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "siteId",
+        "name",
+        "eventName",
+        "triggerKind"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create Browser Event Definition",
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": false,
@@ -1944,6 +2324,46 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_coverage",
+    "category": "analytics",
+    "title": "Get Attribution Coverage",
+    "description": "Measure click-ID coverage and call/CRM journey join rates. Null rates mean there is not yet a denominator.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Attribution Coverage",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_dimensions",
     "category": "analytics",
     "title": "Analytics Dimensions",
@@ -2793,6 +3213,41 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_person_journey",
+    "category": "analytics",
+    "title": "Get Person Journey",
+    "description": "Read one identified person timeline across sessions, immutable touches, calls, CRM stages, conversions, and ad-delivery receipts.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "personId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Opaque X-Ray person identifier returned by an attributed-people or journey result."
+        }
+      },
+      "required": [
+        "siteId",
+        "personId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Person Journey",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_timeseries",
     "category": "analytics",
     "title": "Analytics Timeseries",
@@ -3075,6 +3530,53 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_list_activation_receipts",
+    "category": "analytics",
+    "title": "List Ad Activation Receipts",
+    "description": "List bounded provider delivery receipts for one activation destination.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "destinationId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Activation destination id returned by analytics_list_activation_destinations."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum receipt rows to return.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor from the prior receipt page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId",
+        "destinationId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Ad Activation Receipts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_list_campaign_links",
     "category": "analytics",
     "title": "List Campaign Links",
@@ -3115,6 +3617,86 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_list_connections",
+    "category": "analytics",
+    "title": "List X-Ray Connections",
+    "description": "List phone, CRM, and webhook connections with honest readiness, receipt, and error state.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List X-Ray Connections",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_conversion_rules",
+    "category": "analytics",
+    "title": "List Conversion Rules",
+    "description": "List deterministic versioned rules that turn canonical phone, CRM, transaction, and server events into conversions.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Conversion Rules",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_list_crm_imports",
     "category": "analytics",
     "title": "List CRM Imports",
@@ -3148,6 +3730,46 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "List CRM Imports",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_event_definitions",
+    "category": "analytics",
+    "title": "List Browser Event Definitions",
+    "description": "List declarative page, click, and form-submit tags applied by the first-party X-Ray Pixel.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Browser Event Definitions",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -3249,6 +3871,558 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_reconcile_connection",
+    "category": "analytics",
+    "title": "Reconcile X-Ray Connection",
+    "description": "Reconcile one phone or CRM connection through its configured provider API and return readiness and checkpoint evidence.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "connectionId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Phone or CRM connection id returned by analytics_list_connections."
+        }
+      },
+      "required": [
+        "siteId",
+        "connectionId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Reconcile X-Ray Connection",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_record_external_event",
+    "category": "analytics",
+    "title": "Record Server Event",
+    "description": "Idempotently record a canonical server-side call, CRM, transaction, or custom event and evaluate conversion rules.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "schemaVersion": {
+          "default": 1,
+          "description": "Canonical X-Ray event schema version; use version 1.",
+          "type": "number",
+          "const": 1
+        },
+        "eventId": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned canonical event identifier used for end-to-end deduplication."
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
+        },
+        "sourceAccountRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Stable non-secret account identifier at the phone, CRM, or event source."
+        },
+        "sourceEventId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Stable identifier assigned by the source system for idempotent ingestion."
+        },
+        "eventKind": {
+          "type": "string",
+          "enum": [
+            "browser",
+            "form",
+            "call",
+            "crm",
+            "transaction",
+            "custom_server",
+            "conversion",
+            "delivery"
+          ],
+          "description": "Canonical event family used for journey storage and conversion-rule evaluation."
+        },
+        "eventName": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$",
+          "description": "Optional normalized analytics event-name filter."
+        },
+        "occurredAt": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+          "description": "ISO 8601 timestamp when the source event actually occurred."
+        },
+        "visitorId": {
+          "description": "Consented first-party visitor identifier used for deterministic journey linking.",
+          "type": "string",
+          "maxLength": 160
+        },
+        "sessionId": {
+          "description": "First-party session identifier used for deterministic journey linking.",
+          "type": "string",
+          "maxLength": 160
+        },
+        "callId": {
+          "description": "Stable call identifier assigned by the phone provider.",
+          "type": "string",
+          "maxLength": 240
+        },
+        "dealId": {
+          "description": "Stable CRM deal or opportunity identifier.",
+          "type": "string",
+          "maxLength": 240
+        },
+        "orderId": {
+          "description": "Stable order identifier used for conversion deduplication and reconciliation.",
+          "type": "string",
+          "maxLength": 240
+        },
+        "personRef": {
+          "description": "Opaque source-system person reference; do not place raw contact data here.",
+          "type": "string",
+          "maxLength": 240
+        },
+        "path": {
+          "description": "Exact path value used by this tool; preserve its leading slash or vault-relative form as required.",
+          "type": "string",
+          "maxLength": 2000
+        },
+        "canonicalUrl": {
+          "description": "Canonical public page URL associated with the event.",
+          "type": "string",
+          "maxLength": 3000,
+          "format": "uri"
+        },
+        "sourceName": {
+          "description": "Normalized acquisition-source name associated with the event.",
+          "type": "string",
+          "maxLength": 180
+        },
+        "medium": {
+          "description": "Exact normalized campaign medium used to filter or label analytics data.",
+          "type": "string",
+          "maxLength": 180
+        },
+        "campaign": {
+          "description": "Exact normalized campaign value used to filter or label analytics data.",
+          "type": "string",
+          "maxLength": 240
+        },
+        "valueMinor": {
+          "description": "Monetary event value in the smallest unit of the supplied currency.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "currency": {
+          "description": "Three-letter ISO currency code for the event value.",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 3
+        },
+        "clickIds": {
+          "description": "Native advertising click identifiers preserved for deterministic offline conversion matching.",
+          "type": "object",
+          "properties": {
+            "gclid": {
+              "description": "Google Click ID captured from the attributed landing URL.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "gbraid": {
+              "description": "Google app-to-web click identifier captured from the attributed landing URL.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "wbraid": {
+              "description": "Google web-to-app click identifier captured from the attributed landing URL.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "fbclid": {
+              "description": "Meta click identifier captured from the attributed landing URL.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "fbp": {
+              "description": "Meta first-party browser identifier captured with consent.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "fbc": {
+              "description": "Meta click cookie value captured or derived from fbclid with consent.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "ttclid": {
+              "description": "TikTok click identifier captured from the attributed landing URL.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "rdt_cid": {
+              "description": "Reddit click identifier captured from the attributed landing URL.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "msclkid": {
+              "description": "Microsoft Advertising click identifier captured from the attributed landing URL.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "li_fat_id": {
+              "description": "LinkedIn first-party attribution identifier captured from the landing URL.",
+              "type": "string",
+              "maxLength": 500
+            },
+            "snapclid": {
+              "description": "Snapchat click identifier captured from the attributed landing URL.",
+              "type": "string",
+              "maxLength": 500
+            }
+          }
+        },
+        "properties": {
+          "description": "Bounded non-secret event properties used for reporting and declarative rule evaluation.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "siteId",
+        "eventId",
+        "source",
+        "sourceAccountRef",
+        "sourceEventId",
+        "eventKind",
+        "eventName",
+        "occurredAt"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Record Server Event",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_retry_activation_delivery",
+    "category": "analytics",
+    "title": "Retry Ad Activation Delivery",
+    "description": "Requeue one failed or dead-lettered activation job. This may cause an external provider delivery.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "jobId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Failed activation job id returned by analytics_list_activation_receipts."
+        }
+      },
+      "required": [
+        "siteId",
+        "jobId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Retry Ad Activation Delivery",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_test_activation_destination",
+    "category": "analytics",
+    "title": "Test Ad Activation Destination",
+    "description": "Send the provider-specific verification test for a configured activation destination and return its safe receipt.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "destinationId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Activation destination id returned by analytics_list_activation_destinations."
+        }
+      },
+      "required": [
+        "siteId",
+        "destinationId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Test Ad Activation Destination",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_test_event_definition",
+    "category": "analytics",
+    "title": "Test Browser Event Definition",
+    "description": "Preview a definition against validated hostname, path, trigger, tag, and browser-reported selector-match facts. This never accepts HTML or executes selectors server-side.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "definitionId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Event definition id returned by analytics_list_event_definitions."
+        },
+        "hostname": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "description": "Bare hostname observed by the browser."
+        },
+        "path": {
+          "type": "string",
+          "maxLength": 2000,
+          "pattern": "^\\/.*",
+          "description": "URL path observed by the browser."
+        },
+        "triggerKind": {
+          "type": "string",
+          "enum": [
+            "page",
+            "click",
+            "form",
+            "semantic"
+          ],
+          "description": "Trigger interaction being previewed."
+        },
+        "tagEventName": {
+          "description": "Validated data-xray-event name observed by the browser.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+        },
+        "selectorMatched": {
+          "description": "The browser-reported match result. The server never receives HTML or evaluates a selector.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "siteId",
+        "definitionId",
+        "hostname",
+        "path",
+        "triggerKind"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Test Browser Event Definition",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_update_event_definition",
+    "category": "analytics",
+    "title": "Update Browser Event Definition",
+    "description": "Update a versioned declarative browser event definition. Null path, selector, or metadata clears that optional field.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "definitionId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Event definition id returned by analytics_list_event_definitions."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Human-readable definition name unique within the Site."
+        },
+        "eventName": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$",
+          "description": "Canonical event name emitted when this definition matches."
+        },
+        "triggerKind": {
+          "type": "string",
+          "enum": [
+            "page",
+            "click",
+            "form",
+            "semantic"
+          ],
+          "description": "Declarative browser trigger. Semantic uses a data-xray-event tag."
+        },
+        "path": {
+          "description": "Replacement page path; null clears it.",
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 2000,
+              "pattern": "^\\/.*"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "pathMatch": {
+          "description": "Replacement page path match mode.",
+          "type": "string",
+          "enum": [
+            "exact",
+            "prefix"
+          ]
+        },
+        "selector": {
+          "description": "Replacement browser-only selector; null clears it.",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hostnames": {
+          "description": "Replacement approved bare-hostname scope.",
+          "maxItems": 25,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 253
+          }
+        },
+        "metadata": {
+          "description": "Replacement safe metadata; null clears it.",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "description": "Optional non-negative conversion value in major currency units.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1000000000000
+                },
+                "currency": {
+                  "description": "ISO 4217 currency code for value.",
+                  "type": "string",
+                  "pattern": "^[A-Za-z]{3}$"
+                },
+                "orderId": {
+                  "description": "Optional stable order identifier.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "contentId": {
+                  "description": "Optional product or content identifier.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "contentType": {
+                  "description": "Optional bounded content category.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "oncePerSession": {
+          "description": "Replacement once-per-browser-session behavior.",
+          "type": "boolean"
+        },
+        "enabled": {
+          "description": "Replacement enabled state.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "siteId",
+        "definitionId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Update Browser Event Definition",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
       "openWorldHint": false
     }
   },
@@ -6772,7 +7946,7 @@ export const MCP_TOOL_CATALOG = [
           "type": "object",
           "properties": {
             "canonicalUrl": {
-              "description": "Canonical public URL for this article or entity.",
+              "description": "Canonical public page URL associated with the event.",
               "type": "string",
               "format": "uri"
             },
@@ -7697,7 +8871,7 @@ export const MCP_TOOL_CATALOG = [
           "type": "object",
           "properties": {
             "canonicalUrl": {
-              "description": "Canonical public URL for this article or entity.",
+              "description": "Canonical public page URL associated with the event.",
               "type": "string",
               "format": "uri"
             },

@@ -14,11 +14,11 @@ export interface Input {
   /**
    * Existing provider connection reference authorized for this analytics account.
    */
-  connectionRef?: string;
+  connectionRef: string;
   /**
-   * Optional provider dataset identifier already owned by the connected account.
+   * Provider destination identifier already owned by the connected account.
    */
-  externalDatasetId?: string;
+  externalDatasetId: string;
 }
 
 export interface Output {

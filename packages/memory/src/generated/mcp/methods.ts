@@ -31,8 +31,12 @@ import * as VaultsListSharedWithMe from './tools/list-shared-with-me.js'
 import * as VaultsListVaults from './tools/list-vaults.js'
 import * as VaultsProvisionDefaults from './tools/provision-defaults.js'
 import * as VaultsRouteMemory from './tools/route-memory.js'
+import * as AnalyticsArchiveEventDefinition from './tools/analytics_archive_event_definition.js'
 import * as AnalyticsCreateActivationDestination from './tools/analytics_create_activation_destination.js'
 import * as AnalyticsCreateCampaignLink from './tools/analytics_create_campaign_link.js'
+import * as AnalyticsCreateConnection from './tools/analytics_create_connection.js'
+import * as AnalyticsCreateConversionRule from './tools/analytics_create_conversion_rule.js'
+import * as AnalyticsCreateEventDefinition from './tools/analytics_create_event_definition.js'
 import * as AnalyticsCreateExport from './tools/analytics_create_export.js'
 import * as AnalyticsCreateForm from './tools/analytics_create_form.js'
 import * as AnalyticsGetAcquisition from './tools/analytics_get_acquisition.js'
@@ -40,6 +44,7 @@ import * as AnalyticsGetBusinessMetrics from './tools/analytics_get_business_met
 import * as AnalyticsGetChannelBreakdown from './tools/analytics_get_channel_breakdown.js'
 import * as AnalyticsGetContent from './tools/analytics_get_content.js'
 import * as AnalyticsGetConversions from './tools/analytics_get_conversions.js'
+import * as AnalyticsGetCoverage from './tools/analytics_get_coverage.js'
 import * as AnalyticsGetDimensions from './tools/analytics_get_dimensions.js'
 import * as AnalyticsGetEntitlement from './tools/analytics_get_entitlement.js'
 import * as AnalyticsGetEvents from './tools/analytics_get_events.js'
@@ -47,14 +52,25 @@ import * as AnalyticsGetForecast from './tools/analytics_get_forecast.js'
 import * as AnalyticsGetHealth from './tools/analytics_get_health.js'
 import * as AnalyticsGetOverview from './tools/analytics_get_overview.js'
 import * as AnalyticsGetPaths from './tools/analytics_get_paths.js'
+import * as AnalyticsGetPersonJourney from './tools/analytics_get_person_journey.js'
 import * as AnalyticsGetTimeseries from './tools/analytics_get_timeseries.js'
 import * as AnalyticsImportCrmCsv from './tools/analytics_import_crm_csv.js'
 import * as AnalyticsListActivationDestinations from './tools/analytics_list_activation_destinations.js'
+import * as AnalyticsListActivationReceipts from './tools/analytics_list_activation_receipts.js'
 import * as AnalyticsListCampaignLinks from './tools/analytics_list_campaign_links.js'
+import * as AnalyticsListConnections from './tools/analytics_list_connections.js'
+import * as AnalyticsListConversionRules from './tools/analytics_list_conversion_rules.js'
 import * as AnalyticsListCrmImports from './tools/analytics_list_crm_imports.js'
+import * as AnalyticsListEventDefinitions from './tools/analytics_list_event_definitions.js'
 import * as AnalyticsListForms from './tools/analytics_list_forms.js'
 import * as AnalyticsListPixels from './tools/analytics_list_pixels.js'
 import * as AnalyticsListSites from './tools/analytics_list_sites.js'
+import * as AnalyticsReconcileConnection from './tools/analytics_reconcile_connection.js'
+import * as AnalyticsRecordExternalEvent from './tools/analytics_record_external_event.js'
+import * as AnalyticsRetryActivationDelivery from './tools/analytics_retry_activation_delivery.js'
+import * as AnalyticsTestActivationDestination from './tools/analytics_test_activation_destination.js'
+import * as AnalyticsTestEventDefinition from './tools/analytics_test_event_definition.js'
+import * as AnalyticsUpdateEventDefinition from './tools/analytics_update_event_definition.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -357,6 +373,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "addVault"
   },
   {
+    "name": "analytics_archive_event_definition",
+    "category": "analytics",
+    "methodName": "archiveEventDefinition"
+  },
+  {
     "name": "analytics_create_activation_destination",
     "category": "analytics",
     "methodName": "createActivationDestination"
@@ -365,6 +386,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_create_campaign_link",
     "category": "analytics",
     "methodName": "createCampaignLink"
+  },
+  {
+    "name": "analytics_create_connection",
+    "category": "analytics",
+    "methodName": "createConnection"
+  },
+  {
+    "name": "analytics_create_conversion_rule",
+    "category": "analytics",
+    "methodName": "createConversionRule"
+  },
+  {
+    "name": "analytics_create_event_definition",
+    "category": "analytics",
+    "methodName": "createEventDefinition"
   },
   {
     "name": "analytics_create_export",
@@ -402,6 +438,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getConversions"
   },
   {
+    "name": "analytics_get_coverage",
+    "category": "analytics",
+    "methodName": "getCoverage"
+  },
+  {
     "name": "analytics_get_dimensions",
     "category": "analytics",
     "methodName": "getDimensions"
@@ -437,6 +478,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getPaths"
   },
   {
+    "name": "analytics_get_person_journey",
+    "category": "analytics",
+    "methodName": "getPersonJourney"
+  },
+  {
     "name": "analytics_get_timeseries",
     "category": "analytics",
     "methodName": "getTimeseries"
@@ -452,14 +498,34 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "listActivationDestinations"
   },
   {
+    "name": "analytics_list_activation_receipts",
+    "category": "analytics",
+    "methodName": "listActivationReceipts"
+  },
+  {
     "name": "analytics_list_campaign_links",
     "category": "analytics",
     "methodName": "listCampaignLinks"
   },
   {
+    "name": "analytics_list_connections",
+    "category": "analytics",
+    "methodName": "listConnections"
+  },
+  {
+    "name": "analytics_list_conversion_rules",
+    "category": "analytics",
+    "methodName": "listConversionRules"
+  },
+  {
     "name": "analytics_list_crm_imports",
     "category": "analytics",
     "methodName": "listCrmImports"
+  },
+  {
+    "name": "analytics_list_event_definitions",
+    "category": "analytics",
+    "methodName": "listEventDefinitions"
   },
   {
     "name": "analytics_list_forms",
@@ -475,6 +541,36 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_list_sites",
     "category": "analytics",
     "methodName": "listSites"
+  },
+  {
+    "name": "analytics_reconcile_connection",
+    "category": "analytics",
+    "methodName": "reconcileConnection"
+  },
+  {
+    "name": "analytics_record_external_event",
+    "category": "analytics",
+    "methodName": "recordExternalEvent"
+  },
+  {
+    "name": "analytics_retry_activation_delivery",
+    "category": "analytics",
+    "methodName": "retryActivationDelivery"
+  },
+  {
+    "name": "analytics_test_activation_destination",
+    "category": "analytics",
+    "methodName": "testActivationDestination"
+  },
+  {
+    "name": "analytics_test_event_definition",
+    "category": "analytics",
+    "methodName": "testEventDefinition"
+  },
+  {
+    "name": "analytics_update_event_definition",
+    "category": "analytics",
+    "methodName": "updateEventDefinition"
   },
   {
     "name": "analyze_site_similarity",
@@ -1694,12 +1790,28 @@ export class VaultsNamespace {
 export class AnalyticsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
+  async archiveEventDefinition(input: AnalyticsArchiveEventDefinition.Input): Promise<AnalyticsArchiveEventDefinition.Output> {
+    return this.callTool('analytics_archive_event_definition', input) as Promise<AnalyticsArchiveEventDefinition.Output>
+  }
+
   async createActivationDestination(input: AnalyticsCreateActivationDestination.Input): Promise<AnalyticsCreateActivationDestination.Output> {
     return this.callTool('analytics_create_activation_destination', input) as Promise<AnalyticsCreateActivationDestination.Output>
   }
 
   async createCampaignLink(input: AnalyticsCreateCampaignLink.Input): Promise<AnalyticsCreateCampaignLink.Output> {
     return this.callTool('analytics_create_campaign_link', input) as Promise<AnalyticsCreateCampaignLink.Output>
+  }
+
+  async createConnection(input: AnalyticsCreateConnection.Input): Promise<AnalyticsCreateConnection.Output> {
+    return this.callTool('analytics_create_connection', input) as Promise<AnalyticsCreateConnection.Output>
+  }
+
+  async createConversionRule(input: AnalyticsCreateConversionRule.Input): Promise<AnalyticsCreateConversionRule.Output> {
+    return this.callTool('analytics_create_conversion_rule', input) as Promise<AnalyticsCreateConversionRule.Output>
+  }
+
+  async createEventDefinition(input: AnalyticsCreateEventDefinition.Input): Promise<AnalyticsCreateEventDefinition.Output> {
+    return this.callTool('analytics_create_event_definition', input) as Promise<AnalyticsCreateEventDefinition.Output>
   }
 
   async createExport(input: AnalyticsCreateExport.Input): Promise<AnalyticsCreateExport.Output> {
@@ -1730,6 +1842,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_conversions', input) as Promise<AnalyticsGetConversions.Output>
   }
 
+  async getCoverage(input: AnalyticsGetCoverage.Input): Promise<AnalyticsGetCoverage.Output> {
+    return this.callTool('analytics_get_coverage', input) as Promise<AnalyticsGetCoverage.Output>
+  }
+
   async getDimensions(input: AnalyticsGetDimensions.Input): Promise<AnalyticsGetDimensions.Output> {
     return this.callTool('analytics_get_dimensions', input) as Promise<AnalyticsGetDimensions.Output>
   }
@@ -1758,6 +1874,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_paths', input) as Promise<AnalyticsGetPaths.Output>
   }
 
+  async getPersonJourney(input: AnalyticsGetPersonJourney.Input): Promise<AnalyticsGetPersonJourney.Output> {
+    return this.callTool('analytics_get_person_journey', input) as Promise<AnalyticsGetPersonJourney.Output>
+  }
+
   async getTimeseries(input: AnalyticsGetTimeseries.Input): Promise<AnalyticsGetTimeseries.Output> {
     return this.callTool('analytics_get_timeseries', input) as Promise<AnalyticsGetTimeseries.Output>
   }
@@ -1770,12 +1890,28 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_list_activation_destinations', input) as Promise<AnalyticsListActivationDestinations.Output>
   }
 
+  async listActivationReceipts(input: AnalyticsListActivationReceipts.Input): Promise<AnalyticsListActivationReceipts.Output> {
+    return this.callTool('analytics_list_activation_receipts', input) as Promise<AnalyticsListActivationReceipts.Output>
+  }
+
   async listCampaignLinks(input: AnalyticsListCampaignLinks.Input): Promise<AnalyticsListCampaignLinks.Output> {
     return this.callTool('analytics_list_campaign_links', input) as Promise<AnalyticsListCampaignLinks.Output>
   }
 
+  async listConnections(input: AnalyticsListConnections.Input): Promise<AnalyticsListConnections.Output> {
+    return this.callTool('analytics_list_connections', input) as Promise<AnalyticsListConnections.Output>
+  }
+
+  async listConversionRules(input: AnalyticsListConversionRules.Input): Promise<AnalyticsListConversionRules.Output> {
+    return this.callTool('analytics_list_conversion_rules', input) as Promise<AnalyticsListConversionRules.Output>
+  }
+
   async listCrmImports(input: AnalyticsListCrmImports.Input): Promise<AnalyticsListCrmImports.Output> {
     return this.callTool('analytics_list_crm_imports', input) as Promise<AnalyticsListCrmImports.Output>
+  }
+
+  async listEventDefinitions(input: AnalyticsListEventDefinitions.Input): Promise<AnalyticsListEventDefinitions.Output> {
+    return this.callTool('analytics_list_event_definitions', input) as Promise<AnalyticsListEventDefinitions.Output>
   }
 
   async listForms(input: AnalyticsListForms.Input): Promise<AnalyticsListForms.Output> {
@@ -1788,6 +1924,30 @@ export class AnalyticsNamespace {
 
   async listSites(input: AnalyticsListSites.Input = {} as AnalyticsListSites.Input): Promise<AnalyticsListSites.Output> {
     return this.callTool('analytics_list_sites', input) as Promise<AnalyticsListSites.Output>
+  }
+
+  async reconcileConnection(input: AnalyticsReconcileConnection.Input): Promise<AnalyticsReconcileConnection.Output> {
+    return this.callTool('analytics_reconcile_connection', input) as Promise<AnalyticsReconcileConnection.Output>
+  }
+
+  async recordExternalEvent(input: AnalyticsRecordExternalEvent.Input): Promise<AnalyticsRecordExternalEvent.Output> {
+    return this.callTool('analytics_record_external_event', input) as Promise<AnalyticsRecordExternalEvent.Output>
+  }
+
+  async retryActivationDelivery(input: AnalyticsRetryActivationDelivery.Input): Promise<AnalyticsRetryActivationDelivery.Output> {
+    return this.callTool('analytics_retry_activation_delivery', input) as Promise<AnalyticsRetryActivationDelivery.Output>
+  }
+
+  async testActivationDestination(input: AnalyticsTestActivationDestination.Input): Promise<AnalyticsTestActivationDestination.Output> {
+    return this.callTool('analytics_test_activation_destination', input) as Promise<AnalyticsTestActivationDestination.Output>
+  }
+
+  async testEventDefinition(input: AnalyticsTestEventDefinition.Input): Promise<AnalyticsTestEventDefinition.Output> {
+    return this.callTool('analytics_test_event_definition', input) as Promise<AnalyticsTestEventDefinition.Output>
+  }
+
+  async updateEventDefinition(input: AnalyticsUpdateEventDefinition.Input): Promise<AnalyticsUpdateEventDefinition.Output> {
+    return this.callTool('analytics_update_event_definition', input) as Promise<AnalyticsUpdateEventDefinition.Output>
   }
 }
 
