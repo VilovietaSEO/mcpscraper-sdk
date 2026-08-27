@@ -53,7 +53,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -68,7 +73,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -81,7 +91,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -96,7 +111,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -109,7 +129,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -122,7 +147,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -137,7 +167,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -150,7 +185,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -163,7 +203,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -176,7 +221,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -191,7 +241,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -204,7 +259,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -217,7 +277,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -230,7 +295,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -243,7 +313,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -258,7 +333,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -271,7 +351,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -284,7 +369,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -297,7 +387,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -310,7 +405,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -323,7 +423,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -338,7 +443,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -351,7 +461,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -364,7 +479,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -377,7 +497,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -390,7 +515,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -403,7 +533,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -416,7 +551,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -431,7 +571,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -444,7 +589,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -457,7 +607,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -470,7 +625,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -483,7 +643,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -496,7 +661,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -509,7 +679,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -522,7 +697,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -537,7 +717,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -550,7 +735,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -563,7 +753,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -576,7 +771,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -589,7 +789,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -602,7 +807,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -615,7 +825,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -628,7 +843,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -641,7 +861,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -656,7 +881,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -669,7 +899,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -682,7 +917,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -695,7 +935,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -708,7 +953,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -721,7 +971,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -734,7 +989,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -747,7 +1007,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -760,7 +1025,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;
@@ -773,7 +1043,12 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                rendererKey: "editorial_reading_room_v1" | "personal_authority_v1";
+                rendererKey:
+                  | "editorial_reading_room_v1"
+                  | "personal_authority_v1"
+                  | "personal_authority_v2"
+                  | "newsroom_publisher_v1"
+                  | "blog_article_v1";
                 rendererVersion: 1;
                 mimeType: "text/html";
                 title: string;

@@ -11,13 +11,13 @@ export interface Output {
     artifactSelection:
       | {
           /**
-           * Operation mode selected for this nested request branch.
+           * Governed execution mode for this operation.
            */
           mode: "none";
         }
       | {
           /**
-           * Operation mode selected for this nested request branch.
+           * Governed execution mode for this operation.
            */
           mode: "saved_template";
           /**

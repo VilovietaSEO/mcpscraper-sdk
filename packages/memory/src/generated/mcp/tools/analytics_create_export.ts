@@ -306,7 +306,20 @@ export interface Input {
   /**
    * Attribution model applied to the report; defaults to first touch.
    */
-  attributionModel?: "first_touch" | "last_touch";
+  attributionModel?:
+    "first_touch" | "last_touch" | "last_non_direct" | "linear" | "time_decay" | "position_based" | "custom_weighted";
+  /**
+   * Independent click attribution window. Lifetime does not change retention.
+   */
+  clickWindowDays?: 7 | 14 | 30 | 60 | 90 | 180 | 365 | "lifetime";
+  /**
+   * Independent view attribution window. Lifetime does not change retention.
+   */
+  viewWindowDays?: 7 | 14 | 30 | 60 | 90 | 180 | 365 | "lifetime";
+  /**
+   * Confirmed is the default; candidate-assisted contributions remain separately labeled.
+   */
+  journeyTier?: "confirmed" | "candidate_assisted";
   /**
    * Optional normalized acquisition-channel family filter.
    */

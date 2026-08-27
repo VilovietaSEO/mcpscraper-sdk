@@ -705,6 +705,190 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_apply_crm_pipeline_mapping",
+    "category": "analytics",
+    "title": "Push CRM Pipeline Event",
+    "description": "Push an explicit versioned pipeline event for a confirmed person from X-Ray to the connected CRM. This is the only MCP lane that may create or update a deal/opportunity.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider."
+        },
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Verified service connection reference."
+        },
+        "person": {
+          "type": "object",
+          "properties": {
+            "identityTier": {
+              "type": "string",
+              "const": "confirmed",
+              "description": "Candidate identities are forbidden."
+            },
+            "personId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Confirmed person id."
+            }
+          },
+          "required": [
+            "identityTier",
+            "personId"
+          ],
+          "additionalProperties": false,
+          "description": "Confirmed person associated with the pipeline event."
+        },
+        "event": {
+          "type": "object",
+          "properties": {
+            "eventId": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 240,
+              "description": "Stable pipeline event id."
+            },
+            "eventName": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{1,79}$",
+              "description": "Canonical stage/revenue event."
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+              "description": "Event occurrence time."
+            },
+            "valueMinor": {
+              "description": "Optional verified revenue in minor units.",
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "currency": {
+              "description": "ISO 4217 currency for verified revenue.",
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3
+            }
+          },
+          "required": [
+            "eventId",
+            "eventName",
+            "occurredAt"
+          ],
+          "additionalProperties": false,
+          "description": "Canonical stage or verified-revenue event."
+        },
+        "mapping": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {},
+          "description": "Active versioned Pipeline Event Mapping; Person Sync alone cannot create a deal."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "provider",
+        "connectionId",
+        "person",
+        "event",
+        "mapping",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Push CRM Pipeline Event",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_approve_crm_provisioning",
+    "category": "analytics",
+    "title": "Approve CRM Provisioning",
+    "description": "Create the exact approved namespaced fields in the connected CRM. Provider field creation may be irreversible and cleanup is manual; inspect analytics_plan_crm_provisioning before approving.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "plan": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {},
+          "description": "Exact normalized plan returned by analytics_plan_crm_provisioning."
+        },
+        "approvedFieldInternalNames": {
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": "Exact proposed namespaced provider fields approved for creation."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "plan",
+        "approvedFieldInternalNames",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Approve CRM Provisioning",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "analytics_archive_event_definition",
     "category": "analytics",
     "title": "Archive Browser Event Definition",
@@ -737,6 +921,41 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": true,
       "idempotentHint": true,
       "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_cancel_crm_sync",
+    "category": "analytics",
+    "title": "Cancel CRM Synchronization",
+    "description": "Cancel one synchronization and disable its active work.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "syncId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Sync id returned by analytics_start_crm_sync."
+        }
+      },
+      "required": [
+        "siteId",
+        "syncId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Cancel CRM Synchronization",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": true
     }
   },
   {
@@ -1304,12 +1523,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -1569,6 +1878,1396 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_create_funnel",
+    "category": "analytics",
+    "title": "Create Lead Funnel",
+    "description": "Create a versioned declarative lead-stage funnel.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Human-readable funnel name."
+        },
+        "stages": {
+          "minItems": 2,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{1,79}$",
+                "description": "Stable stage key."
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "Human-readable stage label."
+              },
+              "rule": {
+                "type": "object",
+                "properties": {
+                  "eventNames": {
+                    "description": "Canonical browser/server event names.",
+                    "maxItems": 100,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9_]{1,79}$"
+                    }
+                  },
+                  "conversionKinds": {
+                    "description": "Canonical conversion kinds.",
+                    "maxItems": 100,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9_]{1,79}$"
+                    }
+                  },
+                  "externalEventNames": {
+                    "description": "Canonical CRM/call event names.",
+                    "maxItems": 100,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9_]{1,79}$"
+                    }
+                  }
+                },
+                "additionalProperties": false,
+                "description": "Allowlisted stage match rule; at least one matcher is required by REST."
+              }
+            },
+            "required": [
+              "key",
+              "label",
+              "rule"
+            ]
+          },
+          "description": "Ordered stage definitions."
+        },
+        "isDefault": {
+          "default": false,
+          "description": "Make this version the Site default.",
+          "type": "boolean"
+        },
+        "status": {
+          "default": "active",
+          "description": "Initial funnel status.",
+          "type": "string",
+          "enum": [
+            "active",
+            "disabled"
+          ]
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "name",
+        "stages",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create Lead Funnel",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_create_lead_score",
+    "category": "analytics",
+    "title": "Create Lead Score",
+    "description": "Create a bounded declarative score. Arbitrary code, raw HTML, candidate CRM projection, dollars, and probability labels are forbidden.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "namespaceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "Identity Namespace belonging to this Site."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Lead-score name."
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "fit",
+            "engagement",
+            "combined"
+          ],
+          "description": "Score purpose; a score is not a probability or currency value."
+        },
+        "targetObject": {
+          "type": "string",
+          "enum": [
+            "person",
+            "visitor"
+          ],
+          "description": "Object the score evaluates."
+        },
+        "minimum": {
+          "default": 0,
+          "description": "Overall lower bound.",
+          "type": "integer",
+          "minimum": -100000,
+          "maximum": 100000
+        },
+        "maximum": {
+          "default": 100,
+          "description": "Overall upper bound.",
+          "type": "integer",
+          "minimum": -100000,
+          "maximum": 100000
+        },
+        "groups": {
+          "minItems": 1,
+          "maxItems": 40,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "Stable score-group id."
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "Score-group label."
+              },
+              "operation": {
+                "type": "string",
+                "enum": [
+                  "add",
+                  "subtract"
+                ],
+                "description": "Whether matching adds or subtracts points."
+              },
+              "points": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 10000,
+                "description": "Points applied when every predicate matches."
+              },
+              "cap": {
+                "description": "Optional group cap.",
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 10000
+              },
+              "predicates": {
+                "minItems": 1,
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "event_completed",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "eventName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "description": "Optional normalized analytics event-name filter."
+                        },
+                        "withinDays": {
+                          "description": "Optional bounded lookback window in days.",
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 3650
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "eventName"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "event_frequency",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "eventName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "description": "Optional normalized analytics event-name filter."
+                        },
+                        "minimum": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 1000,
+                          "description": "Overall lower bound for the governed score or range."
+                        },
+                        "withinDays": {
+                          "description": "Optional bounded lookback window in days.",
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 3650
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "eventName",
+                        "minimum"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "event_recency",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "eventName": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "description": "Optional normalized analytics event-name filter."
+                        },
+                        "withinDays": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 3650,
+                          "description": "Optional bounded lookback window in days."
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "eventName",
+                        "withinDays"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "page_visited",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "path": {
+                          "type": "string",
+                          "maxLength": 2000,
+                          "pattern": "^\\/.*",
+                          "description": "Exact path value used by this tool; preserve its leading slash or vault-relative form as required."
+                        },
+                        "withinDays": {
+                          "description": "Optional bounded lookback window in days.",
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 3650
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "path"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "referrer_equals",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 500,
+                          "description": "Typed bounded comparison or field value for this declarative rule."
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "source_equals",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "value": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 180,
+                          "description": "Typed bounded comparison or field value for this declarative rule."
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "call_outcome",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "outcome": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "description": "Canonical call or pipeline outcome matched by this rule."
+                        },
+                        "withinDays": {
+                          "description": "Optional bounded lookback window in days.",
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 3650
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "outcome"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "crm_stage",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "stage": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "description": "Canonical CRM pipeline stage matched by this rule."
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "stage"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "property_equals",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "property": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "description": "Explicitly allowlisted contact or company property used by a score predicate."
+                        },
+                        "value": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "maxLength": 500
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ],
+                          "description": "Typed bounded comparison or field value for this declarative rule."
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "property",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "const": "property_present",
+                          "description": "Governed type discriminator for this rule, score, event, or record."
+                        },
+                        "property": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 160,
+                          "description": "Explicitly allowlisted contact or company property used by a score predicate."
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "property"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ],
+                  "description": "Allowlisted typed score predicate; raw HTML and unrestricted properties are forbidden."
+                },
+                "description": "Predicates combined with AND."
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "operation",
+              "points",
+              "predicates"
+            ]
+          },
+          "description": "Declarative score groups."
+        },
+        "permittedProperties": {
+          "default": [],
+          "description": "Explicit property allowlist used by property predicates.",
+          "maxItems": 200,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        },
+        "enabled": {
+          "default": true,
+          "description": "Whether this version may evaluate.",
+          "type": "boolean"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "namespaceId",
+        "name",
+        "kind",
+        "targetObject",
+        "groups",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create Lead Score",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_create_prediction_target",
+    "category": "analytics",
+    "title": "Create Prediction Target",
+    "description": "Register a namespace-local confirmed outcome and horizon. This begins evidence collection and does not claim model eligibility.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "namespaceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "Identity Namespace belonging to this Site."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "Human-readable prediction target."
+        },
+        "outcomeEvent": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$",
+          "description": "Confirmed outcome event to predict."
+        },
+        "horizonDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3650,
+          "description": "Prediction horizon in days."
+        },
+        "outcomeValueMinor": {
+          "description": "Optional outcome value in minor units; this is not predicted revenue.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "currency": {
+          "description": "ISO 4217 currency, required with outcomeValueMinor.",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 3
+        },
+        "enabled": {
+          "default": true,
+          "description": "Whether to collect eligibility evidence for this target.",
+          "type": "boolean"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "namespaceId",
+        "name",
+        "outcomeEvent",
+        "horizonDays",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create Prediction Target",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_create_saved_view",
+    "category": "analytics",
+    "title": "Create Saved Analytics View",
+    "description": "Persist a validated account-scoped report configuration.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Saved report name."
+        },
+        "settings": {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "number",
+              "const": 1,
+              "description": "Canonical X-Ray event schema version; use version 1."
+            },
+            "reportType": {
+              "type": "string",
+              "enum": [
+                "overview",
+                "acquisition",
+                "content",
+                "conversions",
+                "events",
+                "sessions",
+                "funnel"
+              ],
+              "description": "Governed analytics report family associated with a saved view."
+            },
+            "dateRange": {
+              "type": "object",
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                  "description": "Inclusive ISO 8601 lower time bound."
+                },
+                "to": {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                  "description": "Exclusive ISO 8601 upper time bound."
+                },
+                "timezone": {
+                  "default": "UTC",
+                  "description": "IANA timezone for schedule evaluation; omit to preserve the current timezone.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 100
+                }
+              },
+              "required": [
+                "from",
+                "to"
+              ],
+              "additionalProperties": false,
+              "description": "Inclusive and exclusive ISO report bounds plus the reporting timezone."
+            },
+            "columns": {
+              "minItems": 1,
+              "maxItems": 40,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "sessions",
+                  "visitors",
+                  "known_people",
+                  "leads",
+                  "conversions",
+                  "conversion_rate",
+                  "event_value",
+                  "expected_value",
+                  "verified_revenue",
+                  "channel",
+                  "source",
+                  "medium",
+                  "campaign",
+                  "spend",
+                  "cost_per_lead",
+                  "roas",
+                  "path",
+                  "title",
+                  "engaged_sessions",
+                  "page_views",
+                  "conversion_name",
+                  "unique_people",
+                  "event_name",
+                  "event_kind",
+                  "event_count",
+                  "started_at",
+                  "session_id",
+                  "visitor_id",
+                  "person_id",
+                  "journey_tier",
+                  "landing_page",
+                  "duration_seconds",
+                  "converted",
+                  "stage",
+                  "stage_order",
+                  "entered",
+                  "advanced",
+                  "median_time_seconds"
+                ],
+                "description": "Allowlisted report column selected for sorting."
+              },
+              "description": "Ordered allowlisted columns for the selected report family."
+            },
+            "filters": {
+              "default": [],
+              "description": "Bounded typed filters valid for the selected report family.",
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "type": "string",
+                    "enum": [
+                      "channel",
+                      "source",
+                      "medium",
+                      "campaign",
+                      "journey_tier",
+                      "path",
+                      "conversion_name",
+                      "event_name",
+                      "event_kind",
+                      "landing_page",
+                      "converted",
+                      "stage"
+                    ],
+                    "description": "Allowlisted report field selected by this typed filter."
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": [
+                      "eq",
+                      "neq",
+                      "in",
+                      "not_in",
+                      "contains",
+                      "gte",
+                      "lte",
+                      "is_null"
+                    ],
+                    "description": "Typed comparison operator applied to the selected report field."
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 2000
+                          },
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "boolean"
+                          }
+                        ]
+                      },
+                      {
+                        "minItems": 1,
+                        "maxItems": 100,
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string",
+                              "maxLength": 2000
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Typed bounded comparison or field value for this declarative rule."
+                  }
+                },
+                "required": [
+                  "field",
+                  "operator",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "sort": {
+              "minItems": 1,
+              "maxItems": 3,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "column": {
+                    "type": "string",
+                    "enum": [
+                      "sessions",
+                      "visitors",
+                      "known_people",
+                      "leads",
+                      "conversions",
+                      "conversion_rate",
+                      "event_value",
+                      "expected_value",
+                      "verified_revenue",
+                      "channel",
+                      "source",
+                      "medium",
+                      "campaign",
+                      "spend",
+                      "cost_per_lead",
+                      "roas",
+                      "path",
+                      "title",
+                      "engaged_sessions",
+                      "page_views",
+                      "conversion_name",
+                      "unique_people",
+                      "event_name",
+                      "event_kind",
+                      "event_count",
+                      "started_at",
+                      "session_id",
+                      "visitor_id",
+                      "person_id",
+                      "journey_tier",
+                      "landing_page",
+                      "duration_seconds",
+                      "converted",
+                      "stage",
+                      "stage_order",
+                      "entered",
+                      "advanced",
+                      "median_time_seconds"
+                    ],
+                    "description": "Allowlisted report column selected for sorting."
+                  },
+                  "direction": {
+                    "type": "string",
+                    "enum": [
+                      "asc",
+                      "desc"
+                    ],
+                    "description": "Ascending or descending order for the selected sort column."
+                  }
+                },
+                "required": [
+                  "column",
+                  "direction"
+                ],
+                "additionalProperties": false
+              },
+              "description": "One to three allowlisted report sort clauses."
+            },
+            "comparison": {
+              "default": {
+                "mode": "none"
+              },
+              "description": "Optional prior-period or prior-year report comparison.",
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "default": "none",
+                  "description": "Governed execution mode for this operation.",
+                  "type": "string",
+                  "enum": [
+                    "none",
+                    "previous_period",
+                    "previous_year",
+                    "custom"
+                  ]
+                },
+                "from": {
+                  "description": "Inclusive ISO 8601 lower time bound.",
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                },
+                "to": {
+                  "description": "Exclusive ISO 8601 upper time bound.",
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                }
+              },
+              "additionalProperties": false
+            },
+            "attribution": {
+              "default": {
+                "model": "position_based",
+                "clickWindowDays": 90,
+                "viewWindowDays": 30
+              },
+              "description": "Attribution model and independent click/view windows for this report.",
+              "type": "object",
+              "properties": {
+                "model": {
+                  "default": "position_based",
+                  "description": "Attribution model applied to this saved report view.",
+                  "type": "string",
+                  "enum": [
+                    "first_touch",
+                    "last_touch",
+                    "last_non_direct",
+                    "linear",
+                    "time_decay",
+                    "position_based",
+                    "custom_weighted"
+                  ]
+                },
+                "clickWindowDays": {
+                  "default": 90,
+                  "description": "Independent click attribution window in days or lifetime.",
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "const": 7
+                    },
+                    {
+                      "type": "number",
+                      "const": 14
+                    },
+                    {
+                      "type": "number",
+                      "const": 30
+                    },
+                    {
+                      "type": "number",
+                      "const": 60
+                    },
+                    {
+                      "type": "number",
+                      "const": 90
+                    },
+                    {
+                      "type": "number",
+                      "const": 180
+                    },
+                    {
+                      "type": "number",
+                      "const": 365
+                    },
+                    {
+                      "type": "string",
+                      "const": "lifetime"
+                    }
+                  ]
+                },
+                "viewWindowDays": {
+                  "default": 30,
+                  "description": "Independent view attribution window in days or lifetime.",
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "const": 7
+                    },
+                    {
+                      "type": "number",
+                      "const": 14
+                    },
+                    {
+                      "type": "number",
+                      "const": 30
+                    },
+                    {
+                      "type": "number",
+                      "const": 60
+                    },
+                    {
+                      "type": "number",
+                      "const": 90
+                    },
+                    {
+                      "type": "number",
+                      "const": 180
+                    },
+                    {
+                      "type": "number",
+                      "const": 365
+                    },
+                    {
+                      "type": "string",
+                      "const": "lifetime"
+                    }
+                  ]
+                },
+                "customWeights": {
+                  "description": "First, middle, and last touch weights for custom weighted attribution; they must total one.",
+                  "type": "object",
+                  "properties": {
+                    "first": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "description": "Share of custom attribution credit assigned to the first touch."
+                    },
+                    "middle": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "description": "Share of custom attribution credit assigned across middle touches."
+                    },
+                    "last": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1,
+                      "description": "Share of custom attribution credit assigned to the last touch."
+                    }
+                  },
+                  "required": [
+                    "first",
+                    "middle",
+                    "last"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "journeyTier": {
+              "default": "confirmed",
+              "description": "Confirmed, best-guess, or separately returned combined journey projection.",
+              "type": "string",
+              "enum": [
+                "confirmed",
+                "best_guess",
+                "all"
+              ]
+            },
+            "pagination": {
+              "default": {
+                "limit": 100
+              },
+              "description": "Bounded page size and opaque continuation cursor.",
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "default": 100,
+                  "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000
+                },
+                "cursor": {
+                  "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8192
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "reportType",
+            "dateRange",
+            "columns",
+            "sort"
+          ],
+          "additionalProperties": false,
+          "description": "Complete versioned report settings validated by the same canonical parser as REST and exports."
+        },
+        "isDefault": {
+          "default": false,
+          "description": "Make this the operator default for the report family.",
+          "type": "boolean"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "name",
+        "settings",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create Saved Analytics View",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_delete_privacy_subject",
+    "category": "analytics",
+    "title": "Delete Privacy Subject",
+    "description": "Irreversibly delete one opaque subject and related deterministic/candidate/model data according to lifecycle policy.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "subjectRef": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 240,
+          "description": "Opaque Site-scoped reference returned by an X-Ray read. Raw visitor, session, device, email, phone, IP, and identity hashes are never accepted."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "subjectRef",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Delete Privacy Subject",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_delete_saved_view",
+    "category": "analytics",
+    "title": "Delete Saved Analytics View",
+    "description": "Delete one account-scoped saved report view.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "viewId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Saved-view id returned by analytics_list_saved_views."
+        }
+      },
+      "required": [
+        "siteId",
+        "viewId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Delete Saved Analytics View",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_discover_activation_assets",
+    "category": "analytics",
+    "title": "Discover Ad Destination Assets",
+    "description": "Read bounded authorized provider datasets/conversion actions through an existing connection. Credentials and unrestricted provider bodies are omitted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "platform": {
+          "type": "string",
+          "enum": [
+            "meta",
+            "google",
+            "tiktok",
+            "reddit"
+          ],
+          "description": "Authorized provider connection to inspect."
+        },
+        "connectionRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Existing provider connection reference; credentials are never accepted."
+        }
+      },
+      "required": [
+        "siteId",
+        "platform",
+        "connectionRef"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Discover Ad Destination Assets",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_discover_crm_capabilities",
+    "category": "analytics",
+    "title": "Discover CRM Capabilities",
+    "description": "Read the public provider profile and, when connected, the effective tenant schema and permissions. Credentials and provider record bodies are omitted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider."
+        },
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Existing service connection reference for tenant-specific discovery."
+        }
+      },
+      "required": [
+        "siteId",
+        "provider",
+        "connectionId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Discover CRM Capabilities",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_discover_crm_sync_objects",
+    "category": "analytics",
+    "title": "Discover CRM Sync Objects",
+    "description": "Discover bounded provider objects for an explicit mapping. Credentials and unrestricted records are omitted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "CRM or call provider."
+        },
+        "connectionId": {
+          "description": "Optional service connection for tenant discovery.",
+          "type": "string",
+          "maxLength": 240
+        }
+      },
+      "required": [
+        "siteId",
+        "provider"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Discover CRM Sync Objects",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_export_privacy_subject",
+    "category": "analytics",
+    "title": "Export Privacy Subject",
+    "description": "Create a governed export for one opaque Site-scoped subject without accepting email or phone lookup.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "subjectRef": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 240,
+          "description": "Opaque Site-scoped reference returned by an X-Ray read. Raw visitor, session, device, email, phone, IP, and identity hashes are never accepted."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "subjectRef",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Export Privacy Subject",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_acquisition",
     "category": "analytics",
     "title": "Analytics Acquisition",
@@ -1638,12 +3337,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -1789,12 +3578,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -1871,6 +3750,53 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_candidate_coverage",
+    "category": "analytics",
+    "title": "Get Candidate Coverage",
+    "description": "Read separately labeled, expiring candidate-association coverage. Candidate evidence never establishes identity.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "namespaceId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Identity Namespace belonging to this Site."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum safe rows.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId",
+        "namespaceId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Candidate Coverage",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_channel_breakdown",
     "category": "analytics",
     "title": "Analytics Channel Breakdowns",
@@ -1940,12 +3866,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -2022,6 +4038,46 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_consent_coverage",
+    "category": "analytics",
+    "title": "Get Consent Coverage",
+    "description": "Read aggregate purpose-scoped consent coverage and safe withdrawal references. This tool cannot grant visitor consent.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Consent Coverage",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_content",
     "category": "analytics",
     "title": "Analytics Content",
@@ -2091,12 +4147,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -2242,12 +4388,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -2364,6 +4600,41 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_crm_sync_status",
+    "category": "analytics",
+    "title": "Get CRM Sync Status",
+    "description": "Read one bounded synchronization receipt and checkpoint without contact PII or provider bodies.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "syncId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Sync id returned by analytics_start_crm_sync."
+        }
+      },
+      "required": [
+        "siteId",
+        "syncId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get CRM Sync Status",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_dimensions",
     "category": "analytics",
     "title": "Analytics Dimensions",
@@ -2433,12 +4704,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -2626,12 +4987,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -2760,6 +5211,266 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_funnel",
+    "category": "analytics",
+    "title": "Get Lead Funnel Report",
+    "description": "Read a bounded lead-stage funnel report with documented denominators and safe drill-down references.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "start": {
+          "description": "Inclusive ISO 8601 report start. Omit with end to use the last 30 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "end": {
+          "description": "Exclusive ISO 8601 report end. Omit with start to use now.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "pixelIds": {
+          "description": "Optional Pixel ids belonging to this Site. Omit for every active Pixel.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "hostnames": {
+          "description": "Optional approved detected hostnames within the selected Pixels.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 253
+          }
+        },
+        "source": {
+          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "medium": {
+          "description": "Exact normalized campaign medium used to filter or label analytics data.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "campaign": {
+          "description": "Exact normalized campaign value used to filter or label analytics data.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "eventName": {
+          "description": "Optional normalized analytics event-name filter.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+        },
+        "attributionModel": {
+          "default": "position_based",
+          "description": "Attribution model applied to the report; defaults to first touch.",
+          "type": "string",
+          "enum": [
+            "first_touch",
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
+          ]
+        },
+        "channelFamily": {
+          "description": "Optional normalized acquisition-channel family filter.",
+          "type": "string",
+          "enum": [
+            "llm",
+            "social",
+            "review",
+            "search",
+            "email",
+            "referral",
+            "direct",
+            "other"
+          ]
+        },
+        "platform": {
+          "description": "Normalized external platform selected for this operation.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "referrer": {
+          "description": "Optional exact or normalized referrer filter for analytics rows.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "path": {
+          "description": "Exact path value used by this tool; preserve its leading slash or vault-relative form as required.",
+          "type": "string",
+          "maxLength": 2000,
+          "pattern": "^\\/.*"
+        },
+        "deviceClass": {
+          "description": "Optional normalized device-class filter.",
+          "type": "string",
+          "enum": [
+            "desktop",
+            "tablet",
+            "mobile",
+            "unknown"
+          ]
+        },
+        "countryCode": {
+          "description": "Two-letter country code used to filter analytics rows.",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "regionCode": {
+          "description": "Optional regional subdivision code filter.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8
+        },
+        "conversionKind": {
+          "description": "Optional normalized conversion event kind filter.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+        },
+        "funnelId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Funnel definition id returned by analytics_list_funnels."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum drill-down rows.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId",
+        "funnelId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Lead Funnel Report",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_health",
     "category": "analytics",
     "title": "Analytics Pixel Health",
@@ -2829,12 +5540,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -2911,6 +5712,46 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_onboarding_state",
+    "category": "analytics",
+    "title": "Get X-Ray Setup State",
+    "description": "Read evidence-derived setup milestones. Client input cannot mark evidence milestones complete.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get X-Ray Setup State",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_overview",
     "category": "analytics",
     "title": "Analytics Overview",
@@ -2980,12 +5821,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -3131,12 +6062,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -3248,6 +6269,83 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_prediction_eligibility",
+    "category": "analytics",
+    "title": "Get Prediction Eligibility",
+    "description": "Read evidence gates, model state, target horizon, calibration, and safe unavailable reasons. No probability is synthesized from a lead score.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "namespaceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "Identity Namespace belonging to this Site."
+        },
+        "targetId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Prediction target id returned by analytics_list_prediction_targets."
+        }
+      },
+      "required": [
+        "siteId",
+        "namespaceId",
+        "targetId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Prediction Eligibility",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_session_timeline",
+    "category": "analytics",
+    "title": "Get Session Timeline",
+    "description": "Read one safe chronological session timeline by opaque Site-scoped reference.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 240,
+          "description": "Opaque Site-scoped reference returned by an X-Ray read. Raw visitor, session, device, email, phone, IP, and identity hashes are never accepted."
+        }
+      },
+      "required": [
+        "siteId",
+        "reference"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Session Timeline",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_timeseries",
     "category": "analytics",
     "title": "Analytics Timeseries",
@@ -3317,12 +6415,102 @@ export const MCP_TOOL_CATALOG = [
           "pattern": "^[a-z][a-z0-9_]{1,79}$"
         },
         "attributionModel": {
-          "default": "first_touch",
+          "default": "position_based",
           "description": "Attribution model applied to the report; defaults to first touch.",
           "type": "string",
           "enum": [
             "first_touch",
-            "last_touch"
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default; candidate-assisted contributions remain separately labeled.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "candidate_assisted"
           ]
         },
         "channelFamily": {
@@ -3392,6 +6580,41 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Analytics Timeseries",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_visitor_journey",
+    "category": "analytics",
+    "title": "Get Visitor Journey",
+    "description": "Read one safe visitor journey by opaque Site-scoped reference. Candidate evidence is labeled and never treated as confirmed identity.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 240,
+          "description": "Opaque Site-scoped reference returned by an X-Ray read. Raw visitor, session, device, email, phone, IP, and identity hashes are never accepted."
+        }
+      },
+      "required": [
+        "siteId",
+        "reference"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Visitor Journey",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -3697,6 +6920,46 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_list_crm_capabilities",
+    "category": "analytics",
+    "title": "List CRM Capabilities",
+    "description": "List source-controlled capabilities and honest fallback states for all six supported CRMs.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List CRM Capabilities",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_list_crm_imports",
     "category": "analytics",
     "title": "List CRM Imports",
@@ -3817,6 +7080,197 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_list_funnels",
+    "category": "analytics",
+    "title": "List Lead Funnels",
+    "description": "List versioned lead-stage funnel definitions.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Lead Funnels",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_inference_review",
+    "category": "analytics",
+    "title": "List Inference Review",
+    "description": "Read bounded medium-confidence candidate associations using opaque references and safe evidence classes only.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "namespaceId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Identity Namespace belonging to this Site."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum safe rows.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor.",
+          "type": "string",
+          "maxLength": 1000
+        },
+        "band": {
+          "description": "Candidate confidence band. Medium is review-only and low remains unlinked.",
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low",
+            "ineligible"
+          ]
+        }
+      },
+      "required": [
+        "siteId",
+        "namespaceId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Inference Review",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_lead_scores",
+    "category": "analytics",
+    "title": "List Lead Scores",
+    "description": "List transparent versioned fit, engagement, and combined scores. Scores are neither probabilities nor currency values.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "namespaceId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Identity Namespace belonging to this Site."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum safe rows.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId",
+        "namespaceId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Lead Scores",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_namespace_sources",
+    "category": "analytics",
+    "title": "List Identity Namespace Sources",
+    "description": "List approved Site-controlled domains, applications, phone systems, and CRMs in the active Identity Namespace.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "namespaceId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Identity Namespace belonging to this Site."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum safe rows.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId",
+        "namespaceId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Identity Namespace Sources",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_list_pixels",
     "category": "analytics",
     "title": "List Analytics Pixels",
@@ -3857,6 +7311,367 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_list_prediction_targets",
+    "category": "analytics",
+    "title": "List Prediction Targets",
+    "description": "List namespace-local outcome targets and horizons without claiming a model is eligible.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "namespaceId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Identity Namespace belonging to this Site."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum safe rows.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId",
+        "namespaceId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Prediction Targets",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_saved_views",
+    "category": "analytics",
+    "title": "List Saved Analytics Views",
+    "description": "List account-scoped validated report views without unrestricted sharing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List Saved Analytics Views",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_sessions",
+    "category": "analytics",
+    "title": "List X-Ray Sessions",
+    "description": "Read bounded sessions using opaque references. Raw visitor/session/device identifiers, contact data, IP, and click IDs are omitted.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "start": {
+          "description": "Inclusive ISO 8601 report start. Omit with end to use the last 30 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "end": {
+          "description": "Exclusive ISO 8601 report end. Omit with start to use now.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "pixelIds": {
+          "description": "Optional Pixel ids belonging to this Site. Omit for every active Pixel.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "hostnames": {
+          "description": "Optional approved detected hostnames within the selected Pixels.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 253
+          }
+        },
+        "source": {
+          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "medium": {
+          "description": "Exact normalized campaign medium used to filter or label analytics data.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "campaign": {
+          "description": "Exact normalized campaign value used to filter or label analytics data.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "eventName": {
+          "description": "Optional normalized analytics event-name filter.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+        },
+        "attributionModel": {
+          "default": "position_based",
+          "description": "Attribution model applied to the report; defaults to first touch.",
+          "type": "string",
+          "enum": [
+            "first_touch",
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default. Best-guess totals remain separate and cannot drive CRM or advertising actions.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "best_guess",
+            "all"
+          ]
+        },
+        "channelFamily": {
+          "description": "Optional normalized acquisition-channel family filter.",
+          "type": "string",
+          "enum": [
+            "llm",
+            "social",
+            "review",
+            "search",
+            "email",
+            "referral",
+            "direct",
+            "other"
+          ]
+        },
+        "platform": {
+          "description": "Normalized external platform selected for this operation.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "referrer": {
+          "description": "Optional exact or normalized referrer filter for analytics rows.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "path": {
+          "description": "Exact path value used by this tool; preserve its leading slash or vault-relative form as required.",
+          "type": "string",
+          "maxLength": 2000,
+          "pattern": "^\\/.*"
+        },
+        "deviceClass": {
+          "description": "Optional normalized device-class filter.",
+          "type": "string",
+          "enum": [
+            "desktop",
+            "tablet",
+            "mobile",
+            "unknown"
+          ]
+        },
+        "countryCode": {
+          "description": "Two-letter country code used to filter analytics rows.",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "regionCode": {
+          "description": "Optional regional subdivision code filter.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8
+        },
+        "conversionKind": {
+          "description": "Optional normalized conversion event kind filter.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        },
+        "returning": {
+          "description": "Filter to returning or first-time visitors when known.",
+          "type": "boolean"
+        },
+        "converted": {
+          "description": "Filter to rows with or without a confirmed conversion.",
+          "type": "boolean"
+        },
+        "minimumDurationMs": {
+          "description": "Minimum measured session duration in milliseconds; null durations never become zero.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 31536000000
+        },
+        "maximumDurationMs": {
+          "description": "Maximum measured session duration in milliseconds.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 31536000000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List X-Ray Sessions",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_list_sites",
     "category": "analytics",
     "title": "List Analytics Businesses",
@@ -3872,6 +7687,394 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_visitors",
+    "category": "analytics",
+    "title": "List X-Ray Visitors",
+    "description": "Read bounded visitor summaries using opaque references and separately labeled confirmed or candidate-assisted tiers.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "start": {
+          "description": "Inclusive ISO 8601 report start. Omit with end to use the last 30 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "end": {
+          "description": "Exclusive ISO 8601 report end. Omit with start to use now.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "pixelIds": {
+          "description": "Optional Pixel ids belonging to this Site. Omit for every active Pixel.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "hostnames": {
+          "description": "Optional approved detected hostnames within the selected Pixels.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 253
+          }
+        },
+        "source": {
+          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "medium": {
+          "description": "Exact normalized campaign medium used to filter or label analytics data.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "campaign": {
+          "description": "Exact normalized campaign value used to filter or label analytics data.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "eventName": {
+          "description": "Optional normalized analytics event-name filter.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+        },
+        "attributionModel": {
+          "default": "position_based",
+          "description": "Attribution model applied to the report; defaults to first touch.",
+          "type": "string",
+          "enum": [
+            "first_touch",
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ]
+        },
+        "clickWindowDays": {
+          "default": 90,
+          "description": "Independent click attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindowDays": {
+          "default": 30,
+          "description": "Independent view attribution window. Lifetime does not change retention.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed is the default. Best-guess totals remain separate and cannot drive CRM or advertising actions.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "best_guess",
+            "all"
+          ]
+        },
+        "channelFamily": {
+          "description": "Optional normalized acquisition-channel family filter.",
+          "type": "string",
+          "enum": [
+            "llm",
+            "social",
+            "review",
+            "search",
+            "email",
+            "referral",
+            "direct",
+            "other"
+          ]
+        },
+        "platform": {
+          "description": "Normalized external platform selected for this operation.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "referrer": {
+          "description": "Optional exact or normalized referrer filter for analytics rows.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "path": {
+          "description": "Exact path value used by this tool; preserve its leading slash or vault-relative form as required.",
+          "type": "string",
+          "maxLength": 2000,
+          "pattern": "^\\/.*"
+        },
+        "deviceClass": {
+          "description": "Optional normalized device-class filter.",
+          "type": "string",
+          "enum": [
+            "desktop",
+            "tablet",
+            "mobile",
+            "unknown"
+          ]
+        },
+        "countryCode": {
+          "description": "Two-letter country code used to filter analytics rows.",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "regionCode": {
+          "description": "Optional regional subdivision code filter.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8
+        },
+        "conversionKind": {
+          "description": "Optional normalized conversion event kind filter.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "cursor": {
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page.",
+          "type": "string",
+          "maxLength": 1000
+        },
+        "returning": {
+          "description": "Filter to returning or first-time visitors when known.",
+          "type": "boolean"
+        },
+        "converted": {
+          "description": "Filter to rows with or without a confirmed conversion.",
+          "type": "boolean"
+        },
+        "minimumDurationMs": {
+          "description": "Minimum measured session duration in milliseconds; null durations never become zero.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 31536000000
+        },
+        "maximumDurationMs": {
+          "description": "Maximum measured session duration in milliseconds.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 31536000000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List X-Ray Visitors",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_plan_crm_provisioning",
+    "category": "analytics",
+    "title": "Plan CRM Provisioning",
+    "description": "Preview existing mappings and missing namespaced fields. This read-like plan does not mutate provider schema.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider."
+        },
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Existing service connection reference for tenant-specific discovery."
+        },
+        "fields": {
+          "maxItems": 5000,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "object": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100,
+                "description": "Provider object name."
+              },
+              "internalName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "Provider field internal name."
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "Provider field label."
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "string",
+                  "number",
+                  "datetime",
+                  "url",
+                  "boolean"
+                ],
+                "description": "Provider field type."
+              },
+              "writable": {
+                "type": "boolean",
+                "description": "Whether discovery says the field is writable."
+              },
+              "required": {
+                "description": "Whether the provider requires the field.",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "object",
+              "internalName",
+              "label",
+              "type",
+              "writable"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Discovered tenant fields used to build a no-write preview."
+        },
+        "allowedOperations": {
+          "description": "Tenant-discovered operations; these may narrow but never widen the public provider profile.",
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          }
+        }
+      },
+      "required": [
+        "siteId",
+        "provider",
+        "connectionId",
+        "fields"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Plan CRM Provisioning",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
     }
   },
   {
@@ -4172,6 +8375,183 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_start_crm_sync",
+    "category": "analytics",
+    "title": "Start Inbound CRM Synchronization",
+    "description": "Pull inbound CRM objects and stages into X-Ray through a capability-gated idempotent synchronization. This does not push X-Ray people or deals to the CRM; candidate identities and evidence are excluded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Normalized CRM provider."
+        },
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Verified service connection reference."
+        },
+        "mode": {
+          "default": "incremental",
+          "description": "Incremental sync is the normal replay-safe mode.",
+          "type": "string",
+          "enum": [
+            "initial",
+            "incremental"
+          ]
+        },
+        "mapping": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {},
+          "description": "Mapping that passed analytics_test_crm_sync_mapping."
+        },
+        "backfillFrom": {
+          "description": "Optional lower timestamp for an authorized initial backfill.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "provider",
+        "connectionId",
+        "mapping",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Start Inbound CRM Synchronization",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_sync_crm_person",
+    "category": "analytics",
+    "title": "Push Confirmed Person to CRM",
+    "description": "Push one confirmed-person projection from X-Ray to the connected CRM after provisioning approval. This is not the inbound analytics_start_crm_sync lane; candidate identity or evidence is schema-invalid.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "highlevel",
+            "zoho",
+            "pipedrive",
+            "keap"
+          ],
+          "description": "Supported CRM provider."
+        },
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Verified service connection reference."
+        },
+        "person": {
+          "type": "object",
+          "properties": {
+            "identityTier": {
+              "type": "string",
+              "const": "confirmed",
+              "description": "Only a deterministically confirmed person may be synchronized."
+            },
+            "personId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "Internal confirmed person id resolved by the authorized REST service."
+            },
+            "externalId": {
+              "description": "Optional provider external id.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "fields": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {},
+              "description": "Approved provisioned person fields. Candidate evidence is not accepted."
+            }
+          },
+          "required": [
+            "identityTier",
+            "personId",
+            "fields"
+          ],
+          "additionalProperties": false,
+          "description": "Confirmed-person projection only."
+        },
+        "mapping": {
+          "description": "Approved provider field mapping.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "maxLength": 240
+          }
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "provider",
+        "connectionId",
+        "person",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Push Confirmed Person to CRM",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "analytics_test_activation_destination",
     "category": "analytics",
     "title": "Test Ad Activation Destination",
@@ -4204,6 +8584,160 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": false,
       "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_test_crm_provisioning",
+    "category": "analytics",
+    "title": "Test CRM Provisioning",
+    "description": "Perform the authorized reversible test write/readback/cleanup and return a redacted receipt.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "receipt": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {},
+          "description": "Exact approval receipt returned by analytics_approve_crm_provisioning."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "receipt",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Test CRM Provisioning",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_test_crm_sync_mapping",
+    "category": "analytics",
+    "title": "Test CRM Sync Mapping",
+    "description": "Validate a typed CRM mapping without starting synchronization.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "CRM or call provider."
+        },
+        "mapping": {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "Provider object to read."
+            },
+            "sourceEventIdField": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "description": "Stable external event id field."
+            },
+            "occurredAtField": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "description": "Event occurrence timestamp field."
+            },
+            "personIdField": {
+              "description": "Optional confirmed-person foreign key field.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "dealIdField": {
+              "description": "Optional deal foreign key field.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "stageField": {
+              "description": "Optional pipeline stage field.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "valueField": {
+              "description": "Optional verified-revenue field.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "currencyField": {
+              "description": "Optional ISO currency field.",
+              "type": "string",
+              "maxLength": 160
+            },
+            "eventName": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 80,
+              "description": "Canonical event name emitted by this mapping."
+            }
+          },
+          "required": [
+            "object",
+            "sourceEventIdField",
+            "occurredAtField",
+            "eventName"
+          ],
+          "additionalProperties": false,
+          "description": "Proposed typed CRM event mapping."
+        },
+        "availableObjects": {
+          "description": "Bounded discovery objects returned by analytics_discover_crm_sync_objects.",
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        }
+      },
+      "required": [
+        "siteId",
+        "provider",
+        "mapping"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Test CRM Sync Mapping",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
     }
   },
   {
@@ -4273,6 +8807,350 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_test_funnel",
+    "category": "analytics",
+    "title": "Test Lead Funnel",
+    "description": "Evaluate an unsaved funnel definition against bounded safe fixtures without mutating source events.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "definition": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Draft funnel name."
+            },
+            "stages": {
+              "minItems": 2,
+              "maxItems": 20,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]{1,79}$",
+                    "description": "Stable stage key."
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "description": "Human-readable stage label."
+                  },
+                  "rule": {
+                    "type": "object",
+                    "properties": {
+                      "eventNames": {
+                        "description": "Canonical browser/server event names.",
+                        "maxItems": 100,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+                        }
+                      },
+                      "conversionKinds": {
+                        "description": "Canonical conversion kinds.",
+                        "maxItems": 100,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+                        }
+                      },
+                      "externalEventNames": {
+                        "description": "Canonical CRM/call event names.",
+                        "maxItems": 100,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9_]{1,79}$"
+                        }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Allowlisted stage match rule; at least one matcher is required by REST."
+                  }
+                },
+                "required": [
+                  "key",
+                  "label",
+                  "rule"
+                ]
+              },
+              "description": "Ordered draft funnel stages."
+            },
+            "isDefault": {
+              "default": false,
+              "description": "Ignored by the dry run; retained for create parity.",
+              "type": "boolean"
+            },
+            "status": {
+              "default": "active",
+              "description": "Draft lifecycle state.",
+              "type": "string",
+              "enum": [
+                "active",
+                "disabled"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "stages"
+          ],
+          "additionalProperties": false,
+          "description": "Unsaved funnel definition to evaluate without persistence."
+        },
+        "records": {
+          "maxItems": 10000,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 240,
+                "description": "Synthetic fixture event id."
+              },
+              "subjectRef": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 240,
+                "description": "Synthetic or opaque fixture subject used only to group the preview journey."
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "event",
+                  "external",
+                  "conversion"
+                ],
+                "description": "Canonical fixture record family."
+              },
+              "eventName": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{1,79}$",
+                "description": "Canonical event or conversion name."
+              },
+              "eventDefinitionId": {
+                "description": "Optional browser event-definition id.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "externalEventKind": {
+                "description": "Optional canonical external-event kind.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "occurredAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+                "description": "Fixture occurrence time."
+              },
+              "source": {
+                "description": "Optional normalized acquisition source.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 180
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "campaign": {
+                "description": "Optional normalized campaign.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 240
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "adId": {
+                "description": "Optional normalized ad id; never a visitor click id.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 240
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "valueMinor": {
+                "description": "Optional verified value in minor units.",
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "currency": {
+                "description": "ISO 4217 currency when valueMinor is present.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 3
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "subjectRef",
+              "kind",
+              "eventName",
+              "occurredAt"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Bounded safe fixtures. personId, contact data, IP, click IDs, device identifiers, and provider bodies are schema-invalid."
+        },
+        "start": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+          "description": "Inclusive fixture window start."
+        },
+        "end": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+          "description": "Exclusive fixture window end."
+        }
+      },
+      "required": [
+        "siteId",
+        "definition",
+        "records",
+        "start",
+        "end"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Test Lead Funnel",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_update_crm_sync_schedule",
+    "category": "analytics",
+    "title": "Update CRM Sync Schedule",
+    "description": "Enable or disable a bounded CRM synchronization schedule.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "syncId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Sync id returned by analytics_start_crm_sync."
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Normalized CRM provider."
+        },
+        "connectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Verified service connection reference."
+        },
+        "intervalSeconds": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 900,
+              "maximum": 604800
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Bounded synchronization interval; null disables the schedule."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "syncId",
+        "provider",
+        "connectionId",
+        "intervalSeconds",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Update CRM Sync Schedule",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
     }
   },
   {
@@ -4423,6 +9301,191 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_update_onboarding_preferences",
+    "category": "analytics",
+    "title": "Update X-Ray Setup Preferences",
+    "description": "Persist presentation state only. This cannot forge or complete an evidence milestone.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "preferences": {
+          "description": "Presentation-only account preferences.",
+          "type": "object",
+          "properties": {
+            "compact": {
+              "description": "Use the compact checklist presentation.",
+              "type": "boolean"
+            },
+            "showCompleted": {
+              "description": "Keep completed milestones visible.",
+              "type": "boolean"
+            },
+            "emailAlerts": {
+              "description": "Opt the account operator into setup alerts; this does not affect website visitor consent.",
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "lastPresentedStep": {
+          "description": "Setup step most recently presented to the account operator.",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "dismissedHelp": {
+          "description": "Help-card keys the account operator dismissed. This cannot complete evidence milestones.",
+          "maxItems": 40,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Update X-Ray Setup Preferences",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_validate_activation_mapping",
+    "category": "analytics",
+    "title": "Validate Activation Event Mapping",
+    "description": "Validate explicit confirmed-event mappings against an authorized destination. Candidate-assisted events are rejected; this does not enable delivery.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "platform": {
+          "type": "string",
+          "enum": [
+            "meta",
+            "google",
+            "tiktok",
+            "reddit"
+          ],
+          "description": "Destination provider."
+        },
+        "externalDatasetId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Authorized dataset, Pixel, or conversion-action id."
+        },
+        "eventMapping": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{1,79}$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description": "Confirmed X-Ray event to provider event mapping. Candidate-assisted events are ineligible."
+        }
+      },
+      "required": [
+        "siteId",
+        "platform",
+        "externalDatasetId",
+        "eventMapping"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Validate Activation Event Mapping",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_withdraw_consent",
+    "category": "analytics",
+    "title": "Withdraw Analytics Consent",
+    "description": "Record a purpose-scoped withdrawal for an opaque subject. Necessary processing cannot be withdrawn here, and MCP can never grant visitor consent.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "subjectRef": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 240,
+          "description": "Opaque consent subject reference returned by consent coverage or a safe journey. MCP cannot grant visitor consent."
+        },
+        "occurredAt": {
+          "description": "Optional visitor-reported withdrawal time; defaults to server time.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Caller-owned idempotency key. Reuse it only when retrying the same logical mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "subjectRef",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Withdraw Analytics Consent",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
       "openWorldHint": false
     }
   },
@@ -10463,7 +15526,7 @@ export const MCP_TOOL_CATALOG = [
                 "mode": {
                   "type": "string",
                   "const": "none",
-                  "description": "Operation mode selected for this nested request branch."
+                  "description": "Governed execution mode for this operation."
                 }
               },
               "required": [
@@ -10477,7 +15540,7 @@ export const MCP_TOOL_CATALOG = [
                 "mode": {
                   "type": "string",
                   "const": "saved_template",
-                  "description": "Operation mode selected for this nested request branch."
+                  "description": "Governed execution mode for this operation."
                 },
                 "templateId": {
                   "type": "string",
@@ -11177,11 +16240,11 @@ export const MCP_TOOL_CATALOG = [
                 "created_at",
                 "updated_at"
               ],
-              "description": "Exact table column name to filter."
+              "description": "Allowlisted report column selected for sorting."
             },
             "direction": {
               "default": "asc",
-              "description": "Sort direction applied after filtering.",
+              "description": "Ascending or descending order for the selected sort column.",
               "type": "string",
               "enum": [
                 "asc",
@@ -17806,10 +22869,10 @@ export const MCP_TOOL_CATALOG = [
           "properties": {
             "column": {
               "type": "string",
-              "description": "Exact table column name to filter."
+              "description": "Allowlisted report column selected for sorting."
             },
             "direction": {
-              "description": "Sort direction applied after filtering.",
+              "description": "Ascending or descending order for the selected sort column.",
               "type": "string",
               "enum": [
                 "asc",
@@ -18483,7 +23546,7 @@ export const MCP_TOOL_CATALOG = [
                 "mode": {
                   "type": "string",
                   "const": "none",
-                  "description": "Operation mode selected for this nested request branch."
+                  "description": "Governed execution mode for this operation."
                 }
               },
               "required": [
@@ -18497,7 +23560,7 @@ export const MCP_TOOL_CATALOG = [
                 "mode": {
                   "type": "string",
                   "const": "saved_template",
-                  "description": "Operation mode selected for this nested request branch."
+                  "description": "Governed execution mode for this operation."
                 },
                 "templateId": {
                   "type": "string",
