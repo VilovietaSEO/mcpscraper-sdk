@@ -2,6 +2,13 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-26 — verified against mcp-scraper 0.67.0 / mcp-memory 1.18.1
+
+### Changed
+
+- Regenerated `commons_host_image` across Node, Python, CLI, and cURL clients so one typed call accepts exactly one pasted or generated base64 image, owner-scoped artifact, direct image URL, or webpage URL and returns permanent-hosting provenance.
+- Prepared `mcpscraper-memory-sdk` 0.31.7, `mcpscraper-sdk` 0.30.7, `mcpscraper-cli` 0.29.7, Python `mcpscraper-sdk` 0.29.7, and Python `mcpscraper-memory-sdk` 0.28.7.
+
 ## 2026-08-26 — verified against mcp-scraper 0.66.7 / mcp-memory 1.18.1
 
 ### Changed
