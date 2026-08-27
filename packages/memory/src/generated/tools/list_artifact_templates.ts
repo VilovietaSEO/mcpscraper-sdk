@@ -2,6 +2,13 @@ export interface Input {
   apiKey?: string;
   sessionId?: string;
   status?: "active" | "archived" | "all";
+  query?: string;
+  presetKey?:
+    | "editorial_reading_room_v1"
+    | "personal_authority_v1"
+    | "personal_authority_v2"
+    | "newsroom_publisher_v1"
+    | "blog_article_v1";
 }
 
 export type Output =
@@ -49,6 +56,94 @@ export type Output =
                 services: boolean;
                 proof: boolean;
                 finalCta: boolean;
+              };
+            };
+          }
+        | {
+            name: string;
+            description: string;
+            mark: string;
+            featureFlags: {
+              key: string;
+              label: string;
+              description: string;
+            }[];
+            presetKey: "personal_authority_v2";
+            defaultConfig: {
+              theme: "blue" | "terracotta" | "slate" | "monochrome";
+              showGeneratedAt: boolean;
+              brandName?: string;
+              colors?: {
+                accent?: string;
+                background?: string;
+                surface?: string;
+                text?: string;
+              };
+              typography?: {
+                display: "editorial-serif" | "modern-sans" | "humanist-sans";
+                body: "editorial-serif" | "modern-sans" | "humanist-sans";
+              };
+              featureFlags: {
+                navigation: boolean;
+                socialLinks: boolean;
+                authority: boolean;
+                consultation: boolean;
+                learning: boolean;
+                services: boolean;
+                proof: boolean;
+                finalCta: boolean;
+              };
+            };
+          }
+        | {
+            name: string;
+            description: string;
+            mark: string;
+            featureFlags: {
+              key: string;
+              label: string;
+              description: string;
+            }[];
+            presetKey: "newsroom_publisher_v1";
+            defaultConfig: {
+              theme: "daily" | "journal" | "midnight";
+              showGeneratedAt: boolean;
+              showBylines: boolean;
+              brandName?: string;
+              featureFlags: {
+                breakingTicker: boolean;
+                navigation: boolean;
+                leadGrid: boolean;
+                latestNews: boolean;
+                categorySections: boolean;
+                newsletter: boolean;
+                pressRoom: boolean;
+                trustFooter: boolean;
+              };
+            };
+          }
+        | {
+            name: string;
+            description: string;
+            mark: string;
+            featureFlags: {
+              key: string;
+              label: string;
+              description: string;
+            }[];
+            presetKey: "blog_article_v1";
+            defaultConfig: {
+              theme: "navy" | "slate" | "forest";
+              showGeneratedAt: boolean;
+              brandName?: string;
+              featureFlags: {
+                sidebarMedia: boolean;
+                disclosure: boolean;
+                stickyToc: boolean;
+                faq: boolean;
+                citation: boolean;
+                share: boolean;
+                authorCard: boolean;
               };
             };
           }
@@ -101,6 +196,91 @@ export type Output =
                   finalCta: boolean;
                 };
               };
+            }
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "personal_authority_v2";
+              config: {
+                theme: "blue" | "terracotta" | "slate" | "monochrome";
+                showGeneratedAt: boolean;
+                brandName?: string;
+                colors?: {
+                  accent?: string;
+                  background?: string;
+                  surface?: string;
+                  text?: string;
+                };
+                typography?: {
+                  display: "editorial-serif" | "modern-sans" | "humanist-sans";
+                  body: "editorial-serif" | "modern-sans" | "humanist-sans";
+                };
+                featureFlags: {
+                  navigation: boolean;
+                  socialLinks: boolean;
+                  authority: boolean;
+                  consultation: boolean;
+                  learning: boolean;
+                  services: boolean;
+                  proof: boolean;
+                  finalCta: boolean;
+                };
+              };
+            }
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "newsroom_publisher_v1";
+              config: {
+                theme: "daily" | "journal" | "midnight";
+                showGeneratedAt: boolean;
+                showBylines: boolean;
+                brandName?: string;
+                featureFlags: {
+                  breakingTicker: boolean;
+                  navigation: boolean;
+                  leadGrid: boolean;
+                  latestNews: boolean;
+                  categorySections: boolean;
+                  newsletter: boolean;
+                  pressRoom: boolean;
+                  trustFooter: boolean;
+                };
+              };
+            }
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "blog_article_v1";
+              config: {
+                theme: "navy" | "slate" | "forest";
+                showGeneratedAt: boolean;
+                brandName?: string;
+                featureFlags: {
+                  sidebarMedia: boolean;
+                  disclosure: boolean;
+                  stickyToc: boolean;
+                  faq: boolean;
+                  citation: boolean;
+                  share: boolean;
+                  authorCard: boolean;
+                };
+              };
             };
         versions?: (
           | {
@@ -142,6 +322,91 @@ export type Output =
                   services: boolean;
                   proof: boolean;
                   finalCta: boolean;
+                };
+              };
+            }
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "personal_authority_v2";
+              config: {
+                theme: "blue" | "terracotta" | "slate" | "monochrome";
+                showGeneratedAt: boolean;
+                brandName?: string;
+                colors?: {
+                  accent?: string;
+                  background?: string;
+                  surface?: string;
+                  text?: string;
+                };
+                typography?: {
+                  display: "editorial-serif" | "modern-sans" | "humanist-sans";
+                  body: "editorial-serif" | "modern-sans" | "humanist-sans";
+                };
+                featureFlags: {
+                  navigation: boolean;
+                  socialLinks: boolean;
+                  authority: boolean;
+                  consultation: boolean;
+                  learning: boolean;
+                  services: boolean;
+                  proof: boolean;
+                  finalCta: boolean;
+                };
+              };
+            }
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "newsroom_publisher_v1";
+              config: {
+                theme: "daily" | "journal" | "midnight";
+                showGeneratedAt: boolean;
+                showBylines: boolean;
+                brandName?: string;
+                featureFlags: {
+                  breakingTicker: boolean;
+                  navigation: boolean;
+                  leadGrid: boolean;
+                  latestNews: boolean;
+                  categorySections: boolean;
+                  newsletter: boolean;
+                  pressRoom: boolean;
+                  trustFooter: boolean;
+                };
+              };
+            }
+          | {
+              templateVersionId: string;
+              templateId: string;
+              version: number;
+              rendererVersion: 1;
+              inputContractVersion: 1;
+              authoringInstructions: string;
+              createdAt: string;
+              rendererKey: "blog_article_v1";
+              config: {
+                theme: "navy" | "slate" | "forest";
+                showGeneratedAt: boolean;
+                brandName?: string;
+                featureFlags: {
+                  sidebarMedia: boolean;
+                  disclosure: boolean;
+                  stickyToc: boolean;
+                  faq: boolean;
+                  citation: boolean;
+                  share: boolean;
+                  authorCard: boolean;
                 };
               };
             }
