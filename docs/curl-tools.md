@@ -1,4 +1,4 @@
-# All 275 MCP tools with cURL
+# All 315 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,7 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (275)
+## Complete catalog (315)
 
 ## access
 
@@ -88,7 +88,10 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 
 ## analytics
 
+- `analytics_apply_crm_pipeline_mapping` — Push CRM Pipeline Event
+- `analytics_approve_crm_provisioning` — Approve CRM Provisioning
 - `analytics_archive_event_definition` — Archive Browser Event Definition
+- `analytics_cancel_crm_sync` — Cancel CRM Synchronization
 - `analytics_create_activation_destination` — Create Ad Activation Destination
 - `analytics_create_campaign_link` — Create Campaign Link
 - `analytics_create_connection` — Create X-Ray Connection
@@ -96,38 +99,75 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `analytics_create_event_definition` — Create Browser Event Definition
 - `analytics_create_export` — Create Analytics Export
 - `analytics_create_form` — Create Pixel-linked Form
+- `analytics_create_funnel` — Create Lead Funnel
+- `analytics_create_lead_score` — Create Lead Score
+- `analytics_create_prediction_target` — Create Prediction Target
+- `analytics_create_saved_view` — Create Saved Analytics View
+- `analytics_delete_privacy_subject` — Delete Privacy Subject
+- `analytics_delete_saved_view` — Delete Saved Analytics View
+- `analytics_discover_activation_assets` — Discover Ad Destination Assets
+- `analytics_discover_crm_capabilities` — Discover CRM Capabilities
+- `analytics_discover_crm_sync_objects` — Discover CRM Sync Objects
+- `analytics_export_privacy_subject` — Export Privacy Subject
 - `analytics_get_acquisition` — Analytics Acquisition
 - `analytics_get_business_metrics` — Analytics Business Metrics
+- `analytics_get_candidate_coverage` — Get Candidate Coverage
 - `analytics_get_channel_breakdown` — Analytics Channel Breakdowns
+- `analytics_get_consent_coverage` — Get Consent Coverage
 - `analytics_get_content` — Analytics Content
 - `analytics_get_conversions` — Analytics Conversions
 - `analytics_get_coverage` — Get Attribution Coverage
+- `analytics_get_crm_sync_status` — Get CRM Sync Status
 - `analytics_get_dimensions` — Analytics Dimensions
 - `analytics_get_entitlement` — Get X-Ray Pixel Access
 - `analytics_get_events` — Analytics Events
 - `analytics_get_forecast` — Analytics Forecast
+- `analytics_get_funnel` — Get Lead Funnel Report
 - `analytics_get_health` — Analytics Pixel Health
+- `analytics_get_onboarding_state` — Get X-Ray Setup State
 - `analytics_get_overview` — Analytics Overview
 - `analytics_get_paths` — Analytics Conversion Paths
 - `analytics_get_person_journey` — Get Person Journey
+- `analytics_get_prediction_eligibility` — Get Prediction Eligibility
+- `analytics_get_session_timeline` — Get Session Timeline
 - `analytics_get_timeseries` — Analytics Timeseries
+- `analytics_get_visitor_journey` — Get Visitor Journey
 - `analytics_import_crm_csv` — Import CRM CSV
 - `analytics_list_activation_destinations` — List Ad Activation Destinations
 - `analytics_list_activation_receipts` — List Ad Activation Receipts
 - `analytics_list_campaign_links` — List Campaign Links
 - `analytics_list_connections` — List X-Ray Connections
 - `analytics_list_conversion_rules` — List Conversion Rules
+- `analytics_list_crm_capabilities` — List CRM Capabilities
 - `analytics_list_crm_imports` — List CRM Imports
 - `analytics_list_event_definitions` — List Browser Event Definitions
 - `analytics_list_forms` — List Analytics Forms
+- `analytics_list_funnels` — List Lead Funnels
+- `analytics_list_inference_review` — List Inference Review
+- `analytics_list_lead_scores` — List Lead Scores
+- `analytics_list_namespace_sources` — List Identity Namespace Sources
 - `analytics_list_pixels` — List Analytics Pixels
+- `analytics_list_prediction_targets` — List Prediction Targets
+- `analytics_list_saved_views` — List Saved Analytics Views
+- `analytics_list_sessions` — List X-Ray Sessions
 - `analytics_list_sites` — List Analytics Businesses
+- `analytics_list_visitors` — List X-Ray Visitors
+- `analytics_plan_crm_provisioning` — Plan CRM Provisioning
 - `analytics_reconcile_connection` — Reconcile X-Ray Connection
 - `analytics_record_external_event` — Record Server Event
 - `analytics_retry_activation_delivery` — Retry Ad Activation Delivery
+- `analytics_start_crm_sync` — Start Inbound CRM Synchronization
+- `analytics_sync_crm_person` — Push Confirmed Person to CRM
 - `analytics_test_activation_destination` — Test Ad Activation Destination
+- `analytics_test_crm_provisioning` — Test CRM Provisioning
+- `analytics_test_crm_sync_mapping` — Test CRM Sync Mapping
 - `analytics_test_event_definition` — Test Browser Event Definition
+- `analytics_test_funnel` — Test Lead Funnel
+- `analytics_update_crm_sync_schedule` — Update CRM Sync Schedule
 - `analytics_update_event_definition` — Update Browser Event Definition
+- `analytics_update_onboarding_preferences` — Update X-Ray Setup Preferences
+- `analytics_validate_activation_mapping` — Validate Activation Event Mapping
+- `analytics_withdraw_consent` — Withdraw Analytics Consent
 
 ## web
 

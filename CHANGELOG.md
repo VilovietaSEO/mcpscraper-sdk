@@ -2,6 +2,18 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-27 — verified against mcp-scraper 0.69.0 / mcp-memory 1.18.1
+
+### Added
+
+- Added typed Node, Python, CLI, and cURL operations for X-Ray onboarding, consent coverage and withdrawal, sessions and visitors, confirmed and candidate-assisted journeys, inference review, funnels, saved views, lead scores, prediction eligibility, CRM discovery/provisioning/sync, privacy export/deletion, and activation asset validation.
+
+### Changed
+
+- Regenerated the complete developer contract from the exact 315-tool server manifest while preserving the compact runtime-discovery policy and 101 Memory tools.
+- X-Ray mutations now expose operation-specific outputs, destructive annotations, bounded results, explicit idempotency keys, and separate CRM person-sync versus pipeline-event contracts.
+- Prepared `mcpscraper-memory-sdk` 0.31.9, `mcpscraper-sdk` 0.31.0, `mcpscraper-cli` 0.30.0, Python `mcpscraper-sdk` 0.30.0, and Python `mcpscraper-memory-sdk` 0.28.9.
+
 ## 2026-08-26 — verified against mcp-scraper 0.68.0 / mcp-memory 1.18.1
 
 ### Added

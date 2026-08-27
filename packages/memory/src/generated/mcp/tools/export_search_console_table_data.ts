@@ -7195,7 +7195,7 @@ export interface Input {
    */
   sort?: {
     /**
-     * Exact table column name to filter.
+     * Allowlisted report column selected for sorting.
      */
     column:
       | "id"
@@ -7217,7 +7217,7 @@ export interface Input {
       | "created_at"
       | "updated_at";
     /**
-     * Sort direction applied after filtering.
+     * Ascending or descending order for the selected sort column.
      */
     direction?: "asc" | "desc";
   };

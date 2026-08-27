@@ -31,7 +31,10 @@ import * as VaultsListSharedWithMe from './tools/list-shared-with-me.js'
 import * as VaultsListVaults from './tools/list-vaults.js'
 import * as VaultsProvisionDefaults from './tools/provision-defaults.js'
 import * as VaultsRouteMemory from './tools/route-memory.js'
+import * as AnalyticsApplyCrmPipelineMapping from './tools/analytics_apply_crm_pipeline_mapping.js'
+import * as AnalyticsApproveCrmProvisioning from './tools/analytics_approve_crm_provisioning.js'
 import * as AnalyticsArchiveEventDefinition from './tools/analytics_archive_event_definition.js'
+import * as AnalyticsCancelCrmSync from './tools/analytics_cancel_crm_sync.js'
 import * as AnalyticsCreateActivationDestination from './tools/analytics_create_activation_destination.js'
 import * as AnalyticsCreateCampaignLink from './tools/analytics_create_campaign_link.js'
 import * as AnalyticsCreateConnection from './tools/analytics_create_connection.js'
@@ -39,38 +42,75 @@ import * as AnalyticsCreateConversionRule from './tools/analytics_create_convers
 import * as AnalyticsCreateEventDefinition from './tools/analytics_create_event_definition.js'
 import * as AnalyticsCreateExport from './tools/analytics_create_export.js'
 import * as AnalyticsCreateForm from './tools/analytics_create_form.js'
+import * as AnalyticsCreateFunnel from './tools/analytics_create_funnel.js'
+import * as AnalyticsCreateLeadScore from './tools/analytics_create_lead_score.js'
+import * as AnalyticsCreatePredictionTarget from './tools/analytics_create_prediction_target.js'
+import * as AnalyticsCreateSavedView from './tools/analytics_create_saved_view.js'
+import * as AnalyticsDeletePrivacySubject from './tools/analytics_delete_privacy_subject.js'
+import * as AnalyticsDeleteSavedView from './tools/analytics_delete_saved_view.js'
+import * as AnalyticsDiscoverActivationAssets from './tools/analytics_discover_activation_assets.js'
+import * as AnalyticsDiscoverCrmCapabilities from './tools/analytics_discover_crm_capabilities.js'
+import * as AnalyticsDiscoverCrmSyncObjects from './tools/analytics_discover_crm_sync_objects.js'
+import * as AnalyticsExportPrivacySubject from './tools/analytics_export_privacy_subject.js'
 import * as AnalyticsGetAcquisition from './tools/analytics_get_acquisition.js'
 import * as AnalyticsGetBusinessMetrics from './tools/analytics_get_business_metrics.js'
+import * as AnalyticsGetCandidateCoverage from './tools/analytics_get_candidate_coverage.js'
 import * as AnalyticsGetChannelBreakdown from './tools/analytics_get_channel_breakdown.js'
+import * as AnalyticsGetConsentCoverage from './tools/analytics_get_consent_coverage.js'
 import * as AnalyticsGetContent from './tools/analytics_get_content.js'
 import * as AnalyticsGetConversions from './tools/analytics_get_conversions.js'
 import * as AnalyticsGetCoverage from './tools/analytics_get_coverage.js'
+import * as AnalyticsGetCrmSyncStatus from './tools/analytics_get_crm_sync_status.js'
 import * as AnalyticsGetDimensions from './tools/analytics_get_dimensions.js'
 import * as AnalyticsGetEntitlement from './tools/analytics_get_entitlement.js'
 import * as AnalyticsGetEvents from './tools/analytics_get_events.js'
 import * as AnalyticsGetForecast from './tools/analytics_get_forecast.js'
+import * as AnalyticsGetFunnel from './tools/analytics_get_funnel.js'
 import * as AnalyticsGetHealth from './tools/analytics_get_health.js'
+import * as AnalyticsGetOnboardingState from './tools/analytics_get_onboarding_state.js'
 import * as AnalyticsGetOverview from './tools/analytics_get_overview.js'
 import * as AnalyticsGetPaths from './tools/analytics_get_paths.js'
 import * as AnalyticsGetPersonJourney from './tools/analytics_get_person_journey.js'
+import * as AnalyticsGetPredictionEligibility from './tools/analytics_get_prediction_eligibility.js'
+import * as AnalyticsGetSessionTimeline from './tools/analytics_get_session_timeline.js'
 import * as AnalyticsGetTimeseries from './tools/analytics_get_timeseries.js'
+import * as AnalyticsGetVisitorJourney from './tools/analytics_get_visitor_journey.js'
 import * as AnalyticsImportCrmCsv from './tools/analytics_import_crm_csv.js'
 import * as AnalyticsListActivationDestinations from './tools/analytics_list_activation_destinations.js'
 import * as AnalyticsListActivationReceipts from './tools/analytics_list_activation_receipts.js'
 import * as AnalyticsListCampaignLinks from './tools/analytics_list_campaign_links.js'
 import * as AnalyticsListConnections from './tools/analytics_list_connections.js'
 import * as AnalyticsListConversionRules from './tools/analytics_list_conversion_rules.js'
+import * as AnalyticsListCrmCapabilities from './tools/analytics_list_crm_capabilities.js'
 import * as AnalyticsListCrmImports from './tools/analytics_list_crm_imports.js'
 import * as AnalyticsListEventDefinitions from './tools/analytics_list_event_definitions.js'
 import * as AnalyticsListForms from './tools/analytics_list_forms.js'
+import * as AnalyticsListFunnels from './tools/analytics_list_funnels.js'
+import * as AnalyticsListInferenceReview from './tools/analytics_list_inference_review.js'
+import * as AnalyticsListLeadScores from './tools/analytics_list_lead_scores.js'
+import * as AnalyticsListNamespaceSources from './tools/analytics_list_namespace_sources.js'
 import * as AnalyticsListPixels from './tools/analytics_list_pixels.js'
+import * as AnalyticsListPredictionTargets from './tools/analytics_list_prediction_targets.js'
+import * as AnalyticsListSavedViews from './tools/analytics_list_saved_views.js'
+import * as AnalyticsListSessions from './tools/analytics_list_sessions.js'
 import * as AnalyticsListSites from './tools/analytics_list_sites.js'
+import * as AnalyticsListVisitors from './tools/analytics_list_visitors.js'
+import * as AnalyticsPlanCrmProvisioning from './tools/analytics_plan_crm_provisioning.js'
 import * as AnalyticsReconcileConnection from './tools/analytics_reconcile_connection.js'
 import * as AnalyticsRecordExternalEvent from './tools/analytics_record_external_event.js'
 import * as AnalyticsRetryActivationDelivery from './tools/analytics_retry_activation_delivery.js'
+import * as AnalyticsStartCrmSync from './tools/analytics_start_crm_sync.js'
+import * as AnalyticsSyncCrmPerson from './tools/analytics_sync_crm_person.js'
 import * as AnalyticsTestActivationDestination from './tools/analytics_test_activation_destination.js'
+import * as AnalyticsTestCrmProvisioning from './tools/analytics_test_crm_provisioning.js'
+import * as AnalyticsTestCrmSyncMapping from './tools/analytics_test_crm_sync_mapping.js'
 import * as AnalyticsTestEventDefinition from './tools/analytics_test_event_definition.js'
+import * as AnalyticsTestFunnel from './tools/analytics_test_funnel.js'
+import * as AnalyticsUpdateCrmSyncSchedule from './tools/analytics_update_crm_sync_schedule.js'
 import * as AnalyticsUpdateEventDefinition from './tools/analytics_update_event_definition.js'
+import * as AnalyticsUpdateOnboardingPreferences from './tools/analytics_update_onboarding_preferences.js'
+import * as AnalyticsValidateActivationMapping from './tools/analytics_validate_activation_mapping.js'
+import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -373,9 +413,24 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "addVault"
   },
   {
+    "name": "analytics_apply_crm_pipeline_mapping",
+    "category": "analytics",
+    "methodName": "applyCrmPipelineMapping"
+  },
+  {
+    "name": "analytics_approve_crm_provisioning",
+    "category": "analytics",
+    "methodName": "approveCrmProvisioning"
+  },
+  {
     "name": "analytics_archive_event_definition",
     "category": "analytics",
     "methodName": "archiveEventDefinition"
+  },
+  {
+    "name": "analytics_cancel_crm_sync",
+    "category": "analytics",
+    "methodName": "cancelCrmSync"
   },
   {
     "name": "analytics_create_activation_destination",
@@ -413,6 +468,56 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "createForm"
   },
   {
+    "name": "analytics_create_funnel",
+    "category": "analytics",
+    "methodName": "createFunnel"
+  },
+  {
+    "name": "analytics_create_lead_score",
+    "category": "analytics",
+    "methodName": "createLeadScore"
+  },
+  {
+    "name": "analytics_create_prediction_target",
+    "category": "analytics",
+    "methodName": "createPredictionTarget"
+  },
+  {
+    "name": "analytics_create_saved_view",
+    "category": "analytics",
+    "methodName": "createSavedView"
+  },
+  {
+    "name": "analytics_delete_privacy_subject",
+    "category": "analytics",
+    "methodName": "deletePrivacySubject"
+  },
+  {
+    "name": "analytics_delete_saved_view",
+    "category": "analytics",
+    "methodName": "deleteSavedView"
+  },
+  {
+    "name": "analytics_discover_activation_assets",
+    "category": "analytics",
+    "methodName": "discoverActivationAssets"
+  },
+  {
+    "name": "analytics_discover_crm_capabilities",
+    "category": "analytics",
+    "methodName": "discoverCrmCapabilities"
+  },
+  {
+    "name": "analytics_discover_crm_sync_objects",
+    "category": "analytics",
+    "methodName": "discoverCrmSyncObjects"
+  },
+  {
+    "name": "analytics_export_privacy_subject",
+    "category": "analytics",
+    "methodName": "exportPrivacySubject"
+  },
+  {
     "name": "analytics_get_acquisition",
     "category": "analytics",
     "methodName": "getAcquisition"
@@ -423,9 +528,19 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getBusinessMetrics"
   },
   {
+    "name": "analytics_get_candidate_coverage",
+    "category": "analytics",
+    "methodName": "getCandidateCoverage"
+  },
+  {
     "name": "analytics_get_channel_breakdown",
     "category": "analytics",
     "methodName": "getChannelBreakdown"
+  },
+  {
+    "name": "analytics_get_consent_coverage",
+    "category": "analytics",
+    "methodName": "getConsentCoverage"
   },
   {
     "name": "analytics_get_content",
@@ -441,6 +556,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_get_coverage",
     "category": "analytics",
     "methodName": "getCoverage"
+  },
+  {
+    "name": "analytics_get_crm_sync_status",
+    "category": "analytics",
+    "methodName": "getCrmSyncStatus"
   },
   {
     "name": "analytics_get_dimensions",
@@ -463,9 +583,19 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getForecast"
   },
   {
+    "name": "analytics_get_funnel",
+    "category": "analytics",
+    "methodName": "getFunnel"
+  },
+  {
     "name": "analytics_get_health",
     "category": "analytics",
     "methodName": "getHealth"
+  },
+  {
+    "name": "analytics_get_onboarding_state",
+    "category": "analytics",
+    "methodName": "getOnboardingState"
   },
   {
     "name": "analytics_get_overview",
@@ -483,9 +613,24 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getPersonJourney"
   },
   {
+    "name": "analytics_get_prediction_eligibility",
+    "category": "analytics",
+    "methodName": "getPredictionEligibility"
+  },
+  {
+    "name": "analytics_get_session_timeline",
+    "category": "analytics",
+    "methodName": "getSessionTimeline"
+  },
+  {
     "name": "analytics_get_timeseries",
     "category": "analytics",
     "methodName": "getTimeseries"
+  },
+  {
+    "name": "analytics_get_visitor_journey",
+    "category": "analytics",
+    "methodName": "getVisitorJourney"
   },
   {
     "name": "analytics_import_crm_csv",
@@ -518,6 +663,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "listConversionRules"
   },
   {
+    "name": "analytics_list_crm_capabilities",
+    "category": "analytics",
+    "methodName": "listCrmCapabilities"
+  },
+  {
     "name": "analytics_list_crm_imports",
     "category": "analytics",
     "methodName": "listCrmImports"
@@ -533,14 +683,59 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "listForms"
   },
   {
+    "name": "analytics_list_funnels",
+    "category": "analytics",
+    "methodName": "listFunnels"
+  },
+  {
+    "name": "analytics_list_inference_review",
+    "category": "analytics",
+    "methodName": "listInferenceReview"
+  },
+  {
+    "name": "analytics_list_lead_scores",
+    "category": "analytics",
+    "methodName": "listLeadScores"
+  },
+  {
+    "name": "analytics_list_namespace_sources",
+    "category": "analytics",
+    "methodName": "listNamespaceSources"
+  },
+  {
     "name": "analytics_list_pixels",
     "category": "analytics",
     "methodName": "listPixels"
   },
   {
+    "name": "analytics_list_prediction_targets",
+    "category": "analytics",
+    "methodName": "listPredictionTargets"
+  },
+  {
+    "name": "analytics_list_saved_views",
+    "category": "analytics",
+    "methodName": "listSavedViews"
+  },
+  {
+    "name": "analytics_list_sessions",
+    "category": "analytics",
+    "methodName": "listSessions"
+  },
+  {
     "name": "analytics_list_sites",
     "category": "analytics",
     "methodName": "listSites"
+  },
+  {
+    "name": "analytics_list_visitors",
+    "category": "analytics",
+    "methodName": "listVisitors"
+  },
+  {
+    "name": "analytics_plan_crm_provisioning",
+    "category": "analytics",
+    "methodName": "planCrmProvisioning"
   },
   {
     "name": "analytics_reconcile_connection",
@@ -558,9 +753,29 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "retryActivationDelivery"
   },
   {
+    "name": "analytics_start_crm_sync",
+    "category": "analytics",
+    "methodName": "startCrmSync"
+  },
+  {
+    "name": "analytics_sync_crm_person",
+    "category": "analytics",
+    "methodName": "syncCrmPerson"
+  },
+  {
     "name": "analytics_test_activation_destination",
     "category": "analytics",
     "methodName": "testActivationDestination"
+  },
+  {
+    "name": "analytics_test_crm_provisioning",
+    "category": "analytics",
+    "methodName": "testCrmProvisioning"
+  },
+  {
+    "name": "analytics_test_crm_sync_mapping",
+    "category": "analytics",
+    "methodName": "testCrmSyncMapping"
   },
   {
     "name": "analytics_test_event_definition",
@@ -568,9 +783,34 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "testEventDefinition"
   },
   {
+    "name": "analytics_test_funnel",
+    "category": "analytics",
+    "methodName": "testFunnel"
+  },
+  {
+    "name": "analytics_update_crm_sync_schedule",
+    "category": "analytics",
+    "methodName": "updateCrmSyncSchedule"
+  },
+  {
     "name": "analytics_update_event_definition",
     "category": "analytics",
     "methodName": "updateEventDefinition"
+  },
+  {
+    "name": "analytics_update_onboarding_preferences",
+    "category": "analytics",
+    "methodName": "updateOnboardingPreferences"
+  },
+  {
+    "name": "analytics_validate_activation_mapping",
+    "category": "analytics",
+    "methodName": "validateActivationMapping"
+  },
+  {
+    "name": "analytics_withdraw_consent",
+    "category": "analytics",
+    "methodName": "withdrawConsent"
   },
   {
     "name": "analyze_site_similarity",
@@ -1790,8 +2030,20 @@ export class VaultsNamespace {
 export class AnalyticsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
+  async applyCrmPipelineMapping(input: AnalyticsApplyCrmPipelineMapping.Input): Promise<AnalyticsApplyCrmPipelineMapping.Output> {
+    return this.callTool('analytics_apply_crm_pipeline_mapping', input) as Promise<AnalyticsApplyCrmPipelineMapping.Output>
+  }
+
+  async approveCrmProvisioning(input: AnalyticsApproveCrmProvisioning.Input): Promise<AnalyticsApproveCrmProvisioning.Output> {
+    return this.callTool('analytics_approve_crm_provisioning', input) as Promise<AnalyticsApproveCrmProvisioning.Output>
+  }
+
   async archiveEventDefinition(input: AnalyticsArchiveEventDefinition.Input): Promise<AnalyticsArchiveEventDefinition.Output> {
     return this.callTool('analytics_archive_event_definition', input) as Promise<AnalyticsArchiveEventDefinition.Output>
+  }
+
+  async cancelCrmSync(input: AnalyticsCancelCrmSync.Input): Promise<AnalyticsCancelCrmSync.Output> {
+    return this.callTool('analytics_cancel_crm_sync', input) as Promise<AnalyticsCancelCrmSync.Output>
   }
 
   async createActivationDestination(input: AnalyticsCreateActivationDestination.Input): Promise<AnalyticsCreateActivationDestination.Output> {
@@ -1822,6 +2074,46 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_create_form', input) as Promise<AnalyticsCreateForm.Output>
   }
 
+  async createFunnel(input: AnalyticsCreateFunnel.Input): Promise<AnalyticsCreateFunnel.Output> {
+    return this.callTool('analytics_create_funnel', input) as Promise<AnalyticsCreateFunnel.Output>
+  }
+
+  async createLeadScore(input: AnalyticsCreateLeadScore.Input): Promise<AnalyticsCreateLeadScore.Output> {
+    return this.callTool('analytics_create_lead_score', input) as Promise<AnalyticsCreateLeadScore.Output>
+  }
+
+  async createPredictionTarget(input: AnalyticsCreatePredictionTarget.Input): Promise<AnalyticsCreatePredictionTarget.Output> {
+    return this.callTool('analytics_create_prediction_target', input) as Promise<AnalyticsCreatePredictionTarget.Output>
+  }
+
+  async createSavedView(input: AnalyticsCreateSavedView.Input): Promise<AnalyticsCreateSavedView.Output> {
+    return this.callTool('analytics_create_saved_view', input) as Promise<AnalyticsCreateSavedView.Output>
+  }
+
+  async deletePrivacySubject(input: AnalyticsDeletePrivacySubject.Input): Promise<AnalyticsDeletePrivacySubject.Output> {
+    return this.callTool('analytics_delete_privacy_subject', input) as Promise<AnalyticsDeletePrivacySubject.Output>
+  }
+
+  async deleteSavedView(input: AnalyticsDeleteSavedView.Input): Promise<AnalyticsDeleteSavedView.Output> {
+    return this.callTool('analytics_delete_saved_view', input) as Promise<AnalyticsDeleteSavedView.Output>
+  }
+
+  async discoverActivationAssets(input: AnalyticsDiscoverActivationAssets.Input): Promise<AnalyticsDiscoverActivationAssets.Output> {
+    return this.callTool('analytics_discover_activation_assets', input) as Promise<AnalyticsDiscoverActivationAssets.Output>
+  }
+
+  async discoverCrmCapabilities(input: AnalyticsDiscoverCrmCapabilities.Input): Promise<AnalyticsDiscoverCrmCapabilities.Output> {
+    return this.callTool('analytics_discover_crm_capabilities', input) as Promise<AnalyticsDiscoverCrmCapabilities.Output>
+  }
+
+  async discoverCrmSyncObjects(input: AnalyticsDiscoverCrmSyncObjects.Input): Promise<AnalyticsDiscoverCrmSyncObjects.Output> {
+    return this.callTool('analytics_discover_crm_sync_objects', input) as Promise<AnalyticsDiscoverCrmSyncObjects.Output>
+  }
+
+  async exportPrivacySubject(input: AnalyticsExportPrivacySubject.Input): Promise<AnalyticsExportPrivacySubject.Output> {
+    return this.callTool('analytics_export_privacy_subject', input) as Promise<AnalyticsExportPrivacySubject.Output>
+  }
+
   async getAcquisition(input: AnalyticsGetAcquisition.Input): Promise<AnalyticsGetAcquisition.Output> {
     return this.callTool('analytics_get_acquisition', input) as Promise<AnalyticsGetAcquisition.Output>
   }
@@ -1830,8 +2122,16 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_business_metrics', input) as Promise<AnalyticsGetBusinessMetrics.Output>
   }
 
+  async getCandidateCoverage(input: AnalyticsGetCandidateCoverage.Input): Promise<AnalyticsGetCandidateCoverage.Output> {
+    return this.callTool('analytics_get_candidate_coverage', input) as Promise<AnalyticsGetCandidateCoverage.Output>
+  }
+
   async getChannelBreakdown(input: AnalyticsGetChannelBreakdown.Input): Promise<AnalyticsGetChannelBreakdown.Output> {
     return this.callTool('analytics_get_channel_breakdown', input) as Promise<AnalyticsGetChannelBreakdown.Output>
+  }
+
+  async getConsentCoverage(input: AnalyticsGetConsentCoverage.Input): Promise<AnalyticsGetConsentCoverage.Output> {
+    return this.callTool('analytics_get_consent_coverage', input) as Promise<AnalyticsGetConsentCoverage.Output>
   }
 
   async getContent(input: AnalyticsGetContent.Input): Promise<AnalyticsGetContent.Output> {
@@ -1844,6 +2144,10 @@ export class AnalyticsNamespace {
 
   async getCoverage(input: AnalyticsGetCoverage.Input): Promise<AnalyticsGetCoverage.Output> {
     return this.callTool('analytics_get_coverage', input) as Promise<AnalyticsGetCoverage.Output>
+  }
+
+  async getCrmSyncStatus(input: AnalyticsGetCrmSyncStatus.Input): Promise<AnalyticsGetCrmSyncStatus.Output> {
+    return this.callTool('analytics_get_crm_sync_status', input) as Promise<AnalyticsGetCrmSyncStatus.Output>
   }
 
   async getDimensions(input: AnalyticsGetDimensions.Input): Promise<AnalyticsGetDimensions.Output> {
@@ -1862,8 +2166,16 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_forecast', input) as Promise<AnalyticsGetForecast.Output>
   }
 
+  async getFunnel(input: AnalyticsGetFunnel.Input): Promise<AnalyticsGetFunnel.Output> {
+    return this.callTool('analytics_get_funnel', input) as Promise<AnalyticsGetFunnel.Output>
+  }
+
   async getHealth(input: AnalyticsGetHealth.Input): Promise<AnalyticsGetHealth.Output> {
     return this.callTool('analytics_get_health', input) as Promise<AnalyticsGetHealth.Output>
+  }
+
+  async getOnboardingState(input: AnalyticsGetOnboardingState.Input): Promise<AnalyticsGetOnboardingState.Output> {
+    return this.callTool('analytics_get_onboarding_state', input) as Promise<AnalyticsGetOnboardingState.Output>
   }
 
   async getOverview(input: AnalyticsGetOverview.Input): Promise<AnalyticsGetOverview.Output> {
@@ -1878,8 +2190,20 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_person_journey', input) as Promise<AnalyticsGetPersonJourney.Output>
   }
 
+  async getPredictionEligibility(input: AnalyticsGetPredictionEligibility.Input): Promise<AnalyticsGetPredictionEligibility.Output> {
+    return this.callTool('analytics_get_prediction_eligibility', input) as Promise<AnalyticsGetPredictionEligibility.Output>
+  }
+
+  async getSessionTimeline(input: AnalyticsGetSessionTimeline.Input): Promise<AnalyticsGetSessionTimeline.Output> {
+    return this.callTool('analytics_get_session_timeline', input) as Promise<AnalyticsGetSessionTimeline.Output>
+  }
+
   async getTimeseries(input: AnalyticsGetTimeseries.Input): Promise<AnalyticsGetTimeseries.Output> {
     return this.callTool('analytics_get_timeseries', input) as Promise<AnalyticsGetTimeseries.Output>
+  }
+
+  async getVisitorJourney(input: AnalyticsGetVisitorJourney.Input): Promise<AnalyticsGetVisitorJourney.Output> {
+    return this.callTool('analytics_get_visitor_journey', input) as Promise<AnalyticsGetVisitorJourney.Output>
   }
 
   async importCrmCsv(input: AnalyticsImportCrmCsv.Input): Promise<AnalyticsImportCrmCsv.Output> {
@@ -1906,6 +2230,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_list_conversion_rules', input) as Promise<AnalyticsListConversionRules.Output>
   }
 
+  async listCrmCapabilities(input: AnalyticsListCrmCapabilities.Input): Promise<AnalyticsListCrmCapabilities.Output> {
+    return this.callTool('analytics_list_crm_capabilities', input) as Promise<AnalyticsListCrmCapabilities.Output>
+  }
+
   async listCrmImports(input: AnalyticsListCrmImports.Input): Promise<AnalyticsListCrmImports.Output> {
     return this.callTool('analytics_list_crm_imports', input) as Promise<AnalyticsListCrmImports.Output>
   }
@@ -1918,12 +2246,48 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_list_forms', input) as Promise<AnalyticsListForms.Output>
   }
 
+  async listFunnels(input: AnalyticsListFunnels.Input): Promise<AnalyticsListFunnels.Output> {
+    return this.callTool('analytics_list_funnels', input) as Promise<AnalyticsListFunnels.Output>
+  }
+
+  async listInferenceReview(input: AnalyticsListInferenceReview.Input): Promise<AnalyticsListInferenceReview.Output> {
+    return this.callTool('analytics_list_inference_review', input) as Promise<AnalyticsListInferenceReview.Output>
+  }
+
+  async listLeadScores(input: AnalyticsListLeadScores.Input): Promise<AnalyticsListLeadScores.Output> {
+    return this.callTool('analytics_list_lead_scores', input) as Promise<AnalyticsListLeadScores.Output>
+  }
+
+  async listNamespaceSources(input: AnalyticsListNamespaceSources.Input): Promise<AnalyticsListNamespaceSources.Output> {
+    return this.callTool('analytics_list_namespace_sources', input) as Promise<AnalyticsListNamespaceSources.Output>
+  }
+
   async listPixels(input: AnalyticsListPixels.Input): Promise<AnalyticsListPixels.Output> {
     return this.callTool('analytics_list_pixels', input) as Promise<AnalyticsListPixels.Output>
   }
 
+  async listPredictionTargets(input: AnalyticsListPredictionTargets.Input): Promise<AnalyticsListPredictionTargets.Output> {
+    return this.callTool('analytics_list_prediction_targets', input) as Promise<AnalyticsListPredictionTargets.Output>
+  }
+
+  async listSavedViews(input: AnalyticsListSavedViews.Input): Promise<AnalyticsListSavedViews.Output> {
+    return this.callTool('analytics_list_saved_views', input) as Promise<AnalyticsListSavedViews.Output>
+  }
+
+  async listSessions(input: AnalyticsListSessions.Input): Promise<AnalyticsListSessions.Output> {
+    return this.callTool('analytics_list_sessions', input) as Promise<AnalyticsListSessions.Output>
+  }
+
   async listSites(input: AnalyticsListSites.Input = {} as AnalyticsListSites.Input): Promise<AnalyticsListSites.Output> {
     return this.callTool('analytics_list_sites', input) as Promise<AnalyticsListSites.Output>
+  }
+
+  async listVisitors(input: AnalyticsListVisitors.Input): Promise<AnalyticsListVisitors.Output> {
+    return this.callTool('analytics_list_visitors', input) as Promise<AnalyticsListVisitors.Output>
+  }
+
+  async planCrmProvisioning(input: AnalyticsPlanCrmProvisioning.Input): Promise<AnalyticsPlanCrmProvisioning.Output> {
+    return this.callTool('analytics_plan_crm_provisioning', input) as Promise<AnalyticsPlanCrmProvisioning.Output>
   }
 
   async reconcileConnection(input: AnalyticsReconcileConnection.Input): Promise<AnalyticsReconcileConnection.Output> {
@@ -1938,16 +2302,52 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_retry_activation_delivery', input) as Promise<AnalyticsRetryActivationDelivery.Output>
   }
 
+  async startCrmSync(input: AnalyticsStartCrmSync.Input): Promise<AnalyticsStartCrmSync.Output> {
+    return this.callTool('analytics_start_crm_sync', input) as Promise<AnalyticsStartCrmSync.Output>
+  }
+
+  async syncCrmPerson(input: AnalyticsSyncCrmPerson.Input): Promise<AnalyticsSyncCrmPerson.Output> {
+    return this.callTool('analytics_sync_crm_person', input) as Promise<AnalyticsSyncCrmPerson.Output>
+  }
+
   async testActivationDestination(input: AnalyticsTestActivationDestination.Input): Promise<AnalyticsTestActivationDestination.Output> {
     return this.callTool('analytics_test_activation_destination', input) as Promise<AnalyticsTestActivationDestination.Output>
+  }
+
+  async testCrmProvisioning(input: AnalyticsTestCrmProvisioning.Input): Promise<AnalyticsTestCrmProvisioning.Output> {
+    return this.callTool('analytics_test_crm_provisioning', input) as Promise<AnalyticsTestCrmProvisioning.Output>
+  }
+
+  async testCrmSyncMapping(input: AnalyticsTestCrmSyncMapping.Input): Promise<AnalyticsTestCrmSyncMapping.Output> {
+    return this.callTool('analytics_test_crm_sync_mapping', input) as Promise<AnalyticsTestCrmSyncMapping.Output>
   }
 
   async testEventDefinition(input: AnalyticsTestEventDefinition.Input): Promise<AnalyticsTestEventDefinition.Output> {
     return this.callTool('analytics_test_event_definition', input) as Promise<AnalyticsTestEventDefinition.Output>
   }
 
+  async testFunnel(input: AnalyticsTestFunnel.Input): Promise<AnalyticsTestFunnel.Output> {
+    return this.callTool('analytics_test_funnel', input) as Promise<AnalyticsTestFunnel.Output>
+  }
+
+  async updateCrmSyncSchedule(input: AnalyticsUpdateCrmSyncSchedule.Input): Promise<AnalyticsUpdateCrmSyncSchedule.Output> {
+    return this.callTool('analytics_update_crm_sync_schedule', input) as Promise<AnalyticsUpdateCrmSyncSchedule.Output>
+  }
+
   async updateEventDefinition(input: AnalyticsUpdateEventDefinition.Input): Promise<AnalyticsUpdateEventDefinition.Output> {
     return this.callTool('analytics_update_event_definition', input) as Promise<AnalyticsUpdateEventDefinition.Output>
+  }
+
+  async updateOnboardingPreferences(input: AnalyticsUpdateOnboardingPreferences.Input): Promise<AnalyticsUpdateOnboardingPreferences.Output> {
+    return this.callTool('analytics_update_onboarding_preferences', input) as Promise<AnalyticsUpdateOnboardingPreferences.Output>
+  }
+
+  async validateActivationMapping(input: AnalyticsValidateActivationMapping.Input): Promise<AnalyticsValidateActivationMapping.Output> {
+    return this.callTool('analytics_validate_activation_mapping', input) as Promise<AnalyticsValidateActivationMapping.Output>
+  }
+
+  async withdrawConsent(input: AnalyticsWithdrawConsent.Input): Promise<AnalyticsWithdrawConsent.Output> {
+    return this.callTool('analytics_withdraw_consent', input) as Promise<AnalyticsWithdrawConsent.Output>
   }
 }
 
