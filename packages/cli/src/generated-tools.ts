@@ -4991,19 +4991,33 @@ export const MCP_TOOL_CATALOG = [
     "name": "commons_host_image",
     "category": "commons",
     "title": "Host a Transparent Commons Image",
-    "description": "Normal prerequisite for any featured image whose URL was not already returned by commons_host_image. Host image bytes from imageBase64 when you already have an attachment and the serialized request stays under about 3 MB, or from a stable direct public HTTPS image URL; do not pass a webpage, caller-local path, private URL, or temporary/signed attachment URL. Returns the permanent Commons URL to place in featuredImage.url before commons_validate_entity and commons_submit_entity. Submit can still auto-host a stable public source as a compatibility fallback. JPEG, PNG, GIF, and WebP are accepted up to 10 MB; SVG is rejected. Identical bytes are stored once.",
+    "description": "Turn one supplied image source into a permanent Transparent Commons image before validation and submission. Provide exactly one of imageBase64 for a pasted or AI-generated image, artifactId for an owner-scoped MCP Scraper image artifact, or sourceUrl for either a direct public HTTPS image or a webpage containing the desired image. Webpages are inspected in deterministic order for Open Graph, Twitter, JSON-LD, and meaningful content images; unusable candidates fall through to the next candidate. Returns the permanent URL for featuredImage.url plus source and selection provenance. JPEG, PNG, GIF, and WebP are accepted up to 10 MB; SVG is rejected. Identical bytes are stored once. Never pass a caller-local path or private/authenticated URL.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "sourceUrl": {
-          "description": "Stable direct public HTTPS URL whose response is the image bytes to host. Do not pass an HTML webpage, chat attachment reference, caller-local path, temporary or signed URL, or private/authenticated URL.",
+          "description": "Public HTTPS direct image URL or webpage URL. A direct image is hosted as-is; an HTML page is inspected for Open Graph, Twitter, JSON-LD, and meaningful content images, then the first usable candidate is hosted. Temporary signed URLs are consumed immediately and query credentials are not retained as provenance.",
           "type": "string",
           "format": "uri"
         },
         "imageBase64": {
-          "description": "Base64 image bytes for an image you already hold, including forwarded chat attachment bytes. Prefer this over a temporary attachment URL when the serialized request remains under about 3 MB; larger files require a stable direct public HTTPS source URL.",
+          "description": "Base64 image bytes for an image already available to the caller, including a pasted attachment or AI-generated image. Use sourceType to preserve whether it was uploaded or generated. Keep the complete serialized request within the client transport limit.",
           "type": "string",
           "minLength": 16
+        },
+        "artifactId": {
+          "description": "Owner-scoped image artifact returned by an MCP Scraper media or screenshot workflow. The server reauthorizes ownership and reads the bytes directly; do not construct an artifact ID.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "sourceType": {
+          "description": "Provenance for imageBase64 or artifactId. Use ai_generated only when an image model created the supplied bytes; otherwise use uploaded or omit it.",
+          "type": "string",
+          "enum": [
+            "uploaded",
+            "ai_generated"
+          ]
         },
         "alt": {
           "description": "Alt text describing the image for readers who cannot see it.",
@@ -6057,13 +6071,13 @@ export const MCP_TOOL_CATALOG = [
           "maxLength": 240
         },
         "featuredImage": {
-          "description": "Required for auto-published public entities. First call commons_host_image and place its returned permanent URL here; validation does not fetch external images and reports unregistered URLs as not publishable. Submit retains a compatibility fallback that auto-hosts a stable direct public HTTPS image URL. The image is also added to the media manifest if absent.",
+          "description": "Required for auto-published public entities. First call commons_host_image with attachment bytes, an image artifact, a direct image URL, or a webpage URL, then place its returned permanent URL here. Validation does not fetch external images and reports unregistered URLs as not publishable. Submit retains a compatibility fallback for public URLs. The image is also added to the media manifest if absent.",
           "type": "object",
           "properties": {
             "url": {
               "type": "string",
               "format": "uri",
-              "description": "For a publish-ready entity, use the permanent URL returned by commons_host_image. Submit can auto-host a stable direct public HTTPS image URL as a compatibility fallback, but validation reports any unregistered external URL as not ready. Do not use a chat attachment reference, caller-local path, temporary or signed URL, private URL, or HTML page URL."
+              "description": "For a publish-ready entity, use the permanent URL returned by commons_host_image. Validation reports any unregistered external URL as not ready. Do not use a chat attachment reference, caller-local path, private URL, or HTML page URL here; pass the original image or webpage source to commons_host_image first."
             },
             "alt": {
               "description": "Accessible alternative text describing the image.",
@@ -6982,13 +6996,13 @@ export const MCP_TOOL_CATALOG = [
           "maxLength": 240
         },
         "featuredImage": {
-          "description": "Required for auto-published public entities. First call commons_host_image and place its returned permanent URL here; validation does not fetch external images and reports unregistered URLs as not publishable. Submit retains a compatibility fallback that auto-hosts a stable direct public HTTPS image URL. The image is also added to the media manifest if absent.",
+          "description": "Required for auto-published public entities. First call commons_host_image with attachment bytes, an image artifact, a direct image URL, or a webpage URL, then place its returned permanent URL here. Validation does not fetch external images and reports unregistered URLs as not publishable. Submit retains a compatibility fallback for public URLs. The image is also added to the media manifest if absent.",
           "type": "object",
           "properties": {
             "url": {
               "type": "string",
               "format": "uri",
-              "description": "For a publish-ready entity, use the permanent URL returned by commons_host_image. Submit can auto-host a stable direct public HTTPS image URL as a compatibility fallback, but validation reports any unregistered external URL as not ready. Do not use a chat attachment reference, caller-local path, temporary or signed URL, private URL, or HTML page URL."
+              "description": "For a publish-ready entity, use the permanent URL returned by commons_host_image. Validation reports any unregistered external URL as not ready. Do not use a chat attachment reference, caller-local path, private URL, or HTML page URL here; pass the original image or webpage source to commons_host_image first."
             },
             "alt": {
               "description": "Accessible alternative text describing the image.",
