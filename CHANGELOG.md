@@ -2,6 +2,16 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-27 — verified against mcp-scraper 0.69.1 / mcp-memory 1.18.1
+
+### Fixed
+
+- Added the provider-required `testEventCode` and `testId` fields to `analytics_test_activation_destination` across Node, Python, Memory, CLI, and cURL contracts.
+
+### Changed
+
+- Prepared `mcpscraper-memory-sdk` 0.31.10, `mcpscraper-sdk` 0.31.1, `mcpscraper-cli` 0.30.1, Python `mcpscraper-sdk` 0.30.1, and Python `mcpscraper-memory-sdk` 0.28.10.
+
 ## 2026-08-27 — verified against mcp-scraper 0.69.0 / mcp-memory 1.18.1
 
 ### Added

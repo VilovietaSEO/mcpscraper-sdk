@@ -8555,7 +8555,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_test_activation_destination",
     "category": "analytics",
     "title": "Test Ad Activation Destination",
-    "description": "Send the provider-specific verification test for a configured activation destination and return its safe receipt.",
+    "description": "Send the provider-specific verification test for a configured activation destination and return its safe receipt. Meta and TikTok require testEventCode; Reddit requires testId.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -8570,6 +8570,18 @@ export const MCP_TOOL_CATALOG = [
           "format": "uuid",
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
           "description": "Activation destination id returned by analytics_list_activation_destinations."
+        },
+        "testEventCode": {
+          "description": "Provider test event code required by Meta and TikTok. Obtain it from the authorized provider test-events screen; it is sent only to that configured destination.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "testId": {
+          "description": "Provider test ID required by Reddit Conversions API. It is sent only to that configured destination.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
         }
       },
       "required": [
