@@ -4,6 +4,10 @@ export interface Input {
    */
   siteId: string;
   /**
+   * External activation is confirmed-only. Best-guess and candidate-assisted journey evidence is schema-invalid.
+   */
+  journeyTier?: "confirmed";
+  /**
    * Destination provider.
    */
   platform: "meta" | "google" | "tiktok" | "reddit";

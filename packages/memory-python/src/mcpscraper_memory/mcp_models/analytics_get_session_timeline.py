@@ -7,6 +7,8 @@ class AnalyticsGetSessionTimelineInput(BaseModel):
 
     site_id: str = Field(..., alias="siteId", description="Analytics Site id returned by analytics_list_sites.")
     reference: str = Field(..., alias="reference", description="Opaque Site-scoped reference returned by an X-Ray read. Raw visitor, session, device, email, phone, IP, and identity hashes are never accepted.")
+    from_: str | None = Field(None, alias="from", description="Inclusive ISO time. Defaults to 90 days before to; max window 366 days.")
+    to: str | None = Field(None, alias="to", description="Exclusive ISO time. Defaults to now; max window 366 days.")
 
 
 class AnalyticsGetSessionTimelineOutput(BaseModel):
