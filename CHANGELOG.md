@@ -2,6 +2,19 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
+## 2026-08-27 — verified against mcp-scraper 0.73.0 / mcp-memory 1.19.1
+
+### Added
+
+- Added `analytics_list_journeys` across Node, Python, CLI, and cURL with explicit `confirmed`, `best_guess`, and `all` branches that never merge candidate-assisted totals into confirmed reporting.
+- Added complete typed enhanced Journey responses for session and visitor reads: subject, date range, summary, common pages, acquisition, event breakdown, sessions, chronology, and pagination.
+- Added a runnable X-Ray Journey example and executable contract tests for selectors, date windows, nullable candidate evidence, and complete output parity.
+
+### Changed
+
+- Regenerated all six unified developer surfaces from the exact 331-tool MCP Scraper 0.73.0 source manifest.
+- Prepared `mcpscraper-memory-sdk` 0.33.0, `mcpscraper-sdk` 0.33.0, `mcpscraper-cli` 0.32.0, Python `mcpscraper-sdk` 0.32.0, and Python `mcpscraper-memory-sdk` 0.30.0.
+
 ## 2026-08-27 — verified against mcp-scraper 0.72.6 / mcp-memory 1.19.1
 
 ### Added
