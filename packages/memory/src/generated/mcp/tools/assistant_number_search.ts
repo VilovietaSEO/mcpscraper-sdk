@@ -50,6 +50,7 @@ export interface Output {
       | "request_too_large"
       | "not_found"
       | "registration_review_expired"
+      | "schedule_confirmation_conflict"
       | "response_too_large"
       | "service_not_configured"
       | "invalid_caller"

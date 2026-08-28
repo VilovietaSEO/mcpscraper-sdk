@@ -10,9 +10,12 @@ class AnalyticsCreateActivationDestinationInput(BaseModel):
     name: str = Field(..., alias="name", description="Human-readable name for the record being created or updated.")
     connection_ref: str = Field(..., alias="connectionRef", description="Existing provider connection reference authorized for this analytics account.")
     external_dataset_id: str = Field(..., alias="externalDatasetId", description="Provider destination identifier already owned by the connected account.")
+    operating_account_id: str | None = Field(None, alias="operatingAccountId", description="Google Ads operating account identifier required for Google Data Manager destinations.")
+    idempotency_key: str = Field(..., alias="idempotencyKey", description="Retry key; reuse only for this exact mutation.")
 
 
 class AnalyticsCreateActivationDestinationOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
+    destination: dict[str, Any] = Field(..., alias="destination", description="")

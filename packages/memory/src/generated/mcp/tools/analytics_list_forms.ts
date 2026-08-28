@@ -15,4 +15,7 @@ export interface Input {
 
 export interface Output {
   ok: boolean;
+  data: {
+    [k: string]: unknown;
+  };
 }

@@ -5891,6 +5891,411 @@
         }
       }
     },
+    "/api/v1/assistant/schedules/{scheduleRef}/accepted": {
+      "get": {
+        "operationId": "assistant_get_schedules_by_scheduleRef_accepted",
+        "summary": "Read schedules scheduleRef accepted",
+        "tags": [
+          "Personal Assistant"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "scheduleRef",
+            "in": "path",
+            "required": true,
+            "description": "Opaque caller-owned reference. Foreign and missing references are indistinguishable.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$",
+              "maxLength": 192
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "name": "byte_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1024,
+              "maximum": 262144,
+              "default": 262144
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "pattern": "^[A-Za-z0-9._~:-]+$"
+            }
+          },
+          {
+            "name": "assistant_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/OpaqueRef"
+            }
+          },
+          {
+            "name": "contact_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/OpaqueRef"
+            }
+          },
+          {
+            "name": "command_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/OpaqueRef"
+            }
+          },
+          {
+            "name": "sender_endpoint_ref",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/OpaqueRef"
+            }
+          },
+          {
+            "name": "subject_key",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^[A-Za-z0-9._~:-]+$"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{1,31}$"
+            }
+          }
+        ],
+        "x-assistant-authority-class": "observe",
+        "x-idempotency-required": false,
+        "responses": {
+          "200": {
+            "description": "Bounded owner projection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantEnvelope"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Documented actionable owner error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantErrorEnvelope"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Fail-closed service error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assistant/schedules/{scheduleRef}/activate": {
+      "post": {
+        "operationId": "assistant_post_schedules_by_scheduleRef_activate",
+        "summary": "Create or submit schedules scheduleRef activate",
+        "tags": [
+          "Personal Assistant"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "scheduleRef",
+            "in": "path",
+            "required": true,
+            "description": "Opaque caller-owned reference. Foreign and missing references are indistinguishable.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$",
+              "maxLength": 192
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Replay-safe identity. Reuse only for the identical reviewed request.",
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 240,
+              "pattern": "^[A-Za-z0-9._~:/+\\-]+$"
+            }
+          }
+        ],
+        "x-assistant-authority-class": "reversible_action",
+        "x-idempotency-required": true,
+        "responses": {
+          "200": {
+            "description": "Bounded owner projection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantEnvelope"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Accepted replay-safe mutation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantEnvelope"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Documented actionable owner error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantErrorEnvelope"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Fail-closed service error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssistantPublicMutation"
+              }
+            }
+          },
+          "x-max-bytes": 65536
+        }
+      }
+    },
+    "/api/v1/assistant/schedules/propose": {
+      "post": {
+        "operationId": "assistant_post_schedules_propose",
+        "summary": "Create or submit schedules propose",
+        "tags": [
+          "Personal Assistant"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Replay-safe identity. Reuse only for the identical reviewed request.",
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 240,
+              "pattern": "^[A-Za-z0-9._~:/+\\-]+$"
+            }
+          }
+        ],
+        "x-assistant-authority-class": "reversible_action",
+        "x-idempotency-required": true,
+        "responses": {
+          "200": {
+            "description": "Bounded owner projection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantEnvelope"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Accepted replay-safe mutation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantEnvelope"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Documented actionable owner error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantErrorEnvelope"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Fail-closed service error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssistantPublicMutation"
+              }
+            }
+          },
+          "x-max-bytes": 65536
+        }
+      }
+    },
+    "/api/v1/assistant/schedules/readiness": {
+      "post": {
+        "operationId": "assistant_post_schedules_readiness",
+        "summary": "Create or submit schedules readiness",
+        "tags": [
+          "Personal Assistant"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Replay-safe identity. Reuse only for the identical reviewed request.",
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 240,
+              "pattern": "^[A-Za-z0-9._~:/+\\-]+$"
+            }
+          }
+        ],
+        "x-assistant-authority-class": "reversible_action",
+        "x-idempotency-required": true,
+        "responses": {
+          "200": {
+            "description": "Bounded owner projection.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantEnvelope"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Accepted replay-safe mutation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantEnvelope"
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Documented actionable owner error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantErrorEnvelope"
+                }
+              }
+            }
+          },
+          "5XX": {
+            "description": "Fail-closed service error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssistantErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssistantPublicMutation"
+              }
+            }
+          },
+          "x-max-bytes": 65536
+        }
+      }
+    },
     "/api/v1/assistant/settings": {
       "get": {
         "operationId": "assistant_get_settings",
@@ -6454,6 +6859,7 @@
                   "request_too_large",
                   "not_found",
                   "registration_review_expired",
+                  "schedule_confirmation_conflict",
                   "response_too_large",
                   "service_not_configured",
                   "invalid_caller",
@@ -6493,6 +6899,6 @@
     }
   },
   "x-generated-from": "src/api/personal-assistant-routes.ts",
-  "x-generated-at": "2026-08-28T09:27:52.138Z",
-  "x-source-route-count": 56
+  "x-generated-at": "2026-08-28T21:11:34.449Z",
+  "x-source-route-count": 60
 }

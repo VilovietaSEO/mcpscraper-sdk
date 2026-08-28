@@ -66,8 +66,15 @@ export interface Input {
    * Whether the Pixel may emit this definition.
    */
   enabled?: boolean;
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  definition: {
+    [k: string]: unknown;
+  };
 }

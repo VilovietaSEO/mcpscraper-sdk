@@ -14,9 +14,11 @@ class AnalyticsCreateFormInput(BaseModel):
     success_message: str | None = Field(None, alias="successMessage", description="Optional confirmation shown after a successful form submission.")
     consent_text: str | None = Field(None, alias="consentText", description="Optional consent disclosure displayed with the form submission control.")
     publish: bool | None = Field(None, alias="publish", description="When true, publish the created form immediately; set false to keep it unpublished.")
+    idempotency_key: str = Field(..., alias="idempotencyKey", description="Retry key; reuse only for this exact mutation.")
 
 
 class AnalyticsCreateFormOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
+    form: dict[str, Any] = Field(..., alias="form", description="")

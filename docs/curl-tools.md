@@ -1,4 +1,4 @@
-# All 346 MCP tools with cURL
+# All 354 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (346)
+## Complete catalog (354)
 
 ## access
 
@@ -126,6 +126,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_approve_crm_provisioning` — Approve CRM Provisioning
 - `analytics_archive_event_definition` — Archive Browser Event Definition
 - `analytics_cancel_crm_sync` — Cancel CRM Synchronization
+- `analytics_commit_crm_import` — Commit CRM CSV Import
 - `analytics_create_activation_destination` — Create Ad Activation Destination
 - `analytics_create_campaign_link` — Create Campaign Link
 - `analytics_create_connection` — Create X-Ray Connection
@@ -142,6 +143,9 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_discover_activation_assets` — Discover Ad Destination Assets
 - `analytics_discover_crm_capabilities` — Discover CRM Capabilities
 - `analytics_discover_crm_sync_objects` — Discover CRM Sync Objects
+- `analytics_export_crm_csv` — Export CRM CSV
+- `analytics_export_google_ads_csv` — Export Google Ads CSV
+- `analytics_export_meta_technical` — Export Meta Technical JSONL
 - `analytics_export_privacy_subject` — Export Privacy Subject
 - `analytics_get_acquisition` — Analytics Acquisition
 - `analytics_get_business_metrics` — Analytics Business Metrics
@@ -166,7 +170,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_get_session_timeline` — Get Session Timeline
 - `analytics_get_timeseries` — Analytics Timeseries
 - `analytics_get_visitor_journey` — Get Visitor Journey
-- `analytics_import_crm_csv` — Import CRM CSV
+- `analytics_import_crm_csv` — Legacy CRM CSV Import
 - `analytics_list_activation_destinations` — List Ad Activation Destinations
 - `analytics_list_activation_receipts` — List Ad Activation Receipts
 - `analytics_list_campaign_links` — List Campaign Links
@@ -174,10 +178,13 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_list_conversion_rules` — List Conversion Rules
 - `analytics_list_crm_capabilities` — List CRM Capabilities
 - `analytics_list_crm_imports` — List CRM Imports
+- `analytics_list_crm_outbound_policies` — List CRM Outbound Policies
+- `analytics_list_crm_outbound_receipts` — List CRM Outbound Receipts
 - `analytics_list_event_definitions` — List Browser Event Definitions
 - `analytics_list_forms` — List Analytics Forms
 - `analytics_list_funnels` — List Lead Funnels
 - `analytics_list_inference_review` — List Inference Review
+- `analytics_list_journeys` — List X-Ray Journeys
 - `analytics_list_lead_scores` — List Lead Scores
 - `analytics_list_namespace_sources` — List Identity Namespace Sources
 - `analytics_list_pixels` — List Analytics Pixels
@@ -187,25 +194,26 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_list_sites` — List Analytics Businesses
 - `analytics_list_visitors` — List X-Ray Visitors
 - `analytics_plan_crm_provisioning` — Plan CRM Provisioning
+- `analytics_preview_crm_import` — Preview CRM CSV Import
 - `analytics_reconcile_connection` — Reconcile X-Ray Connection
 - `analytics_record_external_event` — Record Server Event
 - `analytics_retry_activation_delivery` — Retry Ad Activation Delivery
+- `analytics_save_activation_mapping` — Save Activation Event Mapping
+- `analytics_set_activation_automation` — Set Activation Automation
 - `analytics_start_crm_sync` — Start Inbound CRM Synchronization
 - `analytics_sync_crm_person` — Push Confirmed Person to CRM
 - `analytics_test_activation_destination` — Test Ad Activation Destination
 - `analytics_test_crm_provisioning` — Test CRM Provisioning
 - `analytics_test_crm_sync_mapping` — Test CRM Sync Mapping
-- `analytics_test_event_definition` — Test Browser Event Definition
+- `analytics_test_event_definition` — Preview Browser Event Definition
 - `analytics_test_funnel` — Test Lead Funnel
 - `analytics_update_crm_sync_schedule` — Update CRM Sync Schedule
 - `analytics_update_event_definition` — Update Browser Event Definition
 - `analytics_update_onboarding_preferences` — Update X-Ray Setup Preferences
-- `analytics_validate_activation_mapping` — Validate Activation Event Mapping
-- `analytics_withdraw_consent` — Withdraw Analytics Consent
-- `analytics_list_crm_outbound_policies` — List CRM Outbound Policies
-- `analytics_list_crm_outbound_receipts` — List CRM Outbound Receipts
 - `analytics_upsert_crm_outbound_policy` — Configure CRM Outbound Policy
-- `analytics_list_journeys` — List X-Ray Journeys
+- `analytics_validate_activation_mapping` — Validate Activation Event Mapping
+- `analytics_verify_live_event_definition` — Verify Live Browser Event
+- `analytics_withdraw_consent` — Withdraw Analytics Consent
 
 ## web
 
@@ -247,6 +255,24 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `set-schedule-entitlement` — Set Schedule Entitlement
 - `update_artifact_template` — Update Template
 - `update-scheduled-action` — Update Scheduled Action
+
+## assistant
+
+- `assistant_approval_decide` — Decide Assistant Approval
+- `assistant_approvals_list` — List Assistant Approvals
+- `assistant_bulk_send` — Send Reviewed Bulk Messages
+- `assistant_command` — Submit Assistant Command
+- `assistant_conversation_get` — Read Assistant Conversation
+- `assistant_execution_status` — Assistant Execution Status
+- `assistant_grant_create` — Create Assistant Grant
+- `assistant_grant_revoke` — Revoke Assistant Grant
+- `assistant_grants_list` — List Assistant Grants
+- `assistant_message_send` — Send Assistant Message
+- `assistant_number_purchase` — Purchase Assistant Phone Number
+- `assistant_number_release` — Release Assistant Phone Number
+- `assistant_number_search` — Search Assistant Phone Numbers
+- `assistant_number_status` — Assistant Number Status
+- `assistant_status` — Assistant Status
 
 ## browser
 
@@ -291,7 +317,17 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `describe_service_connection_tool` — Describe Connected Service Tool
 - `export_connected_service_data` — Export Connected Service Data
 - `export_search_console_table_data` — Download Filtered Search Console Table Data
+- `gmail_bulk_delete_messages` — Permanently Delete Gmail Messages
+- `gmail_bulk_manage_messages` — Manage Gmail Messages in Bulk
+- `gmail_export_selection` — Export Gmail Selection
+- `gmail_get_attachment` — Open Gmail Attachment
+- `gmail_get_message` — Read Full Gmail Message
+- `gmail_import_status` — Get Gmail Memory Import Status
+- `gmail_import_to_memory` — Import Gmail Selection to Memory
+- `gmail_prepare_memory_import` — Plan Gmail Import to Memory
+- `gmail_prepare_selection` — Prepare Gmail Selection
 - `gmail_search_contacts` — Search Gmail Contacts
+- `gmail_search_messages` — Search Gmail Messages
 - `gmail_send_message` — Send Gmail Message
 - `google_calendar_create_event` — Create Calendar Event
 - `import_service_connection_to_memory` — Import Connected Service Snapshot to Memory
@@ -303,16 +339,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `slack_send_message` — Send Slack Message
 - `test_service_connection` — Test Connected Service
 - `zoom_create_meeting` — Create Zoom Meeting
-- `gmail_bulk_delete_messages` — Permanently Delete Gmail Messages
-- `gmail_bulk_manage_messages` — Manage Gmail Messages in Bulk
-- `gmail_export_selection` — Export Gmail Selection
-- `gmail_get_attachment` — Open Gmail Attachment
-- `gmail_get_message` — Read Full Gmail Message
-- `gmail_import_status` — Get Gmail Memory Import Status
-- `gmail_import_to_memory` — Import Gmail Selection to Memory
-- `gmail_prepare_memory_import` — Plan Gmail Import to Memory
-- `gmail_prepare_selection` — Prepare Gmail Selection
-- `gmail_search_messages` — Search Gmail Messages
 
 ## serpIntelligence
 
@@ -424,6 +450,11 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `serp_identity_delete` — Delete Persistent SERP Identity
 - `serp_identity_list` — List Persistent SERP Identities
 
+## other
+
+- `harvest_paa_start` — Start Durable Google PAA Harvest
+- `harvest_paa_status` — Check Durable Google PAA Harvest
+
 ## images
 
 - `image_asset_delete` — Delete Image Asset
@@ -519,26 +550,3 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 - `youtube_harvest` — YouTube Video Harvest
 - `youtube_transcribe` — YouTube Transcription
-
-## other
-
-- `harvest_paa_start` — Start Durable Google PAA Harvest
-- `harvest_paa_status` — Check Durable Google PAA Harvest
-
-## assistant
-
-- `assistant_approval_decide` — Decide Assistant Approval
-- `assistant_approvals_list` — List Assistant Approvals
-- `assistant_bulk_send` — Send Reviewed Bulk Messages
-- `assistant_command` — Submit Assistant Command
-- `assistant_conversation_get` — Read Assistant Conversation
-- `assistant_execution_status` — Assistant Execution Status
-- `assistant_grant_create` — Create Assistant Grant
-- `assistant_grant_revoke` — Revoke Assistant Grant
-- `assistant_grants_list` — List Assistant Grants
-- `assistant_message_send` — Send Assistant Message
-- `assistant_number_purchase` — Purchase Assistant Phone Number
-- `assistant_number_release` — Release Assistant Phone Number
-- `assistant_number_search` — Search Assistant Phone Numbers
-- `assistant_number_status` — Assistant Number Status
-- `assistant_status` — Assistant Status

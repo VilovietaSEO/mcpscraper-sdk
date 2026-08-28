@@ -12,9 +12,12 @@ class AnalyticsCreateConnectionInput(BaseModel):
     service_connection_ref: str | None = Field(None, alias="serviceConnectionRef", description="Optional MCP Scraper connected-service identifier used for governed provider actions.")
     webhook_secret: str | None = Field(None, alias="webhookSecret", description="Provider webhook validation secret; it is encrypted at rest and never returned.")
     config: dict[str, Any] | None = Field(None, alias="config", description="Validated renderer configuration for the new immutable template version; arbitrary code is rejected.")
+    idempotency_key: str = Field(..., alias="idempotencyKey", description="Retry key; reuse only for this exact mutation.")
 
 
 class AnalyticsCreateConnectionOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
+    connection: dict[str, Any] = Field(..., alias="connection", description="")
+    webhook_url: str = Field(..., alias="webhookUrl", description="")

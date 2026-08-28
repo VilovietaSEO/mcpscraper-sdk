@@ -24,6 +24,7 @@ export type Output =
         sourceKind: string;
         mimeType: string;
         bytes: number;
+        sha256: string;
         width: number;
         height: number;
         projectId: string | null;

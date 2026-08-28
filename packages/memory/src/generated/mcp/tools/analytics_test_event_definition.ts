@@ -31,4 +31,7 @@ export interface Input {
 
 export interface Output {
   ok: boolean;
+  test: {
+    [k: string]: unknown;
+  };
 }

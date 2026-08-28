@@ -48,8 +48,15 @@ export interface Input {
      */
     externalId?: string;
   };
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  import: {
+    [k: string]: unknown;
+  };
 }

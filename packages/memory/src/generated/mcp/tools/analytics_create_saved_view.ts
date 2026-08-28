@@ -487,6 +487,7 @@ export interface Input {
         | "linear"
         | "time_decay"
         | "position_based"
+        | "position_40_20_40"
         | "custom_weighted";
       /**
        * Independent click attribution window in days or lifetime.

@@ -35,6 +35,7 @@ import * as AnalyticsApplyCrmPipelineMapping from './tools/analytics_apply_crm_p
 import * as AnalyticsApproveCrmProvisioning from './tools/analytics_approve_crm_provisioning.js'
 import * as AnalyticsArchiveEventDefinition from './tools/analytics_archive_event_definition.js'
 import * as AnalyticsCancelCrmSync from './tools/analytics_cancel_crm_sync.js'
+import * as AnalyticsCommitCrmImport from './tools/analytics_commit_crm_import.js'
 import * as AnalyticsCreateActivationDestination from './tools/analytics_create_activation_destination.js'
 import * as AnalyticsCreateCampaignLink from './tools/analytics_create_campaign_link.js'
 import * as AnalyticsCreateConnection from './tools/analytics_create_connection.js'
@@ -51,6 +52,9 @@ import * as AnalyticsDeleteSavedView from './tools/analytics_delete_saved_view.j
 import * as AnalyticsDiscoverActivationAssets from './tools/analytics_discover_activation_assets.js'
 import * as AnalyticsDiscoverCrmCapabilities from './tools/analytics_discover_crm_capabilities.js'
 import * as AnalyticsDiscoverCrmSyncObjects from './tools/analytics_discover_crm_sync_objects.js'
+import * as AnalyticsExportCrmCsv from './tools/analytics_export_crm_csv.js'
+import * as AnalyticsExportGoogleAdsCsv from './tools/analytics_export_google_ads_csv.js'
+import * as AnalyticsExportMetaTechnical from './tools/analytics_export_meta_technical.js'
 import * as AnalyticsExportPrivacySubject from './tools/analytics_export_privacy_subject.js'
 import * as AnalyticsGetAcquisition from './tools/analytics_get_acquisition.js'
 import * as AnalyticsGetBusinessMetrics from './tools/analytics_get_business_metrics.js'
@@ -83,10 +87,13 @@ import * as AnalyticsListConnections from './tools/analytics_list_connections.js
 import * as AnalyticsListConversionRules from './tools/analytics_list_conversion_rules.js'
 import * as AnalyticsListCrmCapabilities from './tools/analytics_list_crm_capabilities.js'
 import * as AnalyticsListCrmImports from './tools/analytics_list_crm_imports.js'
+import * as AnalyticsListCrmOutboundPolicies from './tools/analytics_list_crm_outbound_policies.js'
+import * as AnalyticsListCrmOutboundReceipts from './tools/analytics_list_crm_outbound_receipts.js'
 import * as AnalyticsListEventDefinitions from './tools/analytics_list_event_definitions.js'
 import * as AnalyticsListForms from './tools/analytics_list_forms.js'
 import * as AnalyticsListFunnels from './tools/analytics_list_funnels.js'
 import * as AnalyticsListInferenceReview from './tools/analytics_list_inference_review.js'
+import * as AnalyticsListJourneys from './tools/analytics_list_journeys.js'
 import * as AnalyticsListLeadScores from './tools/analytics_list_lead_scores.js'
 import * as AnalyticsListNamespaceSources from './tools/analytics_list_namespace_sources.js'
 import * as AnalyticsListPixels from './tools/analytics_list_pixels.js'
@@ -96,9 +103,12 @@ import * as AnalyticsListSessions from './tools/analytics_list_sessions.js'
 import * as AnalyticsListSites from './tools/analytics_list_sites.js'
 import * as AnalyticsListVisitors from './tools/analytics_list_visitors.js'
 import * as AnalyticsPlanCrmProvisioning from './tools/analytics_plan_crm_provisioning.js'
+import * as AnalyticsPreviewCrmImport from './tools/analytics_preview_crm_import.js'
 import * as AnalyticsReconcileConnection from './tools/analytics_reconcile_connection.js'
 import * as AnalyticsRecordExternalEvent from './tools/analytics_record_external_event.js'
 import * as AnalyticsRetryActivationDelivery from './tools/analytics_retry_activation_delivery.js'
+import * as AnalyticsSaveActivationMapping from './tools/analytics_save_activation_mapping.js'
+import * as AnalyticsSetActivationAutomation from './tools/analytics_set_activation_automation.js'
 import * as AnalyticsStartCrmSync from './tools/analytics_start_crm_sync.js'
 import * as AnalyticsSyncCrmPerson from './tools/analytics_sync_crm_person.js'
 import * as AnalyticsTestActivationDestination from './tools/analytics_test_activation_destination.js'
@@ -109,12 +119,10 @@ import * as AnalyticsTestFunnel from './tools/analytics_test_funnel.js'
 import * as AnalyticsUpdateCrmSyncSchedule from './tools/analytics_update_crm_sync_schedule.js'
 import * as AnalyticsUpdateEventDefinition from './tools/analytics_update_event_definition.js'
 import * as AnalyticsUpdateOnboardingPreferences from './tools/analytics_update_onboarding_preferences.js'
-import * as AnalyticsValidateActivationMapping from './tools/analytics_validate_activation_mapping.js'
-import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js'
-import * as AnalyticsListCrmOutboundPolicies from './tools/analytics_list_crm_outbound_policies.js'
-import * as AnalyticsListCrmOutboundReceipts from './tools/analytics_list_crm_outbound_receipts.js'
 import * as AnalyticsUpsertCrmOutboundPolicy from './tools/analytics_upsert_crm_outbound_policy.js'
-import * as AnalyticsListJourneys from './tools/analytics_list_journeys.js'
+import * as AnalyticsValidateActivationMapping from './tools/analytics_validate_activation_mapping.js'
+import * as AnalyticsVerifyLiveEventDefinition from './tools/analytics_verify_live_event_definition.js'
+import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -150,6 +158,21 @@ import * as ScheduleSetScheduleDefaults from './tools/set-schedule-defaults.js'
 import * as ScheduleSetScheduleEntitlement from './tools/set-schedule-entitlement.js'
 import * as ScheduleUpdateArtifactTemplate from './tools/update_artifact_template.js'
 import * as ScheduleUpdateScheduledAction from './tools/update-scheduled-action.js'
+import * as AssistantApprovalDecide from './tools/assistant_approval_decide.js'
+import * as AssistantApprovalsList from './tools/assistant_approvals_list.js'
+import * as AssistantBulkSend from './tools/assistant_bulk_send.js'
+import * as AssistantCommand from './tools/assistant_command.js'
+import * as AssistantConversationGet from './tools/assistant_conversation_get.js'
+import * as AssistantExecutionStatus from './tools/assistant_execution_status.js'
+import * as AssistantGrantCreate from './tools/assistant_grant_create.js'
+import * as AssistantGrantRevoke from './tools/assistant_grant_revoke.js'
+import * as AssistantGrantsList from './tools/assistant_grants_list.js'
+import * as AssistantMessageSend from './tools/assistant_message_send.js'
+import * as AssistantNumberPurchase from './tools/assistant_number_purchase.js'
+import * as AssistantNumberRelease from './tools/assistant_number_release.js'
+import * as AssistantNumberSearch from './tools/assistant_number_search.js'
+import * as AssistantNumberStatus from './tools/assistant_number_status.js'
+import * as AssistantStatus from './tools/assistant_status.js'
 import * as BrowserClick from './tools/browser_click.js'
 import * as BrowserClose from './tools/browser_close.js'
 import * as BrowserExtensionDelete from './tools/browser_extension_delete.js'
@@ -185,7 +208,17 @@ import * as ConnectionsCallServiceConnectionAction from './tools/call_service_co
 import * as ConnectionsDescribeServiceConnectionTool from './tools/describe_service_connection_tool.js'
 import * as ConnectionsExportConnectedServiceData from './tools/export_connected_service_data.js'
 import * as ConnectionsExportSearchConsoleTableData from './tools/export_search_console_table_data.js'
+import * as ConnectionsGmailBulkDeleteMessages from './tools/gmail_bulk_delete_messages.js'
+import * as ConnectionsGmailBulkManageMessages from './tools/gmail_bulk_manage_messages.js'
+import * as ConnectionsGmailExportSelection from './tools/gmail_export_selection.js'
+import * as ConnectionsGmailGetAttachment from './tools/gmail_get_attachment.js'
+import * as ConnectionsGmailGetMessage from './tools/gmail_get_message.js'
+import * as ConnectionsGmailImportStatus from './tools/gmail_import_status.js'
+import * as ConnectionsGmailImportToMemory from './tools/gmail_import_to_memory.js'
+import * as ConnectionsGmailPrepareMemoryImport from './tools/gmail_prepare_memory_import.js'
+import * as ConnectionsGmailPrepareSelection from './tools/gmail_prepare_selection.js'
 import * as ConnectionsGmailSearchContacts from './tools/gmail_search_contacts.js'
+import * as ConnectionsGmailSearchMessages from './tools/gmail_search_messages.js'
 import * as ConnectionsGmailSendMessage from './tools/gmail_send_message.js'
 import * as ConnectionsGoogleCalendarCreateEvent from './tools/google_calendar_create_event.js'
 import * as ConnectionsImportServiceConnectionToMemory from './tools/import_service_connection_to_memory.js'
@@ -197,16 +230,6 @@ import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled
 import * as ConnectionsSlackSendMessage from './tools/slack_send_message.js'
 import * as ConnectionsTestServiceConnection from './tools/test_service_connection.js'
 import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
-import * as ConnectionsGmailBulkDeleteMessages from './tools/gmail_bulk_delete_messages.js'
-import * as ConnectionsGmailBulkManageMessages from './tools/gmail_bulk_manage_messages.js'
-import * as ConnectionsGmailExportSelection from './tools/gmail_export_selection.js'
-import * as ConnectionsGmailGetAttachment from './tools/gmail_get_attachment.js'
-import * as ConnectionsGmailGetMessage from './tools/gmail_get_message.js'
-import * as ConnectionsGmailImportStatus from './tools/gmail_import_status.js'
-import * as ConnectionsGmailImportToMemory from './tools/gmail_import_to_memory.js'
-import * as ConnectionsGmailPrepareMemoryImport from './tools/gmail_prepare_memory_import.js'
-import * as ConnectionsGmailPrepareSelection from './tools/gmail_prepare_selection.js'
-import * as ConnectionsGmailSearchMessages from './tools/gmail_search_messages.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as CommonsClaimPublication from './tools/commons_claim_publication.js'
@@ -275,6 +298,8 @@ import * as SearchSearchSerp from './tools/search_serp.js'
 import * as SearchSerpIdentityCreate from './tools/serp_identity_create.js'
 import * as SearchSerpIdentityDelete from './tools/serp_identity_delete.js'
 import * as SearchSerpIdentityList from './tools/serp_identity_list.js'
+import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
+import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
 import * as ImagesAssetDelete from './tools/image_asset_delete.js'
 import * as ImagesAssetGet from './tools/image_asset_get.js'
 import * as ImagesAssetList from './tools/image_asset_list.js'
@@ -329,23 +354,6 @@ import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
 import * as VideoAnalyzeStatus from './tools/video-analyze-status.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
-import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
-import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
-import * as AssistantApprovalDecide from './tools/assistant_approval_decide.js'
-import * as AssistantApprovalsList from './tools/assistant_approvals_list.js'
-import * as AssistantBulkSend from './tools/assistant_bulk_send.js'
-import * as AssistantCommand from './tools/assistant_command.js'
-import * as AssistantConversationGet from './tools/assistant_conversation_get.js'
-import * as AssistantExecutionStatus from './tools/assistant_execution_status.js'
-import * as AssistantGrantCreate from './tools/assistant_grant_create.js'
-import * as AssistantGrantRevoke from './tools/assistant_grant_revoke.js'
-import * as AssistantGrantsList from './tools/assistant_grants_list.js'
-import * as AssistantMessageSend from './tools/assistant_message_send.js'
-import * as AssistantNumberPurchase from './tools/assistant_number_purchase.js'
-import * as AssistantNumberRelease from './tools/assistant_number_release.js'
-import * as AssistantNumberSearch from './tools/assistant_number_search.js'
-import * as AssistantNumberStatus from './tools/assistant_number_status.js'
-import * as AssistantStatus from './tools/assistant_status.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -464,6 +472,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "cancelCrmSync"
   },
   {
+    "name": "analytics_commit_crm_import",
+    "category": "analytics",
+    "methodName": "commitCrmImport"
+  },
+  {
     "name": "analytics_create_activation_destination",
     "category": "analytics",
     "methodName": "createActivationDestination"
@@ -542,6 +555,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_discover_crm_sync_objects",
     "category": "analytics",
     "methodName": "discoverCrmSyncObjects"
+  },
+  {
+    "name": "analytics_export_crm_csv",
+    "category": "analytics",
+    "methodName": "exportCrmCsv"
+  },
+  {
+    "name": "analytics_export_google_ads_csv",
+    "category": "analytics",
+    "methodName": "exportGoogleAdsCsv"
+  },
+  {
+    "name": "analytics_export_meta_technical",
+    "category": "analytics",
+    "methodName": "exportMetaTechnical"
   },
   {
     "name": "analytics_export_privacy_subject",
@@ -704,6 +732,16 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "listCrmImports"
   },
   {
+    "name": "analytics_list_crm_outbound_policies",
+    "category": "analytics",
+    "methodName": "listCrmOutboundPolicies"
+  },
+  {
+    "name": "analytics_list_crm_outbound_receipts",
+    "category": "analytics",
+    "methodName": "listCrmOutboundReceipts"
+  },
+  {
     "name": "analytics_list_event_definitions",
     "category": "analytics",
     "methodName": "listEventDefinitions"
@@ -722,6 +760,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_list_inference_review",
     "category": "analytics",
     "methodName": "listInferenceReview"
+  },
+  {
+    "name": "analytics_list_journeys",
+    "category": "analytics",
+    "methodName": "listJourneys"
   },
   {
     "name": "analytics_list_lead_scores",
@@ -769,6 +812,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "planCrmProvisioning"
   },
   {
+    "name": "analytics_preview_crm_import",
+    "category": "analytics",
+    "methodName": "previewCrmImport"
+  },
+  {
     "name": "analytics_reconcile_connection",
     "category": "analytics",
     "methodName": "reconcileConnection"
@@ -782,6 +830,16 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_retry_activation_delivery",
     "category": "analytics",
     "methodName": "retryActivationDelivery"
+  },
+  {
+    "name": "analytics_save_activation_mapping",
+    "category": "analytics",
+    "methodName": "saveActivationMapping"
+  },
+  {
+    "name": "analytics_set_activation_automation",
+    "category": "analytics",
+    "methodName": "setActivationAutomation"
   },
   {
     "name": "analytics_start_crm_sync",
@@ -834,9 +892,19 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "updateOnboardingPreferences"
   },
   {
+    "name": "analytics_upsert_crm_outbound_policy",
+    "category": "analytics",
+    "methodName": "upsertCrmOutboundPolicy"
+  },
+  {
     "name": "analytics_validate_activation_mapping",
     "category": "analytics",
     "methodName": "validateActivationMapping"
+  },
+  {
+    "name": "analytics_verify_live_event_definition",
+    "category": "analytics",
+    "methodName": "verifyLiveEventDefinition"
   },
   {
     "name": "analytics_withdraw_consent",
@@ -862,6 +930,81 @@ export const MCP_TOOL_BINDINGS = [
     "name": "archive_scheduled_run",
     "category": "schedule",
     "methodName": "archiveScheduledRun"
+  },
+  {
+    "name": "assistant_approval_decide",
+    "category": "assistant",
+    "methodName": "approvalDecide"
+  },
+  {
+    "name": "assistant_approvals_list",
+    "category": "assistant",
+    "methodName": "approvalsList"
+  },
+  {
+    "name": "assistant_bulk_send",
+    "category": "assistant",
+    "methodName": "bulkSend"
+  },
+  {
+    "name": "assistant_command",
+    "category": "assistant",
+    "methodName": "command"
+  },
+  {
+    "name": "assistant_conversation_get",
+    "category": "assistant",
+    "methodName": "conversationGet"
+  },
+  {
+    "name": "assistant_execution_status",
+    "category": "assistant",
+    "methodName": "executionStatus"
+  },
+  {
+    "name": "assistant_grant_create",
+    "category": "assistant",
+    "methodName": "grantCreate"
+  },
+  {
+    "name": "assistant_grant_revoke",
+    "category": "assistant",
+    "methodName": "grantRevoke"
+  },
+  {
+    "name": "assistant_grants_list",
+    "category": "assistant",
+    "methodName": "grantsList"
+  },
+  {
+    "name": "assistant_message_send",
+    "category": "assistant",
+    "methodName": "messageSend"
+  },
+  {
+    "name": "assistant_number_purchase",
+    "category": "assistant",
+    "methodName": "numberPurchase"
+  },
+  {
+    "name": "assistant_number_release",
+    "category": "assistant",
+    "methodName": "numberRelease"
+  },
+  {
+    "name": "assistant_number_search",
+    "category": "assistant",
+    "methodName": "numberSearch"
+  },
+  {
+    "name": "assistant_number_status",
+    "category": "assistant",
+    "methodName": "numberStatus"
+  },
+  {
+    "name": "assistant_status",
+    "category": "assistant",
+    "methodName": "status"
   },
   {
     "name": "audit_site",
@@ -1279,9 +1422,59 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getVaultContract"
   },
   {
+    "name": "gmail_bulk_delete_messages",
+    "category": "connections",
+    "methodName": "gmailBulkDeleteMessages"
+  },
+  {
+    "name": "gmail_bulk_manage_messages",
+    "category": "connections",
+    "methodName": "gmailBulkManageMessages"
+  },
+  {
+    "name": "gmail_export_selection",
+    "category": "connections",
+    "methodName": "gmailExportSelection"
+  },
+  {
+    "name": "gmail_get_attachment",
+    "category": "connections",
+    "methodName": "gmailGetAttachment"
+  },
+  {
+    "name": "gmail_get_message",
+    "category": "connections",
+    "methodName": "gmailGetMessage"
+  },
+  {
+    "name": "gmail_import_status",
+    "category": "connections",
+    "methodName": "gmailImportStatus"
+  },
+  {
+    "name": "gmail_import_to_memory",
+    "category": "connections",
+    "methodName": "gmailImportToMemory"
+  },
+  {
+    "name": "gmail_prepare_memory_import",
+    "category": "connections",
+    "methodName": "gmailPrepareMemoryImport"
+  },
+  {
+    "name": "gmail_prepare_selection",
+    "category": "connections",
+    "methodName": "gmailPrepareSelection"
+  },
+  {
     "name": "gmail_search_contacts",
     "category": "connections",
     "methodName": "gmailSearchContacts"
+  },
+  {
+    "name": "gmail_search_messages",
+    "category": "connections",
+    "methodName": "gmailSearchMessages"
   },
   {
     "name": "gmail_send_message",
@@ -1312,6 +1505,16 @@ export const MCP_TOOL_BINDINGS = [
     "name": "harvest_paa",
     "category": "search",
     "methodName": "harvestPaa"
+  },
+  {
+    "name": "harvest_paa_start",
+    "category": "other",
+    "methodName": "harvestPaaStart"
+  },
+  {
+    "name": "harvest_paa_status",
+    "category": "other",
+    "methodName": "harvestPaaStatus"
   },
   {
     "name": "image_asset_delete",
@@ -1922,161 +2125,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "zoom_create_meeting",
     "category": "connections",
     "methodName": "zoomCreateMeeting"
-  },
-  {
-    "name": "gmail_bulk_delete_messages",
-    "category": "connections",
-    "methodName": "gmailBulkDeleteMessages"
-  },
-  {
-    "name": "gmail_bulk_manage_messages",
-    "category": "connections",
-    "methodName": "gmailBulkManageMessages"
-  },
-  {
-    "name": "gmail_export_selection",
-    "category": "connections",
-    "methodName": "gmailExportSelection"
-  },
-  {
-    "name": "gmail_get_attachment",
-    "category": "connections",
-    "methodName": "gmailGetAttachment"
-  },
-  {
-    "name": "gmail_get_message",
-    "category": "connections",
-    "methodName": "gmailGetMessage"
-  },
-  {
-    "name": "gmail_import_status",
-    "category": "connections",
-    "methodName": "gmailImportStatus"
-  },
-  {
-    "name": "gmail_import_to_memory",
-    "category": "connections",
-    "methodName": "gmailImportToMemory"
-  },
-  {
-    "name": "gmail_prepare_memory_import",
-    "category": "connections",
-    "methodName": "gmailPrepareMemoryImport"
-  },
-  {
-    "name": "gmail_prepare_selection",
-    "category": "connections",
-    "methodName": "gmailPrepareSelection"
-  },
-  {
-    "name": "gmail_search_messages",
-    "category": "connections",
-    "methodName": "gmailSearchMessages"
-  },
-  {
-    "name": "analytics_list_crm_outbound_policies",
-    "category": "analytics",
-    "methodName": "listCrmOutboundPolicies"
-  },
-  {
-    "name": "analytics_list_crm_outbound_receipts",
-    "category": "analytics",
-    "methodName": "listCrmOutboundReceipts"
-  },
-  {
-    "name": "analytics_upsert_crm_outbound_policy",
-    "category": "analytics",
-    "methodName": "upsertCrmOutboundPolicy"
-  },
-  {
-    "name": "harvest_paa_start",
-    "category": "other",
-    "methodName": "harvestPaaStart"
-  },
-  {
-    "name": "harvest_paa_status",
-    "category": "other",
-    "methodName": "harvestPaaStatus"
-  },
-  {
-    "name": "analytics_list_journeys",
-    "category": "analytics",
-    "methodName": "listJourneys"
-  },
-  {
-    "name": "assistant_approval_decide",
-    "category": "assistant",
-    "methodName": "approvalDecide"
-  },
-  {
-    "name": "assistant_approvals_list",
-    "category": "assistant",
-    "methodName": "approvalsList"
-  },
-  {
-    "name": "assistant_bulk_send",
-    "category": "assistant",
-    "methodName": "bulkSend"
-  },
-  {
-    "name": "assistant_command",
-    "category": "assistant",
-    "methodName": "command"
-  },
-  {
-    "name": "assistant_conversation_get",
-    "category": "assistant",
-    "methodName": "conversationGet"
-  },
-  {
-    "name": "assistant_execution_status",
-    "category": "assistant",
-    "methodName": "executionStatus"
-  },
-  {
-    "name": "assistant_grant_create",
-    "category": "assistant",
-    "methodName": "grantCreate"
-  },
-  {
-    "name": "assistant_grant_revoke",
-    "category": "assistant",
-    "methodName": "grantRevoke"
-  },
-  {
-    "name": "assistant_grants_list",
-    "category": "assistant",
-    "methodName": "grantsList"
-  },
-  {
-    "name": "assistant_message_send",
-    "category": "assistant",
-    "methodName": "messageSend"
-  },
-  {
-    "name": "assistant_number_purchase",
-    "category": "assistant",
-    "methodName": "numberPurchase"
-  },
-  {
-    "name": "assistant_number_release",
-    "category": "assistant",
-    "methodName": "numberRelease"
-  },
-  {
-    "name": "assistant_number_search",
-    "category": "assistant",
-    "methodName": "numberSearch"
-  },
-  {
-    "name": "assistant_number_status",
-    "category": "assistant",
-    "methodName": "numberStatus"
-  },
-  {
-    "name": "assistant_status",
-    "category": "assistant",
-    "methodName": "status"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2232,6 +2280,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_cancel_crm_sync', input) as Promise<AnalyticsCancelCrmSync.Output>
   }
 
+  async commitCrmImport(input: AnalyticsCommitCrmImport.Input): Promise<AnalyticsCommitCrmImport.Output> {
+    return this.callTool('analytics_commit_crm_import', input) as Promise<AnalyticsCommitCrmImport.Output>
+  }
+
   async createActivationDestination(input: AnalyticsCreateActivationDestination.Input): Promise<AnalyticsCreateActivationDestination.Output> {
     return this.callTool('analytics_create_activation_destination', input) as Promise<AnalyticsCreateActivationDestination.Output>
   }
@@ -2294,6 +2346,18 @@ export class AnalyticsNamespace {
 
   async discoverCrmSyncObjects(input: AnalyticsDiscoverCrmSyncObjects.Input): Promise<AnalyticsDiscoverCrmSyncObjects.Output> {
     return this.callTool('analytics_discover_crm_sync_objects', input) as Promise<AnalyticsDiscoverCrmSyncObjects.Output>
+  }
+
+  async exportCrmCsv(input: AnalyticsExportCrmCsv.Input): Promise<AnalyticsExportCrmCsv.Output> {
+    return this.callTool('analytics_export_crm_csv', input) as Promise<AnalyticsExportCrmCsv.Output>
+  }
+
+  async exportGoogleAdsCsv(input: AnalyticsExportGoogleAdsCsv.Input): Promise<AnalyticsExportGoogleAdsCsv.Output> {
+    return this.callTool('analytics_export_google_ads_csv', input) as Promise<AnalyticsExportGoogleAdsCsv.Output>
+  }
+
+  async exportMetaTechnical(input: AnalyticsExportMetaTechnical.Input): Promise<AnalyticsExportMetaTechnical.Output> {
+    return this.callTool('analytics_export_meta_technical', input) as Promise<AnalyticsExportMetaTechnical.Output>
   }
 
   async exportPrivacySubject(input: AnalyticsExportPrivacySubject.Input): Promise<AnalyticsExportPrivacySubject.Output> {
@@ -2424,6 +2488,14 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_list_crm_imports', input) as Promise<AnalyticsListCrmImports.Output>
   }
 
+  async listCrmOutboundPolicies(input: AnalyticsListCrmOutboundPolicies.Input): Promise<AnalyticsListCrmOutboundPolicies.Output> {
+    return this.callTool('analytics_list_crm_outbound_policies', input) as Promise<AnalyticsListCrmOutboundPolicies.Output>
+  }
+
+  async listCrmOutboundReceipts(input: AnalyticsListCrmOutboundReceipts.Input): Promise<AnalyticsListCrmOutboundReceipts.Output> {
+    return this.callTool('analytics_list_crm_outbound_receipts', input) as Promise<AnalyticsListCrmOutboundReceipts.Output>
+  }
+
   async listEventDefinitions(input: AnalyticsListEventDefinitions.Input): Promise<AnalyticsListEventDefinitions.Output> {
     return this.callTool('analytics_list_event_definitions', input) as Promise<AnalyticsListEventDefinitions.Output>
   }
@@ -2438,6 +2510,10 @@ export class AnalyticsNamespace {
 
   async listInferenceReview(input: AnalyticsListInferenceReview.Input): Promise<AnalyticsListInferenceReview.Output> {
     return this.callTool('analytics_list_inference_review', input) as Promise<AnalyticsListInferenceReview.Output>
+  }
+
+  async listJourneys(input: AnalyticsListJourneys.Input): Promise<AnalyticsListJourneys.Output> {
+    return this.callTool('analytics_list_journeys', input) as Promise<AnalyticsListJourneys.Output>
   }
 
   async listLeadScores(input: AnalyticsListLeadScores.Input): Promise<AnalyticsListLeadScores.Output> {
@@ -2476,6 +2552,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_plan_crm_provisioning', input) as Promise<AnalyticsPlanCrmProvisioning.Output>
   }
 
+  async previewCrmImport(input: AnalyticsPreviewCrmImport.Input): Promise<AnalyticsPreviewCrmImport.Output> {
+    return this.callTool('analytics_preview_crm_import', input) as Promise<AnalyticsPreviewCrmImport.Output>
+  }
+
   async reconcileConnection(input: AnalyticsReconcileConnection.Input): Promise<AnalyticsReconcileConnection.Output> {
     return this.callTool('analytics_reconcile_connection', input) as Promise<AnalyticsReconcileConnection.Output>
   }
@@ -2486,6 +2566,14 @@ export class AnalyticsNamespace {
 
   async retryActivationDelivery(input: AnalyticsRetryActivationDelivery.Input): Promise<AnalyticsRetryActivationDelivery.Output> {
     return this.callTool('analytics_retry_activation_delivery', input) as Promise<AnalyticsRetryActivationDelivery.Output>
+  }
+
+  async saveActivationMapping(input: AnalyticsSaveActivationMapping.Input): Promise<AnalyticsSaveActivationMapping.Output> {
+    return this.callTool('analytics_save_activation_mapping', input) as Promise<AnalyticsSaveActivationMapping.Output>
+  }
+
+  async setActivationAutomation(input: AnalyticsSetActivationAutomation.Input): Promise<AnalyticsSetActivationAutomation.Output> {
+    return this.callTool('analytics_set_activation_automation', input) as Promise<AnalyticsSetActivationAutomation.Output>
   }
 
   async startCrmSync(input: AnalyticsStartCrmSync.Input): Promise<AnalyticsStartCrmSync.Output> {
@@ -2528,28 +2616,20 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_update_onboarding_preferences', input) as Promise<AnalyticsUpdateOnboardingPreferences.Output>
   }
 
-  async validateActivationMapping(input: AnalyticsValidateActivationMapping.Input): Promise<AnalyticsValidateActivationMapping.Output> {
-    return this.callTool('analytics_validate_activation_mapping', input) as Promise<AnalyticsValidateActivationMapping.Output>
-  }
-
-  async withdrawConsent(input: AnalyticsWithdrawConsent.Input): Promise<AnalyticsWithdrawConsent.Output> {
-    return this.callTool('analytics_withdraw_consent', input) as Promise<AnalyticsWithdrawConsent.Output>
-  }
-
-  async listCrmOutboundPolicies(input: AnalyticsListCrmOutboundPolicies.Input): Promise<AnalyticsListCrmOutboundPolicies.Output> {
-    return this.callTool('analytics_list_crm_outbound_policies', input) as Promise<AnalyticsListCrmOutboundPolicies.Output>
-  }
-
-  async listCrmOutboundReceipts(input: AnalyticsListCrmOutboundReceipts.Input): Promise<AnalyticsListCrmOutboundReceipts.Output> {
-    return this.callTool('analytics_list_crm_outbound_receipts', input) as Promise<AnalyticsListCrmOutboundReceipts.Output>
-  }
-
   async upsertCrmOutboundPolicy(input: AnalyticsUpsertCrmOutboundPolicy.Input): Promise<AnalyticsUpsertCrmOutboundPolicy.Output> {
     return this.callTool('analytics_upsert_crm_outbound_policy', input) as Promise<AnalyticsUpsertCrmOutboundPolicy.Output>
   }
 
-  async listJourneys(input: AnalyticsListJourneys.Input): Promise<AnalyticsListJourneys.Output> {
-    return this.callTool('analytics_list_journeys', input) as Promise<AnalyticsListJourneys.Output>
+  async validateActivationMapping(input: AnalyticsValidateActivationMapping.Input): Promise<AnalyticsValidateActivationMapping.Output> {
+    return this.callTool('analytics_validate_activation_mapping', input) as Promise<AnalyticsValidateActivationMapping.Output>
+  }
+
+  async verifyLiveEventDefinition(input: AnalyticsVerifyLiveEventDefinition.Input): Promise<AnalyticsVerifyLiveEventDefinition.Output> {
+    return this.callTool('analytics_verify_live_event_definition', input) as Promise<AnalyticsVerifyLiveEventDefinition.Output>
+  }
+
+  async withdrawConsent(input: AnalyticsWithdrawConsent.Input): Promise<AnalyticsWithdrawConsent.Output> {
+    return this.callTool('analytics_withdraw_consent', input) as Promise<AnalyticsWithdrawConsent.Output>
   }
 }
 
@@ -2698,6 +2778,70 @@ export class ScheduleNamespace {
 
   async updateScheduledAction(input: ScheduleUpdateScheduledAction.Input): Promise<ScheduleUpdateScheduledAction.Output> {
     return this.callTool('update-scheduled-action', input) as Promise<ScheduleUpdateScheduledAction.Output>
+  }
+}
+
+export class AssistantNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async approvalDecide(input: AssistantApprovalDecide.Input): Promise<AssistantApprovalDecide.Output> {
+    return this.callTool('assistant_approval_decide', input) as Promise<AssistantApprovalDecide.Output>
+  }
+
+  async approvalsList(input: AssistantApprovalsList.Input = {} as AssistantApprovalsList.Input): Promise<AssistantApprovalsList.Output> {
+    return this.callTool('assistant_approvals_list', input) as Promise<AssistantApprovalsList.Output>
+  }
+
+  async bulkSend(input: AssistantBulkSend.Input): Promise<AssistantBulkSend.Output> {
+    return this.callTool('assistant_bulk_send', input) as Promise<AssistantBulkSend.Output>
+  }
+
+  async command(input: AssistantCommand.Input): Promise<AssistantCommand.Output> {
+    return this.callTool('assistant_command', input) as Promise<AssistantCommand.Output>
+  }
+
+  async conversationGet(input: AssistantConversationGet.Input): Promise<AssistantConversationGet.Output> {
+    return this.callTool('assistant_conversation_get', input) as Promise<AssistantConversationGet.Output>
+  }
+
+  async executionStatus(input: AssistantExecutionStatus.Input): Promise<AssistantExecutionStatus.Output> {
+    return this.callTool('assistant_execution_status', input) as Promise<AssistantExecutionStatus.Output>
+  }
+
+  async grantCreate(input: AssistantGrantCreate.Input): Promise<AssistantGrantCreate.Output> {
+    return this.callTool('assistant_grant_create', input) as Promise<AssistantGrantCreate.Output>
+  }
+
+  async grantRevoke(input: AssistantGrantRevoke.Input): Promise<AssistantGrantRevoke.Output> {
+    return this.callTool('assistant_grant_revoke', input) as Promise<AssistantGrantRevoke.Output>
+  }
+
+  async grantsList(input: AssistantGrantsList.Input = {} as AssistantGrantsList.Input): Promise<AssistantGrantsList.Output> {
+    return this.callTool('assistant_grants_list', input) as Promise<AssistantGrantsList.Output>
+  }
+
+  async messageSend(input: AssistantMessageSend.Input): Promise<AssistantMessageSend.Output> {
+    return this.callTool('assistant_message_send', input) as Promise<AssistantMessageSend.Output>
+  }
+
+  async numberPurchase(input: AssistantNumberPurchase.Input): Promise<AssistantNumberPurchase.Output> {
+    return this.callTool('assistant_number_purchase', input) as Promise<AssistantNumberPurchase.Output>
+  }
+
+  async numberRelease(input: AssistantNumberRelease.Input): Promise<AssistantNumberRelease.Output> {
+    return this.callTool('assistant_number_release', input) as Promise<AssistantNumberRelease.Output>
+  }
+
+  async numberSearch(input: AssistantNumberSearch.Input): Promise<AssistantNumberSearch.Output> {
+    return this.callTool('assistant_number_search', input) as Promise<AssistantNumberSearch.Output>
+  }
+
+  async numberStatus(input: AssistantNumberStatus.Input): Promise<AssistantNumberStatus.Output> {
+    return this.callTool('assistant_number_status', input) as Promise<AssistantNumberStatus.Output>
+  }
+
+  async status(input: AssistantStatus.Input = {} as AssistantStatus.Input): Promise<AssistantStatus.Output> {
+    return this.callTool('assistant_status', input) as Promise<AssistantStatus.Output>
   }
 }
 
@@ -2852,8 +2996,48 @@ export class ConnectionsNamespace {
     return this.callTool('export_search_console_table_data', input) as Promise<ConnectionsExportSearchConsoleTableData.Output>
   }
 
+  async gmailBulkDeleteMessages(input: ConnectionsGmailBulkDeleteMessages.Input): Promise<ConnectionsGmailBulkDeleteMessages.Output> {
+    return this.callTool('gmail_bulk_delete_messages', input) as Promise<ConnectionsGmailBulkDeleteMessages.Output>
+  }
+
+  async gmailBulkManageMessages(input: ConnectionsGmailBulkManageMessages.Input): Promise<ConnectionsGmailBulkManageMessages.Output> {
+    return this.callTool('gmail_bulk_manage_messages', input) as Promise<ConnectionsGmailBulkManageMessages.Output>
+  }
+
+  async gmailExportSelection(input: ConnectionsGmailExportSelection.Input): Promise<ConnectionsGmailExportSelection.Output> {
+    return this.callTool('gmail_export_selection', input) as Promise<ConnectionsGmailExportSelection.Output>
+  }
+
+  async gmailGetAttachment(input: ConnectionsGmailGetAttachment.Input): Promise<ConnectionsGmailGetAttachment.Output> {
+    return this.callTool('gmail_get_attachment', input) as Promise<ConnectionsGmailGetAttachment.Output>
+  }
+
+  async gmailGetMessage(input: ConnectionsGmailGetMessage.Input): Promise<ConnectionsGmailGetMessage.Output> {
+    return this.callTool('gmail_get_message', input) as Promise<ConnectionsGmailGetMessage.Output>
+  }
+
+  async gmailImportStatus(input: ConnectionsGmailImportStatus.Input): Promise<ConnectionsGmailImportStatus.Output> {
+    return this.callTool('gmail_import_status', input) as Promise<ConnectionsGmailImportStatus.Output>
+  }
+
+  async gmailImportToMemory(input: ConnectionsGmailImportToMemory.Input): Promise<ConnectionsGmailImportToMemory.Output> {
+    return this.callTool('gmail_import_to_memory', input) as Promise<ConnectionsGmailImportToMemory.Output>
+  }
+
+  async gmailPrepareMemoryImport(input: ConnectionsGmailPrepareMemoryImport.Input): Promise<ConnectionsGmailPrepareMemoryImport.Output> {
+    return this.callTool('gmail_prepare_memory_import', input) as Promise<ConnectionsGmailPrepareMemoryImport.Output>
+  }
+
+  async gmailPrepareSelection(input: ConnectionsGmailPrepareSelection.Input): Promise<ConnectionsGmailPrepareSelection.Output> {
+    return this.callTool('gmail_prepare_selection', input) as Promise<ConnectionsGmailPrepareSelection.Output>
+  }
+
   async gmailSearchContacts(input: ConnectionsGmailSearchContacts.Input): Promise<ConnectionsGmailSearchContacts.Output> {
     return this.callTool('gmail_search_contacts', input) as Promise<ConnectionsGmailSearchContacts.Output>
+  }
+
+  async gmailSearchMessages(input: ConnectionsGmailSearchMessages.Input): Promise<ConnectionsGmailSearchMessages.Output> {
+    return this.callTool('gmail_search_messages', input) as Promise<ConnectionsGmailSearchMessages.Output>
   }
 
   async gmailSendMessage(input: ConnectionsGmailSendMessage.Input): Promise<ConnectionsGmailSendMessage.Output> {
@@ -2898,46 +3082,6 @@ export class ConnectionsNamespace {
 
   async zoomCreateMeeting(input: ConnectionsZoomCreateMeeting.Input): Promise<ConnectionsZoomCreateMeeting.Output> {
     return this.callTool('zoom_create_meeting', input) as Promise<ConnectionsZoomCreateMeeting.Output>
-  }
-
-  async gmailBulkDeleteMessages(input: ConnectionsGmailBulkDeleteMessages.Input): Promise<ConnectionsGmailBulkDeleteMessages.Output> {
-    return this.callTool('gmail_bulk_delete_messages', input) as Promise<ConnectionsGmailBulkDeleteMessages.Output>
-  }
-
-  async gmailBulkManageMessages(input: ConnectionsGmailBulkManageMessages.Input): Promise<ConnectionsGmailBulkManageMessages.Output> {
-    return this.callTool('gmail_bulk_manage_messages', input) as Promise<ConnectionsGmailBulkManageMessages.Output>
-  }
-
-  async gmailExportSelection(input: ConnectionsGmailExportSelection.Input): Promise<ConnectionsGmailExportSelection.Output> {
-    return this.callTool('gmail_export_selection', input) as Promise<ConnectionsGmailExportSelection.Output>
-  }
-
-  async gmailGetAttachment(input: ConnectionsGmailGetAttachment.Input): Promise<ConnectionsGmailGetAttachment.Output> {
-    return this.callTool('gmail_get_attachment', input) as Promise<ConnectionsGmailGetAttachment.Output>
-  }
-
-  async gmailGetMessage(input: ConnectionsGmailGetMessage.Input): Promise<ConnectionsGmailGetMessage.Output> {
-    return this.callTool('gmail_get_message', input) as Promise<ConnectionsGmailGetMessage.Output>
-  }
-
-  async gmailImportStatus(input: ConnectionsGmailImportStatus.Input): Promise<ConnectionsGmailImportStatus.Output> {
-    return this.callTool('gmail_import_status', input) as Promise<ConnectionsGmailImportStatus.Output>
-  }
-
-  async gmailImportToMemory(input: ConnectionsGmailImportToMemory.Input): Promise<ConnectionsGmailImportToMemory.Output> {
-    return this.callTool('gmail_import_to_memory', input) as Promise<ConnectionsGmailImportToMemory.Output>
-  }
-
-  async gmailPrepareMemoryImport(input: ConnectionsGmailPrepareMemoryImport.Input): Promise<ConnectionsGmailPrepareMemoryImport.Output> {
-    return this.callTool('gmail_prepare_memory_import', input) as Promise<ConnectionsGmailPrepareMemoryImport.Output>
-  }
-
-  async gmailPrepareSelection(input: ConnectionsGmailPrepareSelection.Input): Promise<ConnectionsGmailPrepareSelection.Output> {
-    return this.callTool('gmail_prepare_selection', input) as Promise<ConnectionsGmailPrepareSelection.Output>
-  }
-
-  async gmailSearchMessages(input: ConnectionsGmailSearchMessages.Input): Promise<ConnectionsGmailSearchMessages.Output> {
-    return this.callTool('gmail_search_messages', input) as Promise<ConnectionsGmailSearchMessages.Output>
   }
 }
 
@@ -3269,6 +3413,18 @@ export class SearchNamespace {
   }
 }
 
+export class OtherNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async harvestPaaStart(input: OtherHarvestPaaStart.Input): Promise<OtherHarvestPaaStart.Output> {
+    return this.callTool('harvest_paa_start', input) as Promise<OtherHarvestPaaStart.Output>
+  }
+
+  async harvestPaaStatus(input: OtherHarvestPaaStatus.Input): Promise<OtherHarvestPaaStatus.Output> {
+    return this.callTool('harvest_paa_status', input) as Promise<OtherHarvestPaaStatus.Output>
+  }
+}
+
 export class ImagesNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3541,88 +3697,13 @@ export class YoutubeNamespace {
   }
 }
 
-export class OtherNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async harvestPaaStart(input: OtherHarvestPaaStart.Input): Promise<OtherHarvestPaaStart.Output> {
-    return this.callTool('harvest_paa_start', input) as Promise<OtherHarvestPaaStart.Output>
-  }
-
-  async harvestPaaStatus(input: OtherHarvestPaaStatus.Input): Promise<OtherHarvestPaaStatus.Output> {
-    return this.callTool('harvest_paa_status', input) as Promise<OtherHarvestPaaStatus.Output>
-  }
-}
-
-export class AssistantNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async approvalDecide(input: AssistantApprovalDecide.Input): Promise<AssistantApprovalDecide.Output> {
-    return this.callTool('assistant_approval_decide', input) as Promise<AssistantApprovalDecide.Output>
-  }
-
-  async approvalsList(input: AssistantApprovalsList.Input = {} as AssistantApprovalsList.Input): Promise<AssistantApprovalsList.Output> {
-    return this.callTool('assistant_approvals_list', input) as Promise<AssistantApprovalsList.Output>
-  }
-
-  async bulkSend(input: AssistantBulkSend.Input): Promise<AssistantBulkSend.Output> {
-    return this.callTool('assistant_bulk_send', input) as Promise<AssistantBulkSend.Output>
-  }
-
-  async command(input: AssistantCommand.Input): Promise<AssistantCommand.Output> {
-    return this.callTool('assistant_command', input) as Promise<AssistantCommand.Output>
-  }
-
-  async conversationGet(input: AssistantConversationGet.Input): Promise<AssistantConversationGet.Output> {
-    return this.callTool('assistant_conversation_get', input) as Promise<AssistantConversationGet.Output>
-  }
-
-  async executionStatus(input: AssistantExecutionStatus.Input): Promise<AssistantExecutionStatus.Output> {
-    return this.callTool('assistant_execution_status', input) as Promise<AssistantExecutionStatus.Output>
-  }
-
-  async grantCreate(input: AssistantGrantCreate.Input): Promise<AssistantGrantCreate.Output> {
-    return this.callTool('assistant_grant_create', input) as Promise<AssistantGrantCreate.Output>
-  }
-
-  async grantRevoke(input: AssistantGrantRevoke.Input): Promise<AssistantGrantRevoke.Output> {
-    return this.callTool('assistant_grant_revoke', input) as Promise<AssistantGrantRevoke.Output>
-  }
-
-  async grantsList(input: AssistantGrantsList.Input = {} as AssistantGrantsList.Input): Promise<AssistantGrantsList.Output> {
-    return this.callTool('assistant_grants_list', input) as Promise<AssistantGrantsList.Output>
-  }
-
-  async messageSend(input: AssistantMessageSend.Input): Promise<AssistantMessageSend.Output> {
-    return this.callTool('assistant_message_send', input) as Promise<AssistantMessageSend.Output>
-  }
-
-  async numberPurchase(input: AssistantNumberPurchase.Input): Promise<AssistantNumberPurchase.Output> {
-    return this.callTool('assistant_number_purchase', input) as Promise<AssistantNumberPurchase.Output>
-  }
-
-  async numberRelease(input: AssistantNumberRelease.Input): Promise<AssistantNumberRelease.Output> {
-    return this.callTool('assistant_number_release', input) as Promise<AssistantNumberRelease.Output>
-  }
-
-  async numberSearch(input: AssistantNumberSearch.Input): Promise<AssistantNumberSearch.Output> {
-    return this.callTool('assistant_number_search', input) as Promise<AssistantNumberSearch.Output>
-  }
-
-  async numberStatus(input: AssistantNumberStatus.Input): Promise<AssistantNumberStatus.Output> {
-    return this.callTool('assistant_number_status', input) as Promise<AssistantNumberStatus.Output>
-  }
-
-  async status(input: AssistantStatus.Input = {} as AssistantStatus.Input): Promise<AssistantStatus.Output> {
-    return this.callTool('assistant_status', input) as Promise<AssistantStatus.Output>
-  }
-}
-
 export class GeneratedMcpToolsClient {
   readonly access: AccessNamespace
   readonly vaults: VaultsNamespace
   readonly analytics: AnalyticsNamespace
   readonly web: WebNamespace
   readonly schedule: ScheduleNamespace
+  readonly assistant: AssistantNamespace
   readonly browser: BrowserNamespace
   readonly memory: MemoryNamespace
   readonly connections: ConnectionsNamespace
@@ -3640,6 +3721,7 @@ export class GeneratedMcpToolsClient {
   readonly artifacts: ArtifactsNamespace
   readonly googleAds: GoogleAdsNamespace
   readonly search: SearchNamespace
+  readonly other: OtherNamespace
   readonly images: ImagesNamespace
   readonly instagram: InstagramNamespace
   readonly leads: LeadsNamespace
@@ -3654,8 +3736,6 @@ export class GeneratedMcpToolsClient {
   readonly recall: RecallNamespace
   readonly video: VideoNamespace
   readonly youtube: YoutubeNamespace
-  readonly other: OtherNamespace
-  readonly assistant: AssistantNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.access = new AccessNamespace(callTool)
@@ -3663,6 +3743,7 @@ export class GeneratedMcpToolsClient {
     this.analytics = new AnalyticsNamespace(callTool)
     this.web = new WebNamespace(callTool)
     this.schedule = new ScheduleNamespace(callTool)
+    this.assistant = new AssistantNamespace(callTool)
     this.browser = new BrowserNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)
     this.connections = new ConnectionsNamespace(callTool)
@@ -3680,6 +3761,7 @@ export class GeneratedMcpToolsClient {
     this.artifacts = new ArtifactsNamespace(callTool)
     this.googleAds = new GoogleAdsNamespace(callTool)
     this.search = new SearchNamespace(callTool)
+    this.other = new OtherNamespace(callTool)
     this.images = new ImagesNamespace(callTool)
     this.instagram = new InstagramNamespace(callTool)
     this.leads = new LeadsNamespace(callTool)
@@ -3694,7 +3776,5 @@ export class GeneratedMcpToolsClient {
     this.recall = new RecallNamespace(callTool)
     this.video = new VideoNamespace(callTool)
     this.youtube = new YoutubeNamespace(callTool)
-    this.other = new OtherNamespace(callTool)
-    this.assistant = new AssistantNamespace(callTool)
   }
 }

@@ -142,8 +142,37 @@ export interface Input {
   properties?: {
     [k: string]: unknown;
   };
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  id: string | null;
+  created: boolean;
+  personId: string | null;
+  identityTier: "confirmed" | "unlinked";
+  namespaceId: string | null;
+  /**
+   * @maxItems 500
+   */
+  conversionIds: string[];
+  consentEligibility: {
+    [k: string]: unknown;
+  };
+  valueProvenance: {
+    [k: string]: {
+      [k: string]: unknown;
+    };
+  };
+  /**
+   * @maxItems 500
+   */
+  scoreEvaluationIds: string[];
+  predictionEvidence: unknown;
+  candidatePromotion: {
+    [k: string]: unknown;
+  } | null;
 }

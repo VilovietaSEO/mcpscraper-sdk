@@ -70,8 +70,15 @@ export interface Input {
    * Replacement enabled state.
    */
   enabled?: boolean;
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  definition: {
+    [k: string]: unknown;
+  };
 }

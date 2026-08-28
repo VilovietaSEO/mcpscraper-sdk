@@ -15,3 +15,4 @@ class AnalyticsListActivationReceiptsOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
+    receipts: list[dict[str, Any]] = Field(..., alias="receipts", description="")
