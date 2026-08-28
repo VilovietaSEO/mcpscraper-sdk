@@ -47,8 +47,15 @@ export interface Input {
    * Optional advertising creative identifier preserved on the tracked campaign link.
    */
   creativeId?: string;
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  link: {
+    [k: string]: unknown;
+  };
 }

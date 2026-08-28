@@ -104,8 +104,15 @@ export interface Input {
    * When true, publish the created form immediately; set false to keep it unpublished.
    */
   publish?: boolean;
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  form: {
+    [k: string]: unknown;
+  };
 }

@@ -922,7 +922,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_approve_crm_provisioning",
     "category": "analytics",
     "title": "Approve CRM Provisioning",
-    "description": "Create the exact approved namespaced fields in the connected CRM. Provider field creation may be irreversible and cleanup is manual; inspect analytics_plan_crm_provisioning before approving.",
+    "description": "Create the planned CRM fields. Creation may be irreversible; inspect analytics_plan_crm_provisioning first.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1134,11 +1134,18 @@ export const MCP_TOOL_CATALOG = [
           "format": "uuid",
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
           "description": "Event definition id returned by analytics_list_event_definitions."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
         "siteId",
-        "definitionId"
+        "definitionId",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -1225,6 +1232,18 @@ export const MCP_TOOL_CATALOG = [
           "minLength": 1,
           "maxLength": 240,
           "description": "Provider destination identifier already owned by the connected account."
+        },
+        "operatingAccountId": {
+          "description": "Google Ads operating account identifier required for Google Data Manager destinations.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
@@ -1232,7 +1251,8 @@ export const MCP_TOOL_CATALOG = [
         "platform",
         "name",
         "connectionRef",
-        "externalDatasetId"
+        "externalDatasetId",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -1318,6 +1338,12 @@ export const MCP_TOOL_CATALOG = [
           "description": "Optional advertising creative identifier preserved on the tracked campaign link.",
           "type": "string",
           "maxLength": 240
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
@@ -1326,7 +1352,8 @@ export const MCP_TOOL_CATALOG = [
         "destinationUrl",
         "source",
         "medium",
-        "campaign"
+        "campaign",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -1342,7 +1369,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_create_connection",
     "category": "analytics",
     "title": "Create X-Ray Connection",
-    "description": "Create a CallRail, CallTrackingMetrics, Twilio, HubSpot, HighLevel, or generic CRM connection. Creation is configured-unverified until a signed receipt succeeds.",
+    "description": "Create a phone or CRM connection. It remains configured-unverified until a signed receipt succeeds.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1394,13 +1421,20 @@ export const MCP_TOOL_CATALOG = [
             "type": "string"
           },
           "additionalProperties": {}
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
         "siteId",
         "provider",
         "name",
-        "sourceAccountRef"
+        "sourceAccountRef",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -1531,13 +1565,20 @@ export const MCP_TOOL_CATALOG = [
           "default": true,
           "description": "Whether the new rule should begin evaluating events immediately.",
           "type": "boolean"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
         "siteId",
         "name",
         "conversionKind",
-        "condition"
+        "condition",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -1661,13 +1702,20 @@ export const MCP_TOOL_CATALOG = [
           "default": true,
           "description": "Whether the Pixel may emit this definition.",
           "type": "boolean"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
         "siteId",
         "name",
         "eventName",
-        "triggerKind"
+        "triggerKind",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -2084,6 +2132,12 @@ export const MCP_TOOL_CATALOG = [
           "default": true,
           "description": "When true, publish the created form immediately; set false to keep it unpublished.",
           "type": "boolean"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
@@ -2091,7 +2145,8 @@ export const MCP_TOOL_CATALOG = [
         "pixelId",
         "name",
         "fields",
-        "brand"
+        "brand",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -3037,16 +3092,10 @@ export const MCP_TOOL_CATALOG = [
               "additionalProperties": false
             },
             "attribution": {
-              "default": {
-                "model": "position_based",
-                "clickWindowDays": 90,
-                "viewWindowDays": 30
-              },
               "description": "Attribution model and independent click/view windows for this report.",
               "type": "object",
               "properties": {
                 "model": {
-                  "default": "position_based",
                   "description": "Attribution model applied to this saved report view.",
                   "type": "string",
                   "enum": [
@@ -3056,6 +3105,7 @@ export const MCP_TOOL_CATALOG = [
                     "linear",
                     "time_decay",
                     "position_based",
+                    "position_40_20_40",
                     "custom_weighted"
                   ]
                 },
@@ -3503,7 +3553,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_acquisition",
     "category": "analytics",
     "title": "Analytics Acquisition",
-    "description": "Read the acquisition report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+    "description": "Read the acquisition report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -3744,7 +3794,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_business_metrics",
     "category": "analytics",
     "title": "Analytics Business Metrics",
-    "description": "Read the configured lead-generation, SaaS, or e-commerce metric pack with explicit missing-input signals.",
+    "description": "Read the configured business metric pack with explicit missing inputs.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -4032,7 +4082,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_channel_breakdown",
     "category": "analytics",
     "title": "Analytics Channel Breakdowns",
-    "description": "Read the LLM, social, and review-site channel breakdowns with campaign-to-creative drill-down report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+    "description": "Read the LLM, social, and review-site channel breakdowns with campaign-to-creative drill-down report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -4313,7 +4363,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_content",
     "category": "analytics",
     "title": "Analytics Content",
-    "description": "Read the content report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+    "description": "Read the content report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -4554,7 +4604,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_conversions",
     "category": "analytics",
     "title": "Analytics Conversions",
-    "description": "Read the conversions report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+    "description": "Read the conversions report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -4795,7 +4845,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_coverage",
     "category": "analytics",
     "title": "Get Attribution Coverage",
-    "description": "Measure click-ID coverage and call/CRM journey join rates. Null rates mean there is not yet a denominator.",
+    "description": "Measure click-ID coverage and call/CRM joins; null means no denominator.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -4869,7 +4919,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_dimensions",
     "category": "analytics",
     "title": "Analytics Dimensions",
-    "description": "Read visualization-ready device, source, country, region, or weekday-hour rows. Chart recommendations are advisory.",
+    "description": "Read chart-ready device, source, country, region, or weekday-hour rows.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5134,7 +5184,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_entitlement",
     "category": "analytics",
     "title": "Get X-Ray Pixel Access",
-    "description": "Check whether Thorbit X-Ray Pixel is connected and entitled for this MCP Scraper account. X-Ray Pixel is owned and billed by Thorbit, requires an active $50+ Thorbit subscription after its 30-day trial, and does not consume MCP Scraper Credits. Call this before analytics_list_sites when access may not be configured. Account linking must be completed in the MCP Scraper dashboard; never ask a user to paste a Thorbit API key into an AI conversation.",
+    "description": "Check X-Ray access before analytics_list_sites. X-Ray is billed by Thorbit and uses no MCP Scraper Credits. Link only in the dashboard; never request its API key.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -5152,7 +5202,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_events",
     "category": "analytics",
     "title": "Analytics Events",
-    "description": "Read paginated event counts. Follow pageInfo cursors instead of requesting an unbounded result.",
+    "description": "Read paginated event counts; follow pageInfo cursors.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5405,7 +5455,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_forecast",
     "category": "analytics",
     "title": "Analytics Forecast",
-    "description": "Read historical monthly revenue and spend plus bounded forward scenarios and ROAS when enough evidence exists.",
+    "description": "Read historical revenue and spend plus evidence-bounded scenarios.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -5986,7 +6036,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_overview",
     "category": "analytics",
     "title": "Analytics Overview",
-    "description": "Read the overview report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+    "description": "Read the overview report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6227,7 +6277,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_paths",
     "category": "analytics",
     "title": "Analytics Conversion Paths",
-    "description": "Read the conversion paths report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+    "description": "Read the conversion paths report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6468,7 +6518,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_person_journey",
     "category": "analytics",
     "title": "Get Person Journey",
-    "description": "Read CRM-oriented identified-person history: touches, calls, CRM stages, conversions, and delivery receipts. For analytics chronology use analytics_get_visitor_journey.",
+    "description": "Read CRM-oriented identified-person history: touches, calls, stages, conversions, and receipts. For chronology use analytics_get_visitor_journey.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6592,7 +6642,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_timeseries",
     "category": "analytics",
     "title": "Analytics Timeseries",
-    "description": "Read daily time-series rows for an AI-selected line, area, or comparative visualization.",
+    "description": "Read bounded daily rows for line, area, or comparison charts.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6879,8 +6929,8 @@ export const MCP_TOOL_CATALOG = [
   {
     "name": "analytics_import_crm_csv",
     "category": "analytics",
-    "title": "Import CRM CSV",
-    "description": "Map and stage a bounded CRM CSV import. Contact fields are encrypted and analytics retains only opaque person references and identity signals.",
+    "title": "Legacy CRM CSV Import",
+    "description": "Legacy direct CRM CSV import; prefer preview then commit.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6948,6 +6998,12 @@ export const MCP_TOOL_CATALOG = [
             }
           },
           "description": "CSV-column mapping used to identify and protect supported CRM fields."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
@@ -6955,12 +7011,13 @@ export const MCP_TOOL_CATALOG = [
         "sourceSystem",
         "filename",
         "csv",
-        "mapping"
+        "mapping",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
-      "title": "Import CRM CSV",
+      "title": "Legacy CRM CSV Import",
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": false,
@@ -6971,7 +7028,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_activation_destinations",
     "category": "analytics",
     "title": "List Ad Activation Destinations",
-    "description": "List Meta, Google, TikTok, and Reddit destinations with pending, delivered, and failed conversion counts.",
+    "description": "List ad destinations with delivery counts and readiness.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7058,7 +7115,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_campaign_links",
     "category": "analytics",
     "title": "List Campaign Links",
-    "description": "List paginated tracked links and canonical UTM and ad hierarchy fields.",
+    "description": "List paginated tracked links with UTM and ad hierarchy fields.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7098,7 +7155,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_connections",
     "category": "analytics",
     "title": "List X-Ray Connections",
-    "description": "List phone, CRM, and webhook connections with honest readiness, receipt, and error state.",
+    "description": "List phone, CRM, and webhook connections with readiness and errors.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7138,7 +7195,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_conversion_rules",
     "category": "analytics",
     "title": "List Conversion Rules",
-    "description": "List deterministic versioned rules that turn canonical phone, CRM, transaction, and server events into conversions.",
+    "description": "List versioned rules that turn canonical events into conversions.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7218,7 +7275,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_crm_imports",
     "category": "analytics",
     "title": "List CRM Imports",
-    "description": "List paginated encrypted CSV import receipts without exposing contact PII in analytics.",
+    "description": "List encrypted CSV import receipts without contact PII.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7258,7 +7315,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_event_definitions",
     "category": "analytics",
     "title": "List Browser Event Definitions",
-    "description": "List declarative page, click, and form-submit tags applied by the first-party X-Ray Pixel.",
+    "description": "List declarative page, click, and form-submit Pixel tags.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7298,7 +7355,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_forms",
     "category": "analytics",
     "title": "List Analytics Forms",
-    "description": "List paginated Pixel-linked forms, embed snippets, fields, versions, and submission counts.",
+    "description": "List paginated Pixel-linked forms, embeds, versions, and submission counts.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7529,7 +7586,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_pixels",
     "category": "analytics",
     "title": "List Analytics Pixels",
-    "description": "List Site Pixels, installation snippets, detected domains, approval states, and health.",
+    "description": "List Pixels, install snippets, approved domains, and health.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -7930,7 +7987,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_sites",
     "category": "analytics",
     "title": "List Analytics Businesses",
-    "description": "List the authenticated account's analytics Businesses, roles, Pixel counts, and latest activity. Call this first to obtain the siteId used by every analytics report tool. Tenant access is enforced by the analytics API.",
+    "description": "List authorized analytics Businesses, roles, Pixel counts, and activity. Call first to obtain the siteId required by analytics tools.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -8351,11 +8408,18 @@ export const MCP_TOOL_CATALOG = [
           "format": "uuid",
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
           "description": "Phone or CRM connection id returned by analytics_list_connections."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
         "siteId",
-        "connectionId"
+        "connectionId",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -8572,6 +8636,12 @@ export const MCP_TOOL_CATALOG = [
             "type": "string"
           },
           "additionalProperties": {}
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
@@ -8582,7 +8652,8 @@ export const MCP_TOOL_CATALOG = [
         "sourceEventId",
         "eventKind",
         "eventName",
-        "occurredAt"
+        "occurredAt",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -8613,11 +8684,18 @@ export const MCP_TOOL_CATALOG = [
           "format": "uuid",
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
           "description": "Failed activation job id returned by analytics_list_activation_receipts."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
         "siteId",
-        "jobId"
+        "jobId",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -8633,7 +8711,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_start_crm_sync",
     "category": "analytics",
     "title": "Start Inbound CRM Synchronization",
-    "description": "Pull inbound CRM objects and stages into X-Ray through a capability-gated idempotent synchronization. This does not push X-Ray people or deals to the CRM; candidate identities and evidence are excluded.",
+    "description": "Pull supported CRM objects into X-Ray. This does not push people or deals; candidate evidence is excluded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -8766,7 +8844,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_sync_crm_person",
     "category": "analytics",
     "title": "Push Confirmed Person to CRM",
-    "description": "Push one confirmed-person projection from X-Ray to the connected CRM after provisioning approval. This is not the inbound analytics_start_crm_sync lane; candidate identity or evidence is schema-invalid.",
+    "description": "Push one confirmed person after CRM provisioning. This is not inbound sync; candidate evidence is invalid.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -9000,11 +9078,18 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "minLength": 1,
           "maxLength": 255
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
         "siteId",
-        "destinationId"
+        "destinationId",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -9327,8 +9412,8 @@ export const MCP_TOOL_CATALOG = [
   {
     "name": "analytics_test_event_definition",
     "category": "analytics",
-    "title": "Test Browser Event Definition",
-    "description": "Preview a definition against validated hostname, path, trigger, tag, and browser-reported selector-match facts. This never accepts HTML or executes selectors server-side.",
+    "title": "Preview Browser Event Definition",
+    "description": "Preview supplied browser match facts. This is not live event verification: it does not open a site, run selectors, or prove Pixel delivery.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -9386,7 +9471,7 @@ export const MCP_TOOL_CATALOG = [
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
-      "title": "Test Browser Event Definition",
+      "title": "Preview Browser Event Definition",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -9877,11 +9962,18 @@ export const MCP_TOOL_CATALOG = [
         "enabled": {
           "description": "Replacement enabled state.",
           "type": "boolean"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
         }
       },
       "required": [
         "siteId",
-        "definitionId"
+        "definitionId",
+        "idempotencyKey"
       ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
@@ -9974,7 +10066,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_validate_activation_mapping",
     "category": "analytics",
     "title": "Validate Activation Event Mapping",
-    "description": "Validate explicit confirmed-event mappings against an authorized destination. Candidate-assisted events are rejected; this does not enable delivery.",
+    "description": "Validate confirmed-event mappings. This cannot save mappings or enable delivery.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -10017,7 +10109,7 @@ export const MCP_TOOL_CATALOG = [
             "minLength": 1,
             "maxLength": 160
           },
-          "description": "Confirmed X-Ray event to provider event mapping. Candidate-assisted events are ineligible."
+          "description": "Confirmed X-Ray event to provider event mapping."
         }
       },
       "required": [
@@ -17922,7 +18014,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa",
     "category": "search",
     "title": "Google PAA + SERP Harvest",
-    "description": "Expand one Google People Also Ask SERP into questions, answers, sources, organic results, and entity IDs. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+    "description": "Expand one Google People Also Ask SERP into questions, answers, every preserved source, AI Overview evidence, ranking URLs, and entity IDs. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; a failed click or browser timeout is never reported as exhaustion. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25980,7 +26072,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_upsert_crm_outbound_policy",
     "category": "analytics",
     "title": "Configure CRM Outbound Policy",
-    "description": "Create or update one immutable-version CRM outbound policy. Policies are disabled unless explicitly enabled, cannot grant visitor consent, and reject candidate identity, raw IP/device signals, and unrestricted journey data.",
+    "description": "Version a CRM outbound policy. It cannot grant consent or send candidate identity, raw IP/device signals, or full journeys.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26192,9 +26284,9 @@ export const MCP_TOOL_CATALOG = [
   },
   {
     "name": "harvest_paa_start",
-    "category": "other",
+    "category": "search",
     "title": "Start Durable Google PAA Harvest",
-    "description": "Start a durable Google People Also Ask harvest and return its job receipt. Use for long work, including 60 questions. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
+    "description": "Start a durable Google People Also Ask harvest and return its job receipt. maxQuestions is the requested target count. The job automatically resumes an interrupted serverless worker under the same jobId, idempotency key, and billing hold while preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26293,9 +26385,9 @@ export const MCP_TOOL_CATALOG = [
   },
   {
     "name": "harvest_paa_status",
-    "category": "other",
+    "category": "search",
     "title": "Check Durable Google PAA Harvest",
-    "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, completeness, attempts, terminal rows, and billing. Polling never starts or bills another run.",
+    "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, automatic-recovery count, target status, discovery status, material completeness, attempts, terminal rows, and billing. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26363,6 +26455,605 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "List X-Ray Journeys",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_commit_crm_import",
+    "category": "analytics",
+    "title": "Commit CRM CSV Import",
+    "description": "Commit the exact preview fingerprint with a caller retry key.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "sourceSystem": {
+          "type": "string",
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "gohighlevel",
+            "zoho",
+            "pipedrive",
+            "keap",
+            "other"
+          ],
+          "description": "CRM system represented by the uploaded CSV."
+        },
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Original CSV filename retained for the import receipt; this is not a local path."
+        },
+        "csv": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000000,
+          "description": "Complete bounded CSV text to validate and stage; do not pass a local filesystem path."
+        },
+        "mapping": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "enum": [
+              "email",
+              "firstName",
+              "lastName",
+              "name",
+              "phone",
+              "company",
+              "externalId",
+              "stage",
+              "outcome",
+              "occurredAt",
+              "value",
+              "currency",
+              "gclid",
+              "gbraid",
+              "wbraid",
+              "fbclid"
+            ]
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "required": [
+            "email",
+            "firstName",
+            "lastName",
+            "name",
+            "phone",
+            "company",
+            "externalId",
+            "stage",
+            "outcome",
+            "occurredAt",
+            "value",
+            "currency",
+            "gclid",
+            "gbraid",
+            "wbraid",
+            "fbclid"
+          ],
+          "description": "CSV-column mapping used to identify and protect supported CRM fields."
+        },
+        "previewFingerprint": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Exact SHA-256 fingerprint returned by analytics_preview_crm_import."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "sourceSystem",
+        "filename",
+        "csv",
+        "mapping",
+        "previewFingerprint",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Commit CRM CSV Import",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_export_crm_csv",
+    "category": "analytics",
+    "title": "Export CRM CSV",
+    "description": "Create a governed CRM CSV; advertising fields require purpose acknowledgement.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "fields": {
+          "description": "Ordered form-field definitions to render and validate for submissions.",
+          "minItems": 1,
+          "maxItems": 16,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "person_id",
+              "crm_person_ref",
+              "journey_url",
+              "first_seen_at",
+              "last_seen_at",
+              "signal_count",
+              "form_submission_count",
+              "conversion_count",
+              "revenue_minor",
+              "currency",
+              "stage",
+              "outcome",
+              "gclid",
+              "gbraid",
+              "wbraid",
+              "fbclid"
+            ]
+          }
+        },
+        "acknowledgedPurpose": {
+          "description": "Explicit governed purpose acknowledgement required for advertising identifiers or activation exports.",
+          "type": "string",
+          "enum": [
+            "business_operations",
+            "advertising_measurement"
+          ]
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Export CRM CSV",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_export_google_ads_csv",
+    "category": "analytics",
+    "title": "Export Google Ads CSV",
+    "description": "Create a consent-gated native offline-conversion upload CSV.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "acknowledgedPurpose": {
+          "type": "string",
+          "const": "advertising_measurement",
+          "description": "Explicit governed purpose acknowledgement required for advertising identifiers or activation exports."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "acknowledgedPurpose",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Export Google Ads CSV",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_export_meta_technical",
+    "category": "analytics",
+    "title": "Export Meta Technical JSONL",
+    "description": "Create a consent-gated technical JSONL relay artifact; Meta does not accept it as a native upload.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "acknowledgedPurpose": {
+          "type": "string",
+          "const": "advertising_measurement",
+          "description": "Explicit governed purpose acknowledgement required for advertising identifiers or activation exports."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "acknowledgedPurpose",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Export Meta Technical JSONL",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_preview_crm_import",
+    "category": "analytics",
+    "title": "Preview CRM CSV Import",
+    "description": "Validate mappings and return bounded row/error counts without importing.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "sourceSystem": {
+          "type": "string",
+          "enum": [
+            "hubspot",
+            "salesforce",
+            "gohighlevel",
+            "zoho",
+            "pipedrive",
+            "keap",
+            "other"
+          ],
+          "description": "CRM system represented by the uploaded CSV."
+        },
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Original CSV filename retained for the import receipt; this is not a local path."
+        },
+        "csv": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8000000,
+          "description": "Complete bounded CSV text to validate and stage; do not pass a local filesystem path."
+        },
+        "mapping": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "enum": [
+              "email",
+              "firstName",
+              "lastName",
+              "name",
+              "phone",
+              "company",
+              "externalId",
+              "stage",
+              "outcome",
+              "occurredAt",
+              "value",
+              "currency",
+              "gclid",
+              "gbraid",
+              "wbraid",
+              "fbclid"
+            ]
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "required": [
+            "email",
+            "firstName",
+            "lastName",
+            "name",
+            "phone",
+            "company",
+            "externalId",
+            "stage",
+            "outcome",
+            "occurredAt",
+            "value",
+            "currency",
+            "gclid",
+            "gbraid",
+            "wbraid",
+            "fbclid"
+          ],
+          "description": "CSV-column mapping used to identify and protect supported CRM fields."
+        }
+      },
+      "required": [
+        "siteId",
+        "sourceSystem",
+        "filename",
+        "csv",
+        "mapping"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Preview CRM CSV Import",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_save_activation_mapping",
+    "category": "analytics",
+    "title": "Save Activation Event Mapping",
+    "description": "Save a typed confirmed-event mapping on an existing destination without enabling delivery.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "destinationId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Activation destination identifier returned by analytics_list_activation_destinations."
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Confirmed, best-guess, or separately returned combined journey projection.",
+          "type": "string",
+          "const": "confirmed"
+        },
+        "eventMapping": {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "type": "number",
+              "const": 1,
+              "description": "Canonical X-Ray event schema version; use version 1."
+            },
+            "mappings": {
+              "maxItems": 200,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "source": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
+                  },
+                  "providerEvent": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "description": "Exact provider event or conversion-action name receiving the confirmed X-Ray event."
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Whether the new rule should begin evaluating events immediately."
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "primary",
+                      "observation"
+                    ],
+                    "description": "Primary conversion or supporting observation role for this enabled mapping."
+                  },
+                  "valueMode": {
+                    "type": "string",
+                    "enum": [
+                      "none",
+                      "event",
+                      "fixed"
+                    ],
+                    "description": "Whether the provider event receives no value, the confirmed event value, or a fixed configured value."
+                  },
+                  "fixedValue": {
+                    "description": "Non-negative fixed major-unit value used only when valueMode is fixed.",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000000
+                  },
+                  "currency": {
+                    "description": "Three-letter ISO currency code for the event value.",
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 3
+                  }
+                },
+                "required": [
+                  "source",
+                  "providerEvent",
+                  "enabled",
+                  "role",
+                  "valueMode"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Bounded typed event-mapping rows for this activation destination."
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "mappings"
+          ],
+          "additionalProperties": false,
+          "description": "Typed confirmed-event mapping; enabled rows require exactly one primary event."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "destinationId",
+        "eventMapping",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Save Activation Event Mapping",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_set_activation_automation",
+    "category": "analytics",
+    "title": "Set Activation Automation",
+    "description": "Explicitly enable or disable automatic delivery; enablement requires verified readiness.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "destinationId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Activation destination identifier returned by analytics_list_activation_destinations."
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Explicitly enable or disable automatic delivery. Enabling requires a verified destination."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "destinationId",
+        "enabled",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Set Activation Automation",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_verify_live_event_definition",
+    "category": "analytics",
+    "title": "Verify Live Browser Event",
+    "description": "Wait briefly for a persisted event matching this definition; returns observed or not observed.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "definitionId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Browser event-definition identifier returned by analytics_list_event_definitions."
+        },
+        "timeoutMs": {
+          "default": 0,
+          "description": "Bounded wait for a newly persisted matching event.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 15000
+        },
+        "maxAgeSeconds": {
+          "default": 300,
+          "description": "Maximum accepted age of the persisted matching event.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        }
+      },
+      "required": [
+        "siteId",
+        "definitionId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Verify Live Browser Event",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,

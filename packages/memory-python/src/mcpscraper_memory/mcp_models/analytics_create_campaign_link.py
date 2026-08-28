@@ -17,9 +17,11 @@ class AnalyticsCreateCampaignLinkInput(BaseModel):
     ad_group: str | None = Field(None, alias="adGroup", description="Optional advertising ad-group identifier preserved on the tracked campaign link.")
     ad_name: str | None = Field(None, alias="adName", description="Optional advertising ad name preserved on the tracked campaign link.")
     creative_id: str | None = Field(None, alias="creativeId", description="Optional advertising creative identifier preserved on the tracked campaign link.")
+    idempotency_key: str = Field(..., alias="idempotencyKey", description="Retry key; reuse only for this exact mutation.")
 
 
 class AnalyticsCreateCampaignLinkOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
+    link: dict[str, Any] = Field(..., alias="link", description="")

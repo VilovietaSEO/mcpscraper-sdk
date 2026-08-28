@@ -19,8 +19,19 @@ export interface Input {
    * Provider destination identifier already owned by the connected account.
    */
   externalDatasetId: string;
+  /**
+   * Google Ads operating account identifier required for Google Data Manager destinations.
+   */
+  operatingAccountId?: string;
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  destination: {
+    [k: string]: unknown;
+  };
 }

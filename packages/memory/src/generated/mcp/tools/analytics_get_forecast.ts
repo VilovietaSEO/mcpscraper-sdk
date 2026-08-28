@@ -18,7 +18,4 @@ export interface Output {
   data: {
     [k: string]: unknown;
   };
-  filters: {
-    [k: string]: unknown;
-  };
 }

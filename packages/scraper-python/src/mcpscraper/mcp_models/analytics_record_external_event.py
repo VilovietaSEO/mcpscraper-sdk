@@ -29,9 +29,21 @@ class AnalyticsRecordExternalEventInput(BaseModel):
     currency: str | None = Field(None, alias="currency", description="Three-letter ISO currency code for the event value.")
     click_ids: dict[str, Any] | None = Field(None, alias="clickIds", description="Native advertising click identifiers preserved for deterministic offline conversion matching.")
     properties: dict[str, Any] | None = Field(None, alias="properties", description="Bounded non-secret event properties used for reporting and declarative rule evaluation.")
+    idempotency_key: str = Field(..., alias="idempotencyKey", description="Retry key; reuse only for this exact mutation.")
 
 
 class AnalyticsRecordExternalEventOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
+    id: Any = Field(..., alias="id", description="")
+    created: bool = Field(..., alias="created", description="")
+    person_id: Any = Field(..., alias="personId", description="")
+    identity_tier: Literal['confirmed', 'unlinked'] = Field(..., alias="identityTier", description="")
+    namespace_id: Any = Field(..., alias="namespaceId", description="")
+    conversion_ids: list[str] = Field(..., alias="conversionIds", description="")
+    consent_eligibility: dict[str, Any] = Field(..., alias="consentEligibility", description="")
+    value_provenance: dict[str, Any] = Field(..., alias="valueProvenance", description="")
+    score_evaluation_ids: list[str] = Field(..., alias="scoreEvaluationIds", description="")
+    prediction_evidence: Any = Field(..., alias="predictionEvidence", description="")
+    candidate_promotion: Any = Field(..., alias="candidatePromotion", description="")

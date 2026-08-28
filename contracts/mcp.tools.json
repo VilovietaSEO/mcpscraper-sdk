@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.73.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "a95c1e160780e5e05cd66f013dce674e3ba1cbd223d37be885be448e46d297f5",
-  "toolCount": 331,
+  "generatedFrom": "mcp-scraper 0.78.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "5cab308c00cf35de198729b75573e4d62517f410aac18048d7a23a87b9b5ce38",
+  "toolCount": 339,
   "tools": [
     {
       "name": "access-accept-share",
@@ -1794,7 +1794,7 @@
     {
       "name": "analytics_approve_crm_provisioning",
       "title": "Approve CRM Provisioning",
-      "description": "Create the exact approved namespaced fields in the connected CRM. Provider field creation may be irreversible and cleanup is manual; inspect analytics_plan_crm_provisioning before approving.",
+      "description": "Create the planned CRM fields. Creation may be irreversible; inspect analytics_plan_crm_provisioning first.",
       "category": "analytics",
       "methodName": "approveCrmProvisioning",
       "inputSchema": {
@@ -2160,11 +2160,18 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Event definition id returned by analytics_list_event_definitions."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
           "siteId",
-          "definitionId"
+          "definitionId",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -2173,10 +2180,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "definition": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "definition"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -2290,6 +2305,18 @@
             "minLength": 1,
             "maxLength": 240,
             "description": "Provider destination identifier already owned by the connected account."
+          },
+          "operatingAccountId": {
+            "description": "Google Ads operating account identifier required for Google Data Manager destinations.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
@@ -2297,7 +2324,8 @@
           "platform",
           "name",
           "connectionRef",
-          "externalDatasetId"
+          "externalDatasetId",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -2306,10 +2334,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "destination": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "destination"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -2398,6 +2434,12 @@
             "description": "Optional advertising creative identifier preserved on the tracked campaign link.",
             "type": "string",
             "maxLength": 240
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
@@ -2406,7 +2448,8 @@
           "destinationUrl",
           "source",
           "medium",
-          "campaign"
+          "campaign",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -2415,10 +2458,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "link": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "link"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -2435,7 +2486,7 @@
     {
       "name": "analytics_create_connection",
       "title": "Create X-Ray Connection",
-      "description": "Create a CallRail, CallTrackingMetrics, Twilio, HubSpot, HighLevel, or generic CRM connection. Creation is configured-unverified until a signed receipt succeeds.",
+      "description": "Create a phone or CRM connection. It remains configured-unverified until a signed receipt succeeds.",
       "category": "analytics",
       "methodName": "createConnection",
       "inputSchema": {
@@ -2489,13 +2540,20 @@
               "type": "string"
             },
             "additionalProperties": {}
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
           "siteId",
           "provider",
           "name",
-          "sourceAccountRef"
+          "sourceAccountRef",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -2504,10 +2562,24 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "connection": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          },
+          "webhookUrl": {
+            "type": "string",
+            "maxLength": 3000,
+            "format": "uri"
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "connection",
+          "webhookUrl"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -2641,13 +2713,20 @@
             "default": true,
             "description": "Whether the new rule should begin evaluating events immediately.",
             "type": "boolean"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
           "siteId",
           "name",
           "conversionKind",
-          "condition"
+          "condition",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -2656,10 +2735,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "rule": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "rule"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -2786,13 +2873,20 @@
             "default": true,
             "description": "Whether the Pixel may emit this definition.",
             "type": "boolean"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
           "siteId",
           "name",
           "eventName",
-          "triggerKind"
+          "triggerKind",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -2801,10 +2895,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "definition": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "definition"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -3285,6 +3387,12 @@
             "default": true,
             "description": "When true, publish the created form immediately; set false to keep it unpublished.",
             "type": "boolean"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
@@ -3292,7 +3400,8 @@
           "pixelId",
           "name",
           "fields",
-          "brand"
+          "brand",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -3301,10 +3410,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "form": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "form"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -4322,16 +4439,10 @@
                 "additionalProperties": false
               },
               "attribution": {
-                "default": {
-                  "model": "position_based",
-                  "clickWindowDays": 90,
-                  "viewWindowDays": 30
-                },
                 "description": "Attribution model and independent click/view windows for this report.",
                 "type": "object",
                 "properties": {
                   "model": {
-                    "default": "position_based",
                     "description": "Attribution model applied to this saved report view.",
                     "type": "string",
                     "enum": [
@@ -4341,6 +4452,7 @@
                       "linear",
                       "time_decay",
                       "position_based",
+                      "position_40_20_40",
                       "custom_weighted"
                     ]
                   },
@@ -5858,7 +5970,7 @@
     {
       "name": "analytics_get_acquisition",
       "title": "Analytics Acquisition",
-      "description": "Read the acquisition report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+      "description": "Read the acquisition report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
       "category": "analytics",
       "methodName": "getAcquisition",
       "inputSchema": {
@@ -6130,7 +6242,7 @@
     {
       "name": "analytics_get_business_metrics",
       "title": "Analytics Business Metrics",
-      "description": "Read the configured lead-generation, SaaS, or e-commerce metric pack with explicit missing-input signals.",
+      "description": "Read the configured business metric pack with explicit missing inputs.",
       "category": "analytics",
       "methodName": "getBusinessMetrics",
       "inputSchema": {
@@ -6472,7 +6584,7 @@
     {
       "name": "analytics_get_channel_breakdown",
       "title": "Analytics Channel Breakdowns",
-      "description": "Read the LLM, social, and review-site channel breakdowns with campaign-to-creative drill-down report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+      "description": "Read the LLM, social, and review-site channel breakdowns with campaign-to-creative drill-down report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
       "category": "analytics",
       "methodName": "getChannelBreakdown",
       "inputSchema": {
@@ -6807,7 +6919,7 @@
     {
       "name": "analytics_get_content",
       "title": "Analytics Content",
-      "description": "Read the content report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+      "description": "Read the content report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
       "category": "analytics",
       "methodName": "getContent",
       "inputSchema": {
@@ -7079,7 +7191,7 @@
     {
       "name": "analytics_get_conversions",
       "title": "Analytics Conversions",
-      "description": "Read the conversions report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+      "description": "Read the conversions report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
       "category": "analytics",
       "methodName": "getConversions",
       "inputSchema": {
@@ -7351,7 +7463,7 @@
     {
       "name": "analytics_get_coverage",
       "title": "Get Attribution Coverage",
-      "description": "Measure click-ID coverage and call/CRM journey join rates. Null rates mean there is not yet a denominator.",
+      "description": "Measure click-ID coverage and call/CRM joins; null means no denominator.",
       "category": "analytics",
       "methodName": "getCoverage",
       "inputSchema": {
@@ -7387,14 +7499,7 @@
           "ok": {
             "type": "boolean"
           },
-          "data": {
-            "type": "object",
-            "propertyNames": {
-              "type": "string"
-            },
-            "additionalProperties": {}
-          },
-          "filters": {
+          "coverage": {
             "type": "object",
             "propertyNames": {
               "type": "string"
@@ -7404,8 +7509,7 @@
         },
         "required": [
           "ok",
-          "data",
-          "filters"
+          "coverage"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -7617,7 +7721,7 @@
     {
       "name": "analytics_get_dimensions",
       "title": "Analytics Dimensions",
-      "description": "Read visualization-ready device, source, country, region, or weekday-hour rows. Chart recommendations are advisory.",
+      "description": "Read chart-ready device, source, country, region, or weekday-hour rows.",
       "category": "analytics",
       "methodName": "getDimensions",
       "inputSchema": {
@@ -7913,7 +8017,7 @@
     {
       "name": "analytics_get_entitlement",
       "title": "Get X-Ray Pixel Access",
-      "description": "Check whether Thorbit X-Ray Pixel is connected and entitled for this MCP Scraper account. X-Ray Pixel is owned and billed by Thorbit, requires an active $50+ Thorbit subscription after its 30-day trial, and does not consume MCP Scraper Credits. Call this before analytics_list_sites when access may not be configured. Account linking must be completed in the MCP Scraper dashboard; never ask a user to paste a Thorbit API key into an AI conversation.",
+      "description": "Check X-Ray access before analytics_list_sites. X-Ray is billed by Thorbit and uses no MCP Scraper Credits. Link only in the dashboard; never request its API key.",
       "category": "analytics",
       "methodName": "getEntitlement",
       "inputSchema": {
@@ -8117,7 +8221,7 @@
     {
       "name": "analytics_get_events",
       "title": "Analytics Events",
-      "description": "Read paginated event counts. Follow pageInfo cursors instead of requesting an unbounded result.",
+      "description": "Read paginated event counts; follow pageInfo cursors.",
       "category": "analytics",
       "methodName": "getEvents",
       "inputSchema": {
@@ -8401,7 +8505,7 @@
     {
       "name": "analytics_get_forecast",
       "title": "Analytics Forecast",
-      "description": "Read historical monthly revenue and spend plus bounded forward scenarios and ROAS when enough evidence exists.",
+      "description": "Read historical revenue and spend plus evidence-bounded scenarios.",
       "category": "analytics",
       "methodName": "getForecast",
       "inputSchema": {
@@ -8443,19 +8547,11 @@
               "type": "string"
             },
             "additionalProperties": {}
-          },
-          "filters": {
-            "type": "object",
-            "propertyNames": {
-              "type": "string"
-            },
-            "additionalProperties": {}
           }
         },
         "required": [
           "ok",
-          "data",
-          "filters"
+          "data"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -9090,7 +9186,7 @@
     {
       "name": "analytics_get_overview",
       "title": "Analytics Overview",
-      "description": "Read the overview report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+      "description": "Read the overview report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
       "category": "analytics",
       "methodName": "getOverview",
       "inputSchema": {
@@ -9362,7 +9458,7 @@
     {
       "name": "analytics_get_paths",
       "title": "Analytics Conversion Paths",
-      "description": "Read the conversion paths report for one analytics Business. Use analytics_list_sites first. Filters use the same normalized Site, Pixel, hostname, date, source, medium, campaign, and event contract as the dashboard, REST API, and exports.",
+      "description": "Read the conversion paths report. Get siteId with analytics_list_sites; filters match dashboard, REST, and exports.",
       "category": "analytics",
       "methodName": "getPaths",
       "inputSchema": {
@@ -9634,7 +9730,7 @@
     {
       "name": "analytics_get_person_journey",
       "title": "Get Person Journey",
-      "description": "Read CRM-oriented identified-person history: touches, calls, CRM stages, conversions, and delivery receipts. For analytics chronology use analytics_get_visitor_journey.",
+      "description": "Read CRM-oriented identified-person history: touches, calls, stages, conversions, and receipts. For chronology use analytics_get_visitor_journey.",
       "category": "analytics",
       "methodName": "getPersonJourney",
       "inputSchema": {
@@ -9665,14 +9761,7 @@
           "ok": {
             "type": "boolean"
           },
-          "data": {
-            "type": "object",
-            "propertyNames": {
-              "type": "string"
-            },
-            "additionalProperties": {}
-          },
-          "filters": {
+          "journey": {
             "type": "object",
             "propertyNames": {
               "type": "string"
@@ -9682,8 +9771,7 @@
         },
         "required": [
           "ok",
-          "data",
-          "filters"
+          "journey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -10522,7 +10610,7 @@
     {
       "name": "analytics_get_timeseries",
       "title": "Analytics Timeseries",
-      "description": "Read daily time-series rows for an AI-selected line, area, or comparative visualization.",
+      "description": "Read bounded daily rows for line, area, or comparison charts.",
       "category": "analytics",
       "methodName": "getTimeseries",
       "inputSchema": {
@@ -11542,8 +11630,8 @@
     },
     {
       "name": "analytics_import_crm_csv",
-      "title": "Import CRM CSV",
-      "description": "Map and stage a bounded CRM CSV import. Contact fields are encrypted and analytics retains only opaque person references and identity signals.",
+      "title": "Legacy CRM CSV Import",
+      "description": "Legacy direct CRM CSV import; prefer preview then commit.",
       "category": "analytics",
       "methodName": "importCrmCsv",
       "inputSchema": {
@@ -11613,6 +11701,12 @@
               }
             },
             "description": "CSV-column mapping used to identify and protect supported CRM fields."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
@@ -11620,7 +11714,8 @@
           "sourceSystem",
           "filename",
           "csv",
-          "mapping"
+          "mapping",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -11629,17 +11724,25 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "import": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "import"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
       },
       "outputSchemaProvided": true,
       "annotations": {
-        "title": "Import CRM CSV",
+        "title": "Legacy CRM CSV Import",
         "readOnlyHint": false,
         "destructiveHint": false,
         "idempotentHint": false,
@@ -11649,7 +11752,7 @@
     {
       "name": "analytics_list_activation_destinations",
       "title": "List Ad Activation Destinations",
-      "description": "List Meta, Google, TikTok, and Reddit destinations with pending, delivered, and failed conversion counts.",
+      "description": "List ad destinations with delivery counts and readiness.",
       "category": "analytics",
       "methodName": "listActivationDestinations",
       "inputSchema": {
@@ -11684,10 +11787,22 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "destinations": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "destinations"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -11746,10 +11861,22 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "receipts": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "receipts"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -11766,7 +11893,7 @@
     {
       "name": "analytics_list_campaign_links",
       "title": "List Campaign Links",
-      "description": "List paginated tracked links and canonical UTM and ad hierarchy fields.",
+      "description": "List paginated tracked links with UTM and ad hierarchy fields.",
       "category": "analytics",
       "methodName": "listCampaignLinks",
       "inputSchema": {
@@ -11801,10 +11928,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "data"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -11821,7 +11956,7 @@
     {
       "name": "analytics_list_connections",
       "title": "List X-Ray Connections",
-      "description": "List phone, CRM, and webhook connections with honest readiness, receipt, and error state.",
+      "description": "List phone, CRM, and webhook connections with readiness and errors.",
       "category": "analytics",
       "methodName": "listConnections",
       "inputSchema": {
@@ -11856,10 +11991,22 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "connections": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "connections"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -11876,7 +12023,7 @@
     {
       "name": "analytics_list_conversion_rules",
       "title": "List Conversion Rules",
-      "description": "List deterministic versioned rules that turn canonical phone, CRM, transaction, and server events into conversions.",
+      "description": "List versioned rules that turn canonical events into conversions.",
       "category": "analytics",
       "methodName": "listConversionRules",
       "inputSchema": {
@@ -11911,10 +12058,22 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "rules": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "rules"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -12457,7 +12616,7 @@
     {
       "name": "analytics_list_crm_imports",
       "title": "List CRM Imports",
-      "description": "List paginated encrypted CSV import receipts without exposing contact PII in analytics.",
+      "description": "List encrypted CSV import receipts without contact PII.",
       "category": "analytics",
       "methodName": "listCrmImports",
       "inputSchema": {
@@ -12492,10 +12651,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "data"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -12512,7 +12679,7 @@
     {
       "name": "analytics_list_event_definitions",
       "title": "List Browser Event Definitions",
-      "description": "List declarative page, click, and form-submit tags applied by the first-party X-Ray Pixel.",
+      "description": "List declarative page, click, and form-submit Pixel tags.",
       "category": "analytics",
       "methodName": "listEventDefinitions",
       "inputSchema": {
@@ -12547,10 +12714,22 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "definitions": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "definitions"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -12567,7 +12746,7 @@
     {
       "name": "analytics_list_forms",
       "title": "List Analytics Forms",
-      "description": "List paginated Pixel-linked forms, embed snippets, fields, versions, and submission counts.",
+      "description": "List paginated Pixel-linked forms, embeds, versions, and submission counts.",
       "category": "analytics",
       "methodName": "listForms",
       "inputSchema": {
@@ -12602,10 +12781,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "data"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -12659,6 +12846,7 @@
             "type": "boolean"
           },
           "definitions": {
+            "maxItems": 500,
             "type": "array",
             "items": {
               "type": "object",
@@ -12742,6 +12930,7 @@
             "type": "boolean"
           },
           "candidates": {
+            "maxItems": 500,
             "type": "array",
             "items": {
               "type": "object",
@@ -12815,6 +13004,7 @@
             "type": "boolean"
           },
           "scores": {
+            "maxItems": 500,
             "type": "array",
             "items": {
               "type": "object",
@@ -12888,6 +13078,7 @@
             "type": "boolean"
           },
           "sources": {
+            "maxItems": 500,
             "type": "array",
             "items": {
               "type": "object",
@@ -12917,7 +13108,7 @@
     {
       "name": "analytics_list_pixels",
       "title": "List Analytics Pixels",
-      "description": "List Site Pixels, installation snippets, detected domains, approval states, and health.",
+      "description": "List Pixels, install snippets, approved domains, and health.",
       "category": "analytics",
       "methodName": "listPixels",
       "inputSchema": {
@@ -12952,10 +13143,22 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "pixels": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "pixels"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -13016,6 +13219,7 @@
             "type": "boolean"
           },
           "targets": {
+            "maxItems": 500,
             "type": "array",
             "items": {
               "type": "object",
@@ -13082,6 +13286,7 @@
             "type": "boolean"
           },
           "views": {
+            "maxItems": 500,
             "type": "array",
             "items": {
               "type": "object",
@@ -13408,7 +13613,7 @@
     {
       "name": "analytics_list_sites",
       "title": "List Analytics Businesses",
-      "description": "List the authenticated account's analytics Businesses, roles, Pixel counts, and latest activity. Call this first to obtain the siteId used by every analytics report tool. Tenant access is enforced by the analytics API.",
+      "description": "List authorized analytics Businesses, roles, Pixel counts, and activity. Call first to obtain the siteId required by analytics tools.",
       "category": "analytics",
       "methodName": "listSites",
       "inputSchema": {
@@ -14098,11 +14303,18 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Phone or CRM connection id returned by analytics_list_connections."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
           "siteId",
-          "connectionId"
+          "connectionId",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -14111,10 +14323,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "reconciliation": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "reconciliation"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -14334,6 +14554,12 @@
               "type": "string"
             },
             "additionalProperties": {}
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
@@ -14344,7 +14570,8 @@
           "sourceEventId",
           "eventKind",
           "eventName",
-          "occurredAt"
+          "occurredAt",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -14353,10 +14580,120 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created": {
+            "type": "boolean"
+          },
+          "personId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "identityTier": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "unlinked"
+            ]
+          },
+          "namespaceId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "conversionIds": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            }
+          },
+          "consentEligibility": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          },
+          "valueProvenance": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "scoreEvaluationIds": {
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            }
+          },
+          "predictionEvidence": {},
+          "candidatePromotion": {
+            "anyOf": [
+              {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "id",
+          "created",
+          "personId",
+          "identityTier",
+          "namespaceId",
+          "conversionIds",
+          "consentEligibility",
+          "valueProvenance",
+          "scoreEvaluationIds",
+          "predictionEvidence",
+          "candidatePromotion"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -14390,11 +14727,18 @@
             "format": "uuid",
             "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             "description": "Failed activation job id returned by analytics_list_activation_receipts."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
           "siteId",
-          "jobId"
+          "jobId",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -14403,10 +14747,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "job": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "job"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -14423,7 +14775,7 @@
     {
       "name": "analytics_start_crm_sync",
       "title": "Start Inbound CRM Synchronization",
-      "description": "Pull inbound CRM objects and stages into X-Ray through a capability-gated idempotent synchronization. This does not push X-Ray people or deals to the CRM; candidate identities and evidence are excluded.",
+      "description": "Pull supported CRM objects into X-Ray. This does not push people or deals; candidate evidence is excluded.",
       "category": "analytics",
       "methodName": "startCrmSync",
       "inputSchema": {
@@ -14601,7 +14953,7 @@
     {
       "name": "analytics_sync_crm_person",
       "title": "Push Confirmed Person to CRM",
-      "description": "Push one confirmed-person projection from X-Ray to the connected CRM after provisioning approval. This is not the inbound analytics_start_crm_sync lane; candidate identity or evidence is schema-invalid.",
+      "description": "Push one confirmed person after CRM provisioning. This is not inbound sync; candidate evidence is invalid.",
       "category": "analytics",
       "methodName": "syncCrmPerson",
       "inputSchema": {
@@ -14893,11 +15245,18 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 255
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
           "siteId",
-          "destinationId"
+          "destinationId",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -14906,10 +15265,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "test": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "test"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -15493,8 +15860,8 @@
     },
     {
       "name": "analytics_test_event_definition",
-      "title": "Test Browser Event Definition",
-      "description": "Preview a definition against validated hostname, path, trigger, tag, and browser-reported selector-match facts. This never accepts HTML or executes selectors server-side.",
+      "title": "Preview Browser Event Definition",
+      "description": "Preview supplied browser match facts. This is not live event verification: it does not open a site, run selectors, or prove Pixel delivery.",
       "category": "analytics",
       "methodName": "testEventDefinition",
       "inputSchema": {
@@ -15558,17 +15925,25 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "test": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "test"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
       },
       "outputSchemaProvided": true,
       "annotations": {
-        "title": "Test Browser Event Definition",
+        "title": "Preview Browser Event Definition",
         "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": true,
@@ -16148,11 +16523,18 @@
           "enabled": {
             "description": "Replacement enabled state.",
             "type": "boolean"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
           }
         },
         "required": [
           "siteId",
-          "definitionId"
+          "definitionId",
+          "idempotencyKey"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
@@ -16161,10 +16543,18 @@
         "properties": {
           "ok": {
             "type": "boolean"
+          },
+          "definition": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
           }
         },
         "required": [
-          "ok"
+          "ok",
+          "definition"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -16281,7 +16671,7 @@
     {
       "name": "analytics_validate_activation_mapping",
       "title": "Validate Activation Event Mapping",
-      "description": "Validate explicit confirmed-event mappings against an authorized destination. Candidate-assisted events are rejected; this does not enable delivery.",
+      "description": "Validate confirmed-event mappings. This cannot save mappings or enable delivery.",
       "category": "analytics",
       "methodName": "validateActivationMapping",
       "inputSchema": {
@@ -16326,7 +16716,7 @@
               "minLength": 1,
               "maxLength": 160
             },
-            "description": "Confirmed X-Ray event to provider event mapping. Candidate-assisted events are ineligible."
+            "description": "Confirmed X-Ray event to provider event mapping."
           }
         },
         "required": [
@@ -40308,7 +40698,7 @@
     {
       "name": "harvest_paa",
       "title": "Google PAA + SERP Harvest",
-      "description": "Expand one Google People Also Ask SERP into questions, answers, sources, organic results, and entity IDs. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+      "description": "Expand one Google People Also Ask SERP into questions, answers, every preserved source, AI Overview evidence, ranking URLs, and entity IDs. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; a failed click or browser timeout is never reported as exhaustion. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
       "category": "search",
       "methodName": "harvestPaa",
       "inputSchema": {
@@ -40465,11 +40855,123 @@
               }
             ]
           },
+          "paaLifecycle": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "requestedQuestions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "questionsFound": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "targetStatus": {
+                    "type": "string",
+                    "enum": [
+                      "met",
+                      "not_met"
+                    ]
+                  },
+                  "discoveryStatus": {
+                    "type": "string",
+                    "enum": [
+                      "in_progress",
+                      "target_reached",
+                      "frontier_exhausted",
+                      "no_paa_observed",
+                      "interrupted",
+                      "recovery_exhausted"
+                    ]
+                  },
+                  "materialStatus": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial"
+                    ]
+                  },
+                  "completionReason": {
+                    "type": "string"
+                  },
+                  "automaticRetries": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "knownQuestions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "processedQuestions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "failedInteractions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "noGrowthConfirmations": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "requestedQuestions",
+                  "questionsFound",
+                  "targetStatus",
+                  "discoveryStatus",
+                  "materialStatus",
+                  "completionReason",
+                  "automaticRetries",
+                  "knownQuestions",
+                  "processedQuestions",
+                  "failedInteractions",
+                  "noGrowthConfirmations"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "questions": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
+                "questionId": {
+                  "type": "string"
+                },
+                "googleLinkId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "googleEvidenceId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
                 "question": {
                   "type": "string"
                 },
@@ -40482,6 +40984,77 @@
                       "type": "null"
                     }
                   ]
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "rawUrl": {
+                        "type": "string"
+                      },
+                      "resolvedUrl": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "linkType": {
+                        "type": "string",
+                        "enum": [
+                          "plain",
+                          "google_url_redirect",
+                          "google_goto_redirect"
+                        ]
+                      },
+                      "resolutionStatus": {
+                        "type": "string",
+                        "enum": [
+                          "not_needed",
+                          "resolved",
+                          "unresolved",
+                          "rejected"
+                        ]
+                      },
+                      "title": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "site": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "rawUrl",
+                      "resolvedUrl",
+                      "linkType",
+                      "resolutionStatus",
+                      "title",
+                      "site"
+                    ],
+                    "additionalProperties": false
+                  }
                 },
                 "sourceTitle": {
                   "anyOf": [
@@ -40502,13 +41075,28 @@
                       "type": "null"
                     }
                   ]
+                },
+                "sourceUrl": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 }
               },
               "required": [
+                "questionId",
+                "googleLinkId",
+                "googleEvidenceId",
                 "question",
                 "answer",
+                "sources",
                 "sourceTitle",
-                "sourceSite"
+                "sourceSite",
+                "sourceUrl"
               ],
               "additionalProperties": false
             }
@@ -40529,6 +41117,36 @@
                 "url": {
                   "type": "string"
                 },
+                "rawUrl": {
+                  "type": "string"
+                },
+                "resolvedUrl": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "linkType": {
+                  "type": "string",
+                  "enum": [
+                    "plain",
+                    "google_url_redirect",
+                    "google_goto_redirect"
+                  ]
+                },
+                "resolutionStatus": {
+                  "type": "string",
+                  "enum": [
+                    "not_needed",
+                    "resolved",
+                    "unresolved",
+                    "rejected"
+                  ]
+                },
                 "domain": {
                   "type": "string"
                 },
@@ -40547,6 +41165,10 @@
                 "position",
                 "title",
                 "url",
+                "rawUrl",
+                "resolvedUrl",
+                "linkType",
+                "resolutionStatus",
                 "domain",
                 "snippet"
               ],
@@ -40571,6 +41193,71 @@
                       }
                     ]
                   },
+                  "citations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "href": {
+                          "type": "string"
+                        },
+                        "rawUrl": {
+                          "type": "string"
+                        },
+                        "resolvedUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "linkType": {
+                          "type": "string",
+                          "enum": [
+                            "plain",
+                            "google_url_redirect",
+                            "google_goto_redirect"
+                          ]
+                        },
+                        "resolutionStatus": {
+                          "type": "string",
+                          "enum": [
+                            "not_needed",
+                            "resolved",
+                            "unresolved",
+                            "rejected"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "text",
+                        "href",
+                        "rawUrl",
+                        "resolvedUrl",
+                        "linkType",
+                        "resolutionStatus"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "expanded": {
+                    "type": "boolean"
+                  },
+                  "fullyExpanded": {
+                    "type": "boolean"
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "shareUrl": {
                     "anyOf": [
                       {
@@ -40584,7 +41271,11 @@
                 },
                 "required": [
                   "detected",
-                  "text"
+                  "text",
+                  "citations",
+                  "expanded",
+                  "fullyExpanded",
+                  "sections"
                 ],
                 "additionalProperties": false
               },
@@ -40700,6 +41391,7 @@
           "degradedResult",
           "degradationReasons",
           "retryRecommended",
+          "paaLifecycle",
           "questions",
           "organicResults",
           "aiOverview",
@@ -58562,6 +59254,36 @@
                 "url": {
                   "type": "string"
                 },
+                "rawUrl": {
+                  "type": "string"
+                },
+                "resolvedUrl": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "linkType": {
+                  "type": "string",
+                  "enum": [
+                    "plain",
+                    "google_url_redirect",
+                    "google_goto_redirect"
+                  ]
+                },
+                "resolutionStatus": {
+                  "type": "string",
+                  "enum": [
+                    "not_needed",
+                    "resolved",
+                    "unresolved",
+                    "rejected"
+                  ]
+                },
                 "domain": {
                   "type": "string"
                 },
@@ -58580,6 +59302,10 @@
                 "position",
                 "title",
                 "url",
+                "rawUrl",
+                "resolvedUrl",
+                "linkType",
+                "resolutionStatus",
                 "domain",
                 "snippet"
               ],
@@ -58658,6 +59384,71 @@
                       }
                     ]
                   },
+                  "citations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "href": {
+                          "type": "string"
+                        },
+                        "rawUrl": {
+                          "type": "string"
+                        },
+                        "resolvedUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "linkType": {
+                          "type": "string",
+                          "enum": [
+                            "plain",
+                            "google_url_redirect",
+                            "google_goto_redirect"
+                          ]
+                        },
+                        "resolutionStatus": {
+                          "type": "string",
+                          "enum": [
+                            "not_needed",
+                            "resolved",
+                            "unresolved",
+                            "rejected"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "text",
+                        "href",
+                        "rawUrl",
+                        "resolvedUrl",
+                        "linkType",
+                        "resolutionStatus"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "expanded": {
+                    "type": "boolean"
+                  },
+                  "fullyExpanded": {
+                    "type": "boolean"
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "shareUrl": {
                     "anyOf": [
                       {
@@ -58671,7 +59462,11 @@
                 },
                 "required": [
                   "detected",
-                  "text"
+                  "text",
+                  "citations",
+                  "expanded",
+                  "fullyExpanded",
+                  "sections"
                 ],
                 "additionalProperties": false
               },
@@ -68000,7 +68795,7 @@
     {
       "name": "analytics_upsert_crm_outbound_policy",
       "title": "Configure CRM Outbound Policy",
-      "description": "Create or update one immutable-version CRM outbound policy. Policies are disabled unless explicitly enabled, cannot grant visitor consent, and reject candidate identity, raw IP/device signals, and unrestricted journey data.",
+      "description": "Version a CRM outbound policy. It cannot grant consent or send candidate identity, raw IP/device signals, or full journeys.",
       "category": "analytics",
       "methodName": "upsertCrmOutboundPolicy",
       "inputSchema": {
@@ -68423,8 +69218,8 @@
     {
       "name": "harvest_paa_start",
       "title": "Start Durable Google PAA Harvest",
-      "description": "Start a durable Google People Also Ask harvest and return its job receipt. Use for long work, including 60 questions. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
-      "category": "other",
+      "description": "Start a durable Google People Also Ask harvest and return its job receipt. maxQuestions is the requested target count. The job automatically resumes an interrupted serverless worker under the same jobId, idempotency key, and billing hold while preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
+      "category": "search",
       "methodName": "harvestPaaStart",
       "inputSchema": {
         "type": "object",
@@ -68580,8 +69375,8 @@
     {
       "name": "harvest_paa_status",
       "title": "Check Durable Google PAA Harvest",
-      "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, completeness, attempts, terminal rows, and billing. Polling never starts or bills another run.",
-      "category": "other",
+      "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, automatic-recovery count, target status, discovery status, material completeness, attempts, terminal rows, and billing. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
+      "category": "search",
       "methodName": "harvestPaaStatus",
       "inputSchema": {
         "type": "object",
@@ -68784,6 +69579,95 @@
                 "type": "integer",
                 "minimum": 0,
                 "maximum": 9007199254740991
+              },
+              "lifecycle": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "requestedQuestions": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "questionsFound": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "targetStatus": {
+                        "type": "string",
+                        "enum": [
+                          "met",
+                          "not_met"
+                        ]
+                      },
+                      "discoveryStatus": {
+                        "type": "string",
+                        "enum": [
+                          "in_progress",
+                          "target_reached",
+                          "frontier_exhausted",
+                          "no_paa_observed",
+                          "interrupted",
+                          "recovery_exhausted"
+                        ]
+                      },
+                      "materialStatus": {
+                        "type": "string",
+                        "enum": [
+                          "complete",
+                          "partial"
+                        ]
+                      },
+                      "completionReason": {
+                        "type": "string"
+                      },
+                      "automaticRetries": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "knownQuestions": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "processedQuestions": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "failedInteractions": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "noGrowthConfirmations": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "requestedQuestions",
+                      "questionsFound",
+                      "targetStatus",
+                      "discoveryStatus",
+                      "materialStatus",
+                      "completionReason",
+                      "automaticRetries",
+                      "knownQuestions",
+                      "processedQuestions",
+                      "failedInteractions",
+                      "noGrowthConfirmations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -68792,7 +69676,8 @@
               "answeredQuestions",
               "sourcedQuestions",
               "missingAnswers",
-              "missingSources"
+              "missingSources",
+              "lifecycle"
             ],
             "additionalProperties": false
           },
@@ -68831,6 +69716,95 @@
                       }
                     ]
                   },
+                  "paaLifecycle": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "requestedQuestions": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "questionsFound": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "targetStatus": {
+                            "type": "string",
+                            "enum": [
+                              "met",
+                              "not_met"
+                            ]
+                          },
+                          "discoveryStatus": {
+                            "type": "string",
+                            "enum": [
+                              "in_progress",
+                              "target_reached",
+                              "frontier_exhausted",
+                              "no_paa_observed",
+                              "interrupted",
+                              "recovery_exhausted"
+                            ]
+                          },
+                          "materialStatus": {
+                            "type": "string",
+                            "enum": [
+                              "complete",
+                              "partial"
+                            ]
+                          },
+                          "completionReason": {
+                            "type": "string"
+                          },
+                          "automaticRetries": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "knownQuestions": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "processedQuestions": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "failedInteractions": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "noGrowthConfirmations": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "requestedQuestions",
+                          "questionsFound",
+                          "targetStatus",
+                          "discoveryStatus",
+                          "materialStatus",
+                          "completionReason",
+                          "automaticRetries",
+                          "knownQuestions",
+                          "processedQuestions",
+                          "failedInteractions",
+                          "noGrowthConfirmations"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
                   "questionCount": {
                     "type": "integer",
                     "minimum": 0,
@@ -68841,6 +69815,29 @@
                     "items": {
                       "type": "object",
                       "properties": {
+                        "questionId": {
+                          "type": "string"
+                        },
+                        "googleLinkId": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "googleEvidenceId": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
                         "question": {
                           "type": "string"
                         },
@@ -68853,6 +69850,77 @@
                               "type": "null"
                             }
                           ]
+                        },
+                        "sources": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "rawUrl": {
+                                "type": "string"
+                              },
+                              "resolvedUrl": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "linkType": {
+                                "type": "string",
+                                "enum": [
+                                  "plain",
+                                  "google_url_redirect",
+                                  "google_goto_redirect"
+                                ]
+                              },
+                              "resolutionStatus": {
+                                "type": "string",
+                                "enum": [
+                                  "not_needed",
+                                  "resolved",
+                                  "unresolved",
+                                  "rejected"
+                                ]
+                              },
+                              "title": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "site": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "rawUrl",
+                              "resolvedUrl",
+                              "linkType",
+                              "resolutionStatus",
+                              "title",
+                              "site"
+                            ],
+                            "additionalProperties": false
+                          }
                         },
                         "sourceTitle": {
                           "anyOf": [
@@ -68886,22 +69954,299 @@
                         }
                       },
                       "required": [
+                        "questionId",
+                        "googleLinkId",
+                        "googleEvidenceId",
                         "question",
                         "answer",
+                        "sources",
                         "sourceTitle",
                         "sourceSite",
                         "sourceUrl"
                       ],
                       "additionalProperties": false
                     }
+                  },
+                  "organicResults": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "rawUrl": {
+                          "type": "string"
+                        },
+                        "resolvedUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "linkType": {
+                          "type": "string",
+                          "enum": [
+                            "plain",
+                            "google_url_redirect",
+                            "google_goto_redirect"
+                          ]
+                        },
+                        "resolutionStatus": {
+                          "type": "string",
+                          "enum": [
+                            "not_needed",
+                            "resolved",
+                            "unresolved",
+                            "rejected"
+                          ]
+                        },
+                        "domain": {
+                          "type": "string"
+                        },
+                        "snippet": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "position",
+                        "title",
+                        "url",
+                        "rawUrl",
+                        "resolvedUrl",
+                        "linkType",
+                        "resolutionStatus",
+                        "domain",
+                        "snippet"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "aiOverview": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "detected": {
+                            "type": "boolean"
+                          },
+                          "text": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "citations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "type": "string"
+                                },
+                                "href": {
+                                  "type": "string"
+                                },
+                                "rawUrl": {
+                                  "type": "string"
+                                },
+                                "resolvedUrl": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "linkType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "plain",
+                                    "google_url_redirect",
+                                    "google_goto_redirect"
+                                  ]
+                                },
+                                "resolutionStatus": {
+                                  "type": "string",
+                                  "enum": [
+                                    "not_needed",
+                                    "resolved",
+                                    "unresolved",
+                                    "rejected"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "text",
+                                "href",
+                                "rawUrl",
+                                "resolvedUrl",
+                                "linkType",
+                                "resolutionStatus"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "expanded": {
+                            "type": "boolean"
+                          },
+                          "fullyExpanded": {
+                            "type": "boolean"
+                          },
+                          "sections": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "shareUrl": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "detected",
+                          "text",
+                          "citations",
+                          "expanded",
+                          "fullyExpanded",
+                          "sections"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "entityIds": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "entities": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "kgId": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "cid": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "gcid": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "kgId",
+                                "cid",
+                                "gcid"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "description": "Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility."
+                          },
+                          "kgIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "cids": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "gcids": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "entities",
+                          "kgIds",
+                          "cids",
+                          "gcids"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 },
                 "required": [
                   "completionStatus",
                   "resultQuality",
                   "retryRecommended",
+                  "paaLifecycle",
                   "questionCount",
-                  "questions"
+                  "questions",
+                  "organicResults",
+                  "aiOverview",
+                  "entityIds"
                 ],
                 "additionalProperties": false
               },
@@ -69464,6 +70809,1092 @@
       "outputSchemaProvided": true,
       "annotations": {
         "title": "List X-Ray Journeys",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_commit_crm_import",
+      "title": "Commit CRM CSV Import",
+      "description": "Commit the exact preview fingerprint with a caller retry key.",
+      "category": "analytics",
+      "methodName": "commitCrmImport",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Analytics Site id returned by analytics_list_sites."
+          },
+          "sourceSystem": {
+            "type": "string",
+            "enum": [
+              "hubspot",
+              "salesforce",
+              "gohighlevel",
+              "zoho",
+              "pipedrive",
+              "keap",
+              "other"
+            ],
+            "description": "CRM system represented by the uploaded CSV."
+          },
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "description": "Original CSV filename retained for the import receipt; this is not a local path."
+          },
+          "csv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8000000,
+            "description": "Complete bounded CSV text to validate and stage; do not pass a local filesystem path."
+          },
+          "mapping": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "enum": [
+                "email",
+                "firstName",
+                "lastName",
+                "name",
+                "phone",
+                "company",
+                "externalId",
+                "stage",
+                "outcome",
+                "occurredAt",
+                "value",
+                "currency",
+                "gclid",
+                "gbraid",
+                "wbraid",
+                "fbclid"
+              ]
+            },
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "required": [
+              "email",
+              "firstName",
+              "lastName",
+              "name",
+              "phone",
+              "company",
+              "externalId",
+              "stage",
+              "outcome",
+              "occurredAt",
+              "value",
+              "currency",
+              "gclid",
+              "gbraid",
+              "wbraid",
+              "fbclid"
+            ],
+            "description": "CSV-column mapping used to identify and protect supported CRM fields."
+          },
+          "previewFingerprint": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "description": "Exact SHA-256 fingerprint returned by analytics_preview_crm_import."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
+          }
+        },
+        "required": [
+          "siteId",
+          "sourceSystem",
+          "filename",
+          "csv",
+          "mapping",
+          "previewFingerprint",
+          "idempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "import": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          },
+          "receipt": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "ok",
+          "import",
+          "receipt"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Commit CRM CSV Import",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_export_crm_csv",
+      "title": "Export CRM CSV",
+      "description": "Create a governed CRM CSV; advertising fields require purpose acknowledgement.",
+      "category": "analytics",
+      "methodName": "exportCrmCsv",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Analytics Site id returned by analytics_list_sites."
+          },
+          "fields": {
+            "description": "Ordered form-field definitions to render and validate for submissions.",
+            "minItems": 1,
+            "maxItems": 16,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "person_id",
+                "crm_person_ref",
+                "journey_url",
+                "first_seen_at",
+                "last_seen_at",
+                "signal_count",
+                "form_submission_count",
+                "conversion_count",
+                "revenue_minor",
+                "currency",
+                "stage",
+                "outcome",
+                "gclid",
+                "gbraid",
+                "wbraid",
+                "fbclid"
+              ]
+            }
+          },
+          "acknowledgedPurpose": {
+            "description": "Explicit governed purpose acknowledgement required for advertising identifiers or activation exports.",
+            "type": "string",
+            "enum": [
+              "business_operations",
+              "advertising_measurement"
+            ]
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
+          }
+        },
+        "required": [
+          "siteId",
+          "idempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "artifact": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "crm_csv",
+                  "google_ads_offline_csv",
+                  "meta_conversions_api_jsonl"
+                ]
+              },
+              "filename": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "mediaType": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "nativeUploadSupported": {
+                "type": "boolean"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "content": {
+                "type": "string",
+                "maxLength": 65536
+              },
+              "rowCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2500
+              },
+              "omittedForConsent": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "kind",
+              "filename",
+              "mediaType",
+              "nativeUploadSupported",
+              "label",
+              "content",
+              "rowCount",
+              "omittedForConsent"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "ok",
+          "artifact"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Export CRM CSV",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_export_google_ads_csv",
+      "title": "Export Google Ads CSV",
+      "description": "Create a consent-gated native offline-conversion upload CSV.",
+      "category": "analytics",
+      "methodName": "exportGoogleAdsCsv",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Analytics Site id returned by analytics_list_sites."
+          },
+          "acknowledgedPurpose": {
+            "type": "string",
+            "const": "advertising_measurement",
+            "description": "Explicit governed purpose acknowledgement required for advertising identifiers or activation exports."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
+          }
+        },
+        "required": [
+          "siteId",
+          "acknowledgedPurpose",
+          "idempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "artifact": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "crm_csv",
+                  "google_ads_offline_csv",
+                  "meta_conversions_api_jsonl"
+                ]
+              },
+              "filename": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "mediaType": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "nativeUploadSupported": {
+                "type": "boolean"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "content": {
+                "type": "string",
+                "maxLength": 65536
+              },
+              "rowCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2500
+              },
+              "omittedForConsent": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "kind",
+              "filename",
+              "mediaType",
+              "nativeUploadSupported",
+              "label",
+              "content",
+              "rowCount",
+              "omittedForConsent"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "ok",
+          "artifact"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Export Google Ads CSV",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_export_meta_technical",
+      "title": "Export Meta Technical JSONL",
+      "description": "Create a consent-gated technical JSONL relay artifact; Meta does not accept it as a native upload.",
+      "category": "analytics",
+      "methodName": "exportMetaTechnical",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Analytics Site id returned by analytics_list_sites."
+          },
+          "acknowledgedPurpose": {
+            "type": "string",
+            "const": "advertising_measurement",
+            "description": "Explicit governed purpose acknowledgement required for advertising identifiers or activation exports."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
+          }
+        },
+        "required": [
+          "siteId",
+          "acknowledgedPurpose",
+          "idempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "artifact": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "crm_csv",
+                  "google_ads_offline_csv",
+                  "meta_conversions_api_jsonl"
+                ]
+              },
+              "filename": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "mediaType": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "nativeUploadSupported": {
+                "type": "boolean"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "content": {
+                "type": "string",
+                "maxLength": 65536
+              },
+              "rowCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2500
+              },
+              "omittedForConsent": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "kind",
+              "filename",
+              "mediaType",
+              "nativeUploadSupported",
+              "label",
+              "content",
+              "rowCount",
+              "omittedForConsent"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "ok",
+          "artifact"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Export Meta Technical JSONL",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_preview_crm_import",
+      "title": "Preview CRM CSV Import",
+      "description": "Validate mappings and return bounded row/error counts without importing.",
+      "category": "analytics",
+      "methodName": "previewCrmImport",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Analytics Site id returned by analytics_list_sites."
+          },
+          "sourceSystem": {
+            "type": "string",
+            "enum": [
+              "hubspot",
+              "salesforce",
+              "gohighlevel",
+              "zoho",
+              "pipedrive",
+              "keap",
+              "other"
+            ],
+            "description": "CRM system represented by the uploaded CSV."
+          },
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240,
+            "description": "Original CSV filename retained for the import receipt; this is not a local path."
+          },
+          "csv": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8000000,
+            "description": "Complete bounded CSV text to validate and stage; do not pass a local filesystem path."
+          },
+          "mapping": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "enum": [
+                "email",
+                "firstName",
+                "lastName",
+                "name",
+                "phone",
+                "company",
+                "externalId",
+                "stage",
+                "outcome",
+                "occurredAt",
+                "value",
+                "currency",
+                "gclid",
+                "gbraid",
+                "wbraid",
+                "fbclid"
+              ]
+            },
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "required": [
+              "email",
+              "firstName",
+              "lastName",
+              "name",
+              "phone",
+              "company",
+              "externalId",
+              "stage",
+              "outcome",
+              "occurredAt",
+              "value",
+              "currency",
+              "gclid",
+              "gbraid",
+              "wbraid",
+              "fbclid"
+            ],
+            "description": "CSV-column mapping used to identify and protect supported CRM fields."
+          }
+        },
+        "required": [
+          "siteId",
+          "sourceSystem",
+          "filename",
+          "csv",
+          "mapping"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "preview": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "number",
+                "const": 1
+              },
+              "fingerprint": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "headers": {
+                "maxItems": 240,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 240
+                }
+              },
+              "totalRows": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2500
+              },
+              "acceptedRows": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2500
+              },
+              "rejectedRows": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2500
+              },
+              "sample": {
+                "maxItems": 5,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                }
+              },
+              "errors": {
+                "maxItems": 100,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                }
+              },
+              "errorReceipt": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "fingerprint",
+              "headers",
+              "totalRows",
+              "acceptedRows",
+              "rejectedRows",
+              "sample",
+              "errors",
+              "errorReceipt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "ok",
+          "preview"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Preview CRM CSV Import",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_save_activation_mapping",
+      "title": "Save Activation Event Mapping",
+      "description": "Save a typed confirmed-event mapping on an existing destination without enabling delivery.",
+      "category": "analytics",
+      "methodName": "saveActivationMapping",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Analytics Site id returned by analytics_list_sites."
+          },
+          "destinationId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Activation destination identifier returned by analytics_list_activation_destinations."
+          },
+          "journeyTier": {
+            "default": "confirmed",
+            "description": "Confirmed, best-guess, or separately returned combined journey projection.",
+            "type": "string",
+            "const": "confirmed"
+          },
+          "eventMapping": {
+            "type": "object",
+            "properties": {
+              "schemaVersion": {
+                "type": "number",
+                "const": 1,
+                "description": "Canonical X-Ray event schema version; use version 1."
+              },
+              "mappings": {
+                "maxItems": 200,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "source": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 160,
+                      "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
+                    },
+                    "providerEvent": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 160,
+                      "description": "Exact provider event or conversion-action name receiving the confirmed X-Ray event."
+                    },
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Whether the new rule should begin evaluating events immediately."
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": [
+                        "primary",
+                        "observation"
+                      ],
+                      "description": "Primary conversion or supporting observation role for this enabled mapping."
+                    },
+                    "valueMode": {
+                      "type": "string",
+                      "enum": [
+                        "none",
+                        "event",
+                        "fixed"
+                      ],
+                      "description": "Whether the provider event receives no value, the confirmed event value, or a fixed configured value."
+                    },
+                    "fixedValue": {
+                      "description": "Non-negative fixed major-unit value used only when valueMode is fixed.",
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1000000000
+                    },
+                    "currency": {
+                      "description": "Three-letter ISO currency code for the event value.",
+                      "type": "string",
+                      "minLength": 3,
+                      "maxLength": 3
+                    }
+                  },
+                  "required": [
+                    "source",
+                    "providerEvent",
+                    "enabled",
+                    "role",
+                    "valueMode"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "Bounded typed event-mapping rows for this activation destination."
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "mappings"
+            ],
+            "additionalProperties": false,
+            "description": "Typed confirmed-event mapping; enabled rows require exactly one primary event."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
+          }
+        },
+        "required": [
+          "siteId",
+          "destinationId",
+          "eventMapping",
+          "idempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "destination": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "ok",
+          "destination"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Save Activation Event Mapping",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_set_activation_automation",
+      "title": "Set Activation Automation",
+      "description": "Explicitly enable or disable automatic delivery; enablement requires verified readiness.",
+      "category": "analytics",
+      "methodName": "setActivationAutomation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Analytics Site id returned by analytics_list_sites."
+          },
+          "destinationId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Activation destination identifier returned by analytics_list_activation_destinations."
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Explicitly enable or disable automatic delivery. Enabling requires a verified destination."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 160,
+            "description": "Retry key; reuse only for this exact mutation."
+          }
+        },
+        "required": [
+          "siteId",
+          "destinationId",
+          "enabled",
+          "idempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "destination": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "ok",
+          "destination"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Set Activation Automation",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analytics_verify_live_event_definition",
+      "title": "Verify Live Browser Event",
+      "description": "Wait briefly for a persisted event matching this definition; returns observed or not observed.",
+      "category": "analytics",
+      "methodName": "verifyLiveEventDefinition",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "siteId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Analytics Site id returned by analytics_list_sites."
+          },
+          "definitionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Browser event-definition identifier returned by analytics_list_event_definitions."
+          },
+          "timeoutMs": {
+            "default": 0,
+            "description": "Bounded wait for a newly persisted matching event.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 15000
+          },
+          "maxAgeSeconds": {
+            "default": 300,
+            "description": "Maximum accepted age of the persisted matching event.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 86400
+          }
+        },
+        "required": [
+          "siteId",
+          "definitionId"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "observed_live_match",
+                  "not_observed"
+                ]
+              },
+              "definitionId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "definitionVersion": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "eventId": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 200
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "observedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "maxAgeSeconds": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 86400
+              }
+            },
+            "required": [
+              "status",
+              "definitionId",
+              "definitionVersion",
+              "eventId",
+              "observedAt",
+              "maxAgeSeconds"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "ok",
+          "verification"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Verify Live Browser Event",
         "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": true,

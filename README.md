@@ -2,7 +2,7 @@
 
 Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence, complete Gmail workflows, and connected services) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, private file assets, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 116 tools).
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **331 unified MCP tools** — 230 MCP Scraper tools plus 101 mirrored Memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **339 unified MCP tools** — 238 MCP Scraper tools plus 101 mirrored Memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Install
 
@@ -482,7 +482,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 331 unified tools in both Node and Python, including all 101 mirrored Memory tools.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 339 unified tools in both Node and Python, including all 101 mirrored Memory tools.
 
 ## Scheduled results and artifact templates
 
@@ -707,7 +707,7 @@ Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Pyt
 
 Concurrency is sold separately from the base plan in quantity-based packs: one $5/month pack adds two browser slots, so quantity `n` adds `2n` slots for `$5n` per month. Existing plan credits and included concurrency do not change when a pack is added.
 
-## All 331 MCP tools
+## All 339 MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -729,7 +729,7 @@ The authoritative tool names, descriptions, complete input/output schemas, annot
 
 ## The CLI
 
-`mcpscraper-cli` keeps ergonomic shortcuts for common operations and also reaches all 331 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps ergonomic shortcuts for common operations and also reaches all 339 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -737,7 +737,7 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 331 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 339 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 56 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
 - [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 116 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
 - [`contracts/gmail.tools.fingerprints.json`](./contracts/gmail.tools.fingerprints.json) — generated SHA-256 fingerprints for the ten complete Gmail tool contracts.

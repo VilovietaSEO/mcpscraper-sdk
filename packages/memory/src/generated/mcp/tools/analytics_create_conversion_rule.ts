@@ -68,8 +68,15 @@ export interface Input {
    * Whether the new rule should begin evaluating events immediately.
    */
   enabled?: boolean;
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  rule: {
+    [k: string]: unknown;
+  };
 }

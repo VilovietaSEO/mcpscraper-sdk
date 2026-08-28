@@ -29,8 +29,16 @@ export interface Input {
   config?: {
     [k: string]: unknown;
   };
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  connection: {
+    [k: string]: unknown;
+  };
+  webhookUrl: string;
 }

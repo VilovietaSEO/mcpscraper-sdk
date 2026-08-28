@@ -1,4 +1,4 @@
-# All 331 MCP tools with cURL
+# All 339 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (331)
+## Complete catalog (339)
 
 ## access
 
@@ -166,7 +166,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_get_session_timeline` — Get Session Timeline
 - `analytics_get_timeseries` — Analytics Timeseries
 - `analytics_get_visitor_journey` — Get Visitor Journey
-- `analytics_import_crm_csv` — Import CRM CSV
+- `analytics_import_crm_csv` — Legacy CRM CSV Import
 - `analytics_list_activation_destinations` — List Ad Activation Destinations
 - `analytics_list_activation_receipts` — List Ad Activation Receipts
 - `analytics_list_campaign_links` — List Campaign Links
@@ -195,7 +195,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_test_activation_destination` — Test Ad Activation Destination
 - `analytics_test_crm_provisioning` — Test CRM Provisioning
 - `analytics_test_crm_sync_mapping` — Test CRM Sync Mapping
-- `analytics_test_event_definition` — Test Browser Event Definition
+- `analytics_test_event_definition` — Preview Browser Event Definition
 - `analytics_test_funnel` — Test Lead Funnel
 - `analytics_update_crm_sync_schedule` — Update CRM Sync Schedule
 - `analytics_update_event_definition` — Update Browser Event Definition
@@ -206,6 +206,14 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_list_crm_outbound_receipts` — List CRM Outbound Receipts
 - `analytics_upsert_crm_outbound_policy` — Configure CRM Outbound Policy
 - `analytics_list_journeys` — List X-Ray Journeys
+- `analytics_commit_crm_import` — Commit CRM CSV Import
+- `analytics_export_crm_csv` — Export CRM CSV
+- `analytics_export_google_ads_csv` — Export Google Ads CSV
+- `analytics_export_meta_technical` — Export Meta Technical JSONL
+- `analytics_preview_crm_import` — Preview CRM CSV Import
+- `analytics_save_activation_mapping` — Save Activation Event Mapping
+- `analytics_set_activation_automation` — Set Activation Automation
+- `analytics_verify_live_event_definition` — Verify Live Browser Event
 
 ## web
 
@@ -423,6 +431,8 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `serp_identity_create` — Create and Take Over Persistent SERP Identity
 - `serp_identity_delete` — Delete Persistent SERP Identity
 - `serp_identity_list` — List Persistent SERP Identities
+- `harvest_paa_start` — Start Durable Google PAA Harvest
+- `harvest_paa_status` — Check Durable Google PAA Harvest
 
 ## images
 
@@ -519,8 +529,3 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 - `youtube_harvest` — YouTube Video Harvest
 - `youtube_transcribe` — YouTube Transcription
-
-## other
-
-- `harvest_paa_start` — Start Durable Google PAA Harvest
-- `harvest_paa_status` — Check Durable Google PAA Harvest

@@ -14,3 +14,4 @@ class AnalyticsListActivationDestinationsOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
+    destinations: list[dict[str, Any]] = Field(..., alias="destinations", description="")

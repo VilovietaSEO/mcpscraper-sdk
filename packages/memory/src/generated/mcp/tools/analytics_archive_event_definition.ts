@@ -7,8 +7,15 @@ export interface Input {
    * Event definition id returned by analytics_list_event_definitions.
    */
   definitionId: string;
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  definition: {
+    [k: string]: unknown;
+  };
 }
