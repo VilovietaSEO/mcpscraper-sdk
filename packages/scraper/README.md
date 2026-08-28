@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated, typed 339-tool MCP surface. It includes 238 MCP Scraper tools and all 101 mirrored Memory tools from `contracts/mcp.tools.json`. Those output types come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source.
+`client.tools` is the generated, typed 346-tool MCP surface from `contracts/mcp.tools.json`, including the governed personal-assistant namespace.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
@@ -87,7 +87,52 @@ Search Console also provides six API-only batches through those connection bridg
 
 Integrations are included with an active Starter plan or higher: OAuth connect/reconnect and direct connected-service reads, approved actions, exports, and snapshots do not currently have an extra connection-operation debit. Scheduled Actions use the shared Credit balance at 75 Credits per started occurrence; agent-mode runs also add 1.5 times OpenRouter's actual reported model cost. Inspect the live policy with `await client.tools.schedule.getScheduleStatus()`.
 
-Core operations are flat on the client: `searchSerp`, `harvestPaa`, `extractUrl`, `mapSiteUrls`, `extractSite`, `auditSite`, `getExtractSiteStatus`, `readExtractSiteExport`, `readExtractSiteImage`, `listJobs`, `getJob`, `getHistory`, `getLedger`.
+Core operations are flat on the client: `startHarvest`, `searchSerp`, `harvestPaa`, `extractUrl`, `mapSiteUrls`, `extractSite`, `auditSite`, `getExtractSiteStatus`, `archiveRead`, `listJobs`, `getJob`, `getHistory`, `getLedger`.
+
+### Durable acquisition
+
+Long-running agents can start SERP/PAA work once and poll the provider-owned job
+instead of holding one synchronous request open:
+
+```ts
+const started = await client.startHarvest({
+  query: 'roofers dallas',
+  location: 'Dallas, TX',
+  serpOnly: true,
+})
+
+let job
+do {
+  await new Promise(resolve => setTimeout(resolve, 2_000))
+  job = await client.getJob(started.job_id, { timeoutMs: 30_000 })
+} while (job.status === 'pending' || job.status === 'running')
+
+if (job.status !== 'done') throw new Error(job.error ?? `Harvest ${job.status}`)
+console.log(job.result)
+```
+
+Background site extraction accepts a caller-owned idempotency key, and the
+archive reader exposes the resulting ZIP without switching to the MCP surface:
+
+```ts
+const crawl = await client.extractSite(
+  { url: 'https://example.com', background: true, formats: ['markdown', 'links', 'json'] },
+  { idempotencyKey: 'foundation-run-123:crawl', timeoutMs: 30_000 },
+)
+
+const status = await client.getExtractSiteStatus(crawl.jobId)
+const bundle = status.artifacts?.find(artifact => artifact.contentType === 'application/zip')
+if (bundle?.downloadUrl) {
+  const pages = await client.archiveRead({ url: bundle.downloadUrl, path: 'pages.jsonl' })
+  const pageCorpus = await client.archiveRead({
+    url: bundle.downloadUrl,
+    pathPrefix: 'pages/',
+    maxEntries: 1000,
+    maxTotalBytes: 20_000_000,
+  })
+  console.log(pages.content)
+}
+```
 
 Everything else is namespaced by product area, matching the OpenAPI spec's tags: `client.youtube`, `client.screenshot`, `client.facebook`, `client.googleAds`, `client.instagram`, `client.reddit`, `client.video`, `client.maps`, `client.directory`, `client.serpIntelligence`, `client.workflows`, `client.gmail`. The REST Gmail namespace preserves opaque path handles and requires explicit idempotency keys for mutations; the generated `client.tools.connections.gmail*` methods expose the exact MCP input/output contracts.
 
@@ -137,4 +182,4 @@ npm run generate
 
 ## See also
 
-[Repo README](../../README.md) (including complete Gmail and reversible bulk examples) · [`mcpscraper-memory-sdk`](../memory) (Node, full 116-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 121-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)

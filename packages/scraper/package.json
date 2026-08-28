@@ -1,7 +1,7 @@
 {
   "name": "mcpscraper-sdk",
   "version": "0.34.0",
-  "description": "Official Node.js client for all 339 mcpscraper.dev MCP tools and the REST API",
+  "description": "Official Node.js client for all 354 mcpscraper.dev MCP tools and the REST API",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "prepack": "npm run build",
-    "generate": "openapi-typescript ../../contracts/scraper.openapi.yaml -o src/schema.ts",
+    "generate": "openapi-typescript ../../contracts/assistant.openapi.yaml -o src/assistant-schema.ts",
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test test/*.test.ts"

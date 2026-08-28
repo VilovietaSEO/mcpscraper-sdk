@@ -165,6 +165,82 @@ test('unified MCP bindings contain every tool in the contract, with no duplicate
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'describe_service_connection_tool'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'import_service_connection_to_memory'))
   assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'archive_read'))
+  assert.ok(MCP_TOOL_BINDINGS.some(binding => binding.name === 'assistant_command'))
+})
+
+test('assistant pagination and idempotent approval bindings use exact wire fields', async () => {
+  const calls: Array<{ name: string; arguments: Record<string, unknown> }> = []
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      const body = JSON.parse(String(init.body))
+      calls.push(body.params)
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: body.id,
+          result: { structuredContent: { ok: true, truncated: false, untrustedContent: false } },
+        },
+      }
+    }),
+  })
+
+  await client.assistant.approvalsList({ state: 'pending', cursor: 'cursor_2', pageSize: 25 })
+  await client.assistant.approvalDecide({
+    approvalRef: 'appr_123',
+    commandRef: 'cmd_123',
+    planDigest: 'a'.repeat(64),
+    contextVersionRef: 'ctx_123',
+    actionDigest: 'b'.repeat(64),
+    argumentDigest: 'c'.repeat(64),
+    decision: 'approve',
+    decidedAt: '2026-08-28T00:00:00.000Z',
+    idempotencyKey: 'approval:appr_123:v1',
+  })
+
+  assert.deepEqual(calls, [
+    { name: 'assistant_approvals_list', arguments: { state: 'pending', cursor: 'cursor_2', pageSize: 25 } },
+    {
+      name: 'assistant_approval_decide',
+      arguments: {
+        approvalRef: 'appr_123',
+        commandRef: 'cmd_123',
+        planDigest: 'a'.repeat(64),
+        contextVersionRef: 'ctx_123',
+        actionDigest: 'b'.repeat(64),
+        argumentDigest: 'c'.repeat(64),
+        decision: 'approve',
+        decidedAt: '2026-08-28T00:00:00.000Z',
+        idempotencyKey: 'approval:appr_123:v1',
+      },
+    },
+  ])
+})
+
+test('direct Memory assistant client creates a context packet with the exact tool name', async () => {
+  let capturedBody: any
+  const client = new MemoryClient({
+    apiKey: 'mk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: { jsonrpc: '2.0', id: capturedBody.id, result: { structuredContent: { ok: true } } },
+      }
+    }),
+  })
+
+  await client.assistant.contextPacketCreate({
+    purpose: 'Prepare the reviewed reply',
+    sourceHandles: [{ kind: 'memory_note', vault: 'Work', path: 'inbox/message.md' }],
+    summary: 'One reviewed message',
+    body: 'Bounded context',
+    expiresAt: '2026-08-29T00:00:00.000Z',
+    sensitivity: 'standard',
+  })
+
+  assert.equal(capturedBody.params.name, 'assistant_context_packet_create')
 })
 
 test('McpToolsClient typed methods call the unified MCP wire name', async () => {

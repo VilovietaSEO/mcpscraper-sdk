@@ -55,6 +55,33 @@ tags:
     description: Complete owner-scoped Gmail reads, immutable selections, bulk actions, exports, and resumable Memory imports.
 
 paths:
+  /harvest:
+    post:
+      tags: [Core]
+      operationId: startHarvest
+      summary: Start a durable Google SERP or People-Also-Ask harvest job
+      description: |
+        Enqueues the same acquisition supported by `/harvest/sync`, but returns a
+        durable job identifier immediately. Set `serpOnly: true` for a SERP-only
+        job. Poll `GET /jobs/{id}` until the job is `done`, `failed`, or
+        `cancelled`. The start route does not currently accept an idempotency key;
+        callers must persist the returned job ID before polling and must not
+        automatically repeat an uncertain start response.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/HarvestSyncRequest' }
+      responses:
+        '202':
+          description: Harvest job accepted.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/HarvestQueuedResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+
   /harvest/sync:
     post:
       tags: [Core]
@@ -198,6 +225,15 @@ paths:
         content:
           application/json:
             schema: { $ref: '#/components/schemas/ExtractSiteRequest' }
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: false
+          schema: { type: string, minLength: 1, maxLength: 500 }
+          description: |
+            Required by the hosted service for background extraction. Reuse the
+            same key only when retrying the same intended crawl after an
+            uncertain response.
       responses:
         '200':
           description: Full crawl result (synchronous mode) or a queued job (`background:true`).
@@ -212,6 +248,34 @@ paths:
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
         '503': { description: Failed to enqueue the background crawl. }
+
+  /archive/read:
+    post:
+      tags: [Core]
+      operationId: archiveRead
+      summary: List or read a bounded public ZIP archive
+      description: |
+        Lists a crawl export ZIP when both path selectors are omitted, returns
+        one bounded UTF-8 text window when `path` is supplied, or returns a
+        bounded group of UTF-8 text files when `pathPrefix` is supplied.
+        Continue exact-file reads from `nextOffset` until it is null. Prefix
+        reads report `entriesTruncated` instead of silently presenting a partial
+        archive as complete. Private-network URLs, unsafe paths, encrypted
+        entries, symlinks, binary inline reads, and ZIP bombs are rejected.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ArchiveReadRequest' }
+      responses:
+        '200':
+          description: Archive inventory, selected text window, or bounded text-file batch.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ArchiveReadResponse' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
+        '500': { $ref: '#/components/responses/ServerError' }
 
   /extract-site/status/{id}:
     get:
@@ -1538,13 +1602,24 @@ components:
         error: { type: string }
       required: [job_id, status]
 
+    HarvestQueuedResponse:
+      type: object
+      properties:
+        job_id: { type: string }
+        status: { type: string, enum: [pending] }
+      required: [job_id, status]
+
     JobRecord:
       type: object
       properties:
         id: { type: string }
-        status: { type: string }
+        status: { type: string, enum: [pending, running, done, failed, cancelled] }
         query: { type: string }
         result: { type: object, additionalProperties: true, nullable: true }
+        error: { type: string, nullable: true }
+        attempts:
+          type: array
+          items: { type: object, additionalProperties: true }
         created_at: { type: string }
 
     ExtractUrlRequest:
@@ -1846,6 +1921,85 @@ components:
         sha256: { type: string }
         dataBase64: { type: string, format: byte }
       required: [jobId, imageId, mimeType, bytes, dataBase64]
+
+    ArchiveReadRequest:
+      type: object
+      required: [url]
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Public HTTPS ZIP URL, including a signed crawl bundle URL.
+        path:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: Exact archive entry path. Mutually exclusive with pathPrefix.
+        pathPrefix:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: Archive path prefix for a bounded multi-file UTF-8 read. Mutually exclusive with path.
+        offset:
+          type: integer
+          minimum: 0
+          default: 0
+          description: UTF-8 byte offset for a selected text entry.
+        maxBytes:
+          type: integer
+          minimum: 1
+          maximum: 200000
+          default: 50000
+        maxEntries:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 200
+        maxTotalBytes:
+          type: integer
+          minimum: 1
+          maximum: 20000000
+          default: 5000000
+          description: Maximum expanded UTF-8 bytes returned by a pathPrefix batch.
+        depositToLibrary:
+          type: boolean
+          default: false
+          description: Preserve the complete selected text entry in the tenant Library vault.
+      additionalProperties: false
+
+    ArchiveReadResponse:
+      type: object
+      required: [mode]
+      properties:
+        mode: { type: string, enum: [list, read, batch] }
+        archiveUrl: { type: string }
+        entries:
+          type: array
+          items: { type: object, additionalProperties: true }
+        path: { type: string }
+        pathPrefix: { type: string }
+        matchedEntryCount: { type: integer }
+        selectedEntryCount: { type: integer }
+        selectedTotalBytes: { type: integer }
+        entriesTruncated: { type: boolean }
+        files:
+          type: array
+          items:
+            type: object
+            required: [path, contentType, fileBytes, content]
+            properties:
+              path: { type: string }
+              contentType: { type: string }
+              fileBytes: { type: integer }
+              content: { type: string }
+            additionalProperties: false
+        content: { type: string }
+        contentType: { type: string }
+        fileBytes: { type: integer }
+        offset: { type: integer }
+        nextOffset: { type: integer, nullable: true }
+        memory: { type: object, additionalProperties: true, nullable: true }
+      additionalProperties: true
 
     YoutubeHarvestRequest:
       type: object

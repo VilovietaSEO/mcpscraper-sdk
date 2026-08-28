@@ -2,9 +2,7 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
-
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 339 unified MCP tools (238 MCP Scraper plus 101 mirrored Memory tools).
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 346 unified MCP tools, including the governed personal-assistant tools.
 
 ## Install
 
@@ -41,13 +39,11 @@ mcpscraper tools call gmail_prepare_selection --args '{"connectionId":"gmail_con
 mcpscraper tools call gmail_import_status --args '{"ingestId":"opaque_ingest_id"}' --json
 ```
 
-`tools list` contains exactly 339 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
-
-Keep a Gmail selection's ID, SHA-256, and count together. `gmail_import_status` only observes work; resume through `gmail_import_to_memory` with the original plan and idempotency key. Permanent deletion is a separate irreversible command requiring both `confirmPermanentDelete:true` and `--yes`; it is intentionally not shown as a copy/paste example.
-
-Google SERP searches cost 60 Credits. PAA harvests cost 400 Credits plus 10 Credits per returned question. For additional throughput, one optional $5/month concurrency pack adds two browser slots; pack quantity scales both slots and monthly price linearly.
+`tools list` contains exactly 346 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release. Scheduled occurrences cost 75 Credits; agent-mode runs also add 1.5 times OpenRouter's actual reported cost. Inspect the live policy with `mcpscraper tools call get-schedule-status --args '{}'`.
+
+Current Google search pricing is 60 Credits per SERP search and 400 Credits plus 10 Credits per returned question for PAA. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
 When a tool returns inline MCP media, the CLI writes each block to a private local file and prints its path instead of dumping base64. Use `--media-dir <path>` to choose the destination; the default is `~/Downloads/mcp-scraper`.
 

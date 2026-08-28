@@ -118,9 +118,15 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
 }
 
 const SCRAPER_PREFIX_CATEGORIES: Array<[string, string]> = [
-  ['gmail_', 'connections'],
+  ['assistant_', 'assistant'],
   ['analytics_', 'analytics'],
   ['browser_', 'browser'],
+  ['commons_', 'commons'],
+  ['gmail_', 'gmail'],
+  ['lead_list_', 'leadLists'],
+  ['local_sourcebook_', 'localSourcebook'],
+  ['serp_identity_', 'serpIdentity'],
+  ['site_export_', 'siteExport'],
   ['youtube_', 'youtube'],
   ['facebook_', 'facebook'],
   ['google_ads_', 'googleAds'],
@@ -272,12 +278,15 @@ async function preserveExistingToolOrder(tools: LiveTool[]): Promise<LiveTool[]>
 
 async function main(): Promise<void> {
   const memoryManifest = JSON.parse(await readFile(MEMORY_MANIFEST_PATH, 'utf8')) as MemoryManifest
+  const existingManifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as UnifiedManifest
+  const existingTools = new Map(existingManifest.tools.map(tool => [tool.name, tool]))
   const memoryCategories = new Map(memoryManifest.tools.map(tool => [tool.legacyId, tool.category]))
   const { tools: loadedTools, generatedFrom } = await loadTools()
   const liveTools = await preserveExistingToolOrder(loadedTools)
 
   const tools: UnifiedTool[] = liveTools.map(tool => {
-    const category = memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
+    const prior = existingTools.get(tool.name)
+    const category = prior?.category ?? memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
     return {
       name: tool.name,
       title: tool.title,

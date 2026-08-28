@@ -4,6 +4,31 @@
  */
 
 export interface paths {
+    "/harvest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start a durable Google SERP or People-Also-Ask harvest job
+         * @description Enqueues the same acquisition supported by `/harvest/sync`, but returns a
+         *     durable job identifier immediately. Set `serpOnly: true` for a SERP-only
+         *     job. Poll `GET /jobs/{id}` until the job is `done`, `failed`, or
+         *     `cancelled`. The start route does not currently accept an idempotency key;
+         *     callers must persist the returned job ID before polling and must not
+         *     automatically repeat an uncertain start response.
+         */
+        post: operations["startHarvest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/harvest/sync": {
         parameters: {
             query?: never;
@@ -153,6 +178,32 @@ export interface paths {
          *     few hundred pages.
          */
         post: operations["extractSite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/archive/read": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * List or read a bounded public ZIP archive
+         * @description Lists a crawl export ZIP when both path selectors are omitted, returns
+         *     one bounded UTF-8 text window when `path` is supplied, or returns a
+         *     bounded group of UTF-8 text files when `pathPrefix` is supplied.
+         *     Continue exact-file reads from `nextOffset` until it is null. Prefix
+         *     reads report `entriesTruncated` instead of silently presenting a partial
+         *     archive as complete. Private-network URLs, unsafe paths, encrypted
+         *     entries, symlinks, binary inline reads, and ZIP bombs are rejected.
+         */
+        post: operations["archiveRead"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1192,13 +1243,23 @@ export interface components {
             };
             error?: string;
         };
+        HarvestQueuedResponse: {
+            job_id: string;
+            /** @enum {string} */
+            status: "pending";
+        };
         JobRecord: {
             id?: string;
-            status?: string;
+            /** @enum {string} */
+            status?: "pending" | "running" | "done" | "failed" | "cancelled";
             query?: string;
             result?: {
                 [key: string]: unknown;
             } | null;
+            error?: string | null;
+            attempts?: {
+                [key: string]: unknown;
+            }[];
             created_at?: string;
         };
         ExtractUrlRequest: {
@@ -1520,6 +1581,66 @@ export interface components {
             sha256?: string;
             /** Format: byte */
             dataBase64: string;
+        };
+        ArchiveReadRequest: {
+            /**
+             * Format: uri
+             * @description Public HTTPS ZIP URL, including a signed crawl bundle URL.
+             */
+            url: string;
+            /** @description Exact archive entry path. Mutually exclusive with pathPrefix. */
+            path?: string;
+            /** @description Archive path prefix for a bounded multi-file UTF-8 read. Mutually exclusive with path. */
+            pathPrefix?: string;
+            /**
+             * @description UTF-8 byte offset for a selected text entry.
+             * @default 0
+             */
+            offset: number;
+            /** @default 50000 */
+            maxBytes: number;
+            /** @default 200 */
+            maxEntries: number;
+            /**
+             * @description Maximum expanded UTF-8 bytes returned by a pathPrefix batch.
+             * @default 5000000
+             */
+            maxTotalBytes: number;
+            /**
+             * @description Preserve the complete selected text entry in the tenant Library vault.
+             * @default false
+             */
+            depositToLibrary: boolean;
+        };
+        ArchiveReadResponse: {
+            /** @enum {string} */
+            mode: "list" | "read" | "batch";
+            archiveUrl?: string;
+            entries?: {
+                [key: string]: unknown;
+            }[];
+            path?: string;
+            pathPrefix?: string;
+            matchedEntryCount?: number;
+            selectedEntryCount?: number;
+            selectedTotalBytes?: number;
+            entriesTruncated?: boolean;
+            files?: {
+                path: string;
+                contentType: string;
+                fileBytes: number;
+                content: string;
+            }[];
+            content?: string;
+            contentType?: string;
+            fileBytes?: number;
+            offset?: number;
+            nextOffset?: number | null;
+            memory?: {
+                [key: string]: unknown;
+            } | null;
+        } & {
+            [key: string]: unknown;
         };
         YoutubeHarvestRequest: {
             /** @enum {string} */
@@ -1998,6 +2119,33 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    startHarvest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HarvestSyncRequest"];
+            };
+        };
+        responses: {
+            /** @description Harvest job accepted. */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HarvestQueuedResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            402: components["responses"]["InsufficientBalance"];
+            429: components["responses"]["ConcurrencyLimitExceeded"];
+        };
+    };
     harvestSync: {
         parameters: {
             query?: never;
@@ -2174,7 +2322,14 @@ export interface operations {
     extractSite: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /**
+                 * @description Required by the hosted service for background extraction. Reuse the
+                 *     same key only when retrying the same intended crawl after an
+                 *     uncertain response.
+                 */
+                "Idempotency-Key"?: string;
+            };
             path?: never;
             cookie?: never;
         };
@@ -2204,6 +2359,33 @@ export interface operations {
                 };
                 content?: never;
             };
+        };
+    };
+    archiveRead: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArchiveReadRequest"];
+            };
+        };
+        responses: {
+            /** @description Archive inventory, selected text window, or bounded text-file batch. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArchiveReadResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            429: components["responses"]["ConcurrencyLimitExceeded"];
+            500: components["responses"]["ServerError"];
         };
     };
     getExtractSiteStatus: {

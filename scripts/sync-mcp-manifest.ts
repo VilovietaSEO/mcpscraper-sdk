@@ -11,6 +11,18 @@ interface ToolSchema {
   outputSchema?: unknown
 }
 
+async function readRpcPayload<T>(response: Response): Promise<T> {
+  const text = await response.text()
+  if (!response.headers.get('content-type')?.includes('text/event-stream')) return JSON.parse(text) as T
+  const data = text
+    .split(/\r?\n/)
+    .filter(line => line.startsWith('data:'))
+    .map(line => line.slice(5).trim())
+    .filter(Boolean)
+  if (!data.length) throw new Error('tools/list returned an empty event stream')
+  return JSON.parse(data.at(-1)!) as T
+}
+
 function stable(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(stable).join(',')}]`
   if (value && typeof value === 'object') {
@@ -32,12 +44,7 @@ async function fetchLiveTools(apiKey: string): Promise<ToolSchema[]> {
     signal: AbortSignal.timeout(30_000),
   })
   if (!response.ok) throw new Error(`tools/list failed: ${response.status} ${await response.text()}`)
-  const raw = await response.text()
-  const dataLine = raw
-    .split(/\r?\n/)
-    .find(line => line.startsWith('data:'))
-  const payloadText = dataLine ? dataLine.slice('data:'.length).trim() : raw
-  const payload = JSON.parse(payloadText) as { result?: { tools?: ToolSchema[] }; error?: { message?: string } }
+  const payload = await readRpcPayload<{ result?: { tools?: ToolSchema[] }; error?: { message?: string } }>(response)
   if (payload.error) throw new Error(payload.error.message ?? 'tools/list RPC error')
   return payload.result?.tools ?? []
 }
