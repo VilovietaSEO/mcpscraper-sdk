@@ -14,6 +14,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 - Regenerated all six unified developer surfaces from the exact 331-tool MCP Scraper 0.73.0 source manifest.
 - Prepared `mcpscraper-memory-sdk` 0.33.0, `mcpscraper-sdk` 0.33.0, `mcpscraper-cli` 0.32.0, Python `mcpscraper-sdk` 0.32.0, and Python `mcpscraper-memory-sdk` 0.30.0.
+- Kept the Node Memory package's published declarations to the canonical ESM type file so CommonJS and ESM consumers share one definition without a redundant 9.3 MB archive copy.
 
 ## 2026-08-27 — verified against mcp-scraper 0.72.6 / mcp-memory 1.19.1
 
