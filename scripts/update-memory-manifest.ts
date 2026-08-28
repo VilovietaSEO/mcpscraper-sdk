@@ -67,6 +67,8 @@ const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>
   image_asset_search: { category: 'images', legacyId: 'image_asset_search' },
   image_asset_move: { category: 'images', legacyId: 'image_asset_move' },
   image_asset_delete: { category: 'images', legacyId: 'image_asset_delete' },
+  file_asset_save: { category: 'files', legacyId: 'file_asset_save' },
+  file_asset_get: { category: 'files', legacyId: 'file_asset_get' },
 }
 
 const PRE_RELEASE_NAME_ALIASES: Record<string, string> = {
@@ -99,11 +101,17 @@ async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {
 }
 
 async function main(): Promise<void> {
+  const localManifestPath = process.env.MCP_MEMORY_TOOL_MANIFEST_PATH
   const apiKey = process.env.MCP_MEMORY_API_KEY
-  if (!apiKey) throw new Error('MCP_MEMORY_API_KEY is required')
+  if (!localManifestPath && !apiKey) {
+    throw new Error('MCP_MEMORY_TOOL_MANIFEST_PATH or MCP_MEMORY_API_KEY is required')
+  }
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as Manifest
   const existing = new Map(manifest.tools.map(tool => [tool.name, tool]))
-  const live = await fetchLiveTools(apiKey)
+  const localManifest = localManifestPath
+    ? JSON.parse(await readFile(localManifestPath, 'utf8')) as { tools?: LiveTool[]; serverInfo?: { name?: string; version?: string }; generatedFrom?: string }
+    : null
+  const live = localManifest?.tools ?? await fetchLiveTools(apiKey!)
 
   const tools: ToolEntry[] = live.map(tool => {
     const prior = existing.get(tool.name) ?? existing.get(PRE_RELEASE_NAME_ALIASES[tool.name])
@@ -121,7 +129,9 @@ async function main(): Promise<void> {
 
   const updated: Manifest = {
     ...manifest,
-    generatedFrom: `mcp-memory live tools/list (${tools.length} registered tools)`,
+    generatedFrom: localManifest
+      ? `${localManifest.serverInfo?.name ?? 'mcp-memory'} ${localManifest.serverInfo?.version ?? 'unversioned'} ${localManifest.generatedFrom ?? 'complete build manifest'} (${tools.length} registered tools)`
+      : `mcp-memory live tools/list (${tools.length} registered tools)`,
     toolCount: tools.length,
     tools,
   }

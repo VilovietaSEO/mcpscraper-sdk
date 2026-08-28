@@ -274,6 +274,41 @@ class WorkflowsNamespace:
         return self._r.call("POST", f"/workflows/schedules/{quote(schedule_id)}/run")
 
 
+class GmailNamespace:
+    def __init__(self, r: _Requester) -> None:
+        self._r = r
+
+    def search_messages(self, params: JsonDict) -> Any:
+        return self._r.call("POST", "/api/gmail/messages/search", params)
+
+    def get_message(self, message_id: str, params: JsonDict) -> Any:
+        return self._r.call("POST", f"/api/gmail/messages/{quote(message_id, safe='')}", params)
+
+    def get_attachment(self, params: JsonDict) -> Any:
+        return self._r.call("POST", "/api/gmail/attachments/get", params)
+
+    def prepare_selection(self, params: JsonDict) -> Any:
+        return self._r.call("POST", "/api/gmail/selections", params)
+
+    def export_selection(self, selection_id: str, params: JsonDict) -> Any:
+        return self._r.call("POST", f"/api/gmail/selections/{quote(selection_id, safe='')}/export", params)
+
+    def bulk_manage(self, selection_id: str, params: JsonDict, *, idempotency_key: str) -> Any:
+        return self._r.call("POST", f"/api/gmail/selections/{quote(selection_id, safe='')}/manage", params, {"Idempotency-Key": idempotency_key})
+
+    def bulk_delete(self, selection_id: str, params: JsonDict, *, idempotency_key: str) -> Any:
+        return self._r.call("POST", f"/api/gmail/selections/{quote(selection_id, safe='')}/delete", params, {"Idempotency-Key": idempotency_key})
+
+    def prepare_memory_import(self, params: JsonDict) -> Any:
+        return self._r.call("POST", "/api/gmail/imports/prepare", params)
+
+    def import_to_memory(self, import_plan_id: str, *, idempotency_key: str) -> Any:
+        return self._r.call("POST", f"/api/gmail/imports/{quote(import_plan_id, safe='')}/start", headers={"Idempotency-Key": idempotency_key})
+
+    def import_status(self, ingest_id: str) -> Any:
+        return self._r.call("GET", f"/api/gmail/imports/{quote(ingest_id, safe='')}")
+
+
 class MemoryTools:
     """Dispatches to any of the 86 memory.mcpscraper.dev tools via POST /memory/mcp-call,
     using only this client's mcpscraper.dev API key. See contracts/memory.tools.json in the
@@ -310,6 +345,7 @@ class ScraperClient:
         self.directory = DirectoryNamespace(self._r)
         self.serp_intelligence = SerpIntelligenceNamespace(self._r)
         self.workflows = WorkflowsNamespace(self._r)
+        self.gmail = GmailNamespace(self._r)
         self.memory_tools = MemoryTools(self._r)
 
     def search_serp(self, query: str, **kwargs: Any) -> Any:

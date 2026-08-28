@@ -1,8 +1,8 @@
 # mcpscraper-sdk
 
-Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, ZIP archive reading, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 114 tools).
+Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence, complete Gmail workflows, and connected services) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, private file assets, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 116 tools).
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **318 unified MCP tools** — 217 MCP Scraper tools plus 101 mirrored Memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, or billing logic lives in this repo; it's typed request/response plumbing only, licensed MIT. All **330 unified MCP tools** — 229 MCP Scraper tools plus 101 mirrored Memory tools — are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Install
 
@@ -31,7 +31,8 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 | [Maps search](#maps-search) | Local businesses via Google Maps | `POST /maps/search` | — |
 | [Lead-list enrichment](#lead-list-enrichment) | Enrich pasted rows or imported CSV/TSV/XLSX files with business contacts and optional owner/leadership evidence | MCP `lead_list_*` tools | Underlying Maps, page, and SERP attempts |
 | [Memory search](#memory-search-using-only-your-scraper-key) | Semantic search across your mcp-memory vaults | `POST /memory/mcp-call` | — |
-| YouTube, Facebook/Google Ads, Instagram, Reddit, video, directory workflows | See [`packages/scraper`](./packages/scraper) and [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) for the full 43-operation REST contract | — | — |
+| [Complete Gmail workflows](#complete-gmail-workflows) | Full reads and attachments, immutable bulk selections, exports/actions, resumable Memory import | MCP `gmail_*` / `POST /api/gmail/*` | Current connected-operation policy |
+| YouTube, Facebook/Google Ads, Instagram, Reddit, video, directory workflows | See [`packages/scraper`](./packages/scraper) and [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) for the full 56-operation REST contract | — | — |
 
 Every example below runs the *same* operation four ways.
 
@@ -432,7 +433,7 @@ Sample output (real, captured live):
 
 ### Memory search, using only your scraper key
 
-Every one of memory.mcpscraper.dev's 114 tools (governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, webhooks, and more — see [`contracts/memory.tools.json`](./contracts/memory.tools.json)) is callable from `mcpscraper-sdk` alone, dispatched through `POST /memory/mcp-call`. mcpscraper.dev auto-provisions a memory identity for your account on first use — no separate `mk_...` key required.
+Every one of memory.mcpscraper.dev's 116 tools (governed capture, private file assets, tags, graph traversal, search, vaults, tables, scheduled actions, webhooks, and more — see [`contracts/memory.tools.json`](./contracts/memory.tools.json)) is callable from `mcpscraper-sdk` alone, dispatched through `POST /memory/mcp-call`. mcpscraper.dev auto-provisions a memory identity for your account on first use — no separate `mk_...` key required.
 
 <details open><summary>Node.js</summary>
 
@@ -481,7 +482,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 318 unified tools in both Node and Python, including all 101 mirrored Memory tools.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 330 unified tools in both Node and Python, including all 101 mirrored Memory tools.
 
 ## Scheduled results and artifact templates
 
@@ -631,9 +632,33 @@ persisted_search_console = client.tools.connections.export_search_console_table_
 )
 ```
 
-Pass the complete `continuation` object returned by a partial export unchanged to resume the exact original range. Provider content is untrusted data; individual oversized records can be truncated with warnings, and attachments are metadata-only.
+Pass the complete `continuation` object returned by a partial generic export unchanged to resume the exact original range. Provider content is untrusted data. For Gmail full-fidelity bodies, raw EML, and actual attachment bytes, use the named workflow below.
 
 For live connected-service calls, start with `listServiceConnections`, then call `describeServiceConnectionTool` for an exact provider-native tool name before supplying arguments to `readServiceConnection` or `callServiceConnectionAction`. The list response identifies the credential `transport`, verified `grantedPermissions`, `permissionVerification`, per-tool permission requirements and blockers in `toolCapabilities`, the exact callable read/action allowlists, and permanently blocked administrative tools; credentials are never returned.
+
+## Complete Gmail workflows
+
+The generated `client.tools.connections` namespace exposes ten first-class Gmail methods for normalized search and complete reads, opaque attachment access, immutable 24-hour selections, complete export, reversible bulk management, separate permanent deletion, and reviewed/resumable Memory import. Keep every selection's `selectionId`, `selectionSha256`, and `count` together; retries reuse one idempotency key. `gmail_import_status` observes only and never resumes writes.
+
+```ts
+const selection = await client.tools.connections.gmailPrepareSelection({
+  connectionId: 'gmail_conn_123',
+  purpose: 'memory_import',
+  source: { kind: 'query', query: 'has:attachment newer_than:30d' },
+})
+const plan = await client.tools.connections.gmailPrepareMemoryImport({
+  connectionId: 'gmail_conn_123',
+  selectionId: selection.selection!.selectionId,
+  selectionSha256: selection.selection!.selectionSha256,
+  attachmentPolicy: 'preserve_all',
+})
+const ingest = await client.tools.connections.gmailImportToMemory({
+  importPlanId: plan.plan!.importPlanId,
+  idempotencyKey: 'mailbox-archive-2026-08-27',
+})
+```
+
+See [`examples/gmail-complete-workflow.mjs`](./examples/gmail-complete-workflow.mjs) for search → full read/attachments → preview → import → resume/status, and [`examples/gmail-bulk-manage.mjs`](./examples/gmail-bulk-manage.mjs) for a reversible label add/remove receipt. Permanent delete is deliberately excluded from the examples: it is irreversible and requires a separately reviewed disposable-only selection plus `confirmPermanentDelete:true`.
 
 ## Integration and scheduled-run billing
 
@@ -682,7 +707,7 @@ Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Pyt
 
 Concurrency is sold separately from the base plan in quantity-based packs: one $5/month pack adds two browser slots, so quantity `n` adds `2n` slots for `$5n` per month. Existing plan credits and included concurrency do not change when a pack is added.
 
-## All 318 MCP tools
+## All 330 MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -702,7 +727,7 @@ The authoritative tool names, descriptions, complete input/output schemas, annot
 
 ## The CLI
 
-`mcpscraper-cli` keeps ergonomic shortcuts for common operations and also reaches all 318 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps ergonomic shortcuts for common operations and also reaches all 330 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -710,9 +735,10 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 318 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
-- [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
-- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 114 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 330 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 56 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
+- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 116 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
+- [`contracts/gmail.tools.fingerprints.json`](./contracts/gmail.tools.fingerprints.json) — generated SHA-256 fingerprints for the ten complete Gmail tool contracts.
 
 The contracts are checked-in public release artifacts. The unified MCP contract is generated only from the server's complete build manifest; the live runtime inventory is used for name and input-schema drift checks and is expected to advertise zero output schemas. The memory manifest is generated from its server inventory, while the REST OpenAPI contract is curated. Release validation (`npm run validate-contracts`) checks them against the live servers for drift.
 

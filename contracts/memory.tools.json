@@ -18,8 +18,8 @@
       "note": "Returns the live tool list; used by scripts/sync-memory-manifest.ts to detect drift against this file."
     }
   },
-  "generatedFrom": "mcp-memory live tools/list (114 registered tools)",
-  "toolCount": 114,
+  "generatedFrom": "mcp-memory 1.19.0 src/mastra/mcp/memory-server.ts complete local registry (116 registered tools)",
+  "toolCount": 116,
   "tools": [
     {
       "name": "issueKeyTool",
@@ -21114,6 +21114,445 @@
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "legacyId": "image_asset_delete"
+    },
+    {
+      "name": "file_asset_save",
+      "description": "Preserve one completed MCP Scraper artifact as an immutable private Memory file. Use for durable Gmail attachments and other source files; use image_asset_save for images. Accepts only an owner-authorized artifact ID, stores original bytes, and reports indexed, stored_not_indexed, or extraction_failed truthfully. The idempotency key makes retries safe.",
+      "category": "files",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string",
+            "description": "Writable Memory vault. Raw source files should normally use Library."
+          },
+          "artifactId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Owner-authorized MCP Scraper artifact ID for completed bytes. Local paths and remote URLs are not accepted."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "maxItems": 20
+          },
+          "sourceRef": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 1000
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200,
+            "description": "Stable key for this logical save. Same key and content resumes; conflicting content fails before another write."
+          }
+        },
+        "required": [
+          "artifactId",
+          "title",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "asset": {
+            "type": "object",
+            "properties": {
+              "assetId": {
+                "type": "string"
+              },
+              "vault": {
+                "type": "string"
+              },
+              "mediaKind": {
+                "type": "string",
+                "enum": [
+                  "document",
+                  "archive",
+                  "other"
+                ]
+              },
+              "originalFilename": {
+                "type": "string"
+              },
+              "mimeType": {
+                "type": "string"
+              },
+              "observedMimeType": {
+                "type": "string"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sha256": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "sourceKind": {
+                "type": "string",
+                "enum": [
+                  "import",
+                  "upload",
+                  "scrape",
+                  "screenshot",
+                  "instagram",
+                  "external_url"
+                ]
+              },
+              "sourceKey": {
+                "type": "string"
+              },
+              "extractionStatus": {
+                "type": "string",
+                "enum": [
+                  "indexed",
+                  "stored_not_indexed",
+                  "extraction_failed"
+                ]
+              },
+              "extractedNoteId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "extractedSourceKey": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "extractionFailureCode": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              },
+              "resource": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "expiresAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  },
+                  "filename": {
+                    "type": "string"
+                  },
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "url",
+                  "expiresAt",
+                  "mimeType",
+                  "filename",
+                  "bytes"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "assetId",
+              "vault",
+              "mediaKind",
+              "originalFilename",
+              "mimeType",
+              "observedMimeType",
+              "bytes",
+              "sha256",
+              "title",
+              "tags",
+              "sourceKind",
+              "sourceKey",
+              "extractionStatus",
+              "extractedNoteId",
+              "extractedSourceKey",
+              "extractionFailureCode",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "reusedObject": {
+            "type": "boolean"
+          },
+          "nextAction": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "file_asset_save"
+    },
+    {
+      "name": "file_asset_get",
+      "description": "Read metadata for one authorized private Memory file and optionally mint a renewable five-minute download resource. Use this after file_asset_save or when an asset ID is already known. It never exposes object-store keys and returns not-found semantics across owners.",
+      "category": "files",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP request is already authenticated."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional caller session identifier."
+          },
+          "vault": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "includeDownload": {
+            "type": "boolean",
+            "default": true,
+            "description": "Mint a five-minute download resource for the original immutable bytes."
+          }
+        },
+        "required": [
+          "assetId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "asset": {
+            "type": "object",
+            "properties": {
+              "assetId": {
+                "type": "string"
+              },
+              "vault": {
+                "type": "string"
+              },
+              "mediaKind": {
+                "type": "string",
+                "enum": [
+                  "document",
+                  "archive",
+                  "other"
+                ]
+              },
+              "originalFilename": {
+                "type": "string"
+              },
+              "mimeType": {
+                "type": "string"
+              },
+              "observedMimeType": {
+                "type": "string"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sha256": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "sourceKind": {
+                "type": "string",
+                "enum": [
+                  "import",
+                  "upload",
+                  "scrape",
+                  "screenshot",
+                  "instagram",
+                  "external_url"
+                ]
+              },
+              "sourceKey": {
+                "type": "string"
+              },
+              "extractionStatus": {
+                "type": "string",
+                "enum": [
+                  "indexed",
+                  "stored_not_indexed",
+                  "extraction_failed"
+                ]
+              },
+              "extractedNoteId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "extractedSourceKey": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "extractionFailureCode": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              },
+              "resource": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "expiresAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  },
+                  "filename": {
+                    "type": "string"
+                  },
+                  "bytes": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "url",
+                  "expiresAt",
+                  "mimeType",
+                  "filename",
+                  "bytes"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "assetId",
+              "vault",
+              "mediaKind",
+              "originalFilename",
+              "mimeType",
+              "observedMimeType",
+              "bytes",
+              "sha256",
+              "title",
+              "tags",
+              "sourceKind",
+              "sourceKey",
+              "extractionStatus",
+              "extractedNoteId",
+              "extractedSourceKey",
+              "extractionFailureCode",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "file_asset_get"
     }
   ]
 }

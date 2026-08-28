@@ -2,16 +2,22 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## 2026-08-27 — verified against mcp-scraper 0.70.0 / mcp-memory 1.18.1
+## 2026-08-27 — verified against mcp-scraper 0.72.6 / mcp-memory 1.19.1
 
 ### Added
 
-- Added typed Node, Python, CLI, and cURL operations for listing and updating X-Ray CRM outbound policies and reading durable outbound receipts.
+- Added exact Node, Python, CLI, cURL, and OpenAPI contracts for all ten Gmail workflow tools: complete message and attachment reads, immutable selections, full exports, reviewed bulk management and deletion, and resumable Memory imports.
+- Added runnable complete Gmail-to-Memory and reversible bulk-label examples. Permanent deletion remains excluded from runnable examples and carries an explicit irreversible-action warning.
+- Added direct Memory `file_asset_save` and `file_asset_get` clients for Node and Python, including scraper-key Memory namespace access for Gmail attachments.
 
 ### Changed
 
-- Regenerated the complete 318-tool contract with strict CRM provisioning, sync, policy, receipt, and activation-discovery schemas while preserving compact runtime discovery.
-- Prepared `mcpscraper-memory-sdk` 0.31.11, `mcpscraper-sdk` 0.32.0, `mcpscraper-cli` 0.31.0, Python `mcpscraper-sdk` 0.31.0, and Python `mcpscraper-memory-sdk` 0.28.11.
+- Regenerated all six unified developer surfaces from the exact 330-tool MCP Scraper 0.72.6 manifest and all direct Memory surfaces from the exact 116-tool Memory 1.19.1 contract.
+- Prepared `mcpscraper-memory-sdk` 0.32.0, `mcpscraper-sdk` 0.32.0, `mcpscraper-cli` 0.31.0, Python `mcpscraper-sdk` 0.31.0, and Python `mcpscraper-memory-sdk` 0.29.0.
+
+### Fixed
+
+- Public Memory clients now expose every generated namespace, preventing newly generated file-attachment methods from existing in models without a callable client path.
 
 ## 2026-08-27 — verified against mcp-scraper 0.69.1 / mcp-memory 1.18.1
 

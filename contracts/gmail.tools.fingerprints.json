@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": "mcp-scraper 0.72.6 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "c6f247a0e01d5613a813fd658efd345cec15466f344a1516f72c853a4f94ea98",
+  "toolCount": 10,
+  "tools": [
+    {
+      "name": "gmail_bulk_delete_messages",
+      "sha256": "b58cf5421dc1d84f9bd9b4ecace4a0cb1c22e75293e0c7951e9436dabb576377"
+    },
+    {
+      "name": "gmail_bulk_manage_messages",
+      "sha256": "44c491baed445dea1618f4ff125034746e18794612eed0bcdc144247c0d062c1"
+    },
+    {
+      "name": "gmail_export_selection",
+      "sha256": "a0d577af75475399508b98b81810f58ac1e8b69c99c35ecccd68606ba75ff893"
+    },
+    {
+      "name": "gmail_get_attachment",
+      "sha256": "e82c9b4cbb235ce08e724549b5639ae7997222589771b8fe6a3a0c3550356e31"
+    },
+    {
+      "name": "gmail_get_message",
+      "sha256": "baa3707737bb71f0d82f897eda2638a086221a7192f4343329c7c705501c6305"
+    },
+    {
+      "name": "gmail_import_status",
+      "sha256": "474fba2ea8205e45f5770709c072708767734edc1c848160205409a86c73f7e8"
+    },
+    {
+      "name": "gmail_import_to_memory",
+      "sha256": "7e7a2a24edfbef3bf55c015a7f760e2f4a90dcdeb057e299ef98f85e0f064ae3"
+    },
+    {
+      "name": "gmail_prepare_memory_import",
+      "sha256": "d7885eaccea8fc98befd7633c937c3d34d22aea9657c305dbd36209b6ea10ec1"
+    },
+    {
+      "name": "gmail_prepare_selection",
+      "sha256": "0d0a451b684e3ae6c533e6bd48b5d14c21171520748220586307fd77f171b5e3"
+    },
+    {
+      "name": "gmail_search_messages",
+      "sha256": "1f021190c839f37a0eaa7ea694334645a21c508a590a42c46e8e3e77ec7c5dd1"
+    }
+  ]
+}

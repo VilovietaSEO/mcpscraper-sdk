@@ -34,6 +34,8 @@ from .models.delete_note import DeleteNoteInput, DeleteNoteOutput
 from .models.delete_scheduled_action import DeleteScheduledActionInput, DeleteScheduledActionOutput
 from .models.delete_vault import DeleteVaultInput, DeleteVaultOutput
 from .models.fact_history import FactHistoryInput, FactHistoryOutput
+from .models.file_asset_get import FileAssetGetInput, FileAssetGetOutput
+from .models.file_asset_save import FileAssetSaveInput, FileAssetSaveOutput
 from .models.get_artifact_template import GetArtifactTemplateInput, GetArtifactTemplateOutput
 from .models.get_chat_link import GetChatLinkInput, GetChatLinkOutput
 from .models.get_message_note import GetMessageNoteInput, GetMessageNoteOutput
@@ -319,6 +321,21 @@ class FactsNamespace:
         payload = FactHistoryInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("factHistoryTool", payload)
         return FactHistoryOutput.model_validate(result)
+
+
+class FilesNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+    def file_asset_save(self, **kwargs: Any) -> FileAssetSaveOutput:
+        payload = FileAssetSaveInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("file_asset_save", payload)
+        return FileAssetSaveOutput.model_validate(result)
+
+    def file_asset_get(self, **kwargs: Any) -> FileAssetGetOutput:
+        payload = FileAssetGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("file_asset_get", payload)
+        return FileAssetGetOutput.model_validate(result)
 
 
 class GraphNamespace:

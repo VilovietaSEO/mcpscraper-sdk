@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated, typed 318-tool MCP surface. It includes 217 MCP Scraper tools and all 101 mirrored Memory tools from `contracts/mcp.tools.json`. Those output types come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source.
+`client.tools` is the generated, typed 330-tool MCP surface. It includes 229 MCP Scraper tools and all 101 mirrored Memory tools from `contracts/mcp.tools.json`. Those output types come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
@@ -89,7 +89,7 @@ Integrations are included with an active Starter plan or higher: OAuth connect/r
 
 Core operations are flat on the client: `searchSerp`, `harvestPaa`, `extractUrl`, `mapSiteUrls`, `extractSite`, `auditSite`, `getExtractSiteStatus`, `readExtractSiteExport`, `readExtractSiteImage`, `listJobs`, `getJob`, `getHistory`, `getLedger`.
 
-Everything else is namespaced by product area, matching the OpenAPI spec's tags: `client.youtube`, `client.screenshot`, `client.facebook`, `client.googleAds`, `client.instagram`, `client.reddit`, `client.video`, `client.maps`, `client.directory`, `client.serpIntelligence`, `client.workflows`.
+Everything else is namespaced by product area, matching the OpenAPI spec's tags: `client.youtube`, `client.screenshot`, `client.facebook`, `client.googleAds`, `client.instagram`, `client.reddit`, `client.video`, `client.maps`, `client.directory`, `client.serpIntelligence`, `client.workflows`, `client.gmail`. The REST Gmail namespace preserves opaque path handles and requires explicit idempotency keys for mutations; the generated `client.tools.connections.gmail*` methods expose the exact MCP input/output contracts.
 
 ### Retry-safe SERP Intelligence captures
 
@@ -137,4 +137,4 @@ npm run generate
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 114-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (including complete Gmail and reversible bulk examples) · [`mcpscraper-memory-sdk`](../memory) (Node, full 116-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)

@@ -196,6 +196,16 @@ import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled
 import * as ConnectionsSlackSendMessage from './tools/slack_send_message.js'
 import * as ConnectionsTestServiceConnection from './tools/test_service_connection.js'
 import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
+import * as ConnectionsGmailBulkDeleteMessages from './tools/gmail_bulk_delete_messages.js'
+import * as ConnectionsGmailBulkManageMessages from './tools/gmail_bulk_manage_messages.js'
+import * as ConnectionsGmailExportSelection from './tools/gmail_export_selection.js'
+import * as ConnectionsGmailGetAttachment from './tools/gmail_get_attachment.js'
+import * as ConnectionsGmailGetMessage from './tools/gmail_get_message.js'
+import * as ConnectionsGmailImportStatus from './tools/gmail_import_status.js'
+import * as ConnectionsGmailImportToMemory from './tools/gmail_import_to_memory.js'
+import * as ConnectionsGmailPrepareMemoryImport from './tools/gmail_prepare_memory_import.js'
+import * as ConnectionsGmailPrepareSelection from './tools/gmail_prepare_selection.js'
+import * as ConnectionsGmailSearchMessages from './tools/gmail_search_messages.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as CommonsClaimPublication from './tools/commons_claim_publication.js'
@@ -318,6 +328,8 @@ import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
 import * as VideoAnalyzeStatus from './tools/video-analyze-status.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
+import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
+import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -1896,6 +1908,56 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "zoomCreateMeeting"
   },
   {
+    "name": "gmail_bulk_delete_messages",
+    "category": "connections",
+    "methodName": "gmailBulkDeleteMessages"
+  },
+  {
+    "name": "gmail_bulk_manage_messages",
+    "category": "connections",
+    "methodName": "gmailBulkManageMessages"
+  },
+  {
+    "name": "gmail_export_selection",
+    "category": "connections",
+    "methodName": "gmailExportSelection"
+  },
+  {
+    "name": "gmail_get_attachment",
+    "category": "connections",
+    "methodName": "gmailGetAttachment"
+  },
+  {
+    "name": "gmail_get_message",
+    "category": "connections",
+    "methodName": "gmailGetMessage"
+  },
+  {
+    "name": "gmail_import_status",
+    "category": "connections",
+    "methodName": "gmailImportStatus"
+  },
+  {
+    "name": "gmail_import_to_memory",
+    "category": "connections",
+    "methodName": "gmailImportToMemory"
+  },
+  {
+    "name": "gmail_prepare_memory_import",
+    "category": "connections",
+    "methodName": "gmailPrepareMemoryImport"
+  },
+  {
+    "name": "gmail_prepare_selection",
+    "category": "connections",
+    "methodName": "gmailPrepareSelection"
+  },
+  {
+    "name": "gmail_search_messages",
+    "category": "connections",
+    "methodName": "gmailSearchMessages"
+  },
+  {
     "name": "analytics_list_crm_outbound_policies",
     "category": "analytics",
     "methodName": "listCrmOutboundPolicies"
@@ -1909,6 +1971,16 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_upsert_crm_outbound_policy",
     "category": "analytics",
     "methodName": "upsertCrmOutboundPolicy"
+  },
+  {
+    "name": "harvest_paa_start",
+    "category": "other",
+    "methodName": "harvestPaaStart"
+  },
+  {
+    "name": "harvest_paa_status",
+    "category": "other",
+    "methodName": "harvestPaaStatus"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2727,6 +2799,46 @@ export class ConnectionsNamespace {
   async zoomCreateMeeting(input: ConnectionsZoomCreateMeeting.Input): Promise<ConnectionsZoomCreateMeeting.Output> {
     return this.callTool('zoom_create_meeting', input) as Promise<ConnectionsZoomCreateMeeting.Output>
   }
+
+  async gmailBulkDeleteMessages(input: ConnectionsGmailBulkDeleteMessages.Input): Promise<ConnectionsGmailBulkDeleteMessages.Output> {
+    return this.callTool('gmail_bulk_delete_messages', input) as Promise<ConnectionsGmailBulkDeleteMessages.Output>
+  }
+
+  async gmailBulkManageMessages(input: ConnectionsGmailBulkManageMessages.Input): Promise<ConnectionsGmailBulkManageMessages.Output> {
+    return this.callTool('gmail_bulk_manage_messages', input) as Promise<ConnectionsGmailBulkManageMessages.Output>
+  }
+
+  async gmailExportSelection(input: ConnectionsGmailExportSelection.Input): Promise<ConnectionsGmailExportSelection.Output> {
+    return this.callTool('gmail_export_selection', input) as Promise<ConnectionsGmailExportSelection.Output>
+  }
+
+  async gmailGetAttachment(input: ConnectionsGmailGetAttachment.Input): Promise<ConnectionsGmailGetAttachment.Output> {
+    return this.callTool('gmail_get_attachment', input) as Promise<ConnectionsGmailGetAttachment.Output>
+  }
+
+  async gmailGetMessage(input: ConnectionsGmailGetMessage.Input): Promise<ConnectionsGmailGetMessage.Output> {
+    return this.callTool('gmail_get_message', input) as Promise<ConnectionsGmailGetMessage.Output>
+  }
+
+  async gmailImportStatus(input: ConnectionsGmailImportStatus.Input): Promise<ConnectionsGmailImportStatus.Output> {
+    return this.callTool('gmail_import_status', input) as Promise<ConnectionsGmailImportStatus.Output>
+  }
+
+  async gmailImportToMemory(input: ConnectionsGmailImportToMemory.Input): Promise<ConnectionsGmailImportToMemory.Output> {
+    return this.callTool('gmail_import_to_memory', input) as Promise<ConnectionsGmailImportToMemory.Output>
+  }
+
+  async gmailPrepareMemoryImport(input: ConnectionsGmailPrepareMemoryImport.Input): Promise<ConnectionsGmailPrepareMemoryImport.Output> {
+    return this.callTool('gmail_prepare_memory_import', input) as Promise<ConnectionsGmailPrepareMemoryImport.Output>
+  }
+
+  async gmailPrepareSelection(input: ConnectionsGmailPrepareSelection.Input): Promise<ConnectionsGmailPrepareSelection.Output> {
+    return this.callTool('gmail_prepare_selection', input) as Promise<ConnectionsGmailPrepareSelection.Output>
+  }
+
+  async gmailSearchMessages(input: ConnectionsGmailSearchMessages.Input): Promise<ConnectionsGmailSearchMessages.Output> {
+    return this.callTool('gmail_search_messages', input) as Promise<ConnectionsGmailSearchMessages.Output>
+  }
 }
 
 export class SerpIntelligenceNamespace {
@@ -3329,6 +3441,18 @@ export class YoutubeNamespace {
   }
 }
 
+export class OtherNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async harvestPaaStart(input: OtherHarvestPaaStart.Input): Promise<OtherHarvestPaaStart.Output> {
+    return this.callTool('harvest_paa_start', input) as Promise<OtherHarvestPaaStart.Output>
+  }
+
+  async harvestPaaStatus(input: OtherHarvestPaaStatus.Input): Promise<OtherHarvestPaaStatus.Output> {
+    return this.callTool('harvest_paa_status', input) as Promise<OtherHarvestPaaStatus.Output>
+  }
+}
+
 export class GeneratedMcpToolsClient {
   readonly access: AccessNamespace
   readonly vaults: VaultsNamespace
@@ -3366,6 +3490,7 @@ export class GeneratedMcpToolsClient {
   readonly recall: RecallNamespace
   readonly video: VideoNamespace
   readonly youtube: YoutubeNamespace
+  readonly other: OtherNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.access = new AccessNamespace(callTool)
@@ -3404,5 +3529,6 @@ export class GeneratedMcpToolsClient {
     this.recall = new RecallNamespace(callTool)
     this.video = new VideoNamespace(callTool)
     this.youtube = new YoutubeNamespace(callTool)
+    this.other = new OtherNamespace(callTool)
   }
 }

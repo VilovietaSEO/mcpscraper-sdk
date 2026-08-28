@@ -1,4 +1,4 @@
-# All 318 MCP tools with cURL
+# All 330 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -47,7 +47,41 @@ For a fresh Search Console API extract, set `dataset` to `search_console_perform
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
-## Complete catalog (318)
+## Complete Gmail workflow
+
+The selection receipt is immutable. Keep `selectionId`, `selectionSha256`, and `count` together, then reuse that exact receipt for preview/export or a reviewed Memory import. `gmail_import_status` only observes progress; call `gmail_import_to_memory` again with the same idempotency key when `nextAction` says to resume.
+
+```bash
+CONNECTION_ID="gmail_connection_id"
+QUERY='has:attachment newer_than:30d'
+
+call_tool() {
+  jq -n --arg name "$1" --argjson args "$2" \
+    '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args}}' \
+  | curl -sS https://mcpscraper.dev/mcp \
+      -H "x-api-key: $MCP_SCRAPER_API_KEY" \
+      -H "content-type: application/json" \
+      -H "accept: application/json, text/event-stream" \
+      --data-binary @-
+}
+
+SEARCH=$(call_tool gmail_search_messages "$(jq -n --arg connectionId "$CONNECTION_ID" --arg query "$QUERY" '{connectionId:$connectionId,query:$query,limit:25}')")
+SELECTION=$(call_tool gmail_prepare_selection "$(jq -n --arg connectionId "$CONNECTION_ID" --arg query "$QUERY" '{connectionId:$connectionId,purpose:"memory_import",source:{kind:"query",query:$query}}')")
+# Parse the JSON tool result for selectionId, selectionSha256, and count before continuing.
+# Prepare the reviewed route and attachment plan, then call gmail_import_to_memory with one stable idempotencyKey.
+# If the result requests continuation, call gmail_import_to_memory again with the same importPlanId and key.
+# Call gmail_import_status with the returned ingestId until its status is terminal.
+```
+
+A complete runnable Node example, including attachment preservation and resume/status handling, is checked in at `examples/gmail-complete-workflow.mjs`.
+
+## Reversible Gmail bulk management
+
+Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact receipt, then call `gmail_bulk_manage_messages` with the unchanged receipt and a stable idempotency key. A runnable label add/remove example is checked in at `examples/gmail-bulk-manage.mjs`.
+
+> **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
+
+## Complete catalog (330)
 
 ## access
 
@@ -268,6 +302,16 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 - `slack_send_message` — Send Slack Message
 - `test_service_connection` — Test Connected Service
 - `zoom_create_meeting` — Create Zoom Meeting
+- `gmail_bulk_delete_messages` — Permanently Delete Gmail Messages
+- `gmail_bulk_manage_messages` — Manage Gmail Messages in Bulk
+- `gmail_export_selection` — Export Gmail Selection
+- `gmail_get_attachment` — Open Gmail Attachment
+- `gmail_get_message` — Read Full Gmail Message
+- `gmail_import_status` — Get Gmail Memory Import Status
+- `gmail_import_to_memory` — Import Gmail Selection to Memory
+- `gmail_prepare_memory_import` — Plan Gmail Import to Memory
+- `gmail_prepare_selection` — Prepare Gmail Selection
+- `gmail_search_messages` — Search Gmail Messages
 
 ## serpIntelligence
 
@@ -474,3 +518,8 @@ If a signed artifact URL expires, call `renew_connected_data_download` with the 
 
 - `youtube_harvest` — YouTube Video Harvest
 - `youtube_transcribe` — YouTube Transcription
+
+## other
+
+- `harvest_paa_start` — Start Durable Google PAA Harvest
+- `harvest_paa_status` — Check Durable Google PAA Harvest

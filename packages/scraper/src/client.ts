@@ -5,6 +5,7 @@ import {
   CaptureNamespace,
   ChannelsNamespace,
   FactsNamespace,
+  FilesNamespace,
   GraphNamespace,
   LibraryNamespace,
   MemoryNamespace as MemoryToolNamespace,
@@ -44,6 +45,10 @@ export interface ScraperClientOptions {
 
 export interface IdempotentRequestOptions {
   idempotencyKey?: string
+}
+
+export interface GmailMutationOptions {
+  idempotencyKey: string
 }
 
 type SerpIntelligenceCaptureDefaultedKey =
@@ -299,11 +304,46 @@ class WorkflowsNamespace {
   }
 }
 
+class GmailNamespace {
+  constructor(private readonly r: Requester) {}
+  searchMessages(params: RequestBodyOf<'gmailSearchMessages'>) {
+    return this.r.call<'gmailSearchMessages'>('POST', '/api/gmail/messages/search', params)
+  }
+  getMessage(messageId: string, params: RequestBodyOf<'gmailGetMessage'>) {
+    return this.r.call<'gmailGetMessage'>('POST', `/api/gmail/messages/${encodeURIComponent(messageId)}`, params)
+  }
+  getAttachment(params: RequestBodyOf<'gmailGetAttachment'>) {
+    return this.r.call<'gmailGetAttachment'>('POST', '/api/gmail/attachments/get', params)
+  }
+  prepareSelection(params: RequestBodyOf<'gmailPrepareSelection'>) {
+    return this.r.call<'gmailPrepareSelection'>('POST', '/api/gmail/selections', params)
+  }
+  exportSelection(selectionId: string, params: RequestBodyOf<'gmailExportSelection'>) {
+    return this.r.call<'gmailExportSelection'>('POST', `/api/gmail/selections/${encodeURIComponent(selectionId)}/export`, params)
+  }
+  bulkManage(selectionId: string, params: RequestBodyOf<'gmailBulkManageMessages'>, options: GmailMutationOptions) {
+    return this.r.call<'gmailBulkManageMessages'>('POST', `/api/gmail/selections/${encodeURIComponent(selectionId)}/manage`, params, { 'Idempotency-Key': options.idempotencyKey })
+  }
+  bulkDelete(selectionId: string, params: RequestBodyOf<'gmailBulkDeleteMessages'>, options: GmailMutationOptions) {
+    return this.r.call<'gmailBulkDeleteMessages'>('POST', `/api/gmail/selections/${encodeURIComponent(selectionId)}/delete`, params, { 'Idempotency-Key': options.idempotencyKey })
+  }
+  prepareMemoryImport(params: RequestBodyOf<'gmailPrepareMemoryImport'>) {
+    return this.r.call<'gmailPrepareMemoryImport'>('POST', '/api/gmail/imports/prepare', params)
+  }
+  importToMemory(importPlanId: string, options: GmailMutationOptions) {
+    return this.r.call<'gmailImportToMemory'>('POST', `/api/gmail/imports/${encodeURIComponent(importPlanId)}/start`, undefined, { 'Idempotency-Key': options.idempotencyKey })
+  }
+  importStatus(ingestId: string) {
+    return this.r.call<'gmailImportStatus'>('GET', `/api/gmail/imports/${encodeURIComponent(ingestId)}`)
+  }
+}
+
 class MemoryTools {
   readonly access: AccessNamespace
   readonly capture: CaptureNamespace
   readonly channels: ChannelsNamespace
   readonly facts: FactsNamespace
+  readonly files: FilesNamespace
   readonly graph: GraphNamespace
   readonly library: LibraryNamespace
   readonly memory: MemoryToolNamespace
@@ -321,6 +361,7 @@ class MemoryTools {
     this.capture = new CaptureNamespace(callTool)
     this.channels = new ChannelsNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
+    this.files = new FilesNamespace(callTool)
     this.graph = new GraphNamespace(callTool)
     this.library = new LibraryNamespace(callTool)
     this.memory = new MemoryToolNamespace(callTool)
@@ -349,6 +390,7 @@ export class ScraperClient {
   readonly directory: DirectoryNamespace
   readonly serpIntelligence: SerpIntelligenceNamespace
   readonly workflows: WorkflowsNamespace
+  readonly gmail: GmailNamespace
   readonly memoryTools: MemoryTools
   readonly tools: McpToolsClient
 
@@ -367,6 +409,7 @@ export class ScraperClient {
     this.directory = new DirectoryNamespace(this.r)
     this.serpIntelligence = new SerpIntelligenceNamespace(this.r)
     this.workflows = new WorkflowsNamespace(this.r)
+    this.gmail = new GmailNamespace(this.r)
     this.memoryTools = new MemoryTools(this.callMemoryTool.bind(this))
     this.tools = new McpToolsClient({
       apiKey: options.apiKey,

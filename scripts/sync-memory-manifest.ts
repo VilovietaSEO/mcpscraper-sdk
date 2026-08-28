@@ -58,9 +58,10 @@ function schemaSignature(schema: unknown): string {
 }
 
 async function main(): Promise<void> {
+  const localManifestPath = process.env.MCP_MEMORY_TOOL_MANIFEST_PATH
   const apiKey = process.env.MCP_MEMORY_API_KEY
-  if (!apiKey) {
-    console.error('MCP_MEMORY_API_KEY is required to check live tool drift.')
+  if (!localManifestPath && !apiKey) {
+    console.error('MCP_MEMORY_TOOL_MANIFEST_PATH or MCP_MEMORY_API_KEY is required to check tool drift.')
     process.exitCode = 1
     return
   }
@@ -68,7 +69,9 @@ async function main(): Promise<void> {
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8')) as Manifest
   const manifestByName = new Map(manifest.tools.map(t => [t.name, t]))
 
-  const live = await fetchLiveTools(apiKey)
+  const live = localManifestPath
+    ? ((JSON.parse(readFileSync(localManifestPath, 'utf8')) as { tools?: RpcTool[] }).tools ?? [])
+    : await fetchLiveTools(apiKey!)
   const liveByName = new Map(live.map(t => [t.name, t]))
 
   const missingFromLive = [...manifestByName.keys()].filter(name => !liveByName.has(name))
@@ -89,7 +92,9 @@ async function main(): Promise<void> {
   if (missingFromLive.length) console.log('In manifest but no longer live:', missingFromLive)
   if (missingFromManifest.length) console.log('Live but missing from manifest:', missingFromManifest)
   if (schemaDrift.length) console.log('Input schema drift:', schemaDrift)
-  console.log(clean ? 'OK — manifest matches live tools/list.' : 'DRIFT DETECTED — update contracts/memory.tools.json.')
+  console.log(clean
+    ? localManifestPath ? 'OK — manifest matches the complete local Memory registry.' : 'OK — manifest matches live tools/list.'
+    : 'DRIFT DETECTED — update contracts/memory.tools.json.')
 
   process.exitCode = clean ? 0 : 1
 }

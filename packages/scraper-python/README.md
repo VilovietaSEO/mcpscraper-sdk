@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated 318-tool MCP surface — 217 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool. Its output models come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source:
+`client.tools` is the generated 330-tool MCP surface — 229 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool. Its output models come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source:
 
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 
@@ -114,14 +114,14 @@ print(page["memory"])  # {"deposited": True, "vault": "competitors", "noteId": "
 
 ## Memory tools, using only this API key
 
-`client.memory_tools.call_tool(name, args)` dispatches to any of the 114 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
+`client.memory_tools.call_tool(name, args)` dispatches to any of the 116 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
 
 ```python
 hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing pages"})
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 318 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 330 unified MCP tools.
 
 ## Regenerating models
 

@@ -181,6 +181,38 @@ test('namespaced methods hit the right path', async () => {
   assert.equal(capturedUrl, 'https://mcpscraper.dev/workflows/runs/run_123')
 })
 
+test('Gmail REST namespace preserves opaque path handles and idempotency headers', async () => {
+  const calls: Array<{ url: string; method: string; headers: Record<string, string>; body: unknown }> = []
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    calls.push({
+      url: String(url),
+      method: String(init?.method),
+      headers: init?.headers as Record<string, string>,
+      body: init?.body ? JSON.parse(String(init.body)) : null,
+    })
+    return jsonResponse(200, { ok: true, error: null })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+
+  await client.gmail.getMessage('message/with spaces', { connectionId: 'conn_1', includeRawArtifact: true })
+  await client.gmail.bulkManage('selection/one', {
+    connectionId: 'conn_1',
+    selectionSha256: 'a'.repeat(64),
+    expectedCount: 2,
+    operation: { kind: 'mark_read' },
+  }, { idempotencyKey: 'gmail-manage-1' })
+  await client.gmail.importToMemory('plan/one', { idempotencyKey: 'gmail-import-1' })
+  await client.gmail.importStatus('ingest/one')
+
+  assert.equal(calls[0].url, 'https://mcpscraper.dev/api/gmail/messages/message%2Fwith%20spaces')
+  assert.equal(calls[1].url, 'https://mcpscraper.dev/api/gmail/selections/selection%2Fone/manage')
+  assert.equal(calls[1].headers['Idempotency-Key'], 'gmail-manage-1')
+  assert.equal(calls[2].url, 'https://mcpscraper.dev/api/gmail/imports/plan%2Fone/start')
+  assert.equal(calls[2].headers['Idempotency-Key'], 'gmail-import-1')
+  assert.equal(calls[2].body, null)
+  assert.equal(calls[3].method, 'GET')
+})
+
 test('SERP capture sends a retry key and captureWithReceipt returns the accepted key', async () => {
   const capturedHeaders: Array<Record<string, string>> = []
   const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
@@ -278,6 +310,29 @@ test('memoryTools dispatches through /memory/mcp-call with toolName and args', a
   assert.equal(capturedUrl, 'https://mcpscraper.dev/memory/mcp-call')
   assert.equal((capturedBody as { toolName: string }).toolName, 'searchTool')
   assert.deepEqual((capturedBody as { args: unknown }).args, { query: 'roofing warranty terms' })
+  assert.equal((result as { ok: boolean }).ok, true)
+})
+
+test('memoryTools.files exposes attachment persistence through a scraper key', async () => {
+  let capturedBody: unknown
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    capturedBody = JSON.parse(String(init?.body))
+    return jsonResponse(200, { ok: true, reusedObject: false })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+
+  const result = await client.memoryTools.files.fileAssetSave({
+    artifactId: 'artifact_gmail_attachment_1',
+    title: 'invoice.pdf',
+    idempotencyKey: 'gmail-import-attachment-1',
+  })
+
+  assert.equal((capturedBody as { toolName: string }).toolName, 'file_asset_save')
+  assert.deepEqual((capturedBody as { args: unknown }).args, {
+    artifactId: 'artifact_gmail_attachment_1',
+    title: 'invoice.pdf',
+    idempotencyKey: 'gmail-import-attachment-1',
+  })
   assert.equal((result as { ok: boolean }).ok, true)
 })
 
