@@ -114,6 +114,8 @@ import * as ImageAssetList from './tools/image_asset_list.js'
 import * as ImageAssetSearch from './tools/image_asset_search.js'
 import * as ImageAssetMove from './tools/image_asset_move.js'
 import * as ImageAssetDelete from './tools/image_asset_delete.js'
+import * as FileAssetSave from './tools/file_asset_save.js'
+import * as FileAssetGet from './tools/file_asset_get.js'
 
 export class AccessNamespace {
   constructor(private readonly callTool: CallToolFn) {}
@@ -632,5 +634,17 @@ export class ImagesNamespace {
 
   async imageAssetDelete(input: ImageAssetDelete.Input): Promise<ImageAssetDelete.Output> {
     return this.callTool('image_asset_delete', input) as Promise<ImageAssetDelete.Output>
+  }
+}
+
+export class FilesNamespace {
+  constructor(private readonly callTool: CallToolFn) {}
+
+  async fileAssetSave(input: FileAssetSave.Input): Promise<FileAssetSave.Output> {
+    return this.callTool('file_asset_save', input) as Promise<FileAssetSave.Output>
+  }
+
+  async fileAssetGet(input: FileAssetGet.Input): Promise<FileAssetGet.Output> {
+    return this.callTool('file_asset_get', input) as Promise<FileAssetGet.Output>
   }
 }

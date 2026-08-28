@@ -51,6 +51,41 @@ def test_memory_search_sends_correct_wire_tool_name_and_parses_structured_conten
 
 
 @responses.activate
+def test_files_file_asset_save_exposes_original_attachment_persistence():
+    captured = {}
+
+    def handler(request):
+        captured["body"] = json.loads(request.body)
+        return (
+            200,
+            {},
+            json.dumps(
+                {
+                    "jsonrpc": "2.0",
+                    "id": captured["body"]["id"],
+                    "result": {"structuredContent": {"ok": True, "reusedObject": False}},
+                }
+            ),
+        )
+
+    responses.add_callback(responses.POST, f"{BASE_URL}/mcp", callback=handler, content_type="application/json")
+
+    result = MemoryClient(api_key="mk_test").files.file_asset_save(
+        artifactId="artifact_gmail_attachment_1",
+        title="invoice.pdf",
+        idempotencyKey="gmail-import-attachment-1",
+    )
+
+    assert captured["body"]["params"]["name"] == "file_asset_save"
+    assert captured["body"]["params"]["arguments"] == {
+        "artifactId": "artifact_gmail_attachment_1",
+        "title": "invoice.pdf",
+        "idempotencyKey": "gmail-import-attachment-1",
+    }
+    assert result.ok is True
+
+
+@responses.activate
 def test_mcp_tools_client_preserves_native_image_content():
     responses.add(
         responses.POST,

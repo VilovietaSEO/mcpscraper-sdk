@@ -51,6 +51,8 @@ tags:
       for your account on first call. See `mcpscraper-memory-sdk`'s tool manifest
       (`contracts/memory.tools.json` in this repo) for the full set of tool names and their
       per-tool input/output shapes; this single endpoint dispatches to whichever tool you name.
+  - name: Gmail
+    description: Complete owner-scoped Gmail reads, immutable selections, bulk actions, exports, and resumable Memory imports.
 
 paths:
   /harvest/sync:
@@ -1201,13 +1203,139 @@ paths:
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
 
+  /api/gmail/messages/search:
+    post:
+      tags: [Gmail]
+      operationId: gmailSearchMessages
+      summary: Search Gmail messages and receive normalized previews plus an opaque cursor
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GmailSearchMessagesRequest' } } } }
+      responses:
+        '200': { description: Normalized message page., content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /api/gmail/messages/{messageId}:
+    post:
+      tags: [Gmail]
+      operationId: gmailGetMessage
+      summary: Read one complete normalized Gmail message and its attachment references
+      parameters:
+        - { name: messageId, in: path, required: true, schema: { type: string } }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GmailGetMessageRequest' } } } }
+      responses:
+        '200': { description: 'Complete normalized message, MIME tree, and artifact pointers.', content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/gmail/attachments/get:
+    post:
+      tags: [Gmail]
+      operationId: gmailGetAttachment
+      summary: Resolve an opaque attachment reference to verified private bytes
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GmailGetAttachmentRequest' } } } }
+      responses:
+        '200': { description: Canonical artifact pointer plus bounded text when safe., content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /api/gmail/selections:
+    post:
+      tags: [Gmail]
+      operationId: gmailPrepareSelection
+      summary: Freeze an exact owner-scoped Gmail selection for one purpose
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GmailPrepareSelectionRequest' } } } }
+      responses:
+        '200': { description: Immutable 24-hour selection receipt and bounded preview., content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /api/gmail/selections/{selectionId}/export:
+    post:
+      tags: [Gmail]
+      operationId: gmailExportSelection
+      summary: Export every message in an unchanged frozen selection
+      parameters:
+        - { name: selectionId, in: path, required: true, schema: { type: string } }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GmailSelectionReceiptRequest' } } } }
+      responses:
+        '200': { description: Complete export artifact and bounded preview., content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /api/gmail/selections/{selectionId}/manage:
+    post:
+      tags: [Gmail]
+      operationId: gmailBulkManageMessages
+      summary: Apply one reversible mailbox operation to an unchanged selection
+      parameters:
+        - { name: selectionId, in: path, required: true, schema: { type: string } }
+        - { name: Idempotency-Key, in: header, required: true, schema: { type: string, minLength: 8, maxLength: 200 } }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GmailBulkManageRequest' } } } }
+      responses:
+        '200': { description: Per-chunk action receipt with exact partial/retry state., content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /api/gmail/selections/{selectionId}/delete:
+    post:
+      tags: [Gmail]
+      operationId: gmailBulkDeleteMessages
+      summary: Permanently and irreversibly delete an unchanged Gmail selection
+      description: This is not trash. It requires an exact selection receipt, a stable Idempotency-Key, and literal confirmPermanentDelete true.
+      parameters:
+        - { name: selectionId, in: path, required: true, schema: { type: string } }
+        - { name: Idempotency-Key, in: header, required: true, schema: { type: string, minLength: 8, maxLength: 200 } }
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GmailBulkDeleteRequest' } } } }
+      responses:
+        '200': { description: Irreversible batch submission receipt., content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /api/gmail/imports/prepare:
+    post:
+      tags: [Gmail]
+      operationId: gmailPrepareMemoryImport
+      summary: Review exact Memory routes, attachment handling, and refusals before writes
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/GmailPrepareMemoryImportRequest' } } } }
+      responses:
+        '200': { description: Immutable import plan with exact routes and attachment totals., content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /api/gmail/imports/{importPlanId}/start:
+    post:
+      tags: [Gmail]
+      operationId: gmailImportToMemory
+      summary: Start or resume a reviewed Gmail import to Memory
+      parameters:
+        - { name: importPlanId, in: path, required: true, schema: { type: string } }
+        - { name: Idempotency-Key, in: header, required: true, schema: { type: string, minLength: 8, maxLength: 200 } }
+      responses:
+        '200': { description: Durable ingest receipt and exact next action., content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '400': { $ref: '#/components/responses/BadRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /api/gmail/imports/{ingestId}:
+    get:
+      tags: [Gmail]
+      operationId: gmailImportStatus
+      summary: Observe Gmail Memory import state without continuing work
+      parameters:
+        - { name: ingestId, in: path, required: true, schema: { type: string } }
+      responses:
+        '200': { description: 'Current message, attachment, checkpoint, and manifest state.', content: { application/json: { schema: { $ref: '#/components/schemas/GmailWorkflowResponse' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
   /memory/mcp-call:
     post:
       tags: [Memory]
       operationId: callMemoryTool
       summary: Call one memory.mcpscraper.dev tool by name, using this account's mcpscraper.dev API key
       description: |
-        Generic dispatch: names one of the 92 tools documented in this repo's
+        Generic dispatch: names one of the 116 tools documented in this repo's
         `contracts/memory.tools.json` and forwards `args` to it, using a memory identity
         auto-provisioned for the calling mcpscraper.dev account. The response shape depends
         entirely on which tool was called — see that tool's `outputSchema` in the manifest.
@@ -2001,4 +2129,125 @@ components:
       properties:
         ok: { type: boolean }
         error: { type: string, description: 'Present when ok is false.' }
+      additionalProperties: true
+
+    GmailSearchMessagesRequest:
+      type: object
+      required: [connectionId, query]
+      additionalProperties: false
+      properties:
+        connectionId: { type: string, minLength: 1, maxLength: 500 }
+        query: { type: string, minLength: 1, maxLength: 1000 }
+        limit: { type: integer, minimum: 1, maximum: 500, default: 50 }
+        cursor: { type: string, minLength: 1, maxLength: 500 }
+
+    GmailGetMessageRequest:
+      type: object
+      required: [connectionId]
+      additionalProperties: false
+      properties:
+        connectionId: { type: string, minLength: 1, maxLength: 500 }
+        includeRawArtifact: { type: boolean, default: true }
+
+    GmailGetAttachmentRequest:
+      type: object
+      required: [attachmentRef]
+      additionalProperties: false
+      properties:
+        attachmentRef: { type: string, minLength: 1, maxLength: 500 }
+
+    GmailSelectionSource:
+      oneOf:
+        - type: object
+          required: [kind, query]
+          additionalProperties: false
+          properties:
+            kind: { type: string, enum: [query] }
+            query: { type: string, minLength: 1, maxLength: 1000 }
+        - type: object
+          required: [kind, messageIds]
+          additionalProperties: false
+          properties:
+            kind: { type: string, enum: [message_ids] }
+            messageIds: { type: array, minItems: 1, maxItems: 5000, items: { type: string, minLength: 1, maxLength: 500 } }
+
+    GmailPrepareSelectionRequest:
+      type: object
+      required: [connectionId, purpose, source]
+      additionalProperties: false
+      properties:
+        connectionId: { type: string, minLength: 1, maxLength: 500 }
+        purpose: { type: string, enum: [export, mailbox_action, memory_import] }
+        source: { $ref: '#/components/schemas/GmailSelectionSource' }
+
+    GmailSelectionReceiptRequest:
+      type: object
+      required: [connectionId, selectionSha256, expectedCount]
+      additionalProperties: false
+      properties:
+        connectionId: { type: string, minLength: 1, maxLength: 500 }
+        selectionSha256: { type: string, pattern: '^[a-f0-9]{64}$' }
+        expectedCount: { type: integer, minimum: 1, maximum: 5000 }
+
+    GmailBulkManageRequest:
+      type: object
+      required: [connectionId, selectionSha256, expectedCount, operation]
+      additionalProperties: false
+      properties:
+        connectionId: { type: string, minLength: 1, maxLength: 500 }
+        selectionSha256: { type: string, pattern: '^[a-f0-9]{64}$' }
+        expectedCount: { type: integer, minimum: 1, maximum: 5000 }
+        operation:
+          oneOf:
+            - type: object
+              required: [kind]
+              additionalProperties: false
+              properties: { kind: { type: string, enum: [mark_read, mark_unread, archive, move_to_inbox, trash, restore] } }
+            - type: object
+              required: [kind]
+              additionalProperties: false
+              properties:
+                kind: { type: string, enum: [labels] }
+                addLabelIds: { type: array, minItems: 1, maxItems: 100, items: { type: string, minLength: 1 } }
+                removeLabelIds: { type: array, minItems: 1, maxItems: 100, items: { type: string, minLength: 1 } }
+
+    GmailBulkDeleteRequest:
+      type: object
+      required: [connectionId, selectionSha256, expectedCount, confirmPermanentDelete]
+      additionalProperties: false
+      properties:
+        connectionId: { type: string, minLength: 1, maxLength: 500 }
+        selectionSha256: { type: string, pattern: '^[a-f0-9]{64}$' }
+        expectedCount: { type: integer, minimum: 1, maximum: 5000 }
+        confirmPermanentDelete: { type: boolean, enum: [true] }
+
+    GmailPrepareMemoryImportRequest:
+      type: object
+      required: [connectionId, selectionId, selectionSha256]
+      additionalProperties: false
+      properties:
+        connectionId: { type: string, minLength: 1, maxLength: 500 }
+        selectionId: { type: string, minLength: 1, maxLength: 500 }
+        selectionSha256: { type: string, pattern: '^[a-f0-9]{64}$' }
+        filingPolicy: { type: string, enum: [source_archive, relationship_communications], default: source_archive }
+        destination:
+          oneOf:
+            - type: object
+              required: [mode]
+              additionalProperties: false
+              properties: { mode: { type: string, enum: [auto] } }
+            - type: object
+              required: [mode, vault]
+              additionalProperties: false
+              properties:
+                mode: { type: string, enum: [vault] }
+                vault: { type: string, minLength: 1, maxLength: 120 }
+        attachmentPolicy: { type: string, enum: [preserve_all, index_supported, metadata_only, exclude], default: preserve_all }
+
+    GmailWorkflowResponse:
+      type: object
+      required: [ok, error]
+      properties:
+        ok: { type: boolean }
+        error: { type: string, nullable: true }
       additionalProperties: true

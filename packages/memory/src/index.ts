@@ -7,6 +7,7 @@ export {
   CaptureNamespace,
   ChannelsNamespace,
   FactsNamespace,
+  FilesNamespace,
   GraphNamespace,
   LibraryNamespace,
   MemoryNamespace,

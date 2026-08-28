@@ -4,7 +4,7 @@ Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 318 unified MCP tools (217 MCP Scraper plus 101 mirrored Memory tools).
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 330 unified MCP tools (229 MCP Scraper plus 101 mirrored Memory tools).
 
 ## Install
 
@@ -36,9 +36,14 @@ mcpscraper tools call renew_connected_data_download --args '{"artifactId":"artif
 mcpscraper tools call archive_read --args '{"url":"https://github.com/octocat/Hello-World/archive/refs/heads/master.zip"}' --json
 mcpscraper tools call list_scheduled_runs --args '{"view":"inbox","limit":30}' --json
 mcpscraper tools call lead_list_enrich --args '{"idempotencyKey":"roofing-dallas-001","source":{"kind":"rows","rows":[{"Business":"White Rock Roofing","City":"Dallas","Website":"https://roofwhiterock.com"}]},"columnMap":{"name":"Business","city":"City","websiteUrl":"Website"},"defaultEntityType":"business","emailSearchFallback":"serp_snippets","peopleDiscovery":"owners","peopleQueryTemplates":["{business} owner of company {city}","{business} founder {city}"],"outputFormats":["csv","xlsx"]}' --json
+mcpscraper tools call gmail_search_messages --args '{"connectionId":"gmail_conn_123","query":"has:attachment newer_than:30d","limit":25}' --json
+mcpscraper tools call gmail_prepare_selection --args '{"connectionId":"gmail_conn_123","purpose":"memory_import","source":{"kind":"query","query":"has:attachment newer_than:30d"}}' --json
+mcpscraper tools call gmail_import_status --args '{"ingestId":"opaque_ingest_id"}' --json
 ```
 
-`tools list` contains exactly 318 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 330 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+
+Keep a Gmail selection's ID, SHA-256, and count together. `gmail_import_status` only observes work; resume through `gmail_import_to_memory` with the original plan and idempotency key. Permanent deletion is a separate irreversible command requiring both `confirmPermanentDelete:true` and `--yes`; it is intentionally not shown as a copy/paste example.
 
 Google SERP searches cost 60 Credits. PAA harvests cost 400 Credits plus 10 Credits per returned question. For additional throughput, one optional $5/month concurrency pack adds two browser slots; pack quantity scales both slots and monthly price linearly.
 

@@ -45,6 +45,38 @@ test('memory.search sends a tools/call JSON-RPC request and parses structuredCon
   assert.equal(result.results?.[0]?.text, 'hello')
 })
 
+test('files.fileAssetSave exposes original attachment persistence with the exact wire contract', async () => {
+  let capturedBody: any
+  const client = new MemoryClient({
+    apiKey: 'mk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return {
+        status: 200,
+        json: {
+          jsonrpc: '2.0',
+          id: capturedBody.id,
+          result: { structuredContent: { ok: true, reusedObject: false } },
+        },
+      }
+    }),
+  })
+
+  const result = await client.files.fileAssetSave({
+    artifactId: 'artifact_gmail_attachment_1',
+    title: 'invoice.pdf',
+    idempotencyKey: 'gmail-import-attachment-1',
+  })
+
+  assert.equal(capturedBody.params.name, 'file_asset_save')
+  assert.deepEqual(capturedBody.params.arguments, {
+    artifactId: 'artifact_gmail_attachment_1',
+    title: 'invoice.pdf',
+    idempotencyKey: 'gmail-import-attachment-1',
+  })
+  assert.equal(result.ok, true)
+})
+
 test('access.acceptShare round-trips through a text content block', async () => {
   const client = new MemoryClient({
     apiKey: 'mk_test',

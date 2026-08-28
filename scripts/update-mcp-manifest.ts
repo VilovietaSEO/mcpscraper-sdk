@@ -5,6 +5,19 @@ import { stripInternalTelemetry } from './mcp-contract-telemetry.js'
 
 const MANIFEST_PATH = join(process.cwd(), 'contracts/mcp.tools.json')
 const MEMORY_MANIFEST_PATH = join(process.cwd(), 'contracts/memory.tools.json')
+const GMAIL_FINGERPRINT_PATH = join(process.cwd(), 'contracts/gmail.tools.fingerprints.json')
+const GMAIL_WORKFLOW_TOOLS = new Set([
+  'gmail_search_messages',
+  'gmail_get_message',
+  'gmail_get_attachment',
+  'gmail_prepare_selection',
+  'gmail_export_selection',
+  'gmail_bulk_manage_messages',
+  'gmail_bulk_delete_messages',
+  'gmail_prepare_memory_import',
+  'gmail_import_to_memory',
+  'gmail_import_status',
+])
 
 interface LiveTool {
   name: string
@@ -103,6 +116,7 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
 }
 
 const SCRAPER_PREFIX_CATEGORIES: Array<[string, string]> = [
+  ['gmail_', 'connections'],
   ['analytics_', 'analytics'],
   ['browser_', 'browser'],
   ['youtube_', 'youtube'],
@@ -292,7 +306,36 @@ async function main(): Promise<void> {
     toolCount: tools.length,
     tools,
   }
+  const gmailTools = tools
+    .filter(tool => GMAIL_WORKFLOW_TOOLS.has(tool.name))
+    .map(tool => {
+      const contract = {
+        name: tool.name,
+        description: tool.description,
+        inputSchema: tool.inputSchema,
+        outputSchema: tool.outputSchema,
+        annotations: tool.annotations ?? {},
+      }
+      return {
+        name: tool.name,
+        sha256: createHash('sha256').update(canonicalJson(contract)).digest('hex'),
+      }
+    })
+    .sort((left, right) => left.name.localeCompare(right.name))
+  if (gmailTools.length > 0 && gmailTools.length !== GMAIL_WORKFLOW_TOOLS.size) {
+    const present = new Set(gmailTools.map(tool => tool.name))
+    throw new Error(`Complete server manifest is missing Gmail workflow tools: ${[...GMAIL_WORKFLOW_TOOLS].filter(name => !present.has(name)).join(', ')}`)
+  }
   await writeFile(MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8')
+  if (gmailTools.length > 0) {
+    await writeFile(GMAIL_FINGERPRINT_PATH, `${JSON.stringify({
+      schemaVersion: 1,
+      generatedFrom,
+      sourceContractSha256: manifest.sourceContractSha256,
+      toolCount: gmailTools.length,
+      tools: gmailTools,
+    }, null, 2)}\n`, 'utf8')
+  }
   console.log(`Updated unified MCP manifest with ${tools.length} tools across ${new Set(tools.map(t => t.category)).size} categories.`)
 }
 

@@ -5,6 +5,7 @@ export type {
   SerpIntelligenceCaptureOptions,
   SerpIntelligenceCaptureReceipt,
   IdempotentRequestOptions,
+  GmailMutationOptions,
 } from './client.js'
 export { ScraperApiError } from './errors.js'
 export type {

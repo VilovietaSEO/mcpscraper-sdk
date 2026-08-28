@@ -836,6 +836,179 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/gmail/messages/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Search Gmail messages and receive normalized previews plus an opaque cursor */
+        post: operations["gmailSearchMessages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/messages/{messageId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Read one complete normalized Gmail message and its attachment references */
+        post: operations["gmailGetMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/attachments/get": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resolve an opaque attachment reference to verified private bytes */
+        post: operations["gmailGetAttachment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/selections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Freeze an exact owner-scoped Gmail selection for one purpose */
+        post: operations["gmailPrepareSelection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/selections/{selectionId}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Export every message in an unchanged frozen selection */
+        post: operations["gmailExportSelection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/selections/{selectionId}/manage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Apply one reversible mailbox operation to an unchanged selection */
+        post: operations["gmailBulkManageMessages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/selections/{selectionId}/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Permanently and irreversibly delete an unchanged Gmail selection
+         * @description This is not trash. It requires an exact selection receipt, a stable Idempotency-Key, and literal confirmPermanentDelete true.
+         */
+        post: operations["gmailBulkDeleteMessages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/imports/prepare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Review exact Memory routes, attachment handling, and refusals before writes */
+        post: operations["gmailPrepareMemoryImport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/imports/{importPlanId}/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Start or resume a reviewed Gmail import to Memory */
+        post: operations["gmailImportToMemory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gmail/imports/{ingestId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Observe Gmail Memory import state without continuing work */
+        get: operations["gmailImportStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/memory/mcp-call": {
         parameters: {
             query?: never;
@@ -847,7 +1020,7 @@ export interface paths {
         put?: never;
         /**
          * Call one memory.mcpscraper.dev tool by name, using this account's mcpscraper.dev API key
-         * @description Generic dispatch: names one of the 92 tools documented in this repo's
+         * @description Generic dispatch: names one of the 116 tools documented in this repo's
          *     `contracts/memory.tools.json` and forwards `args` to it, using a memory identity
          *     auto-provisioned for the calling mcpscraper.dev account. The response shape depends
          *     entirely on which tool was called — see that tool's `outputSchema` in the manifest.
@@ -1646,6 +1819,91 @@ export interface components {
             ok?: boolean;
             /** @description Present when ok is false. */
             error?: string;
+        } & {
+            [key: string]: unknown;
+        };
+        GmailSearchMessagesRequest: {
+            connectionId: string;
+            query: string;
+            /** @default 50 */
+            limit: number;
+            cursor?: string;
+        };
+        GmailGetMessageRequest: {
+            connectionId: string;
+            /** @default true */
+            includeRawArtifact: boolean;
+        };
+        GmailGetAttachmentRequest: {
+            attachmentRef: string;
+        };
+        GmailSelectionSource: {
+            /** @enum {string} */
+            kind: "query";
+            query: string;
+        } | {
+            /** @enum {string} */
+            kind: "message_ids";
+            messageIds: string[];
+        };
+        GmailPrepareSelectionRequest: {
+            connectionId: string;
+            /** @enum {string} */
+            purpose: "export" | "mailbox_action" | "memory_import";
+            source: components["schemas"]["GmailSelectionSource"];
+        };
+        GmailSelectionReceiptRequest: {
+            connectionId: string;
+            selectionSha256: string;
+            expectedCount: number;
+        };
+        GmailBulkManageRequest: {
+            connectionId: string;
+            selectionSha256: string;
+            expectedCount: number;
+            operation: {
+                /** @enum {string} */
+                kind: "mark_read" | "mark_unread" | "archive" | "move_to_inbox" | "trash" | "restore";
+            } | {
+                /** @enum {string} */
+                kind: "labels";
+                addLabelIds?: string[];
+                removeLabelIds?: string[];
+            };
+        };
+        GmailBulkDeleteRequest: {
+            connectionId: string;
+            selectionSha256: string;
+            expectedCount: number;
+            /** @enum {boolean} */
+            confirmPermanentDelete: true;
+        };
+        GmailPrepareMemoryImportRequest: {
+            connectionId: string;
+            selectionId: string;
+            selectionSha256: string;
+            /**
+             * @default source_archive
+             * @enum {string}
+             */
+            filingPolicy: "source_archive" | "relationship_communications";
+            destination?: {
+                /** @enum {string} */
+                mode: "auto";
+            } | {
+                /** @enum {string} */
+                mode: "vault";
+                vault: string;
+            };
+            /**
+             * @default preserve_all
+             * @enum {string}
+             */
+            attachmentPolicy: "preserve_all" | "index_supported" | "metadata_only" | "exclude";
+        };
+        GmailWorkflowResponse: {
+            ok: boolean;
+            error: string | null;
         } & {
             [key: string]: unknown;
         };
@@ -3427,6 +3685,278 @@ export interface operations {
             404: components["responses"]["NotFound"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
+        };
+    };
+    gmailSearchMessages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GmailSearchMessagesRequest"];
+            };
+        };
+        responses: {
+            /** @description Normalized message page. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    gmailGetMessage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                messageId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GmailGetMessageRequest"];
+            };
+        };
+        responses: {
+            /** @description Complete normalized message, MIME tree, and artifact pointers. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    gmailGetAttachment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GmailGetAttachmentRequest"];
+            };
+        };
+        responses: {
+            /** @description Canonical artifact pointer plus bounded text when safe. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["NotFound"];
+        };
+    };
+    gmailPrepareSelection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GmailPrepareSelectionRequest"];
+            };
+        };
+        responses: {
+            /** @description Immutable 24-hour selection receipt and bounded preview. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    gmailExportSelection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                selectionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GmailSelectionReceiptRequest"];
+            };
+        };
+        responses: {
+            /** @description Complete export artifact and bounded preview. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    gmailBulkManageMessages: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                selectionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GmailBulkManageRequest"];
+            };
+        };
+        responses: {
+            /** @description Per-chunk action receipt with exact partial/retry state. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    gmailBulkDeleteMessages: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                selectionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GmailBulkDeleteRequest"];
+            };
+        };
+        responses: {
+            /** @description Irreversible batch submission receipt. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    gmailPrepareMemoryImport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GmailPrepareMemoryImportRequest"];
+            };
+        };
+        responses: {
+            /** @description Immutable import plan with exact routes and attachment totals. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    gmailImportToMemory: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                importPlanId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Durable ingest receipt and exact next action. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            400: components["responses"]["BadRequest"];
+            401: components["responses"]["Unauthorized"];
+        };
+    };
+    gmailImportStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ingestId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current message, attachment, checkpoint, and manifest state. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GmailWorkflowResponse"];
+                };
+            };
+            401: components["responses"]["Unauthorized"];
+            404: components["responses"]["NotFound"];
         };
     };
     callMemoryTool: {

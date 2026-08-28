@@ -4,6 +4,7 @@ import {
   CaptureNamespace,
   ChannelsNamespace,
   FactsNamespace,
+  FilesNamespace,
   GraphNamespace,
   LibraryNamespace,
   MemoryNamespace,
@@ -45,6 +46,7 @@ export class MemoryClient {
   readonly capture: CaptureNamespace
   readonly channels: ChannelsNamespace
   readonly facts: FactsNamespace
+  readonly files: FilesNamespace
   readonly graph: GraphNamespace
   readonly library: LibraryNamespace
   readonly memory: MemoryNamespace
@@ -72,6 +74,7 @@ export class MemoryClient {
     this.capture = new CaptureNamespace(callTool)
     this.channels = new ChannelsNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
+    this.files = new FilesNamespace(callTool)
     this.graph = new GraphNamespace(callTool)
     this.library = new LibraryNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)

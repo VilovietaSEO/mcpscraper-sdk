@@ -310,6 +310,28 @@ def test_namespaced_methods_hit_the_right_path():
 
 
 @responses.activate
+def test_gmail_rest_namespace_preserves_handles_and_retry_keys():
+    responses.add(responses.POST, "https://mcpscraper.dev/api/gmail/messages/message%2Fone", json={"ok": True, "error": None}, status=200)
+    responses.add(responses.POST, "https://mcpscraper.dev/api/gmail/selections/selection%2Fone/manage", json={"ok": True, "error": None}, status=200)
+    responses.add(responses.POST, "https://mcpscraper.dev/api/gmail/imports/plan%2Fone/start", json={"ok": True, "error": None}, status=200)
+    responses.add(responses.GET, "https://mcpscraper.dev/api/gmail/imports/ingest%2Fone", json={"ok": True, "error": None}, status=200)
+
+    client = ScraperClient(api_key="sk_test")
+    client.gmail.get_message("message/one", {"connectionId": "conn_1", "includeRawArtifact": True})
+    client.gmail.bulk_manage(
+        "selection/one",
+        {"connectionId": "conn_1", "selectionSha256": "a" * 64, "expectedCount": 2, "operation": {"kind": "mark_read"}},
+        idempotency_key="gmail-manage-1",
+    )
+    client.gmail.import_to_memory("plan/one", idempotency_key="gmail-import-1")
+    client.gmail.import_status("ingest/one")
+
+    assert responses.calls[1].request.headers["Idempotency-Key"] == "gmail-manage-1"
+    assert responses.calls[2].request.headers["Idempotency-Key"] == "gmail-import-1"
+    assert responses.calls[2].request.body is None
+
+
+@responses.activate
 def test_serp_capture_sends_retry_key_and_returns_receipt():
     responses.add(
         responses.POST,

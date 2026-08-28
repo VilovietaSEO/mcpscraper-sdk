@@ -10,6 +10,7 @@ from ._generated_client import (
     CaptureNamespace,
     ChannelsNamespace,
     FactsNamespace,
+    FilesNamespace,
     GraphNamespace,
     LibraryNamespace,
     MemoryNamespace,
@@ -42,6 +43,7 @@ class MemoryClient:
         self.capture = CaptureNamespace(self._call_tool)
         self.channels = ChannelsNamespace(self._call_tool)
         self.facts = FactsNamespace(self._call_tool)
+        self.files = FilesNamespace(self._call_tool)
         self.graph = GraphNamespace(self._call_tool)
         self.library = LibraryNamespace(self._call_tool)
         self.memory = MemoryNamespace(self._call_tool)
