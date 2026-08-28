@@ -22,7 +22,7 @@
   "generatedFrom": "mcp-memory 1.20.0 apps/memory/src/mastra/mcp/memory-server.ts (121 registered tools)",
   "serverInfo": {
     "name": "mcp-memory",
-    "version": "1.19.1"
+    "version": "1.20.0"
   },
   "toolCount": 121,
   "tools": [
@@ -79,7 +79,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "acceptShareTool"
+      "legacyId": "acceptShareTool",
+      "annotations": {
+        "title": "Accept Shared Note",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "addVaultTool",
@@ -139,7 +146,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "addVaultTool"
+      "legacyId": "addVaultTool",
+      "annotations": {
+        "title": "Add Vault",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "answerInboxItemTool",
@@ -238,7 +252,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "answerInboxItemTool"
+      "legacyId": "answerInboxItemTool",
+      "annotations": {
+        "title": "Answer Agent Inbox Item",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "approveSenderTool",
@@ -289,7 +310,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "approveSenderTool"
+      "legacyId": "approveSenderTool",
+      "annotations": {
+        "title": "Approve Sender",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "archive_artifact_template",
@@ -1624,7 +1652,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "archive_artifact_template"
+      "legacyId": "archive_artifact_template",
+      "annotations": {
+        "title": "Archive Artifact Template",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "archive_scheduled_run",
@@ -1991,7 +2026,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "archive_scheduled_run"
+      "legacyId": "archive_scheduled_run",
+      "annotations": {
+        "title": "Archive Scheduled Run",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "assistant_context_packet_create",
@@ -2500,7 +2542,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "assistant_context_packet_create"
+      "legacyId": "assistant_context_packet_create",
+      "annotations": {
+        "title": "Create Assistant Context Packet",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "assistant_context_packet_get",
@@ -2857,7 +2906,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "assistant_context_packet_get"
+      "legacyId": "assistant_context_packet_get",
+      "annotations": {
+        "title": "Get Assistant Context Packet",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "assistant_context_packet_lifecycle",
@@ -3353,7 +3409,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "assistant_context_packet_lifecycle"
+      "legacyId": "assistant_context_packet_lifecycle",
+      "annotations": {
+        "title": "Change Context Packet Lifecycle",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "assistant_context_packet_list",
@@ -3722,7 +3785,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "assistant_context_packet_list"
+      "legacyId": "assistant_context_packet_list",
+      "annotations": {
+        "title": "List Assistant Context Packets",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "assistant_context_packet_share_accept",
@@ -4107,7 +4177,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "assistant_context_packet_share_accept"
+      "legacyId": "assistant_context_packet_share_accept",
+      "annotations": {
+        "title": "Accept Context Packet Share",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "autoOptimizationTool",
@@ -4166,7 +4243,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "autoOptimizationTool"
+      "legacyId": "autoOptimizationTool",
+      "annotations": {
+        "title": "Automatic Memory Optimization",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "bulkDeleteNotesTool",
@@ -4315,7 +4399,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "bulkDeleteNotesTool"
+      "legacyId": "bulkDeleteNotesTool",
+      "annotations": {
+        "title": "Bulk Delete Notes",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "costUsageTool",
@@ -4440,7 +4531,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "costUsageTool"
+      "legacyId": "costUsageTool",
+      "annotations": {
+        "title": "Cost & Usage",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "create_artifact_template",
@@ -6290,7 +6388,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "create_artifact_template"
+      "legacyId": "create_artifact_template",
+      "annotations": {
+        "title": "Create Artifact Template",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "createChannelTool",
@@ -6402,7 +6507,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "createChannelTool"
+      "legacyId": "createChannelTool",
+      "annotations": {
+        "title": "Create Channel",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "createScheduledActionTool",
@@ -6594,7 +6706,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "createScheduledActionTool"
+      "legacyId": "createScheduledActionTool",
+      "annotations": {
+        "title": "Create Scheduled Action",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "createSecureVaultTool",
@@ -6649,7 +6768,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "createSecureVaultTool"
+      "legacyId": "createSecureVaultTool",
+      "annotations": {
+        "title": "Create Secure Vault",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "createTableTool",
@@ -6757,7 +6883,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "createTableTool"
+      "legacyId": "createTableTool",
+      "annotations": {
+        "title": "Create Table",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "createWebhookTool",
@@ -6813,7 +6946,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "createWebhookTool"
+      "legacyId": "createWebhookTool",
+      "annotations": {
+        "title": "Create Webhook",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     },
     {
       "name": "declineShareTool",
@@ -6864,7 +7004,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "declineShareTool"
+      "legacyId": "declineShareTool",
+      "annotations": {
+        "title": "Decline Shared Note",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "deleteNoteTool",
@@ -6967,7 +7114,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "deleteNoteTool"
+      "legacyId": "deleteNoteTool",
+      "annotations": {
+        "title": "Delete Memory Note",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "deleteScheduledActionTool",
@@ -7013,7 +7167,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "deleteScheduledActionTool"
+      "legacyId": "deleteScheduledActionTool",
+      "annotations": {
+        "title": "Delete Scheduled Action",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "deleteTableRowsTool",
@@ -7100,7 +7261,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "deleteTableRowsTool"
+      "legacyId": "deleteTableRowsTool",
+      "annotations": {
+        "title": "Delete Table Rows",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "deleteVaultTool",
@@ -7159,7 +7327,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "deleteVaultTool"
+      "legacyId": "deleteVaultTool",
+      "annotations": {
+        "title": "Delete Vault",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "describeTableTool",
@@ -7230,7 +7405,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "describeTableTool"
+      "legacyId": "describeTableTool",
+      "annotations": {
+        "title": "Describe Table",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "dropTableTool",
@@ -7281,7 +7463,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "dropTableTool"
+      "legacyId": "dropTableTool",
+      "annotations": {
+        "title": "Drop Table",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "exportTool",
@@ -7369,7 +7558,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "exportTool"
+      "legacyId": "exportTool",
+      "annotations": {
+        "title": "Export Vault",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "factHistoryTool",
@@ -7528,7 +7724,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "factHistoryTool"
+      "legacyId": "factHistoryTool",
+      "annotations": {
+        "title": "Fact History",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "file_asset_get",
@@ -7725,7 +7928,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "file_asset_get"
+      "legacyId": "file_asset_get",
+      "annotations": {
+        "title": "Get File Asset",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "file_asset_save",
@@ -7967,7 +8177,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "file_asset_save"
+      "legacyId": "file_asset_save",
+      "annotations": {
+        "title": "Save File Asset",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "get_artifact_template",
@@ -9297,7 +9514,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "get_artifact_template"
+      "legacyId": "get_artifact_template",
+      "annotations": {
+        "title": "Get Artifact Template",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "get_scheduled_run",
@@ -9659,7 +9883,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "get_scheduled_run"
+      "legacyId": "get_scheduled_run",
+      "annotations": {
+        "title": "Get Scheduled Run",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "getChatLinkTool",
@@ -9706,7 +9937,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "getChatLinkTool"
+      "legacyId": "getChatLinkTool",
+      "annotations": {
+        "title": "Get Chat Link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "getMessageNoteTool",
@@ -9788,7 +10026,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "getMessageNoteTool"
+      "legacyId": "getMessageNoteTool",
+      "annotations": {
+        "title": "Get Message Attachment",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "getScheduleLinkTool",
@@ -9839,7 +10084,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "getScheduleLinkTool"
+      "legacyId": "getScheduleLinkTool",
+      "annotations": {
+        "title": "Get Schedule Link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "getScheduleStatusTool",
@@ -9907,7 +10159,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "getScheduleStatusTool"
+      "legacyId": "getScheduleStatusTool",
+      "annotations": {
+        "title": "Get Schedule Status",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "getTool",
@@ -10132,7 +10391,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "getTool"
+      "legacyId": "getTool",
+      "annotations": {
+        "title": "Get Memory Note",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "getVaultAppLinkTool",
@@ -10179,7 +10445,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "getVaultAppLinkTool"
+      "legacyId": "getVaultAppLinkTool",
+      "annotations": {
+        "title": "Get Vault App Link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "getVaultContractTool",
@@ -10228,7 +10501,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "getVaultContractTool"
+      "legacyId": "getVaultContractTool",
+      "annotations": {
+        "title": "Get Vault Contract",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "graphPathTool",
@@ -10352,7 +10632,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "graphPathTool"
+      "legacyId": "graphPathTool",
+      "annotations": {
+        "title": "Memory Graph Path",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "graphUniverseTool",
@@ -10482,7 +10769,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "graphUniverseTool"
+      "legacyId": "graphUniverseTool",
+      "annotations": {
+        "title": "Memory Graph Universe",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "image_asset_delete",
@@ -10566,7 +10860,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_asset_delete"
+      "legacyId": "image_asset_delete",
+      "annotations": {
+        "title": "Delete Image Asset",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "image_asset_get",
@@ -10763,7 +11064,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_asset_get"
+      "legacyId": "image_asset_get",
+      "annotations": {
+        "title": "Get Image Asset",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "image_asset_list",
@@ -11010,7 +11318,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_asset_list"
+      "legacyId": "image_asset_list",
+      "annotations": {
+        "title": "List Image Assets",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "image_asset_move",
@@ -11225,7 +11540,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_asset_move"
+      "legacyId": "image_asset_move",
+      "annotations": {
+        "title": "Move Image Asset",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "image_asset_save",
@@ -11494,7 +11816,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_asset_save"
+      "legacyId": "image_asset_save",
+      "annotations": {
+        "title": "Save Image Asset",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "image_asset_search",
@@ -11790,7 +12119,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_asset_search"
+      "legacyId": "image_asset_search",
+      "annotations": {
+        "title": "Search Image Assets",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "image_folder_create",
@@ -11906,7 +12242,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_folder_create"
+      "legacyId": "image_folder_create",
+      "annotations": {
+        "title": "Create Image Folder",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "image_folder_list",
@@ -12019,7 +12362,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_folder_list"
+      "legacyId": "image_folder_list",
+      "annotations": {
+        "title": "List Image Folders",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "image_project_create",
@@ -12123,7 +12473,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_project_create"
+      "legacyId": "image_project_create",
+      "annotations": {
+        "title": "Create Image Project",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "image_project_list",
@@ -12225,7 +12582,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "image_project_list"
+      "legacyId": "image_project_list",
+      "annotations": {
+        "title": "List Image Projects",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "inboxSettingsTool",
@@ -12275,7 +12639,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "inboxSettingsTool"
+      "legacyId": "inboxSettingsTool",
+      "annotations": {
+        "title": "Inbox Settings",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "insertTableRowsTool",
@@ -12337,7 +12708,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "insertTableRowsTool"
+      "legacyId": "insertTableRowsTool",
+      "annotations": {
+        "title": "Insert Table Rows",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "inviteAccountTool",
@@ -12458,7 +12836,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "inviteAccountTool"
+      "legacyId": "inviteAccountTool",
+      "annotations": {
+        "title": "Invite To Account",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "issueKeyTool",
@@ -12619,7 +13004,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "issueKeyTool"
+      "legacyId": "issueKeyTool",
+      "annotations": {
+        "title": "Issue API Key",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "libraryIngestTool",
@@ -12743,7 +13135,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "libraryIngestTool"
+      "legacyId": "libraryIngestTool",
+      "annotations": {
+        "title": "Library Ingest",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "list_artifact_templates",
@@ -14731,7 +15130,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "list_artifact_templates"
+      "legacyId": "list_artifact_templates",
+      "annotations": {
+        "title": "List Artifact Templates",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "list_scheduled_runs",
@@ -15150,7 +15556,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "list_scheduled_runs"
+      "legacyId": "list_scheduled_runs",
+      "annotations": {
+        "title": "List Scheduled Runs",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listApprovedSendersTool",
@@ -15200,7 +15613,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listApprovedSendersTool"
+      "legacyId": "listApprovedSendersTool",
+      "annotations": {
+        "title": "List Approved Senders",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listChannelMembersTool",
@@ -15316,7 +15736,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listChannelMembersTool"
+      "legacyId": "listChannelMembersTool",
+      "annotations": {
+        "title": "List Channel Members",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listChannelMessagesTool",
@@ -15482,7 +15909,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listChannelMessagesTool"
+      "legacyId": "listChannelMessagesTool",
+      "annotations": {
+        "title": "List Channel Messages",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listKeysTool",
@@ -15590,7 +16024,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listKeysTool"
+      "legacyId": "listKeysTool",
+      "annotations": {
+        "title": "List API Keys",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listScheduledActionRunsTool",
@@ -15710,7 +16151,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listScheduledActionRunsTool"
+      "legacyId": "listScheduledActionRunsTool",
+      "annotations": {
+        "title": "List Scheduled Action Runs",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listScheduledActionsTool",
@@ -15869,7 +16317,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listScheduledActionsTool"
+      "legacyId": "listScheduledActionsTool",
+      "annotations": {
+        "title": "List Scheduled Actions",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listSharedWithMeTool",
@@ -15971,7 +16426,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listSharedWithMeTool"
+      "legacyId": "listSharedWithMeTool",
+      "annotations": {
+        "title": "List Shared With Me",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listTablesTool",
@@ -16017,7 +16479,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listTablesTool"
+      "legacyId": "listTablesTool",
+      "annotations": {
+        "title": "List Tables",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listTagsTool",
@@ -16109,7 +16578,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listTagsTool"
+      "legacyId": "listTagsTool",
+      "annotations": {
+        "title": "List Memory Tags",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listTool",
@@ -16220,7 +16696,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listTool"
+      "legacyId": "listTool",
+      "annotations": {
+        "title": "List Memory Notes",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listVaultsTool",
@@ -16322,7 +16805,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listVaultsTool"
+      "legacyId": "listVaultsTool",
+      "annotations": {
+        "title": "List Vaults",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "listWebhooksTool",
@@ -16389,7 +16879,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "listWebhooksTool"
+      "legacyId": "listWebhooksTool",
+      "annotations": {
+        "title": "List Webhooks",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "mark_scheduled_run_opened",
@@ -16751,7 +17248,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "mark_scheduled_run_opened"
+      "legacyId": "mark_scheduled_run_opened",
+      "annotations": {
+        "title": "Mark Scheduled Run Opened",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "mark_scheduled_run_unopened",
@@ -17113,7 +17617,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "mark_scheduled_run_unopened"
+      "legacyId": "mark_scheduled_run_unopened",
+      "annotations": {
+        "title": "Mark Scheduled Run Unopened",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "memoryCaptureTool",
@@ -17444,7 +17955,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "memoryCaptureTool"
+      "legacyId": "memoryCaptureTool",
+      "annotations": {
+        "title": "Capture Governed Memory",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "memoryQuestionsTool",
@@ -17524,7 +18042,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "memoryQuestionsTool"
+      "legacyId": "memoryQuestionsTool",
+      "annotations": {
+        "title": "Daily Memory Questions",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     },
     {
       "name": "mergeTagsTool",
@@ -17591,7 +18116,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "mergeTagsTool"
+      "legacyId": "mergeTagsTool",
+      "annotations": {
+        "title": "Merge Memory Tags",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "myMentionsTool",
@@ -17676,7 +18208,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "myMentionsTool"
+      "legacyId": "myMentionsTool",
+      "annotations": {
+        "title": "My Mentions",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "noteBacklinksTool",
@@ -17787,7 +18326,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "noteBacklinksTool"
+      "legacyId": "noteBacklinksTool",
+      "annotations": {
+        "title": "Memory Backlinks",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "noteInboxTool",
@@ -17889,7 +18435,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "noteInboxTool"
+      "legacyId": "noteInboxTool",
+      "annotations": {
+        "title": "Note Inbox",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "pauseScheduledActionTool",
@@ -17932,7 +18485,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "pauseScheduledActionTool"
+      "legacyId": "pauseScheduledActionTool",
+      "annotations": {
+        "title": "Pause Scheduled Action",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "pollChannelTool",
@@ -18093,7 +18653,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "pollChannelTool"
+      "legacyId": "pollChannelTool",
+      "annotations": {
+        "title": "Poll Channel",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "postMessageTool",
@@ -18192,7 +18759,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "postMessageTool"
+      "legacyId": "postMessageTool",
+      "annotations": {
+        "title": "Post Message",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     },
     {
       "name": "prepareMemoryWriteTool",
@@ -18307,7 +18881,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "prepareMemoryWriteTool"
+      "legacyId": "prepareMemoryWriteTool",
+      "annotations": {
+        "title": "Prepare Memory Write",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "proposeScheduledActionTool",
@@ -18376,7 +18957,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "proposeScheduledActionTool"
+      "legacyId": "proposeScheduledActionTool",
+      "annotations": {
+        "title": "Propose Scheduled Action",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     },
     {
       "name": "provisionDefaultsTool",
@@ -18467,7 +19055,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "provisionDefaultsTool"
+      "legacyId": "provisionDefaultsTool",
+      "annotations": {
+        "title": "Provision Default Vaults",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "putTool",
@@ -18720,7 +19315,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "putTool"
+      "legacyId": "putTool",
+      "annotations": {
+        "title": "Put Memory Note",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "queryTableTool",
@@ -18849,7 +19451,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "queryTableTool"
+      "legacyId": "queryTableTool",
+      "annotations": {
+        "title": "Query Table",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "reactMessageTool",
@@ -18924,7 +19533,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "reactMessageTool"
+      "legacyId": "reactMessageTool",
+      "annotations": {
+        "title": "React To Message",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "recordFactTool",
@@ -19133,7 +19749,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "recordFactTool"
+      "legacyId": "recordFactTool",
+      "annotations": {
+        "title": "Record Fact",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "removeApprovedSenderTool",
@@ -19188,7 +19811,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "removeApprovedSenderTool"
+      "legacyId": "removeApprovedSenderTool",
+      "annotations": {
+        "title": "Remove Approved Sender",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "removeChannelMemberTool",
@@ -19245,7 +19875,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "removeChannelMemberTool"
+      "legacyId": "removeChannelMemberTool",
+      "annotations": {
+        "title": "Remove Channel Member",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "replyMessageTool",
@@ -19350,7 +19987,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "replyMessageTool"
+      "legacyId": "replyMessageTool",
+      "annotations": {
+        "title": "Reply To Message",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     },
     {
       "name": "resolveTagsTool",
@@ -19517,7 +20161,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "resolveTagsTool"
+      "legacyId": "resolveTagsTool",
+      "annotations": {
+        "title": "Resolve Memory Tags",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "resumeScheduledActionTool",
@@ -19567,7 +20218,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "resumeScheduledActionTool"
+      "legacyId": "resumeScheduledActionTool",
+      "annotations": {
+        "title": "Resume Scheduled Action",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "revokeChatLinkTool",
@@ -19610,7 +20268,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "revokeChatLinkTool"
+      "legacyId": "revokeChatLinkTool",
+      "annotations": {
+        "title": "Revoke Chat Link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "revokeKeyTool",
@@ -19665,7 +20330,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "revokeKeyTool"
+      "legacyId": "revokeKeyTool",
+      "annotations": {
+        "title": "Revoke API Key",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "revokeScheduleLinkTool",
@@ -19708,7 +20380,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "revokeScheduleLinkTool"
+      "legacyId": "revokeScheduleLinkTool",
+      "annotations": {
+        "title": "Revoke Schedule Link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "revokeShareTool",
@@ -19759,7 +20438,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "revokeShareTool"
+      "legacyId": "revokeShareTool",
+      "annotations": {
+        "title": "Revoke Note Share",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "revokeVaultAppLinkTool",
@@ -19802,7 +20488,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "revokeVaultAppLinkTool"
+      "legacyId": "revokeVaultAppLinkTool",
+      "annotations": {
+        "title": "Revoke Vault App Link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "revokeWebhookTool",
@@ -19850,7 +20543,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "revokeWebhookTool"
+      "legacyId": "revokeWebhookTool",
+      "annotations": {
+        "title": "Revoke Webhook",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "routeMemoryTool",
@@ -19916,7 +20616,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "routeMemoryTool"
+      "legacyId": "routeMemoryTool",
+      "annotations": {
+        "title": "Route Memory",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "searchTool",
@@ -20227,7 +20934,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "searchTool"
+      "legacyId": "searchTool",
+      "annotations": {
+        "title": "Hybrid Smart RAG Memory Search",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "setAgentIdentityTool",
@@ -20277,7 +20991,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "setAgentIdentityTool"
+      "legacyId": "setAgentIdentityTool",
+      "annotations": {
+        "title": "Set Agent Identity",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "setScheduleDefaultsTool",
@@ -20331,7 +21052,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "setScheduleDefaultsTool"
+      "legacyId": "setScheduleDefaultsTool",
+      "annotations": {
+        "title": "Set Schedule Defaults",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "setScheduleEntitlementTool",
@@ -20390,7 +21118,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "setScheduleEntitlementTool"
+      "legacyId": "setScheduleEntitlementTool",
+      "annotations": {
+        "title": "Set Schedule Entitlement",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "setScopeTool",
@@ -20480,7 +21215,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "setScopeTool"
+      "legacyId": "setScopeTool",
+      "annotations": {
+        "title": "Set Key Scope / Plan",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "shareNoteTool",
@@ -20655,7 +21397,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "shareNoteTool"
+      "legacyId": "shareNoteTool",
+      "annotations": {
+        "title": "Share Note",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "shareVaultTool",
@@ -20745,7 +21494,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "shareVaultTool"
+      "legacyId": "shareVaultTool",
+      "annotations": {
+        "title": "Share Vault Entitlement",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "storageUsageTool",
@@ -20842,7 +21598,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "storageUsageTool"
+      "legacyId": "storageUsageTool",
+      "annotations": {
+        "title": "Storage Usage",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "suggestTool",
@@ -20927,7 +21690,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "suggestTool"
+      "legacyId": "suggestTool",
+      "annotations": {
+        "title": "Suggest Notes (typeahead)",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "swapVaultTool",
@@ -20982,7 +21752,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "swapVaultTool"
+      "legacyId": "swapVaultTool",
+      "annotations": {
+        "title": "Swap Active Vault",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "switchAccountTool",
@@ -21040,7 +21817,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "switchAccountTool"
+      "legacyId": "switchAccountTool",
+      "annotations": {
+        "title": "Switch Active Account",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "temporalRecallTool",
@@ -21174,7 +21958,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "temporalRecallTool"
+      "legacyId": "temporalRecallTool",
+      "annotations": {
+        "title": "Temporal Memory Recall",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "unlinkShareTool",
@@ -21225,7 +22016,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "unlinkShareTool"
+      "legacyId": "unlinkShareTool",
+      "annotations": {
+        "title": "Unlink Shared Note",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "update_artifact_template",
@@ -22927,7 +23725,14 @@
         ],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "update_artifact_template"
+      "legacyId": "update_artifact_template",
+      "annotations": {
+        "title": "Update Artifact Template",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
+      }
     },
     {
       "name": "updateScheduledActionTool",
@@ -23177,7 +23982,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "updateScheduledActionTool"
+      "legacyId": "updateScheduledActionTool",
+      "annotations": {
+        "title": "Update Scheduled Action",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "uploadTool",
@@ -23254,7 +24066,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "uploadTool"
+      "legacyId": "uploadTool",
+      "annotations": {
+        "title": "Upload Document to Vault",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
     },
     {
       "name": "upsertTagTool",
@@ -23346,7 +24165,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "upsertTagTool"
+      "legacyId": "upsertTagTool",
+      "annotations": {
+        "title": "Upsert Memory Tag",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "validateMemoryWriteTool",
@@ -23522,7 +24348,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "validateMemoryWriteTool"
+      "legacyId": "validateMemoryWriteTool",
+      "annotations": {
+        "title": "Validate Memory Write",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     },
     {
       "name": "videoAnalyzeStartTool",
@@ -23620,7 +24453,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "videoAnalyzeStartTool"
+      "legacyId": "videoAnalyzeStartTool",
+      "annotations": {
+        "title": "Start Video Breakdown",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
     },
     {
       "name": "videoAnalyzeStatusTool",
@@ -23698,7 +24538,14 @@
         "additionalProperties": false,
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
-      "legacyId": "videoAnalyzeStatusTool"
+      "legacyId": "videoAnalyzeStatusTool",
+      "annotations": {
+        "title": "Video Breakdown Status",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
     }
   ]
 }

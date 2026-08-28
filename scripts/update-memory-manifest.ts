@@ -11,11 +11,14 @@ interface ToolEntry {
   inputSchema: unknown
   outputSchema: unknown
   legacyId: string
+  annotations?: unknown
 }
 
 interface Manifest {
+  generatedAt?: string
   protocol: unknown
   generatedFrom: string
+  serverInfo?: { name?: string; version?: string }
   toolCount: number
   tools: ToolEntry[]
 }
@@ -25,6 +28,7 @@ interface LiveTool {
   description?: string
   inputSchema: unknown
   outputSchema?: unknown
+  annotations?: unknown
 }
 
 const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>> = {
@@ -129,6 +133,7 @@ async function main(): Promise<void> {
       inputSchema: tool.inputSchema,
       outputSchema: tool.outputSchema ?? prior?.outputSchema ?? { type: 'object', additionalProperties: true },
       legacyId: metadata.legacyId,
+      annotations: tool.annotations ?? prior?.annotations,
     }
   })
 
@@ -137,6 +142,7 @@ async function main(): Promise<void> {
     generatedFrom: localManifest
       ? `${localManifest.serverInfo?.name ?? 'mcp-memory'} ${localManifest.serverInfo?.version ?? 'unversioned'} ${localManifest.generatedFrom ?? 'complete build manifest'} (${tools.length} registered tools)`
       : `mcp-memory live tools/list (${tools.length} registered tools)`,
+    ...(localManifest?.serverInfo ? { serverInfo: localManifest.serverInfo } : {}),
     toolCount: tools.length,
     tools,
   }
