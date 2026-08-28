@@ -17,9 +17,11 @@ class AnalyticsUpdateEventDefinitionInput(BaseModel):
     metadata: Any | None = Field(None, alias="metadata", description="Replacement safe metadata; null clears it.")
     once_per_session: bool | None = Field(None, alias="oncePerSession", description="Replacement once-per-browser-session behavior.")
     enabled: bool | None = Field(None, alias="enabled", description="Replacement enabled state.")
+    idempotency_key: str = Field(..., alias="idempotencyKey", description="Retry key; reuse only for this exact mutation.")
 
 
 class AnalyticsUpdateEventDefinitionOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
+    definition: dict[str, Any] = Field(..., alias="definition", description="")

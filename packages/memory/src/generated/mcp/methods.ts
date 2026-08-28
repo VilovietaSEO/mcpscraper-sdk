@@ -115,6 +115,14 @@ import * as AnalyticsListCrmOutboundPolicies from './tools/analytics_list_crm_ou
 import * as AnalyticsListCrmOutboundReceipts from './tools/analytics_list_crm_outbound_receipts.js'
 import * as AnalyticsUpsertCrmOutboundPolicy from './tools/analytics_upsert_crm_outbound_policy.js'
 import * as AnalyticsListJourneys from './tools/analytics_list_journeys.js'
+import * as AnalyticsCommitCrmImport from './tools/analytics_commit_crm_import.js'
+import * as AnalyticsExportCrmCsv from './tools/analytics_export_crm_csv.js'
+import * as AnalyticsExportGoogleAdsCsv from './tools/analytics_export_google_ads_csv.js'
+import * as AnalyticsExportMetaTechnical from './tools/analytics_export_meta_technical.js'
+import * as AnalyticsPreviewCrmImport from './tools/analytics_preview_crm_import.js'
+import * as AnalyticsSaveActivationMapping from './tools/analytics_save_activation_mapping.js'
+import * as AnalyticsSetActivationAutomation from './tools/analytics_set_activation_automation.js'
+import * as AnalyticsVerifyLiveEventDefinition from './tools/analytics_verify_live_event_definition.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -275,6 +283,8 @@ import * as SearchSearchSerp from './tools/search_serp.js'
 import * as SearchSerpIdentityCreate from './tools/serp_identity_create.js'
 import * as SearchSerpIdentityDelete from './tools/serp_identity_delete.js'
 import * as SearchSerpIdentityList from './tools/serp_identity_list.js'
+import * as SearchHarvestPaaStart from './tools/harvest_paa_start.js'
+import * as SearchHarvestPaaStatus from './tools/harvest_paa_status.js'
 import * as ImagesAssetDelete from './tools/image_asset_delete.js'
 import * as ImagesAssetGet from './tools/image_asset_get.js'
 import * as ImagesAssetList from './tools/image_asset_list.js'
@@ -329,8 +339,6 @@ import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
 import * as VideoAnalyzeStatus from './tools/video-analyze-status.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
-import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
-import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -1975,18 +1983,58 @@ export const MCP_TOOL_BINDINGS = [
   },
   {
     "name": "harvest_paa_start",
-    "category": "other",
+    "category": "search",
     "methodName": "harvestPaaStart"
   },
   {
     "name": "harvest_paa_status",
-    "category": "other",
+    "category": "search",
     "methodName": "harvestPaaStatus"
   },
   {
     "name": "analytics_list_journeys",
     "category": "analytics",
     "methodName": "listJourneys"
+  },
+  {
+    "name": "analytics_commit_crm_import",
+    "category": "analytics",
+    "methodName": "commitCrmImport"
+  },
+  {
+    "name": "analytics_export_crm_csv",
+    "category": "analytics",
+    "methodName": "exportCrmCsv"
+  },
+  {
+    "name": "analytics_export_google_ads_csv",
+    "category": "analytics",
+    "methodName": "exportGoogleAdsCsv"
+  },
+  {
+    "name": "analytics_export_meta_technical",
+    "category": "analytics",
+    "methodName": "exportMetaTechnical"
+  },
+  {
+    "name": "analytics_preview_crm_import",
+    "category": "analytics",
+    "methodName": "previewCrmImport"
+  },
+  {
+    "name": "analytics_save_activation_mapping",
+    "category": "analytics",
+    "methodName": "saveActivationMapping"
+  },
+  {
+    "name": "analytics_set_activation_automation",
+    "category": "analytics",
+    "methodName": "setActivationAutomation"
+  },
+  {
+    "name": "analytics_verify_live_event_definition",
+    "category": "analytics",
+    "methodName": "verifyLiveEventDefinition"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2460,6 +2508,38 @@ export class AnalyticsNamespace {
 
   async listJourneys(input: AnalyticsListJourneys.Input): Promise<AnalyticsListJourneys.Output> {
     return this.callTool('analytics_list_journeys', input) as Promise<AnalyticsListJourneys.Output>
+  }
+
+  async commitCrmImport(input: AnalyticsCommitCrmImport.Input): Promise<AnalyticsCommitCrmImport.Output> {
+    return this.callTool('analytics_commit_crm_import', input) as Promise<AnalyticsCommitCrmImport.Output>
+  }
+
+  async exportCrmCsv(input: AnalyticsExportCrmCsv.Input): Promise<AnalyticsExportCrmCsv.Output> {
+    return this.callTool('analytics_export_crm_csv', input) as Promise<AnalyticsExportCrmCsv.Output>
+  }
+
+  async exportGoogleAdsCsv(input: AnalyticsExportGoogleAdsCsv.Input): Promise<AnalyticsExportGoogleAdsCsv.Output> {
+    return this.callTool('analytics_export_google_ads_csv', input) as Promise<AnalyticsExportGoogleAdsCsv.Output>
+  }
+
+  async exportMetaTechnical(input: AnalyticsExportMetaTechnical.Input): Promise<AnalyticsExportMetaTechnical.Output> {
+    return this.callTool('analytics_export_meta_technical', input) as Promise<AnalyticsExportMetaTechnical.Output>
+  }
+
+  async previewCrmImport(input: AnalyticsPreviewCrmImport.Input): Promise<AnalyticsPreviewCrmImport.Output> {
+    return this.callTool('analytics_preview_crm_import', input) as Promise<AnalyticsPreviewCrmImport.Output>
+  }
+
+  async saveActivationMapping(input: AnalyticsSaveActivationMapping.Input): Promise<AnalyticsSaveActivationMapping.Output> {
+    return this.callTool('analytics_save_activation_mapping', input) as Promise<AnalyticsSaveActivationMapping.Output>
+  }
+
+  async setActivationAutomation(input: AnalyticsSetActivationAutomation.Input): Promise<AnalyticsSetActivationAutomation.Output> {
+    return this.callTool('analytics_set_activation_automation', input) as Promise<AnalyticsSetActivationAutomation.Output>
+  }
+
+  async verifyLiveEventDefinition(input: AnalyticsVerifyLiveEventDefinition.Input): Promise<AnalyticsVerifyLiveEventDefinition.Output> {
+    return this.callTool('analytics_verify_live_event_definition', input) as Promise<AnalyticsVerifyLiveEventDefinition.Output>
   }
 }
 
@@ -3177,6 +3257,14 @@ export class SearchNamespace {
   async serpIdentityList(input: SearchSerpIdentityList.Input = {} as SearchSerpIdentityList.Input): Promise<SearchSerpIdentityList.Output> {
     return this.callTool('serp_identity_list', input) as Promise<SearchSerpIdentityList.Output>
   }
+
+  async harvestPaaStart(input: SearchHarvestPaaStart.Input): Promise<SearchHarvestPaaStart.Output> {
+    return this.callTool('harvest_paa_start', input) as Promise<SearchHarvestPaaStart.Output>
+  }
+
+  async harvestPaaStatus(input: SearchHarvestPaaStatus.Input): Promise<SearchHarvestPaaStatus.Output> {
+    return this.callTool('harvest_paa_status', input) as Promise<SearchHarvestPaaStatus.Output>
+  }
 }
 
 export class ImagesNamespace {
@@ -3451,18 +3539,6 @@ export class YoutubeNamespace {
   }
 }
 
-export class OtherNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async harvestPaaStart(input: OtherHarvestPaaStart.Input): Promise<OtherHarvestPaaStart.Output> {
-    return this.callTool('harvest_paa_start', input) as Promise<OtherHarvestPaaStart.Output>
-  }
-
-  async harvestPaaStatus(input: OtherHarvestPaaStatus.Input): Promise<OtherHarvestPaaStatus.Output> {
-    return this.callTool('harvest_paa_status', input) as Promise<OtherHarvestPaaStatus.Output>
-  }
-}
-
 export class GeneratedMcpToolsClient {
   readonly access: AccessNamespace
   readonly vaults: VaultsNamespace
@@ -3500,7 +3576,6 @@ export class GeneratedMcpToolsClient {
   readonly recall: RecallNamespace
   readonly video: VideoNamespace
   readonly youtube: YoutubeNamespace
-  readonly other: OtherNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.access = new AccessNamespace(callTool)
@@ -3539,6 +3614,5 @@ export class GeneratedMcpToolsClient {
     this.recall = new RecallNamespace(callTool)
     this.video = new VideoNamespace(callTool)
     this.youtube = new YoutubeNamespace(callTool)
-    this.other = new OtherNamespace(callTool)
   }
 }

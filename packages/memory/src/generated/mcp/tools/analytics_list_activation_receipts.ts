@@ -19,4 +19,10 @@ export interface Input {
 
 export interface Output {
   ok: boolean;
+  /**
+   * @maxItems 500
+   */
+  receipts: {
+    [k: string]: unknown;
+  }[];
 }

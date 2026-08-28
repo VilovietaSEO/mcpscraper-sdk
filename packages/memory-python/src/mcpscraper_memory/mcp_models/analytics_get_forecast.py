@@ -15,4 +15,3 @@ class AnalyticsGetForecastOutput(BaseModel):
 
     ok: bool = Field(..., alias="ok", description="")
     data: dict[str, Any] = Field(..., alias="data", description="")
-    filters: dict[str, Any] = Field(..., alias="filters", description="")

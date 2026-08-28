@@ -4,7 +4,7 @@ Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 331 unified MCP tools (230 MCP Scraper plus 101 mirrored Memory tools).
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 339 unified MCP tools (238 MCP Scraper plus 101 mirrored Memory tools).
 
 ## Install
 
@@ -41,7 +41,7 @@ mcpscraper tools call gmail_prepare_selection --args '{"connectionId":"gmail_con
 mcpscraper tools call gmail_import_status --args '{"ingestId":"opaque_ingest_id"}' --json
 ```
 
-`tools list` contains exactly 331 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 339 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 Keep a Gmail selection's ID, SHA-256, and count together. `gmail_import_status` only observes work; resume through `gmail_import_to_memory` with the original plan and idempotency key. Permanent deletion is a separate irreversible command requiring both `confirmPermanentDelete:true` and `--yes`; it is intentionally not shown as a copy/paste example.
 

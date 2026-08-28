@@ -14,5 +14,4 @@ class AnalyticsGetCoverageOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     ok: bool = Field(..., alias="ok", description="")
-    data: dict[str, Any] = Field(..., alias="data", description="")
-    filters: dict[str, Any] = Field(..., alias="filters", description="")
+    coverage: dict[str, Any] = Field(..., alias="coverage", description="")

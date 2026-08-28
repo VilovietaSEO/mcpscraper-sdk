@@ -15,4 +15,10 @@ export interface Input {
 
 export interface Output {
   ok: boolean;
+  /**
+   * @maxItems 500
+   */
+  definitions: {
+    [k: string]: unknown;
+  }[];
 }

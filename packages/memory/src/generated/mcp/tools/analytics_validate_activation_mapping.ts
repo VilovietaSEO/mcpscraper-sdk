@@ -16,7 +16,7 @@ export interface Input {
    */
   externalDatasetId: string;
   /**
-   * Confirmed X-Ray event to provider event mapping. Candidate-assisted events are ineligible.
+   * Confirmed X-Ray event to provider event mapping.
    */
   eventMapping: {
     [k: string]: string;

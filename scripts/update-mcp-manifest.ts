@@ -55,6 +55,8 @@ interface MemoryManifest {
 
 const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   harvest_paa: 'search',
+  harvest_paa_start: 'search',
+  harvest_paa_status: 'search',
   search_serp: 'search',
   serp_identity_create: 'search',
   serp_identity_delete: 'search',

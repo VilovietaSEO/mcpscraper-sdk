@@ -15,8 +15,15 @@ export interface Input {
    * Provider test ID required by Reddit Conversions API. It is sent only to that configured destination.
    */
   testId?: string;
+  /**
+   * Retry key; reuse only for this exact mutation.
+   */
+  idempotencyKey: string;
 }
 
 export interface Output {
   ok: boolean;
+  test: {
+    [k: string]: unknown;
+  };
 }
