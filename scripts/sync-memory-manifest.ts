@@ -17,6 +17,18 @@ interface RpcTool {
   inputSchema: unknown
 }
 
+async function readRpcPayload<T>(response: Response): Promise<T> {
+  const text = await response.text()
+  if (!response.headers.get('content-type')?.includes('text/event-stream')) return JSON.parse(text) as T
+  const data = text
+    .split(/\r?\n/)
+    .filter(line => line.startsWith('data:'))
+    .map(line => line.slice(5).trim())
+    .filter(Boolean)
+  if (!data.length) throw new Error('tools/list returned an empty event stream')
+  return JSON.parse(data.at(-1)!) as T
+}
+
 async function fetchLiveTools(apiKey: string): Promise<RpcTool[]> {
   const res = await fetch(ENDPOINT, {
     method: 'POST',
@@ -34,7 +46,7 @@ async function fetchLiveTools(apiKey: string): Promise<RpcTool[]> {
   if (!res.ok) {
     throw new Error(`tools/list failed: ${res.status} ${await res.text()}`)
   }
-  const body = (await res.json()) as { result?: { tools?: RpcTool[] }; error?: { message: string } }
+  const body = await readRpcPayload<{ result?: { tools?: RpcTool[] }; error?: { message: string } }>(res)
   if (body.error) throw new Error(`tools/list RPC error: ${body.error.message}`)
   return body.result?.tools ?? []
 }

@@ -1,8 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 331 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 116-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
-
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+Official TypeScript/JavaScript clients for all 346 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 121-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
@@ -54,7 +52,7 @@ try {
 
 ## Namespaces
 
-`MemoryClient` retains the direct 116-tool memory namespaces, including `client.files.fileAssetSave(...)` and `client.files.fileAssetGet(...)` for original attachment bytes. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 331 tools — 230 MCP Scraper tools plus 101 mirrored Memory tools — across its generated namespaces. Scheduled results and saved artifact templates are available under `client.schedule`; run IDs and cursors remain opaque, and `artifactSelection: { mode: 'none' }` does not disable Memory-note writing.
+The direct Memory contract contains 121 tools. `MemoryClient` preserves the established compatibility namespaces and adds the source-generated `assistant` context-packet namespace. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 346 unified tools. Scheduled results and saved artifact templates remain under `client.schedule`; run IDs and cursors are opaque, and `artifactSelection: { mode: 'none' }` does not disable Memory-note writing.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
@@ -70,4 +68,4 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 
 ## See also
 
-[Repo README](../../README.md) (including complete Gmail and reversible bulk examples) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 116 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 121 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)

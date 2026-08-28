@@ -5,7 +5,30 @@ import responses
 import requests
 
 from mcpscraper import ScraperClient, ScraperApiError
+from mcpscraper import AssistantApprovalDecision, AssistantPageRequest
 from mcpscraper._mcp_generated_client import MCP_TOOL_BINDINGS, MCP_TOOL_COUNT
+
+
+def test_assistant_types_preserve_pagination_and_idempotency_fields():
+    page = AssistantPageRequest(state="pending", cursor="cursor_2", page_size=25)
+    decision = AssistantApprovalDecision(
+        approval_ref="appr_123",
+        command_ref="cmd_123",
+        plan_digest="a" * 64,
+        context_version_ref="ctx_123",
+        action_digest="b" * 64,
+        argument_digest="c" * 64,
+        decision="approve",
+        decided_at="2026-08-28T00:00:00.000Z",
+        idempotency_key="approval:appr_123:v1",
+    )
+
+    assert page.model_dump(by_alias=True, exclude_none=True) == {
+        "state": "pending",
+        "cursor": "cursor_2",
+        "pageSize": 25,
+    }
+    assert decision.model_dump(by_alias=True, exclude_none=True)["idempotencyKey"] == "approval:appr_123:v1"
 
 
 @responses.activate
@@ -39,6 +62,87 @@ def test_harvest_paa_omits_serp_only():
 
     sent_body = json.loads(responses.calls[0].request.body)
     assert "serpOnly" not in sent_body
+
+
+@responses.activate
+def test_start_harvest_uses_durable_endpoint():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/harvest",
+        json={"job_id": "job_async_1", "status": "pending"},
+        status=202,
+    )
+    client = ScraperClient(api_key="sk_test")
+    result = client.start_harvest(query="roofers denver", serp_only=True)
+
+    sent_body = json.loads(responses.calls[0].request.body)
+    assert sent_body["serpOnly"] is True
+    assert result["job_id"] == "job_async_1"
+
+
+@responses.activate
+def test_extract_site_sends_idempotency_key():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/extract-site",
+        json={"jobId": "extract_1", "status": "pending", "statusUrl": "/extract-site/status/extract_1"},
+        status=202,
+    )
+    client = ScraperClient(api_key="sk_test")
+    client.extract_site(
+        "https://example.com",
+        background=True,
+        idempotency_key="foundation:crawl:1",
+    )
+
+    assert responses.calls[0].request.headers["Idempotency-Key"] == "foundation:crawl:1"
+
+
+@responses.activate
+def test_archive_read_uses_public_rest_route():
+    responses.add(
+        responses.POST,
+        "https://mcpscraper.dev/archive/read",
+        json={"mode": "read", "path": "pages.jsonl", "content": "{}", "nextOffset": None},
+        status=200,
+    )
+    client = ScraperClient(api_key="sk_test")
+    result = client.archive_read(
+        "https://example.com/bundle.zip",
+        path="pages.jsonl",
+    )
+
+    assert result["mode"] == "read"
+    assert result["content"] == "{}"
+
+    responses.replace(
+        responses.POST,
+        "https://mcpscraper.dev/archive/read",
+        json={
+            "mode": "batch",
+            "pathPrefix": "pages/",
+            "matchedEntryCount": 1,
+            "selectedEntryCount": 1,
+            "selectedTotalBytes": 5,
+            "entriesTruncated": False,
+            "files": [{"path": "pages/one.md", "content": "# One"}],
+        },
+        status=200,
+    )
+    batch = client.archive_read(
+        "https://example.com/bundle.zip",
+        pathPrefix="pages/",
+        maxEntries=100,
+        maxTotalBytes=5_000_000,
+    )
+    assert batch["mode"] == "batch"
+    assert batch["entriesTruncated"] is False
+    assert json.loads(responses.calls[1].request.body) == {
+        "url": "https://example.com/bundle.zip",
+        "pathPrefix": "pages/",
+        "maxEntries": 100,
+        "maxTotalBytes": 5_000_000,
+    }
 
 
 @responses.activate

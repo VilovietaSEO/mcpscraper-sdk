@@ -33,7 +33,11 @@ type SuccessBodyOf<K extends OperationId> = operations[K]['responses'] extends {
   200: { content: { 'application/json': infer B } }
 }
   ? B
-  : unknown
+  : operations[K]['responses'] extends {
+      202: { content: { 'application/json': infer B } }
+    }
+    ? B
+    : unknown
 
 export interface ScraperClientOptions {
   apiKey: string
@@ -50,6 +54,41 @@ export interface IdempotentRequestOptions {
 export interface GmailMutationOptions {
   idempotencyKey: string
 }
+
+export interface ScraperRequestOptions {
+  signal?: AbortSignal
+  timeoutMs?: number
+}
+
+export interface ExtractSiteOptions extends ScraperRequestOptions {
+  idempotencyKey?: string
+}
+
+type HarvestDefaultedKey =
+  | 'depth'
+  | 'maxQuestions'
+  | 'gl'
+  | 'hl'
+  | 'device'
+  | 'proxyMode'
+  | 'pages'
+  | 'serpOnly'
+  | 'debug'
+
+export type HarvestParams =
+  Omit<RequestBodyOf<'startHarvest'>, HarvestDefaultedKey>
+  & Partial<Pick<RequestBodyOf<'startHarvest'>, HarvestDefaultedKey>>
+
+type ArchiveReadDefaultedKey =
+  | 'offset'
+  | 'maxBytes'
+  | 'maxEntries'
+  | 'maxTotalBytes'
+  | 'depositToLibrary'
+
+export type ArchiveReadParams =
+  Omit<RequestBodyOf<'archiveRead'>, ArchiveReadDefaultedKey>
+  & Partial<Pick<RequestBodyOf<'archiveRead'>, ArchiveReadDefaultedKey>>
 
 type SerpIntelligenceCaptureDefaultedKey =
   | 'gl'
@@ -104,8 +143,9 @@ class Requester {
     path: string,
     body?: RequestBodyOf<K>,
     extraHeaders: Record<string, string> = {},
+    options: ScraperRequestOptions = {},
   ): Promise<SuccessBodyOf<K>> {
-    return (await this.callWithReceipt<K>(method, path, body, extraHeaders)).data
+    return (await this.callWithReceipt<K>(method, path, body, extraHeaders, options)).data
   }
 
   async callWithReceipt<K extends OperationId>(
@@ -113,16 +153,38 @@ class Requester {
     path: string,
     body?: RequestBodyOf<K>,
     extraHeaders: Record<string, string> = {},
+    options: ScraperRequestOptions = {},
   ): Promise<{ data: SuccessBodyOf<K>; headers: Headers }> {
-    const res = await this.request(`${this.baseUrl}${path}`, {
-      method,
-      headers: {
-        'x-api-key': this.apiKey,
-        ...(body !== undefined ? { 'content-type': 'application/json' } : {}),
-        ...extraHeaders,
-      },
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    })
+    const requestTimeoutMs = options.timeoutMs ?? this.timeoutMs
+    const timeoutSignal = AbortSignal.timeout(requestTimeoutMs)
+    const signal = options.signal
+      ? AbortSignal.any([options.signal, timeoutSignal])
+      : timeoutSignal
+    let res: Response
+    try {
+      res = await this.fetchImpl(`${this.baseUrl}${path}`, {
+        method,
+        headers: {
+          'x-api-key': this.apiKey,
+          ...(body !== undefined ? { 'content-type': 'application/json' } : {}),
+          ...extraHeaders,
+        },
+        body: body !== undefined ? JSON.stringify(body) : undefined,
+        signal,
+      })
+    } catch (error) {
+      if (error instanceof DOMException && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
+        if (options.signal?.aborted && !timeoutSignal.aborted) throw error
+        throw new ScraperApiError(408, {
+          error: 'mcp_request_timeout',
+          error_code: 'mcp_request_timeout',
+          error_type: 'timeout',
+          message: `The client stopped waiting after ${Math.round(requestTimeoutMs / 1000)}s. This does not prove server-side work stopped; use the same Idempotency-Key or poll a returned job before starting a new paid run.`,
+          retryable: true,
+        })
+      }
+      throw error
+    }
     const data = await res.json().catch(() => undefined)
     if (!res.ok) throw new ScraperApiError(res.status, data)
     return { data: data as SuccessBodyOf<K>, headers: res.headers }
@@ -219,8 +281,8 @@ class VideoNamespace {
 
 class MapsNamespace {
   constructor(private readonly r: Requester) {}
-  search(params: RequestBodyOf<'mapsSearch'>) {
-    return this.r.call<'mapsSearch'>('POST', '/maps/search', params)
+  search(params: RequestBodyOf<'mapsSearch'>, options: ScraperRequestOptions = {}) {
+    return this.r.call<'mapsSearch'>('POST', '/maps/search', params, {}, options)
   }
   place(params: RequestBodyOf<'mapsPlaceIntel'>) {
     return this.r.call<'mapsPlaceIntel'>('POST', '/maps/place', params)
@@ -431,32 +493,58 @@ export class ScraperClient {
     return result
   }
 
-  searchSerp(params: Omit<RequestBodyOf<'harvestSync'>, 'serpOnly'>) {
-    return this.r.call<'harvestSync'>('POST', '/harvest/sync', { ...params, serpOnly: true })
+  startHarvest(params: HarvestParams, options: ScraperRequestOptions = {}) {
+    return this.r.call<'startHarvest'>(
+      'POST',
+      '/harvest',
+      params as RequestBodyOf<'startHarvest'>,
+      {},
+      options,
+    )
   }
 
-  harvestPaa(params: RequestBodyOf<'harvestSync'>) {
-    return this.r.call<'harvestSync'>('POST', '/harvest/sync', params)
+  searchSerp(
+    params: Omit<RequestBodyOf<'harvestSync'>, 'serpOnly'>,
+    options: ScraperRequestOptions = {},
+  ) {
+    return this.r.call<'harvestSync'>('POST', '/harvest/sync', { ...params, serpOnly: true }, {}, options)
   }
 
-  extractUrl(params: RequestBodyOf<'extractUrl'>, options: IdempotentRequestOptions = {}) {
-    return this.r.call<'extractUrl'>('POST', '/extract-url', params, options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {})
+  harvestPaa(params: RequestBodyOf<'harvestSync'>, options: ScraperRequestOptions = {}) {
+    return this.r.call<'harvestSync'>('POST', '/harvest/sync', params, {}, options)
   }
 
-  mapSiteUrls(params: RequestBodyOf<'mapSiteUrls'>) {
-    return this.r.call<'mapSiteUrls'>('POST', '/map-urls', params)
+  extractUrl(params: RequestBodyOf<'extractUrl'>, options: ScraperRequestOptions = {}) {
+    return this.r.call<'extractUrl'>('POST', '/extract-url', params, {}, options)
   }
 
-  extractSite(params: RequestBodyOf<'extractSite'>, options: IdempotentRequestOptions = {}) {
-    return this.r.call<'extractSite'>('POST', '/extract-site', params, options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {})
+  mapSiteUrls(params: RequestBodyOf<'mapSiteUrls'>, options: ScraperRequestOptions = {}) {
+    return this.r.call<'mapSiteUrls'>('POST', '/map-urls', params, {}, options)
+  }
+
+  extractSite(params: RequestBodyOf<'extractSite'>, options: ExtractSiteOptions = {}) {
+    const headers: Record<string, string> = options.idempotencyKey === undefined
+      ? {}
+      : { 'Idempotency-Key': options.idempotencyKey }
+    return this.r.call<'extractSite'>('POST', '/extract-site', params, headers, options)
   }
 
   auditSite(params: RequestBodyOf<'extractSite'>, options: IdempotentRequestOptions = {}) {
     return this.extractSite(params, options)
   }
 
-  getExtractSiteStatus(id: string) {
-    return this.r.call<'getExtractSiteStatus'>('GET', `/extract-site/status/${encodeURIComponent(id)}`)
+  getExtractSiteStatus(id: string, options: ScraperRequestOptions = {}) {
+    return this.r.call<'getExtractSiteStatus'>('GET', `/extract-site/status/${encodeURIComponent(id)}`, undefined, {}, options)
+  }
+
+  archiveRead(params: ArchiveReadParams, options: ScraperRequestOptions = {}) {
+    return this.r.call<'archiveRead'>(
+      'POST',
+      '/archive/read',
+      params as RequestBodyOf<'archiveRead'>,
+      {},
+      options,
+    )
   }
 
   readExtractSiteExport(params: RequestBodyOf<'readExtractSiteExport'>) {
@@ -471,8 +559,8 @@ export class ScraperClient {
     return this.r.call<'listJobs'>('GET', '/jobs')
   }
 
-  getJob(id: string) {
-    return this.r.call<'getJob'>('GET', `/jobs/${encodeURIComponent(id)}`)
+  getJob(id: string, options: ScraperRequestOptions = {}) {
+    return this.r.call<'getJob'>('GET', `/jobs/${encodeURIComponent(id)}`, undefined, {}, options)
   }
 
   getHistory() {

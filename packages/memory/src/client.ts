@@ -17,6 +17,7 @@ import {
   VideoNamespace,
   WebhooksNamespace,
 } from './generated/methods.js'
+import { AssistantNamespace } from './generated/direct/methods.js'
 
 export interface MemoryClientOptions {
   apiKey: string
@@ -43,6 +44,7 @@ interface JsonRpcResponse {
 
 export class MemoryClient {
   readonly access: AccessNamespace
+  readonly assistant: AssistantNamespace
   readonly capture: CaptureNamespace
   readonly channels: ChannelsNamespace
   readonly facts: FactsNamespace
@@ -71,6 +73,7 @@ export class MemoryClient {
 
     const callTool = this.callTool.bind(this)
     this.access = new AccessNamespace(callTool)
+    this.assistant = new AssistantNamespace(callTool)
     this.capture = new CaptureNamespace(callTool)
     this.channels = new ChannelsNamespace(callTool)
     this.facts = new FactsNamespace(callTool)

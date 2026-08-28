@@ -1,0 +1,104 @@
+export interface Input {
+  /**
+   * Opaque pending approval reference being decided.
+   */
+  approvalRef: string;
+  /**
+   * Opaque command reference bound to the reviewed approval.
+   */
+  commandRef: string;
+  /**
+   * SHA-256 digest of the immutable reviewed plan.
+   */
+  planDigest: string;
+  /**
+   * Opaque immutable context-version reference used during review.
+   */
+  contextVersionRef: string;
+  /**
+   * SHA-256 digest of the exact reviewed action.
+   */
+  actionDigest: string;
+  /**
+   * SHA-256 digest of the exact reviewed action arguments.
+   */
+  argumentDigest: string;
+  /**
+   * SHA-256 digest of the reviewed audience, or null when no audience exists.
+   */
+  audienceDigest?: string | null;
+  /**
+   * Exact approved spend ceiling, or null when the action has no spend.
+   */
+  spendLimit?: {
+    /**
+     * Three-letter currency code for the approved spend ceiling.
+     */
+    currency: string;
+    /**
+     * Maximum approved spend in integer minor currency units.
+     */
+    amountMinor: number;
+  } | null;
+  /**
+   * Owner decision for this exact immutable approval.
+   */
+  decision: "approve" | "reject";
+  /**
+   * Typed confirmation required by the approval policy, or null when policy does not require one.
+   */
+  typedConfirmation?: string | null;
+  /**
+   * ISO 8601 timestamp when the owner made this decision.
+   */
+  decidedAt: string;
+  /**
+   * Stable retry identity for this exact approval decision.
+   */
+  idempotencyKey: string;
+}
+
+export interface Output {
+  ok: boolean;
+  data?: unknown;
+  receipt?: unknown;
+  resourceUri?: string;
+  truncated: boolean;
+  untrustedContent: boolean;
+  error?: {
+    code:
+      | "not_authenticated"
+      | "validation_failed"
+      | "idempotency_key_invalid"
+      | "request_too_large"
+      | "not_found"
+      | "registration_review_expired"
+      | "response_too_large"
+      | "service_not_configured"
+      | "invalid_caller"
+      | "invalid_request"
+      | "policy_denied"
+      | "approval_required"
+      | "assistant_service_failed"
+      | "assistant_request_cancelled"
+      | "assistant_request_failed"
+      | "assistant_resource_failed"
+      | "assistant_response_invalid"
+      | "assistant_response_rejected"
+      | "assistant_response_too_large"
+      | "mcp_http_error"
+      | "mcp_request_timeout"
+      | "response_lost"
+      | "service_unavailable"
+      | "idempotency_conflict"
+      | "idempotency_in_progress";
+    message: string;
+    retryClass:
+      | "never"
+      | "safe_read"
+      | "receipt_lookup"
+      | "reconcile_first"
+      | "same_identity_after_reconciliation"
+      | "new_review";
+  };
+}

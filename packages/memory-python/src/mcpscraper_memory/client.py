@@ -23,6 +23,7 @@ from ._generated_client import (
     VideoNamespace,
     WebhooksNamespace,
 )
+from ._direct_generated_client import AssistantNamespace
 
 DEFAULT_BASE_URL = "https://memory.mcpscraper.dev"
 
@@ -40,6 +41,7 @@ class MemoryClient:
         self._rpc_id = itertools.count(1)
 
         self.access = AccessNamespace(self._call_tool)
+        self.assistant = AssistantNamespace(self._call_tool)
         self.capture = CaptureNamespace(self._call_tool)
         self.channels = ChannelsNamespace(self._call_tool)
         self.facts = FactsNamespace(self._call_tool)

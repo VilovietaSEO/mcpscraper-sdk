@@ -351,6 +351,9 @@ class ScraperClient:
     def search_serp(self, query: str, **kwargs: Any) -> Any:
         return self._r.call("POST", "/harvest/sync", {"query": query, "serpOnly": True, **kwargs})
 
+    def start_harvest(self, query: str, **kwargs: Any) -> Any:
+        return self._r.call("POST", "/harvest", {"query": query, **kwargs})
+
     def harvest_paa(self, query: str, **kwargs: Any) -> Any:
         return self._r.call("POST", "/harvest/sync", {"query": query, **kwargs})
 
@@ -361,7 +364,13 @@ class ScraperClient:
     def map_site_urls(self, url: str, **kwargs: Any) -> Any:
         return self._r.call("POST", "/map-urls", {"url": url, **kwargs})
 
-    def extract_site(self, url: str, *, idempotency_key: str | None = None, **kwargs: Any) -> Any:
+    def extract_site(
+        self,
+        url: str,
+        *,
+        idempotency_key: str | None = None,
+        **kwargs: Any,
+    ) -> Any:
         headers = {} if idempotency_key is None else {"Idempotency-Key": idempotency_key}
         return self._r.call("POST", "/extract-site", {"url": url, **kwargs}, headers)
 
@@ -376,6 +385,9 @@ class ScraperClient:
 
     def read_extract_site_image(self, job_id: str, image_id: str) -> Any:
         return self._r.call("POST", "/extract-site/image", {"jobId": job_id, "imageId": image_id})
+
+    def archive_read(self, url: str, **kwargs: Any) -> Any:
+        return self._r.call("POST", "/archive/read", {"url": url, **kwargs})
 
     def list_jobs(self) -> Any:
         return self._r.call("GET", "/jobs")

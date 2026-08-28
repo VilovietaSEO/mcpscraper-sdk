@@ -28,6 +28,11 @@ interface LiveTool {
 }
 
 const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>> = {
+  assistant_context_packet_create: { category: 'assistant', legacyId: 'assistant_context_packet_create' },
+  assistant_context_packet_get: { category: 'assistant', legacyId: 'assistant_context_packet_get' },
+  assistant_context_packet_lifecycle: { category: 'assistant', legacyId: 'assistant_context_packet_lifecycle' },
+  assistant_context_packet_list: { category: 'assistant', legacyId: 'assistant_context_packet_list' },
+  assistant_context_packet_share_accept: { category: 'assistant', legacyId: 'assistant_context_packet_share_accept' },
   prepareMemoryWriteTool: { category: 'capture', legacyId: 'prepare-memory-write' },
   validateMemoryWriteTool: { category: 'capture', legacyId: 'validate-memory-write' },
   memoryCaptureTool: { category: 'capture', legacyId: 'memory-capture' },

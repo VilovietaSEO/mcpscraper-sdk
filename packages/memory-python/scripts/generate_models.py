@@ -7,11 +7,11 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[3]
 MANIFEST_PATH = REPO_ROOT / "contracts" / "memory.tools.json"
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-MODELS_DIR = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "models"
-CLIENT_GENERATED_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_generated_client.py"
+MODELS_DIR = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "direct_models"
+CLIENT_GENERATED_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_direct_generated_client.py"
 
 CATEGORIES = [
-    "access", "capture", "channels", "facts", "files", "graph", "library", "memory", "recall",
+    "access", "assistant", "capture", "channels", "facts", "graph", "library", "memory", "recall",
     "schedule", "storage", "tables", "tags", "vaults", "video", "webhooks",
 ]
 
@@ -25,9 +25,10 @@ def to_snake_case(value: str) -> str:
 
 def derive_method_name(legacy_id: str, category: str) -> str:
     for candidate in (category, category.rstrip("s")):
-        prefix = f"{candidate}-"
-        if legacy_id.startswith(prefix) and len(legacy_id) > len(prefix):
-            return to_snake_case(legacy_id[len(prefix):])
+        for separator in ("-", "_"):
+            prefix = f"{candidate}{separator}"
+            if legacy_id.startswith(prefix) and len(legacy_id) > len(prefix):
+                return to_snake_case(legacy_id[len(prefix):])
     return to_snake_case(legacy_id)
 
 
@@ -38,7 +39,7 @@ def to_pascal_case(value: str) -> str:
 
 def json_type_to_python(schema: dict, class_name_hint: str) -> str:
     if "enum" in schema:
-        literal_values = ", ".join(json.dumps(v) for v in schema["enum"])
+        literal_values = ", ".join(repr(v) for v in schema["enum"])
         return f"Literal[{literal_values}]"
     json_type = schema.get("type")
     if json_type == "string":
@@ -125,7 +126,7 @@ def main() -> None:
             used_names.add(method_name)
 
             import_lines.append(
-                f"from .models.{module_name} import {input_class}, {output_class}"
+                f"from .direct_models.{module_name} import {input_class}, {output_class}"
             )
             method_blocks.append(
                 f'    def {method_name}(self, **kwargs: Any) -> {output_class}:\n'
@@ -147,7 +148,7 @@ def main() -> None:
         + "\n\n".join(namespace_blocks)
         + "\n"
     )
-    CLIENT_GENERATED_PATH.write_text(generated)
+    CLIENT_GENERATED_PATH.write_text(generated.rstrip() + "\n")
 
     print(f"Generated {len(tools)} tool model pairs across {len(by_category)} categories.")
 

@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated 331-tool MCP surface — 230 MCP Scraper tools plus 101 mirrored Memory tools — with one typed snake_case method per tool. Its output models come from the versioned complete server build manifest; the compact live MCP `tools/list` response intentionally omits output schemas and is not a code-generation source:
+`client.tools` is the generated 346-tool MCP surface, including the governed personal-assistant namespace, with one typed snake_case method per tool:
 
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 
@@ -54,6 +54,12 @@ client.tools.search.search_serp(query="roof repair Denver")
 client.tools.web.archive_read(
     url="https://github.com/octocat/Hello-World/archive/refs/heads/master.zip",
     path="Hello-World-master/README",
+)
+client.tools.web.archive_read(
+    url="https://github.com/octocat/Hello-World/archive/refs/heads/master.zip",
+    path_prefix="Hello-World-master/",
+    max_entries=100,
+    max_total_bytes=2_000_000,
 )
 method = client.tools.editorial.reading_room_guide(focus="workflow")
 client.tools.memory.search(query="roofing warranty terms")
@@ -114,14 +120,14 @@ print(page["memory"])  # {"deposited": True, "vault": "competitors", "noteId": "
 
 ## Memory tools, using only this API key
 
-`client.memory_tools.call_tool(name, args)` dispatches to any of the 116 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
+`client.memory_tools.call_tool(name, args)` dispatches to any of the 121 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
 
 ```python
 hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing pages"})
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 331 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 346 unified MCP tools.
 
 ## Regenerating models
 

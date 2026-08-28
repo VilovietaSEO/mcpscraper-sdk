@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = join(__dirname, '..')
 const MANIFEST_PATH = join(REPO_ROOT, 'contracts/memory.tools.json')
-const OUT_DIR = join(REPO_ROOT, 'packages/memory/src/generated')
+const OUT_DIR = join(REPO_ROOT, 'packages/memory/src/generated/direct')
 const TOOLS_DIR = join(OUT_DIR, 'tools')
 
 interface ToolEntry {
@@ -38,9 +38,11 @@ function toCamelCase(input: string): string {
 function deriveMethodName(toolName: string, category: string): string {
   const candidates = [category, category.replace(/s$/, '')]
   for (const candidate of candidates) {
-    const prefix = `${candidate}-`
-    if (toolName.startsWith(prefix) && toolName.length > prefix.length) {
-      return toCamelCase(toolName.slice(prefix.length))
+    for (const separator of ['-', '_']) {
+      const prefix = `${candidate}${separator}`
+      if (toolName.startsWith(prefix) && toolName.length > prefix.length) {
+        return toCamelCase(toolName.slice(prefix.length))
+      }
     }
   }
   return toCamelCase(toolName)
