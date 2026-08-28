@@ -194,6 +194,79 @@ test('McpToolsClient typed methods call the unified MCP wire name', async () => 
   assert.deepEqual(result, { ok: true, results: [] })
 })
 
+test('McpToolsClient exposes separated X-Ray best-guess journeys through the generated analytics namespace', async () => {
+  let capturedBody: any
+  const response = {
+    ok: true,
+    journeyTier: 'best_guess',
+    confirmed: null,
+    bestGuess: {
+      journeyTier: 'candidate_assisted',
+      totalsAreSeparated: true,
+      items: [],
+      pageInfo: { nextCursor: null, hasNextPage: false },
+    },
+    totalsAreSeparated: false,
+  } as const
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return { status: 200, json: { jsonrpc: '2.0', id: capturedBody.id, result: { structuredContent: response } } }
+    }),
+  })
+
+  const result = await client.analytics.listJourneys({
+    siteId: '10000000-0000-4000-8000-000000000001',
+    journeyTier: 'best_guess',
+    limit: 25,
+  })
+  assert.equal(capturedBody.params.name, 'analytics_list_journeys')
+  assert.deepEqual(capturedBody.params.arguments, {
+    siteId: '10000000-0000-4000-8000-000000000001', journeyTier: 'best_guess', limit: 25,
+  })
+  assert.deepEqual(result, response)
+})
+
+test('McpToolsClient sends enhanced X-Ray journey windows and returns the complete confirmed projection', async () => {
+  let capturedBody: any
+  const response = {
+    ok: true,
+    data: {
+      subject: { kind: 'visitor', reference: 'xrv_example', personRef: null },
+      range: {
+        from: '2026-08-01T00:00:00.000Z', to: '2026-09-01T00:00:00.000Z',
+        fromInclusive: true, toExclusive: true,
+      },
+      journeyTier: 'confirmed', candidateAssisted: null,
+      summary: {
+        sessions: 1, pageviews: 2, events: 3, conversions: 0, revenue: null,
+        totalEngagementMs: null, averageEngagementMs: null,
+      },
+      commonPages: [], acquisition: [], eventBreakdown: [], sessions: [], items: [],
+      pageInfo: { nextCursor: null, hasNextPage: false },
+    },
+  } as const
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      capturedBody = JSON.parse(String(init.body))
+      return { status: 200, json: { jsonrpc: '2.0', id: capturedBody.id, result: { structuredContent: response } } }
+    }),
+  })
+
+  const result = await client.analytics.getVisitorJourney({
+    siteId: '10000000-0000-4000-8000-000000000001', reference: 'xrv_example',
+    from: '2026-08-01T00:00:00.000Z', to: '2026-09-01T00:00:00.000Z',
+  })
+  assert.equal(capturedBody.params.name, 'analytics_get_visitor_journey')
+  assert.deepEqual(capturedBody.params.arguments, {
+    siteId: '10000000-0000-4000-8000-000000000001', reference: 'xrv_example',
+    from: '2026-08-01T00:00:00.000Z', to: '2026-09-01T00:00:00.000Z',
+  })
+  assert.deepEqual(result, response)
+})
+
 test('McpToolsClient parses a hosted MCP SSE response', async () => {
   const client = new McpToolsClient({
     apiKey: 'sk_test',

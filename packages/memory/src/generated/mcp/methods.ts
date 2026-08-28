@@ -114,6 +114,7 @@ import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js
 import * as AnalyticsListCrmOutboundPolicies from './tools/analytics_list_crm_outbound_policies.js'
 import * as AnalyticsListCrmOutboundReceipts from './tools/analytics_list_crm_outbound_receipts.js'
 import * as AnalyticsUpsertCrmOutboundPolicy from './tools/analytics_upsert_crm_outbound_policy.js'
+import * as AnalyticsListJourneys from './tools/analytics_list_journeys.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -1981,6 +1982,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "harvest_paa_status",
     "category": "other",
     "methodName": "harvestPaaStatus"
+  },
+  {
+    "name": "analytics_list_journeys",
+    "category": "analytics",
+    "methodName": "listJourneys"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2450,6 +2456,10 @@ export class AnalyticsNamespace {
 
   async upsertCrmOutboundPolicy(input: AnalyticsUpsertCrmOutboundPolicy.Input): Promise<AnalyticsUpsertCrmOutboundPolicy.Output> {
     return this.callTool('analytics_upsert_crm_outbound_policy', input) as Promise<AnalyticsUpsertCrmOutboundPolicy.Output>
+  }
+
+  async listJourneys(input: AnalyticsListJourneys.Input): Promise<AnalyticsListJourneys.Output> {
+    return this.callTool('analytics_list_journeys', input) as Promise<AnalyticsListJourneys.Output>
   }
 }
 

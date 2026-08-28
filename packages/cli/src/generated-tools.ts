@@ -6468,7 +6468,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_person_journey",
     "category": "analytics",
     "title": "Get Person Journey",
-    "description": "Read one identified person timeline across sessions, immutable touches, calls, CRM stages, conversions, and ad-delivery receipts.",
+    "description": "Read CRM-oriented identified-person history: touches, calls, CRM stages, conversions, and delivery receipts. For analytics chronology use analytics_get_visitor_journey.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6545,7 +6545,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_session_timeline",
     "category": "analytics",
     "title": "Get Session Timeline",
-    "description": "Read one safe chronological session timeline by opaque Site-scoped reference.",
+    "description": "Read confirmed session summary, pages, events, acquisition, session rollups, and chronology. Use visitor journey for cross-session history.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6560,6 +6560,18 @@ export const MCP_TOOL_CATALOG = [
           "minLength": 8,
           "maxLength": 240,
           "description": "Opaque Site-scoped reference returned by an X-Ray read. Raw visitor, session, device, email, phone, IP, and identity hashes are never accepted."
+        },
+        "from": {
+          "description": "Inclusive ISO time. Defaults to 90 days before to; max window 366 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "to": {
+          "description": "Exclusive ISO time. Defaults to now; max window 366 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
         }
       },
       "required": [
@@ -6821,7 +6833,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_visitor_journey",
     "category": "analytics",
     "title": "Get Visitor Journey",
-    "description": "Read one safe visitor journey by opaque Site-scoped reference. Candidate evidence is labeled and never treated as confirmed identity.",
+    "description": "Read one confirmed cross-session visitor/person journey: summary, pages, events, acquisition, session rollups, and chronology. Candidate evidence is excluded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -6836,6 +6848,18 @@ export const MCP_TOOL_CATALOG = [
           "minLength": 8,
           "maxLength": 240,
           "description": "Opaque Site-scoped reference returned by an X-Ray read. Raw visitor, session, device, email, phone, IP, and identity hashes are never accepted."
+        },
+        "from": {
+          "description": "Inclusive ISO time. Defaults to 90 days before to; max window 366 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+        },
+        "to": {
+          "description": "Exclusive ISO time. Defaults to now; max window 366 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
         }
       },
       "required": [
@@ -7924,7 +7948,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_visitors",
     "category": "analytics",
     "title": "List X-Ray Visitors",
-    "description": "Read bounded visitor summaries using opaque references and separately labeled confirmed or candidate-assisted tiers.",
+    "description": "Read bounded visitor summaries with opaque references, visit counts, returning status, and confirmed conversion status.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -9959,6 +9983,12 @@ export const MCP_TOOL_CATALOG = [
           "format": "uuid",
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
           "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "External activation is confirmed-only. Best-guess and candidate-assisted journey evidence is schema-invalid.",
+          "type": "string",
+          "const": "confirmed"
         },
         "platform": {
           "type": "string",
@@ -26283,6 +26313,56 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Check Durable Google PAA Harvest",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_list_journeys",
+    "category": "analytics",
+    "title": "List X-Ray Journeys",
+    "description": "List confirmed cross-session paths, separately labeled best-guess paths, or both. Candidate-assisted evidence cannot drive CRM or advertising actions.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Analytics Site id returned by analytics_list_sites."
+        },
+        "journeyTier": {
+          "default": "confirmed",
+          "description": "Select confirmed journeys, separately labeled best-guess journeys, or both branches. Confirmed is the default; best-guess evidence can never drive CRM or advertising actions.",
+          "type": "string",
+          "enum": [
+            "confirmed",
+            "best_guess",
+            "all"
+          ]
+        },
+        "limit": {
+          "default": 50,
+          "description": "Maximum rows returned in each selected journey branch.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "cursor": {
+          "description": "Opaque keyset cursor returned in a selected branch pageInfo.nextCursor.",
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "List X-Ray Journeys",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
