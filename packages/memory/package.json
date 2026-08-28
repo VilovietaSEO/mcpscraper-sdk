@@ -15,7 +15,9 @@
     }
   },
   "files": [
-    "dist",
+    "dist/index.js",
+    "dist/index.cjs",
+    "dist/index.d.ts",
     "README.md"
   ],
   "scripts": {
