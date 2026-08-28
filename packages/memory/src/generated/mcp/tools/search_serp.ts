@@ -72,6 +72,10 @@ export interface Output {
     position: number;
     title: string;
     url: string;
+    rawUrl: string;
+    resolvedUrl: string | null;
+    linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
+    resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
     domain: string;
     snippet: string | null;
   }[];
@@ -85,6 +89,17 @@ export interface Output {
   aiOverview: {
     detected: boolean;
     text: string | null;
+    citations: {
+      text: string;
+      href: string;
+      rawUrl: string;
+      resolvedUrl: string | null;
+      linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
+      resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
+    }[];
+    expanded: boolean;
+    fullyExpanded: boolean;
+    sections: string[];
     shareUrl?: string | null;
   } | null;
   entityIds: {

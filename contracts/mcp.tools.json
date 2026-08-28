@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.78.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "ea235ebc567daaa62a80c2cbad9efffa15825a6b65fab117a4533718fa1354ae",
+  "generatedFrom": "mcp-scraper 0.79.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "f34bf70adf7fb3785db7faed5317645468250b9da041e01df91d012fa39a3856",
   "toolCount": 354,
   "tools": [
     {
@@ -47930,7 +47930,7 @@
     {
       "name": "harvest_paa",
       "title": "Google PAA + SERP Harvest",
-      "description": "Expand one Google People Also Ask SERP into questions, answers, sources, organic results, and entity IDs. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+      "description": "Expand one Google People Also Ask SERP into questions, answers, every preserved source, AI Overview evidence, ranking URLs, and entity IDs. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; a failed click or browser timeout is never reported as exhaustion. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
       "category": "search",
       "methodName": "harvestPaa",
       "inputSchema": {
@@ -48087,11 +48087,123 @@
               }
             ]
           },
+          "paaLifecycle": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "requestedQuestions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "questionsFound": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "targetStatus": {
+                    "type": "string",
+                    "enum": [
+                      "met",
+                      "not_met"
+                    ]
+                  },
+                  "discoveryStatus": {
+                    "type": "string",
+                    "enum": [
+                      "in_progress",
+                      "target_reached",
+                      "frontier_exhausted",
+                      "no_paa_observed",
+                      "interrupted",
+                      "recovery_exhausted"
+                    ]
+                  },
+                  "materialStatus": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial"
+                    ]
+                  },
+                  "completionReason": {
+                    "type": "string"
+                  },
+                  "automaticRetries": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "knownQuestions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "processedQuestions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "failedInteractions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "noGrowthConfirmations": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "requestedQuestions",
+                  "questionsFound",
+                  "targetStatus",
+                  "discoveryStatus",
+                  "materialStatus",
+                  "completionReason",
+                  "automaticRetries",
+                  "knownQuestions",
+                  "processedQuestions",
+                  "failedInteractions",
+                  "noGrowthConfirmations"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "questions": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
+                "questionId": {
+                  "type": "string"
+                },
+                "googleLinkId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "googleEvidenceId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
                 "question": {
                   "type": "string"
                 },
@@ -48104,6 +48216,77 @@
                       "type": "null"
                     }
                   ]
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "rawUrl": {
+                        "type": "string"
+                      },
+                      "resolvedUrl": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "linkType": {
+                        "type": "string",
+                        "enum": [
+                          "plain",
+                          "google_url_redirect",
+                          "google_goto_redirect"
+                        ]
+                      },
+                      "resolutionStatus": {
+                        "type": "string",
+                        "enum": [
+                          "not_needed",
+                          "resolved",
+                          "unresolved",
+                          "rejected"
+                        ]
+                      },
+                      "title": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "site": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "rawUrl",
+                      "resolvedUrl",
+                      "linkType",
+                      "resolutionStatus",
+                      "title",
+                      "site"
+                    ],
+                    "additionalProperties": false
+                  }
                 },
                 "sourceTitle": {
                   "anyOf": [
@@ -48124,13 +48307,28 @@
                       "type": "null"
                     }
                   ]
+                },
+                "sourceUrl": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 }
               },
               "required": [
+                "questionId",
+                "googleLinkId",
+                "googleEvidenceId",
                 "question",
                 "answer",
+                "sources",
                 "sourceTitle",
-                "sourceSite"
+                "sourceSite",
+                "sourceUrl"
               ],
               "additionalProperties": false
             }
@@ -48151,6 +48349,36 @@
                 "url": {
                   "type": "string"
                 },
+                "rawUrl": {
+                  "type": "string"
+                },
+                "resolvedUrl": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "linkType": {
+                  "type": "string",
+                  "enum": [
+                    "plain",
+                    "google_url_redirect",
+                    "google_goto_redirect"
+                  ]
+                },
+                "resolutionStatus": {
+                  "type": "string",
+                  "enum": [
+                    "not_needed",
+                    "resolved",
+                    "unresolved",
+                    "rejected"
+                  ]
+                },
                 "domain": {
                   "type": "string"
                 },
@@ -48169,6 +48397,10 @@
                 "position",
                 "title",
                 "url",
+                "rawUrl",
+                "resolvedUrl",
+                "linkType",
+                "resolutionStatus",
                 "domain",
                 "snippet"
               ],
@@ -48193,6 +48425,71 @@
                       }
                     ]
                   },
+                  "citations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "href": {
+                          "type": "string"
+                        },
+                        "rawUrl": {
+                          "type": "string"
+                        },
+                        "resolvedUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "linkType": {
+                          "type": "string",
+                          "enum": [
+                            "plain",
+                            "google_url_redirect",
+                            "google_goto_redirect"
+                          ]
+                        },
+                        "resolutionStatus": {
+                          "type": "string",
+                          "enum": [
+                            "not_needed",
+                            "resolved",
+                            "unresolved",
+                            "rejected"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "text",
+                        "href",
+                        "rawUrl",
+                        "resolvedUrl",
+                        "linkType",
+                        "resolutionStatus"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "expanded": {
+                    "type": "boolean"
+                  },
+                  "fullyExpanded": {
+                    "type": "boolean"
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "shareUrl": {
                     "anyOf": [
                       {
@@ -48206,7 +48503,11 @@
                 },
                 "required": [
                   "detected",
-                  "text"
+                  "text",
+                  "citations",
+                  "expanded",
+                  "fullyExpanded",
+                  "sections"
                 ],
                 "additionalProperties": false
               },
@@ -48322,6 +48623,7 @@
           "degradedResult",
           "degradationReasons",
           "retryRecommended",
+          "paaLifecycle",
           "questions",
           "organicResults",
           "aiOverview",
@@ -48343,7 +48645,7 @@
     {
       "name": "harvest_paa_start",
       "title": "Start Durable Google PAA Harvest",
-      "description": "Start a durable Google People Also Ask harvest and return its job receipt. Use for long work, including 60 questions. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
+      "description": "Start a durable Google People Also Ask harvest and return its job receipt. maxQuestions is the requested target count. The job automatically resumes an interrupted serverless worker under the same jobId, idempotency key, and billing hold while preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
       "category": "other",
       "methodName": "harvestPaaStart",
       "inputSchema": {
@@ -48500,7 +48802,7 @@
     {
       "name": "harvest_paa_status",
       "title": "Check Durable Google PAA Harvest",
-      "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, completeness, attempts, terminal rows, and billing. Polling never starts or bills another run.",
+      "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, automatic-recovery count, target status, discovery status, material completeness, attempts, terminal rows, and billing. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
       "category": "other",
       "methodName": "harvestPaaStatus",
       "inputSchema": {
@@ -48704,6 +49006,95 @@
                 "type": "integer",
                 "minimum": 0,
                 "maximum": 9007199254740991
+              },
+              "lifecycle": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "requestedQuestions": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "questionsFound": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "targetStatus": {
+                        "type": "string",
+                        "enum": [
+                          "met",
+                          "not_met"
+                        ]
+                      },
+                      "discoveryStatus": {
+                        "type": "string",
+                        "enum": [
+                          "in_progress",
+                          "target_reached",
+                          "frontier_exhausted",
+                          "no_paa_observed",
+                          "interrupted",
+                          "recovery_exhausted"
+                        ]
+                      },
+                      "materialStatus": {
+                        "type": "string",
+                        "enum": [
+                          "complete",
+                          "partial"
+                        ]
+                      },
+                      "completionReason": {
+                        "type": "string"
+                      },
+                      "automaticRetries": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "knownQuestions": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "processedQuestions": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "failedInteractions": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "noGrowthConfirmations": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "requestedQuestions",
+                      "questionsFound",
+                      "targetStatus",
+                      "discoveryStatus",
+                      "materialStatus",
+                      "completionReason",
+                      "automaticRetries",
+                      "knownQuestions",
+                      "processedQuestions",
+                      "failedInteractions",
+                      "noGrowthConfirmations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               }
             },
             "required": [
@@ -48712,7 +49103,8 @@
               "answeredQuestions",
               "sourcedQuestions",
               "missingAnswers",
-              "missingSources"
+              "missingSources",
+              "lifecycle"
             ],
             "additionalProperties": false
           },
@@ -48751,6 +49143,95 @@
                       }
                     ]
                   },
+                  "paaLifecycle": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "requestedQuestions": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "questionsFound": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "targetStatus": {
+                            "type": "string",
+                            "enum": [
+                              "met",
+                              "not_met"
+                            ]
+                          },
+                          "discoveryStatus": {
+                            "type": "string",
+                            "enum": [
+                              "in_progress",
+                              "target_reached",
+                              "frontier_exhausted",
+                              "no_paa_observed",
+                              "interrupted",
+                              "recovery_exhausted"
+                            ]
+                          },
+                          "materialStatus": {
+                            "type": "string",
+                            "enum": [
+                              "complete",
+                              "partial"
+                            ]
+                          },
+                          "completionReason": {
+                            "type": "string"
+                          },
+                          "automaticRetries": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "knownQuestions": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "processedQuestions": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "failedInteractions": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "noGrowthConfirmations": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "requestedQuestions",
+                          "questionsFound",
+                          "targetStatus",
+                          "discoveryStatus",
+                          "materialStatus",
+                          "completionReason",
+                          "automaticRetries",
+                          "knownQuestions",
+                          "processedQuestions",
+                          "failedInteractions",
+                          "noGrowthConfirmations"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
                   "questionCount": {
                     "type": "integer",
                     "minimum": 0,
@@ -48761,6 +49242,29 @@
                     "items": {
                       "type": "object",
                       "properties": {
+                        "questionId": {
+                          "type": "string"
+                        },
+                        "googleLinkId": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "googleEvidenceId": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
                         "question": {
                           "type": "string"
                         },
@@ -48773,6 +49277,77 @@
                               "type": "null"
                             }
                           ]
+                        },
+                        "sources": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "rawUrl": {
+                                "type": "string"
+                              },
+                              "resolvedUrl": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "linkType": {
+                                "type": "string",
+                                "enum": [
+                                  "plain",
+                                  "google_url_redirect",
+                                  "google_goto_redirect"
+                                ]
+                              },
+                              "resolutionStatus": {
+                                "type": "string",
+                                "enum": [
+                                  "not_needed",
+                                  "resolved",
+                                  "unresolved",
+                                  "rejected"
+                                ]
+                              },
+                              "title": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "site": {
+                                "anyOf": [
+                                  {
+                                    "type": "string"
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              }
+                            },
+                            "required": [
+                              "url",
+                              "rawUrl",
+                              "resolvedUrl",
+                              "linkType",
+                              "resolutionStatus",
+                              "title",
+                              "site"
+                            ],
+                            "additionalProperties": false
+                          }
                         },
                         "sourceTitle": {
                           "anyOf": [
@@ -48806,22 +49381,299 @@
                         }
                       },
                       "required": [
+                        "questionId",
+                        "googleLinkId",
+                        "googleEvidenceId",
                         "question",
                         "answer",
+                        "sources",
                         "sourceTitle",
                         "sourceSite",
                         "sourceUrl"
                       ],
                       "additionalProperties": false
                     }
+                  },
+                  "organicResults": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "rawUrl": {
+                          "type": "string"
+                        },
+                        "resolvedUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "linkType": {
+                          "type": "string",
+                          "enum": [
+                            "plain",
+                            "google_url_redirect",
+                            "google_goto_redirect"
+                          ]
+                        },
+                        "resolutionStatus": {
+                          "type": "string",
+                          "enum": [
+                            "not_needed",
+                            "resolved",
+                            "unresolved",
+                            "rejected"
+                          ]
+                        },
+                        "domain": {
+                          "type": "string"
+                        },
+                        "snippet": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "position",
+                        "title",
+                        "url",
+                        "rawUrl",
+                        "resolvedUrl",
+                        "linkType",
+                        "resolutionStatus",
+                        "domain",
+                        "snippet"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "aiOverview": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "detected": {
+                            "type": "boolean"
+                          },
+                          "text": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "citations": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "text": {
+                                  "type": "string"
+                                },
+                                "href": {
+                                  "type": "string"
+                                },
+                                "rawUrl": {
+                                  "type": "string"
+                                },
+                                "resolvedUrl": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "linkType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "plain",
+                                    "google_url_redirect",
+                                    "google_goto_redirect"
+                                  ]
+                                },
+                                "resolutionStatus": {
+                                  "type": "string",
+                                  "enum": [
+                                    "not_needed",
+                                    "resolved",
+                                    "unresolved",
+                                    "rejected"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "text",
+                                "href",
+                                "rawUrl",
+                                "resolvedUrl",
+                                "linkType",
+                                "resolutionStatus"
+                              ],
+                              "additionalProperties": false
+                            }
+                          },
+                          "expanded": {
+                            "type": "boolean"
+                          },
+                          "fullyExpanded": {
+                            "type": "boolean"
+                          },
+                          "sections": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "shareUrl": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "detected",
+                          "text",
+                          "citations",
+                          "expanded",
+                          "fullyExpanded",
+                          "sections"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "entityIds": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "entities": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                },
+                                "kgId": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "cid": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                },
+                                "gcid": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "kgId",
+                                "cid",
+                                "gcid"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "description": "Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility."
+                          },
+                          "kgIds": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "cids": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "gcids": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "entities",
+                          "kgIds",
+                          "cids",
+                          "gcids"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 },
                 "required": [
                   "completionStatus",
                   "resultQuality",
                   "retryRecommended",
+                  "paaLifecycle",
                   "questionCount",
-                  "questions"
+                  "questions",
+                  "organicResults",
+                  "aiOverview",
+                  "entityIds"
                 ],
                 "additionalProperties": false
               },
@@ -66753,6 +67605,36 @@
                 "url": {
                   "type": "string"
                 },
+                "rawUrl": {
+                  "type": "string"
+                },
+                "resolvedUrl": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "linkType": {
+                  "type": "string",
+                  "enum": [
+                    "plain",
+                    "google_url_redirect",
+                    "google_goto_redirect"
+                  ]
+                },
+                "resolutionStatus": {
+                  "type": "string",
+                  "enum": [
+                    "not_needed",
+                    "resolved",
+                    "unresolved",
+                    "rejected"
+                  ]
+                },
                 "domain": {
                   "type": "string"
                 },
@@ -66771,6 +67653,10 @@
                 "position",
                 "title",
                 "url",
+                "rawUrl",
+                "resolvedUrl",
+                "linkType",
+                "resolutionStatus",
                 "domain",
                 "snippet"
               ],
@@ -66849,6 +67735,71 @@
                       }
                     ]
                   },
+                  "citations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "href": {
+                          "type": "string"
+                        },
+                        "rawUrl": {
+                          "type": "string"
+                        },
+                        "resolvedUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "linkType": {
+                          "type": "string",
+                          "enum": [
+                            "plain",
+                            "google_url_redirect",
+                            "google_goto_redirect"
+                          ]
+                        },
+                        "resolutionStatus": {
+                          "type": "string",
+                          "enum": [
+                            "not_needed",
+                            "resolved",
+                            "unresolved",
+                            "rejected"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "text",
+                        "href",
+                        "rawUrl",
+                        "resolvedUrl",
+                        "linkType",
+                        "resolutionStatus"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "expanded": {
+                    "type": "boolean"
+                  },
+                  "fullyExpanded": {
+                    "type": "boolean"
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "shareUrl": {
                     "anyOf": [
                       {
@@ -66862,7 +67813,11 @@
                 },
                 "required": [
                   "detected",
-                  "text"
+                  "text",
+                  "citations",
+                  "expanded",
+                  "fullyExpanded",
+                  "sections"
                 ],
                 "additionalProperties": false
               },

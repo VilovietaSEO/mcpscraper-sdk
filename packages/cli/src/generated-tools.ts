@@ -20616,7 +20616,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa",
     "category": "search",
     "title": "Google PAA + SERP Harvest",
-    "description": "Expand one Google People Also Ask SERP into questions, answers, sources, organic results, and entity IDs. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+    "description": "Expand one Google People Also Ask SERP into questions, answers, every preserved source, AI Overview evidence, ranking URLs, and entity IDs. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; a failed click or browser timeout is never reported as exhaustion. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -20716,7 +20716,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_start",
     "category": "other",
     "title": "Start Durable Google PAA Harvest",
-    "description": "Start a durable Google People Also Ask harvest and return its job receipt. Use for long work, including 60 questions. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
+    "description": "Start a durable Google People Also Ask harvest and return its job receipt. maxQuestions is the requested target count. The job automatically resumes an interrupted serverless worker under the same jobId, idempotency key, and billing hold while preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -20817,7 +20817,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_status",
     "category": "other",
     "title": "Check Durable Google PAA Harvest",
-    "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, completeness, attempts, terminal rows, and billing. Polling never starts or bills another run.",
+    "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, automatic-recovery count, target status, discovery status, material completeness, attempts, terminal rows, and billing. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
     "inputSchema": {
       "type": "object",
       "properties": {
