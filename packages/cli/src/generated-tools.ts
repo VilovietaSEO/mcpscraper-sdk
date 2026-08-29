@@ -20817,7 +20817,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_status",
     "category": "other",
     "title": "Check Durable Google PAA Harvest",
-    "description": "Poll an owner-scoped harvest_paa_start job. Returns state, saved progress, automatic-recovery count, target status, discovery status, material completeness, attempts, terminal rows, and billing. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
+    "description": "Poll an owner-scoped harvest_paa_start job. Returns the job/operation/task correlation ID, saved progress, automatic-recovery count, target and discovery status, material completeness, recent per-control interaction outcomes with 0.7/1.0/1.4-second confirmation telemetry, provider-session-correlated attempts, terminal rows, and billing. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
     "inputSchema": {
       "type": "object",
       "properties": {

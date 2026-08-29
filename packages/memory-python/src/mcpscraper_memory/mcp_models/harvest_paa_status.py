@@ -12,6 +12,8 @@ class HarvestPaaStatusOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     job_id: str = Field(..., alias="jobId", description="")
+    operation_id: str = Field(..., alias="operationId", description="")
+    task_id: str = Field(..., alias="taskId", description="")
     status: Any = Field(..., alias="status", description="")
     replayed: bool = Field(..., alias="replayed", description="")
     progress: dict[str, Any] = Field(..., alias="progress", description="")

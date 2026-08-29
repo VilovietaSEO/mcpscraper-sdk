@@ -59,6 +59,8 @@ export interface Input {
 
 export interface Output {
   jobId: string;
+  operationId: string;
+  taskId: string;
   status: {
     state: "pending" | "running";
     terminal: false;

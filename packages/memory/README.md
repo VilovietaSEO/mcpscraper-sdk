@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 346 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 121-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official TypeScript/JavaScript clients for all 354 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 121-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
 
 These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
 
@@ -52,7 +52,7 @@ try {
 
 ## Namespaces
 
-The direct Memory contract contains 121 tools. `MemoryClient` preserves the established compatibility namespaces and adds the source-generated `assistant` context-packet namespace. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 346 unified tools. Scheduled results and saved artifact templates remain under `client.schedule`; run IDs and cursors are opaque, and `artifactSelection: { mode: 'none' }` does not disable Memory-note writing.
+The direct Memory contract contains 121 tools. `MemoryClient` preserves the established compatibility namespaces and adds the source-generated `assistant` context-packet namespace. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 354 unified tools. Scheduled results and saved artifact templates remain under `client.schedule`; run IDs and cursors are opaque, and `artifactSelection: { mode: 'none' }` does not disable Memory-note writing.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
