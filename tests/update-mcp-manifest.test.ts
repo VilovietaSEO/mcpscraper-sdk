@@ -77,6 +77,17 @@ test('one missing output schema fails before overwriting a stale prior schema', 
   assert.equal(await readFile(join(directory, 'contracts/mcp.tools.json'), 'utf8'), priorText)
 })
 
+test('one missing input schema fails before overwriting a stale prior schema', async () => {
+  const { directory, sourcePath, priorText } = await fixture({ type: 'object' })
+  const source = JSON.parse(await readFile(sourcePath, 'utf8'))
+  delete source.tools[0].inputSchema
+  await writeFile(sourcePath, JSON.stringify(source))
+  const result = run(directory, { MCP_TOOL_MANIFEST_PATH: sourcePath })
+  assert.notEqual(result.status, 0)
+  assert.match(result.stderr, /missing inputSchema/)
+  assert.equal(await readFile(join(directory, 'contracts/mcp.tools.json'), 'utf8'), priorText)
+})
+
 test('a live-only update fails even when an API key is present', async () => {
   const { directory, priorText } = await fixture(undefined)
   const result = run(directory, { MCP_TOOL_MANIFEST_PATH: undefined, MCP_SCRAPER_API_KEY: 'test-key' })

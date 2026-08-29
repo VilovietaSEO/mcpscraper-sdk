@@ -1,59 +1,18 @@
 export interface Input {
   /**
-   * Opaque pending approval reference being decided.
+   * Opaque verified recipient reference. Raw phone numbers are never accepted.
    */
-  approvalRef: string;
+  recipientRef: string;
   /**
-   * Opaque command reference bound to the reviewed approval.
+   * Opaque owned sender endpoint whose binding and registration must be eligible.
    */
-  commandRef: string;
+  senderEndpointRef: string;
   /**
-   * SHA-256 digest of the immutable reviewed plan.
+   * Explicit confirmation for one fixed transactional diagnostic message.
    */
-  planDigest: string;
+  confirmation: "SEND TEST";
   /**
-   * Opaque immutable context-version reference used during review.
-   */
-  contextVersionRef: string;
-  /**
-   * SHA-256 digest of the exact reviewed action.
-   */
-  actionDigest: string;
-  /**
-   * SHA-256 digest of the exact reviewed action arguments.
-   */
-  argumentDigest: string;
-  /**
-   * SHA-256 digest of the reviewed audience, or null when no audience exists.
-   */
-  audienceDigest?: string | null;
-  /**
-   * Exact approved spend ceiling, or null when the action has no spend.
-   */
-  spendLimit?: {
-    /**
-     * Three-letter currency code for the approved spend ceiling.
-     */
-    currency: string;
-    /**
-     * Maximum approved spend in integer minor currency units.
-     */
-    amountMinor: number;
-  } | null;
-  /**
-   * Owner decision for this exact immutable approval.
-   */
-  decision: "approve" | "reject";
-  /**
-   * Typed confirmation required by the approval policy, or null when policy does not require one.
-   */
-  typedConfirmation?: string | null;
-  /**
-   * ISO 8601 timestamp when the owner made this decision.
-   */
-  decidedAt: string;
-  /**
-   * Stable retry identity for this exact approval decision.
+   * Stable retry identity for this exact test. Reconcile an unknown outcome before retrying with the same key.
    */
   idempotencyKey: string;
 }
@@ -62,23 +21,31 @@ export type Output =
   | {
       ok: true;
       data: {
-        approvalRef: string;
-        commandRef: string;
-        cycleRef: string | null;
-        grantRef: string | null;
-        requestedActionDigest: string;
-        approvedArgumentDigest: string;
-        audienceDigest: string | null;
-        spendLimit: {
-          currency: string;
-          amountMinor: number;
-        } | null;
-        occurrenceRef: string | null;
-        state: "pending" | "approved" | "rejected" | "expired" | "consumed" | "cancelled";
-        requestedAt: string;
-        expiresAt: string;
-        decidedAt: string | null;
-        consumedAt: string | null;
+        executionRef: string;
+        state:
+          | "pending"
+          | "awaiting_inbound"
+          | "provider_started"
+          | "started_unknown"
+          | "failed_not_started"
+          | "blocked"
+          | "completed"
+          | "timed_out";
+        /**
+         * @maxItems 10
+         */
+        nextActions:
+          | []
+          | [string]
+          | [string, string]
+          | [string, string, string]
+          | [string, string, string, string]
+          | [string, string, string, string, string]
+          | [string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string, string, string, string];
       };
       receipt?: {
         receiptRef: string;

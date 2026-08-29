@@ -36,19 +36,20 @@ function toPascalCase(input: string): string {
     .join('')
 }
 
-const FALLBACK_INTERFACE = (name: string): string =>
-  `export interface ${name} {\n  [key: string]: unknown\n}\n`
-
-async function compileSchema(schema: unknown, exportName: string, toolName: string, fallbacks: string[]): Promise<string> {
+async function compileSchema(schema: unknown, exportName: string, toolName: string): Promise<string> {
+  let generated: string
   try {
-    return await compile(schema as Record<string, unknown>, exportName, {
+    generated = await compile(schema as Record<string, unknown>, exportName, {
       bannerComment: '',
       additionalProperties: false,
     })
-  } catch {
-    fallbacks.push(`${toolName} (${exportName})`)
-    return FALLBACK_INTERFACE(exportName)
+  } catch (error) {
+    throw new Error(`Schema compilation failed for ${toolName} (${exportName}); refusing an unknown/index-signature fallback`, { cause: error })
   }
+  if (toolName.startsWith('assistant_') && /\[key:\s*string\]\s*:\s*unknown|\[k:\s*string\]\s*:\s*unknown/.test(generated)) {
+    throw new Error(`Schema compilation produced an unknown index-signature fallback for ${toolName} (${exportName})`)
+  }
+  return generated
 }
 
 function inputIsOptional(schema: Record<string, unknown>): boolean {
@@ -157,7 +158,6 @@ async function main(): Promise<void> {
     byCategory.set(tool.category, bucket)
   }
 
-  const fallbacks: string[] = []
   const importLines: string[] = []
   const classBlocks: string[] = []
   const propertyLines: string[] = []
@@ -181,10 +181,10 @@ async function main(): Promise<void> {
         '  }',
       ].join('\n'))
 
-      const inputTs = await compileSchema(tool.inputSchema, 'Input', tool.name, fallbacks)
+      const inputTs = await compileSchema(tool.inputSchema, 'Input', tool.name)
       const outputTs = tool.outputSchemaProvided
-        ? await compileSchema(tool.outputSchema, 'Output', tool.name, fallbacks)
-        : 'export type Output = unknown\n'
+        ? await compileSchema(tool.outputSchema, 'Output', tool.name)
+        : (() => { throw new Error(`Tool ${tool.name} has no output schema; refusing unknown output typing`) })()
       await writeFile(join(TOOLS_DIR, `${moduleName}.ts`), `${inputTs}\n${outputTs}`)
     }
 
@@ -238,7 +238,6 @@ async function main(): Promise<void> {
   await writeFile(CURL_DOC_PATH, `${renderCurlDocs(manifest.tools).trimEnd()}\n`)
 
   console.log(`Generated ${manifest.tools.length} unified Node tool methods, CLI entries, and cURL catalog across ${byCategory.size} categories.`)
-  if (fallbacks.length) console.log(`Used fallback output typing for ${fallbacks.length} schemas.`)
 }
 
 main().catch(error => {

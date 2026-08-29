@@ -163,6 +163,8 @@ import * as AssistantApprovalsList from './tools/assistant_approvals_list.js'
 import * as AssistantBulkSend from './tools/assistant_bulk_send.js'
 import * as AssistantCommand from './tools/assistant_command.js'
 import * as AssistantConversationGet from './tools/assistant_conversation_get.js'
+import * as AssistantDeliveryTest from './tools/assistant_delivery_test.js'
+import * as AssistantDiagnosticsGet from './tools/assistant_diagnostics_get.js'
 import * as AssistantExecutionStatus from './tools/assistant_execution_status.js'
 import * as AssistantGrantCreate from './tools/assistant_grant_create.js'
 import * as AssistantGrantRevoke from './tools/assistant_grant_revoke.js'
@@ -955,6 +957,16 @@ export const MCP_TOOL_BINDINGS = [
     "name": "assistant_conversation_get",
     "category": "assistant",
     "methodName": "conversationGet"
+  },
+  {
+    "name": "assistant_delivery_test",
+    "category": "assistant",
+    "methodName": "deliveryTest"
+  },
+  {
+    "name": "assistant_diagnostics_get",
+    "category": "assistant",
+    "methodName": "diagnosticsGet"
   },
   {
     "name": "assistant_execution_status",
@@ -2802,6 +2814,14 @@ export class AssistantNamespace {
 
   async conversationGet(input: AssistantConversationGet.Input): Promise<AssistantConversationGet.Output> {
     return this.callTool('assistant_conversation_get', input) as Promise<AssistantConversationGet.Output>
+  }
+
+  async deliveryTest(input: AssistantDeliveryTest.Input): Promise<AssistantDeliveryTest.Output> {
+    return this.callTool('assistant_delivery_test', input) as Promise<AssistantDeliveryTest.Output>
+  }
+
+  async diagnosticsGet(input: AssistantDiagnosticsGet.Input = {} as AssistantDiagnosticsGet.Input): Promise<AssistantDiagnosticsGet.Output> {
+    return this.callTool('assistant_diagnostics_get', input) as Promise<AssistantDiagnosticsGet.Output>
   }
 
   async executionStatus(input: AssistantExecutionStatus.Input): Promise<AssistantExecutionStatus.Output> {

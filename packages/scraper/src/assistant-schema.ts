@@ -194,6 +194,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/assistant/consent/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read consent content */
+        get: operations["assistant_get_consent_content"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/assistant/consent/evidence": {
         parameters: {
             query?: never;
@@ -255,7 +272,8 @@ export interface paths {
         /** Read contacts */
         get: operations["assistant_get_contacts"];
         put?: never;
-        post?: never;
+        /** Create or submit contacts */
+        post: operations["assistant_post_contacts"];
         delete?: never;
         options?: never;
         head?: never;
@@ -278,6 +296,41 @@ export interface paths {
         head?: never;
         /** Update contacts contactRef */
         patch: operations["assistant_patch_contacts_by_contactRef"];
+        trace?: never;
+    };
+    "/api/v1/assistant/contacts/{contactRef}/delivery-endpoints": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit contacts contactRef delivery endpoints */
+        post: operations["assistant_post_contacts_by_contactRef_delivery_endpoints"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/contacts/{contactRef}/delivery-endpoints/{deliveryEndpointRef}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete or revoke contacts contactRef delivery endpoints deliveryEndpointRef */
+        delete: operations["assistant_delete_contacts_by_contactRef_delivery_endpoints_by_deliveryEndpointRef"];
+        options?: never;
+        head?: never;
+        /** Update contacts contactRef delivery endpoints deliveryEndpointRef */
+        patch: operations["assistant_patch_contacts_by_contactRef_delivery_endpoints_by_deliveryEndpointRef"];
         trace?: never;
     };
     "/api/v1/assistant/context-packets": {
@@ -367,6 +420,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/assistant/delivery-tests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit delivery tests */
+        post: operations["assistant_post_delivery_tests"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/diagnostics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read diagnostics */
+        get: operations["assistant_get_diagnostics"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/assistant/executions/{executionRef}": {
         parameters: {
             query?: never;
@@ -414,6 +501,142 @@ export interface paths {
         post?: never;
         /** Delete or revoke grants grantRef */
         delete: operations["assistant_delete_grants_by_grantRef"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/inbound-claims/block": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit inbound claims block */
+        post: operations["assistant_post_inbound_claims_block"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/inbound-claims/claim": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit inbound claims claim */
+        post: operations["assistant_post_inbound_claims_claim"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/inbound-claims/discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit inbound claims discard */
+        post: operations["assistant_post_inbound_claims_discard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/inbound-claims/inspect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit inbound claims inspect */
+        post: operations["assistant_post_inbound_claims_inspect"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/lifecycle/{lifecycleRef}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read lifecycle lifecycleRef */
+        get: operations["assistant_get_lifecycle_by_lifecycleRef"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/lifecycle/{lifecycleRef}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit lifecycle lifecycleRef cancel */
+        post: operations["assistant_post_lifecycle_by_lifecycleRef_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/lifecycle/{lifecycleRef}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit lifecycle lifecycleRef confirm */
+        post: operations["assistant_post_lifecycle_by_lifecycleRef_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/lifecycle/previews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit lifecycle previews */
+        post: operations["assistant_post_lifecycle_previews"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -657,6 +880,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/assistant/recipient-enrollment/challenges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit recipient enrollment challenges */
+        post: operations["assistant_post_recipient_enrollment_challenges"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/recipient-enrollment/challenges/{challengeRef}/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit recipient enrollment challenges challengeRef verify */
+        post: operations["assistant_post_recipient_enrollment_challenges_by_challengeRef_verify"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/assistant/reminders": {
         parameters: {
             query?: never;
@@ -730,6 +987,74 @@ export interface paths {
         patch: operations["assistant_patch_schedules_by_scheduleRef"];
         trace?: never;
     };
+    "/api/v1/assistant/schedules/{scheduleRef}/accepted": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read schedules scheduleRef accepted */
+        get: operations["assistant_get_schedules_by_scheduleRef_accepted"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/schedules/{scheduleRef}/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit schedules scheduleRef activate */
+        post: operations["assistant_post_schedules_by_scheduleRef_activate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/schedules/propose": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit schedules propose */
+        post: operations["assistant_post_schedules_propose"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assistant/schedules/readiness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create or submit schedules readiness */
+        post: operations["assistant_post_schedules_readiness"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/assistant/settings": {
         parameters: {
             query?: never;
@@ -753,9 +1078,43 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         OpaqueRef: string;
-        /** @description Bounded public owner input. Authority is derived from x-api-key authentication; provider credentials, raw provider identifiers, signed URLs, and owner IDs are rejected. */
-        AssistantPublicMutation: {
-            [key: string]: unknown;
+        AssistantPublicReceiptError: {
+            code: string;
+            message: string;
+            /** @enum {string} */
+            retryClass: "never" | "safe_read" | "same_identity_after_reconciliation" | "new_review";
+            traceRef?: components["schemas"]["OpaqueRef"];
+            details?: null | boolean | number | string | (null | boolean | number | string | (null | boolean | number | string | (null | boolean | number | string | (null | boolean | number | string)[] | {
+                [key: string]: null | boolean | number | string;
+            })[] | {
+                [key: string]: null | boolean | number | string | (null | boolean | number | string)[] | {
+                    [key: string]: null | boolean | number | string;
+                };
+            })[] | {
+                [key: string]: null | boolean | number | string | (null | boolean | number | string | (null | boolean | number | string)[] | {
+                    [key: string]: null | boolean | number | string;
+                })[] | {
+                    [key: string]: null | boolean | number | string | (null | boolean | number | string)[] | {
+                        [key: string]: null | boolean | number | string;
+                    };
+                };
+            })[] | {
+                [key: string]: null | boolean | number | string | (null | boolean | number | string | (null | boolean | number | string | (null | boolean | number | string)[] | {
+                    [key: string]: null | boolean | number | string;
+                })[] | {
+                    [key: string]: null | boolean | number | string | (null | boolean | number | string)[] | {
+                        [key: string]: null | boolean | number | string;
+                    };
+                })[] | {
+                    [key: string]: null | boolean | number | string | (null | boolean | number | string | (null | boolean | number | string)[] | {
+                        [key: string]: null | boolean | number | string;
+                    })[] | {
+                        [key: string]: null | boolean | number | string | (null | boolean | number | string)[] | {
+                            [key: string]: null | boolean | number | string;
+                        };
+                    };
+                };
+            };
         };
         PersonalAssistantComposeCommand: {
             assistantRef: string;
@@ -772,6 +1131,8 @@ export interface components {
             body: string;
             /** @enum {string} */
             messageClass: "administrative" | "transactional" | "conversational" | "campaign";
+            /** @default [] */
+            attachmentRefs: string[];
             approvalRef?: string;
         };
         PersonalAssistantBulkSendSubmission: {
@@ -805,11 +1166,40 @@ export interface components {
                 expiresAt: string;
             };
         };
-        AssistantEnvelope: {
-            data: unknown;
-            receipt?: {
-                [key: string]: unknown;
+        PublicReceipt: {
+            receiptRef: components["schemas"]["OpaqueRef"];
+            idempotencyKey: string;
+            requestDigest: string;
+            resultDigest: string | null;
+            /** @enum {string} */
+            state: "accepted" | "denied" | "pending_provider" | "confirmed" | "failed" | "unknown" | "reconciled" | "cancelled";
+            replayed: boolean;
+            /** Format: date-time */
+            occurredAt: string;
+            error: components["schemas"]["AssistantPublicReceiptError"] | null;
+        };
+        AssistantErrorEnvelope: {
+            error: {
+                /** @enum {string} */
+                code: "not_authenticated" | "validation_failed" | "idempotency_key_invalid" | "request_too_large" | "not_found" | "registration_review_expired" | "schedule_confirmation_conflict" | "response_too_large" | "service_not_configured" | "invalid_caller" | "invalid_request" | "policy_denied" | "approval_required" | "assistant_service_failed";
+                message: string;
+                /** @enum {string} */
+                retry_class: "never" | "safe_read" | "receipt_lookup" | "reconcile_first";
+                request_ref: string;
+                next_actions: string[];
+                details?: {
+                    fields: string[];
+                };
+                receipt?: components["schemas"]["PublicReceipt"];
             };
+        };
+        AssistantGetApprovalsData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetApprovalsEnvelope: {
+            data: components["schemas"]["AssistantGetApprovalsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
             meta: {
                 request_ref: string;
                 /** @constant */
@@ -819,18 +1209,2806 @@ export interface components {
                 next_actions: string[];
             };
         };
-        AssistantErrorEnvelope: {
-            error: {
-                /** @enum {string} */
-                code: "not_authenticated" | "validation_failed" | "idempotency_key_invalid" | "request_too_large" | "not_found" | "registration_review_expired" | "response_too_large" | "service_not_configured" | "invalid_caller" | "invalid_request" | "policy_denied" | "approval_required" | "assistant_service_failed";
-                message: string;
-                /** @enum {string} */
-                retry_class: "never" | "safe_read" | "receipt_lookup" | "reconcile_first";
+        AssistantPostApprovalsByApprovalRefDecisionData: {
+            approvalRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            /** Format: date-time */
+            decidedAt: string | null;
+        };
+        AssistantPostApprovalsByApprovalRefDecisionEnvelope: {
+            data: components["schemas"]["AssistantPostApprovalsByApprovalRefDecisionData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
                 request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
                 next_actions: string[];
-            } & {
-                [key: string]: unknown;
             };
+        };
+        AssistantPostApprovalsByApprovalRefDecisionRequest: {
+            commandRef?: components["schemas"]["OpaqueRef"];
+            planDigest?: string | null;
+            contextVersionRef?: components["schemas"]["OpaqueRef"];
+            actionDigest?: string | null;
+            argumentDigest?: string | null;
+            audienceDigest?: string | null;
+            spendLimit?: Record<string, never>;
+            decision?: string;
+            typedConfirmation?: string;
+            /** Format: date-time */
+            decidedAt?: string | null;
+        };
+        AssistantGetAssistantsData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetAssistantsEnvelope: {
+            data: components["schemas"]["AssistantGetAssistantsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostAssistantsData: {
+            assistantRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            displayName: string;
+            revision: number;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPostAssistantsEnvelope: {
+            data: components["schemas"]["AssistantPostAssistantsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostAssistantsRequest: {
+            displayName?: string;
+        };
+        AssistantGetAssistantsByAssistantRefData: {
+            assistantRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            displayName: string;
+            revision: number;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantGetAssistantsByAssistantRefEnvelope: {
+            data: components["schemas"]["AssistantGetAssistantsByAssistantRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchAssistantsByAssistantRefData: {
+            assistantRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            displayName: string;
+            revision: number;
+            /** Format: date-time */
+            createdAt: string | null;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPatchAssistantsByAssistantRefEnvelope: {
+            data: components["schemas"]["AssistantPatchAssistantsByAssistantRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchAssistantsByAssistantRefRequest: {
+            displayName?: string;
+            state?: string;
+        };
+        AssistantGetAssistantsByAssistantRefChannelsData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetAssistantsByAssistantRefChannelsEnvelope: {
+            data: components["schemas"]["AssistantGetAssistantsByAssistantRefChannelsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostAssistantsByAssistantRefChannelsData: {
+            bindingRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            channelEndpointRef: components["schemas"]["OpaqueRef"];
+            channel: string;
+            state: string;
+            revision: number;
+        };
+        AssistantPostAssistantsByAssistantRefChannelsEnvelope: {
+            data: components["schemas"]["AssistantPostAssistantsByAssistantRefChannelsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostAssistantsByAssistantRefChannelsRequest: {
+            endpointRef?: components["schemas"]["OpaqueRef"];
+        };
+        AssistantDeleteChannelBindingsByBindingRefData: {
+            bindingRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            channelEndpointRef: components["schemas"]["OpaqueRef"];
+            channel: string;
+            state: string;
+            revision: number;
+        };
+        AssistantDeleteChannelBindingsByBindingRefEnvelope: {
+            data: components["schemas"]["AssistantDeleteChannelBindingsByBindingRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantDeleteChannelBindingsByBindingRefRequest: {
+            reason?: string;
+        };
+        AssistantPostCommandsData: {
+            command: Record<string, never>;
+            intent: Record<string, never>;
+        };
+        AssistantPostCommandsEnvelope: {
+            data: components["schemas"]["AssistantPostCommandsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostCommandsRequest: {
+            assistantRef: string;
+            rawInstruction: string;
+            /** @default [] */
+            contextPacketRefs: string[];
+            /** @default [] */
+            attachmentRefs: string[];
+        };
+        AssistantGetCommandsByCommandRefReviewData: {
+            command: Record<string, never>;
+            intent: Record<string, never>;
+            receipts: unknown[];
+        };
+        AssistantGetCommandsByCommandRefReviewEnvelope: {
+            data: components["schemas"]["AssistantGetCommandsByCommandRefReviewData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostCommandsBulkSendData: {
+            command: Record<string, never>;
+            intent: Record<string, never>;
+        };
+        AssistantPostCommandsBulkSendEnvelope: {
+            data: components["schemas"]["AssistantPostCommandsBulkSendData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostCommandsBulkSendRequest: {
+            assistantRef: string;
+            contextVersionRef: string;
+            selectionRef: string;
+            audienceDigest: string;
+            messageRef: string;
+            maxRecipients: number;
+            approvalRef: string;
+            /** @enum {string} */
+            confirmation: "SEND";
+        };
+        AssistantPostCommandsMessageSendData: {
+            command: Record<string, never>;
+            intent: Record<string, never>;
+        };
+        AssistantPostCommandsMessageSendEnvelope: {
+            data: components["schemas"]["AssistantPostCommandsMessageSendData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostCommandsMessageSendRequest: {
+            assistantRef: string;
+            conversationRef: string;
+            contextVersionRef: string;
+            body: string;
+            /** @enum {string} */
+            messageClass: "administrative" | "transactional" | "conversational" | "campaign";
+            /** @default [] */
+            attachmentRefs: string[];
+            approvalRef?: string;
+        };
+        AssistantPostConsentByConsentRefWithdrawData: {
+            consentRef: components["schemas"]["OpaqueRef"];
+            contactRef: components["schemas"]["OpaqueRef"];
+            senderEndpointRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            messageClass: string;
+            subjectKey: string;
+            policy: string;
+            proofDigest: string | null;
+            /** Format: date-time */
+            capturedAt: string | null;
+            /** Format: date-time */
+            expiresAt: string | null;
+        };
+        AssistantPostConsentByConsentRefWithdrawEnvelope: {
+            data: components["schemas"]["AssistantPostConsentByConsentRefWithdrawData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostConsentByConsentRefWithdrawRequest: {
+            contactRef?: components["schemas"]["OpaqueRef"];
+            reason?: string;
+        };
+        AssistantGetConsentContentData: {
+            policyVersion: string;
+            disclosureDigest: string;
+            disclosureText: string;
+            /** @enum {string} */
+            optInKeyword: "START";
+            /** @enum {string} */
+            optOutKeyword: "STOP";
+            /** @enum {string} */
+            helpKeyword: "HELP";
+        };
+        AssistantGetConsentContentEnvelope: {
+            data: components["schemas"]["AssistantGetConsentContentData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostConsentEvidenceData: {
+            consentRef: components["schemas"]["OpaqueRef"];
+            contactRef: components["schemas"]["OpaqueRef"];
+            senderEndpointRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            messageClass: string;
+            subjectKey: string;
+            policy: string;
+            proofDigest: string | null;
+            /** Format: date-time */
+            capturedAt: string | null;
+            /** Format: date-time */
+            expiresAt: string | null;
+        };
+        AssistantPostConsentEvidenceEnvelope: {
+            data: components["schemas"]["AssistantPostConsentEvidenceData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostConsentEvidenceRequest: {
+            consentRef?: components["schemas"]["OpaqueRef"];
+            contactRef?: components["schemas"]["OpaqueRef"];
+            senderEndpointRef?: components["schemas"]["OpaqueRef"];
+            recipientHash?: string;
+            subjectKey?: string;
+            messageClass?: string;
+            transition?: string;
+            source?: string;
+            proofDigest?: string | null;
+            disclosureDigest?: string | null;
+            /** Format: date-time */
+            capturedAt?: string | null;
+            /** Format: date-time */
+            withdrawnAt?: string | null;
+            /** Format: date-time */
+            expiresAt?: string | null;
+        };
+        AssistantGetConsentRequirementsData: {
+            contactRef: components["schemas"]["OpaqueRef"];
+            senderEndpointRef: components["schemas"]["OpaqueRef"];
+            messageClass: string;
+            subjectKey: string;
+            required: boolean;
+            reasons: unknown[];
+        };
+        AssistantGetConsentRequirementsEnvelope: {
+            data: components["schemas"]["AssistantGetConsentRequirementsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantGetConsentStatusData: {
+            consentRef: components["schemas"]["OpaqueRef"];
+            contactRef: components["schemas"]["OpaqueRef"];
+            senderEndpointRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            messageClass: string;
+            subjectKey: string;
+            policy: string;
+            proofDigest: string | null;
+            /** Format: date-time */
+            capturedAt: string | null;
+            /** Format: date-time */
+            expiresAt: string | null;
+        };
+        AssistantGetConsentStatusEnvelope: {
+            data: components["schemas"]["AssistantGetConsentStatusData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantGetContactsData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetContactsEnvelope: {
+            data: components["schemas"]["AssistantGetContactsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostContactsData: {
+            contactRef: components["schemas"]["OpaqueRef"];
+            displayName: string;
+            relationship: string;
+            channels: unknown[];
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPostContactsEnvelope: {
+            data: components["schemas"]["AssistantPostContactsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostContactsRequest: {
+            displayName?: string;
+            relationship?: string;
+            phone?: string;
+            timezone?: string;
+        };
+        AssistantGetContactsByContactRefData: {
+            contactRef: components["schemas"]["OpaqueRef"];
+            displayName: string;
+            relationship: string;
+            channels: unknown[];
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantGetContactsByContactRefEnvelope: {
+            data: components["schemas"]["AssistantGetContactsByContactRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchContactsByContactRefData: {
+            contactRef: components["schemas"]["OpaqueRef"];
+            displayName: string;
+            relationship: string;
+            channels: unknown[];
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPatchContactsByContactRefEnvelope: {
+            data: components["schemas"]["AssistantPatchContactsByContactRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchContactsByContactRefRequest: {
+            displayName?: string;
+            relationship?: string;
+            timezone?: string;
+            attributes?: Record<string, never>;
+        };
+        AssistantPostContactsByContactRefDeliveryEndpointsData: {
+            contactRef: components["schemas"]["OpaqueRef"];
+            displayName: string;
+            relationship: string;
+            channels: unknown[];
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPostContactsByContactRefDeliveryEndpointsEnvelope: {
+            data: components["schemas"]["AssistantPostContactsByContactRefDeliveryEndpointsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostContactsByContactRefDeliveryEndpointsRequest: {
+            channel?: string;
+            phone?: string;
+        };
+        AssistantDeleteContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefData: {
+            contactRef: components["schemas"]["OpaqueRef"];
+            displayName: string;
+            relationship: string;
+            channels: unknown[];
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantDeleteContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefEnvelope: {
+            data: components["schemas"]["AssistantDeleteContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantDeleteContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefRequest: {
+            reasonCode?: string;
+        };
+        AssistantPatchContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefData: {
+            contactRef: components["schemas"]["OpaqueRef"];
+            displayName: string;
+            relationship: string;
+            channels: unknown[];
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPatchContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefEnvelope: {
+            data: components["schemas"]["AssistantPatchContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefRequest: {
+            phone?: string;
+        };
+        AssistantGetContextPacketsData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetContextPacketsEnvelope: {
+            data: components["schemas"]["AssistantGetContextPacketsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostContextPacketsData: {
+            packetRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            state: string;
+            manifestDigest: string | null;
+            label: string;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPostContextPacketsEnvelope: {
+            data: components["schemas"]["AssistantPostContextPacketsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostContextPacketsRequest: {
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            label?: string;
+            state?: string;
+        };
+        AssistantGetContextPacketsByPacketRefData: {
+            packetRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            state: string;
+            manifestDigest: string | null;
+            label: string;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantGetContextPacketsByPacketRefEnvelope: {
+            data: components["schemas"]["AssistantGetContextPacketsByPacketRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchContextPacketsByPacketRefData: {
+            packetRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            state: string;
+            manifestDigest: string | null;
+            label: string;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPatchContextPacketsByPacketRefEnvelope: {
+            data: components["schemas"]["AssistantPatchContextPacketsByPacketRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchContextPacketsByPacketRefRequest: {
+            label?: string;
+            state?: string;
+        };
+        AssistantGetConversationsData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetConversationsEnvelope: {
+            data: components["schemas"]["AssistantGetConversationsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantGetConversationsByConversationRefData: {
+            conversation: Record<string, never>;
+            messages: Record<string, never>;
+        };
+        AssistantGetConversationsByConversationRefEnvelope: {
+            data: components["schemas"]["AssistantGetConversationsByConversationRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostConversationsByConversationRefReadData: {
+            conversationRef: components["schemas"]["OpaqueRef"];
+            /** Format: date-time */
+            openedAt: string | null;
+        };
+        AssistantPostConversationsByConversationRefReadEnvelope: {
+            data: components["schemas"]["AssistantPostConversationsByConversationRefReadData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostConversationsByConversationRefReadRequest: Record<string, never>;
+        AssistantPostDeliveryTestsData: {
+            executionRef: string;
+            /** @enum {string} */
+            state: "pending" | "awaiting_inbound" | "provider_started" | "started_unknown" | "failed_not_started" | "blocked" | "completed" | "timed_out";
+            nextActions: string[];
+        };
+        AssistantPostDeliveryTestsEnvelope: {
+            data: components["schemas"]["AssistantPostDeliveryTestsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostDeliveryTestsRequest: {
+            recipientRef: string;
+            senderEndpointRef: string;
+            /** @enum {string} */
+            confirmation: "SEND TEST";
+        };
+        AssistantGetDiagnosticsData: {
+            /** Format: date-time */
+            checkedAt: string;
+            journeyState: {
+                /** @enum {string} */
+                schemaVersion: "assistant-journey-state.v1";
+                productAvailability: {
+                    /** @enum {string} */
+                    area: "productAvailability";
+                    /** @enum {string} */
+                    state: "available" | "degraded" | "unavailable";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                };
+                operatorActivation: {
+                    /** @enum {string} */
+                    area: "operatorActivation";
+                    /** @enum {string} */
+                    state: "ready" | "in_progress" | "blocked" | "failed" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                };
+                assistantAccount: {
+                    /** @enum {string} */
+                    area: "assistantAccount";
+                    /** @enum {string} */
+                    state: "active" | "missing" | "paused" | "unavailable" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                };
+                providerConnections: {
+                    /** @enum {string} */
+                    area: "providerConnections";
+                    /** @enum {string} */
+                    state: "connected" | "pending" | "disconnected" | "needs_attention" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                }[];
+                senderRegistration: {
+                    /** @enum {string} */
+                    area: "senderRegistration";
+                    /** @enum {string} */
+                    state: "not_started" | "draft" | "submitted" | "in_review" | "approved" | "rejected" | "suspended" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                };
+                senderBinding: {
+                    /** @enum {string} */
+                    area: "senderBinding";
+                    /** @enum {string} */
+                    state: "missing" | "pending" | "verified" | "failed" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                };
+                recipientEnrollment: {
+                    /** @enum {string} */
+                    area: "recipientEnrollment";
+                    /** @enum {string} */
+                    state: "missing" | "pending_verification" | "verified" | "removed" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                };
+                recipientConsent: {
+                    /** @enum {string} */
+                    area: "recipientConsent";
+                    /** @enum {string} */
+                    state: "missing" | "active" | "suppressed" | "expired" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                };
+                testConversation: {
+                    /** @enum {string} */
+                    area: "testConversation";
+                    /** @enum {string} */
+                    state: "not_started" | "inbound_only" | "pending" | "verified" | "failed" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                };
+                featureReadiness: {
+                    /** @enum {string} */
+                    area: "featureReadiness";
+                    /** @enum {string} */
+                    state: "ready" | "blocked" | "degraded" | "unavailable" | "unknown";
+                    subjectRef: string | null;
+                    label: string;
+                    /** @enum {string} */
+                    owner: "operator" | "account_owner" | "provider" | "system";
+                    explanation: string;
+                    allowedReads: string[];
+                    allowedActions: string[];
+                    nextAction: {
+                        label: string;
+                        route: string;
+                    };
+                    /** @enum {string} */
+                    retryability: "never" | "safe_read" | "after_owner_action" | "after_provider_update" | "after_operator_action";
+                    /** Format: date-time */
+                    lastVerifiedAt: string | null;
+                    supportReceipt: string | null;
+                    featureKey: string;
+                }[];
+                /** Format: date-time */
+                evaluatedAt: string;
+            };
+            checks: {
+                /** @enum {string} */
+                id: "connection" | "sender" | "registration" | "binding" | "recipient" | "consent" | "webhook" | "worker" | "schedule_dispatch" | "delivery_callback";
+                /** @enum {string} */
+                state: "healthy" | "pending" | "needs_attention" | "blocked" | "unknown";
+                summary: string;
+                /** @enum {string} */
+                owner: "operator" | "account_owner" | "provider" | "system";
+                /** Format: date-time */
+                lastVerifiedAt?: string;
+                failedStep?: string;
+                /** @enum {string} */
+                retrySafety: "safe" | "confirmation_required" | "unsafe" | "unknown";
+                action?: {
+                    label: string;
+                    href: string;
+                };
+                receiptRef?: string;
+            }[];
+            supportRef: string;
+        };
+        AssistantGetDiagnosticsEnvelope: {
+            data: components["schemas"]["AssistantGetDiagnosticsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantGetExecutionsByExecutionRefData: {
+            execution: Record<string, never>;
+            receipts: unknown[];
+        };
+        AssistantGetExecutionsByExecutionRefEnvelope: {
+            data: components["schemas"]["AssistantGetExecutionsByExecutionRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantGetGrantsData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetGrantsEnvelope: {
+            data: components["schemas"]["AssistantGetGrantsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostGrantsData: {
+            grantRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            operation: string;
+            authorityClass: string;
+            approvalMode: string;
+            scope: Record<string, never>;
+            state: string;
+            /** Format: date-time */
+            startsAt: string | null;
+            /** Format: date-time */
+            expiresAt: string | null;
+            /** Format: date-time */
+            revokedAt: string | null;
+        };
+        AssistantPostGrantsEnvelope: {
+            data: components["schemas"]["AssistantPostGrantsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostGrantsRequest: {
+            grantRef?: components["schemas"]["OpaqueRef"];
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            revision?: number;
+            operation?: string;
+            authorityClass?: string;
+            approvalMode?: string;
+            scope?: Record<string, never>;
+            /** Format: date-time */
+            startsAt?: string | null;
+            /** Format: date-time */
+            expiresAt?: string | null;
+        };
+        AssistantDeleteGrantsByGrantRefData: {
+            grantRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            operation: string;
+            authorityClass: string;
+            approvalMode: string;
+            scope: Record<string, never>;
+            state: string;
+            /** Format: date-time */
+            startsAt: string | null;
+            /** Format: date-time */
+            expiresAt: string | null;
+            /** Format: date-time */
+            revokedAt: string | null;
+        };
+        AssistantDeleteGrantsByGrantRefEnvelope: {
+            data: components["schemas"]["AssistantDeleteGrantsByGrantRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantDeleteGrantsByGrantRefRequest: {
+            operation?: string;
+            reason?: string;
+        };
+        AssistantPostInboundClaimsBlockData: {
+            /** @enum {string} */
+            state: "bound" | "blocked" | "discarded";
+            quarantineRef: string;
+            replayed: boolean;
+            contactRef?: string;
+            conversationRef?: string;
+            command: {
+                commandRef: string;
+                receiptRef: string;
+            } | null;
+        };
+        AssistantPostInboundClaimsBlockEnvelope: {
+            data: components["schemas"]["AssistantPostInboundClaimsBlockData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostInboundClaimsBlockRequest: {
+            claimToken: string;
+        };
+        AssistantPostInboundClaimsClaimData: {
+            /** @enum {string} */
+            state: "bound" | "blocked" | "discarded";
+            quarantineRef: string;
+            replayed: boolean;
+            contactRef?: string;
+            conversationRef?: string;
+            command: {
+                commandRef: string;
+                receiptRef: string;
+            } | null;
+        };
+        AssistantPostInboundClaimsClaimEnvelope: {
+            data: components["schemas"]["AssistantPostInboundClaimsClaimData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostInboundClaimsClaimRequest: {
+            claimToken: string;
+            /** @enum {string} */
+            claimAs: "self" | "contact";
+            postClaimInstruction?: string | null;
+        };
+        AssistantPostInboundClaimsDiscardData: {
+            /** @enum {string} */
+            state: "bound" | "blocked" | "discarded";
+            quarantineRef: string;
+            replayed: boolean;
+            contactRef?: string;
+            conversationRef?: string;
+            command: {
+                commandRef: string;
+                receiptRef: string;
+            } | null;
+        };
+        AssistantPostInboundClaimsDiscardEnvelope: {
+            data: components["schemas"]["AssistantPostInboundClaimsDiscardData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostInboundClaimsDiscardRequest: {
+            claimToken: string;
+        };
+        AssistantPostInboundClaimsInspectData: {
+            quarantineRef: string;
+            /** @enum {string} */
+            routeReason: "sender_unbound" | "ambiguous_route";
+            /** @enum {string} */
+            state: "pending";
+            /** Format: date-time */
+            expiresAt: string;
+            allowedActions: ("claim_self" | "claim_contact" | "block" | "discard")[];
+        };
+        AssistantPostInboundClaimsInspectEnvelope: {
+            data: components["schemas"]["AssistantPostInboundClaimsInspectData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostInboundClaimsInspectRequest: {
+            claimToken: string;
+        };
+        AssistantGetLifecycleByLifecycleRefData: {
+            /** @enum {string} */
+            state: "awaiting_confirmation" | "pausing" | "applying" | "completed" | "reconciliation_required" | "cancelled" | "failed";
+            preview: {
+                lifecycleRef: string;
+                /** @enum {string} */
+                operation: "export_data" | "remove_recipient" | "withdraw_consent" | "disconnect_provider" | "delete_conversation" | "delete_attachment" | "delete_context_packet" | "delete_assistant" | "detach_number" | "release_number";
+                target: {
+                    /** @enum {string} */
+                    kind: "account" | "recipient" | "consent" | "connection" | "conversation" | "attachment" | "context_packet" | "assistant" | "number";
+                    targetRef: string;
+                };
+                /** @enum {string} */
+                state: "awaiting_confirmation";
+                previewDigest: string;
+                confirmationPhrase: string;
+                irreversible: boolean;
+                impact: {
+                    schedules: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    grants: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    conversations: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    attachments: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    contextPackets: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    recipients: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    connections: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    numbers: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                };
+                minimumAudit: {
+                    /** @enum {string} */
+                    category: "consent" | "suppression" | "approval" | "receipt" | "audit" | "registration" | "released_number";
+                    reason: string;
+                    /** Format: date-time */
+                    retainedUntil: string | null;
+                }[];
+                /** Format: date-time */
+                createdAt: string;
+                /** Format: date-time */
+                expiresAt: string;
+            };
+            receipt: {
+                lifecycleRef: string;
+                /** @enum {string} */
+                operation: "export_data" | "remove_recipient" | "withdraw_consent" | "disconnect_provider" | "delete_conversation" | "delete_attachment" | "delete_context_packet" | "delete_assistant" | "detach_number" | "release_number";
+                target: {
+                    /** @enum {string} */
+                    kind: "account" | "recipient" | "consent" | "connection" | "conversation" | "attachment" | "context_packet" | "assistant" | "number";
+                    targetRef: string;
+                };
+                /** @enum {string} */
+                state: "completed" | "reconciliation_required" | "cancelled" | "failed";
+                previewDigest: string;
+                paused: {
+                    schedules: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    grants: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    conversations: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    attachments: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    contextPackets: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    recipients: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    connections: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    numbers: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                };
+                deleted: {
+                    categories: string[];
+                    count: number;
+                };
+                exportRef: string | null;
+                minimumAudit: {
+                    /** @enum {string} */
+                    category: "consent" | "suppression" | "approval" | "receipt" | "audit" | "registration" | "released_number";
+                    reason: string;
+                    /** Format: date-time */
+                    retainedUntil: string | null;
+                }[];
+                unresolved: {
+                    reconciliationRef: string;
+                    /** @enum {string} */
+                    kind: "provider_disconnect" | "provider_number_detach" | "provider_number_release" | "artifact_purge" | "memory_purge";
+                    targetRef: string;
+                    /** @enum {string} */
+                    state: "awaiting_provider" | "pending_cleanup" | "outcome_unknown";
+                    /** @enum {string} */
+                    retrySafety: "reconcile_first" | "operator_only" | "not_retryable";
+                    nextAction: string;
+                }[];
+                /** Format: date-time */
+                irreversibleAt: string | null;
+                /** Format: date-time */
+                completedAt: string;
+            } | null;
+        };
+        AssistantGetLifecycleByLifecycleRefEnvelope: {
+            data: components["schemas"]["AssistantGetLifecycleByLifecycleRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostLifecycleByLifecycleRefCancelData: {
+            /** @enum {string} */
+            state: "awaiting_confirmation" | "pausing" | "applying" | "completed" | "reconciliation_required" | "cancelled" | "failed";
+            preview: {
+                lifecycleRef: string;
+                /** @enum {string} */
+                operation: "export_data" | "remove_recipient" | "withdraw_consent" | "disconnect_provider" | "delete_conversation" | "delete_attachment" | "delete_context_packet" | "delete_assistant" | "detach_number" | "release_number";
+                target: {
+                    /** @enum {string} */
+                    kind: "account" | "recipient" | "consent" | "connection" | "conversation" | "attachment" | "context_packet" | "assistant" | "number";
+                    targetRef: string;
+                };
+                /** @enum {string} */
+                state: "awaiting_confirmation";
+                previewDigest: string;
+                confirmationPhrase: string;
+                irreversible: boolean;
+                impact: {
+                    schedules: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    grants: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    conversations: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    attachments: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    contextPackets: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    recipients: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    connections: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    numbers: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                };
+                minimumAudit: {
+                    /** @enum {string} */
+                    category: "consent" | "suppression" | "approval" | "receipt" | "audit" | "registration" | "released_number";
+                    reason: string;
+                    /** Format: date-time */
+                    retainedUntil: string | null;
+                }[];
+                /** Format: date-time */
+                createdAt: string;
+                /** Format: date-time */
+                expiresAt: string;
+            };
+            receipt: {
+                lifecycleRef: string;
+                /** @enum {string} */
+                operation: "export_data" | "remove_recipient" | "withdraw_consent" | "disconnect_provider" | "delete_conversation" | "delete_attachment" | "delete_context_packet" | "delete_assistant" | "detach_number" | "release_number";
+                target: {
+                    /** @enum {string} */
+                    kind: "account" | "recipient" | "consent" | "connection" | "conversation" | "attachment" | "context_packet" | "assistant" | "number";
+                    targetRef: string;
+                };
+                /** @enum {string} */
+                state: "completed" | "reconciliation_required" | "cancelled" | "failed";
+                previewDigest: string;
+                paused: {
+                    schedules: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    grants: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    conversations: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    attachments: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    contextPackets: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    recipients: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    connections: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    numbers: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                };
+                deleted: {
+                    categories: string[];
+                    count: number;
+                };
+                exportRef: string | null;
+                minimumAudit: {
+                    /** @enum {string} */
+                    category: "consent" | "suppression" | "approval" | "receipt" | "audit" | "registration" | "released_number";
+                    reason: string;
+                    /** Format: date-time */
+                    retainedUntil: string | null;
+                }[];
+                unresolved: {
+                    reconciliationRef: string;
+                    /** @enum {string} */
+                    kind: "provider_disconnect" | "provider_number_detach" | "provider_number_release" | "artifact_purge" | "memory_purge";
+                    targetRef: string;
+                    /** @enum {string} */
+                    state: "awaiting_provider" | "pending_cleanup" | "outcome_unknown";
+                    /** @enum {string} */
+                    retrySafety: "reconcile_first" | "operator_only" | "not_retryable";
+                    nextAction: string;
+                }[];
+                /** Format: date-time */
+                irreversibleAt: string | null;
+                /** Format: date-time */
+                completedAt: string;
+            } | null;
+        };
+        AssistantPostLifecycleByLifecycleRefCancelEnvelope: {
+            data: components["schemas"]["AssistantPostLifecycleByLifecycleRefCancelData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostLifecycleByLifecycleRefCancelRequest: Record<string, never>;
+        AssistantPostLifecycleByLifecycleRefConfirmData: {
+            /** @enum {string} */
+            state: "awaiting_confirmation" | "pausing" | "applying" | "completed" | "reconciliation_required" | "cancelled" | "failed";
+            preview: {
+                lifecycleRef: string;
+                /** @enum {string} */
+                operation: "export_data" | "remove_recipient" | "withdraw_consent" | "disconnect_provider" | "delete_conversation" | "delete_attachment" | "delete_context_packet" | "delete_assistant" | "detach_number" | "release_number";
+                target: {
+                    /** @enum {string} */
+                    kind: "account" | "recipient" | "consent" | "connection" | "conversation" | "attachment" | "context_packet" | "assistant" | "number";
+                    targetRef: string;
+                };
+                /** @enum {string} */
+                state: "awaiting_confirmation";
+                previewDigest: string;
+                confirmationPhrase: string;
+                irreversible: boolean;
+                impact: {
+                    schedules: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    grants: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    conversations: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    attachments: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    contextPackets: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    recipients: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    connections: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    numbers: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                };
+                minimumAudit: {
+                    /** @enum {string} */
+                    category: "consent" | "suppression" | "approval" | "receipt" | "audit" | "registration" | "released_number";
+                    reason: string;
+                    /** Format: date-time */
+                    retainedUntil: string | null;
+                }[];
+                /** Format: date-time */
+                createdAt: string;
+                /** Format: date-time */
+                expiresAt: string;
+            };
+            receipt: {
+                lifecycleRef: string;
+                /** @enum {string} */
+                operation: "export_data" | "remove_recipient" | "withdraw_consent" | "disconnect_provider" | "delete_conversation" | "delete_attachment" | "delete_context_packet" | "delete_assistant" | "detach_number" | "release_number";
+                target: {
+                    /** @enum {string} */
+                    kind: "account" | "recipient" | "consent" | "connection" | "conversation" | "attachment" | "context_packet" | "assistant" | "number";
+                    targetRef: string;
+                };
+                /** @enum {string} */
+                state: "completed" | "reconciliation_required" | "cancelled" | "failed";
+                previewDigest: string;
+                paused: {
+                    schedules: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    grants: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    conversations: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    attachments: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    contextPackets: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    recipients: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    connections: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                    numbers: {
+                        count: number;
+                        refs: string[];
+                        truncated: boolean;
+                    };
+                };
+                deleted: {
+                    categories: string[];
+                    count: number;
+                };
+                exportRef: string | null;
+                minimumAudit: {
+                    /** @enum {string} */
+                    category: "consent" | "suppression" | "approval" | "receipt" | "audit" | "registration" | "released_number";
+                    reason: string;
+                    /** Format: date-time */
+                    retainedUntil: string | null;
+                }[];
+                unresolved: {
+                    reconciliationRef: string;
+                    /** @enum {string} */
+                    kind: "provider_disconnect" | "provider_number_detach" | "provider_number_release" | "artifact_purge" | "memory_purge";
+                    targetRef: string;
+                    /** @enum {string} */
+                    state: "awaiting_provider" | "pending_cleanup" | "outcome_unknown";
+                    /** @enum {string} */
+                    retrySafety: "reconcile_first" | "operator_only" | "not_retryable";
+                    nextAction: string;
+                }[];
+                /** Format: date-time */
+                irreversibleAt: string | null;
+                /** Format: date-time */
+                completedAt: string;
+            } | null;
+        };
+        AssistantPostLifecycleByLifecycleRefConfirmEnvelope: {
+            data: components["schemas"]["AssistantPostLifecycleByLifecycleRefConfirmData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostLifecycleByLifecycleRefConfirmRequest: {
+            previewDigest: string;
+            confirmationPhrase: string;
+            acknowledgeIrreversible: boolean;
+        };
+        AssistantPostLifecyclePreviewsData: {
+            lifecycleRef: string;
+            /** @enum {string} */
+            operation: "export_data" | "remove_recipient" | "withdraw_consent" | "disconnect_provider" | "delete_conversation" | "delete_attachment" | "delete_context_packet" | "delete_assistant" | "detach_number" | "release_number";
+            target: {
+                /** @enum {string} */
+                kind: "account" | "recipient" | "consent" | "connection" | "conversation" | "attachment" | "context_packet" | "assistant" | "number";
+                targetRef: string;
+            };
+            /** @enum {string} */
+            state: "awaiting_confirmation";
+            previewDigest: string;
+            confirmationPhrase: string;
+            irreversible: boolean;
+            impact: {
+                schedules: {
+                    count: number;
+                    refs: string[];
+                    truncated: boolean;
+                };
+                grants: {
+                    count: number;
+                    refs: string[];
+                    truncated: boolean;
+                };
+                conversations: {
+                    count: number;
+                    refs: string[];
+                    truncated: boolean;
+                };
+                attachments: {
+                    count: number;
+                    refs: string[];
+                    truncated: boolean;
+                };
+                contextPackets: {
+                    count: number;
+                    refs: string[];
+                    truncated: boolean;
+                };
+                recipients: {
+                    count: number;
+                    refs: string[];
+                    truncated: boolean;
+                };
+                connections: {
+                    count: number;
+                    refs: string[];
+                    truncated: boolean;
+                };
+                numbers: {
+                    count: number;
+                    refs: string[];
+                    truncated: boolean;
+                };
+            };
+            minimumAudit: {
+                /** @enum {string} */
+                category: "consent" | "suppression" | "approval" | "receipt" | "audit" | "registration" | "released_number";
+                reason: string;
+                /** Format: date-time */
+                retainedUntil: string | null;
+            }[];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            expiresAt: string;
+        };
+        AssistantPostLifecyclePreviewsEnvelope: {
+            data: components["schemas"]["AssistantPostLifecyclePreviewsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostLifecyclePreviewsRequest: {
+            /** @enum {string} */
+            operation: "export_data" | "remove_recipient" | "withdraw_consent" | "disconnect_provider" | "delete_conversation" | "delete_attachment" | "delete_context_packet" | "delete_assistant" | "detach_number" | "release_number";
+            target: {
+                /** @enum {string} */
+                kind: "account" | "recipient" | "consent" | "connection" | "conversation" | "attachment" | "context_packet" | "assistant" | "number";
+                targetRef: string;
+            };
+            reason?: string;
+        };
+        AssistantGetNumbersData: {
+            items: unknown[];
+            /** Format: date-time */
+            expiresAt: string | null;
+            nextCursor: string;
+        };
+        AssistantGetNumbersEnvelope: {
+            data: components["schemas"]["AssistantGetNumbersData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersByNumberRefMessagingServiceSetupData: {
+            serviceRef: components["schemas"]["OpaqueRef"];
+            numberRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            webhookState: string;
+            advancedOptOutState: string;
+            sendReady: boolean;
+            reasons: unknown[];
+            /** Format: date-time */
+            verifiedAt: string | null;
+        };
+        AssistantPostNumbersByNumberRefMessagingServiceSetupEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersByNumberRefMessagingServiceSetupData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersByNumberRefMessagingServiceSetupRequest: {
+            connectionRef?: components["schemas"]["OpaqueRef"];
+            friendlyName?: string;
+            useCase?: string;
+            existingServiceRef?: components["schemas"]["OpaqueRef"];
+            advancedOptOutAttestation?: Record<string, never>;
+            reviewedConfiguration?: Record<string, never>;
+        };
+        AssistantGetNumbersByNumberRefMessagingServiceStatusData: {
+            serviceRef: components["schemas"]["OpaqueRef"];
+            numberRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            webhookState: string;
+            advancedOptOutState: string;
+            sendReady: boolean;
+            reasons: unknown[];
+            /** Format: date-time */
+            verifiedAt: string | null;
+        };
+        AssistantGetNumbersByNumberRefMessagingServiceStatusEnvelope: {
+            data: components["schemas"]["AssistantGetNumbersByNumberRefMessagingServiceStatusData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantGetNumbersByNumberRefReadinessData: {
+            numberRef: components["schemas"]["OpaqueRef"];
+            numberDisplay: string;
+            lifecycleState: string;
+            registration: Record<string, never>;
+            senderBinding: Record<string, never>;
+            capabilities: unknown[];
+            inboundReady: boolean;
+            outboundReady: boolean;
+            reasons: unknown[];
+            /** Format: date-time */
+            lastVerifiedAt: string | null;
+        };
+        AssistantGetNumbersByNumberRefReadinessEnvelope: {
+            data: components["schemas"]["AssistantGetNumbersByNumberRefReadinessData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantGetNumbersByNumberRefRegistrationData: {
+            registrationRef: components["schemas"]["OpaqueRef"];
+            numberRef: components["schemas"]["OpaqueRef"];
+            caseKind: string;
+            state: string;
+            sendReady: boolean;
+            reasons: unknown[];
+            requiredEvidence: unknown[];
+            /** Format: date-time */
+            evaluatedAt: string | null;
+        };
+        AssistantGetNumbersByNumberRefRegistrationEnvelope: {
+            data: components["schemas"]["AssistantGetNumbersByNumberRefRegistrationData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersByNumberRefRegistrationPrepareData: {
+            registrationRef: components["schemas"]["OpaqueRef"];
+            numberRef: components["schemas"]["OpaqueRef"];
+            caseKind: string;
+            state: string;
+            sendReady: boolean;
+            reasons: unknown[];
+            requiredEvidence: unknown[];
+            /** Format: date-time */
+            evaluatedAt: string | null;
+        };
+        AssistantPostNumbersByNumberRefRegistrationPrepareEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersByNumberRefRegistrationPrepareData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersByNumberRefRegistrationPrepareRequest: {
+            connectionRef?: components["schemas"]["OpaqueRef"];
+            caseKind?: string;
+            jurisdiction?: string;
+            useCase?: string;
+        };
+        AssistantPostNumbersByNumberRefRegistrationPreviewData: {
+            schemaVersion: string;
+            numberRef: components["schemas"]["OpaqueRef"];
+            caseKind: string;
+            missingInformation: unknown[];
+            estimates: Record<string, never>;
+            approval: Record<string, never>;
+            review: Record<string, never>;
+            evidenceRequirements: unknown[];
+            sendReadinessImpact: Record<string, never>;
+        };
+        AssistantPostNumbersByNumberRefRegistrationPreviewEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersByNumberRefRegistrationPreviewData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersByNumberRefRegistrationPreviewRequest: {
+            connectionRef: string;
+            /** @enum {string} */
+            caseKind?: "regulation" | "bundle" | "brand" | "campaign" | "toll_free_verification" | "sender_registration";
+            jurisdiction?: string;
+            useCase?: string;
+        };
+        AssistantPostNumbersByNumberRefRegistrationSubmitData: {
+            registrationRef: components["schemas"]["OpaqueRef"];
+            numberRef: components["schemas"]["OpaqueRef"];
+            caseKind: string;
+            state: string;
+            sendReady: boolean;
+            reasons: unknown[];
+            requiredEvidence: unknown[];
+            /** Format: date-time */
+            evaluatedAt: string | null;
+        };
+        AssistantPostNumbersByNumberRefRegistrationSubmitEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersByNumberRefRegistrationSubmitData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersByNumberRefRegistrationSubmitRequest: {
+            connectionRef: string;
+            registrationRef: string;
+            evidenceRefs: string[];
+            reviewedAuthorization: {
+                reviewRef: string;
+                reviewDigest: string;
+                approvalRef: string;
+                approvalDigest: string;
+                /** Format: date-time */
+                expiresAt: string;
+            };
+        };
+        AssistantPostNumbersByNumberRefReleaseData: {
+            releaseRef: components["schemas"]["OpaqueRef"];
+            receiptRef: components["schemas"]["OpaqueRef"];
+            numberRef: components["schemas"]["OpaqueRef"];
+            idempotencyKey: string;
+            requestDigest: string | null;
+            state: string;
+            stages: unknown[];
+            quarantineUntil: string;
+            replayed: boolean;
+            /** Format: date-time */
+            occurredAt: string | null;
+            errorCode: string;
+        };
+        AssistantPostNumbersByNumberRefReleaseEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersByNumberRefReleaseData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersByNumberRefReleaseRequest: {
+            connectionRef?: components["schemas"]["OpaqueRef"];
+            approvalRef?: components["schemas"]["OpaqueRef"];
+            reason?: string;
+        };
+        AssistantPostNumbersAttachData: {
+            numberRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            endpointRef: components["schemas"]["OpaqueRef"];
+            numberDisplay: string;
+            countryCode: string;
+            numberType: string;
+            lifecycleState: string;
+            capabilities: unknown[];
+            requirements: Record<string, never>;
+            registrationState: string;
+            sendReady: boolean;
+        };
+        AssistantPostNumbersAttachEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersAttachData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersAttachRequest: {
+            connectionRef?: components["schemas"]["OpaqueRef"];
+            candidateRef?: components["schemas"]["OpaqueRef"];
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            endpointRef?: components["schemas"]["OpaqueRef"];
+        };
+        AssistantPostNumbersAttachPreviewData: {
+            candidateRef: components["schemas"]["OpaqueRef"];
+            kind: string;
+            numberDisplay: string;
+            countryCode: string;
+            numberType: string;
+            capabilities: unknown[];
+            requirements: Record<string, never>;
+            price: Record<string, never>;
+            /** Format: date-time */
+            expiresAt: string | null;
+        };
+        AssistantPostNumbersAttachPreviewEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersAttachPreviewData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersAttachPreviewRequest: {
+            connectionRef?: components["schemas"]["OpaqueRef"];
+            candidateRef?: components["schemas"]["OpaqueRef"];
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            endpointRef?: components["schemas"]["OpaqueRef"];
+        };
+        AssistantPostNumbersPurchaseData: {
+            purchaseRef: components["schemas"]["OpaqueRef"];
+            receiptRef: components["schemas"]["OpaqueRef"];
+            candidateRef: components["schemas"]["OpaqueRef"];
+            numberRef: components["schemas"]["OpaqueRef"];
+            idempotencyKey: string;
+            requestDigest: string | null;
+            state: string;
+            quote: Record<string, never>;
+            replayed: boolean;
+            /** Format: date-time */
+            occurredAt: string | null;
+            errorCode: string;
+        };
+        AssistantPostNumbersPurchaseEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersPurchaseData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersPurchaseRequest: {
+            connectionRef?: components["schemas"]["OpaqueRef"];
+            candidateRef?: components["schemas"]["OpaqueRef"];
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            endpointRef?: components["schemas"]["OpaqueRef"];
+            approvalRef?: components["schemas"]["OpaqueRef"];
+        };
+        AssistantPostNumbersPurchasePreviewData: {
+            candidateRef: components["schemas"]["OpaqueRef"];
+            kind: string;
+            numberDisplay: string;
+            countryCode: string;
+            numberType: string;
+            capabilities: unknown[];
+            requirements: Record<string, never>;
+            price: Record<string, never>;
+            /** Format: date-time */
+            expiresAt: string | null;
+        };
+        AssistantPostNumbersPurchasePreviewEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersPurchasePreviewData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersPurchasePreviewRequest: {
+            connectionRef?: components["schemas"]["OpaqueRef"];
+            candidateRef?: components["schemas"]["OpaqueRef"];
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            endpointRef?: components["schemas"]["OpaqueRef"];
+        };
+        AssistantPostNumbersSearchData: {
+            items: unknown[];
+            /** Format: date-time */
+            expiresAt: string | null;
+            nextCursor: string;
+        };
+        AssistantPostNumbersSearchEnvelope: {
+            data: components["schemas"]["AssistantPostNumbersSearchData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostNumbersSearchRequest: {
+            connectionRef?: components["schemas"]["OpaqueRef"];
+            countryCode?: string;
+            numberType?: string;
+            capabilities?: unknown[];
+            areaCode?: string;
+            limit?: number;
+        };
+        AssistantPostRecipientEnrollmentChallengesData: {
+            challengeRef: components["schemas"]["OpaqueRef"];
+            contactRef: components["schemas"]["OpaqueRef"];
+            deliveryEndpointRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            /** Format: date-time */
+            expiresAt: string | null;
+            maskedDestination: string;
+        };
+        AssistantPostRecipientEnrollmentChallengesEnvelope: {
+            data: components["schemas"]["AssistantPostRecipientEnrollmentChallengesData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostRecipientEnrollmentChallengesRequest: {
+            contactRef?: components["schemas"]["OpaqueRef"];
+            deliveryEndpointRef?: components["schemas"]["OpaqueRef"];
+            senderEndpointRef?: components["schemas"]["OpaqueRef"];
+            messageClass?: string;
+            subjectKey?: string;
+        };
+        AssistantPostRecipientEnrollmentChallengesByChallengeRefVerifyData: {
+            challengeRef: components["schemas"]["OpaqueRef"];
+            contactRef: components["schemas"]["OpaqueRef"];
+            deliveryEndpointRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            /** Format: date-time */
+            verifiedAt: string | null;
+            consentRef: components["schemas"]["OpaqueRef"];
+        };
+        AssistantPostRecipientEnrollmentChallengesByChallengeRefVerifyEnvelope: {
+            data: components["schemas"]["AssistantPostRecipientEnrollmentChallengesByChallengeRefVerifyData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostRecipientEnrollmentChallengesByChallengeRefVerifyRequest: {
+            code?: string;
+        };
+        AssistantGetRemindersData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetRemindersEnvelope: {
+            data: components["schemas"]["AssistantGetRemindersData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostRemindersData: {
+            reminderRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            instruction: string;
+            scheduledFor: string;
+            timezone: string;
+            revision: number;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPostRemindersEnvelope: {
+            data: components["schemas"]["AssistantPostRemindersData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostRemindersRequest: {
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            instruction?: string;
+            scheduledFor?: string;
+            timezone?: string;
+        };
+        AssistantDeleteRemindersByReminderRefData: {
+            reminderRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            instruction: string;
+            scheduledFor: string;
+            timezone: string;
+            revision: number;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantDeleteRemindersByReminderRefEnvelope: {
+            data: components["schemas"]["AssistantDeleteRemindersByReminderRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantDeleteRemindersByReminderRefRequest: {
+            reason?: string;
+        };
+        AssistantGetRemindersByReminderRefData: {
+            reminderRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            instruction: string;
+            scheduledFor: string;
+            timezone: string;
+            revision: number;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantGetRemindersByReminderRefEnvelope: {
+            data: components["schemas"]["AssistantGetRemindersByReminderRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchRemindersByReminderRefData: {
+            reminderRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            instruction: string;
+            scheduledFor: string;
+            timezone: string;
+            revision: number;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPatchRemindersByReminderRefEnvelope: {
+            data: components["schemas"]["AssistantPatchRemindersByReminderRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchRemindersByReminderRefRequest: {
+            state?: string;
+            instruction?: string;
+            scheduledFor?: string;
+            timezone?: string;
+        };
+        AssistantGetSchedulesData: {
+            items: unknown[];
+            nextCursor: string;
+        };
+        AssistantGetSchedulesEnvelope: {
+            data: components["schemas"]["AssistantGetSchedulesData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostSchedulesData: {
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            timezone: string;
+            /** Format: date-time */
+            nextDueAt: string | null;
+            revision: number;
+        };
+        AssistantPostSchedulesEnvelope: {
+            data: components["schemas"]["AssistantPostSchedulesData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostSchedulesRequest: {
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            state?: string;
+            timezone?: string;
+            /** Format: date-time */
+            nextDueAt?: string | null;
+        };
+        AssistantGetSchedulesByScheduleRefData: {
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            timezone: string;
+            /** Format: date-time */
+            nextDueAt: string | null;
+            revision: number;
+        };
+        AssistantGetSchedulesByScheduleRefEnvelope: {
+            data: components["schemas"]["AssistantGetSchedulesByScheduleRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchSchedulesByScheduleRefData: {
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            assistantRef: components["schemas"]["OpaqueRef"];
+            state: string;
+            timezone: string;
+            /** Format: date-time */
+            nextDueAt: string | null;
+            revision: number;
+        };
+        AssistantPatchSchedulesByScheduleRefEnvelope: {
+            data: components["schemas"]["AssistantPatchSchedulesByScheduleRefData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchSchedulesByScheduleRefRequest: {
+            state?: string;
+            timezone?: string;
+            /** Format: date-time */
+            nextDueAt?: string | null;
+        };
+        AssistantGetSchedulesByScheduleRefAcceptedData: {
+            schemaVersion: string;
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            state: string;
+            proposalDigest: string | null;
+            readinessDigest: string | null;
+            deliveryDigest: string | null;
+            /** Format: date-time */
+            activatedAt: string | null;
+        };
+        AssistantGetSchedulesByScheduleRefAcceptedEnvelope: {
+            data: components["schemas"]["AssistantGetSchedulesByScheduleRefAcceptedData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostSchedulesByScheduleRefActivateData: {
+            schemaVersion: string;
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            state: string;
+            proposalDigest: string | null;
+            readinessDigest: string | null;
+            deliveryDigest: string | null;
+            /** Format: date-time */
+            activatedAt: string | null;
+        };
+        AssistantPostSchedulesByScheduleRefActivateEnvelope: {
+            data: components["schemas"]["AssistantPostSchedulesByScheduleRefActivateData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostSchedulesByScheduleRefActivateRequest: {
+            expectedRevision: number;
+            readinessDigest: string;
+            planDigest: string;
+            grantSetDigest: string;
+        };
+        AssistantPostSchedulesProposeData: {
+            schemaVersion: string;
+            draft: Record<string, never>;
+            interpretation: Record<string, never>;
+            proposalDigest: string | null;
+            /** Format: date-time */
+            expiresAt: string | null;
+        };
+        AssistantPostSchedulesProposeEnvelope: {
+            data: components["schemas"]["AssistantPostSchedulesProposeData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostSchedulesProposeRequest: {
+            assistantRef: string;
+            rawInstruction: string;
+            /**
+             * @default null
+             * @enum {string|null}
+             */
+            preferredKind: "reminder" | "assistant_job" | null;
+            timezone: string;
+        };
+        AssistantPostSchedulesReadinessData: {
+            schemaVersion: string;
+            scheduleRef: components["schemas"]["OpaqueRef"];
+            ready: boolean;
+            blockers: unknown[];
+            warnings: unknown[];
+            readinessDigest: string | null;
+            /** Format: date-time */
+            evaluatedAt: string | null;
+        };
+        AssistantPostSchedulesReadinessEnvelope: {
+            data: components["schemas"]["AssistantPostSchedulesReadinessData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPostSchedulesReadinessRequest: {
+            draft: {
+                /** @enum {string} */
+                schemaVersion: "assistant-schedule-draft.v1";
+                scheduleRef: string;
+                assistantRef: string;
+                revision: number;
+                title: string;
+                instruction: string;
+                condition: {
+                    /** @enum {string} */
+                    kind: "always";
+                } | {
+                    /** @enum {string} */
+                    kind: "fact_equals";
+                    factRef: string;
+                    expectedDigest: string;
+                };
+                quietHours: {
+                    timezone: string;
+                    startLocal: string;
+                    endLocal: string;
+                    urgentException: boolean;
+                } | null;
+                timezone: string;
+                timing: {
+                    /** @enum {string} */
+                    mode: "once";
+                    /** Format: date-time */
+                    runAt: string;
+                    /** @enum {string|null} */
+                    recurrence: null;
+                } | {
+                    /** @enum {string} */
+                    mode: "recurring";
+                    /** @enum {string|null} */
+                    runAt: null;
+                    recurrence: string;
+                };
+                nextRunPreview: string[];
+                delivery: {
+                    /** @enum {string} */
+                    channel: "web" | "sms" | "email";
+                    endpointRef: string;
+                    senderNumberRef: string | null;
+                    recipientRef: string | null;
+                    fallbackOrder: ("sms" | "web" | "email")[];
+                    retry: {
+                        maxAttempts: number;
+                        backoffSeconds: number;
+                    };
+                    expiresAfterSeconds: number;
+                    failureNotificationEndpointRef: string | null;
+                    defaultsRevision: number;
+                    /** @enum {string} */
+                    resultMode: "completion" | "summary" | "full_result" | "needs_attention_only";
+                };
+                planDigest: string;
+                grantSetDigest: string;
+                /** @enum {string} */
+                kind: "reminder";
+                contextPacketRefs: unknown[];
+                /** @enum {string|null} */
+                vaultRef: null;
+                /** @enum {string|null} */
+                model: null;
+                /** @enum {string|null} */
+                authority: null;
+                browserGrants: unknown[];
+            } | {
+                /** @enum {string} */
+                schemaVersion: "assistant-schedule-draft.v1";
+                scheduleRef: string;
+                assistantRef: string;
+                revision: number;
+                title: string;
+                instruction: string;
+                condition: {
+                    /** @enum {string} */
+                    kind: "always";
+                } | {
+                    /** @enum {string} */
+                    kind: "fact_equals";
+                    factRef: string;
+                    expectedDigest: string;
+                };
+                quietHours: {
+                    timezone: string;
+                    startLocal: string;
+                    endLocal: string;
+                    urgentException: boolean;
+                } | null;
+                timezone: string;
+                timing: {
+                    /** @enum {string} */
+                    mode: "once";
+                    /** Format: date-time */
+                    runAt: string;
+                    /** @enum {string|null} */
+                    recurrence: null;
+                } | {
+                    /** @enum {string} */
+                    mode: "recurring";
+                    /** @enum {string|null} */
+                    runAt: null;
+                    recurrence: string;
+                };
+                nextRunPreview: string[];
+                delivery: {
+                    /** @enum {string} */
+                    channel: "web" | "sms" | "email";
+                    endpointRef: string;
+                    senderNumberRef: string | null;
+                    recipientRef: string | null;
+                    fallbackOrder: ("sms" | "web" | "email")[];
+                    retry: {
+                        maxAttempts: number;
+                        backoffSeconds: number;
+                    };
+                    expiresAfterSeconds: number;
+                    failureNotificationEndpointRef: string | null;
+                    defaultsRevision: number;
+                    /** @enum {string} */
+                    resultMode: "completion" | "summary" | "full_result" | "needs_attention_only";
+                };
+                planDigest: string;
+                grantSetDigest: string;
+                /** @enum {string} */
+                kind: "assistant_job";
+                contextPacketRefs: string[];
+                vaultRef: string | null;
+                model: {
+                    /** @enum {string} */
+                    provider: "openai" | "anthropic" | "google" | "other";
+                    modelKey: string;
+                    maxOutputTokens: number;
+                };
+                authority: {
+                    /** @enum {string} */
+                    authorityClass: "observe" | "draft" | "reversible_action" | "external_write" | "destructive";
+                    /** @enum {string} */
+                    approvalMode: "deny" | "per_occurrence" | "per_recipient" | "preauthorized" | "typed_confirmation";
+                    maximumSpend: {
+                        currency: string;
+                        amountMinor: number;
+                    };
+                };
+                browserGrants: {
+                    grantRef: string;
+                    profileRef: string;
+                    loginBindingRef: string;
+                    domains: string[];
+                    actions: ("browser_open" | "browser_goto" | "browser_read" | "browser_locate" | "browser_click" | "browser_type" | "browser_press" | "browser_scroll" | "browser_screenshot" | "browser_close")[];
+                    /** @enum {string} */
+                    authorityClass: "observe" | "draft" | "reversible_action" | "external_write" | "destructive";
+                    /** @enum {string} */
+                    approvalMode: "deny" | "per_occurrence" | "per_recipient" | "preauthorized" | "typed_confirmation";
+                    /** Format: date-time */
+                    expiresAt: string;
+                    spendLimit: {
+                        currency: string;
+                        amountMinor: number;
+                    } | null;
+                }[];
+            };
+            runtimeRef: string | null;
+            exactConnectionBindings: {
+                connectionRef: string;
+                operations: string[];
+            }[];
+        };
+        AssistantGetSettingsData: {
+            assistantRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            settings: Record<string, never>;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantGetSettingsEnvelope: {
+            data: components["schemas"]["AssistantGetSettingsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchSettingsData: {
+            assistantRef: components["schemas"]["OpaqueRef"];
+            revision: number;
+            settings: Record<string, never>;
+            /** Format: date-time */
+            updatedAt: string | null;
+        };
+        AssistantPatchSettingsEnvelope: {
+            data: components["schemas"]["AssistantPatchSettingsData"];
+            receipt?: components["schemas"]["PublicReceipt"];
+            meta: {
+                request_ref: string;
+                /** @constant */
+                projection_version: "assistant-owner-api.v1";
+                /** Format: date-time */
+                fetched_at: string;
+                next_actions: string[];
+            };
+        };
+        AssistantPatchSettingsRequest: {
+            assistantRef?: components["schemas"]["OpaqueRef"];
+            timezone?: string;
+            quietHours?: Record<string, never>;
+            delivery?: Record<string, never>;
+            spend?: Record<string, never>;
         };
     };
     responses: never;
@@ -860,13 +4038,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetApprovalsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -904,17 +4082,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostApprovalsByApprovalRefDecisionRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostApprovalsByApprovalRefDecisionEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -923,7 +4101,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostApprovalsByApprovalRefDecisionEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -965,13 +4143,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetAssistantsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1006,17 +4184,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostAssistantsRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostAssistantsEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -1025,7 +4203,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostAssistantsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1070,13 +4248,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetAssistantsByAssistantRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1114,17 +4292,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPatchAssistantsByAssistantRefRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPatchAssistantsByAssistantRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1169,13 +4347,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetAssistantsByAssistantRefChannelsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1213,17 +4391,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostAssistantsByAssistantRefChannelsRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostAssistantsByAssistantRefChannelsEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -1232,7 +4410,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostAssistantsByAssistantRefChannelsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1270,17 +4448,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantDeleteChannelBindingsByBindingRefRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantDeleteChannelBindingsByBindingRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1315,17 +4493,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PersonalAssistantComposeCommand"];
+                "application/json": components["schemas"]["AssistantPostCommandsRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostCommandsEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -1334,7 +4512,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostCommandsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1379,13 +4557,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetCommandsByCommandRefReviewEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1420,17 +4598,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PersonalAssistantBulkSendSubmission"];
+                "application/json": components["schemas"]["AssistantPostCommandsBulkSendRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostCommandsBulkSendEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -1439,7 +4617,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostCommandsBulkSendEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1474,17 +4652,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["PersonalAssistantMessageSendSubmission"];
+                "application/json": components["schemas"]["AssistantPostCommandsMessageSendRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostCommandsMessageSendEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -1493,7 +4671,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostCommandsMessageSendEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1531,17 +4709,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostConsentByConsentRefWithdrawRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostConsentByConsentRefWithdrawEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -1550,7 +4728,55 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostConsentByConsentRefWithdrawEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_get_consent_content: {
+        parameters: {
+            query?: {
+                page_size?: number;
+                byte_limit?: number;
+                cursor?: string;
+                assistant_ref?: components["schemas"]["OpaqueRef"];
+                contact_ref?: components["schemas"]["OpaqueRef"];
+                command_ref?: components["schemas"]["OpaqueRef"];
+                sender_endpoint_ref?: components["schemas"]["OpaqueRef"];
+                subject_key?: string;
+                state?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantGetConsentContentEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1585,17 +4811,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostConsentEvidenceRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostConsentEvidenceEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -1604,7 +4830,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostConsentEvidenceEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1646,13 +4872,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetConsentRequirementsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1694,13 +4920,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetConsentStatusEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1742,13 +4968,67 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetContactsEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_contacts: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostContactsRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostContactsEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostContactsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1793,13 +5073,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetContactsByContactRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1837,17 +5117,174 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPatchContactsByContactRefRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPatchContactsByContactRefEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_contacts_by_contactRef_delivery_endpoints: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                contactRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostContactsByContactRefDeliveryEndpointsRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostContactsByContactRefDeliveryEndpointsEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostContactsByContactRefDeliveryEndpointsEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_delete_contacts_by_contactRef_delivery_endpoints_by_deliveryEndpointRef: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                contactRef: string;
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                deliveryEndpointRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantDeleteContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantDeleteContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_patch_contacts_by_contactRef_delivery_endpoints_by_deliveryEndpointRef: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                contactRef: string;
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                deliveryEndpointRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPatchContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPatchContactsByContactRefDeliveryEndpointsByDeliveryEndpointRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1889,13 +5326,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetContextPacketsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1930,17 +5367,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostContextPacketsRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostContextPacketsEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -1949,7 +5386,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostContextPacketsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -1994,13 +5431,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetContextPacketsByPacketRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2038,17 +5475,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPatchContextPacketsByPacketRefRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPatchContextPacketsByPacketRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2090,13 +5527,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetConversationsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2141,13 +5578,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetConversationsByConversationRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2185,17 +5622,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostConversationsByConversationRefReadRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostConversationsByConversationRefReadEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2204,7 +5641,109 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostConversationsByConversationRefReadEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_delivery_tests: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostDeliveryTestsRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostDeliveryTestsEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostDeliveryTestsEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_get_diagnostics: {
+        parameters: {
+            query?: {
+                page_size?: number;
+                byte_limit?: number;
+                cursor?: string;
+                assistant_ref?: components["schemas"]["OpaqueRef"];
+                contact_ref?: components["schemas"]["OpaqueRef"];
+                command_ref?: components["schemas"]["OpaqueRef"];
+                sender_endpoint_ref?: components["schemas"]["OpaqueRef"];
+                subject_key?: string;
+                state?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantGetDiagnosticsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2249,13 +5788,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetExecutionsByExecutionRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2297,13 +5836,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetGrantsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2338,17 +5877,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostGrantsRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostGrantsEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2357,7 +5896,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostGrantsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2395,17 +5934,452 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantDeleteGrantsByGrantRefRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantDeleteGrantsByGrantRefEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_inbound_claims_block: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostInboundClaimsBlockRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostInboundClaimsBlockEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostInboundClaimsBlockEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_inbound_claims_claim: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostInboundClaimsClaimRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostInboundClaimsClaimEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostInboundClaimsClaimEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_inbound_claims_discard: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostInboundClaimsDiscardRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostInboundClaimsDiscardEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostInboundClaimsDiscardEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_inbound_claims_inspect: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostInboundClaimsInspectRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostInboundClaimsInspectEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostInboundClaimsInspectEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_get_lifecycle_by_lifecycleRef: {
+        parameters: {
+            query?: {
+                page_size?: number;
+                byte_limit?: number;
+                cursor?: string;
+                assistant_ref?: components["schemas"]["OpaqueRef"];
+                contact_ref?: components["schemas"]["OpaqueRef"];
+                command_ref?: components["schemas"]["OpaqueRef"];
+                sender_endpoint_ref?: components["schemas"]["OpaqueRef"];
+                subject_key?: string;
+                state?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                lifecycleRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantGetLifecycleByLifecycleRefEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_lifecycle_by_lifecycleRef_cancel: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                lifecycleRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostLifecycleByLifecycleRefCancelRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostLifecycleByLifecycleRefCancelEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostLifecycleByLifecycleRefCancelEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_lifecycle_by_lifecycleRef_confirm: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                lifecycleRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostLifecycleByLifecycleRefConfirmRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostLifecycleByLifecycleRefConfirmEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostLifecycleByLifecycleRefConfirmEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_lifecycle_previews: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostLifecyclePreviewsRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostLifecyclePreviewsEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostLifecyclePreviewsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2447,13 +6421,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetNumbersEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2491,17 +6465,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostNumbersByNumberRefMessagingServiceSetupRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefMessagingServiceSetupEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2510,7 +6484,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefMessagingServiceSetupEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2555,13 +6529,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetNumbersByNumberRefMessagingServiceStatusEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2606,13 +6580,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetNumbersByNumberRefReadinessEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2657,13 +6631,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetNumbersByNumberRefRegistrationEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2701,17 +6675,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationPrepareRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationPrepareEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2720,7 +6694,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationPrepareEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2758,17 +6732,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RegistrationPreviewRequest"];
+                "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationPreviewRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationPreviewEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2777,7 +6751,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationPreviewEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2815,17 +6789,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RegistrationSubmitRequest"];
+                "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationSubmitRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationSubmitEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2834,7 +6808,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefRegistrationSubmitEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2872,17 +6846,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostNumbersByNumberRefReleaseRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefReleaseEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2891,7 +6865,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersByNumberRefReleaseEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2926,17 +6900,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostNumbersAttachRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersAttachEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2945,7 +6919,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersAttachEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -2980,17 +6954,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostNumbersAttachPreviewRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersAttachPreviewEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -2999,7 +6973,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersAttachPreviewEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3034,17 +7008,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostNumbersPurchaseRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersPurchaseEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -3053,7 +7027,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersPurchaseEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3088,17 +7062,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostNumbersPurchasePreviewRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersPurchasePreviewEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -3107,7 +7081,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersPurchasePreviewEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3142,17 +7116,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostNumbersSearchRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersSearchEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -3161,7 +7135,118 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostNumbersSearchEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_recipient_enrollment_challenges: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostRecipientEnrollmentChallengesRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostRecipientEnrollmentChallengesEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostRecipientEnrollmentChallengesEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_recipient_enrollment_challenges_by_challengeRef_verify: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                challengeRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostRecipientEnrollmentChallengesByChallengeRefVerifyRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostRecipientEnrollmentChallengesByChallengeRefVerifyEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostRecipientEnrollmentChallengesByChallengeRefVerifyEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3203,13 +7288,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetRemindersEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3244,17 +7329,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostRemindersRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostRemindersEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -3263,7 +7348,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostRemindersEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3308,13 +7393,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetRemindersByReminderRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3352,17 +7437,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantDeleteRemindersByReminderRefRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantDeleteRemindersByReminderRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3400,17 +7485,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPatchRemindersByReminderRefRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPatchRemindersByReminderRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3452,13 +7537,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetSchedulesEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3493,17 +7578,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPostSchedulesRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostSchedulesEnvelope"];
                 };
             };
             /** @description Accepted replay-safe mutation. */
@@ -3512,7 +7597,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPostSchedulesEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3557,13 +7642,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetSchedulesByScheduleRefEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3601,17 +7686,233 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPatchSchedulesByScheduleRefRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPatchSchedulesByScheduleRefEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_get_schedules_by_scheduleRef_accepted: {
+        parameters: {
+            query?: {
+                page_size?: number;
+                byte_limit?: number;
+                cursor?: string;
+                assistant_ref?: components["schemas"]["OpaqueRef"];
+                contact_ref?: components["schemas"]["OpaqueRef"];
+                command_ref?: components["schemas"]["OpaqueRef"];
+                sender_endpoint_ref?: components["schemas"]["OpaqueRef"];
+                subject_key?: string;
+                state?: string;
+            };
+            header?: never;
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                scheduleRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantGetSchedulesByScheduleRefAcceptedEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_schedules_by_scheduleRef_activate: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                /** @description Opaque caller-owned reference. Foreign and missing references are indistinguishable. */
+                scheduleRef: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostSchedulesByScheduleRefActivateRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostSchedulesByScheduleRefActivateEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostSchedulesByScheduleRefActivateEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_schedules_propose: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostSchedulesProposeRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostSchedulesProposeEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostSchedulesProposeEnvelope"];
+                };
+            };
+            /** @description Documented actionable owner error. */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+            /** @description Fail-closed service error. */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantErrorEnvelope"];
+                };
+            };
+        };
+    };
+    assistant_post_schedules_readiness: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Replay-safe identity. Reuse only for the identical reviewed request. */
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssistantPostSchedulesReadinessRequest"];
+            };
+        };
+        responses: {
+            /** @description Bounded operation-specific owner projection. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostSchedulesReadinessEnvelope"];
+                };
+            };
+            /** @description Accepted replay-safe mutation. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssistantPostSchedulesReadinessEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3653,13 +7954,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantGetSettingsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */
@@ -3694,17 +7995,17 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["AssistantPublicMutation"];
+                "application/json": components["schemas"]["AssistantPatchSettingsRequest"];
             };
         };
         responses: {
-            /** @description Bounded owner projection. */
+            /** @description Bounded operation-specific owner projection. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AssistantEnvelope"];
+                    "application/json": components["schemas"]["AssistantPatchSettingsEnvelope"];
                 };
             };
             /** @description Documented actionable owner error. */

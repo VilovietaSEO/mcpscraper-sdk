@@ -11651,6 +11651,73 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "assistant_delivery_test",
+    "category": "assistant",
+    "title": "Send Assistant Delivery Test",
+    "description": "Submit one fixed transactional diagnostic message from an eligible opaque sender endpoint to one already verified and consented opaque recipient. This is an external write requiring explicit SEND TEST confirmation and a replay-safe idempotency key. It accepts no raw phone number or custom body; reconcile an unknown outcome before retrying.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "recipientRef": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$",
+          "description": "Opaque verified recipient reference. Raw phone numbers are never accepted."
+        },
+        "senderEndpointRef": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$",
+          "description": "Opaque owned sender endpoint whose binding and registration must be eligible."
+        },
+        "confirmation": {
+          "type": "string",
+          "const": "SEND TEST",
+          "description": "Explicit confirmation for one fixed transactional diagnostic message."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 240,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9:._/+~-]*$",
+          "description": "Stable retry identity for this exact test. Reconcile an unknown outcome before retrying with the same key."
+        }
+      },
+      "required": [
+        "recipientRef",
+        "senderEndpointRef",
+        "confirmation",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Send Assistant Delivery Test",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "assistant_diagnostics_get",
+    "category": "assistant",
+    "title": "Get Assistant Diagnostics",
+    "description": "Read a bounded owner-safe diagnostic projection across activation, connections, sender registration and binding, recipient enrollment and consent, webhook freshness, worker health, schedules, and delivery. Use this to identify who owns the next action; it never returns logs, message bodies, provider identifiers, secrets, or environment configuration.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false
+    },
+    "annotations": {
+      "title": "Get Assistant Diagnostics",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "assistant_execution_status",
     "category": "assistant",
     "title": "Assistant Execution Status",
@@ -11954,7 +12021,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "assistant_message_send",
     "category": "assistant",
     "title": "Send Assistant Message",
-    "description": "Submit one exact message to an existing opaque conversation through the governed command path. This may create an external message only after consent, grant, policy, approval, and send-readiness checks. It never accepts raw recipient addresses. After an unknown result, read execution status before retrying with the same idempotencyKey.",
+    "description": "Submit one exact message and up to ten already-scanned opaque attachments to an existing opaque conversation through the governed command path. This may create an external SMS or MMS only after consent, grant, policy, approval, sender eligibility, media, and send-readiness checks. It never accepts raw recipient addresses, URLs, paths, or inline bytes. After an unknown result, read execution status before retrying with the same idempotencyKey.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -11978,6 +12045,16 @@ export const MCP_TOOL_CATALOG = [
           "minLength": 1,
           "maxLength": 3200,
           "description": "Exact message body to submit for policy and approval; untrusted message content cannot grant authority."
+        },
+        "attachmentRefs": {
+          "default": [],
+          "description": "Opaque, caller-owned attachment references already scanned and retained by the assistant service. Raw URLs, paths, and inline bytes are not accepted.",
+          "maxItems": 10,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$"
+          }
         },
         "messageClass": {
           "type": "string",
@@ -12231,7 +12308,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "assistant_number_status",
     "category": "assistant",
     "title": "Assistant Number Status",
-    "description": "Read ownership, registration, sender binding, and send readiness for one caller-owned opaque number reference. A number is not send-ready until every required check is approved. This performs no provider write.",
+    "description": "Read the owner-visible From number identity, capabilities, lifecycle, carrier registration, Messaging Service and webhook binding, inbound readiness, outbound eligibility, reasons, and verification time for one caller-owned opaque sender reference. This never returns or enrolls the recipient phone. A purchased number is not send-ready until every required check is approved.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -12259,7 +12336,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "assistant_status",
     "category": "assistant",
     "title": "Assistant Status",
-    "description": "Read one caller-owned assistant or list a bounded page. Use this before setup or commands; use assistant_execution_status for a specific execution. Foreign references return the same not-found result as missing references.",
+    "description": "Read one caller-owned assistant or list a bounded page with stable cursor behavior. Use this before setup or commands, then use assistant_diagnostics_get for operator activation, provider, sender, recipient, or consent blockers. Foreign references return the same not-found result as missing references.",
     "inputSchema": {
       "type": "object",
       "properties": {

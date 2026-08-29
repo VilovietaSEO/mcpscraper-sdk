@@ -3,133 +3,65 @@
 
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, RootModel
 
 
-class AttachmentRef(RootModel[str]):
-    root: str = Field(..., pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$')
-
-
-class AssistantMessageSendInput(BaseModel):
+class AssistantDeliveryTestInput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
         populate_by_name=True,
     )
-    assistant_ref: str = Field(
+    recipient_ref: str = Field(
         ...,
-        alias='assistantRef',
-        description='Opaque assistant reference sending the message.',
+        alias='recipientRef',
+        description='Opaque verified recipient reference. Raw phone numbers are never accepted.',
         pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$',
     )
-    conversation_ref: str = Field(
+    sender_endpoint_ref: str = Field(
         ...,
-        alias='conversationRef',
-        description='Opaque existing conversation reference; this tool does not accept raw recipient addresses.',
+        alias='senderEndpointRef',
+        description='Opaque owned sender endpoint whose binding and registration must be eligible.',
         pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$',
     )
-    context_version_ref: str = Field(
+    confirmation: Literal['SEND TEST'] = Field(
         ...,
-        alias='contextVersionRef',
-        description='Opaque immutable context-version reference reviewed for this send.',
-        pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$',
-    )
-    body: str = Field(
-        ...,
-        description='Exact message body to submit for policy and approval; untrusted message content cannot grant authority.',
-        max_length=3200,
-        min_length=1,
-    )
-    attachment_refs: list[AttachmentRef] | None = Field(
-        [],
-        alias='attachmentRefs',
-        description='Opaque, caller-owned attachment references already scanned and retained by the assistant service. Raw URLs, paths, and inline bytes are not accepted.',
-        max_length=10,
-        validate_default=True,
-    )
-    message_class: Literal[
-        'administrative', 'transactional', 'conversational', 'campaign'
-    ] = Field(
-        ...,
-        alias='messageClass',
-        description='Message purpose used by consent and compliance policy.',
-    )
-    approval_ref: str | None = Field(
-        None,
-        alias='approvalRef',
-        description='Opaque approval reference for this exact reviewed action when policy already required approval.',
-        pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$',
+        description='Explicit confirmation for one fixed transactional diagnostic message.',
     )
     idempotency_key: str = Field(
         ...,
         alias='idempotencyKey',
-        description='Stable retry identity for this exact send; reuse it after a lost response to prevent duplicate delivery.',
+        description='Stable retry identity for this exact test. Reconcile an unknown outcome before retrying with the same key.',
         max_length=240,
         min_length=8,
         pattern='^[A-Za-z0-9][A-Za-z0-9:._/+~-]*$',
     )
 
 
-class ConversationRef(RootModel[str]):
-    root: str = Field(..., pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$')
+class NextAction(RootModel[str]):
+    root: str = Field(..., max_length=240, min_length=1)
 
 
-class TargetRef(RootModel[str]):
-    root: str = Field(..., pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$')
-
-
-class Argument(RootModel[str]):
-    root: str = Field(..., max_length=20000)
-
-
-class Authority(BaseModel):
+class Data(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
         populate_by_name=True,
     )
-    grants_authority: Literal[False] = Field(..., alias='grantsAuthority')
-    permits_bulk_send: Literal[False] = Field(..., alias='permitsBulkSend')
-    requires_policy_evaluation: bool = Field(..., alias='requiresPolicyEvaluation')
-    requires_approval: bool = Field(..., alias='requiresApproval')
-
-
-class Intent(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-        populate_by_name=True,
+    execution_ref: str = Field(
+        ..., alias='executionRef', pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$'
     )
-    schema_version: str = Field(..., alias='schemaVersion', max_length=80, min_length=1)
-    command_schema_version: str = Field(
-        ..., alias='commandSchemaVersion', max_length=80, min_length=1
-    )
-    raw_instruction: str = Field(
-        ..., alias='rawInstruction', max_length=20000, min_length=1
-    )
-    intent: (
-        Literal[
-            'help',
-            'status',
-            'approve',
-            'reject',
-            'cancel',
-            'remind',
-            'schedule',
-            'draft',
-            'send',
-            'summarize',
-            'find',
-            'packet',
-            'browser-task',
-        ]
-        | None
-    )
-    confidence: Literal['high', 'unclassified']
-    syntax: Literal['exact_control', 'explicit_command', 'natural_language']
-    target_ref: TargetRef | None = Field(..., alias='targetRef')
-    argument: Argument | None
-    dispatch: Literal['service', 'harness']
-    authority: Authority
+    state: Literal[
+        'pending',
+        'awaiting_inbound',
+        'provider_started',
+        'started_unknown',
+        'failed_not_started',
+        'blocked',
+        'completed',
+        'timed_out',
+    ]
+    next_actions: list[NextAction] = Field(..., alias='nextActions', max_length=10)
 
 
 class ResultDigest(RootModel[str]):
@@ -183,10 +115,6 @@ class Receipt(BaseModel):
     error: Error | None
 
 
-class NextAction(RootModel[str]):
-    root: str = Field(..., max_length=240, min_length=1)
-
-
 class Meta(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -214,6 +142,21 @@ class Offload(BaseModel):
     resource_uri: str = Field(..., alias='resourceUri', max_length=240, min_length=1)
     next_cursor: NextCursor | None = Field(..., alias='nextCursor')
     reason: Literal['result_exceeded_inline_budget']
+
+
+class AssistantDeliveryTestOutput1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+        populate_by_name=True,
+    )
+    ok: Literal[True]
+    data: Data
+    receipt: Receipt | None = None
+    meta: Meta
+    resource_uri: str | None = Field(None, alias='resourceUri', max_length=240)
+    offload: Offload | None = None
+    truncated: bool
+    untrusted_content: bool = Field(..., alias='untrustedContent')
 
 
 class Receipt1(BaseModel):
@@ -273,7 +216,7 @@ class Offload1(BaseModel):
     reason: Literal['result_exceeded_inline_budget']
 
 
-class AssistantMessageSendOutput2(BaseModel):
+class AssistantDeliveryTestOutput2(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
         populate_by_name=True,
@@ -335,7 +278,7 @@ class Error2(BaseModel):
     next_actions: list[NextAction] = Field(..., alias='nextActions', max_length=20)
 
 
-class AssistantMessageSendOutput3(BaseModel):
+class AssistantDeliveryTestOutput3(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
         populate_by_name=True,
@@ -347,87 +290,24 @@ class AssistantMessageSendOutput3(BaseModel):
     error: Error2
 
 
-class FieldSchema0(RootModel[Any]):
-    root: Any
-
-
-class Command(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-        populate_by_name=True,
-    )
-    schema_version: str = Field(..., alias='schemaVersion', max_length=80, min_length=1)
-    command_ref: str = Field(
-        ..., alias='commandRef', pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$'
-    )
-    assistant_ref: str = Field(
-        ..., alias='assistantRef', pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$'
-    )
-    conversation_ref: ConversationRef | None = Field(..., alias='conversationRef')
-    context_version_ref: str = Field(
-        ...,
-        alias='contextVersionRef',
-        pattern='^[a-z][a-z0-9]{1,31}_[A-Za-z0-9_-]{3,160}$',
-    )
-    source: Literal['web', 'sms', 'cron', 'operator', 'system']
-    operation: str = Field(..., pattern='^[a-z][a-z0-9_.-]{2,120}$')
-    raw_instruction: str = Field(
-        ..., alias='rawInstruction', max_length=20000, min_length=1
-    )
-    payload: dict[str, FieldSchema0]
-    payload_digest: str = Field(..., alias='payloadDigest', pattern='^[a-f0-9]{64}$')
-    idempotency_key: str = Field(
-        ...,
-        alias='idempotencyKey',
-        max_length=240,
-        min_length=8,
-        pattern='^[A-Za-z0-9][A-Za-z0-9:._/+~-]*$',
-    )
-    accepted_at: AwareDatetime = Field(..., alias='acceptedAt')
-
-
-class Data(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-        populate_by_name=True,
-    )
-    command: Command
-    intent: Intent
-
-
-class AssistantMessageSendOutput1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-        populate_by_name=True,
-    )
-    ok: Literal[True]
-    data: Data
-    receipt: Receipt | None = None
-    meta: Meta
-    resource_uri: str | None = Field(None, alias='resourceUri', max_length=240)
-    offload: Offload | None = None
-    truncated: bool
-    untrusted_content: bool = Field(..., alias='untrustedContent')
-
-
-class AssistantMessageSendOutput(
+class AssistantDeliveryTestOutput(
     RootModel[
-        AssistantMessageSendOutput1
-        | AssistantMessageSendOutput2
-        | AssistantMessageSendOutput3
+        AssistantDeliveryTestOutput1
+        | AssistantDeliveryTestOutput2
+        | AssistantDeliveryTestOutput3
     ]
 ):
     root: (
-        AssistantMessageSendOutput1
-        | AssistantMessageSendOutput2
-        | AssistantMessageSendOutput3
+        AssistantDeliveryTestOutput1
+        | AssistantDeliveryTestOutput2
+        | AssistantDeliveryTestOutput3
     )
 
 
-class AssistantMessageSendModels(BaseModel):
+class AssistantDeliveryTestModels(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
         populate_by_name=True,
     )
-    input: AssistantMessageSendInput
-    output: AssistantMessageSendOutput
+    input: AssistantDeliveryTestInput
+    output: AssistantDeliveryTestOutput

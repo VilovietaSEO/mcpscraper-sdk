@@ -254,6 +254,10 @@ async function loadTools(): Promise<{ tools: LiveTool[]; generatedFrom: string }
   if (missingOutputSchemas.length) {
     throw new Error(`Complete server manifest is missing outputSchema for: ${missingOutputSchemas.join(', ')}`)
   }
+  const missingInputSchemas = tools.filter(tool => tool.inputSchema === undefined).map(tool => tool.name)
+  if (missingInputSchemas.length) {
+    throw new Error(`Complete server manifest is missing inputSchema for: ${missingInputSchemas.join(', ')}`)
+  }
   if (!manifest.serverInfo?.name || !manifest.serverInfo.version) {
     throw new Error('Complete server manifest must record serverInfo.name and serverInfo.version')
   }
@@ -293,7 +297,7 @@ async function main(): Promise<void> {
       description: tool.description ?? '',
       category,
       methodName: deriveMethodName(tool.name, category),
-      inputSchema: tool.inputSchema ?? { type: 'object', additionalProperties: true },
+      inputSchema: tool.inputSchema!,
       outputSchema: stripInternalTelemetry(tool.outputSchema) as Record<string, unknown>,
       outputSchemaProvided: true,
       annotations: tool.annotations ?? {},
