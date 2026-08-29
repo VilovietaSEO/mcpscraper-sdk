@@ -2,12 +2,12 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## [Unreleased] — verified against mcp-scraper 0.79.3 / mcp-memory 1.20.0
+## [Unreleased] — verified against mcp-scraper 0.80.0 / mcp-memory 1.20.0
 
 ### Added
 
-- Added generated Node, Python, CLI, and cURL bindings for all 15 governed Personal Assistant MCP tools, including immutable command review, approval decisions, conversations, schedules, reminders, grants, contacts, context packets, settings, and Twilio number workflows.
-- Added the separately named 60-operation Assistant owner REST contract without replacing the established scraper REST OpenAPI contract.
+- Added generated Node, Python, CLI, and cURL bindings for all 17 governed Personal Assistant MCP tools, including owner-safe diagnostics, confirmed delivery tests, immutable command review, approval decisions, conversations, grants, and Twilio number workflows.
+- Added the separately named 77-operation Assistant owner REST contract, including schedules, reminders, recipient claims, consent content, and confirmed lifecycle operations, without replacing the established scraper REST OpenAPI contract.
 - Added direct Memory bindings for the five Assistant context-packet operations, including creation, retrieval, lifecycle changes, listing, and share acceptance.
 - Added compile-checked TypeScript and Python Assistant examples plus public cursor, idempotency, command, and approval-decision types.
 - Added the Foundation REST and bounded archive-reading clients needed by durable Assistant research and crawl workflows.
@@ -15,9 +15,10 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ### Changed
 
 - Regenerated the durable PAA status contract with stable job, operation, and task correlation IDs; typed lifecycle counters; recent per-control 0.7/1.0/1.4-second confirmation outcomes; and interruption-safe telemetry summaries.
-- Regenerated all six unified developer surfaces from the exact 354-tool MCP Scraper source manifest and all direct Memory clients from the exact 121-tool Memory contract.
+- Regenerated all six unified developer surfaces from the exact 356-tool MCP Scraper source manifest and all direct Memory clients from the exact 121-tool Memory contract.
+- Made Assistant generation fail closed when a source tool omits a schema or generation would otherwise emit an unknown or open index-signature fallback; message sends now accept at most ten opaque attachment references.
 - Exposed PAA lifecycle diagnostics that distinguish target completion, proven frontier exhaustion, interruption, and exhausted automatic recovery while preserving complete question, AI Overview, and ranked-link material.
-- Prepared `mcpscraper-memory-sdk` 0.35.1, `mcpscraper-sdk` 0.35.1, `mcpscraper-cli` 0.34.1, Python `mcpscraper-sdk` 0.33.1, and Python `mcpscraper-memory-sdk` 0.31.1.
+- Prepared backward-compatible minor releases: `mcpscraper-sdk` 0.36.0, `mcpscraper-memory-sdk` 0.36.0, `mcpscraper-cli` 0.35.0, Python `mcpscraper-sdk` 0.34.0, and Python `mcpscraper-memory-sdk` 0.32.0.
 
 ## 2026-08-27 — verified against mcp-scraper 0.73.0 / mcp-memory 1.19.1
 

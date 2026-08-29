@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated, typed 354-tool MCP surface from `contracts/mcp.tools.json`, including the governed personal-assistant namespace.
+`client.tools` is the generated, typed 356-tool MCP surface from `contracts/mcp.tools.json`, including the governed personal-assistant namespace.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 

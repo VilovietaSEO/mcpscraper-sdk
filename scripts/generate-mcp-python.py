@@ -4,6 +4,9 @@ import re
 import shutil
 from pathlib import Path
 
+from datamodel_code_generator import DataModelType, Formatter, InputFileType, generate
+from datamodel_code_generator.parser import LiteralType
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = REPO_ROOT / "contracts" / "mcp.tools.json"
 TARGETS = [
@@ -66,6 +69,67 @@ def render_model(class_name: str, schema: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_strict_assistant_models(tool: dict) -> str:
+    """Generate the complete closed Assistant input/output graph without permissive fallbacks."""
+    prefix = to_pascal_case(tool["name"])
+    input_name = prefix + "Input"
+    output_name = prefix + "Output"
+    def python_compatible_schema(value):
+        if isinstance(value, list):
+            return [python_compatible_schema(entry) for entry in value]
+        if not isinstance(value, dict):
+            return value
+        normalized = {key: python_compatible_schema(entry) for key, entry in value.items()}
+        # Pydantic correctly parses JSON Schema date-time strings as datetime.
+        # Retaining Zod's string regex would then apply a string constraint to a
+        # datetime instance and fail every otherwise-valid timestamp at runtime.
+        if normalized.get("format") == "date-time":
+            normalized.pop("pattern", None)
+        return normalized
+
+    wrapper = {
+        "$defs": {
+            input_name: python_compatible_schema(tool["inputSchema"]),
+            output_name: python_compatible_schema(tool["outputSchema"]),
+        },
+        "type": "object",
+        "properties": {
+            "input": {"$ref": f"#/$defs/{input_name}"},
+            "output": {"$ref": f"#/$defs/{output_name}"},
+        },
+        "required": ["input", "output"],
+        "additionalProperties": False,
+    }
+    rendered = generate(
+        json.dumps(wrapper),
+        input_file_type=InputFileType.JsonSchema,
+        output_model_type=DataModelType.PydanticV2BaseModel,
+        class_name=prefix + "Models",
+        field_constraints=True,
+        target_python_version="3.10",
+        disable_timestamp=True,
+        use_union_operator=True,
+        enum_field_as_literal=LiteralType.All,
+        allow_population_by_field_name=True,
+        snake_case_field=True,
+        formatters=[Formatter.BLACK, Formatter.ISORT],
+    )
+    if not isinstance(rendered, str):
+        raise RuntimeError(f"Assistant schema generator returned no source for {tool['name']}")
+    if f"class {input_name}(" not in rendered or f"class {output_name}(" not in rendered:
+        raise RuntimeError(f"Assistant schema generator omitted {input_name} or {output_name}")
+    if "extra='allow'" in rendered or 'extra="allow"' in rendered:
+        raise RuntimeError(f"Assistant schema generator produced a permissive model for {tool['name']}")
+    empty_output = re.compile(
+        rf"class {re.escape(output_name)}\(BaseModel\):\s+model_config\s*=.*?(?=\nclass |\Z)",
+        re.DOTALL,
+    )
+    match = empty_output.search(rendered)
+    if match and not re.search(r"\n\s{4}[a-zA-Z_][a-zA-Z0-9_]*:\s", match.group(0)):
+        raise RuntimeError(f"Assistant schema generator produced an empty output fallback for {tool['name']}")
+    return rendered.rstrip() + "\n"
+
+
 def generate_target(package_root: Path, package_name: str, tools: list[dict]) -> None:
     models_dir = package_root / "mcp_models"
     generated_client_path = package_root / "_mcp_generated_client.py"
@@ -81,16 +145,19 @@ def generate_target(package_root: Path, package_name: str, tools: list[dict]) ->
         model_prefix = to_pascal_case(tool["name"])
         input_class = model_prefix + "Input"
         output_class = model_prefix + "Output"
-        content = [
-            "from typing import Any, Literal",
-            "from pydantic import BaseModel, ConfigDict, Field",
-            "",
-            "",
-            render_model(input_class, tool["inputSchema"]),
-            "",
-            render_model(output_class, tool["outputSchema"]),
-        ]
-        (models_dir / f"{module_name}.py").write_text("\n".join(content))
+        if tool["name"].startswith("assistant_"):
+            content = render_strict_assistant_models(tool)
+        else:
+            content = "\n".join([
+                "from typing import Any, Literal",
+                "from pydantic import BaseModel, ConfigDict, Field",
+                "",
+                "",
+                render_model(input_class, tool["inputSchema"]),
+                "",
+                render_model(output_class, tool["outputSchema"]),
+            ])
+        (models_dir / f"{module_name}.py").write_text(content)
         import_lines.append(
             f"from .mcp_models.{module_name} import {input_class}, {output_class}"
         )
