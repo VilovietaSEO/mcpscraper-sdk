@@ -84,6 +84,11 @@ export interface Output {
     processedQuestions: number;
     failedInteractions: number;
     noGrowthConfirmations: number;
+    visibleControls: number;
+    eligibleControls: number;
+    dispatchedInteractions: number;
+    confirmedInteractions: number;
+    unconfirmedInteractions: number;
   } | null;
   questions: {
     questionId: string;

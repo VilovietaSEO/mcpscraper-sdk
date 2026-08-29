@@ -2,7 +2,7 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## [Unreleased] — verified against mcp-scraper 0.79.1 / mcp-memory 1.20.0
+## [Unreleased] — verified against mcp-scraper 0.79.3 / mcp-memory 1.20.0
 
 ### Added
 
@@ -14,9 +14,10 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ### Changed
 
+- Regenerated the durable PAA status contract with stable job, operation, and task correlation IDs; typed lifecycle counters; recent per-control 0.7/1.0/1.4-second confirmation outcomes; and interruption-safe telemetry summaries.
 - Regenerated all six unified developer surfaces from the exact 354-tool MCP Scraper source manifest and all direct Memory clients from the exact 121-tool Memory contract.
 - Exposed PAA lifecycle diagnostics that distinguish target completion, proven frontier exhaustion, interruption, and exhausted automatic recovery while preserving complete question, AI Overview, and ranked-link material.
-- Prepared `mcpscraper-memory-sdk` 0.35.0, `mcpscraper-sdk` 0.35.0, `mcpscraper-cli` 0.34.0, Python `mcpscraper-sdk` 0.33.0, and Python `mcpscraper-memory-sdk` 0.31.0.
+- Prepared `mcpscraper-memory-sdk` 0.35.1, `mcpscraper-sdk` 0.35.1, `mcpscraper-cli` 0.34.1, Python `mcpscraper-sdk` 0.33.1, and Python `mcpscraper-memory-sdk` 0.31.1.
 
 ## 2026-08-27 — verified against mcp-scraper 0.73.0 / mcp-memory 1.19.1
 
