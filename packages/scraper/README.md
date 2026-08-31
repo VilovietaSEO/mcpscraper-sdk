@@ -174,12 +174,27 @@ Use `mcpscraper-memory-sdk`'s own `MemoryClient` instead if you already have a d
 
 ## Regenerating types
 
-`src/schema.ts` is generated from the OpenAPI spec and checked in. After editing `../../contracts/scraper.openapi.yaml`, regenerate with:
+`src/schema.ts` is generated from the OpenAPI spec and checked in. After editing `contracts/scraper.openapi.yaml`, regenerate from the repository root with:
 
 ```bash
-npm run generate
+npx openapi-typescript contracts/scraper.openapi.yaml -o packages/scraper/src/schema.ts
 ```
 
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 121-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
+
+## Two-page PAA research
+
+Set `pages` to `2` to request organic results from a second Google results page before PAA expands on the original first page. This does not harvest a second PAA graph. The default is one page. Inspect `pagination.requestedPages`, `pagination.capturedPages`, and `pagination.page2Status`; page two can be unavailable or fail without discarding first-page PAA. Legacy results can return `pagination: null`.
+
+Use `tools = new McpToolsClient({ apiKey })` from this package.
+
+```ts
+const result = await tools.search.harvestPaa({
+  query: 'commercial truck insurance', pages: 2, maxQuestions: 3,
+})
+console.log(result.pagination)
+```
+
+Requires MCP Scraper 0.81.0 or later. [Release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.37.0).

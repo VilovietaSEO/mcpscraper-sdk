@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.80.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "2b8a52b2cb70132cdb80f1f0bdb9a9b5830905ec57a74008b120d4e0fb79ef86",
+  "generatedFrom": "mcp-scraper 0.81.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "d41d050580562096e30b2e6f354e97a4ea1bc0d8bb7635c1639838c684a8fa76",
   "toolCount": 356,
   "tools": [
     {
@@ -59512,6 +59512,13 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "pages": {
+            "default": 1,
+            "description": "Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2
+          },
           "query": {
             "type": "string",
             "minLength": 1,
@@ -59774,6 +59781,82 @@
                   "dispatchedInteractions",
                   "confirmedInteractions",
                   "unconfirmedInteractions"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pagination": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "requestedPages": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "const": 1
+                      },
+                      {
+                        "type": "number",
+                        "const": 2
+                      }
+                    ]
+                  },
+                  "capturedPages": {
+                    "anyOf": [
+                      {
+                        "type": "number",
+                        "const": 1
+                      },
+                      {
+                        "type": "number",
+                        "const": 2
+                      }
+                    ]
+                  },
+                  "page2Status": {
+                    "type": "string",
+                    "enum": [
+                      "not_requested",
+                      "not_attempted",
+                      "captured",
+                      "unavailable",
+                      "failed"
+                    ]
+                  },
+                  "page1OrganicCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "page2OrganicCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "failureCode": {
+                    "type": "string",
+                    "enum": [
+                      "missing_next",
+                      "invalid_next",
+                      "empty_page",
+                      "captcha",
+                      "timeout",
+                      "navigation_error",
+                      "unsupported_driver"
+                    ]
+                  }
+                },
+                "required": [
+                  "requestedPages",
+                  "capturedPages",
+                  "page2Status",
+                  "page1OrganicCount",
+                  "page2OrganicCount"
                 ],
                 "additionalProperties": false
               },
@@ -60230,6 +60313,7 @@
           "degradationReasons",
           "retryRecommended",
           "paaLifecycle",
+          "pagination",
           "questions",
           "organicResults",
           "aiOverview",
@@ -60257,6 +60341,13 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "pages": {
+            "default": 1,
+            "description": "Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2
+          },
           "query": {
             "type": "string",
             "minLength": 1,
@@ -61026,6 +61117,82 @@
               {
                 "type": "object",
                 "properties": {
+                  "pagination": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "requestedPages": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "const": 1
+                              },
+                              {
+                                "type": "number",
+                                "const": 2
+                              }
+                            ]
+                          },
+                          "capturedPages": {
+                            "anyOf": [
+                              {
+                                "type": "number",
+                                "const": 1
+                              },
+                              {
+                                "type": "number",
+                                "const": 2
+                              }
+                            ]
+                          },
+                          "page2Status": {
+                            "type": "string",
+                            "enum": [
+                              "not_requested",
+                              "not_attempted",
+                              "captured",
+                              "unavailable",
+                              "failed"
+                            ]
+                          },
+                          "page1OrganicCount": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "page2OrganicCount": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "failureCode": {
+                            "type": "string",
+                            "enum": [
+                              "missing_next",
+                              "invalid_next",
+                              "empty_page",
+                              "captcha",
+                              "timeout",
+                              "navigation_error",
+                              "unsupported_driver"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "requestedPages",
+                          "capturedPages",
+                          "page2Status",
+                          "page1OrganicCount",
+                          "page2OrganicCount"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
                   "completionStatus": {
                     "anyOf": [
                       {
@@ -61608,6 +61775,7 @@
                   }
                 },
                 "required": [
+                  "pagination",
                   "completionStatus",
                   "resultQuality",
                   "retryRecommended",

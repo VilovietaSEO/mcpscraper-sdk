@@ -69,8 +69,8 @@ def render_model(class_name: str, schema: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def render_strict_assistant_models(tool: dict) -> str:
-    """Generate the complete closed Assistant input/output graph without permissive fallbacks."""
+def render_strict_tool_models(tool: dict) -> str:
+    """Generate the complete closed input/output graph without permissive fallbacks."""
     prefix = to_pascal_case(tool["name"])
     input_name = prefix + "Input"
     output_name = prefix + "Output"
@@ -115,18 +115,18 @@ def render_strict_assistant_models(tool: dict) -> str:
         formatters=[Formatter.BLACK, Formatter.ISORT],
     )
     if not isinstance(rendered, str):
-        raise RuntimeError(f"Assistant schema generator returned no source for {tool['name']}")
+        raise RuntimeError(f"Tool schema generator returned no source for {tool['name']}")
     if f"class {input_name}(" not in rendered or f"class {output_name}(" not in rendered:
-        raise RuntimeError(f"Assistant schema generator omitted {input_name} or {output_name}")
+        raise RuntimeError(f"Tool schema generator omitted {input_name} or {output_name}")
     if "extra='allow'" in rendered or 'extra="allow"' in rendered:
-        raise RuntimeError(f"Assistant schema generator produced a permissive model for {tool['name']}")
+        raise RuntimeError(f"Tool schema generator produced a permissive model for {tool['name']}")
     empty_output = re.compile(
         rf"class {re.escape(output_name)}\(BaseModel\):\s+model_config\s*=.*?(?=\nclass |\Z)",
         re.DOTALL,
     )
     match = empty_output.search(rendered)
     if match and not re.search(r"\n\s{4}[a-zA-Z_][a-zA-Z0-9_]*:\s", match.group(0)):
-        raise RuntimeError(f"Assistant schema generator produced an empty output fallback for {tool['name']}")
+        raise RuntimeError(f"Tool schema generator produced an empty output fallback for {tool['name']}")
     return rendered.rstrip() + "\n"
 
 
@@ -145,8 +145,8 @@ def generate_target(package_root: Path, package_name: str, tools: list[dict]) ->
         model_prefix = to_pascal_case(tool["name"])
         input_class = model_prefix + "Input"
         output_class = model_prefix + "Output"
-        if tool["name"].startswith("assistant_"):
-            content = render_strict_assistant_models(tool)
+        if tool["name"].startswith("assistant_") or tool["name"] in {"harvest_paa", "harvest_paa_start", "harvest_paa_status"}:
+            content = render_strict_tool_models(tool)
         else:
             content = "\n".join([
                 "from typing import Any, Literal",

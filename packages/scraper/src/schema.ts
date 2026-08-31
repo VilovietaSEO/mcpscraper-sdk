@@ -1216,7 +1216,7 @@ export interface components {
             /** @description Optional US ZIP override. */
             proxyZip?: string;
             /**
-             * @description Organic result pages to fetch.
+             * @description Organic result pages to request. For full PAA harvesting, pages=2 captures optional second-page organic results before expanding PAA on the original first page. Missing or failed page two does not discard first-page PAA; inspect result.diagnostics.pagination for the actual captured outcome.
              * @default 1
              */
             pages: number;
@@ -1237,11 +1237,30 @@ export interface components {
             job_id: string;
             /** @enum {string} */
             status: "done" | "cancelled" | "failed";
-            /** @description Present when status is done — SERP/PAA harvest result. */
-            result?: {
+            result?: components["schemas"]["HarvestResult"];
+            error?: string;
+        };
+        HarvestPaginationDiagnostics: {
+            /** @enum {integer} */
+            requestedPages: 1 | 2;
+            /** @enum {integer} */
+            capturedPages: 1 | 2;
+            /** @enum {string} */
+            page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
+            page1OrganicCount: number;
+            page2OrganicCount: number;
+            /** @enum {string} */
+            failureCode?: "missing_next" | "invalid_next" | "empty_page" | "captcha" | "timeout" | "navigation_error" | "unsupported_driver";
+        };
+        /** @description SERP/PAA harvest result. Legacy results may omit pagination diagnostics. */
+        HarvestResult: {
+            diagnostics?: {
+                pagination?: components["schemas"]["HarvestPaginationDiagnostics"];
+            } & {
                 [key: string]: unknown;
             };
-            error?: string;
+        } & {
+            [key: string]: unknown;
         };
         HarvestQueuedResponse: {
             job_id: string;
@@ -1253,9 +1272,7 @@ export interface components {
             /** @enum {string} */
             status?: "pending" | "running" | "done" | "failed" | "cancelled";
             query?: string;
-            result?: {
-                [key: string]: unknown;
-            } | null;
+            result?: components["schemas"]["HarvestResult"] | null;
             error?: string | null;
             attempts?: {
                 [key: string]: unknown;

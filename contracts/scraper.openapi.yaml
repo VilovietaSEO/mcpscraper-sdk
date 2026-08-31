@@ -1588,7 +1588,7 @@ components:
         device: { type: string, enum: [desktop, mobile], default: desktop }
         proxyMode: { type: string, enum: [configured, none], default: none }
         proxyZip: { type: string, pattern: '^\d{5}$', description: 'Optional US ZIP override.' }
-        pages: { type: integer, minimum: 1, maximum: 2, default: 1, description: 'Organic result pages to fetch.' }
+        pages: { type: integer, minimum: 1, maximum: 2, default: 1, description: 'Organic result pages to request. For full PAA harvesting, pages=2 captures optional second-page organic results before expanding PAA on the original first page. Missing or failed page two does not discard first-page PAA; inspect result.diagnostics.pagination for the actual captured outcome.' }
         serpOnly: { type: boolean, default: false, description: 'true = pure SERP call (search_serp); false = full PAA harvest.' }
         recency: { type: string, enum: [day, week, month, year], description: 'Optional Google time filter (past day/week/month/year). Omit for all-time. Pairs well with a site: operator in the query.' }
         debug: { type: boolean, default: false }
@@ -1598,9 +1598,31 @@ components:
       properties:
         job_id: { type: string }
         status: { type: string, enum: [done, cancelled, failed] }
-        result: { type: object, additionalProperties: true, description: 'Present when status is done — SERP/PAA harvest result.' }
+        result: { $ref: '#/components/schemas/HarvestResult' }
         error: { type: string }
       required: [job_id, status]
+
+    HarvestPaginationDiagnostics:
+      type: object
+      required: [requestedPages, capturedPages, page2Status, page1OrganicCount, page2OrganicCount]
+      properties:
+        requestedPages: { type: integer, enum: [1, 2] }
+        capturedPages: { type: integer, enum: [1, 2] }
+        page2Status: { type: string, enum: [not_requested, not_attempted, captured, unavailable, failed] }
+        page1OrganicCount: { type: integer, minimum: 0 }
+        page2OrganicCount: { type: integer, minimum: 0 }
+        failureCode: { type: string, enum: [missing_next, invalid_next, empty_page, captcha, timeout, navigation_error, unsupported_driver] }
+
+    HarvestResult:
+      type: object
+      additionalProperties: true
+      description: SERP/PAA harvest result. Legacy results may omit pagination diagnostics.
+      properties:
+        diagnostics:
+          type: object
+          additionalProperties: true
+          properties:
+            pagination: { $ref: '#/components/schemas/HarvestPaginationDiagnostics' }
 
     HarvestQueuedResponse:
       type: object
@@ -1615,7 +1637,10 @@ components:
         id: { type: string }
         status: { type: string, enum: [pending, running, done, failed, cancelled] }
         query: { type: string }
-        result: { type: object, additionalProperties: true, nullable: true }
+        result:
+          type: object
+          allOf: [{ $ref: '#/components/schemas/HarvestResult' }]
+          nullable: true
         error: { type: string, nullable: true }
         attempts:
           type: array

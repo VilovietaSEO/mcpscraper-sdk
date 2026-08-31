@@ -69,3 +69,18 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 121 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
+
+## Two-page PAA research
+
+Set `pages` to `2` to request organic results from a second Google results page before PAA expands on the original first page. This does not harvest a second PAA graph. The default is one page. Inspect `pagination.requestedPages`, `pagination.capturedPages`, and `pagination.page2Status`; page two can be unavailable or fail without discarding first-page PAA. Legacy results can return `pagination: null`.
+
+Use `tools = new McpToolsClient({ apiKey })` from this package.
+
+```ts
+const result = await tools.search.harvestPaa({
+  query: 'commercial truck insurance', pages: 2, maxQuestions: 3,
+})
+console.log(result.pagination)
+```
+
+Requires MCP Scraper 0.81.0 or later. [Release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.37.0).

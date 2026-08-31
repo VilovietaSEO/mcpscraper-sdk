@@ -2,7 +2,27 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## [Unreleased] — verified against mcp-scraper 0.80.0 / mcp-memory 1.20.0
+## [Unreleased]
+
+## [0.37.0] - 2026-08-31
+
+Verified against mcp-scraper 0.81.0; direct Memory API remains unchanged.
+
+### Added
+
+- Request up to two organic result pages with `pages: 2` in synchronous and durable PAA harvesting across Node, Python, CLI, and cURL. PAA questions continue to expand on the original first page.
+- Read typed pagination outcomes to distinguish a captured second page from an unavailable or failed optional page without losing first-page evidence. Existing one-page requests remain the default.
+- Added a runnable two-page PAA example and documented the same option for REST callers.
+
+### Changed
+
+- Regenerated all unified public clients from the 356-tool MCP Scraper contract. Package versions are Node scraper/memory 0.37.0, CLI 0.36.0, Python scraper 0.35.0, and Python memory 0.33.0.
+- Raised Node package dependency floors so the scraper and CLI load clients containing the new PAA contract.
+
+## [0.36.0] - 2026-08-28
+
+Verified against mcp-scraper 0.80.0 / mcp-memory 1.20.0
+
 
 ### Added
 
@@ -535,3 +555,7 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Added `POST /memory/mcp-call` to the contract and `client.memoryTools.*` to the SDK — all 74 memory.mcpscraper.dev tools, callable with only a scraper API key (reuses `mcpscraper-memory-sdk`'s generated namespace classes as a workspace dependency; no code duplicated).
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
+
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.37.0...HEAD
+[0.37.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.36.0...v0.37.0
+[0.36.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.35.1...v0.36.0
