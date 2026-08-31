@@ -8,7 +8,7 @@ export interface Input {
    */
   subreddit?: string;
   /**
-   * Discovery time range: "week", "month" (30 days, default), or "all" (no Google time filter).
+   * Web-discovery time range: "week", "month" (default), or "all" (no date filter).
    */
   window?: "week" | "month" | "all";
   /**
@@ -52,7 +52,7 @@ export interface Output {
   candidatesFound: number;
   partial: boolean;
   searchQuery: string;
-  discoverySource: "google_serp" | "reddit_search_fallback" | "none";
+  discoverySource: "web_search" | "google_serp" | "reddit_search_fallback" | "none";
   resultQuality: "complete" | "partial" | "degraded";
   degradedResult: boolean;
   degradationReasons: string[];

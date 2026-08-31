@@ -1,10 +1,10 @@
 export interface Input {
   /**
-   * A reddit.com thread/post URL. The reader opens normal Reddit first, waits through automatic browser challenges, and uses the equivalent old Reddit URL only if the normal page remains unavailable.
+   * A reddit.com thread/post URL. Legacy reddit.com hostnames are normalized, but retrieval uses the current Reddit page only.
    */
   url: string;
   /**
-   * Optional cap on comments returned. Omit to return all captured comments.
+   * Optional cap on comments returned. Omit to return the largest set captured within the bounded expansion window, up to 2,000.
    */
   maxComments?: number;
 }

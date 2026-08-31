@@ -2,7 +2,16 @@
 
 All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are documented here. Each entry notes which product version(s) it was verified against.
 
-## [Unreleased] — verified against mcp-scraper 0.80.0 / mcp-memory 1.20.0
+## [Unreleased]
+
+## [0.36.1] - 2026-08-31 — verified against mcp-scraper 0.81.0 / mcp-memory 1.20.0
+
+### Changed
+
+- Regenerated the Node, Python, CLI, and cURL contracts so `reddit_thread` and `reddit_trending` describe the managed residential primary path, bounded backup behavior, and 25-comment recovery limit shipped by MCP Scraper 0.81.0.
+- Prepared patch releases: `mcpscraper-sdk` 0.36.1, `mcpscraper-memory-sdk` 0.36.1, `mcpscraper-cli` 0.35.1, Python `mcpscraper-sdk` 0.34.1, and Python `mcpscraper-memory-sdk` 0.32.1.
+
+## [0.36.0] - 2026-08-29 — verified against mcp-scraper 0.80.0 / mcp-memory 1.20.0
 
 ### Added
 

@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-sdk",
-  "version": "0.36.0",
+  "version": "0.36.1",
   "description": "Official Node.js client for all 356 mcpscraper.dev MCP tools and the REST API",
   "license": "MIT",
   "type": "module",
@@ -32,7 +32,7 @@
     "seo-api"
   ],
   "dependencies": {
-    "mcpscraper-memory-sdk": "^0.35.1"
+    "mcpscraper-memory-sdk": "^0.36.1"
   },
   "devDependencies": {
     "openapi-typescript": "^7.13.0"
