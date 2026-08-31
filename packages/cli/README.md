@@ -131,3 +131,13 @@ $ mcpscraper map https://example.com --json
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) · [`mcpscraper-memory-sdk`](../memory) · Python: [`mcpscraper-sdk`](../scraper-python) · [`mcpscraper-memory-sdk`](../memory-python)
+
+## Two-page PAA research
+
+Set `pages` to `2` to request organic results from a second Google results page before PAA expands on the original first page. This does not harvest a second PAA graph. The default is one page. Inspect `pagination.requestedPages`, `pagination.capturedPages`, and `pagination.page2Status`; page two can be unavailable or fail without discarding first-page PAA. Legacy results can return `pagination: null`.
+
+```bash
+mcpscraper tools call harvest_paa --args '{"query":"commercial truck insurance","pages":2,"maxQuestions":3}' --json
+```
+
+Requires MCP Scraper 0.81.0 or later. [Release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.37.0).

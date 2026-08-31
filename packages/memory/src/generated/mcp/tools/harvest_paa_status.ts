@@ -4964,6 +4964,21 @@ export interface Output {
         ];
   };
   result: {
+    pagination: {
+      requestedPages: 1 | 2;
+      capturedPages: 1 | 2;
+      page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
+      page1OrganicCount: number;
+      page2OrganicCount: number;
+      failureCode?:
+        | "missing_next"
+        | "invalid_next"
+        | "empty_page"
+        | "captcha"
+        | "timeout"
+        | "navigation_error"
+        | "unsupported_driver";
+    } | null;
     completionStatus: string | null;
     resultQuality: string | null;
     retryRecommended: boolean | null;

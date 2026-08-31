@@ -20697,6 +20697,13 @@ export const MCP_TOOL_CATALOG = [
     "inputSchema": {
       "type": "object",
       "properties": {
+        "pages": {
+          "default": 1,
+          "description": "Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
         "query": {
           "type": "string",
           "minLength": 1,
@@ -20797,6 +20804,13 @@ export const MCP_TOOL_CATALOG = [
     "inputSchema": {
       "type": "object",
       "properties": {
+        "pages": {
+          "default": 1,
+          "description": "Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
         "query": {
           "type": "string",
           "minLength": 1,

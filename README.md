@@ -774,3 +774,15 @@ npm run smoke-test           # live smoke test against prod using test/throwaway
 ```
 
 Package-specific docs: [`packages/scraper`](./packages/scraper) · [`packages/memory`](./packages/memory) · [`packages/scraper-python`](./packages/scraper-python) · [`packages/memory-python`](./packages/memory-python) · [`packages/cli`](./packages/cli)
+
+## Two-page PAA research
+
+Set `pages` to `2` to request organic results from a second Google results page before PAA expands on the original first page. This does not harvest a second PAA graph. The default is one page. Inspect `pagination.requestedPages`, `pagination.capturedPages`, and `pagination.page2Status`; page two can be unavailable or fail without discarding first-page PAA. Legacy results can return `pagination: null`.
+
+Use the generated `McpToolsClient.search.harvestPaa` method (Python: `search.harvest_paa`) or `harvest_paa_start` for durable jobs. For REST, pass `pages: 2` to `/harvest` or `/harvest/sync` and inspect `result.diagnostics.pagination`.
+
+```bash
+npm run example:paa:two-pages
+```
+
+The runnable example uses `MCP_SCRAPER_API_KEY`, optionally `PAA_QUERY`, and requests three PAA questions. This is a billed live request. Requires MCP Scraper 0.81.0 or later. [Release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.37.0).
