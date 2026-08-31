@@ -5,8 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 class RedditThreadInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    url: str = Field(..., alias="url", description="A reddit.com thread/post URL. The reader opens normal Reddit first, waits through automatic browser challenges, and uses the equivalent old Reddit URL only if the normal page remains unavailable.")
-    max_comments: int | None = Field(None, alias="maxComments", description="Optional cap on comments returned. Omit to return all captured comments.")
+    url: str = Field(..., alias="url", description="A reddit.com thread/post URL. Legacy reddit.com hostnames are normalized, but retrieval uses the current Reddit page only.")
+    max_comments: int | None = Field(None, alias="maxComments", description="Optional cap on comments returned. Omit to return the largest set captured within the bounded expansion window, up to 2,000.")
 
 
 class RedditThreadOutput(BaseModel):

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.80.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "2b8a52b2cb70132cdb80f1f0bdb9a9b5830905ec57a74008b120d4e0fb79ef86",
+  "generatedFrom": "mcp-scraper 0.81.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "27682a08258a3e36d49f6cfe9e92fec3844dad34353990f7b19570e7cb444b60",
   "toolCount": 356,
   "tools": [
     {
@@ -77973,7 +77973,7 @@
     {
       "name": "reddit_thread",
       "title": "Reddit Thread + Comments",
-      "description": "Capture a Reddit post and its comment tree from a reddit.com thread URL. Opens normal Reddit in a managed stealth browser first and waits through automatic challenges for up to 300 seconds; only then tries the equivalent old Reddit URL. Returns retrievalSource so the caller can see which page worked. Pass maxComments to cap the list.",
+      "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. The managed residential browser is primary; a bounded managed-browser backup can recover the post and up to 25 comments when the primary fails. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
       "category": "reddit",
       "methodName": "thread",
       "inputSchema": {
@@ -77982,10 +77982,10 @@
           "url": {
             "type": "string",
             "minLength": 1,
-            "description": "A reddit.com thread/post URL. The reader opens normal Reddit first, waits through automatic browser challenges, and uses the equivalent old Reddit URL only if the normal page remains unavailable."
+            "description": "A reddit.com thread/post URL. Legacy reddit.com hostnames are normalized, but retrieval uses the current Reddit page only."
           },
           "maxComments": {
-            "description": "Optional cap on comments returned. Omit to return all captured comments.",
+            "description": "Optional cap on comments returned. Omit to return the largest set captured within the bounded expansion window, up to 2,000.",
             "type": "integer",
             "minimum": 1,
             "maximum": 2000
@@ -78152,7 +78152,7 @@
     {
       "name": "reddit_trending",
       "title": "Reddit Trending",
-      "description": "Discover Reddit conversations through a managed Google site:reddit.com search for the last week, last 30 days, or all time. Exact phrases are supported by quoting the topic. Saved thread URLs are opened on normal Reddit in a managed stealth browser that waits through automatic challenges for up to 300 seconds, with old Reddit used only as a fallback. If Google finds no usable links, the fallback opens normal Reddit and uses its search bar before trying old Reddit. Inspect resultQuality and discoverySource; set includeComments:false for discovery only.",
+      "description": "Discover Reddit conversations through a site-restricted web search for the last week, month, or all time. With includeComments:true, each candidate is opened on current Reddit through a managed residential browser, with a bounded backup of up to 25 comments after primary failure, and ranked from rendered engagement; discovery, each hydrated thread, and returned comments are billed separately. Set includeComments:false for the faster discovery-only result, and inspect resultQuality and discoverySource before treating an empty result as meaningful.",
       "category": "reddit",
       "methodName": "trending",
       "inputSchema": {
@@ -78170,7 +78170,7 @@
           },
           "window": {
             "default": "month",
-            "description": "Discovery time range: \"week\", \"month\" (30 days, default), or \"all\" (no Google time filter).",
+            "description": "Web-discovery time range: \"week\", \"month\" (default), or \"all\" (no date filter).",
             "type": "string",
             "enum": [
               "week",
@@ -78338,6 +78338,7 @@
           "discoverySource": {
             "type": "string",
             "enum": [
+              "web_search",
               "google_serp",
               "reddit_search_fallback",
               "none"
