@@ -3,14 +3,14 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class StorageUsageToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key (Bearer secret). Optional when the MCP session is already authenticated; the server resolves auth from the session.")
     session_id: str | None = Field(None, alias="sessionId", description="Session identifier used to resolve the active vault and per-session state. Optional; defaults to the current MCP session.")
 
 
 class StorageUsageToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="True when usage was computed; false on an auth/scope error.")
     total_bytes: float | None = Field(None, alias="totalBytes", description="Total stored bytes across all the caller vaults. Present when ok is true.")

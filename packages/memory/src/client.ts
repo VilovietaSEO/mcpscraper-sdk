@@ -17,7 +17,7 @@ import {
   VideoNamespace,
   WebhooksNamespace,
 } from './generated/methods.js'
-import { AssistantNamespace } from './generated/direct/methods.js'
+import { AssistantNamespace, CrmNamespace, ResearchNamespace } from './generated/direct/methods.js'
 
 export interface MemoryClientOptions {
   apiKey: string
@@ -45,6 +45,7 @@ interface JsonRpcResponse {
 export class MemoryClient {
   readonly access: AccessNamespace
   readonly assistant: AssistantNamespace
+  readonly crm: CrmNamespace
   readonly capture: CaptureNamespace
   readonly channels: ChannelsNamespace
   readonly facts: FactsNamespace
@@ -53,6 +54,7 @@ export class MemoryClient {
   readonly library: LibraryNamespace
   readonly memory: MemoryNamespace
   readonly recall: RecallNamespace
+  readonly research: ResearchNamespace
   readonly schedule: ScheduleNamespace
   readonly storage: StorageNamespace
   readonly tables: TablesNamespace
@@ -74,6 +76,7 @@ export class MemoryClient {
     const callTool = this.callTool.bind(this)
     this.access = new AccessNamespace(callTool)
     this.assistant = new AssistantNamespace(callTool)
+    this.crm = new CrmNamespace(callTool)
     this.capture = new CaptureNamespace(callTool)
     this.channels = new ChannelsNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
@@ -82,6 +85,7 @@ export class MemoryClient {
     this.library = new LibraryNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
+    this.research = new ResearchNamespace(callTool)
     this.schedule = new ScheduleNamespace(callTool)
     this.storage = new StorageNamespace(callTool)
     this.tables = new TablesNamespace(callTool)

@@ -27,7 +27,7 @@ export {
   VideoNamespace,
   WebhooksNamespace,
 } from './generated/methods.js'
-export { AssistantNamespace } from './generated/direct/methods.js'
+export { AssistantNamespace, CrmNamespace, ResearchNamespace } from './generated/direct/methods.js'
 export type { CallToolFn } from './generated/methods.js'
 export { McpToolsClient, McpToolError } from './mcp-client.js'
 export type { McpToolsClientOptions, McpToolDescriptor, McpToolErrorDetails, McpContentBlock, McpToolCallResult } from './mcp-client.js'

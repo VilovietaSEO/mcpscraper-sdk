@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class SwitchAccountToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key (Bearer secret). Optional when the MCP session is already authenticated; the server resolves auth from the session.")
     session_id: str | None = Field(None, alias="sessionId", description="Session identifier. Optional; defaults to the current MCP session.")
@@ -11,7 +11,7 @@ class SwitchAccountToolInput(BaseModel):
 
 
 class SwitchAccountToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="True on success; false on auth/scope error.")
     active_owner: str | None = Field(None, alias="activeOwner", description="The account now active for your identity (your own identity means your own account).")

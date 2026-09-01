@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class MergeTagsToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="")
     session_id: str | None = Field(None, alias="sessionId", description="")
@@ -12,7 +12,7 @@ class MergeTagsToolInput(BaseModel):
 
 
 class MergeTagsToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="")
     from_: str | None = Field(None, alias="from", description="")

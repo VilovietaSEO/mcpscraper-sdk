@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class SuggestToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key (Bearer secret). Optional when the MCP session is already authenticated; the server resolves auth from the session.")
     session_id: str | None = Field(None, alias="sessionId", description="Session identifier. Optional; defaults to the current MCP session.")
@@ -12,7 +12,7 @@ class SuggestToolInput(BaseModel):
 
 
 class SuggestToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="True when the lookup ran; false on auth error.")
     suggestions: list[dict[str, Any]] | None = Field(None, alias="suggestions", description="Title matches ordered prefix-first then most-recent. Present when ok is true; may be empty.")

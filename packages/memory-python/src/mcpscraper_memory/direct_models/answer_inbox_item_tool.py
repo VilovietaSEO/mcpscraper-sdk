@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class AnswerInboxItemToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="")
     session_id: str | None = Field(None, alias="sessionId", description="")
@@ -17,7 +17,7 @@ class AnswerInboxItemToolInput(BaseModel):
 
 
 class AnswerInboxItemToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="")
     question_id: str | None = Field(None, alias="questionId", description="")

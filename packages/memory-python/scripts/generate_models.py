@@ -11,8 +11,8 @@ MODELS_DIR = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "direct_models"
 CLIENT_GENERATED_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_direct_generated_client.py"
 
 CATEGORIES = [
-    "access", "assistant", "capture", "channels", "facts", "graph", "library", "memory", "recall",
-    "schedule", "storage", "tables", "tags", "vaults", "video", "webhooks",
+    "access", "assistant", "capture", "channels", "crm", "facts", "graph", "library", "memory", "recall",
+    "research", "schedule", "storage", "tables", "tags", "vaults", "video", "webhooks",
 ]
 
 
@@ -71,9 +71,10 @@ def field_definition(name: str, schema: dict, required: bool, class_name_hint: s
 def render_model(class_name: str, schema: dict) -> str:
     properties = schema.get("properties", {}) or {}
     required = set(schema.get("required", []) or [])
+    extra = "forbid" if schema.get("additionalProperties") is False else "allow"
     if not properties:
-        return f"class {class_name}(BaseModel):\n    model_config = ConfigDict(populate_by_name=True, extra=\"allow\")\n"
-    lines = [f"class {class_name}(BaseModel):", '    model_config = ConfigDict(populate_by_name=True, extra="allow")', ""]
+        return f'class {class_name}(BaseModel):\n    model_config = ConfigDict(populate_by_name=True, extra="{extra}")\n'
+    lines = [f"class {class_name}(BaseModel):", f'    model_config = ConfigDict(populate_by_name=True, extra="{extra}")', ""]
     for prop_name, prop_schema in properties.items():
         lines.append(field_definition(prop_name, prop_schema, prop_name in required, class_name))
     return "\n".join(lines) + "\n"

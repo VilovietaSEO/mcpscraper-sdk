@@ -3,14 +3,14 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class GetVaultAppLinkToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key. Optional when the MCP session is already authenticated.")
     session_id: str | None = Field(None, alias="sessionId", description="Optional MCP session identifier.")
 
 
 class GetVaultAppLinkToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="True when the request succeeded.")
     url: str | None = Field(None, alias="url", description="Vault App link. Present only when the secret is first minted; anyone holding it can use the Vault App as this identity.")

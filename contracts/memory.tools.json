@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T09:27:34.619Z",
+  "generatedAt": "2026-09-01T20:57:53.436Z",
   "protocol": {
     "transport": "JSON-RPC 2.0 over HTTPS",
     "endpoint": "https://memory.mcpscraper.dev/mcp",
@@ -19,12 +19,12 @@
       "note": "Returns the runtime tool list for source-to-live drift verification."
     }
   },
-  "generatedFrom": "mcp-memory 1.20.0 apps/memory/src/mastra/mcp/memory-server.ts (121 registered tools)",
+  "generatedFrom": "mcp-memory 1.21.1 apps/memory/src/mastra/mcp/memory-server.ts (145 registered tools)",
   "serverInfo": {
     "name": "mcp-memory",
-    "version": "1.20.0"
+    "version": "1.21.1"
   },
-  "toolCount": 121,
+  "toolCount": 145,
   "tools": [
     {
       "name": "acceptShareTool",
@@ -6953,6 +6953,3380 @@
         "destructiveHint": false,
         "idempotentHint": false,
         "openWorldHint": true
+      }
+    },
+    {
+      "name": "crmAppendCommunicationTool",
+      "description": "Append one idempotent governed CRM activity to canonical Communication, linked only to stable CRM entity IDs. Use for actual calls, meetings, messages, forms, conversions, or notes about a managed relationship; never pass a Research record ID. This is native Memory CRM and does not write to an external provider.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "personEntityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "maxItems": 100,
+            "default": []
+          },
+          "activityType": {
+            "type": "string",
+            "enum": [
+              "call",
+              "meeting",
+              "email",
+              "message",
+              "form",
+              "form_submission",
+              "conversion",
+              "note",
+              "calendar_event"
+            ]
+          },
+          "kind": {
+            "type": "string",
+            "const": "form_submission"
+          },
+          "occurredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300,
+            "default": "Form submission"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 200000,
+            "default": ""
+          },
+          "submittedFields": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "props": {
+            "type": "object",
+            "additionalProperties": {},
+            "default": {}
+          }
+        },
+        "required": [
+          "idempotencyKey",
+          "occurredAt"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "noteId": {
+                "type": "string"
+              },
+              "vault": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "associationIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "entityId",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              },
+              "replayed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-activity-append",
+      "annotations": {
+        "title": "Append CRM Activity",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmCounterpartApplyTool",
+      "description": "Apply an unexpired owner-scoped counterpart link preview using its exact handle and digest. The operation is idempotent, copies no fields, and keeps the Research and CRM records independently editable.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "planId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "planHandle": {
+            "type": "string",
+            "minLength": 1
+          },
+          "digest": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "planId",
+          "planHandle",
+          "digest",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "link": {
+            "type": "object",
+            "properties": {
+              "linkId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "subjectId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "researchEntityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "crmEntityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "copiedFields": {
+                "type": "array",
+                "items": {
+                  "not": {}
+                }
+              }
+            },
+            "required": [
+              "linkId",
+              "subjectId",
+              "researchEntityId",
+              "crmEntityId",
+              "copiedFields"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-counterpart-apply",
+      "annotations": {
+        "title": "Apply CRM Counterpart Link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmCounterpartPreviewTool",
+      "description": "Preview an explicit link between one Research record and one CRM record of the same kind. Link-only is the safe default and the only mode in this release: copiedFields is always empty, and neither record is promoted, merged, relocated, or synchronized. The returned owner-scoped handle and digest expire.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "researchEntityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "crmEntityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "ttlMinutes": {
+            "type": "integer",
+            "minimum": 5,
+            "maximum": 1440,
+            "default": 60
+          },
+          "mode": {
+            "type": "string",
+            "const": "link_only",
+            "default": "link_only"
+          }
+        },
+        "required": [
+          "researchEntityId",
+          "crmEntityId",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "object",
+            "properties": {
+              "planId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "planHandle": {
+                "type": "string"
+              },
+              "digest": {
+                "type": "string"
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "researchEntityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "crmEntityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "copiedFields": {
+                "type": "array",
+                "items": {
+                  "not": {}
+                }
+              },
+              "mode": {
+                "type": "string",
+                "const": "link_only"
+              }
+            },
+            "required": [
+              "planId",
+              "planHandle",
+              "digest",
+              "expiresAt",
+              "researchEntityId",
+              "crmEntityId",
+              "copiedFields",
+              "mode"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-counterpart-preview",
+      "annotations": {
+        "title": "Preview CRM Counterpart Link",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmDealTransitionTool",
+      "description": "Apply one governed deal-stage transition after enforcing the pipeline’s allowed forward/backward moves, required fields, probability, and won/lost semantics. Returns an audit receipt and rejects stale revisions.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "dealId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "pipelineId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "targetStageId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "fields": {
+            "type": "object",
+            "additionalProperties": {},
+            "default": {}
+          }
+        },
+        "required": [
+          "dealId",
+          "pipelineId",
+          "targetStageId",
+          "baseRevision",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "noteId": {
+                "type": "string"
+              },
+              "vault": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "associationIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "entityId",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              },
+              "replayed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-deal-transition",
+      "annotations": {
+        "title": "Transition CRM Deal",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmDealUpsertTool",
+      "description": "Create or revision-check a canonical Deal associated only with stable CRM people or organizations. A managed relationship does not require a deal; use this only for an actual commercial opportunity.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "dealId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 100
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 200000,
+            "default": ""
+          },
+          "pipelineId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stageId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "probability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "party": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "enteredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{3}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "props": {
+            "type": "object",
+            "additionalProperties": {},
+            "default": {}
+          }
+        },
+        "required": [
+          "baseRevision",
+          "idempotencyKey",
+          "entityIds",
+          "title",
+          "pipelineId",
+          "stageId",
+          "probability",
+          "party",
+          "enteredAt"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "noteId": {
+                "type": "string"
+              },
+              "vault": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "associationIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "entityId",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              },
+              "replayed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-deal-upsert",
+      "annotations": {
+        "title": "Upsert CRM Deal",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmDuplicateSearchTool",
+      "description": "Search reviewable duplicate candidates within one CRM person or organization domain using stable owner-scoped evidence. This never merges, links, or promotes records and never searches Research records.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "crm_person",
+              "crm_organization"
+            ]
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 25
+          }
+        },
+        "required": [
+          "domain"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-duplicate-search",
+      "annotations": {
+        "title": "Search CRM Duplicates",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmImportApplyTool",
+      "description": "Apply an unexpired CRM import preview with its exact owner-scoped handle, digest, explicit confirmation token, and idempotency key. Upload or preview alone can never apply rows. Research domains are unreachable.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "importId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "planHandle": {
+            "type": "string",
+            "minLength": 1
+          },
+          "digest": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "confirmationToken": {
+            "type": "string",
+            "minLength": 8
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "importId",
+          "planHandle",
+          "digest",
+          "confirmationToken",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "importId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "complete",
+                  "partial",
+                  "failed"
+                ]
+              },
+              "applied": {
+                "type": "integer"
+              },
+              "failed": {
+                "type": "integer"
+              },
+              "entityIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
+            "required": [
+              "importId",
+              "status",
+              "applied",
+              "failed",
+              "entityIds"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-import-apply",
+      "annotations": {
+        "title": "Apply CRM Import",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmImportPreviewTool",
+      "description": "Preview a CRM-owned import before any row is applied. Rows may target only CRM People or CRM Organizations. Returns validation issues, duplicate candidates, an owner-scoped expiring handle, and an exact digest; raw rows remain in Memory-owned storage and never enter X-Ray.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "ttlMinutes": {
+            "type": "integer",
+            "minimum": 5,
+            "maximum": 1440,
+            "default": 60
+          },
+          "mapping": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rowNumber": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "domain": {
+                  "type": "string",
+                  "enum": [
+                    "crm_person",
+                    "crm_organization"
+                  ]
+                },
+                "values": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "rowNumber",
+                "domain",
+                "values"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 50000
+          }
+        },
+        "required": [
+          "idempotencyKey",
+          "mapping",
+          "rows"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "object",
+            "properties": {
+              "importId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "planHandle": {
+                "type": "string"
+              },
+              "digest": {
+                "type": "string"
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "acceptedRows": {
+                "type": "integer"
+              },
+              "rejectedRows": {
+                "type": "integer"
+              },
+              "issues": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "duplicateCandidates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "totalIssues": {
+                "type": "integer"
+              },
+              "totalDuplicateCandidates": {
+                "type": "integer"
+              },
+              "resultTruncated": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "importId",
+              "planHandle",
+              "digest",
+              "expiresAt",
+              "acceptedRows",
+              "rejectedRows",
+              "issues",
+              "duplicateCandidates",
+              "totalIssues",
+              "totalDuplicateCandidates",
+              "resultTruncated"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-import-preview",
+      "annotations": {
+        "title": "Preview CRM Import",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmMergeApplyTool",
+      "description": "Apply an explicitly owner-confirmed, unexpired CRM merge plan with its exact handle, digest, and idempotency key. The duplicate becomes a reversible archived alias; canonical source history is retained. This destructive operation is disabled without owner scope and confirmation.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "mergeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "planHandle": {
+            "type": "string",
+            "minLength": 1
+          },
+          "digest": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "ownerConfirmation": {
+            "type": "string",
+            "minLength": 8
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "mergeId",
+          "planHandle",
+          "digest",
+          "ownerConfirmation",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "mergeId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "masterEntityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "duplicateEntityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "status": {
+                "type": "string",
+                "const": "applied"
+              },
+              "receiptId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "mergeId",
+              "masterEntityId",
+              "duplicateEntityId",
+              "status",
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-merge-apply",
+      "annotations": {
+        "title": "Apply CRM Merge",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmMergePreviewTool",
+      "description": "Preview a reversible duplicate merge inside one CRM domain. Shows field conflicts and affected associations; the duplicate will become an archived alias and source history will not be deleted. Preview does not apply the merge.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "masterEntityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "duplicateEntityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "ttlMinutes": {
+            "type": "integer",
+            "minimum": 5,
+            "maximum": 1440,
+            "default": 60
+          }
+        },
+        "required": [
+          "masterEntityId",
+          "duplicateEntityId",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "plan": {
+            "type": "object",
+            "properties": {
+              "mergeId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "planHandle": {
+                "type": "string"
+              },
+              "digest": {
+                "type": "string"
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "fieldConflicts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              },
+              "associationCount": {
+                "type": "integer"
+              },
+              "preservesArchivedAlias": {
+                "type": "boolean",
+                "const": true
+              },
+              "deletesSourceHistory": {
+                "type": "boolean",
+                "const": false
+              }
+            },
+            "required": [
+              "mergeId",
+              "planHandle",
+              "digest",
+              "expiresAt",
+              "fieldConflicts",
+              "associationCount",
+              "preservesArchivedAlias",
+              "deletesSourceHistory"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-merge-preview",
+      "annotations": {
+        "title": "Preview CRM Merge",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmOrganizationGetTool",
+      "description": "Get one managed CRM Organization by stable entity ID with aliases, associations, and optional Research counterpart ID. Linking does not synchronize fields.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "entityId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "research_person",
+                  "research_organization",
+                  "crm_person",
+                  "crm_organization"
+                ]
+              },
+              "entityKind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "organization"
+                ]
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "relationshipStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive",
+                      "archived",
+                      "merged"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "prospect",
+                    "customer",
+                    "former_customer",
+                    "friend",
+                    "coworker",
+                    "collaborator",
+                    "vendor",
+                    "partner",
+                    "advisor",
+                    "media",
+                    "community",
+                    "other"
+                  ]
+                }
+              },
+              "commercialLifecycle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "lead",
+                      "qualified",
+                      "opportunity",
+                      "customer",
+                      "retained",
+                      "churned",
+                      "disqualified"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipOwnerId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "researchRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entityId",
+              "domain",
+              "entityKind",
+              "displayName",
+              "content",
+              "props",
+              "relationshipStatus",
+              "relationshipTypes",
+              "commercialLifecycle",
+              "relationshipOwnerId",
+              "topics",
+              "researchRoles",
+              "revision",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "associations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "counterpartEntityId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-organization-get",
+      "annotations": {
+        "title": "Get CRM Organization",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmOrganizationSearchTool",
+      "description": "Search owner-managed CRM Organizations such as prospect accounts, customers, employers, vendors, partners, communities, or publications. Never returns Research Organizations and never infers an account solely from an email domain.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "relationshipType": {
+            "type": "string",
+            "enum": [
+              "prospect",
+              "customer",
+              "former_customer",
+              "friend",
+              "coworker",
+              "collaborator",
+              "vendor",
+              "partner",
+              "advisor",
+              "media",
+              "community",
+              "other"
+            ]
+          },
+          "relationshipStatus": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "archived",
+              "merged"
+            ]
+          },
+          "commercialLifecycle": {
+            "type": "string",
+            "enum": [
+              "lead",
+              "qualified",
+              "opportunity",
+              "customer",
+              "retained",
+              "churned",
+              "disqualified"
+            ]
+          },
+          "relationshipOwnerId": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 25
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "entityId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "domain": {
+                  "type": "string",
+                  "enum": [
+                    "research_person",
+                    "research_organization",
+                    "crm_person",
+                    "crm_organization"
+                  ]
+                },
+                "entityKind": {
+                  "type": "string",
+                  "enum": [
+                    "person",
+                    "organization"
+                  ]
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "props": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "relationshipStatus": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "active",
+                        "inactive",
+                        "archived",
+                        "merged"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relationshipTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "prospect",
+                      "customer",
+                      "former_customer",
+                      "friend",
+                      "coworker",
+                      "collaborator",
+                      "vendor",
+                      "partner",
+                      "advisor",
+                      "media",
+                      "community",
+                      "other"
+                    ]
+                  }
+                },
+                "commercialLifecycle": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "lead",
+                        "qualified",
+                        "opportunity",
+                        "customer",
+                        "retained",
+                        "churned",
+                        "disqualified"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relationshipOwnerId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "topics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "researchRoles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "revision": {
+                  "type": "integer"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "entityId",
+                "domain",
+                "entityKind",
+                "displayName",
+                "content",
+                "props",
+                "relationshipStatus",
+                "relationshipTypes",
+                "commercialLifecycle",
+                "relationshipOwnerId",
+                "topics",
+                "researchRoles",
+                "revision",
+                "createdAt",
+                "updatedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "pageInfo": {
+            "type": "object",
+            "properties": {
+              "endCursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "hasNextPage": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "endCursor",
+              "hasNextPage"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-organization-search",
+      "annotations": {
+        "title": "Search CRM Organizations",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmPersonGetTool",
+      "description": "Get one owner-managed CRM Person by stable entity ID with its governed relationship record, aliases, associations, and optional Research counterpart ID. It does not copy Research fields or expose provider setup.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "entityId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "research_person",
+                  "research_organization",
+                  "crm_person",
+                  "crm_organization"
+                ]
+              },
+              "entityKind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "organization"
+                ]
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "relationshipStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive",
+                      "archived",
+                      "merged"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "prospect",
+                    "customer",
+                    "former_customer",
+                    "friend",
+                    "coworker",
+                    "collaborator",
+                    "vendor",
+                    "partner",
+                    "advisor",
+                    "media",
+                    "community",
+                    "other"
+                  ]
+                }
+              },
+              "commercialLifecycle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "lead",
+                      "qualified",
+                      "opportunity",
+                      "customer",
+                      "retained",
+                      "churned",
+                      "disqualified"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipOwnerId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "researchRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entityId",
+              "domain",
+              "entityKind",
+              "displayName",
+              "content",
+              "props",
+              "relationshipStatus",
+              "relationshipTypes",
+              "commercialLifecycle",
+              "relationshipOwnerId",
+              "topics",
+              "researchRoles",
+              "revision",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "associations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "counterpartEntityId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-person-get",
+      "annotations": {
+        "title": "Get CRM Person",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmPersonSearchTool",
+      "description": "Search owner-managed CRM People: prospects, customers, friends, coworkers, collaborators, vendors, partners, advisors, media, community contacts, or other relationships. This is not research search and never returns Research People.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "relationshipType": {
+            "type": "string",
+            "enum": [
+              "prospect",
+              "customer",
+              "former_customer",
+              "friend",
+              "coworker",
+              "collaborator",
+              "vendor",
+              "partner",
+              "advisor",
+              "media",
+              "community",
+              "other"
+            ]
+          },
+          "relationshipStatus": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "archived",
+              "merged"
+            ]
+          },
+          "commercialLifecycle": {
+            "type": "string",
+            "enum": [
+              "lead",
+              "qualified",
+              "opportunity",
+              "customer",
+              "retained",
+              "churned",
+              "disqualified"
+            ]
+          },
+          "relationshipOwnerId": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 25
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "entityId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "domain": {
+                  "type": "string",
+                  "enum": [
+                    "research_person",
+                    "research_organization",
+                    "crm_person",
+                    "crm_organization"
+                  ]
+                },
+                "entityKind": {
+                  "type": "string",
+                  "enum": [
+                    "person",
+                    "organization"
+                  ]
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "props": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "relationshipStatus": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "active",
+                        "inactive",
+                        "archived",
+                        "merged"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relationshipTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "prospect",
+                      "customer",
+                      "former_customer",
+                      "friend",
+                      "coworker",
+                      "collaborator",
+                      "vendor",
+                      "partner",
+                      "advisor",
+                      "media",
+                      "community",
+                      "other"
+                    ]
+                  }
+                },
+                "commercialLifecycle": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "lead",
+                        "qualified",
+                        "opportunity",
+                        "customer",
+                        "retained",
+                        "churned",
+                        "disqualified"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relationshipOwnerId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "topics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "researchRoles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "revision": {
+                  "type": "integer"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "entityId",
+                "domain",
+                "entityKind",
+                "displayName",
+                "content",
+                "props",
+                "relationshipStatus",
+                "relationshipTypes",
+                "commercialLifecycle",
+                "relationshipOwnerId",
+                "topics",
+                "researchRoles",
+                "revision",
+                "createdAt",
+                "updatedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "pageInfo": {
+            "type": "object",
+            "properties": {
+              "endCursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "hasNextPage": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "endCursor",
+              "hasNextPage"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-person-search",
+      "annotations": {
+        "title": "Search CRM People",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmQualityListTool",
+      "description": "List owner-scoped relationship quality issues for classification, invalid names, duplicates, imports, merges, or canonical work. This is an audit queue only: it never auto-classifies, auto-merges, or activates providers.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "queue": {
+            "type": "string",
+            "enum": [
+              "classification",
+              "naming",
+              "duplicates",
+              "imports",
+              "merges",
+              "work"
+            ]
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 50
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-quality-list",
+      "annotations": {
+        "title": "List CRM Quality Issues",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmUpsertOrganizationTool",
+      "description": "Create or revision-check a managed CRM Organization. Relationship type is required while commercial lifecycle is optional. Rejects Research claims/citations/roles/topics, does not infer an account from email, and does not activate an external provider.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 200000,
+            "default": ""
+          },
+          "relationshipTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "prospect",
+                "customer",
+                "former_customer",
+                "friend",
+                "coworker",
+                "collaborator",
+                "vendor",
+                "partner",
+                "advisor",
+                "media",
+                "community",
+                "other"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 12
+          },
+          "relationshipStatus": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "archived",
+              "merged"
+            ],
+            "default": "active"
+          },
+          "commercialLifecycle": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "lead",
+                  "qualified",
+                  "opportunity",
+                  "customer",
+                  "retained",
+                  "churned",
+                  "disqualified"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relationshipOwnerId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "primaryDomain": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "website": {
+                "type": "string",
+                "format": "uri"
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "address": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "additionalProperties": false,
+            "default": {}
+          },
+          "props": {
+            "type": "object",
+            "additionalProperties": {},
+            "default": {}
+          },
+          "lineage": {
+            "type": "object",
+            "properties": {
+              "authority": {
+                "type": "string",
+                "enum": [
+                  "memory_manual",
+                  "memory_agent",
+                  "connected_source",
+                  "crm_import",
+                  "xray_derived"
+                ],
+                "default": "memory_agent"
+              },
+              "sensitivity": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "internal",
+                  "personal",
+                  "restricted"
+                ],
+                "default": "internal"
+              },
+              "sourceRef": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "confidence": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "observedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "baseRevision",
+          "idempotencyKey",
+          "displayName",
+          "relationshipTypes",
+          "lineage"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "research_person",
+                  "research_organization",
+                  "crm_person",
+                  "crm_organization"
+                ]
+              },
+              "entityKind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "organization"
+                ]
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "relationshipStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive",
+                      "archived",
+                      "merged"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "prospect",
+                    "customer",
+                    "former_customer",
+                    "friend",
+                    "coworker",
+                    "collaborator",
+                    "vendor",
+                    "partner",
+                    "advisor",
+                    "media",
+                    "community",
+                    "other"
+                  ]
+                }
+              },
+              "commercialLifecycle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "lead",
+                      "qualified",
+                      "opportunity",
+                      "customer",
+                      "retained",
+                      "churned",
+                      "disqualified"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipOwnerId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "researchRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entityId",
+              "domain",
+              "entityKind",
+              "displayName",
+              "content",
+              "props",
+              "relationshipStatus",
+              "relationshipTypes",
+              "commercialLifecycle",
+              "relationshipOwnerId",
+              "topics",
+              "researchRoles",
+              "revision",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              },
+              "replayed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-organization-upsert",
+      "annotations": {
+        "title": "Upsert CRM Organization",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmUpsertPersonTool",
+      "description": "Create or revision-check a managed CRM Person. Relationship type is required, but sales lifecycle and deals are optional so friends, coworkers, and collaborators are first-class. Rejects Research claims/citations/roles/topics and never activates an external CRM provider.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 200000,
+            "default": ""
+          },
+          "relationshipTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "prospect",
+                "customer",
+                "former_customer",
+                "friend",
+                "coworker",
+                "collaborator",
+                "vendor",
+                "partner",
+                "advisor",
+                "media",
+                "community",
+                "other"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 12
+          },
+          "relationshipStatus": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "archived",
+              "merged"
+            ],
+            "default": "active"
+          },
+          "commercialLifecycle": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "lead",
+                  "qualified",
+                  "opportunity",
+                  "customer",
+                  "retained",
+                  "churned",
+                  "disqualified"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "relationshipOwnerId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 300
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "contact": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email",
+                "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "address": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            },
+            "additionalProperties": false,
+            "default": {}
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Bridge-compatible top-level email; normalized into contact provenance.",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Bridge-compatible top-level phone; normalized into contact provenance."
+          },
+          "organizationName": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "Bridge-compatible organization label; it never creates or resolves an organization by inference."
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "siteId": {
+                "type": "string"
+              },
+              "formId": {
+                "type": "string"
+              },
+              "submissionId": {
+                "type": "string"
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "kind",
+              "observedAt"
+            ],
+            "additionalProperties": false
+          },
+          "props": {
+            "type": "object",
+            "additionalProperties": {},
+            "default": {}
+          },
+          "lineage": {
+            "type": "object",
+            "properties": {
+              "authority": {
+                "type": "string",
+                "enum": [
+                  "memory_manual",
+                  "memory_agent",
+                  "connected_source",
+                  "crm_import",
+                  "xray_derived"
+                ],
+                "default": "memory_agent"
+              },
+              "sensitivity": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "internal",
+                  "personal",
+                  "restricted"
+                ],
+                "default": "personal"
+              },
+              "sourceRef": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "confidence": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "observedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "idempotencyKey",
+          "displayName",
+          "relationshipTypes"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "research_person",
+                  "research_organization",
+                  "crm_person",
+                  "crm_organization"
+                ]
+              },
+              "entityKind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "organization"
+                ]
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "relationshipStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive",
+                      "archived",
+                      "merged"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "prospect",
+                    "customer",
+                    "former_customer",
+                    "friend",
+                    "coworker",
+                    "collaborator",
+                    "vendor",
+                    "partner",
+                    "advisor",
+                    "media",
+                    "community",
+                    "other"
+                  ]
+                }
+              },
+              "commercialLifecycle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "lead",
+                      "qualified",
+                      "opportunity",
+                      "customer",
+                      "retained",
+                      "churned",
+                      "disqualified"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipOwnerId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "researchRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entityId",
+              "domain",
+              "entityKind",
+              "displayName",
+              "content",
+              "props",
+              "relationshipStatus",
+              "relationshipTypes",
+              "commercialLifecycle",
+              "relationshipOwnerId",
+              "topics",
+              "researchRoles",
+              "revision",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              },
+              "replayed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-person-upsert",
+      "annotations": {
+        "title": "Upsert CRM Person",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crmUpsertTaskTool",
+      "description": "Create or revision-check a canonical Task linked only to stable CRM entity IDs. Tasks remain in the shared Tasks authority; this tool adds the CRM lens and idempotent audit receipt rather than creating a second task store.",
+      "category": "crm",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "taskId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "personEntityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "communicationEntityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "maxItems": 100,
+            "default": []
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 200000,
+            "default": ""
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "todo",
+              "in_progress",
+              "blocked",
+              "done",
+              "cancelled"
+            ],
+            "default": "todo"
+          },
+          "dueAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": {}
+          },
+          "props": {
+            "type": "object",
+            "additionalProperties": {},
+            "default": {}
+          }
+        },
+        "required": [
+          "idempotencyKey",
+          "title"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "noteId": {
+                "type": "string"
+              },
+              "vault": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "associationIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "entityId",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              },
+              "replayed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "crm-task-upsert",
+      "annotations": {
+        "title": "Upsert CRM Task",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       }
     },
     {
@@ -17628,7 +21002,7 @@
     },
     {
       "name": "memoryCaptureTool",
-      "description": "Strict normal-create path for durable memory. Before capture, list the complete tag vocabulary, call prepare-memory-write, run hybrid memory-search for related notes, and read the strongest link candidates. This tool refuses incomplete notes and invalid relationship-domain writes: projects need a project kind, tasks may be independent Inbox todos but must use a matched project when linked, deals need a known party, and draft emails need a pending approval state. It writes through memory-put, registers canonical tags, and verifies persisted content and props. Reserve memory-put for low-level migrations or deliberate edits.",
+      "description": "Strict normal-create path for ordinary durable memory. Before capture, list the complete tag vocabulary, call prepare-memory-write, run hybrid memory-search for related notes, and read the strongest link candidates. Research People/Organizations and CRM People/Organizations are rejected and must use their specialized tools. Projects need a project kind, tasks may be independent Inbox todos but must use a matched project when linked, deals need a known party, and draft emails need pending approval. It writes through memory-put, registers canonical tags, and verifies persisted content and props.",
       "category": "memoryCaptureTool",
       "inputSchema": {
         "type": "object",
@@ -18770,7 +22144,7 @@
     },
     {
       "name": "prepareMemoryWriteTool",
-      "description": "Mandatory planning pass for a normal new memory. First inspect the complete tag vocabulary with list-memory-tags; then this pass routes the note, returns the live template and natural vault relationships, resolves proposed tags, and shortlists interlinks. For People, Organizations, Deals, Projects, Tasks, and Communication, it also returns relationship and approval guidance: search existing records before linking, but do not invent a project or party. A Task can remain an independent Inbox todo. Use hybrid memory-search (3 focused queries, 50 fused candidates, bounded graph expansion, rerank to 30 by default) and read strong related notes before capture. This is an explicit AI workflow directive, not a claim of persisted call-order enforcement.",
+      "description": "Mandatory planning pass for ordinary non-entity memory. First inspect the complete tag vocabulary with list-memory-tags; then this pass routes the note, returns the live template and natural vault relationships, resolves proposed tags, and shortlists interlinks. Research People/Organizations and CRM People/Organizations are intentionally rejected here: use the matching research-*-capture or crm-*-upsert tool so generic writes cannot cross their authority boundary. Deals, Projects, Tasks, and Communication retain relationship and approval guidance. A Task can remain an independent Inbox todo. Use hybrid memory-search and read strong related notes before capture.",
       "category": "prepareMemoryWriteTool",
       "inputSchema": {
         "type": "object",
@@ -19066,7 +22440,7 @@
     },
     {
       "name": "putTool",
-      "description": "Create or deliberately edit one note at a path in a memory vault; content is persisted and indexed for search. For normal new People, Organizations, Deals, Projects, Tasks, or Communication records, use prepare-memory-write then memory-capture: People must be real people, Organizations must be real organizations, Deals need a known party, Projects need a supported kind, Tasks can be independent Inbox todos or use a verified Project when linked, and draft emails need pending approval. For row-shaped datasets you'll filter/sort by exact value, use table-create/table-insert-rows/table-query instead. Ordinary vaults are indexed and shareable — never store real secrets there; use a secure vault (create-secure-vault) instead, which is never indexed or shareable and is encrypted at rest. Requires write scope.",
+      "description": "Create or deliberately edit one ordinary note at a path in a memory vault; content is persisted and indexed for search. This low-level tool cannot write Research People/Organizations or CRM People/Organizations; use the specialized research-* or crm-* tools so domain validation, stable identity, revision history, audit, and idempotency cannot be bypassed. For Deals, Projects, Tasks, or Communication, use prepare-memory-write then memory-capture. For row-shaped datasets use table tools. Ordinary vaults are indexed and shareable; use a secure vault for secrets. Requires write scope.",
       "category": "putTool",
       "inputSchema": {
         "type": "object",
@@ -19081,7 +22455,7 @@
           },
           "vault": {
             "type": "string",
-            "description": "Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 16-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Do not use this low-level tool to create ordinary People, Organizations, Deals, Projects, Tasks, or Communication records: first use prepare-memory-write then memory-capture so relationships and approval state are validated."
+            "description": "Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 18-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Research People/Organizations and CRM People/Organizations require their specialized tools and are always rejected here. For Deals, Projects, Tasks, or Communication records, first use prepare-memory-write then memory-capture so relationships and approval state are validated."
           },
           "path": {
             "type": "string",
@@ -19994,6 +23368,1570 @@
         "destructiveHint": false,
         "idempotentHint": false,
         "openWorldHint": true
+      }
+    },
+    {
+      "name": "researchOrganizationCaptureTool",
+      "description": "Create or revision-check a sourced Research Organization. Requires evidence and rejects CRM relationship, lifecycle, owner, consent, outreach, deal, and task state. This tool never creates a CRM account.",
+      "category": "research",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 200000,
+            "default": ""
+          },
+          "sourceEvidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "claim": {
+                  "type": "string",
+                  "maxLength": 4000
+                }
+              },
+              "required": [
+                "sourceRef"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 100
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "maxItems": 100,
+            "default": []
+          },
+          "researchRoles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "maxItems": 100,
+            "default": []
+          },
+          "props": {
+            "type": "object",
+            "additionalProperties": {},
+            "default": {}
+          },
+          "lineage": {
+            "type": "object",
+            "properties": {
+              "authority": {
+                "type": "string",
+                "enum": [
+                  "memory_manual",
+                  "memory_agent",
+                  "connected_source",
+                  "crm_import",
+                  "xray_derived"
+                ],
+                "default": "memory_agent"
+              },
+              "sensitivity": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "internal",
+                  "personal",
+                  "restricted"
+                ]
+              },
+              "sourceRef": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "confidence": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "sensitivity",
+              "observedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "baseRevision",
+          "idempotencyKey",
+          "displayName",
+          "sourceEvidence",
+          "lineage"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "research_person",
+                  "research_organization",
+                  "crm_person",
+                  "crm_organization"
+                ]
+              },
+              "entityKind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "organization"
+                ]
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "relationshipStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive",
+                      "archived",
+                      "merged"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "prospect",
+                    "customer",
+                    "former_customer",
+                    "friend",
+                    "coworker",
+                    "collaborator",
+                    "vendor",
+                    "partner",
+                    "advisor",
+                    "media",
+                    "community",
+                    "other"
+                  ]
+                }
+              },
+              "commercialLifecycle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "lead",
+                      "qualified",
+                      "opportunity",
+                      "customer",
+                      "retained",
+                      "churned",
+                      "disqualified"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipOwnerId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "researchRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entityId",
+              "domain",
+              "entityKind",
+              "displayName",
+              "content",
+              "props",
+              "relationshipStatus",
+              "relationshipTypes",
+              "commercialLifecycle",
+              "relationshipOwnerId",
+              "topics",
+              "researchRoles",
+              "revision",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              },
+              "replayed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "research-organization-capture",
+      "annotations": {
+        "title": "Capture Research Organization",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "researchOrganizationGetTool",
+      "description": "Get one sourced Research Organization by stable entity ID with aliases, associations, and optional explicit CRM counterpart link. Linking never copies fields.",
+      "category": "research",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "entityId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "research_person",
+                  "research_organization",
+                  "crm_person",
+                  "crm_organization"
+                ]
+              },
+              "entityKind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "organization"
+                ]
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "relationshipStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive",
+                      "archived",
+                      "merged"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "prospect",
+                    "customer",
+                    "former_customer",
+                    "friend",
+                    "coworker",
+                    "collaborator",
+                    "vendor",
+                    "partner",
+                    "advisor",
+                    "media",
+                    "community",
+                    "other"
+                  ]
+                }
+              },
+              "commercialLifecycle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "lead",
+                      "qualified",
+                      "opportunity",
+                      "customer",
+                      "retained",
+                      "churned",
+                      "disqualified"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipOwnerId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "researchRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entityId",
+              "domain",
+              "entityKind",
+              "displayName",
+              "content",
+              "props",
+              "relationshipStatus",
+              "relationshipTypes",
+              "commercialLifecycle",
+              "relationshipOwnerId",
+              "topics",
+              "researchRoles",
+              "revision",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "associations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "counterpartEntityId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "research-organization-get",
+      "annotations": {
+        "title": "Get Research Organization",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "researchOrganizationSearchTool",
+      "description": "Search sourced Research Organizations studied as knowledge. Never infer an organization from an email domain and never use this for prospect/customer/vendor relationship operations; use crm-organization-search for managed accounts.",
+      "category": "research",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "topic": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "role": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 25
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "entityId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "domain": {
+                  "type": "string",
+                  "enum": [
+                    "research_person",
+                    "research_organization",
+                    "crm_person",
+                    "crm_organization"
+                  ]
+                },
+                "entityKind": {
+                  "type": "string",
+                  "enum": [
+                    "person",
+                    "organization"
+                  ]
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "props": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "relationshipStatus": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "active",
+                        "inactive",
+                        "archived",
+                        "merged"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relationshipTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "prospect",
+                      "customer",
+                      "former_customer",
+                      "friend",
+                      "coworker",
+                      "collaborator",
+                      "vendor",
+                      "partner",
+                      "advisor",
+                      "media",
+                      "community",
+                      "other"
+                    ]
+                  }
+                },
+                "commercialLifecycle": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "lead",
+                        "qualified",
+                        "opportunity",
+                        "customer",
+                        "retained",
+                        "churned",
+                        "disqualified"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relationshipOwnerId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "topics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "researchRoles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "revision": {
+                  "type": "integer"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "entityId",
+                "domain",
+                "entityKind",
+                "displayName",
+                "content",
+                "props",
+                "relationshipStatus",
+                "relationshipTypes",
+                "commercialLifecycle",
+                "relationshipOwnerId",
+                "topics",
+                "researchRoles",
+                "revision",
+                "createdAt",
+                "updatedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "pageInfo": {
+            "type": "object",
+            "properties": {
+              "endCursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "hasNextPage": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "endCursor",
+              "hasNextPage"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "research-organization-search",
+      "annotations": {
+        "title": "Search Research Organizations",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "researchPersonCaptureTool",
+      "description": "Create or revision-check an independently governed Research Person for sourced knowledge, including historical figures. Requires evidence and rejects relationship type, lifecycle, owner, consent, outreach, deal, and task state. An email may be retained only as sourced evidence and never promotes the subject into CRM.",
+      "category": "research",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200
+          },
+          "displayName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 200000,
+            "default": ""
+          },
+          "sourceEvidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sourceRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "claim": {
+                  "type": "string",
+                  "maxLength": 4000
+                }
+              },
+              "required": [
+                "sourceRef"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "maxItems": 100
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "maxItems": 100,
+            "default": []
+          },
+          "researchRoles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "maxItems": 100,
+            "default": []
+          },
+          "props": {
+            "type": "object",
+            "additionalProperties": {},
+            "default": {}
+          },
+          "lineage": {
+            "type": "object",
+            "properties": {
+              "authority": {
+                "type": "string",
+                "enum": [
+                  "memory_manual",
+                  "memory_agent",
+                  "connected_source",
+                  "crm_import",
+                  "xray_derived"
+                ],
+                "default": "memory_agent"
+              },
+              "sensitivity": {
+                "type": "string",
+                "enum": [
+                  "public",
+                  "internal",
+                  "personal",
+                  "restricted"
+                ]
+              },
+              "sourceRef": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 2000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "confidence": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "sensitivity",
+              "observedAt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "baseRevision",
+          "idempotencyKey",
+          "displayName",
+          "sourceEvidence",
+          "lineage"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "research_person",
+                  "research_organization",
+                  "crm_person",
+                  "crm_organization"
+                ]
+              },
+              "entityKind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "organization"
+                ]
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "relationshipStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive",
+                      "archived",
+                      "merged"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "prospect",
+                    "customer",
+                    "former_customer",
+                    "friend",
+                    "coworker",
+                    "collaborator",
+                    "vendor",
+                    "partner",
+                    "advisor",
+                    "media",
+                    "community",
+                    "other"
+                  ]
+                }
+              },
+              "commercialLifecycle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "lead",
+                      "qualified",
+                      "opportunity",
+                      "customer",
+                      "retained",
+                      "churned",
+                      "disqualified"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipOwnerId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "researchRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entityId",
+              "domain",
+              "entityKind",
+              "displayName",
+              "content",
+              "props",
+              "relationshipStatus",
+              "relationshipTypes",
+              "commercialLifecycle",
+              "relationshipOwnerId",
+              "topics",
+              "researchRoles",
+              "revision",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "receipt": {
+            "type": "object",
+            "properties": {
+              "receiptId": {
+                "type": "string"
+              },
+              "replayed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "receiptId"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "research-person-capture",
+      "annotations": {
+        "title": "Capture Research Person",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "researchPersonGetTool",
+      "description": "Get one sourced Research Person by stable entity ID with aliases, associations, and an optional explicit CRM counterpart link. This does not expose CRM operational state or copy counterpart fields.",
+      "category": "research",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "entityId"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object",
+            "properties": {
+              "entityId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "research_person",
+                  "research_organization",
+                  "crm_person",
+                  "crm_organization"
+                ]
+              },
+              "entityKind": {
+                "type": "string",
+                "enum": [
+                  "person",
+                  "organization"
+                ]
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              },
+              "props": {
+                "type": "object",
+                "additionalProperties": {}
+              },
+              "relationshipStatus": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "inactive",
+                      "archived",
+                      "merged"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipTypes": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "prospect",
+                    "customer",
+                    "former_customer",
+                    "friend",
+                    "coworker",
+                    "collaborator",
+                    "vendor",
+                    "partner",
+                    "advisor",
+                    "media",
+                    "community",
+                    "other"
+                  ]
+                }
+              },
+              "commercialLifecycle": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "lead",
+                      "qualified",
+                      "opportunity",
+                      "customer",
+                      "retained",
+                      "churned",
+                      "disqualified"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "relationshipOwnerId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "researchRoles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "entityId",
+              "domain",
+              "entityKind",
+              "displayName",
+              "content",
+              "props",
+              "relationshipStatus",
+              "relationshipTypes",
+              "commercialLifecycle",
+              "relationshipOwnerId",
+              "topics",
+              "researchRoles",
+              "revision",
+              "createdAt",
+              "updatedAt"
+            ],
+            "additionalProperties": false
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "associations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          },
+          "counterpartEntityId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "research-person-get",
+      "annotations": {
+        "title": "Get Research Person",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "researchPersonSearchTool",
+      "description": "Search sourced Research People, including historical figures and living subjects studied as knowledge. Never use this to find or manage contacts, prospects, customers, friends, coworkers, outreach, deals, or tasks; use crm-person-search for managed relationships. Results are owner-scoped, cursor-paged, and deterministically ordered.",
+      "category": "research",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "apiKey": {
+            "type": "string",
+            "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+          },
+          "sessionId": {
+            "type": "string",
+            "description": "Optional MCP session identifier used for active account context."
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "topic": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "role": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "cursor": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 25
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "entityId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "domain": {
+                  "type": "string",
+                  "enum": [
+                    "research_person",
+                    "research_organization",
+                    "crm_person",
+                    "crm_organization"
+                  ]
+                },
+                "entityKind": {
+                  "type": "string",
+                  "enum": [
+                    "person",
+                    "organization"
+                  ]
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "props": {
+                  "type": "object",
+                  "additionalProperties": {}
+                },
+                "relationshipStatus": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "active",
+                        "inactive",
+                        "archived",
+                        "merged"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relationshipTypes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "prospect",
+                      "customer",
+                      "former_customer",
+                      "friend",
+                      "coworker",
+                      "collaborator",
+                      "vendor",
+                      "partner",
+                      "advisor",
+                      "media",
+                      "community",
+                      "other"
+                    ]
+                  }
+                },
+                "commercialLifecycle": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "enum": [
+                        "lead",
+                        "qualified",
+                        "opportunity",
+                        "customer",
+                        "retained",
+                        "churned",
+                        "disqualified"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "relationshipOwnerId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "topics": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "researchRoles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "revision": {
+                  "type": "integer"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "entityId",
+                "domain",
+                "entityKind",
+                "displayName",
+                "content",
+                "props",
+                "relationshipStatus",
+                "relationshipTypes",
+                "commercialLifecycle",
+                "relationshipOwnerId",
+                "topics",
+                "researchRoles",
+                "revision",
+                "createdAt",
+                "updatedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "pageInfo": {
+            "type": "object",
+            "properties": {
+              "endCursor": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "hasNextPage": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "endCursor",
+              "hasNextPage"
+            ],
+            "additionalProperties": false
+          },
+          "code": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ok",
+          "message"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "legacyId": "research-person-search",
+      "annotations": {
+        "title": "Search Research People",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       }
     },
     {

@@ -1,6 +1,6 @@
 # mcpscraper-sdk
 
-Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, ZIP archive reading, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 121 tools).
+Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, ZIP archive reading, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, separate Research and CRM records, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 145 tools).
 
 These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or assistant policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **369 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
@@ -453,7 +453,7 @@ Sample output (real, captured live):
 
 ### Memory search, using only your scraper key
 
-Every one of memory.mcpscraper.dev's 121 tools (governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, webhooks, and more — see [`contracts/memory.tools.json`](./contracts/memory.tools.json)) is callable from `mcpscraper-sdk` alone, dispatched through `POST /memory/mcp-call`. mcpscraper.dev auto-provisions a memory identity for your account on first use — no separate `mk_...` key required.
+Every one of memory.mcpscraper.dev's 145 tools (governed capture, separate Research and CRM records, tags, graph traversal, search, vaults, tables, scheduled actions, webhooks, and more — see [`contracts/memory.tools.json`](./contracts/memory.tools.json)) is callable from `mcpscraper-sdk` alone, dispatched through `POST /memory/mcp-call`. mcpscraper.dev auto-provisions a memory identity for your account on first use — no separate `mk_...` key required.
 
 <details open><summary>Node.js</summary>
 
@@ -758,7 +758,7 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 - [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 369 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
 - [`contracts/assistant.openapi.yaml`](./contracts/assistant.openapi.yaml) — OpenAPI 3.1 owner contract for the personal assistant. Source of truth for the additive `assistantPaths`, `assistantOperations`, and `assistantComponents` TypeScript exports; private worker, Cron, webhook, credential, and database operations are intentionally absent.
-- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 121 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
+- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 145 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.
 
 The contracts are checked-in public release artifacts. The unified MCP contract is generated only from the server's complete build manifest; the live runtime inventory is used for name and input-schema drift checks and is expected to advertise zero output schemas. The memory manifest is generated from its server inventory, while the REST OpenAPI contract is curated. Release validation (`npm run validate-contracts`) checks them against the live servers for drift.
 

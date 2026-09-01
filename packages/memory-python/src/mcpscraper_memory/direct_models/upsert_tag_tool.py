@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class UpsertTagToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="")
     session_id: str | None = Field(None, alias="sessionId", description="")
@@ -14,7 +14,7 @@ class UpsertTagToolInput(BaseModel):
 
 
 class UpsertTagToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="")
     tag: dict[str, Any] | None = Field(None, alias="tag", description="")

@@ -243,6 +243,36 @@ test('direct Memory assistant client creates a context packet with the exact too
   assert.equal(capturedBody.params.name, 'assistant_context_packet_create')
 })
 
+test('direct Research and CRM namespaces preserve domain-specific wire names', async () => {
+  const calls: Array<{ name: string; arguments: Record<string, unknown> }> = []
+  const client = new MemoryClient({
+    apiKey: 'mk_test',
+    fetch: fakeFetch((_url, init) => {
+      const body = JSON.parse(String(init.body))
+      calls.push(body.params)
+      return {
+        status: 200,
+        json: { jsonrpc: '2.0', id: body.id, result: { structuredContent: { ok: true } } },
+      }
+    }),
+  })
+
+  await client.research.personCapture({
+    baseRevision: 0,
+    idempotencyKey: 'research-person-1',
+    displayName: 'Synthetic Historical Person',
+    sourceEvidence: [{ sourceRef: 'https://example.test/source' }],
+    lineage: { sensitivity: 'public', observedAt: '2026-09-01T00:00:00.000Z' },
+  })
+  await client.crm.personUpsert({
+    idempotencyKey: 'crm-person-1',
+    displayName: 'Synthetic Coworker',
+    relationshipTypes: ['coworker'],
+  })
+
+  assert.deepEqual(calls.map(call => call.name), ['researchPersonCaptureTool', 'crmUpsertPersonTool'])
+})
+
 test('McpToolsClient typed methods call the unified MCP wire name', async () => {
   let capturedUrl = ''
   let capturedBody: any

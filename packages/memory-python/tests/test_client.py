@@ -195,6 +195,56 @@ def test_non_2xx_http_response_raises_memory_api_error():
     assert exc_info.value.http_status == 500
 
 
+@responses.activate
+def test_direct_research_and_crm_namespaces_preserve_domain_specific_wire_names():
+    calls = []
+
+    def handler(request):
+        body = json.loads(request.body)
+        calls.append(body["params"])
+        return (200, {}, json.dumps({"jsonrpc": "2.0", "id": body["id"], "result": {"structuredContent": {"ok": True, "message": "accepted"}}}))
+
+    responses.add_callback(responses.POST, f"{BASE_URL}/mcp", callback=handler, content_type="application/json")
+    client = MemoryClient(api_key="mk_test")
+    client.research.person_capture(
+        baseRevision=0,
+        idempotencyKey="research-person-1",
+        displayName="Synthetic Historical Person",
+        sourceEvidence=[{"sourceRef": "https://example.test/source"}],
+        lineage={"sensitivity": "public", "observedAt": "2026-09-01T00:00:00.000Z"},
+    )
+    client.crm.person_upsert(
+        idempotencyKey="crm-person-1",
+        displayName="Synthetic Coworker",
+        relationshipTypes=["coworker"],
+    )
+
+    assert [call["name"] for call in calls] == ["researchPersonCaptureTool", "crmUpsertPersonTool"]
+
+
+def test_governed_models_reject_cross_domain_unknown_fields():
+    from pydantic import ValidationError
+    from mcpscraper_memory.direct_models.research_person_capture import ResearchPersonCaptureInput
+    from mcpscraper_memory.direct_models.crm_person_upsert import CrmPersonUpsertInput
+
+    with pytest.raises(ValidationError):
+        ResearchPersonCaptureInput(
+            baseRevision=0,
+            idempotencyKey="research-person-2",
+            displayName="Synthetic Historical Person",
+            sourceEvidence=[{"sourceRef": "https://example.test/source"}],
+            lineage={"sensitivity": "public", "observedAt": "2026-09-01T00:00:00.000Z"},
+            relationshipTypes=["prospect"],
+        )
+    with pytest.raises(ValidationError):
+        CrmPersonUpsertInput(
+            idempotencyKey="crm-person-2",
+            displayName="Synthetic Coworker",
+            relationshipTypes=["coworker"],
+            sourceEvidence=[{"sourceRef": "https://example.test/source"}],
+        )
+
+
 def test_unified_bindings_contain_every_contract_tool():
     assert MCP_TOOL_COUNT == len(MCP_TOOL_BINDINGS)
     names = {binding["name"] for binding in MCP_TOOL_BINDINGS}
