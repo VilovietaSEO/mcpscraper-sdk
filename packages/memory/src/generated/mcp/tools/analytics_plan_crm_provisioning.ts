@@ -6,7 +6,7 @@ export interface Input {
   /**
    * Supported CRM provider.
    */
-  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+  provider: "hubspot" | "highlevel" | "zoho" | "keap";
   /**
    * Existing service connection reference for tenant-specific discovery.
    */
@@ -60,7 +60,7 @@ export interface Output {
     /**
      * Supported phone, CRM, or advertising provider for this governed connection.
      */
-    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    provider: "hubspot" | "highlevel" | "zoho" | "keap";
     /**
      * Existing authorized service-connection reference; never supply credentials or tokens.
      */

@@ -2,7 +2,7 @@
 
 Official client libraries for [mcpscraper.dev](https://mcpscraper.dev) (web intelligence: SERP/PAA research, single-page and whole-site extraction, ZIP archive reading, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev) (hosted per-user memory: governed capture, tags, graph traversal, search, vaults, tables, scheduled actions, and more — 121 tools).
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or assistant policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **373 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or assistant policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **369 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Personal assistant
 
@@ -502,7 +502,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 373 unified tools in both Node and Python.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 369 unified tools in both Node and Python.
 
 ## Scheduled results and artifact templates
 
@@ -725,7 +725,7 @@ This is a one-result snapshot with a 1 MB limit—not whole-account pagination, 
 
 Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Python, scraper) or `MemoryApiError` (Node/Python, memory), each carrying the HTTP status, an error code, and the safe public response body. The scraper envelope includes `error_code`, `error_type`, `message`, `retryable`, and—when known—retry timing, charge status, and bounded recovery details. `ScraperApiError` adds helpers for insufficient balance, concurrency, verification challenges, and timeouts. The CLI catches these and prints a clean one-line message instead of a stack trace.
 
-## All 373 MCP tools
+## All 369 MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -741,13 +741,13 @@ route = client.tools.vaults.route_memory(title="Raw article", content=markdown, 
 method = client.tools.editorial.reading_room_guide(focus="workflow")
 ```
 
-For X-Ray identity reporting, [`examples/xray-journeys.mjs`](./examples/xray-journeys.mjs) demonstrates confirmed-only pagination and separately labeled `candidate_assisted` best-guess evidence. Best-guess results are analysis-only and must not feed CRM or advertising actions.
+For X-Ray identity reporting, [`examples/xray-journeys.mjs`](./examples/xray-journeys.mjs) demonstrates confirmed-only pagination and separately labeled `candidate_assisted` best-guess evidence. Best-guess results are analysis-only and must not feed CRM or advertising actions. [`examples/xray-attribution.mjs`](./examples/xray-attribution.mjs) reads the provider-neutral attribution methodology and truthful view-evidence status, with structured survey creation kept behind an explicit draft gate.
 
 The authoritative tool names, descriptions, complete input/output schemas, annotations, categories, and generated method bindings live in [`contracts/mcp.tools.json`](./contracts/mcp.tools.json). Runtime MCP discovery intentionally omits `outputSchema` to keep strict clients interoperable; SDK generation consumes the server's complete build manifest instead of reconstructing schemas from `tools/list`.
 
 ## The CLI
 
-`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 373 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 369 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -755,7 +755,7 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 373 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 369 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
 - [`contracts/assistant.openapi.yaml`](./contracts/assistant.openapi.yaml) — OpenAPI 3.1 owner contract for the personal assistant. Source of truth for the additive `assistantPaths`, `assistantOperations`, and `assistantComponents` TypeScript exports; private worker, Cron, webhook, credential, and database operations are intentionally absent.
 - [`contracts/memory.tools.json`](./contracts/memory.tools.json) — tool manifest (name, description, input/output JSON Schema per tool) for memory.mcpscraper.dev's 121 tools. Source of truth for `mcpscraper-memory-sdk` (Node and Python) and `mcpscraper-sdk`'s `memoryTools`/`memory_tools` bridge.

@@ -6,7 +6,7 @@ export interface Input {
   /**
    * Supported CRM provider.
    */
-  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+  provider: "hubspot" | "highlevel" | "zoho" | "keap";
   /**
    * Optional service connection for tenant discovery.
    */
@@ -17,7 +17,7 @@ export interface Output {
   ok: boolean;
   discovered: {
     capability: {
-      provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+      provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
       mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
       canSyncNow: boolean;
       canSchedule: boolean;

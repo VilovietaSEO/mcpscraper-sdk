@@ -6,7 +6,7 @@ export interface Input {
   /**
    * Supported CRM provider; tenant evidence may narrow this provider to webhook or manual mode.
    */
-  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+  provider: "hubspot" | "highlevel" | "zoho" | "keap";
   /**
    * Verified service connection reference.
    */

@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.39.0] - 2026-09-01 — verified against mcp-scraper 0.85.0 / mcp-memory 1.20.0
+
+### Changed
+
+- Regenerated the Node, Python, CLI, and cURL surfaces from the exact 369-tool MCP Scraper 0.85.0 contract while preserving the separate 121-tool direct Memory API.
+- Kept six provider-neutral X-Ray operations for attribution methodology, observed-plus-reported impact, structured post-purchase surveys, and truthful view-evidence status; the runnable example now demonstrates only that retained contract.
+- Prepared `mcpscraper-sdk` 0.39.0, `mcpscraper-memory-sdk` 0.39.0, `mcpscraper-cli` 0.38.0, Python `mcpscraper-sdk` 0.37.0, and Python `mcpscraper-memory-sdk` 0.35.0.
+
+### Removed
+
+- Withdrew `analytics_setup_revenue_source`, `analytics_prepare_revenue_source`, `analytics_apply_revenue_source`, and `analytics_verify_revenue_source` because their provider workflow was not production-ready. Consumers must stop calling these operations; there is no provider-setup SDK replacement in this release, while the six provider-neutral attribution and survey operations remain available.
+
 ## [0.38.0] - 2026-09-01 — verified against mcp-scraper 0.84.0 / mcp-memory 1.20.0
 
 ### Added

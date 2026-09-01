@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-01",
+  "sourceContract": {
+    "serverVersion": "0.85.0",
+    "serverManifestSha256": "35277f7553227b0258b2e60e90c196b414e21d38a1a6005717d84451759b36a5",
+    "projectedContractSha256": "e46a5062c90e0218c5cf547b09da5052a65ef4b1e3a38148340ff0309edf966c",
+    "toolCount": 369
+  },
+  "verification": {
+    "artifactAllowlist": "passed",
+    "forbiddenContent": "passed",
+    "freshNodeInstall": "passed",
+    "freshPython312Install": "passed",
+    "withdrawnBindingsAbsent": true
+  },
+  "artifacts": [
+    {
+      "file": "mcpscraper-sdk-0.39.0.tgz",
+      "sha256": "e065d8cb2f9833e9c5e85a9a9cb5e9c7798fdd3d2b2eb1729dc95978e9e192f2",
+      "compressedBytes": 80732,
+      "unpackedBytes": 977731,
+      "fileCount": 6,
+      "largestPaths": ["package/dist/index.d.cts", "package/dist/index.d.ts", "package/dist/index.cjs", "package/dist/index.js", "package/README.md"],
+      "sourceMapCount": 0,
+      "nestedNodeModulesCount": 0,
+      "declaredDependencies": { "mcpscraper-memory-sdk": "^0.39.0" }
+    },
+    {
+      "file": "mcpscraper-memory-sdk-0.39.0.tgz",
+      "sha256": "cfad727ab3cf99bca0ef92c19ef73969f357e2b7b2cdf9b1bddacdc5f953af42",
+      "compressedBytes": 290449,
+      "unpackedBytes": 10910035,
+      "fileCount": 5,
+      "largestPaths": ["package/dist/index.d.ts", "package/dist/index.cjs", "package/dist/index.js", "package/README.md", "package/package.json"],
+      "sourceMapCount": 0,
+      "nestedNodeModulesCount": 0,
+      "declaredDependencies": {}
+    },
+    {
+      "file": "mcpscraper-cli-0.38.0.tgz",
+      "sha256": "8f696780aa694cfc1352ab0612ab8ed1352ea721ff5d2fc04a9aec6d978082ce",
+      "compressedBytes": 158068,
+      "unpackedBytes": 1127740,
+      "fileCount": 3,
+      "largestPaths": ["package/dist/bin/cli.js", "package/README.md", "package/package.json"],
+      "sourceMapCount": 0,
+      "nestedNodeModulesCount": 0,
+      "declaredDependencies": { "commander": "^12.0.0", "mcpscraper-sdk": "^0.39.0" }
+    },
+    {
+      "file": "mcpscraper_sdk-0.37.0-py3-none-any.whl",
+      "sha256": "453d8b0cd5de669b28fed286ee5f8e349d9df03d806bdc12c0e4da81afb9d8aa",
+      "compressedBytes": 367829,
+      "unpackedBytes": 1063007,
+      "fileCount": 380,
+      "largestPaths": ["mcpscraper/_mcp_generated_client.py", "mcpscraper_sdk-0.37.0.dist-info/RECORD", "mcpscraper/models.py", "mcpscraper/mcp_models/assistant_diagnostics_get.py", "mcpscraper/client.py"],
+      "sourceMapCount": 0,
+      "nestedNodeModulesCount": 0,
+      "declaredDependencies": ["requests>=2.31", "pydantic>=2.0"]
+    },
+    {
+      "file": "mcpscraper_sdk-0.37.0.tar.gz",
+      "sha256": "ca250c7da52887613ec282ac4a6527d9602c49d0e47983eeee26eedd218526b6",
+      "compressedBytes": 145287,
+      "unpackedBytes": 1032640,
+      "fileCount": 381,
+      "largestPaths": ["mcpscraper_sdk-0.37.0/src/mcpscraper/_mcp_generated_client.py", "mcpscraper_sdk-0.37.0/src/mcpscraper/models.py", "mcpscraper_sdk-0.37.0/src/mcpscraper/mcp_models/assistant_diagnostics_get.py", "mcpscraper_sdk-0.37.0/src/mcpscraper/client.py", "mcpscraper_sdk-0.37.0/src/mcpscraper/mcp_models/assistant_grant_create.py"],
+      "sourceMapCount": 0,
+      "nestedNodeModulesCount": 0,
+      "declaredDependencies": ["requests>=2.31", "pydantic>=2.0"]
+    },
+    {
+      "file": "mcpscraper_memory_sdk-0.35.0-py3-none-any.whl",
+      "sha256": "deadd5212f0b92cda36449f3a3af225180ca7867fd2b8211c2707b3327a73875",
+      "compressedBytes": 549952,
+      "unpackedBytes": 1420839,
+      "fileCount": 620,
+      "largestPaths": ["mcpscraper_memory/_mcp_generated_client.py", "mcpscraper_memory_sdk-0.35.0.dist-info/RECORD", "mcpscraper_memory/_generated_client.py", "mcpscraper_memory/mcp_models/assistant_diagnostics_get.py", "mcpscraper_memory/mcp_models/assistant_grant_create.py"],
+      "sourceMapCount": 0,
+      "nestedNodeModulesCount": 0,
+      "declaredDependencies": ["requests>=2.31", "pydantic>=2"]
+    },
+    {
+      "file": "mcpscraper_memory_sdk-0.35.0.tar.gz",
+      "sha256": "b4b24305cd50a8adc7378bcf567baa8dcac982c111bde2cbc933ac905b17d650",
+      "compressedBytes": 188175,
+      "unpackedBytes": 1357378,
+      "fileCount": 621,
+      "largestPaths": ["mcpscraper_memory_sdk-0.35.0/src/mcpscraper_memory/_mcp_generated_client.py", "mcpscraper_memory_sdk-0.35.0/src/mcpscraper_memory/_generated_client.py", "mcpscraper_memory_sdk-0.35.0/src/mcpscraper_memory/mcp_models/assistant_diagnostics_get.py", "mcpscraper_memory_sdk-0.35.0/src/mcpscraper_memory/mcp_models/assistant_grant_create.py", "mcpscraper_memory_sdk-0.35.0/src/mcpscraper_memory/mcp_models/assistant_message_send.py"],
+      "sourceMapCount": 0,
+      "nestedNodeModulesCount": 0,
+      "declaredDependencies": ["requests>=2.31", "pydantic>=2"]
+    }
+  ]
+}

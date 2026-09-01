@@ -10,7 +10,7 @@ export interface Input {
   /**
    * Supported CRM provider; scheduling fails closed unless effective capability permits polling.
    */
-  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+  provider: "hubspot" | "highlevel" | "zoho" | "keap";
   /**
    * Verified service connection reference.
    */
@@ -28,7 +28,7 @@ export interface Input {
 export interface Output {
   ok: boolean;
   schedule: {
-    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+    provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
     intervalSeconds: number | null;
     nextRunAt: string | null;
   };

@@ -1,4 +1,4 @@
-# All 373 MCP tools with cURL
+# All 369 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (373)
+## Complete catalog (369)
 
 ## access
 
@@ -221,16 +221,12 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_set_experiment_state` — Set X-Ray Experiment State
 - `analytics_setup_site` — Install X-Ray on a Site
 - `analytics_verify_site_setup` — Verify X-Ray Site Setup
-- `analytics_apply_revenue_source` — Apply SaaS Revenue Authority
 - `analytics_create_post_purchase_survey` — Create Post-Purchase Survey Draft
 - `analytics_get_attribution_methodology` — Get X-Ray Attribution Methodology
 - `analytics_get_impact_report` — Get Observed and Reported Impact
 - `analytics_get_post_purchase_survey_report` — Get Post-Purchase Survey Report
 - `analytics_get_view_evidence_status` — Get Provider View Evidence Status
-- `analytics_prepare_revenue_source` — Prepare SaaS Revenue Authority
 - `analytics_set_post_purchase_survey_state` — Set Post-Purchase Survey State
-- `analytics_setup_revenue_source` — Set Up SaaS Revenue Authority
-- `analytics_verify_revenue_source` — Verify SaaS Revenue Authority
 
 ## web
 

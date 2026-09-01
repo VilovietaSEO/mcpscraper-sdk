@@ -23,8 +23,7 @@ export interface Output {
     | [
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -227,8 +226,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -272,8 +270,7 @@ export interface Output {
     | [
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -476,8 +473,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -519,8 +515,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -723,8 +718,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -768,8 +762,7 @@ export interface Output {
     | [
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -972,8 +965,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -1015,8 +1007,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -1219,8 +1210,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -1262,8 +1252,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -1466,8 +1455,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -1511,8 +1499,7 @@ export interface Output {
     | [
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -1715,8 +1702,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -1758,8 +1744,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -1962,8 +1947,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -2005,8 +1989,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -2209,8 +2192,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -2252,8 +2234,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -2456,8 +2437,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -2501,8 +2481,7 @@ export interface Output {
     | [
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -2705,8 +2684,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -2748,8 +2726,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -2952,8 +2929,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -2995,8 +2971,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -3199,8 +3174,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -3242,8 +3216,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -3446,8 +3419,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -3489,8 +3461,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -3693,8 +3664,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -3738,8 +3708,7 @@ export interface Output {
     | [
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -3942,8 +3911,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -3985,8 +3953,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -4189,8 +4156,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -4232,8 +4198,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -4436,8 +4401,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -4479,8 +4443,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -4683,8 +4646,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -4726,8 +4688,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -4930,8 +4891,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
@@ -4973,8 +4933,7 @@ export interface Output {
         },
         {
           profile: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             displayName: string;
             /**
              * @maxItems 20
@@ -5177,8 +5136,7 @@ export interface Output {
             safeFallback: "note" | "activity" | "webhook_only";
           };
           sync: {
-            provider:
-              "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+            provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
             mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
             canSyncNow: boolean;
             canSchedule: boolean;
