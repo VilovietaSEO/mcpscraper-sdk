@@ -28142,6 +28142,851 @@ export const MCP_TOOL_CATALOG = [
       "idempotentHint": true,
       "openWorldHint": true
     }
+  },
+  {
+    "name": "analytics_apply_site_setup",
+    "category": "analytics",
+    "title": "Apply X-Ray Site Setup",
+    "description": "Publish a confirmed measurement-plan revision to the installed X-Ray tag using an idempotent retry key. No repository access or visitor-experiment authority.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id owning the setup."
+        },
+        "setupId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Durable owner-bound setup id returned by an X-Ray setup operation; it is not a browser session id."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
+        },
+        "confirmed": {
+          "type": "boolean",
+          "const": true,
+          "description": "Confirms publishing this exact measurement manifest to the installed X-Ray tag runtime. This does not activate an experiment."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "setupId",
+        "revision",
+        "confirmed",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Apply X-Ray Site Setup",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_create_experiment",
+    "category": "analytics",
+    "title": "Create X-Ray Experiment Draft",
+    "description": "Create an owner-bound, preregistered experiment draft from a measured site. Requires a hypothesis, primary metric, guardrails, audience, duration, sample threshold, expiry, control, allocations, and only allowlisted visual operations. It never approves or activates the experiment.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "plan": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Owner-facing experiment name."
+            },
+            "hypothesis": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 500,
+              "description": "Falsifiable prediction connecting the declared change to the primary metric."
+            },
+            "primaryMetricEvent": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{1,79}$",
+              "description": "Persisted X-Ray event used as the sole primary outcome metric."
+            },
+            "guardrailEvents": {
+              "default": [],
+              "description": "Events monitored for unacceptable harm; these do not replace the primary metric.",
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{1,79}$"
+              }
+            },
+            "guardrailMaximumAbsoluteIncrease": {
+              "default": 0.05,
+              "description": "Maximum allowed absolute increase in any declared harm-event rate versus control before automatic pause.",
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1
+            },
+            "stoppingRule": {
+              "default": {
+                "method": "fixed_horizon",
+                "actionOnSampleRatioMismatch": "pause",
+                "actionOnGuardrailBreach": "pause",
+                "winnerRequiresSignificance": true
+              },
+              "description": "Pre-registered stopping behavior; no continuous peeking or automatic winner rollout.",
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "fixed_horizon",
+                  "description": "Evaluate only after the registered minimum duration and sample."
+                },
+                "actionOnSampleRatioMismatch": {
+                  "type": "string",
+                  "const": "pause",
+                  "description": "Pause when assignment balance is invalid."
+                },
+                "actionOnGuardrailBreach": {
+                  "type": "string",
+                  "const": "pause",
+                  "description": "Pause when a registered harm guardrail is breached."
+                },
+                "winnerRequiresSignificance": {
+                  "type": "boolean",
+                  "const": true,
+                  "description": "Require the registered significance threshold before calling a winner."
+                }
+              },
+              "required": [
+                "method",
+                "actionOnSampleRatioMismatch",
+                "actionOnGuardrailBreach",
+                "winnerRequiresSignificance"
+              ],
+              "additionalProperties": false
+            },
+            "rollbackPlan": {
+              "default": {
+                "action": "restore_control",
+                "triggers": [
+                  "pause",
+                  "kill",
+                  "expiry",
+                  "manifest_error",
+                  "selector_ambiguity",
+                  "performance_guardrail"
+                ]
+              },
+              "description": "Closed rollback contract executed by the Pixel.",
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "const": "restore_control",
+                  "description": "Restore every captured control value."
+                },
+                "triggers": {
+                  "minItems": 6,
+                  "maxItems": 6,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "pause",
+                      "kill",
+                      "expiry",
+                      "manifest_error",
+                      "selector_ambiguity",
+                      "performance_guardrail"
+                    ],
+                    "description": "Fail-to-control condition."
+                  },
+                  "description": "Complete closed rollback trigger set."
+                }
+              },
+              "required": [
+                "action",
+                "triggers"
+              ],
+              "additionalProperties": false
+            },
+            "performanceGuardrailMs": {
+              "default": 16,
+              "description": "Maximum synchronous DOM-application time before the Pixel restores control.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "audience": {
+              "type": "object",
+              "properties": {
+                "routePrefixes": {
+                  "minItems": 1,
+                  "maxItems": 25,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 2000,
+                    "pattern": "^\\/.*"
+                  },
+                  "description": "Approved route prefixes eligible for assignment."
+                },
+                "trafficClass": {
+                  "default": "production",
+                  "description": "Declared traffic population; canary state remains separately gated.",
+                  "type": "string",
+                  "enum": [
+                    "internal",
+                    "test",
+                    "production"
+                  ]
+                }
+              },
+              "required": [
+                "routePrefixes"
+              ],
+              "additionalProperties": false,
+              "description": "Bounded route and traffic audience."
+            },
+            "assignmentUnit": {
+              "default": "visitor",
+              "description": "Stable mutually exclusive assignment unit.",
+              "type": "string",
+              "enum": [
+                "visitor",
+                "session"
+              ]
+            },
+            "minimumDurationHours": {
+              "type": "integer",
+              "minimum": 24,
+              "maximum": 2160,
+              "description": "Minimum active hours before a result may be called."
+            },
+            "minimumExposures": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 10000000,
+              "description": "Minimum visible variant exposures before evaluation."
+            },
+            "minimumDetectableEffect": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1,
+              "description": "Smallest absolute effect worth detecting, expressed from 0 to 1."
+            },
+            "alpha": {
+              "default": 0.05,
+              "description": "Pre-registered false-positive threshold.",
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.2
+            },
+            "power": {
+              "default": 0.8,
+              "description": "Pre-registered statistical power target.",
+              "type": "number",
+              "minimum": 0.7,
+              "maximum": 0.99
+            },
+            "variants": {
+              "minItems": 2,
+              "maxItems": 8,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "variantId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]{1,79}$",
+                    "description": "Stable variant identifier."
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "description": "Owner-facing variant label."
+                  },
+                  "allocation": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1,
+                    "description": "Traffic allocation from 0 to 1; all variants must total 1."
+                  },
+                  "operations": {
+                    "maxItems": 12,
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "replace_text",
+                              "description": "Replace plain text only."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique bounded CSS selector."
+                            },
+                            "text": {
+                              "type": "string",
+                              "maxLength": 240,
+                              "description": "Replacement text without markup."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "set_style_token",
+                              "description": "Apply one product-owned style token."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique bounded CSS selector."
+                            },
+                            "token": {
+                              "type": "string",
+                              "enum": [
+                                "cta_primary",
+                                "cta_secondary",
+                                "cta_contrast",
+                                "muted",
+                                "highlight"
+                              ],
+                              "description": "Allowlisted style token."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "token"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "swap_image",
+                              "description": "Swap one image using HTTPS."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique image selector."
+                            },
+                            "src": {
+                              "type": "string",
+                              "maxLength": 2000,
+                              "format": "uri",
+                              "description": "HTTPS image URL."
+                            },
+                            "alt": {
+                              "type": "string",
+                              "maxLength": 240,
+                              "description": "Required bounded alternative text."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "src",
+                            "alt"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "move_relative",
+                              "description": "Move one sibling before or after another."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique element selector."
+                            },
+                            "anchorSelector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique sibling anchor selector."
+                            },
+                            "position": {
+                              "type": "string",
+                              "enum": [
+                                "before",
+                                "after"
+                              ],
+                              "description": "Placement relative to the anchor."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "anchorSelector",
+                            "position"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "set_visibility",
+                              "description": "Show or hide one unique element."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique bounded CSS selector."
+                            },
+                            "visible": {
+                              "type": "boolean",
+                              "description": "Whether the selected element should be visible."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "visible"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "description": "Closed, data-only presentation operations; an empty list is the control."
+                  }
+                },
+                "required": [
+                  "variantId",
+                  "label",
+                  "allocation",
+                  "operations"
+                ],
+                "additionalProperties": false,
+                "description": "One control or treatment variant."
+              },
+              "description": "Two to eight mutually exclusive variants including one control."
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+              "description": "Hard experiment expiry; the Pixel rolls back after this instant."
+            }
+          },
+          "required": [
+            "name",
+            "hypothesis",
+            "primaryMetricEvent",
+            "audience",
+            "minimumDurationHours",
+            "minimumExposures",
+            "minimumDetectableEffect",
+            "variants",
+            "expiresAt"
+          ],
+          "additionalProperties": false,
+          "description": "Preregistered hypothesis, metric, audience, sample requirements, expiry, allocations, and allowlisted visual operations. One control variant must have no operations."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "plan",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create X-Ray Experiment Draft",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_experiment",
+    "category": "analytics",
+    "title": "Get X-Ray Experiment",
+    "description": "Read the preregistered plan, exact state, assignment counts, exposures, outcomes, and decision status for one authorized experiment. Browser intent is never reported as a terminal business outcome.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "experimentId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound experiment id returned by analytics_create_experiment."
+        }
+      },
+      "required": [
+        "siteId",
+        "experimentId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get X-Ray Experiment",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_prepare_site_setup",
+    "category": "analytics",
+    "title": "Prepare X-Ray Site Setup",
+    "description": "Inspect the public site and prepare an expiring measurement plan for an already installed X-Ray tag. No repository access, credentials, code changes, visitor delivery, or MCP Scraper Credits.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id returned by analytics_list_sites."
+        },
+        "startUrl": {
+          "type": "string",
+          "maxLength": 3000,
+          "format": "uri",
+          "description": "Public same-origin URL from which X-Ray discovers bounded routes and rendering surfaces."
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Plain-language customer outcome to measure; do not paste credentials, source code, form contents, or visitor data."
+        },
+        "businessModel": {
+          "description": "Optional user-confirmed model; omit to receive an evidence-backed recommendation.",
+          "type": "string",
+          "enum": [
+            "saas",
+            "lead_generation",
+            "ecommerce"
+          ]
+        },
+        "scope": {
+          "default": "same_origin",
+          "description": "Bounded route discovery scope; neither mode authorizes third-party crawling.",
+          "type": "string",
+          "enum": [
+            "same_origin",
+            "sitemap"
+          ]
+        },
+        "maxPages": {
+          "default": 50,
+          "description": "Maximum pages inspected under the X-Ray entitlement; this consumes zero MCP Scraper Credits.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "pixelId": {
+          "description": "Optional existing Pixel belonging to the Site; omit to let the service resolve the canonical Pixel.",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "consentMode": {
+          "default": "required",
+          "description": "Consent expectation for non-delivering discovery. It never grants a visitor consent choice.",
+          "type": "string",
+          "enum": [
+            "required",
+            "granted_test",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "siteId",
+        "startUrl"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Prepare X-Ray Site Setup",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_set_experiment_state",
+    "category": "analytics",
+    "title": "Set X-Ray Experiment State",
+    "description": "Approve, canary, activate, pause, kill, or archive one exact experiment revision. Approval and visitor activation are separate confirmed steps. Activation publishes the signed tag manifest; pause and kill publish rollback. Reuse the same idempotency key only for the identical transition.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "experimentId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound experiment id returned by analytics_create_experiment."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact experiment revision being changed."
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "approve",
+            "activate_canary",
+            "activate",
+            "pause",
+            "kill",
+            "archive"
+          ],
+          "description": "Approval and activation are distinct operations. Pause and kill publish rollback immediately."
+        },
+        "confirmed": {
+          "description": "Required for approve, activate_canary, and activate. This confirms only the exact state transition.",
+          "type": "boolean",
+          "const": true
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "experimentId",
+        "revision",
+        "operation",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Set X-Ray Experiment State",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_setup_site",
+    "category": "analytics",
+    "title": "Install X-Ray on a Site",
+    "description": "Use for “set up X-Ray” or “tell me what drives customers.” One installed X-Ray tag loads a digest-bound, versioned measurement manifest across approved pages; GitHub access is not required. State is a durable owner-bound setupId and revision, never a browser session. Setup charges zero MCP Scraper Credits. Apply publishes measurement rules only. Experiment approval and activation are separate. Returns exactly one honest next action.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "description": "Authorized Analytics Site id. Supply siteId or startUrl on the first call.",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "startUrl": {
+          "description": "Public same-origin URL to set up. Supply only when siteId is not yet known.",
+          "type": "string",
+          "maxLength": 3000,
+          "format": "uri"
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Plain-language customer outcome to measure; do not paste credentials, source code, form contents, or visitor data."
+        },
+        "setupId": {
+          "description": "Reuse to continue an existing durable setup after approval, deployment, or reconnecting.",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
+        },
+        "businessModel": {
+          "description": "Optional explicit business model; omit to infer it from bounded site evidence.",
+          "type": "string",
+          "enum": [
+            "saas",
+            "lead_generation",
+            "ecommerce"
+          ]
+        },
+        "goalAction": {
+          "default": "continue",
+          "description": "Desired lifecycle step. Continue lets the façade select the single safe next operation from durable state.",
+          "type": "string",
+          "enum": [
+            "continue",
+            "prepare",
+            "apply",
+            "verify",
+            "first_answers"
+          ]
+        },
+        "authority": {
+          "description": "Source authority or ownership context supporting this content.",
+          "type": "object",
+          "properties": {
+            "confirmed": {
+              "description": "Confirms publishing this exact setup revision to the installed X-Ray tag runtime. It does not authorize a visitor experiment.",
+              "type": "boolean",
+              "const": true
+            },
+            "confirmedCanary": {
+              "description": "Separately authorizes labeled verification canaries for this exact revision; it does not authorize apply, merge, or deploy.",
+              "type": "boolean",
+              "const": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "idempotencyKey": {
+          "description": "Required only for apply or canary-capable verify; reuse for the exact same intent after an unknown result.",
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Install X-Ray on a Site",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_verify_site_setup",
+    "category": "analytics",
+    "title": "Verify X-Ray Site Setup",
+    "description": "Expert live proof. Defaults non-delivering; confirmedCanary allows labeled canaries. A PR/build is not deployed definition or outcome proof.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id owning the setup."
+        },
+        "setupId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Durable owner-bound setup id returned by an X-Ray setup operation; it is not a browser session id."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
+        },
+        "confirmedCanary": {
+          "description": "Omit for non-delivering interception. True separately authorizes only labeled, bounded canaries; it does not authorize merge or deploy.",
+          "type": "boolean",
+          "const": true
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "setupId",
+        "revision",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Verify X-Ray Site Setup",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
   }
 ] as const
 export const MCP_TOOL_NAMES = MCP_TOOL_CATALOG.map(tool => tool.name)

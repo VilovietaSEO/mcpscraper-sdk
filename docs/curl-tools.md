@@ -1,4 +1,4 @@
-# All 356 MCP tools with cURL
+# All 363 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (356)
+## Complete catalog (363)
 
 ## access
 
@@ -214,6 +214,13 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_validate_activation_mapping` — Validate Activation Event Mapping
 - `analytics_verify_live_event_definition` — Verify Live Browser Event
 - `analytics_withdraw_consent` — Withdraw Analytics Consent
+- `analytics_apply_site_setup` — Apply X-Ray Site Setup
+- `analytics_create_experiment` — Create X-Ray Experiment Draft
+- `analytics_get_experiment` — Get X-Ray Experiment
+- `analytics_prepare_site_setup` — Prepare X-Ray Site Setup
+- `analytics_set_experiment_state` — Set X-Ray Experiment State
+- `analytics_setup_site` — Install X-Ray on a Site
+- `analytics_verify_site_setup` — Verify X-Ray Site Setup
 
 ## web
 

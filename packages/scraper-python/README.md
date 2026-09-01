@@ -127,7 +127,7 @@ hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 356 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 363 unified MCP tools.
 
 ## Regenerating models
 
