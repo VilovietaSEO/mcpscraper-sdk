@@ -6,7 +6,7 @@ class AnalyticsApplyCrmPipelineMappingInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     site_id: str = Field(..., alias="siteId", description="Analytics Site id returned by analytics_list_sites.")
-    provider: Literal['hubspot', 'salesforce', 'highlevel', 'zoho', 'pipedrive', 'keap'] = Field(..., alias="provider", description="Supported CRM provider.")
+    provider: Literal['hubspot', 'highlevel', 'zoho', 'keap'] = Field(..., alias="provider", description="Supported CRM provider.")
     connection_id: str = Field(..., alias="connectionId", description="Verified service connection reference.")
     person: dict[str, Any] = Field(..., alias="person", description="Confirmed person associated with the pipeline event; candidate identity is schema-invalid.")
     event: dict[str, Any] = Field(..., alias="event", description="Canonical stage or verified-revenue event.")

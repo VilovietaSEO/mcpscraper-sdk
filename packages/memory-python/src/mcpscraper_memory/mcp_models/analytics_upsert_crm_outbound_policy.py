@@ -6,7 +6,7 @@ class AnalyticsUpsertCrmOutboundPolicyInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     site_id: str = Field(..., alias="siteId", description="Analytics Site id returned by analytics_list_sites.")
-    provider: Literal['hubspot', 'salesforce', 'highlevel', 'zoho', 'pipedrive', 'keap'] = Field(..., alias="provider", description="Supported CRM provider.")
+    provider: Literal['hubspot', 'highlevel', 'zoho', 'keap'] = Field(..., alias="provider", description="Supported CRM provider.")
     connection_id: str = Field(..., alias="connectionId", description="Verified service connection reference.")
     kind: Literal['person_summary', 'pipeline_event'] = Field(..., alias="kind", description="Person summaries never create deals; pipeline events require an explicit versioned mapping.")
     enabled: bool = Field(..., alias="enabled", description="Policies are disabled by default and must be explicitly enabled after provisioning and consent checks.")

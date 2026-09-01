@@ -2,7 +2,9 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 373 unified MCP tools, including governed X-Ray revenue, survey, attribution-impact, and evidence-status operations.
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 369 unified MCP tools, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
 ## Install
 
@@ -39,7 +41,7 @@ mcpscraper tools call gmail_prepare_selection --args '{"connectionId":"gmail_con
 mcpscraper tools call gmail_import_status --args '{"ingestId":"opaque_ingest_id"}' --json
 ```
 
-`tools list` contains exactly 373 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 369 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release. Scheduled occurrences cost 75 Credits; agent-mode runs also add 1.5 times OpenRouter's actual reported cost. Inspect the live policy with `mcpscraper tools call get-schedule-status --args '{}'`.
 

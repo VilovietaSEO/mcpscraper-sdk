@@ -14,7 +14,7 @@ export interface Input {
     /**
      * Supported phone, CRM, or advertising provider for this governed connection.
      */
-    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    provider: "hubspot" | "highlevel" | "zoho" | "keap";
     /**
      * Existing authorized service-connection reference; never supply credentials or tokens.
      */
@@ -109,7 +109,7 @@ export interface Output {
     /**
      * Supported phone, CRM, or advertising provider for this governed connection.
      */
-    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    provider: "hubspot" | "highlevel" | "zoho" | "keap";
     /**
      * Existing authorized service-connection reference; never supply credentials or tokens.
      */

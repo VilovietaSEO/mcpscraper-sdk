@@ -16,7 +16,7 @@ export interface Output {
     /**
      * Supported phone, CRM, or advertising provider for this governed connection.
      */
-    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    provider: "hubspot" | "highlevel" | "zoho" | "keap";
     connectionId: string;
     kind: "person_summary" | "pipeline_event";
     enabled: boolean;

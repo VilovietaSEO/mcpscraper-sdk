@@ -15,7 +15,7 @@
     "build": "npm run build --workspaces",
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspaces",
-    "test:contract-projection": "node --test --import tsx tests/mcp-contract-telemetry.test.ts tests/update-mcp-manifest.test.ts tests/update-memory-manifest.test.ts tests/gmail-contract.test.ts tests/xray-journey-contract.test.ts tests/xray-saas-attribution-contract.test.ts tests/personal-assistant-contract.test.ts",
+    "test:contract-projection": "node --test --import tsx tests/mcp-contract-telemetry.test.ts tests/update-mcp-manifest.test.ts tests/update-memory-manifest.test.ts tests/gmail-contract.test.ts tests/xray-journey-contract.test.ts tests/xray-attribution-contract.test.ts tests/personal-assistant-contract.test.ts",
     "test:python": "node scripts/run-python-project.mjs packages/scraper-python -m pytest packages/scraper-python/tests && node scripts/run-python-project.mjs packages/memory-python -m pytest packages/memory-python/tests",
     "validate-contracts": "node --import tsx scripts/validate-contracts.ts",
     "check:product-contract": "node --import tsx scripts/check-public-product-contract.ts",
@@ -29,7 +29,7 @@
     "example:gmail": "npm run build --workspace=mcpscraper-memory-sdk && node examples/gmail-complete-workflow.mjs",
     "example:gmail:bulk-manage": "npm run build --workspace=mcpscraper-memory-sdk && node examples/gmail-bulk-manage.mjs",
     "example:xray:journeys": "npm run build --workspace=mcpscraper-memory-sdk && node examples/xray-journeys.mjs",
-    "example:xray:saas-attribution": "npm run build --workspace=mcpscraper-memory-sdk && node examples/xray-saas-attribution.mjs"
+    "example:xray:attribution": "npm run build --workspace=mcpscraper-memory-sdk && node examples/xray-attribution.mjs"
   },
   "devDependencies": {
     "typescript": "^5.6.0",
@@ -82,9 +82,9 @@
     "load-tsconfig": "^0.2.5",
     "lodash": "^4.18.1",
     "magic-string": "^0.30.21",
-    "mcpscraper-cli": "^0.37.0",
-    "mcpscraper-memory-sdk": "^0.38.0",
-    "mcpscraper-sdk": "^0.38.0",
+    "mcpscraper-cli": "^0.38.0",
+    "mcpscraper-memory-sdk": "^0.39.0",
+    "mcpscraper-sdk": "^0.39.0",
     "minimatch": "^5.1.9",
     "minimist": "^1.2.8",
     "mlly": "^1.8.2",

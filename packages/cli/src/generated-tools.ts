@@ -722,10 +722,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider."
@@ -944,10 +942,8 @@ export const MCP_TOOL_CATALOG = [
               "type": "string",
               "enum": [
                 "hubspot",
-                "salesforce",
                 "highlevel",
                 "zoho",
-                "pipedrive",
                 "keap"
               ],
               "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -3549,10 +3545,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider."
@@ -3597,10 +3591,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider."
@@ -7505,7 +7497,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_list_crm_capabilities",
     "category": "analytics",
     "title": "List CRM Capabilities",
-    "description": "List source-controlled capabilities and honest fallback states for all six supported CRMs.",
+    "description": "List source-controlled capabilities and honest fallback states for every publicly registered CRM.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -8676,10 +8668,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider."
@@ -9388,10 +9378,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider; tenant evidence may narrow this provider to webhook or manual mode."
@@ -9521,10 +9509,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider."
@@ -9795,10 +9781,8 @@ export const MCP_TOOL_CATALOG = [
               "type": "string",
               "enum": [
                 "hubspot",
-                "salesforce",
                 "highlevel",
                 "zoho",
-                "pipedrive",
                 "keap"
               ],
               "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -9955,10 +9939,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider."
@@ -10438,10 +10420,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider; scheduling fails closed unless effective capability permits polling."
@@ -10743,10 +10723,8 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "hubspot",
-            "salesforce",
             "highlevel",
             "zoho",
-            "pipedrive",
             "keap"
           ],
           "description": "Supported CRM provider."
@@ -28989,61 +28967,6 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
-    "name": "analytics_apply_revenue_source",
-    "category": "analytics",
-    "title": "Apply SaaS Revenue Authority",
-    "description": "Apply one exact reviewed revenue-source revision using an idempotency key. It binds an authorized provider account and authority role; it never accepts credentials and does not claim the source live before provider receipt verification.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "setupId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Owner-bound revenue setup id returned by prepare or the facade."
-        },
-        "revision": {
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991,
-          "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
-        },
-        "confirmed": {
-          "type": "boolean",
-          "const": true,
-          "description": "Confirms this exact provider account, role, and event-family revision."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "setupId",
-        "revision",
-        "confirmed",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Apply SaaS Revenue Authority",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": true
-    }
-  },
-  {
     "name": "analytics_create_post_purchase_survey",
     "category": "analytics",
     "title": "Create Post-Purchase Survey Draft",
@@ -29418,57 +29341,6 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
-    "name": "analytics_prepare_revenue_source",
-    "category": "analytics",
-    "title": "Prepare SaaS Revenue Authority",
-    "description": "Inspect an already-authorized provider connection and return a revisioned primary-or-observation revenue plan. This read-like preparation may query the provider but cannot create revenue or receive a provider credential.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "serviceConnectionRef": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 240,
-          "description": "Already-authorized connected-account reference. Credentials never belong in this input."
-        },
-        "role": {
-          "default": "primary",
-          "description": "Choose one primary authority per subscription-revenue outcome family; observation sources cannot create revenue.",
-          "type": "string",
-          "enum": [
-            "primary",
-            "observation"
-          ]
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "serviceConnectionRef",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Prepare SaaS Revenue Authority",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": true
-    }
-  },
-  {
     "name": "analytics_set_post_purchase_survey_state",
     "category": "analytics",
     "title": "Set Post-Purchase Survey State",
@@ -29538,132 +29410,6 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": true,
       "idempotentHint": true,
       "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_setup_revenue_source",
-    "category": "analytics",
-    "title": "Set Up SaaS Revenue Authority",
-    "description": "Use as the customer-facing SaaS revenue setup facade after tag and measurement readiness. It prepares, reads, applies, or verifies one owner-authorized subscription authority without accepting credentials. Provider calls may occur only through the approved connected account; reuse setupId and revision.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "action": {
-          "default": "continue",
-          "description": "Lifecycle action. Continue reads an existing setup or prepares one when serviceConnectionRef is supplied.",
-          "type": "string",
-          "enum": [
-            "continue",
-            "prepare",
-            "apply",
-            "verify"
-          ]
-        },
-        "setupId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Owner-bound revenue setup id returned by prepare or the facade."
-        },
-        "serviceConnectionRef": {
-          "description": "Already-authorized connected-account reference. Never supply a credential, token, or provider key.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 240
-        },
-        "role": {
-          "default": "primary",
-          "description": "Primary may create subscription outcomes; observation only compares provider evidence.",
-          "type": "string",
-          "enum": [
-            "primary",
-            "observation"
-          ]
-        },
-        "revision": {
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991,
-          "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
-        },
-        "confirmed": {
-          "description": "Required only to apply the exact reviewed revision.",
-          "type": "boolean",
-          "const": true
-        },
-        "idempotencyKey": {
-          "description": "Required for apply and verify. Reuse only for the identical operation.",
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160
-        }
-      },
-      "required": [
-        "siteId"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Set Up SaaS Revenue Authority",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": true
-    }
-  },
-  {
-    "name": "analytics_verify_revenue_source",
-    "category": "analytics",
-    "title": "Verify SaaS Revenue Authority",
-    "description": "Verify one applied revenue source through the approved provider connection and return a redacted non-customer receipt state. A successful API call without a signed webhook or reconciliation receipt is not live proof.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "setupId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Owner-bound revenue setup id returned by prepare or the facade."
-        },
-        "revision": {
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991,
-          "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "setupId",
-        "revision",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Verify SaaS Revenue Authority",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": true
     }
   }
 ] as const

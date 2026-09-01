@@ -6,7 +6,7 @@ export interface Input {
   /**
    * Supported CRM provider.
    */
-  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+  provider: "hubspot" | "highlevel" | "zoho" | "keap";
   /**
    * Verified service connection reference.
    */
@@ -117,7 +117,7 @@ export interface Output {
     /**
      * Supported phone, CRM, or advertising provider for this governed connection.
      */
-    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    provider: "hubspot" | "highlevel" | "zoho" | "keap";
     operation: "person_upsert";
     dealCreated: false;
     providerRecordRef?: string;

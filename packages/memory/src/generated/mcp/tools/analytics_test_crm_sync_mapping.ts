@@ -6,7 +6,7 @@ export interface Input {
   /**
    * Supported CRM provider.
    */
-  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+  provider: "hubspot" | "highlevel" | "zoho" | "keap";
   /**
    * Proposed typed CRM event mapping.
    */

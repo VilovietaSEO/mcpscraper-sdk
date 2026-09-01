@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.84.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "c9b3d57bab42979811faefe34e8a17a8d67433c4c47600afa1920797b5430e42",
-  "toolCount": 373,
+  "generatedFrom": "mcp-scraper 0.85.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "e46a5062c90e0218c5cf547b09da5052a65ef4b1e3a38148340ff0309edf966c",
+  "toolCount": 369,
   "tools": [
     {
       "name": "access-accept-share",
@@ -1544,10 +1544,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider."
@@ -1749,10 +1747,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -1818,10 +1814,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -2004,10 +1998,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -5108,10 +5100,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider."
@@ -5143,10 +5133,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -5158,10 +5146,8 @@
                     "type": "string",
                     "enum": [
                       "hubspot",
-                      "salesforce",
                       "highlevel",
                       "zoho",
-                      "pipedrive",
                       "keap",
                       "callrail",
                       "twilio",
@@ -5572,10 +5558,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -5739,10 +5723,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider."
@@ -5775,10 +5757,8 @@
                     "type": "string",
                     "enum": [
                       "hubspot",
-                      "salesforce",
                       "highlevel",
                       "zoho",
-                      "pipedrive",
                       "keap",
                       "callrail",
                       "twilio",
@@ -8112,10 +8092,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -12625,7 +12603,7 @@
     {
       "name": "analytics_list_crm_capabilities",
       "title": "List CRM Capabilities",
-      "description": "List source-controlled capabilities and honest fallback states for all six supported CRMs.",
+      "description": "List source-controlled capabilities and honest fallback states for every publicly registered CRM.",
       "category": "analytics",
       "methodName": "listCrmCapabilities",
       "inputSchema": {
@@ -12674,10 +12652,8 @@
                       "type": "string",
                       "enum": [
                         "hubspot",
-                        "salesforce",
                         "highlevel",
                         "zoho",
-                        "pipedrive",
                         "keap",
                         "callrail",
                         "twilio",
@@ -12951,10 +12927,8 @@
                       "type": "string",
                       "enum": [
                         "hubspot",
-                        "salesforce",
                         "highlevel",
                         "zoho",
-                        "pipedrive",
                         "keap",
                         "callrail",
                         "twilio",
@@ -13257,10 +13231,8 @@
                   "type": "string",
                   "enum": [
                     "hubspot",
-                    "salesforce",
                     "highlevel",
                     "zoho",
-                    "pipedrive",
                     "keap"
                   ],
                   "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -15376,10 +15348,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider."
@@ -15482,10 +15452,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -16574,10 +16542,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider; tenant evidence may narrow this provider to webhook or manual mode."
@@ -16752,10 +16718,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider."
@@ -16950,10 +16914,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -17105,10 +17067,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -17262,10 +17222,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -17417,10 +17375,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider."
@@ -18054,10 +18010,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider; scheduling fails closed unless effective capability permits polling."
@@ -18111,10 +18065,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap",
                   "callrail",
                   "twilio",
@@ -18470,10 +18422,8 @@
             "type": "string",
             "enum": [
               "hubspot",
-              "salesforce",
               "highlevel",
               "zoho",
-              "pipedrive",
               "keap"
             ],
             "description": "Supported CRM provider."
@@ -18680,10 +18630,8 @@
                 "type": "string",
                 "enum": [
                   "hubspot",
-                  "salesforce",
                   "highlevel",
                   "zoho",
-                  "pipedrive",
                   "keap"
                 ],
                 "description": "Supported phone, CRM, or advertising provider for this governed connection."
@@ -89440,263 +89388,6 @@
       }
     },
     {
-      "name": "analytics_apply_revenue_source",
-      "title": "Apply SaaS Revenue Authority",
-      "description": "Apply one exact reviewed revenue-source revision using an idempotency key. It binds an authorized provider account and authority role; it never accepts credentials and does not claim the source live before provider receipt verification.",
-      "category": "analytics",
-      "methodName": "applyRevenueSource",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "siteId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Authorized Analytics Site id."
-          },
-          "setupId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Owner-bound revenue setup id returned by prepare or the facade."
-          },
-          "revision": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
-          },
-          "confirmed": {
-            "type": "boolean",
-            "const": true,
-            "description": "Confirms this exact provider account, role, and event-family revision."
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 160,
-            "description": "Retry key; reuse only for this exact mutation."
-          }
-        },
-        "required": [
-          "siteId",
-          "setupId",
-          "revision",
-          "confirmed",
-          "idempotencyKey"
-        ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema"
-      },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "ok": {
-            "type": "boolean",
-            "const": true
-          },
-          "operation": {
-            "type": "string",
-            "const": "apply"
-          },
-          "setup": {
-            "type": "object",
-            "properties": {
-              "schemaVersion": {
-                "type": "number",
-                "const": 1
-              },
-              "setupId": {
-                "type": "string",
-                "format": "uuid",
-                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-              },
-              "siteId": {
-                "type": "string",
-                "format": "uuid",
-                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-              },
-              "revision": {
-                "type": "integer",
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991
-              },
-              "state": {
-                "type": "string",
-                "enum": [
-                  "prepared",
-                  "configured_unverified",
-                  "verified",
-                  "live",
-                  "blocked"
-                ]
-              },
-              "authorityId": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "provider": {
-                "type": "string",
-                "const": "stripe_revenue"
-              },
-              "serviceConnectionRef": {
-                "type": "string",
-                "minLength": 1
-              },
-              "providerAccountRef": {
-                "type": "string",
-                "pattern": "^acct_[A-Za-z0-9]+$"
-              },
-              "providerIdentityVerifiedAt": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-              },
-              "outcomeFamily": {
-                "type": "string",
-                "const": "subscription_revenue"
-              },
-              "role": {
-                "type": "string",
-                "enum": [
-                  "primary",
-                  "observation"
-                ]
-              },
-              "eventFamilies": {
-                "type": "array",
-                "prefixItems": [
-                  {
-                    "type": "string",
-                    "const": "subscription"
-                  },
-                  {
-                    "type": "string",
-                    "const": "invoice"
-                  },
-                  {
-                    "type": "string",
-                    "const": "refund"
-                  },
-                  {
-                    "type": "string",
-                    "const": "credit_note"
-                  }
-                ]
-              },
-              "verification": {
-                "type": "object",
-                "properties": {
-                  "status": {
-                    "type": "string",
-                    "enum": [
-                      "not_started",
-                      "missing_provider_receipt",
-                      "verified",
-                      "live"
-                    ]
-                  },
-                  "receiptRef": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "evidenceKind": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "signed_webhook",
-                          "reconciliation"
-                        ]
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "testClass": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "const": "non_customer"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "status",
-                  "receiptRef",
-                  "evidenceKind",
-                  "testClass"
-                ],
-                "additionalProperties": false
-              },
-              "nextAction": {
-                "type": "string",
-                "minLength": 1
-              },
-              "createdAt": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-              }
-            },
-            "required": [
-              "schemaVersion",
-              "setupId",
-              "siteId",
-              "revision",
-              "state",
-              "authorityId",
-              "provider",
-              "serviceConnectionRef",
-              "providerAccountRef",
-              "providerIdentityVerifiedAt",
-              "outcomeFamily",
-              "role",
-              "eventFamilies",
-              "verification",
-              "nextAction",
-              "createdAt"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "required": [
-          "ok",
-          "operation",
-          "setup"
-        ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
-      },
-      "outputSchemaProvided": true,
-      "annotations": {
-        "title": "Apply SaaS Revenue Authority",
-        "readOnlyHint": false,
-        "destructiveHint": false,
-        "idempotentHint": true,
-        "openWorldHint": true
-      }
-    },
-    {
       "name": "analytics_create_post_purchase_survey",
       "title": "Create Post-Purchase Survey Draft",
       "description": "Create an idempotent, structured, contact-free post-purchase survey draft. Customer answers remain reported influence and cannot establish identity, mutate CRM, qualify activation, or change observed touches.",
@@ -90956,259 +90647,6 @@
       }
     },
     {
-      "name": "analytics_prepare_revenue_source",
-      "title": "Prepare SaaS Revenue Authority",
-      "description": "Inspect an already-authorized provider connection and return a revisioned primary-or-observation revenue plan. This read-like preparation may query the provider but cannot create revenue or receive a provider credential.",
-      "category": "analytics",
-      "methodName": "prepareRevenueSource",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "siteId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Authorized Analytics Site id."
-          },
-          "serviceConnectionRef": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 240,
-            "description": "Already-authorized connected-account reference. Credentials never belong in this input."
-          },
-          "role": {
-            "default": "primary",
-            "description": "Choose one primary authority per subscription-revenue outcome family; observation sources cannot create revenue.",
-            "type": "string",
-            "enum": [
-              "primary",
-              "observation"
-            ]
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 160,
-            "description": "Retry key; reuse only for this exact mutation."
-          }
-        },
-        "required": [
-          "siteId",
-          "serviceConnectionRef",
-          "idempotencyKey"
-        ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema"
-      },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "ok": {
-            "type": "boolean",
-            "const": true
-          },
-          "operation": {
-            "type": "string",
-            "const": "prepare"
-          },
-          "setup": {
-            "type": "object",
-            "properties": {
-              "schemaVersion": {
-                "type": "number",
-                "const": 1
-              },
-              "setupId": {
-                "type": "string",
-                "format": "uuid",
-                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-              },
-              "siteId": {
-                "type": "string",
-                "format": "uuid",
-                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-              },
-              "revision": {
-                "type": "integer",
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991
-              },
-              "state": {
-                "type": "string",
-                "enum": [
-                  "prepared",
-                  "configured_unverified",
-                  "verified",
-                  "live",
-                  "blocked"
-                ]
-              },
-              "authorityId": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "provider": {
-                "type": "string",
-                "const": "stripe_revenue"
-              },
-              "serviceConnectionRef": {
-                "type": "string",
-                "minLength": 1
-              },
-              "providerAccountRef": {
-                "type": "string",
-                "pattern": "^acct_[A-Za-z0-9]+$"
-              },
-              "providerIdentityVerifiedAt": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-              },
-              "outcomeFamily": {
-                "type": "string",
-                "const": "subscription_revenue"
-              },
-              "role": {
-                "type": "string",
-                "enum": [
-                  "primary",
-                  "observation"
-                ]
-              },
-              "eventFamilies": {
-                "type": "array",
-                "prefixItems": [
-                  {
-                    "type": "string",
-                    "const": "subscription"
-                  },
-                  {
-                    "type": "string",
-                    "const": "invoice"
-                  },
-                  {
-                    "type": "string",
-                    "const": "refund"
-                  },
-                  {
-                    "type": "string",
-                    "const": "credit_note"
-                  }
-                ]
-              },
-              "verification": {
-                "type": "object",
-                "properties": {
-                  "status": {
-                    "type": "string",
-                    "enum": [
-                      "not_started",
-                      "missing_provider_receipt",
-                      "verified",
-                      "live"
-                    ]
-                  },
-                  "receiptRef": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "evidenceKind": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "signed_webhook",
-                          "reconciliation"
-                        ]
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "testClass": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "const": "non_customer"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "status",
-                  "receiptRef",
-                  "evidenceKind",
-                  "testClass"
-                ],
-                "additionalProperties": false
-              },
-              "nextAction": {
-                "type": "string",
-                "minLength": 1
-              },
-              "createdAt": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-              }
-            },
-            "required": [
-              "schemaVersion",
-              "setupId",
-              "siteId",
-              "revision",
-              "state",
-              "authorityId",
-              "provider",
-              "serviceConnectionRef",
-              "providerAccountRef",
-              "providerIdentityVerifiedAt",
-              "outcomeFamily",
-              "role",
-              "eventFamilies",
-              "verification",
-              "nextAction",
-              "createdAt"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "required": [
-          "ok",
-          "operation",
-          "setup"
-        ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
-      },
-      "outputSchemaProvided": true,
-      "annotations": {
-        "title": "Prepare SaaS Revenue Authority",
-        "readOnlyHint": false,
-        "destructiveHint": false,
-        "idempotentHint": true,
-        "openWorldHint": true
-      }
-    },
-    {
       "name": "analytics_set_post_purchase_survey_state",
       "title": "Set Post-Purchase Survey State",
       "description": "Publish, pause, or irreversibly archive one exact survey revision. Production publication requires approved privacy disclosure evidence. Reuse the same idempotency key only for the identical transition; archive cannot be undone.",
@@ -91416,541 +90854,6 @@
         "destructiveHint": true,
         "idempotentHint": true,
         "openWorldHint": false
-      }
-    },
-    {
-      "name": "analytics_setup_revenue_source",
-      "title": "Set Up SaaS Revenue Authority",
-      "description": "Use as the customer-facing SaaS revenue setup facade after tag and measurement readiness. It prepares, reads, applies, or verifies one owner-authorized subscription authority without accepting credentials. Provider calls may occur only through the approved connected account; reuse setupId and revision.",
-      "category": "analytics",
-      "methodName": "setupRevenueSource",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "siteId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Authorized Analytics Site id."
-          },
-          "action": {
-            "default": "continue",
-            "description": "Lifecycle action. Continue reads an existing setup or prepares one when serviceConnectionRef is supplied.",
-            "type": "string",
-            "enum": [
-              "continue",
-              "prepare",
-              "apply",
-              "verify"
-            ]
-          },
-          "setupId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Owner-bound revenue setup id returned by prepare or the facade."
-          },
-          "serviceConnectionRef": {
-            "description": "Already-authorized connected-account reference. Never supply a credential, token, or provider key.",
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 240
-          },
-          "role": {
-            "default": "primary",
-            "description": "Primary may create subscription outcomes; observation only compares provider evidence.",
-            "type": "string",
-            "enum": [
-              "primary",
-              "observation"
-            ]
-          },
-          "revision": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
-          },
-          "confirmed": {
-            "description": "Required only to apply the exact reviewed revision.",
-            "type": "boolean",
-            "const": true
-          },
-          "idempotencyKey": {
-            "description": "Required for apply and verify. Reuse only for the identical operation.",
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 160
-          }
-        },
-        "required": [
-          "siteId"
-        ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema"
-      },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "ok": {
-            "type": "boolean",
-            "const": true
-          },
-          "operation": {
-            "type": "string",
-            "const": "facade"
-          },
-          "setup": {
-            "type": "object",
-            "properties": {
-              "schemaVersion": {
-                "type": "number",
-                "const": 1
-              },
-              "setupId": {
-                "type": "string",
-                "format": "uuid",
-                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-              },
-              "siteId": {
-                "type": "string",
-                "format": "uuid",
-                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-              },
-              "revision": {
-                "type": "integer",
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991
-              },
-              "state": {
-                "type": "string",
-                "enum": [
-                  "prepared",
-                  "configured_unverified",
-                  "verified",
-                  "live",
-                  "blocked"
-                ]
-              },
-              "authorityId": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "provider": {
-                "type": "string",
-                "const": "stripe_revenue"
-              },
-              "serviceConnectionRef": {
-                "type": "string",
-                "minLength": 1
-              },
-              "providerAccountRef": {
-                "type": "string",
-                "pattern": "^acct_[A-Za-z0-9]+$"
-              },
-              "providerIdentityVerifiedAt": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-              },
-              "outcomeFamily": {
-                "type": "string",
-                "const": "subscription_revenue"
-              },
-              "role": {
-                "type": "string",
-                "enum": [
-                  "primary",
-                  "observation"
-                ]
-              },
-              "eventFamilies": {
-                "type": "array",
-                "prefixItems": [
-                  {
-                    "type": "string",
-                    "const": "subscription"
-                  },
-                  {
-                    "type": "string",
-                    "const": "invoice"
-                  },
-                  {
-                    "type": "string",
-                    "const": "refund"
-                  },
-                  {
-                    "type": "string",
-                    "const": "credit_note"
-                  }
-                ]
-              },
-              "verification": {
-                "type": "object",
-                "properties": {
-                  "status": {
-                    "type": "string",
-                    "enum": [
-                      "not_started",
-                      "missing_provider_receipt",
-                      "verified",
-                      "live"
-                    ]
-                  },
-                  "receiptRef": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "evidenceKind": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "signed_webhook",
-                          "reconciliation"
-                        ]
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "testClass": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "const": "non_customer"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "status",
-                  "receiptRef",
-                  "evidenceKind",
-                  "testClass"
-                ],
-                "additionalProperties": false
-              },
-              "nextAction": {
-                "type": "string",
-                "minLength": 1
-              },
-              "createdAt": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-              }
-            },
-            "required": [
-              "schemaVersion",
-              "setupId",
-              "siteId",
-              "revision",
-              "state",
-              "authorityId",
-              "provider",
-              "serviceConnectionRef",
-              "providerAccountRef",
-              "providerIdentityVerifiedAt",
-              "outcomeFamily",
-              "role",
-              "eventFamilies",
-              "verification",
-              "nextAction",
-              "createdAt"
-            ],
-            "additionalProperties": false
-          },
-          "nextAction": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "ok",
-          "operation",
-          "setup",
-          "nextAction"
-        ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
-      },
-      "outputSchemaProvided": true,
-      "annotations": {
-        "title": "Set Up SaaS Revenue Authority",
-        "readOnlyHint": false,
-        "destructiveHint": false,
-        "idempotentHint": true,
-        "openWorldHint": true
-      }
-    },
-    {
-      "name": "analytics_verify_revenue_source",
-      "title": "Verify SaaS Revenue Authority",
-      "description": "Verify one applied revenue source through the approved provider connection and return a redacted non-customer receipt state. A successful API call without a signed webhook or reconciliation receipt is not live proof.",
-      "category": "analytics",
-      "methodName": "verifyRevenueSource",
-      "inputSchema": {
-        "type": "object",
-        "properties": {
-          "siteId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Authorized Analytics Site id."
-          },
-          "setupId": {
-            "type": "string",
-            "format": "uuid",
-            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-            "description": "Owner-bound revenue setup id returned by prepare or the facade."
-          },
-          "revision": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991,
-            "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "minLength": 8,
-            "maxLength": 160,
-            "description": "Retry key; reuse only for this exact mutation."
-          }
-        },
-        "required": [
-          "siteId",
-          "setupId",
-          "revision",
-          "idempotencyKey"
-        ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema"
-      },
-      "outputSchema": {
-        "type": "object",
-        "properties": {
-          "ok": {
-            "type": "boolean",
-            "const": true
-          },
-          "operation": {
-            "type": "string",
-            "const": "verify"
-          },
-          "setup": {
-            "type": "object",
-            "properties": {
-              "schemaVersion": {
-                "type": "number",
-                "const": 1
-              },
-              "setupId": {
-                "type": "string",
-                "format": "uuid",
-                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-              },
-              "siteId": {
-                "type": "string",
-                "format": "uuid",
-                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-              },
-              "revision": {
-                "type": "integer",
-                "exclusiveMinimum": 0,
-                "maximum": 9007199254740991
-              },
-              "state": {
-                "type": "string",
-                "enum": [
-                  "prepared",
-                  "configured_unverified",
-                  "verified",
-                  "live",
-                  "blocked"
-                ]
-              },
-              "authorityId": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "format": "uuid",
-                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "provider": {
-                "type": "string",
-                "const": "stripe_revenue"
-              },
-              "serviceConnectionRef": {
-                "type": "string",
-                "minLength": 1
-              },
-              "providerAccountRef": {
-                "type": "string",
-                "pattern": "^acct_[A-Za-z0-9]+$"
-              },
-              "providerIdentityVerifiedAt": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-              },
-              "outcomeFamily": {
-                "type": "string",
-                "const": "subscription_revenue"
-              },
-              "role": {
-                "type": "string",
-                "enum": [
-                  "primary",
-                  "observation"
-                ]
-              },
-              "eventFamilies": {
-                "type": "array",
-                "prefixItems": [
-                  {
-                    "type": "string",
-                    "const": "subscription"
-                  },
-                  {
-                    "type": "string",
-                    "const": "invoice"
-                  },
-                  {
-                    "type": "string",
-                    "const": "refund"
-                  },
-                  {
-                    "type": "string",
-                    "const": "credit_note"
-                  }
-                ]
-              },
-              "verification": {
-                "type": "object",
-                "properties": {
-                  "status": {
-                    "type": "string",
-                    "enum": [
-                      "not_started",
-                      "missing_provider_receipt",
-                      "verified",
-                      "live"
-                    ]
-                  },
-                  "receiptRef": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "minLength": 1
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "evidenceKind": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "enum": [
-                          "signed_webhook",
-                          "reconciliation"
-                        ]
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "testClass": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "const": "non_customer"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  }
-                },
-                "required": [
-                  "status",
-                  "receiptRef",
-                  "evidenceKind",
-                  "testClass"
-                ],
-                "additionalProperties": false
-              },
-              "nextAction": {
-                "type": "string",
-                "minLength": 1
-              },
-              "createdAt": {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
-              }
-            },
-            "required": [
-              "schemaVersion",
-              "setupId",
-              "siteId",
-              "revision",
-              "state",
-              "authorityId",
-              "provider",
-              "serviceConnectionRef",
-              "providerAccountRef",
-              "providerIdentityVerifiedAt",
-              "outcomeFamily",
-              "role",
-              "eventFamilies",
-              "verification",
-              "nextAction",
-              "createdAt"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "required": [
-          "ok",
-          "operation",
-          "setup"
-        ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
-      },
-      "outputSchemaProvided": true,
-      "annotations": {
-        "title": "Verify SaaS Revenue Authority",
-        "readOnlyHint": false,
-        "destructiveHint": false,
-        "idempotentHint": true,
-        "openWorldHint": true
       }
     }
   ]

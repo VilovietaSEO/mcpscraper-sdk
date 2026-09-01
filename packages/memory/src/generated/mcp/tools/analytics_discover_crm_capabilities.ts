@@ -6,7 +6,7 @@ export interface Input {
   /**
    * Supported CRM provider.
    */
-  provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+  provider: "hubspot" | "highlevel" | "zoho" | "keap";
   /**
    * Existing service connection reference for tenant-specific discovery.
    */
@@ -19,9 +19,9 @@ export interface Output {
     /**
      * Supported phone, CRM, or advertising provider for this governed connection.
      */
-    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    provider: "hubspot" | "highlevel" | "zoho" | "keap";
     publicProfile: {
-      provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap" | "callrail" | "twilio" | "ctm";
+      provider: "hubspot" | "highlevel" | "zoho" | "keap" | "callrail" | "twilio" | "ctm";
       displayName: string;
       /**
        * @maxItems 20
@@ -281,7 +281,7 @@ export interface Output {
     /**
      * Supported phone, CRM, or advertising provider for this governed connection.
      */
-    provider: "hubspot" | "salesforce" | "highlevel" | "zoho" | "pipedrive" | "keap";
+    provider: "hubspot" | "highlevel" | "zoho" | "keap";
     mode: "incremental_and_webhook" | "incremental_only" | "webhook_only" | "manual_backfill" | "unavailable";
     canSyncNow: boolean;
     canSchedule: boolean;
