@@ -1,4 +1,4 @@
-# All 369 MCP tools with cURL
+# All 377 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (369)
+## Complete catalog (377)
 
 ## access
 
@@ -122,14 +122,10 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 ## analytics
 
-- `analytics_apply_crm_pipeline_mapping` — Push CRM Pipeline Event
-- `analytics_approve_crm_provisioning` — Approve CRM Provisioning
 - `analytics_archive_event_definition` — Archive Browser Event Definition
-- `analytics_cancel_crm_sync` — Cancel CRM Synchronization
 - `analytics_commit_crm_import` — Commit CRM CSV Import
 - `analytics_create_activation_destination` — Create Ad Activation Destination
 - `analytics_create_campaign_link` — Create Campaign Link
-- `analytics_create_connection` — Create X-Ray Connection
 - `analytics_create_conversion_rule` — Create Conversion Rule
 - `analytics_create_event_definition` — Create Browser Event Definition
 - `analytics_create_export` — Create Analytics Export
@@ -141,8 +137,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_delete_privacy_subject` — Delete Privacy Subject
 - `analytics_delete_saved_view` — Delete Saved Analytics View
 - `analytics_discover_activation_assets` — Discover Ad Destination Assets
-- `analytics_discover_crm_capabilities` — Discover CRM Capabilities
-- `analytics_discover_crm_sync_objects` — Discover CRM Sync Objects
 - `analytics_export_crm_csv` — Export CRM CSV
 - `analytics_export_google_ads_csv` — Export Google Ads CSV
 - `analytics_export_meta_technical` — Export Meta Technical JSONL
@@ -155,7 +149,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_get_content` — Analytics Content
 - `analytics_get_conversions` — Analytics Conversions
 - `analytics_get_coverage` — Get Attribution Coverage
-- `analytics_get_crm_sync_status` — Get CRM Sync Status
 - `analytics_get_dimensions` — Analytics Dimensions
 - `analytics_get_entitlement` — Get X-Ray Pixel Access
 - `analytics_get_events` — Analytics Events
@@ -170,16 +163,12 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_get_session_timeline` — Get Session Timeline
 - `analytics_get_timeseries` — Analytics Timeseries
 - `analytics_get_visitor_journey` — Get Visitor Journey
-- `analytics_import_crm_csv` — Legacy CRM CSV Import
 - `analytics_list_activation_destinations` — List Ad Activation Destinations
 - `analytics_list_activation_receipts` — List Ad Activation Receipts
 - `analytics_list_campaign_links` — List Campaign Links
 - `analytics_list_connections` — List X-Ray Connections
 - `analytics_list_conversion_rules` — List Conversion Rules
-- `analytics_list_crm_capabilities` — List CRM Capabilities
 - `analytics_list_crm_imports` — List CRM Imports
-- `analytics_list_crm_outbound_policies` — List CRM Outbound Policies
-- `analytics_list_crm_outbound_receipts` — List CRM Outbound Receipts
 - `analytics_list_event_definitions` — List Browser Event Definitions
 - `analytics_list_forms` — List Analytics Forms
 - `analytics_list_funnels` — List Lead Funnels
@@ -193,24 +182,16 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_list_sessions` — List X-Ray Sessions
 - `analytics_list_sites` — List Analytics Businesses
 - `analytics_list_visitors` — List X-Ray Visitors
-- `analytics_plan_crm_provisioning` — Plan CRM Provisioning
 - `analytics_preview_crm_import` — Preview CRM CSV Import
-- `analytics_reconcile_connection` — Reconcile X-Ray Connection
 - `analytics_record_external_event` — Record Server Event
 - `analytics_retry_activation_delivery` — Retry Ad Activation Delivery
 - `analytics_save_activation_mapping` — Save Activation Event Mapping
 - `analytics_set_activation_automation` — Set Activation Automation
-- `analytics_start_crm_sync` — Start Inbound CRM Synchronization
-- `analytics_sync_crm_person` — Push Confirmed Person to CRM
 - `analytics_test_activation_destination` — Test Ad Activation Destination
-- `analytics_test_crm_provisioning` — Test CRM Provisioning
-- `analytics_test_crm_sync_mapping` — Test CRM Sync Mapping
 - `analytics_test_event_definition` — Preview Browser Event Definition
 - `analytics_test_funnel` — Test Lead Funnel
-- `analytics_update_crm_sync_schedule` — Update CRM Sync Schedule
 - `analytics_update_event_definition` — Update Browser Event Definition
 - `analytics_update_onboarding_preferences` — Update X-Ray Setup Preferences
-- `analytics_upsert_crm_outbound_policy` — Configure CRM Outbound Policy
 - `analytics_validate_activation_mapping` — Validate Activation Event Mapping
 - `analytics_verify_live_event_definition` — Verify Live Browser Event
 - `analytics_withdraw_consent` — Withdraw Analytics Consent
@@ -565,3 +546,36 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 - `youtube_harvest` — YouTube Video Harvest
 - `youtube_transcribe` — YouTube Transcription
+
+## crm
+
+- `crm-activity-append` — Append CRM Activity
+- `crm-counterpart-apply` — Apply CRM Counterpart Link
+- `crm-counterpart-preview` — Preview CRM Counterpart Link
+- `crm-deal-transition` — Transition CRM Deal
+- `crm-deal-upsert` — Upsert CRM Deal
+- `crm-duplicate-search` — Search CRM Duplicates
+- `crm-import-apply` — Apply CRM Import
+- `crm-import-preview` — Preview CRM Import
+- `crm-merge-apply` — Apply CRM Merge
+- `crm-merge-preview` — Preview CRM Merge
+- `crm-organization-get` — Get CRM Organization
+- `crm-organization-search` — Search CRM Organizations
+- `crm-organization-upsert` — Upsert CRM Organization
+- `crm-person-get` — Get CRM Person
+- `crm-person-search` — Search CRM People
+- `crm-person-upsert` — Upsert CRM Person
+- `crm-pipeline-list` — List CRM Pipelines
+- `crm-pipeline-upsert` — Upsert CRM Pipeline
+- `crm-quality-list` — List CRM Quality Issues
+- `crm-task-upsert` — Upsert CRM Task
+- `crm-work-search` — Search CRM Work
+
+## research
+
+- `research-organization-capture` — Capture Research Organization
+- `research-organization-get` — Get Research Organization
+- `research-organization-search` — Search Research Organizations
+- `research-person-capture` — Capture Research Person
+- `research-person-get` — Get Research Person
+- `research-person-search` — Search Research People

@@ -3,11 +3,11 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class PutToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key (Bearer secret). Optional when the MCP session is already authenticated; the server resolves auth from the session.")
     session_id: str | None = Field(None, alias="sessionId", description="Session identifier used to resolve the active vault and per-session state. Optional; defaults to the current MCP session.")
-    vault: str | None = Field(None, alias="vault", description="Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 16-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Do not use this low-level tool to create ordinary People, Organizations, Deals, Projects, Tasks, or Communication records: first use prepare-memory-write then memory-capture so relationships and approval state are validated.")
+    vault: str | None = Field(None, alias="vault", description="Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 18-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Research People/Organizations and CRM People/Organizations require their specialized tools and are always rejected here. For Deals, Projects, Tasks, or Communication records, first use prepare-memory-write then memory-capture so relationships and approval state are validated.")
     path: str | None = Field(None, alias="path", description="Vault-relative note path to create or overwrite, e.g. projects/q3-plan. Writing an existing path replaces it. Required unless shareId is given.")
     share_id: str | None = Field(None, alias="shareId", description="Edit a note someone individually shared with you and you accepted (accept-share), by its shareId, instead of vault+path. Requires the share to grant edit permission, and baseRevision is mandatory (get the current revision first) since you are editing alongside the owner and possibly others.")
     title: str | None = Field(None, alias="title", description="Optional human-readable title; defaults are derived from the path when omitted.")
@@ -18,7 +18,7 @@ class PutToolInput(BaseModel):
 
 
 class PutToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="True when the note was stored; false on auth/scope error, empty content, or a revision conflict.")
     note: dict[str, Any] | None = Field(None, alias="note", description="The stored note metadata. Present when ok is true.")

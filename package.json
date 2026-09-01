@@ -29,7 +29,8 @@
     "example:gmail": "npm run build --workspace=mcpscraper-memory-sdk && node examples/gmail-complete-workflow.mjs",
     "example:gmail:bulk-manage": "npm run build --workspace=mcpscraper-memory-sdk && node examples/gmail-bulk-manage.mjs",
     "example:xray:journeys": "npm run build --workspace=mcpscraper-memory-sdk && node examples/xray-journeys.mjs",
-    "example:xray:attribution": "npm run build --workspace=mcpscraper-memory-sdk && node examples/xray-attribution.mjs"
+    "example:xray:attribution": "npm run build --workspace=mcpscraper-memory-sdk && node examples/xray-attribution.mjs",
+    "example:research-crm": "npm run build --workspace=mcpscraper-memory-sdk && node examples/research-crm-governed-workflow.mjs"
   },
   "devDependencies": {
     "typescript": "^5.6.0",

@@ -3,14 +3,14 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class RevokeVaultAppLinkToolInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key. Optional when the MCP session is already authenticated.")
     session_id: str | None = Field(None, alias="sessionId", description="Optional MCP session identifier.")
 
 
 class RevokeVaultAppLinkToolOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="True when the request succeeded.")
     revoked: bool | None = Field(None, alias="revoked", description="True when an active Vault App link was revoked.")

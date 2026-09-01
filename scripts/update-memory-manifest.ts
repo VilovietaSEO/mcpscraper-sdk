@@ -32,6 +32,30 @@ interface LiveTool {
 }
 
 const NEW_TOOL_METADATA: Record<string, Pick<ToolEntry, 'category' | 'legacyId'>> = {
+  researchPersonSearchTool: { category: 'research', legacyId: 'research-person-search' },
+  researchPersonGetTool: { category: 'research', legacyId: 'research-person-get' },
+  researchPersonCaptureTool: { category: 'research', legacyId: 'research-person-capture' },
+  researchOrganizationSearchTool: { category: 'research', legacyId: 'research-organization-search' },
+  researchOrganizationGetTool: { category: 'research', legacyId: 'research-organization-get' },
+  researchOrganizationCaptureTool: { category: 'research', legacyId: 'research-organization-capture' },
+  crmPersonSearchTool: { category: 'crm', legacyId: 'crm-person-search' },
+  crmPersonGetTool: { category: 'crm', legacyId: 'crm-person-get' },
+  crmUpsertPersonTool: { category: 'crm', legacyId: 'crm-person-upsert' },
+  crmOrganizationSearchTool: { category: 'crm', legacyId: 'crm-organization-search' },
+  crmOrganizationGetTool: { category: 'crm', legacyId: 'crm-organization-get' },
+  crmUpsertOrganizationTool: { category: 'crm', legacyId: 'crm-organization-upsert' },
+  crmAppendCommunicationTool: { category: 'crm', legacyId: 'crm-activity-append' },
+  crmUpsertTaskTool: { category: 'crm', legacyId: 'crm-task-upsert' },
+  crmDealUpsertTool: { category: 'crm', legacyId: 'crm-deal-upsert' },
+  crmDealTransitionTool: { category: 'crm', legacyId: 'crm-deal-transition' },
+  crmCounterpartPreviewTool: { category: 'crm', legacyId: 'crm-counterpart-preview' },
+  crmCounterpartApplyTool: { category: 'crm', legacyId: 'crm-counterpart-apply' },
+  crmImportPreviewTool: { category: 'crm', legacyId: 'crm-import-preview' },
+  crmImportApplyTool: { category: 'crm', legacyId: 'crm-import-apply' },
+  crmDuplicateSearchTool: { category: 'crm', legacyId: 'crm-duplicate-search' },
+  crmMergePreviewTool: { category: 'crm', legacyId: 'crm-merge-preview' },
+  crmMergeApplyTool: { category: 'crm', legacyId: 'crm-merge-apply' },
+  crmQualityListTool: { category: 'crm', legacyId: 'crm-quality-list' },
   assistant_context_packet_create: { category: 'assistant', legacyId: 'assistant_context_packet_create' },
   assistant_context_packet_get: { category: 'assistant', legacyId: 'assistant_context_packet_get' },
   assistant_context_packet_lifecycle: { category: 'assistant', legacyId: 'assistant_context_packet_lifecycle' },
@@ -118,7 +142,7 @@ async function main(): Promise<void> {
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as Manifest
   const existing = new Map(manifest.tools.map(tool => [tool.name, tool]))
   const localManifest = localManifestPath
-    ? JSON.parse(await readFile(localManifestPath, 'utf8')) as { tools?: LiveTool[]; serverInfo?: { name?: string; version?: string }; generatedFrom?: string }
+    ? JSON.parse(await readFile(localManifestPath, 'utf8')) as { generatedAt?: string; tools?: LiveTool[]; serverInfo?: { name?: string; version?: string }; generatedFrom?: string }
     : null
   const live = localManifest?.tools ?? await fetchLiveTools(apiKey!)
 
@@ -139,6 +163,7 @@ async function main(): Promise<void> {
 
   const updated: Manifest = {
     ...manifest,
+    generatedAt: localManifest?.generatedAt ?? new Date().toISOString(),
     generatedFrom: localManifest
       ? `${localManifest.serverInfo?.name ?? 'mcp-memory'} ${localManifest.serverInfo?.version ?? 'unversioned'} ${localManifest.generatedFrom ?? 'complete build manifest'} (${tools.length} registered tools)`
       : `mcp-memory live tools/list (${tools.length} registered tools)`,

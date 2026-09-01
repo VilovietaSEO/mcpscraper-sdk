@@ -4,6 +4,24 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.40.0] - 2026-09-01 — verified against mcp-scraper 0.86.0 / mcp-memory 1.21.2
+
+### Added
+
+- Added exact generated Node and Python bindings for six governed Research tools and twenty-one native CRM tools, exposed as separate `research` and `crm` namespaces.
+- Added a runnable synthetic Research-versus-CRM example with explicit, link-only counterpart preview/apply and no external-provider continuation.
+- Added governed CRM work search plus pipeline list/upsert bindings so Deals, Tasks, activity timelines, and pipeline setup use the native relationship model.
+
+### Changed
+
+- Regenerated the direct Memory surface from the exact 148-tool Memory 1.21.2 contract and made Python input models honor closed schemas, so cross-domain or unknown governed fields fail before transport.
+- Regenerated every unified developer surface from the exact 377-tool MCP Scraper 0.86.0 contract, including the removal of all unproved external CRM provider operations.
+- Prepared `mcpscraper-sdk` 0.40.0, `mcpscraper-memory-sdk` 0.40.0, `mcpscraper-cli` 0.39.0, Python `mcpscraper-sdk` 0.38.0, and Python `mcpscraper-memory-sdk` 0.36.0.
+
+### Security
+
+- Kept Salesforce, Pipedrive, Stripe, and every other external CRM provider unavailable: no provider setup or write wrapper exists in generated clients, examples, or package documentation.
+
 ## [0.39.0] - 2026-09-01 — verified against mcp-scraper 0.85.0 / mcp-memory 1.20.0
 
 ### Changed

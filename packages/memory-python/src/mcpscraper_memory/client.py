@@ -23,7 +23,7 @@ from ._generated_client import (
     VideoNamespace,
     WebhooksNamespace,
 )
-from ._direct_generated_client import AssistantNamespace
+from ._direct_generated_client import AssistantNamespace, CrmNamespace, ResearchNamespace
 
 DEFAULT_BASE_URL = "https://memory.mcpscraper.dev"
 
@@ -42,6 +42,7 @@ class MemoryClient:
 
         self.access = AccessNamespace(self._call_tool)
         self.assistant = AssistantNamespace(self._call_tool)
+        self.crm = CrmNamespace(self._call_tool)
         self.capture = CaptureNamespace(self._call_tool)
         self.channels = ChannelsNamespace(self._call_tool)
         self.facts = FactsNamespace(self._call_tool)
@@ -50,6 +51,7 @@ class MemoryClient:
         self.library = LibraryNamespace(self._call_tool)
         self.memory = MemoryNamespace(self._call_tool)
         self.recall = RecallNamespace(self._call_tool)
+        self.research = ResearchNamespace(self._call_tool)
         self.schedule = ScheduleNamespace(self._call_tool)
         self.storage = StorageNamespace(self._call_tool)
         self.tables = TablesNamespace(self._call_tool)

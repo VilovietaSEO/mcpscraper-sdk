@@ -20,7 +20,7 @@ function successData(schema: Schema): Schema {
 
 test('Assistant MCP inventory and owner-safe contracts remain exact', async () => {
   const manifest = JSON.parse(await readFile('contracts/mcp.tools.json', 'utf8'))
-  assert.equal(manifest.toolCount, 369)
+  assert.equal(manifest.toolCount, 377)
   assert.deepEqual(manifest.tools.map((tool: Schema) => tool.name).filter((name: string) => name.startsWith('assistant_')).sort(), EXPECTED_ASSISTANT_TOOLS)
 
   const byName = new Map<string, Schema>(manifest.tools.map((tool: Schema) => [tool.name, tool]))

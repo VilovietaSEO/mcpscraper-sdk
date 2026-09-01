@@ -20,6 +20,27 @@ import * as CreateScheduledActionTool from './tools/createScheduledActionTool.js
 import * as CreateSecureVaultTool from './tools/createSecureVaultTool.js'
 import * as CreateTableTool from './tools/createTableTool.js'
 import * as CreateWebhookTool from './tools/createWebhookTool.js'
+import * as CrmActivityAppend from './tools/crm-activity-append.js'
+import * as CrmCounterpartApply from './tools/crm-counterpart-apply.js'
+import * as CrmCounterpartPreview from './tools/crm-counterpart-preview.js'
+import * as CrmDealTransition from './tools/crm-deal-transition.js'
+import * as CrmDealUpsert from './tools/crm-deal-upsert.js'
+import * as CrmDuplicateSearch from './tools/crm-duplicate-search.js'
+import * as CrmImportApply from './tools/crm-import-apply.js'
+import * as CrmImportPreview from './tools/crm-import-preview.js'
+import * as CrmMergeApply from './tools/crm-merge-apply.js'
+import * as CrmMergePreview from './tools/crm-merge-preview.js'
+import * as CrmOrganizationGet from './tools/crm-organization-get.js'
+import * as CrmOrganizationSearch from './tools/crm-organization-search.js'
+import * as CrmPersonGet from './tools/crm-person-get.js'
+import * as CrmPersonSearch from './tools/crm-person-search.js'
+import * as CrmPipelineList from './tools/crm-pipeline-list.js'
+import * as CrmPipelineUpsert from './tools/crm-pipeline-upsert.js'
+import * as CrmQualityList from './tools/crm-quality-list.js'
+import * as CrmOrganizationUpsert from './tools/crm-organization-upsert.js'
+import * as CrmPersonUpsert from './tools/crm-person-upsert.js'
+import * as CrmTaskUpsert from './tools/crm-task-upsert.js'
+import * as CrmWorkSearch from './tools/crm-work-search.js'
 import * as DeclineShareTool from './tools/declineShareTool.js'
 import * as DeleteNoteTool from './tools/deleteNoteTool.js'
 import * as DeleteScheduledActionTool from './tools/deleteScheduledActionTool.js'
@@ -92,6 +113,12 @@ import * as RecordFactTool from './tools/recordFactTool.js'
 import * as RemoveApprovedSenderTool from './tools/removeApprovedSenderTool.js'
 import * as RemoveChannelMemberTool from './tools/removeChannelMemberTool.js'
 import * as ReplyMessageTool from './tools/replyMessageTool.js'
+import * as ResearchOrganizationCapture from './tools/research-organization-capture.js'
+import * as ResearchOrganizationGet from './tools/research-organization-get.js'
+import * as ResearchOrganizationSearch from './tools/research-organization-search.js'
+import * as ResearchPersonCapture from './tools/research-person-capture.js'
+import * as ResearchPersonGet from './tools/research-person-get.js'
+import * as ResearchPersonSearch from './tools/research-person-search.js'
 import * as ResolveTagsTool from './tools/resolveTagsTool.js'
 import * as ResumeScheduledActionTool from './tools/resumeScheduledActionTool.js'
 import * as RevokeChatLinkTool from './tools/revokeChatLinkTool.js'
@@ -259,6 +286,94 @@ export class CreateWebhookToolNamespace {
 
   async createWebhookTool(input: CreateWebhookTool.Input): Promise<CreateWebhookTool.Output> {
     return this.callTool('createWebhookTool', input) as Promise<CreateWebhookTool.Output>
+  }
+}
+
+export class CrmNamespace {
+  constructor(private readonly callTool: CallToolFn) {}
+
+  async activityAppend(input: CrmActivityAppend.Input): Promise<CrmActivityAppend.Output> {
+    return this.callTool('crmAppendCommunicationTool', input) as Promise<CrmActivityAppend.Output>
+  }
+
+  async counterpartApply(input: CrmCounterpartApply.Input): Promise<CrmCounterpartApply.Output> {
+    return this.callTool('crmCounterpartApplyTool', input) as Promise<CrmCounterpartApply.Output>
+  }
+
+  async counterpartPreview(input: CrmCounterpartPreview.Input): Promise<CrmCounterpartPreview.Output> {
+    return this.callTool('crmCounterpartPreviewTool', input) as Promise<CrmCounterpartPreview.Output>
+  }
+
+  async dealTransition(input: CrmDealTransition.Input): Promise<CrmDealTransition.Output> {
+    return this.callTool('crmDealTransitionTool', input) as Promise<CrmDealTransition.Output>
+  }
+
+  async dealUpsert(input: CrmDealUpsert.Input): Promise<CrmDealUpsert.Output> {
+    return this.callTool('crmDealUpsertTool', input) as Promise<CrmDealUpsert.Output>
+  }
+
+  async duplicateSearch(input: CrmDuplicateSearch.Input): Promise<CrmDuplicateSearch.Output> {
+    return this.callTool('crmDuplicateSearchTool', input) as Promise<CrmDuplicateSearch.Output>
+  }
+
+  async importApply(input: CrmImportApply.Input): Promise<CrmImportApply.Output> {
+    return this.callTool('crmImportApplyTool', input) as Promise<CrmImportApply.Output>
+  }
+
+  async importPreview(input: CrmImportPreview.Input): Promise<CrmImportPreview.Output> {
+    return this.callTool('crmImportPreviewTool', input) as Promise<CrmImportPreview.Output>
+  }
+
+  async mergeApply(input: CrmMergeApply.Input): Promise<CrmMergeApply.Output> {
+    return this.callTool('crmMergeApplyTool', input) as Promise<CrmMergeApply.Output>
+  }
+
+  async mergePreview(input: CrmMergePreview.Input): Promise<CrmMergePreview.Output> {
+    return this.callTool('crmMergePreviewTool', input) as Promise<CrmMergePreview.Output>
+  }
+
+  async organizationGet(input: CrmOrganizationGet.Input): Promise<CrmOrganizationGet.Output> {
+    return this.callTool('crmOrganizationGetTool', input) as Promise<CrmOrganizationGet.Output>
+  }
+
+  async organizationSearch(input: CrmOrganizationSearch.Input): Promise<CrmOrganizationSearch.Output> {
+    return this.callTool('crmOrganizationSearchTool', input) as Promise<CrmOrganizationSearch.Output>
+  }
+
+  async personGet(input: CrmPersonGet.Input): Promise<CrmPersonGet.Output> {
+    return this.callTool('crmPersonGetTool', input) as Promise<CrmPersonGet.Output>
+  }
+
+  async personSearch(input: CrmPersonSearch.Input): Promise<CrmPersonSearch.Output> {
+    return this.callTool('crmPersonSearchTool', input) as Promise<CrmPersonSearch.Output>
+  }
+
+  async pipelineList(input: CrmPipelineList.Input): Promise<CrmPipelineList.Output> {
+    return this.callTool('crmPipelineListTool', input) as Promise<CrmPipelineList.Output>
+  }
+
+  async pipelineUpsert(input: CrmPipelineUpsert.Input): Promise<CrmPipelineUpsert.Output> {
+    return this.callTool('crmPipelineUpsertTool', input) as Promise<CrmPipelineUpsert.Output>
+  }
+
+  async qualityList(input: CrmQualityList.Input): Promise<CrmQualityList.Output> {
+    return this.callTool('crmQualityListTool', input) as Promise<CrmQualityList.Output>
+  }
+
+  async organizationUpsert(input: CrmOrganizationUpsert.Input): Promise<CrmOrganizationUpsert.Output> {
+    return this.callTool('crmUpsertOrganizationTool', input) as Promise<CrmOrganizationUpsert.Output>
+  }
+
+  async personUpsert(input: CrmPersonUpsert.Input): Promise<CrmPersonUpsert.Output> {
+    return this.callTool('crmUpsertPersonTool', input) as Promise<CrmPersonUpsert.Output>
+  }
+
+  async taskUpsert(input: CrmTaskUpsert.Input): Promise<CrmTaskUpsert.Output> {
+    return this.callTool('crmUpsertTaskTool', input) as Promise<CrmTaskUpsert.Output>
+  }
+
+  async workSearch(input: CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
+    return this.callTool('crmWorkSearchTool', input) as Promise<CrmWorkSearch.Output>
   }
 }
 
@@ -783,6 +898,34 @@ export class ReplyMessageToolNamespace {
 
   async replyMessageTool(input: ReplyMessageTool.Input): Promise<ReplyMessageTool.Output> {
     return this.callTool('replyMessageTool', input) as Promise<ReplyMessageTool.Output>
+  }
+}
+
+export class ResearchNamespace {
+  constructor(private readonly callTool: CallToolFn) {}
+
+  async organizationCapture(input: ResearchOrganizationCapture.Input): Promise<ResearchOrganizationCapture.Output> {
+    return this.callTool('researchOrganizationCaptureTool', input) as Promise<ResearchOrganizationCapture.Output>
+  }
+
+  async organizationGet(input: ResearchOrganizationGet.Input): Promise<ResearchOrganizationGet.Output> {
+    return this.callTool('researchOrganizationGetTool', input) as Promise<ResearchOrganizationGet.Output>
+  }
+
+  async organizationSearch(input: ResearchOrganizationSearch.Input): Promise<ResearchOrganizationSearch.Output> {
+    return this.callTool('researchOrganizationSearchTool', input) as Promise<ResearchOrganizationSearch.Output>
+  }
+
+  async personCapture(input: ResearchPersonCapture.Input): Promise<ResearchPersonCapture.Output> {
+    return this.callTool('researchPersonCaptureTool', input) as Promise<ResearchPersonCapture.Output>
+  }
+
+  async personGet(input: ResearchPersonGet.Input): Promise<ResearchPersonGet.Output> {
+    return this.callTool('researchPersonGetTool', input) as Promise<ResearchPersonGet.Output>
+  }
+
+  async personSearch(input: ResearchPersonSearch.Input): Promise<ResearchPersonSearch.Output> {
+    return this.callTool('researchPersonSearchTool', input) as Promise<ResearchPersonSearch.Output>
   }
 }
 
