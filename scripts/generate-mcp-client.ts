@@ -42,6 +42,7 @@ async function compileSchema(schema: unknown, exportName: string, toolName: stri
     generated = await compile(schema as Record<string, unknown>, exportName, {
       bannerComment: '',
       additionalProperties: false,
+      ignoreMinAndMaxItems: ['analytics_create_experiment', 'analytics_get_experiment', 'analytics_set_experiment_state'].includes(toolName),
     })
   } catch (error) {
     throw new Error(`Schema compilation failed for ${toolName} (${exportName}); refusing an unknown/index-signature fallback`, { cause: error })

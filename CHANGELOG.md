@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.37.0] - 2026-09-01 — verified against mcp-scraper 0.83.0 / mcp-memory 1.20.0
+
+### Added
+
+- Added generated Node, Python, CLI, and cURL bindings for tag-only X-Ray setup: prepare, apply, verify, and the one-conversation setup facade.
+- Added generated bindings for creating a pre-registered experiment, changing its governed lifecycle state, and reading evidence plus automatic guardrail evaluation.
+
+### Changed
+
+- Regenerated all developer surfaces from the exact 363-tool MCP Scraper 0.83.0 contract.
+- Prepared minor releases: `mcpscraper-sdk` 0.37.0, `mcpscraper-memory-sdk` 0.37.0, `mcpscraper-cli` 0.36.0, Python `mcpscraper-sdk` 0.35.0, and Python `mcpscraper-memory-sdk` 0.33.0.
+
 ## [0.36.1] - 2026-08-31 — verified against mcp-scraper 0.81.0 / mcp-memory 1.20.0
 
 ### Changed

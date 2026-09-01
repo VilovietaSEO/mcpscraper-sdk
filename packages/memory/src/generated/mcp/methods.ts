@@ -123,6 +123,13 @@ import * as AnalyticsUpsertCrmOutboundPolicy from './tools/analytics_upsert_crm_
 import * as AnalyticsValidateActivationMapping from './tools/analytics_validate_activation_mapping.js'
 import * as AnalyticsVerifyLiveEventDefinition from './tools/analytics_verify_live_event_definition.js'
 import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js'
+import * as AnalyticsApplySiteSetup from './tools/analytics_apply_site_setup.js'
+import * as AnalyticsCreateExperiment from './tools/analytics_create_experiment.js'
+import * as AnalyticsGetExperiment from './tools/analytics_get_experiment.js'
+import * as AnalyticsPrepareSiteSetup from './tools/analytics_prepare_site_setup.js'
+import * as AnalyticsSetExperimentState from './tools/analytics_set_experiment_state.js'
+import * as AnalyticsSetupSite from './tools/analytics_setup_site.js'
+import * as AnalyticsVerifySiteSetup from './tools/analytics_verify_site_setup.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -2137,6 +2144,41 @@ export const MCP_TOOL_BINDINGS = [
     "name": "zoom_create_meeting",
     "category": "connections",
     "methodName": "zoomCreateMeeting"
+  },
+  {
+    "name": "analytics_apply_site_setup",
+    "category": "analytics",
+    "methodName": "applySiteSetup"
+  },
+  {
+    "name": "analytics_create_experiment",
+    "category": "analytics",
+    "methodName": "createExperiment"
+  },
+  {
+    "name": "analytics_get_experiment",
+    "category": "analytics",
+    "methodName": "getExperiment"
+  },
+  {
+    "name": "analytics_prepare_site_setup",
+    "category": "analytics",
+    "methodName": "prepareSiteSetup"
+  },
+  {
+    "name": "analytics_set_experiment_state",
+    "category": "analytics",
+    "methodName": "setExperimentState"
+  },
+  {
+    "name": "analytics_setup_site",
+    "category": "analytics",
+    "methodName": "setupSite"
+  },
+  {
+    "name": "analytics_verify_site_setup",
+    "category": "analytics",
+    "methodName": "verifySiteSetup"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2642,6 +2684,34 @@ export class AnalyticsNamespace {
 
   async withdrawConsent(input: AnalyticsWithdrawConsent.Input): Promise<AnalyticsWithdrawConsent.Output> {
     return this.callTool('analytics_withdraw_consent', input) as Promise<AnalyticsWithdrawConsent.Output>
+  }
+
+  async applySiteSetup(input: AnalyticsApplySiteSetup.Input): Promise<AnalyticsApplySiteSetup.Output> {
+    return this.callTool('analytics_apply_site_setup', input) as Promise<AnalyticsApplySiteSetup.Output>
+  }
+
+  async createExperiment(input: AnalyticsCreateExperiment.Input): Promise<AnalyticsCreateExperiment.Output> {
+    return this.callTool('analytics_create_experiment', input) as Promise<AnalyticsCreateExperiment.Output>
+  }
+
+  async getExperiment(input: AnalyticsGetExperiment.Input): Promise<AnalyticsGetExperiment.Output> {
+    return this.callTool('analytics_get_experiment', input) as Promise<AnalyticsGetExperiment.Output>
+  }
+
+  async prepareSiteSetup(input: AnalyticsPrepareSiteSetup.Input): Promise<AnalyticsPrepareSiteSetup.Output> {
+    return this.callTool('analytics_prepare_site_setup', input) as Promise<AnalyticsPrepareSiteSetup.Output>
+  }
+
+  async setExperimentState(input: AnalyticsSetExperimentState.Input): Promise<AnalyticsSetExperimentState.Output> {
+    return this.callTool('analytics_set_experiment_state', input) as Promise<AnalyticsSetExperimentState.Output>
+  }
+
+  async setupSite(input: AnalyticsSetupSite.Input = {} as AnalyticsSetupSite.Input): Promise<AnalyticsSetupSite.Output> {
+    return this.callTool('analytics_setup_site', input) as Promise<AnalyticsSetupSite.Output>
+  }
+
+  async verifySiteSetup(input: AnalyticsVerifySiteSetup.Input): Promise<AnalyticsVerifySiteSetup.Output> {
+    return this.callTool('analytics_verify_site_setup', input) as Promise<AnalyticsVerifySiteSetup.Output>
   }
 }
 

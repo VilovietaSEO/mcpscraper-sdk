@@ -2,7 +2,7 @@
 
 Command-line interface for [mcpscraper.dev](https://mcpscraper.dev) and [memory.mcpscraper.dev](https://memory.mcpscraper.dev).
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 356 unified MCP tools, including the governed personal-assistant tools.
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 363 unified MCP tools, including the governed personal-assistant tools.
 
 ## Install
 
