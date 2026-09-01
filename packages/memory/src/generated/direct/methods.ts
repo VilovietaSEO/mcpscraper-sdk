@@ -34,10 +34,13 @@ import * as CrmOrganizationGet from './tools/crm-organization-get.js'
 import * as CrmOrganizationSearch from './tools/crm-organization-search.js'
 import * as CrmPersonGet from './tools/crm-person-get.js'
 import * as CrmPersonSearch from './tools/crm-person-search.js'
+import * as CrmPipelineList from './tools/crm-pipeline-list.js'
+import * as CrmPipelineUpsert from './tools/crm-pipeline-upsert.js'
 import * as CrmQualityList from './tools/crm-quality-list.js'
 import * as CrmOrganizationUpsert from './tools/crm-organization-upsert.js'
 import * as CrmPersonUpsert from './tools/crm-person-upsert.js'
 import * as CrmTaskUpsert from './tools/crm-task-upsert.js'
+import * as CrmWorkSearch from './tools/crm-work-search.js'
 import * as DeclineShareTool from './tools/declineShareTool.js'
 import * as DeleteNoteTool from './tools/deleteNoteTool.js'
 import * as DeleteScheduledActionTool from './tools/deleteScheduledActionTool.js'
@@ -345,6 +348,14 @@ export class CrmNamespace {
     return this.callTool('crmPersonSearchTool', input) as Promise<CrmPersonSearch.Output>
   }
 
+  async pipelineList(input: CrmPipelineList.Input): Promise<CrmPipelineList.Output> {
+    return this.callTool('crmPipelineListTool', input) as Promise<CrmPipelineList.Output>
+  }
+
+  async pipelineUpsert(input: CrmPipelineUpsert.Input): Promise<CrmPipelineUpsert.Output> {
+    return this.callTool('crmPipelineUpsertTool', input) as Promise<CrmPipelineUpsert.Output>
+  }
+
   async qualityList(input: CrmQualityList.Input): Promise<CrmQualityList.Output> {
     return this.callTool('crmQualityListTool', input) as Promise<CrmQualityList.Output>
   }
@@ -359,6 +370,10 @@ export class CrmNamespace {
 
   async taskUpsert(input: CrmTaskUpsert.Input): Promise<CrmTaskUpsert.Output> {
     return this.callTool('crmUpsertTaskTool', input) as Promise<CrmTaskUpsert.Output>
+  }
+
+  async workSearch(input: CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
+    return this.callTool('crmWorkSearchTool', input) as Promise<CrmWorkSearch.Output>
   }
 }
 

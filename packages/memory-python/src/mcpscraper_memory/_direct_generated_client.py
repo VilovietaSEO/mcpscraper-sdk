@@ -21,8 +21,11 @@ from .direct_models.crm_organization_upsert import CrmOrganizationUpsertInput, C
 from .direct_models.crm_person_get import CrmPersonGetInput, CrmPersonGetOutput
 from .direct_models.crm_person_search import CrmPersonSearchInput, CrmPersonSearchOutput
 from .direct_models.crm_person_upsert import CrmPersonUpsertInput, CrmPersonUpsertOutput
+from .direct_models.crm_pipeline_list import CrmPipelineListInput, CrmPipelineListOutput
+from .direct_models.crm_pipeline_upsert import CrmPipelineUpsertInput, CrmPipelineUpsertOutput
 from .direct_models.crm_quality_list import CrmQualityListInput, CrmQualityListOutput
 from .direct_models.crm_task_upsert import CrmTaskUpsertInput, CrmTaskUpsertOutput
+from .direct_models.crm_work_search import CrmWorkSearchInput, CrmWorkSearchOutput
 from .direct_models.research_organization_capture import ResearchOrganizationCaptureInput, ResearchOrganizationCaptureOutput
 from .direct_models.research_organization_get import ResearchOrganizationGetInput, ResearchOrganizationGetOutput
 from .direct_models.research_organization_search import ResearchOrganizationSearchInput, ResearchOrganizationSearchOutput
@@ -153,6 +156,16 @@ class CrmNamespace:
         result = self._call_tool("crmPersonSearchTool", payload)
         return CrmPersonSearchOutput.model_validate(result)
 
+    def pipeline_list(self, **kwargs: Any) -> CrmPipelineListOutput:
+        payload = CrmPipelineListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("crmPipelineListTool", payload)
+        return CrmPipelineListOutput.model_validate(result)
+
+    def pipeline_upsert(self, **kwargs: Any) -> CrmPipelineUpsertOutput:
+        payload = CrmPipelineUpsertInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("crmPipelineUpsertTool", payload)
+        return CrmPipelineUpsertOutput.model_validate(result)
+
     def quality_list(self, **kwargs: Any) -> CrmQualityListOutput:
         payload = CrmQualityListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("crmQualityListTool", payload)
@@ -172,6 +185,11 @@ class CrmNamespace:
         payload = CrmTaskUpsertInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
         result = self._call_tool("crmUpsertTaskTool", payload)
         return CrmTaskUpsertOutput.model_validate(result)
+
+    def work_search(self, **kwargs: Any) -> CrmWorkSearchOutput:
+        payload = CrmWorkSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+        result = self._call_tool("crmWorkSearchTool", payload)
+        return CrmWorkSearchOutput.model_validate(result)
 
 
 class FactsNamespace:

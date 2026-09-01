@@ -9,13 +9,13 @@ import test from 'node:test'
 const updater = resolve('scripts/update-memory-manifest.ts')
 const tsxLoader = createRequire(join(process.cwd(), 'package.json')).resolve('tsx')
 
-test('released Memory contract exposes 24 governed tools and no external CRM provider wrapper', async () => {
+test('released Memory contract exposes 27 governed tools and no external CRM provider wrapper', async () => {
   const manifest = JSON.parse(await readFile(resolve('contracts/memory.tools.json'), 'utf8'))
   const governed = manifest.tools.filter((tool: { category: string }) => ['research', 'crm'].includes(tool.category))
-  assert.equal(manifest.toolCount, 145)
+  assert.equal(manifest.toolCount, 148)
   assert.equal(governed.filter((tool: { category: string }) => tool.category === 'research').length, 6)
-  assert.equal(governed.filter((tool: { category: string }) => tool.category === 'crm').length, 18)
-  assert.equal(governed.length, 24)
+  assert.equal(governed.filter((tool: { category: string }) => tool.category === 'crm').length, 21)
+  assert.equal(governed.length, 27)
   assert.equal(
     manifest.tools.some((tool: { name: string; legacyId: string }) =>
       /salesforce|pipedrive|stripe|hubspot|zoho/iu.test(`${tool.name} ${tool.legacyId}`)),

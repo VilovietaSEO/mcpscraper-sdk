@@ -31,14 +31,10 @@ import * as VaultsListSharedWithMe from './tools/list-shared-with-me.js'
 import * as VaultsListVaults from './tools/list-vaults.js'
 import * as VaultsProvisionDefaults from './tools/provision-defaults.js'
 import * as VaultsRouteMemory from './tools/route-memory.js'
-import * as AnalyticsApplyCrmPipelineMapping from './tools/analytics_apply_crm_pipeline_mapping.js'
-import * as AnalyticsApproveCrmProvisioning from './tools/analytics_approve_crm_provisioning.js'
 import * as AnalyticsArchiveEventDefinition from './tools/analytics_archive_event_definition.js'
-import * as AnalyticsCancelCrmSync from './tools/analytics_cancel_crm_sync.js'
 import * as AnalyticsCommitCrmImport from './tools/analytics_commit_crm_import.js'
 import * as AnalyticsCreateActivationDestination from './tools/analytics_create_activation_destination.js'
 import * as AnalyticsCreateCampaignLink from './tools/analytics_create_campaign_link.js'
-import * as AnalyticsCreateConnection from './tools/analytics_create_connection.js'
 import * as AnalyticsCreateConversionRule from './tools/analytics_create_conversion_rule.js'
 import * as AnalyticsCreateEventDefinition from './tools/analytics_create_event_definition.js'
 import * as AnalyticsCreateExport from './tools/analytics_create_export.js'
@@ -50,8 +46,6 @@ import * as AnalyticsCreateSavedView from './tools/analytics_create_saved_view.j
 import * as AnalyticsDeletePrivacySubject from './tools/analytics_delete_privacy_subject.js'
 import * as AnalyticsDeleteSavedView from './tools/analytics_delete_saved_view.js'
 import * as AnalyticsDiscoverActivationAssets from './tools/analytics_discover_activation_assets.js'
-import * as AnalyticsDiscoverCrmCapabilities from './tools/analytics_discover_crm_capabilities.js'
-import * as AnalyticsDiscoverCrmSyncObjects from './tools/analytics_discover_crm_sync_objects.js'
 import * as AnalyticsExportCrmCsv from './tools/analytics_export_crm_csv.js'
 import * as AnalyticsExportGoogleAdsCsv from './tools/analytics_export_google_ads_csv.js'
 import * as AnalyticsExportMetaTechnical from './tools/analytics_export_meta_technical.js'
@@ -64,7 +58,6 @@ import * as AnalyticsGetConsentCoverage from './tools/analytics_get_consent_cove
 import * as AnalyticsGetContent from './tools/analytics_get_content.js'
 import * as AnalyticsGetConversions from './tools/analytics_get_conversions.js'
 import * as AnalyticsGetCoverage from './tools/analytics_get_coverage.js'
-import * as AnalyticsGetCrmSyncStatus from './tools/analytics_get_crm_sync_status.js'
 import * as AnalyticsGetDimensions from './tools/analytics_get_dimensions.js'
 import * as AnalyticsGetEntitlement from './tools/analytics_get_entitlement.js'
 import * as AnalyticsGetEvents from './tools/analytics_get_events.js'
@@ -79,16 +72,12 @@ import * as AnalyticsGetPredictionEligibility from './tools/analytics_get_predic
 import * as AnalyticsGetSessionTimeline from './tools/analytics_get_session_timeline.js'
 import * as AnalyticsGetTimeseries from './tools/analytics_get_timeseries.js'
 import * as AnalyticsGetVisitorJourney from './tools/analytics_get_visitor_journey.js'
-import * as AnalyticsImportCrmCsv from './tools/analytics_import_crm_csv.js'
 import * as AnalyticsListActivationDestinations from './tools/analytics_list_activation_destinations.js'
 import * as AnalyticsListActivationReceipts from './tools/analytics_list_activation_receipts.js'
 import * as AnalyticsListCampaignLinks from './tools/analytics_list_campaign_links.js'
 import * as AnalyticsListConnections from './tools/analytics_list_connections.js'
 import * as AnalyticsListConversionRules from './tools/analytics_list_conversion_rules.js'
-import * as AnalyticsListCrmCapabilities from './tools/analytics_list_crm_capabilities.js'
 import * as AnalyticsListCrmImports from './tools/analytics_list_crm_imports.js'
-import * as AnalyticsListCrmOutboundPolicies from './tools/analytics_list_crm_outbound_policies.js'
-import * as AnalyticsListCrmOutboundReceipts from './tools/analytics_list_crm_outbound_receipts.js'
 import * as AnalyticsListEventDefinitions from './tools/analytics_list_event_definitions.js'
 import * as AnalyticsListForms from './tools/analytics_list_forms.js'
 import * as AnalyticsListFunnels from './tools/analytics_list_funnels.js'
@@ -102,24 +91,16 @@ import * as AnalyticsListSavedViews from './tools/analytics_list_saved_views.js'
 import * as AnalyticsListSessions from './tools/analytics_list_sessions.js'
 import * as AnalyticsListSites from './tools/analytics_list_sites.js'
 import * as AnalyticsListVisitors from './tools/analytics_list_visitors.js'
-import * as AnalyticsPlanCrmProvisioning from './tools/analytics_plan_crm_provisioning.js'
 import * as AnalyticsPreviewCrmImport from './tools/analytics_preview_crm_import.js'
-import * as AnalyticsReconcileConnection from './tools/analytics_reconcile_connection.js'
 import * as AnalyticsRecordExternalEvent from './tools/analytics_record_external_event.js'
 import * as AnalyticsRetryActivationDelivery from './tools/analytics_retry_activation_delivery.js'
 import * as AnalyticsSaveActivationMapping from './tools/analytics_save_activation_mapping.js'
 import * as AnalyticsSetActivationAutomation from './tools/analytics_set_activation_automation.js'
-import * as AnalyticsStartCrmSync from './tools/analytics_start_crm_sync.js'
-import * as AnalyticsSyncCrmPerson from './tools/analytics_sync_crm_person.js'
 import * as AnalyticsTestActivationDestination from './tools/analytics_test_activation_destination.js'
-import * as AnalyticsTestCrmProvisioning from './tools/analytics_test_crm_provisioning.js'
-import * as AnalyticsTestCrmSyncMapping from './tools/analytics_test_crm_sync_mapping.js'
 import * as AnalyticsTestEventDefinition from './tools/analytics_test_event_definition.js'
 import * as AnalyticsTestFunnel from './tools/analytics_test_funnel.js'
-import * as AnalyticsUpdateCrmSyncSchedule from './tools/analytics_update_crm_sync_schedule.js'
 import * as AnalyticsUpdateEventDefinition from './tools/analytics_update_event_definition.js'
 import * as AnalyticsUpdateOnboardingPreferences from './tools/analytics_update_onboarding_preferences.js'
-import * as AnalyticsUpsertCrmOutboundPolicy from './tools/analytics_upsert_crm_outbound_policy.js'
 import * as AnalyticsValidateActivationMapping from './tools/analytics_validate_activation_mapping.js'
 import * as AnalyticsVerifyLiveEventDefinition from './tools/analytics_verify_live_event_definition.js'
 import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js'
@@ -369,6 +350,33 @@ import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
 import * as VideoAnalyzeStatus from './tools/video-analyze-status.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
+import * as CrmActivityAppend from './tools/crm-activity-append.js'
+import * as CrmCounterpartApply from './tools/crm-counterpart-apply.js'
+import * as CrmCounterpartPreview from './tools/crm-counterpart-preview.js'
+import * as CrmDealTransition from './tools/crm-deal-transition.js'
+import * as CrmDealUpsert from './tools/crm-deal-upsert.js'
+import * as CrmDuplicateSearch from './tools/crm-duplicate-search.js'
+import * as CrmImportApply from './tools/crm-import-apply.js'
+import * as CrmImportPreview from './tools/crm-import-preview.js'
+import * as CrmMergeApply from './tools/crm-merge-apply.js'
+import * as CrmMergePreview from './tools/crm-merge-preview.js'
+import * as CrmOrganizationGet from './tools/crm-organization-get.js'
+import * as CrmOrganizationSearch from './tools/crm-organization-search.js'
+import * as CrmOrganizationUpsert from './tools/crm-organization-upsert.js'
+import * as CrmPersonGet from './tools/crm-person-get.js'
+import * as CrmPersonSearch from './tools/crm-person-search.js'
+import * as CrmPersonUpsert from './tools/crm-person-upsert.js'
+import * as CrmPipelineList from './tools/crm-pipeline-list.js'
+import * as CrmPipelineUpsert from './tools/crm-pipeline-upsert.js'
+import * as CrmQualityList from './tools/crm-quality-list.js'
+import * as CrmTaskUpsert from './tools/crm-task-upsert.js'
+import * as CrmWorkSearch from './tools/crm-work-search.js'
+import * as ResearchOrganizationCapture from './tools/research-organization-capture.js'
+import * as ResearchOrganizationGet from './tools/research-organization-get.js'
+import * as ResearchOrganizationSearch from './tools/research-organization-search.js'
+import * as ResearchPersonCapture from './tools/research-person-capture.js'
+import * as ResearchPersonGet from './tools/research-person-get.js'
+import * as ResearchPersonSearch from './tools/research-person-search.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -467,24 +475,9 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "addVault"
   },
   {
-    "name": "analytics_apply_crm_pipeline_mapping",
-    "category": "analytics",
-    "methodName": "applyCrmPipelineMapping"
-  },
-  {
-    "name": "analytics_approve_crm_provisioning",
-    "category": "analytics",
-    "methodName": "approveCrmProvisioning"
-  },
-  {
     "name": "analytics_archive_event_definition",
     "category": "analytics",
     "methodName": "archiveEventDefinition"
-  },
-  {
-    "name": "analytics_cancel_crm_sync",
-    "category": "analytics",
-    "methodName": "cancelCrmSync"
   },
   {
     "name": "analytics_commit_crm_import",
@@ -500,11 +493,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_create_campaign_link",
     "category": "analytics",
     "methodName": "createCampaignLink"
-  },
-  {
-    "name": "analytics_create_connection",
-    "category": "analytics",
-    "methodName": "createConnection"
   },
   {
     "name": "analytics_create_conversion_rule",
@@ -560,16 +548,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_discover_activation_assets",
     "category": "analytics",
     "methodName": "discoverActivationAssets"
-  },
-  {
-    "name": "analytics_discover_crm_capabilities",
-    "category": "analytics",
-    "methodName": "discoverCrmCapabilities"
-  },
-  {
-    "name": "analytics_discover_crm_sync_objects",
-    "category": "analytics",
-    "methodName": "discoverCrmSyncObjects"
   },
   {
     "name": "analytics_export_crm_csv",
@@ -630,11 +608,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_get_coverage",
     "category": "analytics",
     "methodName": "getCoverage"
-  },
-  {
-    "name": "analytics_get_crm_sync_status",
-    "category": "analytics",
-    "methodName": "getCrmSyncStatus"
   },
   {
     "name": "analytics_get_dimensions",
@@ -707,11 +680,6 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getVisitorJourney"
   },
   {
-    "name": "analytics_import_crm_csv",
-    "category": "analytics",
-    "methodName": "importCrmCsv"
-  },
-  {
     "name": "analytics_list_activation_destinations",
     "category": "analytics",
     "methodName": "listActivationDestinations"
@@ -737,24 +705,9 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "listConversionRules"
   },
   {
-    "name": "analytics_list_crm_capabilities",
-    "category": "analytics",
-    "methodName": "listCrmCapabilities"
-  },
-  {
     "name": "analytics_list_crm_imports",
     "category": "analytics",
     "methodName": "listCrmImports"
-  },
-  {
-    "name": "analytics_list_crm_outbound_policies",
-    "category": "analytics",
-    "methodName": "listCrmOutboundPolicies"
-  },
-  {
-    "name": "analytics_list_crm_outbound_receipts",
-    "category": "analytics",
-    "methodName": "listCrmOutboundReceipts"
   },
   {
     "name": "analytics_list_event_definitions",
@@ -822,19 +775,9 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "listVisitors"
   },
   {
-    "name": "analytics_plan_crm_provisioning",
-    "category": "analytics",
-    "methodName": "planCrmProvisioning"
-  },
-  {
     "name": "analytics_preview_crm_import",
     "category": "analytics",
     "methodName": "previewCrmImport"
-  },
-  {
-    "name": "analytics_reconcile_connection",
-    "category": "analytics",
-    "methodName": "reconcileConnection"
   },
   {
     "name": "analytics_record_external_event",
@@ -857,29 +800,9 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "setActivationAutomation"
   },
   {
-    "name": "analytics_start_crm_sync",
-    "category": "analytics",
-    "methodName": "startCrmSync"
-  },
-  {
-    "name": "analytics_sync_crm_person",
-    "category": "analytics",
-    "methodName": "syncCrmPerson"
-  },
-  {
     "name": "analytics_test_activation_destination",
     "category": "analytics",
     "methodName": "testActivationDestination"
-  },
-  {
-    "name": "analytics_test_crm_provisioning",
-    "category": "analytics",
-    "methodName": "testCrmProvisioning"
-  },
-  {
-    "name": "analytics_test_crm_sync_mapping",
-    "category": "analytics",
-    "methodName": "testCrmSyncMapping"
   },
   {
     "name": "analytics_test_event_definition",
@@ -892,11 +815,6 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "testFunnel"
   },
   {
-    "name": "analytics_update_crm_sync_schedule",
-    "category": "analytics",
-    "methodName": "updateCrmSyncSchedule"
-  },
-  {
     "name": "analytics_update_event_definition",
     "category": "analytics",
     "methodName": "updateEventDefinition"
@@ -905,11 +823,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_update_onboarding_preferences",
     "category": "analytics",
     "methodName": "updateOnboardingPreferences"
-  },
-  {
-    "name": "analytics_upsert_crm_outbound_policy",
-    "category": "analytics",
-    "methodName": "upsertCrmOutboundPolicy"
   },
   {
     "name": "analytics_validate_activation_mapping",
@@ -2215,6 +2128,141 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_set_post_purchase_survey_state",
     "category": "analytics",
     "methodName": "setPostPurchaseSurveyState"
+  },
+  {
+    "name": "crm-activity-append",
+    "category": "crm",
+    "methodName": "activityAppend"
+  },
+  {
+    "name": "crm-counterpart-apply",
+    "category": "crm",
+    "methodName": "counterpartApply"
+  },
+  {
+    "name": "crm-counterpart-preview",
+    "category": "crm",
+    "methodName": "counterpartPreview"
+  },
+  {
+    "name": "crm-deal-transition",
+    "category": "crm",
+    "methodName": "dealTransition"
+  },
+  {
+    "name": "crm-deal-upsert",
+    "category": "crm",
+    "methodName": "dealUpsert"
+  },
+  {
+    "name": "crm-duplicate-search",
+    "category": "crm",
+    "methodName": "duplicateSearch"
+  },
+  {
+    "name": "crm-import-apply",
+    "category": "crm",
+    "methodName": "importApply"
+  },
+  {
+    "name": "crm-import-preview",
+    "category": "crm",
+    "methodName": "importPreview"
+  },
+  {
+    "name": "crm-merge-apply",
+    "category": "crm",
+    "methodName": "mergeApply"
+  },
+  {
+    "name": "crm-merge-preview",
+    "category": "crm",
+    "methodName": "mergePreview"
+  },
+  {
+    "name": "crm-organization-get",
+    "category": "crm",
+    "methodName": "organizationGet"
+  },
+  {
+    "name": "crm-organization-search",
+    "category": "crm",
+    "methodName": "organizationSearch"
+  },
+  {
+    "name": "crm-organization-upsert",
+    "category": "crm",
+    "methodName": "organizationUpsert"
+  },
+  {
+    "name": "crm-person-get",
+    "category": "crm",
+    "methodName": "personGet"
+  },
+  {
+    "name": "crm-person-search",
+    "category": "crm",
+    "methodName": "personSearch"
+  },
+  {
+    "name": "crm-person-upsert",
+    "category": "crm",
+    "methodName": "personUpsert"
+  },
+  {
+    "name": "crm-pipeline-list",
+    "category": "crm",
+    "methodName": "pipelineList"
+  },
+  {
+    "name": "crm-pipeline-upsert",
+    "category": "crm",
+    "methodName": "pipelineUpsert"
+  },
+  {
+    "name": "crm-quality-list",
+    "category": "crm",
+    "methodName": "qualityList"
+  },
+  {
+    "name": "crm-task-upsert",
+    "category": "crm",
+    "methodName": "taskUpsert"
+  },
+  {
+    "name": "crm-work-search",
+    "category": "crm",
+    "methodName": "workSearch"
+  },
+  {
+    "name": "research-organization-capture",
+    "category": "research",
+    "methodName": "organizationCapture"
+  },
+  {
+    "name": "research-organization-get",
+    "category": "research",
+    "methodName": "organizationGet"
+  },
+  {
+    "name": "research-organization-search",
+    "category": "research",
+    "methodName": "organizationSearch"
+  },
+  {
+    "name": "research-person-capture",
+    "category": "research",
+    "methodName": "personCapture"
+  },
+  {
+    "name": "research-person-get",
+    "category": "research",
+    "methodName": "personGet"
+  },
+  {
+    "name": "research-person-search",
+    "category": "research",
+    "methodName": "personSearch"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2354,20 +2402,8 @@ export class VaultsNamespace {
 export class AnalyticsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
-  async applyCrmPipelineMapping(input: AnalyticsApplyCrmPipelineMapping.Input): Promise<AnalyticsApplyCrmPipelineMapping.Output> {
-    return this.callTool('analytics_apply_crm_pipeline_mapping', input) as Promise<AnalyticsApplyCrmPipelineMapping.Output>
-  }
-
-  async approveCrmProvisioning(input: AnalyticsApproveCrmProvisioning.Input): Promise<AnalyticsApproveCrmProvisioning.Output> {
-    return this.callTool('analytics_approve_crm_provisioning', input) as Promise<AnalyticsApproveCrmProvisioning.Output>
-  }
-
   async archiveEventDefinition(input: AnalyticsArchiveEventDefinition.Input): Promise<AnalyticsArchiveEventDefinition.Output> {
     return this.callTool('analytics_archive_event_definition', input) as Promise<AnalyticsArchiveEventDefinition.Output>
-  }
-
-  async cancelCrmSync(input: AnalyticsCancelCrmSync.Input): Promise<AnalyticsCancelCrmSync.Output> {
-    return this.callTool('analytics_cancel_crm_sync', input) as Promise<AnalyticsCancelCrmSync.Output>
   }
 
   async commitCrmImport(input: AnalyticsCommitCrmImport.Input): Promise<AnalyticsCommitCrmImport.Output> {
@@ -2380,10 +2416,6 @@ export class AnalyticsNamespace {
 
   async createCampaignLink(input: AnalyticsCreateCampaignLink.Input): Promise<AnalyticsCreateCampaignLink.Output> {
     return this.callTool('analytics_create_campaign_link', input) as Promise<AnalyticsCreateCampaignLink.Output>
-  }
-
-  async createConnection(input: AnalyticsCreateConnection.Input): Promise<AnalyticsCreateConnection.Output> {
-    return this.callTool('analytics_create_connection', input) as Promise<AnalyticsCreateConnection.Output>
   }
 
   async createConversionRule(input: AnalyticsCreateConversionRule.Input): Promise<AnalyticsCreateConversionRule.Output> {
@@ -2428,14 +2460,6 @@ export class AnalyticsNamespace {
 
   async discoverActivationAssets(input: AnalyticsDiscoverActivationAssets.Input): Promise<AnalyticsDiscoverActivationAssets.Output> {
     return this.callTool('analytics_discover_activation_assets', input) as Promise<AnalyticsDiscoverActivationAssets.Output>
-  }
-
-  async discoverCrmCapabilities(input: AnalyticsDiscoverCrmCapabilities.Input): Promise<AnalyticsDiscoverCrmCapabilities.Output> {
-    return this.callTool('analytics_discover_crm_capabilities', input) as Promise<AnalyticsDiscoverCrmCapabilities.Output>
-  }
-
-  async discoverCrmSyncObjects(input: AnalyticsDiscoverCrmSyncObjects.Input): Promise<AnalyticsDiscoverCrmSyncObjects.Output> {
-    return this.callTool('analytics_discover_crm_sync_objects', input) as Promise<AnalyticsDiscoverCrmSyncObjects.Output>
   }
 
   async exportCrmCsv(input: AnalyticsExportCrmCsv.Input): Promise<AnalyticsExportCrmCsv.Output> {
@@ -2484,10 +2508,6 @@ export class AnalyticsNamespace {
 
   async getCoverage(input: AnalyticsGetCoverage.Input): Promise<AnalyticsGetCoverage.Output> {
     return this.callTool('analytics_get_coverage', input) as Promise<AnalyticsGetCoverage.Output>
-  }
-
-  async getCrmSyncStatus(input: AnalyticsGetCrmSyncStatus.Input): Promise<AnalyticsGetCrmSyncStatus.Output> {
-    return this.callTool('analytics_get_crm_sync_status', input) as Promise<AnalyticsGetCrmSyncStatus.Output>
   }
 
   async getDimensions(input: AnalyticsGetDimensions.Input): Promise<AnalyticsGetDimensions.Output> {
@@ -2546,10 +2566,6 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_visitor_journey', input) as Promise<AnalyticsGetVisitorJourney.Output>
   }
 
-  async importCrmCsv(input: AnalyticsImportCrmCsv.Input): Promise<AnalyticsImportCrmCsv.Output> {
-    return this.callTool('analytics_import_crm_csv', input) as Promise<AnalyticsImportCrmCsv.Output>
-  }
-
   async listActivationDestinations(input: AnalyticsListActivationDestinations.Input): Promise<AnalyticsListActivationDestinations.Output> {
     return this.callTool('analytics_list_activation_destinations', input) as Promise<AnalyticsListActivationDestinations.Output>
   }
@@ -2570,20 +2586,8 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_list_conversion_rules', input) as Promise<AnalyticsListConversionRules.Output>
   }
 
-  async listCrmCapabilities(input: AnalyticsListCrmCapabilities.Input): Promise<AnalyticsListCrmCapabilities.Output> {
-    return this.callTool('analytics_list_crm_capabilities', input) as Promise<AnalyticsListCrmCapabilities.Output>
-  }
-
   async listCrmImports(input: AnalyticsListCrmImports.Input): Promise<AnalyticsListCrmImports.Output> {
     return this.callTool('analytics_list_crm_imports', input) as Promise<AnalyticsListCrmImports.Output>
-  }
-
-  async listCrmOutboundPolicies(input: AnalyticsListCrmOutboundPolicies.Input): Promise<AnalyticsListCrmOutboundPolicies.Output> {
-    return this.callTool('analytics_list_crm_outbound_policies', input) as Promise<AnalyticsListCrmOutboundPolicies.Output>
-  }
-
-  async listCrmOutboundReceipts(input: AnalyticsListCrmOutboundReceipts.Input): Promise<AnalyticsListCrmOutboundReceipts.Output> {
-    return this.callTool('analytics_list_crm_outbound_receipts', input) as Promise<AnalyticsListCrmOutboundReceipts.Output>
   }
 
   async listEventDefinitions(input: AnalyticsListEventDefinitions.Input): Promise<AnalyticsListEventDefinitions.Output> {
@@ -2638,16 +2642,8 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_list_visitors', input) as Promise<AnalyticsListVisitors.Output>
   }
 
-  async planCrmProvisioning(input: AnalyticsPlanCrmProvisioning.Input): Promise<AnalyticsPlanCrmProvisioning.Output> {
-    return this.callTool('analytics_plan_crm_provisioning', input) as Promise<AnalyticsPlanCrmProvisioning.Output>
-  }
-
   async previewCrmImport(input: AnalyticsPreviewCrmImport.Input): Promise<AnalyticsPreviewCrmImport.Output> {
     return this.callTool('analytics_preview_crm_import', input) as Promise<AnalyticsPreviewCrmImport.Output>
-  }
-
-  async reconcileConnection(input: AnalyticsReconcileConnection.Input): Promise<AnalyticsReconcileConnection.Output> {
-    return this.callTool('analytics_reconcile_connection', input) as Promise<AnalyticsReconcileConnection.Output>
   }
 
   async recordExternalEvent(input: AnalyticsRecordExternalEvent.Input): Promise<AnalyticsRecordExternalEvent.Output> {
@@ -2666,24 +2662,8 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_set_activation_automation', input) as Promise<AnalyticsSetActivationAutomation.Output>
   }
 
-  async startCrmSync(input: AnalyticsStartCrmSync.Input): Promise<AnalyticsStartCrmSync.Output> {
-    return this.callTool('analytics_start_crm_sync', input) as Promise<AnalyticsStartCrmSync.Output>
-  }
-
-  async syncCrmPerson(input: AnalyticsSyncCrmPerson.Input): Promise<AnalyticsSyncCrmPerson.Output> {
-    return this.callTool('analytics_sync_crm_person', input) as Promise<AnalyticsSyncCrmPerson.Output>
-  }
-
   async testActivationDestination(input: AnalyticsTestActivationDestination.Input): Promise<AnalyticsTestActivationDestination.Output> {
     return this.callTool('analytics_test_activation_destination', input) as Promise<AnalyticsTestActivationDestination.Output>
-  }
-
-  async testCrmProvisioning(input: AnalyticsTestCrmProvisioning.Input): Promise<AnalyticsTestCrmProvisioning.Output> {
-    return this.callTool('analytics_test_crm_provisioning', input) as Promise<AnalyticsTestCrmProvisioning.Output>
-  }
-
-  async testCrmSyncMapping(input: AnalyticsTestCrmSyncMapping.Input): Promise<AnalyticsTestCrmSyncMapping.Output> {
-    return this.callTool('analytics_test_crm_sync_mapping', input) as Promise<AnalyticsTestCrmSyncMapping.Output>
   }
 
   async testEventDefinition(input: AnalyticsTestEventDefinition.Input): Promise<AnalyticsTestEventDefinition.Output> {
@@ -2694,20 +2674,12 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_test_funnel', input) as Promise<AnalyticsTestFunnel.Output>
   }
 
-  async updateCrmSyncSchedule(input: AnalyticsUpdateCrmSyncSchedule.Input): Promise<AnalyticsUpdateCrmSyncSchedule.Output> {
-    return this.callTool('analytics_update_crm_sync_schedule', input) as Promise<AnalyticsUpdateCrmSyncSchedule.Output>
-  }
-
   async updateEventDefinition(input: AnalyticsUpdateEventDefinition.Input): Promise<AnalyticsUpdateEventDefinition.Output> {
     return this.callTool('analytics_update_event_definition', input) as Promise<AnalyticsUpdateEventDefinition.Output>
   }
 
   async updateOnboardingPreferences(input: AnalyticsUpdateOnboardingPreferences.Input): Promise<AnalyticsUpdateOnboardingPreferences.Output> {
     return this.callTool('analytics_update_onboarding_preferences', input) as Promise<AnalyticsUpdateOnboardingPreferences.Output>
-  }
-
-  async upsertCrmOutboundPolicy(input: AnalyticsUpsertCrmOutboundPolicy.Input): Promise<AnalyticsUpsertCrmOutboundPolicy.Output> {
-    return this.callTool('analytics_upsert_crm_outbound_policy', input) as Promise<AnalyticsUpsertCrmOutboundPolicy.Output>
   }
 
   async validateActivationMapping(input: AnalyticsValidateActivationMapping.Input): Promise<AnalyticsValidateActivationMapping.Output> {
@@ -3847,6 +3819,122 @@ export class YoutubeNamespace {
   }
 }
 
+export class CrmNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async activityAppend(input: CrmActivityAppend.Input): Promise<CrmActivityAppend.Output> {
+    return this.callTool('crm-activity-append', input) as Promise<CrmActivityAppend.Output>
+  }
+
+  async counterpartApply(input: CrmCounterpartApply.Input): Promise<CrmCounterpartApply.Output> {
+    return this.callTool('crm-counterpart-apply', input) as Promise<CrmCounterpartApply.Output>
+  }
+
+  async counterpartPreview(input: CrmCounterpartPreview.Input): Promise<CrmCounterpartPreview.Output> {
+    return this.callTool('crm-counterpart-preview', input) as Promise<CrmCounterpartPreview.Output>
+  }
+
+  async dealTransition(input: CrmDealTransition.Input): Promise<CrmDealTransition.Output> {
+    return this.callTool('crm-deal-transition', input) as Promise<CrmDealTransition.Output>
+  }
+
+  async dealUpsert(input: CrmDealUpsert.Input): Promise<CrmDealUpsert.Output> {
+    return this.callTool('crm-deal-upsert', input) as Promise<CrmDealUpsert.Output>
+  }
+
+  async duplicateSearch(input: CrmDuplicateSearch.Input): Promise<CrmDuplicateSearch.Output> {
+    return this.callTool('crm-duplicate-search', input) as Promise<CrmDuplicateSearch.Output>
+  }
+
+  async importApply(input: CrmImportApply.Input): Promise<CrmImportApply.Output> {
+    return this.callTool('crm-import-apply', input) as Promise<CrmImportApply.Output>
+  }
+
+  async importPreview(input: CrmImportPreview.Input): Promise<CrmImportPreview.Output> {
+    return this.callTool('crm-import-preview', input) as Promise<CrmImportPreview.Output>
+  }
+
+  async mergeApply(input: CrmMergeApply.Input): Promise<CrmMergeApply.Output> {
+    return this.callTool('crm-merge-apply', input) as Promise<CrmMergeApply.Output>
+  }
+
+  async mergePreview(input: CrmMergePreview.Input): Promise<CrmMergePreview.Output> {
+    return this.callTool('crm-merge-preview', input) as Promise<CrmMergePreview.Output>
+  }
+
+  async organizationGet(input: CrmOrganizationGet.Input): Promise<CrmOrganizationGet.Output> {
+    return this.callTool('crm-organization-get', input) as Promise<CrmOrganizationGet.Output>
+  }
+
+  async organizationSearch(input: CrmOrganizationSearch.Input = {} as CrmOrganizationSearch.Input): Promise<CrmOrganizationSearch.Output> {
+    return this.callTool('crm-organization-search', input) as Promise<CrmOrganizationSearch.Output>
+  }
+
+  async organizationUpsert(input: CrmOrganizationUpsert.Input): Promise<CrmOrganizationUpsert.Output> {
+    return this.callTool('crm-organization-upsert', input) as Promise<CrmOrganizationUpsert.Output>
+  }
+
+  async personGet(input: CrmPersonGet.Input): Promise<CrmPersonGet.Output> {
+    return this.callTool('crm-person-get', input) as Promise<CrmPersonGet.Output>
+  }
+
+  async personSearch(input: CrmPersonSearch.Input = {} as CrmPersonSearch.Input): Promise<CrmPersonSearch.Output> {
+    return this.callTool('crm-person-search', input) as Promise<CrmPersonSearch.Output>
+  }
+
+  async personUpsert(input: CrmPersonUpsert.Input): Promise<CrmPersonUpsert.Output> {
+    return this.callTool('crm-person-upsert', input) as Promise<CrmPersonUpsert.Output>
+  }
+
+  async pipelineList(input: CrmPipelineList.Input = {} as CrmPipelineList.Input): Promise<CrmPipelineList.Output> {
+    return this.callTool('crm-pipeline-list', input) as Promise<CrmPipelineList.Output>
+  }
+
+  async pipelineUpsert(input: CrmPipelineUpsert.Input): Promise<CrmPipelineUpsert.Output> {
+    return this.callTool('crm-pipeline-upsert', input) as Promise<CrmPipelineUpsert.Output>
+  }
+
+  async qualityList(input: CrmQualityList.Input = {} as CrmQualityList.Input): Promise<CrmQualityList.Output> {
+    return this.callTool('crm-quality-list', input) as Promise<CrmQualityList.Output>
+  }
+
+  async taskUpsert(input: CrmTaskUpsert.Input): Promise<CrmTaskUpsert.Output> {
+    return this.callTool('crm-task-upsert', input) as Promise<CrmTaskUpsert.Output>
+  }
+
+  async workSearch(input: CrmWorkSearch.Input = {} as CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
+    return this.callTool('crm-work-search', input) as Promise<CrmWorkSearch.Output>
+  }
+}
+
+export class ResearchNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async organizationCapture(input: ResearchOrganizationCapture.Input): Promise<ResearchOrganizationCapture.Output> {
+    return this.callTool('research-organization-capture', input) as Promise<ResearchOrganizationCapture.Output>
+  }
+
+  async organizationGet(input: ResearchOrganizationGet.Input): Promise<ResearchOrganizationGet.Output> {
+    return this.callTool('research-organization-get', input) as Promise<ResearchOrganizationGet.Output>
+  }
+
+  async organizationSearch(input: ResearchOrganizationSearch.Input = {} as ResearchOrganizationSearch.Input): Promise<ResearchOrganizationSearch.Output> {
+    return this.callTool('research-organization-search', input) as Promise<ResearchOrganizationSearch.Output>
+  }
+
+  async personCapture(input: ResearchPersonCapture.Input): Promise<ResearchPersonCapture.Output> {
+    return this.callTool('research-person-capture', input) as Promise<ResearchPersonCapture.Output>
+  }
+
+  async personGet(input: ResearchPersonGet.Input): Promise<ResearchPersonGet.Output> {
+    return this.callTool('research-person-get', input) as Promise<ResearchPersonGet.Output>
+  }
+
+  async personSearch(input: ResearchPersonSearch.Input = {} as ResearchPersonSearch.Input): Promise<ResearchPersonSearch.Output> {
+    return this.callTool('research-person-search', input) as Promise<ResearchPersonSearch.Output>
+  }
+}
+
 export class GeneratedMcpToolsClient {
   readonly access: AccessNamespace
   readonly vaults: VaultsNamespace
@@ -3886,6 +3974,8 @@ export class GeneratedMcpToolsClient {
   readonly recall: RecallNamespace
   readonly video: VideoNamespace
   readonly youtube: YoutubeNamespace
+  readonly crm: CrmNamespace
+  readonly research: ResearchNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.access = new AccessNamespace(callTool)
@@ -3926,5 +4016,7 @@ export class GeneratedMcpToolsClient {
     this.recall = new RecallNamespace(callTool)
     this.video = new VideoNamespace(callTool)
     this.youtube = new YoutubeNamespace(callTool)
+    this.crm = new CrmNamespace(callTool)
+    this.research = new ResearchNamespace(callTool)
   }
 }
