@@ -1,7 +1,7 @@
 [project]
 name = "mcpscraper-memory-sdk"
-version = "0.33.0"
-description = "Official Python clients for all 363 mcpscraper.dev MCP tools and the direct 121-tool memory API"
+version = "0.34.0"
+description = "Official Python clients for all 373 mcpscraper.dev MCP tools and the direct 121-tool memory API"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"

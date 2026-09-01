@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.38.0] - 2026-09-01 — verified against mcp-scraper 0.84.0 / mcp-memory 1.20.0
+
+### Added
+
+- Added generated Node, Python, CLI, and cURL bindings for governed SaaS revenue-source setup, post-purchase survey lifecycle and reporting, attribution methodology, explicit observed-plus-reported impact, and provider-backed view-evidence status.
+- Added a runnable X-Ray SaaS attribution example that inspects methodology and view readiness by default, while requiring explicit environment gates before preparing, applying, or verifying a revenue authority or creating a survey draft.
+
+### Changed
+
+- Regenerated every unified developer surface from the exact 373-tool MCP Scraper 0.84.0 contract while retaining the separate 121-tool direct Memory API.
+- Prepared minor releases: `mcpscraper-sdk` 0.38.0, `mcpscraper-memory-sdk` 0.38.0, `mcpscraper-cli` 0.37.0, Python `mcpscraper-sdk` 0.36.0, and Python `mcpscraper-memory-sdk` 0.34.0.
+
 ## [0.37.0] - 2026-09-01 — verified against mcp-scraper 0.83.0 / mcp-memory 1.20.0
 
 ### Added
