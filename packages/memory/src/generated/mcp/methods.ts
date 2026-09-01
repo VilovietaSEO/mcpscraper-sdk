@@ -130,6 +130,16 @@ import * as AnalyticsPrepareSiteSetup from './tools/analytics_prepare_site_setup
 import * as AnalyticsSetExperimentState from './tools/analytics_set_experiment_state.js'
 import * as AnalyticsSetupSite from './tools/analytics_setup_site.js'
 import * as AnalyticsVerifySiteSetup from './tools/analytics_verify_site_setup.js'
+import * as AnalyticsApplyRevenueSource from './tools/analytics_apply_revenue_source.js'
+import * as AnalyticsCreatePostPurchaseSurvey from './tools/analytics_create_post_purchase_survey.js'
+import * as AnalyticsGetAttributionMethodology from './tools/analytics_get_attribution_methodology.js'
+import * as AnalyticsGetImpactReport from './tools/analytics_get_impact_report.js'
+import * as AnalyticsGetPostPurchaseSurveyReport from './tools/analytics_get_post_purchase_survey_report.js'
+import * as AnalyticsGetViewEvidenceStatus from './tools/analytics_get_view_evidence_status.js'
+import * as AnalyticsPrepareRevenueSource from './tools/analytics_prepare_revenue_source.js'
+import * as AnalyticsSetPostPurchaseSurveyState from './tools/analytics_set_post_purchase_survey_state.js'
+import * as AnalyticsSetupRevenueSource from './tools/analytics_setup_revenue_source.js'
+import * as AnalyticsVerifyRevenueSource from './tools/analytics_verify_revenue_source.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -2179,6 +2189,56 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_verify_site_setup",
     "category": "analytics",
     "methodName": "verifySiteSetup"
+  },
+  {
+    "name": "analytics_apply_revenue_source",
+    "category": "analytics",
+    "methodName": "applyRevenueSource"
+  },
+  {
+    "name": "analytics_create_post_purchase_survey",
+    "category": "analytics",
+    "methodName": "createPostPurchaseSurvey"
+  },
+  {
+    "name": "analytics_get_attribution_methodology",
+    "category": "analytics",
+    "methodName": "getAttributionMethodology"
+  },
+  {
+    "name": "analytics_get_impact_report",
+    "category": "analytics",
+    "methodName": "getImpactReport"
+  },
+  {
+    "name": "analytics_get_post_purchase_survey_report",
+    "category": "analytics",
+    "methodName": "getPostPurchaseSurveyReport"
+  },
+  {
+    "name": "analytics_get_view_evidence_status",
+    "category": "analytics",
+    "methodName": "getViewEvidenceStatus"
+  },
+  {
+    "name": "analytics_prepare_revenue_source",
+    "category": "analytics",
+    "methodName": "prepareRevenueSource"
+  },
+  {
+    "name": "analytics_set_post_purchase_survey_state",
+    "category": "analytics",
+    "methodName": "setPostPurchaseSurveyState"
+  },
+  {
+    "name": "analytics_setup_revenue_source",
+    "category": "analytics",
+    "methodName": "setupRevenueSource"
+  },
+  {
+    "name": "analytics_verify_revenue_source",
+    "category": "analytics",
+    "methodName": "verifyRevenueSource"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2712,6 +2772,46 @@ export class AnalyticsNamespace {
 
   async verifySiteSetup(input: AnalyticsVerifySiteSetup.Input): Promise<AnalyticsVerifySiteSetup.Output> {
     return this.callTool('analytics_verify_site_setup', input) as Promise<AnalyticsVerifySiteSetup.Output>
+  }
+
+  async applyRevenueSource(input: AnalyticsApplyRevenueSource.Input): Promise<AnalyticsApplyRevenueSource.Output> {
+    return this.callTool('analytics_apply_revenue_source', input) as Promise<AnalyticsApplyRevenueSource.Output>
+  }
+
+  async createPostPurchaseSurvey(input: AnalyticsCreatePostPurchaseSurvey.Input): Promise<AnalyticsCreatePostPurchaseSurvey.Output> {
+    return this.callTool('analytics_create_post_purchase_survey', input) as Promise<AnalyticsCreatePostPurchaseSurvey.Output>
+  }
+
+  async getAttributionMethodology(input: AnalyticsGetAttributionMethodology.Input): Promise<AnalyticsGetAttributionMethodology.Output> {
+    return this.callTool('analytics_get_attribution_methodology', input) as Promise<AnalyticsGetAttributionMethodology.Output>
+  }
+
+  async getImpactReport(input: AnalyticsGetImpactReport.Input): Promise<AnalyticsGetImpactReport.Output> {
+    return this.callTool('analytics_get_impact_report', input) as Promise<AnalyticsGetImpactReport.Output>
+  }
+
+  async getPostPurchaseSurveyReport(input: AnalyticsGetPostPurchaseSurveyReport.Input): Promise<AnalyticsGetPostPurchaseSurveyReport.Output> {
+    return this.callTool('analytics_get_post_purchase_survey_report', input) as Promise<AnalyticsGetPostPurchaseSurveyReport.Output>
+  }
+
+  async getViewEvidenceStatus(input: AnalyticsGetViewEvidenceStatus.Input): Promise<AnalyticsGetViewEvidenceStatus.Output> {
+    return this.callTool('analytics_get_view_evidence_status', input) as Promise<AnalyticsGetViewEvidenceStatus.Output>
+  }
+
+  async prepareRevenueSource(input: AnalyticsPrepareRevenueSource.Input): Promise<AnalyticsPrepareRevenueSource.Output> {
+    return this.callTool('analytics_prepare_revenue_source', input) as Promise<AnalyticsPrepareRevenueSource.Output>
+  }
+
+  async setPostPurchaseSurveyState(input: AnalyticsSetPostPurchaseSurveyState.Input): Promise<AnalyticsSetPostPurchaseSurveyState.Output> {
+    return this.callTool('analytics_set_post_purchase_survey_state', input) as Promise<AnalyticsSetPostPurchaseSurveyState.Output>
+  }
+
+  async setupRevenueSource(input: AnalyticsSetupRevenueSource.Input): Promise<AnalyticsSetupRevenueSource.Output> {
+    return this.callTool('analytics_setup_revenue_source', input) as Promise<AnalyticsSetupRevenueSource.Output>
+  }
+
+  async verifyRevenueSource(input: AnalyticsVerifyRevenueSource.Input): Promise<AnalyticsVerifyRevenueSource.Output> {
+    return this.callTool('analytics_verify_revenue_source', input) as Promise<AnalyticsVerifyRevenueSource.Output>
   }
 }
 

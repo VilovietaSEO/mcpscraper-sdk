@@ -28987,6 +28987,684 @@ export const MCP_TOOL_CATALOG = [
       "idempotentHint": true,
       "openWorldHint": true
     }
+  },
+  {
+    "name": "analytics_apply_revenue_source",
+    "category": "analytics",
+    "title": "Apply SaaS Revenue Authority",
+    "description": "Apply one exact reviewed revenue-source revision using an idempotency key. It binds an authorized provider account and authority role; it never accepts credentials and does not claim the source live before provider receipt verification.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "setupId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound revenue setup id returned by prepare or the facade."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
+        },
+        "confirmed": {
+          "type": "boolean",
+          "const": true,
+          "description": "Confirms this exact provider account, role, and event-family revision."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "setupId",
+        "revision",
+        "confirmed",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Apply SaaS Revenue Authority",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_create_post_purchase_survey",
+    "category": "analytics",
+    "title": "Create Post-Purchase Survey Draft",
+    "description": "Create an idempotent, structured, contact-free post-purchase survey draft. Customer answers remain reported influence and cannot establish identity, mutate CRM, qualify activation, or change observed touches.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "Owner-facing survey name."
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Customer-visible structured influence question; do not request contact data or free text."
+        },
+        "selectionMode": {
+          "type": "string",
+          "enum": [
+            "single",
+            "multiple"
+          ],
+          "description": "Whether a respondent may select one influence or several."
+        },
+        "eligibleOutcomeFamilies": {
+          "minItems": 1,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "description": "Authoritative outcome families eligible to receive an invitation."
+        },
+        "exchangeTtlSeconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 86400,
+          "description": "Short-lived merchant exchange-code lifetime."
+        },
+        "sessionTtlSeconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 86400,
+          "description": "Hosted survey session lifetime after one-time exchange."
+        },
+        "approvedCopyId": {
+          "description": "Versioned privacy disclosure approval. A draft may omit it; production publication may not.",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "options": {
+          "minItems": 2,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "optionId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "description": "Stable opaque option id; changing a label never changes this id."
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "Bounded owner-authored influence label. Free-text customer testimony is not accepted."
+              }
+            },
+            "required": [
+              "optionId",
+              "label"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Two to twenty stable structured influences."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "name",
+        "question",
+        "selectionMode",
+        "eligibleOutcomeFamilies",
+        "exchangeTtlSeconds",
+        "sessionTtlSeconds",
+        "options",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create Post-Purchase Survey Draft",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_attribution_methodology",
+    "category": "analytics",
+    "title": "Get X-Ray Attribution Methodology",
+    "description": "Read the seven observed models, default position weights, explicit observed-plus-reported methodology, and evidence boundaries. Use before requesting combined impact; this never turns survey testimony or aggregate impressions into deterministic touches.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get X-Ray Attribution Methodology",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_impact_report",
+    "category": "analytics",
+    "title": "Get Observed and Reported Impact",
+    "description": "Read an opt-in impact projection that keeps observed attribution and customer-reported influence in separate ledgers. Requires a published survey, one existing observed model, an immutable methodology version, and explicit weights totaling 1,000,000 micros.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "surveyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Published or paused post-purchase survey whose immutable responses supply the reported ledger."
+        },
+        "baseModel": {
+          "type": "string",
+          "enum": [
+            "first_touch",
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ],
+          "description": "Existing observed attribution model; observed_plus_reported is deliberately not an observed model."
+        },
+        "observedWeightMicros": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000,
+          "description": "Observed share in micros. It must total exactly 1,000,000 with reportedWeightMicros."
+        },
+        "reportedWeightMicros": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000,
+          "description": "Customer-reported share in micros. It must total exactly 1,000,000 with observedWeightMicros."
+        },
+        "methodologyVersion": {
+          "type": "string",
+          "const": "xray_observed_plus_reported_equal_selected_v1",
+          "description": "Immutable methodology selected after reading analytics_get_attribution_methodology."
+        },
+        "from": {
+          "description": "Inclusive observed-evidence start. Omit with to for the last 30 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "to": {
+          "description": "Exclusive observed-evidence end. Omit to use now.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "clickWindow": {
+          "default": 90,
+          "description": "Independent observed click window.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindow": {
+          "default": 90,
+          "description": "Independent view window; provider-unavailable state never manufactures view touches.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        }
+      },
+      "required": [
+        "siteId",
+        "surveyId",
+        "baseModel",
+        "observedWeightMicros",
+        "reportedWeightMicros",
+        "methodologyVersion"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Observed and Reported Impact",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_post_purchase_survey_report",
+    "category": "analytics",
+    "title": "Get Post-Purchase Survey Report",
+    "description": "Read aggregate response coverage, option counts, and separately labeled reported-influence evidence for one survey. The output excludes contact fields, raw invitation tokens, and deterministic touch claims.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "surveyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound survey id."
+        }
+      },
+      "required": [
+        "siteId",
+        "surveyId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Post-Purchase Survey Report",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_view_evidence_status",
+    "category": "analytics",
+    "title": "Get Provider View Evidence Status",
+    "description": "Read provider-by-provider availability for event-level view evidence. Unavailable or unproven is an honest result; aggregate campaign impressions can never create person-level attribution touches.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Provider View Evidence Status",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_prepare_revenue_source",
+    "category": "analytics",
+    "title": "Prepare SaaS Revenue Authority",
+    "description": "Inspect an already-authorized provider connection and return a revisioned primary-or-observation revenue plan. This read-like preparation may query the provider but cannot create revenue or receive a provider credential.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "serviceConnectionRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Already-authorized connected-account reference. Credentials never belong in this input."
+        },
+        "role": {
+          "default": "primary",
+          "description": "Choose one primary authority per subscription-revenue outcome family; observation sources cannot create revenue.",
+          "type": "string",
+          "enum": [
+            "primary",
+            "observation"
+          ]
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "serviceConnectionRef",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Prepare SaaS Revenue Authority",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_set_post_purchase_survey_state",
+    "category": "analytics",
+    "title": "Set Post-Purchase Survey State",
+    "description": "Publish, pause, or irreversibly archive one exact survey revision. Production publication requires approved privacy disclosure evidence. Reuse the same idempotency key only for the identical transition; archive cannot be undone.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "surveyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound survey id."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact survey revision being changed."
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "published",
+            "paused",
+            "archived"
+          ],
+          "description": "Publish or pause this revision. Archive is irreversible."
+        },
+        "approvedCopyId": {
+          "description": "Approved privacy disclosure identifier required for production publication; it is not legal approval by itself.",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "surveyId",
+        "revision",
+        "state",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Set Post-Purchase Survey State",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_setup_revenue_source",
+    "category": "analytics",
+    "title": "Set Up SaaS Revenue Authority",
+    "description": "Use as the customer-facing SaaS revenue setup facade after tag and measurement readiness. It prepares, reads, applies, or verifies one owner-authorized subscription authority without accepting credentials. Provider calls may occur only through the approved connected account; reuse setupId and revision.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "action": {
+          "default": "continue",
+          "description": "Lifecycle action. Continue reads an existing setup or prepares one when serviceConnectionRef is supplied.",
+          "type": "string",
+          "enum": [
+            "continue",
+            "prepare",
+            "apply",
+            "verify"
+          ]
+        },
+        "setupId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound revenue setup id returned by prepare or the facade."
+        },
+        "serviceConnectionRef": {
+          "description": "Already-authorized connected-account reference. Never supply a credential, token, or provider key.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "role": {
+          "default": "primary",
+          "description": "Primary may create subscription outcomes; observation only compares provider evidence.",
+          "type": "string",
+          "enum": [
+            "primary",
+            "observation"
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
+        },
+        "confirmed": {
+          "description": "Required only to apply the exact reviewed revision.",
+          "type": "boolean",
+          "const": true
+        },
+        "idempotencyKey": {
+          "description": "Required for apply and verify. Reuse only for the identical operation.",
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Set Up SaaS Revenue Authority",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "analytics_verify_revenue_source",
+    "category": "analytics",
+    "title": "Verify SaaS Revenue Authority",
+    "description": "Verify one applied revenue source through the approved provider connection and return a redacted non-customer receipt state. A successful API call without a signed webhook or reconciliation receipt is not live proof.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "setupId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound revenue setup id returned by prepare or the facade."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current revenue setup revision; reload before retrying a stale mutation."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "setupId",
+        "revision",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Verify SaaS Revenue Authority",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    }
   }
 ] as const
 export const MCP_TOOL_NAMES = MCP_TOOL_CATALOG.map(tool => tool.name)
