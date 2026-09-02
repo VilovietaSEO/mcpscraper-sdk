@@ -18745,10 +18745,17 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa",
     "category": "search",
     "title": "Google PAA + SERP Harvest",
-    "description": "Expand one Google People Also Ask SERP into questions, answers, every preserved source, AI Overview evidence, ranking URLs, and entity IDs. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; a failed click or browser timeout is never reported as exhaustion. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+    "description": "Expand one Google People Also Ask SERP into questions, answers, every preserved source, AI Overview evidence, ranking URLs, and entity IDs. Set pages to 2 to add the second organic-results page when available; PAA is still expanded once on the preserved first page, and pagination reports what was captured. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; a failed click or browser timeout is never reported as exhaustion. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
+        "pages": {
+          "default": 1,
+          "description": "Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
         "query": {
           "type": "string",
           "minLength": 1,
@@ -18845,10 +18852,17 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_start",
     "category": "other",
     "title": "Start Durable Google PAA Harvest",
-    "description": "Start a durable Google People Also Ask harvest and return its job receipt. maxQuestions is the requested target count. The job automatically resumes an interrupted serverless worker under the same jobId, idempotency key, and billing hold while preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
+    "description": "Start a durable Google People Also Ask harvest and return its job receipt. Set pages to 2 to add the second organic-results page when available; PAA is still expanded once on the preserved first page, and pagination survives checkpoint recovery. maxQuestions is the requested target count. The job automatically resumes an interrupted serverless worker under the same jobId, idempotency key, and billing hold while preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
+        "pages": {
+          "default": 1,
+          "description": "Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
         "query": {
           "type": "string",
           "minLength": 1,
@@ -18946,7 +18960,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_status",
     "category": "other",
     "title": "Check Durable Google PAA Harvest",
-    "description": "Poll an owner-scoped harvest_paa_start job. Returns the job/operation/task correlation ID, saved progress, automatic-recovery count, target and discovery status, material completeness, recent per-control interaction outcomes with 0.7/1.0/1.4-second confirmation telemetry, provider-session-correlated attempts, terminal rows, and billing. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
+    "description": "Poll an owner-scoped harvest_paa_start job. Returns the job/operation/task correlation ID, saved progress, automatic-recovery count, target and discovery status, material completeness, bounded organic-page pagination, recent per-control interaction outcomes with 0.7/1.0/1.4-second confirmation telemetry, provider-session-correlated attempts, terminal rows, and billing. Page-two outcomes describe organic results only; the PAA graph always comes from the preserved first page. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23029,7 +23043,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_thread",
     "category": "reddit",
     "title": "Reddit Thread + Comments",
-    "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. The managed residential browser is primary; a bounded managed-browser backup can recover the post and up to 25 comments when the primary fails. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
+    "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. Each of up to two primary attempts finds and clicks the exact URL through a site-restricted web search before landing with a managed residential browser; up to two managed-browser backup attempts can then recover the post and 25 comments. It stops on the first accepted result. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23062,7 +23076,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_trending",
     "category": "reddit",
     "title": "Reddit Trending",
-    "description": "Discover Reddit conversations through a site-restricted web search for the last week, month, or all time. With includeComments:true, each candidate is opened on current Reddit through a managed residential browser, with a bounded backup of up to 25 comments after primary failure, and ranked from rendered engagement; discovery, each hydrated thread, and returned comments are billed separately. Set includeComments:false for the faster discovery-only result, and inspect resultQuality and discoverySource before treating an empty result as meaningful.",
+    "description": "Discover Reddit conversations through a site-restricted web search for the last week, month, or all time. With includeComments:true, each candidate is hydrated with up to two fresh managed residential browser attempts followed by up to two managed-browser backup attempts capped at 25 comments, stopping on the first accepted result, and ranked from rendered engagement; discovery, each hydrated thread, and returned comments are billed separately. Set includeComments:false for the faster discovery-only result, and inspect resultQuality and discoverySource before treating an empty result as meaningful.",
     "inputSchema": {
       "type": "object",
       "properties": {

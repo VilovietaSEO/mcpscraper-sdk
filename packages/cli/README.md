@@ -47,6 +47,11 @@ Integration connections are included with an active Starter plan or higher and h
 
 Current Google search pricing is 60 Credits per SERP search and 400 Credits plus 10 Credits per returned question for PAA. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
+Use `mcpscraper tools call harvest_paa_start --args '{"query":"...","pages":2,"idempotencyKey":"..."}' --json`
+to request a second organic-results page, then poll the returned `jobId` with
+`harvest_paa_status`. One page is the default, and the second page never creates
+a second PAA graph. Pagination can be null for older saved jobs.
+
 When a tool returns inline MCP media, the CLI writes each block to a private local file and prints its path instead of dumping base64. Use `--media-dir <path>` to choose the destination; the default is `~/Downloads/mcp-scraper`.
 
 ### `mcpscraper search <query>`

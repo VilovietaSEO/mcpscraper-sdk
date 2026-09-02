@@ -4,6 +4,19 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-09-02 — verified against mcp-scraper 0.87.0 / mcp-memory 1.21.2
+
+### Added
+
+- Added typed `pages: 1 | 2` inputs for synchronous and durable PAA harvesting, plus nullable pagination results that report requested and captured pages, per-page organic counts, and a bounded page-two outcome.
+- Added a runnable durable two-page PAA example. It reuses one idempotency key, polls the original job, and makes clear that page two adds organic results while PAA is expanded once from the preserved first page.
+
+### Changed
+
+- Regenerated every unified Node, Python, CLI, and cURL surface from the exact 377-tool MCP Scraper 0.87.0 contract.
+- Synchronized the `reddit_thread` and `reddit_trending` descriptions shipped by MCP Scraper 0.86.1–0.86.4, documenting the bounded primary and backup attempt behavior that had not yet reached the SDK contract.
+- Prepared `mcpscraper-sdk` 0.41.0, `mcpscraper-memory-sdk` 0.41.0, `mcpscraper-cli` 0.40.0, Python `mcpscraper-sdk` 0.39.0, and Python `mcpscraper-memory-sdk` 0.37.0.
+
 ## [0.40.0] - 2026-09-01 — verified against mcp-scraper 0.86.0 / mcp-memory 1.21.2
 
 ### Added

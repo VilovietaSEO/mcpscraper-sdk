@@ -210,6 +210,12 @@ curl https://mcpscraper.dev/mcp \
 
 ### Search
 
+PAA harvests capture one organic page by default. Pass `pages: 2` to add the
+second organic-results page when Google offers it; the service preserves page
+one and expands its PAA graph exactly once. Durable status returns nullable
+`pagination` for compatibility with jobs saved before this contract. See the
+runnable [`examples/paa-two-page.mjs`](./examples/paa-two-page.mjs).
+
 <details open><summary>Node.js</summary>
 
 ```ts

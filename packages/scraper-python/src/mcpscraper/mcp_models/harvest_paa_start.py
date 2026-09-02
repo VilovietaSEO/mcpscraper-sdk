@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class HarvestPaaStartInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
+    pages: int | None = Field(None, alias="pages", description="Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.")
     query: str = Field(..., alias="query", description="The search topic, exactly as it should be searched, e.g. \"best hvac company in Denver\". Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.")
     location: str | None = Field(None, alias="location", description="Where Google should think the searcher is, e.g. \"Denver, CO\". Sets the Google UULE parameter only — it never changes your query text and never selects a proxy. To put the place in the search terms too, write it into query.")
     max_questions: int | None = Field(None, alias="maxQuestions", description="PAA questions to extract. Default 30, maximum 200. Use 10 for quick probes, 100-200 for deep research. Billed per extracted question; unused hold refunded.")
