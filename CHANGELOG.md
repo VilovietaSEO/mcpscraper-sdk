@@ -14,8 +14,15 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 ### Changed
 
 - Regenerated every unified Node, Python, CLI, and cURL surface from the exact 377-tool MCP Scraper 0.87.0 contract.
-- Synchronized the `reddit_thread` and `reddit_trending` descriptions shipped by MCP Scraper 0.86.1–0.86.4, documenting the bounded primary and backup attempt behavior that had not yet reached the SDK contract.
 - Prepared `mcpscraper-sdk` 0.41.0, `mcpscraper-memory-sdk` 0.41.0, `mcpscraper-cli` 0.40.0, Python `mcpscraper-sdk` 0.39.0, and Python `mcpscraper-memory-sdk` 0.37.0.
+
+
+## [0.40.1] - 2026-09-02 — verified against mcp-scraper 0.86.1 / mcp-memory 1.21.2
+
+### Changed
+
+- Regenerated the 377-tool unified contract and CLI guidance so `reddit_thread` and hydrated `reddit_trending` calls describe the two-primary, two-backup early-stop retry ladder and its 25-comment backup cap.
+- Prepared `mcpscraper-sdk` 0.40.1, `mcpscraper-memory-sdk` 0.40.1, `mcpscraper-cli` 0.39.1, Python `mcpscraper-sdk` 0.38.1, and Python `mcpscraper-memory-sdk` 0.36.1 without changing method names or request schemas.
 
 ## [0.40.0] - 2026-09-01 — verified against mcp-scraper 0.86.0 / mcp-memory 1.21.2
 
