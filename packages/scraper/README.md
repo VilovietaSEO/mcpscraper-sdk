@@ -89,6 +89,13 @@ Integrations are included with an active Starter plan or higher: OAuth connect/r
 
 Core operations are flat on the client: `startHarvest`, `searchSerp`, `harvestPaa`, `extractUrl`, `mapSiteUrls`, `extractSite`, `auditSite`, `getExtractSiteStatus`, `archiveRead`, `listJobs`, `getJob`, `getHistory`, `getLedger`.
 
+For a durable PAA harvest, `client.tools.other.harvestPaaStart` accepts
+`pages: 1 | 2` and defaults to one. Two pages add page-two organic results when
+available while expanding only the preserved page-one PAA graph. Poll the same
+`jobId` with `harvestPaaStatus`; its `progress.pagination` and
+`result.pagination` are nullable for older saved jobs. The complete workflow is
+in [`../../examples/paa-two-page.mjs`](../../examples/paa-two-page.mjs).
+
 ### Durable acquisition
 
 Long-running agents can start SERP/PAA work once and poll the provider-owned job

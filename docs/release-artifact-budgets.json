@@ -1,59 +1,129 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "basis": "Last published artifact plus five percent byte headroom; file counts may not increase for this contract-withdrawal release.",
-    "source": "npm and PyPI registry artifacts downloaded on 2026-09-01",
+    "basis": "Current registry artifact plus five percent byte headroom; file counts may not increase for this additive generated-contract release.",
+    "source": "npm and PyPI registry artifacts downloaded on 2026-09-02",
     "failClosed": true
   },
   "artifacts": [
     {
       "package": "mcpscraper-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.39.0",
-      "baseline": { "version": "0.38.0", "sha256": "70da3639c853efb18cc6beec6c732fe20215a7653e7f89c0158df4c3ac5898ec", "compressedBytes": 80731, "unpackedBytes": 977712, "fileCount": 6 },
-      "maximum": { "compressedBytes": 84768, "unpackedBytes": 1026598, "fileCount": 6 }
+      "candidateVersion": "0.41.0",
+      "baseline": {
+        "version": "0.40.0",
+        "sha256": "95db887e9b57d00c133885fd761dab18031f36bfb288b5ef9e00f8cfd9c3b1bf",
+        "compressedBytes": 80732,
+        "unpackedBytes": 977731,
+        "fileCount": 6
+      },
+      "maximum": {
+        "compressedBytes": 84769,
+        "unpackedBytes": 1026618,
+        "fileCount": 6
+      }
     },
     {
       "package": "mcpscraper-memory-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.39.0",
-      "baseline": { "version": "0.38.0", "sha256": "4939248660072b61469ccfd6137ef5c907a314d384b12a1fecd0531596f9755c", "compressedBytes": 291867, "unpackedBytes": 10920754, "fileCount": 5 },
-      "maximum": { "compressedBytes": 306461, "unpackedBytes": 11466792, "fileCount": 5 }
+      "candidateVersion": "0.41.0",
+      "baseline": {
+        "version": "0.40.0",
+        "sha256": "209d4404bd52154d3d0e80b07c4f13fcfba2e51baf6468b0a08889549680dbd1",
+        "compressedBytes": 285178,
+        "unpackedBytes": 10641177,
+        "fileCount": 5
+      },
+      "maximum": {
+        "compressedBytes": 299437,
+        "unpackedBytes": 11173236,
+        "fileCount": 5
+      }
     },
     {
       "package": "mcpscraper-cli",
       "format": "npm-tgz",
-      "candidateVersion": "0.38.0",
-      "baseline": { "version": "0.37.0", "sha256": "3f8739bfac75bcfa3002dd62dcaa892d7e7341daddedf4e1dc863f785bcd77f9", "compressedBytes": 158907, "unpackedBytes": 1137309, "fileCount": 3 },
-      "maximum": { "compressedBytes": 166853, "unpackedBytes": 1194175, "fileCount": 3 }
+      "candidateVersion": "0.40.0",
+      "baseline": {
+        "version": "0.39.0",
+        "sha256": "39977ab006d3daa13b9a6b592beecde88eb98916463d40a4fddb75012587b815",
+        "compressedBytes": 156727,
+        "unpackedBytes": 1139019,
+        "fileCount": 3
+      },
+      "maximum": {
+        "compressedBytes": 164564,
+        "unpackedBytes": 1195970,
+        "fileCount": 3
+      }
     },
     {
       "package": "mcpscraper-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.37.0",
-      "baseline": { "version": "0.36.0", "sha256": "575496529a34c221fb3deef6427f4bc45623afb22c1ff0eef1659781562757d1", "compressedBytes": 371131, "unpackedBytes": 1071123, "fileCount": 384 },
-      "maximum": { "compressedBytes": 389688, "unpackedBytes": 1124680, "fileCount": 384 }
+      "candidateVersion": "0.39.0",
+      "baseline": {
+        "version": "0.38.0",
+        "sha256": "2506eb3d7414e764cf490d79da6f19e407b4bbced8000aafc86dad2929c231ca",
+        "compressedBytes": 376728,
+        "unpackedBytes": 1089622,
+        "fileCount": 388
+      },
+      "maximum": {
+        "compressedBytes": 395565,
+        "unpackedBytes": 1144104,
+        "fileCount": 388
+      }
     },
     {
       "package": "mcpscraper-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.37.0",
-      "baseline": { "version": "0.36.0", "sha256": "a5d0c62dd0f82acf283bd03b45fdd502fa40c6fabfff57507940da14f14241f5", "compressedBytes": 146149, "unpackedBytes": 1040285, "fileCount": 385 },
-      "maximum": { "compressedBytes": 153457, "unpackedBytes": 1092300, "fileCount": 385 }
+      "candidateVersion": "0.39.0",
+      "baseline": {
+        "version": "0.38.0",
+        "sha256": "975ce450b39473b3a3814709755d1cd6e52bbc7c46b68f679f79ff60ffe03015",
+        "compressedBytes": 146480,
+        "unpackedBytes": 1058656,
+        "fileCount": 389
+      },
+      "maximum": {
+        "compressedBytes": 153804,
+        "unpackedBytes": 1111589,
+        "fileCount": 389
+      }
     },
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.35.0",
-      "baseline": { "version": "0.34.0", "sha256": "f5c9f3384054a78d1fcdd11d3537d52d0b54fb8d18645e5b10a2d12e18b7e17b", "compressedBytes": 553285, "unpackedBytes": 1428893, "fileCount": 624 },
-      "maximum": { "compressedBytes": 580950, "unpackedBytes": 1500338, "fileCount": 624 }
+      "candidateVersion": "0.37.0",
+      "baseline": {
+        "version": "0.36.0",
+        "sha256": "a2e9448f07387e5e9aead4efeb889e4dc6223285d8590b5d8431b8fc4210ba42",
+        "compressedBytes": 580262,
+        "unpackedBytes": 1503230,
+        "fileCount": 655
+      },
+      "maximum": {
+        "compressedBytes": 609276,
+        "unpackedBytes": 1578392,
+        "fileCount": 655
+      }
     },
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.35.0",
-      "baseline": { "version": "0.34.0", "sha256": "684dd21525df55045e538eb1ab0fefb51c151ce7184b665769e92db383ea4bff", "compressedBytes": 189003, "unpackedBytes": 1364843, "fileCount": 625 },
-      "maximum": { "compressedBytes": 198454, "unpackedBytes": 1433086, "fileCount": 625 }
+      "candidateVersion": "0.37.0",
+      "baseline": {
+        "version": "0.36.0",
+        "sha256": "c16787df9c51cc60a11d84f18569de0d2d4be2949087f6ba61be422e4568c6ac",
+        "compressedBytes": 194505,
+        "unpackedBytes": 1436345,
+        "fileCount": 656
+      },
+      "maximum": {
+        "compressedBytes": 204231,
+        "unpackedBytes": 1508163,
+        "fileCount": 656
+      }
     }
   ]
 }

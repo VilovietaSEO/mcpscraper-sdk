@@ -58,6 +58,12 @@ The direct Memory contract contains 148 tools. `MemoryClient` preserves the esta
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
+The unified MCP client supports two-page PAA acquisition through
+`client.other.harvestPaaStart({ pages: 2, ... })`. One page remains the default;
+page two adds organic results when available and does not create another PAA
+graph. Poll the returned job with `harvestPaaStatus` and treat pagination as
+nullable for older saved jobs.
+
 Every method's input/output types are generated from the live tool schemas (see `src/generated/`, produced by `npm run generate` at the repo root from `contracts/memory.tools.json`) — no hand-maintained duplicate types to drift out of sync.
 
 ## Getting an API key

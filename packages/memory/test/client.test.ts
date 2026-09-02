@@ -218,6 +218,42 @@ test('assistant pagination and idempotent approval bindings use exact wire field
   ])
 })
 
+test('durable PAA sends two-page acquisition through one generated job workflow', async () => {
+  const calls: Array<{ name: string; arguments: Record<string, unknown> }> = []
+  const client = new McpToolsClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch((_url, init) => {
+      const body = JSON.parse(String(init.body))
+      calls.push(body.params)
+      const structuredContent = body.params.name === 'harvest_paa_start'
+        ? {
+            jobId: 'paa_job_1', operationId: 'paa_job_1', taskId: 'paa_job_1',
+            status: { state: 'pending', terminal: false, pollAfterSeconds: 2, retryGuidance: 'poll' },
+            replayed: false, statusTool: 'harvest_paa_status',
+          }
+        : {
+            jobId: 'paa_job_1', operationId: 'paa_job_1', taskId: 'paa_job_1',
+            status: { state: 'running', terminal: false, pollAfterSeconds: 2, retryGuidance: 'poll' },
+            replayed: false,
+          }
+      return { status: 200, json: { jsonrpc: '2.0', id: body.id, result: { structuredContent } } }
+    }),
+  })
+
+  const started = await client.other.harvestPaaStart({
+    query: 'roof repair', pages: 2, maxQuestions: 10, idempotencyKey: 'paa-two-page:test:1',
+  })
+  await client.other.harvestPaaStatus({ jobId: started.jobId })
+
+  assert.deepEqual(calls, [
+    {
+      name: 'harvest_paa_start',
+      arguments: { query: 'roof repair', pages: 2, maxQuestions: 10, idempotencyKey: 'paa-two-page:test:1' },
+    },
+    { name: 'harvest_paa_status', arguments: { jobId: 'paa_job_1' } },
+  ])
+})
+
 test('direct Memory assistant client creates a context packet with the exact tool name', async () => {
   let capturedBody: any
   const client = new MemoryClient({

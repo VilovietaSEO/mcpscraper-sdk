@@ -47,6 +47,12 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 `client.tools` is the generated 377-tool MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
 
+For durable PAA acquisition, call
+`client.tools.other.harvest_paa_start(pages=2, ...)`, then poll its `job_id` with
+`harvest_paa_status`. One page is the default. A second page contributes organic
+results when available; all PAA questions still come from the preserved first
+page. Pagination is nullable for older saved jobs.
+
 Use `client.tools.call_tool_result(name, args)` when a multimodal tool must preserve its native MCP image, audio, or resource blocks. `call_tool(...)` remains the parsed, backward-compatible path.
 
 ```python

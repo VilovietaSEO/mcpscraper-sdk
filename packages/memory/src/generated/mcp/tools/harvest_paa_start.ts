@@ -1,5 +1,9 @@
 export interface Input {
   /**
+   * Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.
+   */
+  pages?: number;
+  /**
    * The search topic, exactly as it should be searched, e.g. "best hvac company in Denver". Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.
    */
   query: string;

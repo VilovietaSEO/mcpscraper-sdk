@@ -35,6 +35,12 @@ Use `McpToolsClient(api_key="sk_...")` for all 377 unified tools, including prov
 
 Use `client.call_tool_result(name, args)` for native MCP image, audio, or resource blocks. The existing `call_tool` method keeps returning the parsed structured/text value.
 
+The unified MCP client accepts `pages=2` on
+`client.other.harvest_paa_start(...)`. It keeps one page as the default, adds
+page-two organic results when available, and expands PAA only on the preserved
+first page. Poll the same job with `harvest_paa_status`; pagination remains
+nullable for results saved under older contracts.
+
 ## Don't have a memory key?
 
 If you already have an `mcpscraper.dev` API key and don't want to provision a separate `mk_...` memory key, use `mcpscraper-sdk`'s `ScraperClient.memory_tools` instead — it exposes this exact same set of 148 tools, dispatched through your scraper API key.
