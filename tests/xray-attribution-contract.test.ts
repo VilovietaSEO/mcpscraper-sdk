@@ -25,7 +25,7 @@ test('the six provider-neutral X-Ray attribution tools project into every genera
     tools: Array<Record<string, any>>
   }
   assert.equal(manifest.toolCount, 377)
-  assert.match(manifest.generatedFrom, /mcp-scraper 0\.86\.0/)
+  assert.match(manifest.generatedFrom, /mcp-scraper 0\.86\.1/)
 
   const [cli, curl, nodeMethods, scraperPython, memoryPython] = await Promise.all([
     readFile('packages/cli/src/generated-tools.ts', 'utf8'),

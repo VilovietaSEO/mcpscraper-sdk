@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.86.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "92ae894d15affa63681976856e5e85c64f7ef5e1c344ffd6684c3904cd90646c",
+  "generatedFrom": "mcp-scraper 0.86.1 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "6bdbb6b16079e634e75b774aa7a483d545fe48089113f5dda31c9c1bec0f3a6f",
   "toolCount": 377,
   "tools": [
     {
@@ -73125,7 +73125,7 @@
     {
       "name": "reddit_thread",
       "title": "Reddit Thread + Comments",
-      "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. The managed residential browser is primary; a bounded managed-browser backup can recover the post and up to 25 comments when the primary fails. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
+      "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. It makes up to two fresh managed residential browser attempts, then up to two managed-browser backup attempts that can recover the post and 25 comments, stopping on the first accepted result. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
       "category": "reddit",
       "methodName": "thread",
       "inputSchema": {
@@ -73304,7 +73304,7 @@
     {
       "name": "reddit_trending",
       "title": "Reddit Trending",
-      "description": "Discover Reddit conversations through a site-restricted web search for the last week, month, or all time. With includeComments:true, each candidate is opened on current Reddit through a managed residential browser, with a bounded backup of up to 25 comments after primary failure, and ranked from rendered engagement; discovery, each hydrated thread, and returned comments are billed separately. Set includeComments:false for the faster discovery-only result, and inspect resultQuality and discoverySource before treating an empty result as meaningful.",
+      "description": "Discover Reddit conversations through a site-restricted web search for the last week, month, or all time. With includeComments:true, each candidate is hydrated with up to two fresh managed residential browser attempts followed by up to two managed-browser backup attempts capped at 25 comments, stopping on the first accepted result, and ranked from rendered engagement; discovery, each hydrated thread, and returned comments are billed separately. Set includeComments:false for the faster discovery-only result, and inspect resultQuality and discoverySource before treating an empty result as meaningful.",
       "category": "reddit",
       "methodName": "trending",
       "inputSchema": {
