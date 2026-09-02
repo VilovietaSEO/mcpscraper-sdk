@@ -14,4 +14,9 @@ class ImageAssetMoveInput(BaseModel):
 
 
 class ImageAssetMoveOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+    ok: bool = Field(..., alias="ok", description="")
+    asset: dict[str, Any] | None = Field(None, alias="asset", description="")
+    code: str | None = Field(None, alias="code", description="")
+    error: str | None = Field(None, alias="error", description="")

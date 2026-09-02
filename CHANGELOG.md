@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.42.0] - 2026-09-02 — verified against mcp-scraper 0.88.0 / mcp-memory 1.22.0
+
+### Changed
+
+- Made every Node, Python, and CLI Memory client use `MCP_SCRAPER_API_KEY` and the canonical `https://mcpscraper.dev/mcp` endpoint.
+- Regenerated the unified surface from the exact 375-tool contract and the Memory-first surface from the strict 148-tool contract.
+- Prepared `mcpscraper-sdk` 0.42.0, `mcpscraper-memory-sdk` 0.42.0, `mcpscraper-cli` 0.41.0, Python `mcpscraper-sdk` 0.40.0, and Python `mcpscraper-memory-sdk` 0.38.0.
+
+### Deprecated
+
+- Memory key issuance and scope mutation now fail locally with `legacy_key_issuance_retired`; existing direct credentials retain a one-release revoke window documented by MCP Scraper.
+
 ## [0.41.0] - 2026-09-02 — verified against mcp-scraper 0.87.0 / mcp-memory 1.21.2
 
 ### Added
@@ -17,7 +29,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 - Prepared `mcpscraper-sdk` 0.41.0, `mcpscraper-memory-sdk` 0.41.0, `mcpscraper-cli` 0.40.0, Python `mcpscraper-sdk` 0.39.0, and Python `mcpscraper-memory-sdk` 0.37.0.
 
 
-## [0.40.1] - 2026-09-02 — verified against mcp-scraper 0.86.1 / mcp-memory 1.21.2
+## [0.40.1] - 2026-09-02 — verified against mcp-scraper 0.86.5 / mcp-memory 1.21.2
 
 ### Changed
 

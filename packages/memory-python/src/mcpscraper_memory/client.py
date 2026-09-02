@@ -24,8 +24,9 @@ from ._generated_client import (
     WebhooksNamespace,
 )
 from ._direct_generated_client import AssistantNamespace, CrmNamespace, ResearchNamespace
+from ._direct_tool_name_map import DIRECT_TO_UNIFIED_TOOL_NAMES
 
-DEFAULT_BASE_URL = "https://memory.mcpscraper.dev"
+DEFAULT_BASE_URL = "https://mcpscraper.dev/mcp"
 
 
 class MemoryClient:
@@ -61,18 +62,24 @@ class MemoryClient:
         self.webhooks = WebhooksNamespace(self._call_tool)
 
     def _call_tool(self, name: str, arguments: dict[str, Any]) -> Any:
+        unified_name = DIRECT_TO_UNIFIED_TOOL_NAMES.get(name, name)
+        if unified_name in {"access-issue-key", "access-set-scope"}:
+            raise MemoryApiError(
+                "Legacy Memory key issuance and scope mutation are retired; use "
+                "MCP_SCRAPER_API_KEY with https://mcpscraper.dev/mcp."
+            )
         response = self._session.post(
-            f"{self._base_url}/mcp",
+            self._base_url,
             headers={
                 "content-type": "application/json",
                 "accept": "application/json, text/event-stream",
-                "authorization": f"Bearer {self._api_key}",
+                "x-api-key": self._api_key,
             },
             json={
                 "jsonrpc": "2.0",
                 "id": next(self._rpc_id),
                 "method": "tools/call",
-                "params": {"name": name, "arguments": arguments},
+                "params": {"name": unified_name, "arguments": arguments},
             },
         )
 

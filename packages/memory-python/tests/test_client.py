@@ -17,7 +17,7 @@ from mcpscraper_memory.models.get_schedule_status import GetScheduleStatusOutput
 from mcpscraper_memory.models.resume_scheduled_action import ResumeScheduledActionOutput
 from mcpscraper_memory.models.set_schedule_entitlement import SetScheduleEntitlementInput
 
-BASE_URL = "https://memory.mcpscraper.dev"
+BASE_URL = "https://mcpscraper.dev/mcp"
 
 
 @responses.activate
@@ -38,13 +38,13 @@ def test_memory_search_sends_correct_wire_tool_name_and_parses_structured_conten
             ),
         )
 
-    responses.add_callback(responses.POST, f"{BASE_URL}/mcp", callback=handler, content_type="application/json")
+    responses.add_callback(responses.POST, BASE_URL, callback=handler, content_type="application/json")
 
-    client = MemoryClient(api_key="mk_test")
+    client = MemoryClient(api_key="sk_test")
     result = client.memory.search(query="hello world")
 
     assert captured["body"]["method"] == "tools/call"
-    assert captured["body"]["params"]["name"] == "searchTool"
+    assert captured["body"]["params"]["name"] == "memory-search"
     assert captured["body"]["params"]["arguments"] == {"query": "hello world"}
     assert result.ok is True
     assert result.results[0]["text"] == "hello"
@@ -68,9 +68,9 @@ def test_files_file_asset_save_exposes_original_attachment_persistence():
             ),
         )
 
-    responses.add_callback(responses.POST, f"{BASE_URL}/mcp", callback=handler, content_type="application/json")
+    responses.add_callback(responses.POST, BASE_URL, callback=handler, content_type="application/json")
 
-    result = MemoryClient(api_key="mk_test").files.file_asset_save(
+    result = MemoryClient(api_key="sk_test").files.file_asset_save(
         artifactId="artifact_gmail_attachment_1",
         title="invoice.pdf",
         idempotencyKey="gmail-import-attachment-1",
@@ -133,7 +133,7 @@ def test_mcp_tools_client_parses_hosted_sse_response():
 
 
 @responses.activate
-def test_access_headers_include_accept_and_authorization():
+def test_access_headers_use_the_single_scraper_key():
     captured = {}
 
     def handler(request):
@@ -142,27 +142,33 @@ def test_access_headers_include_accept_and_authorization():
         vault = {"vault": "Ideas", "handle": "Ideas", "role": "owner", "notes": 3, "bytes": 1024, "kind": "notes"}
         return (200, {}, json.dumps({"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": {"ok": True, "vaults": [vault]}}}))
 
-    responses.add_callback(responses.POST, f"{BASE_URL}/mcp", callback=handler, content_type="application/json")
+    responses.add_callback(responses.POST, BASE_URL, callback=handler, content_type="application/json")
 
-    client = MemoryClient(api_key="mk_test")
+    client = MemoryClient(api_key="sk_test")
     result = client.vaults.list_vaults()
 
     assert captured["headers"]["accept"] == "application/json, text/event-stream"
-    assert captured["headers"]["authorization"] == "Bearer mk_test"
-    assert captured["body"]["params"]["name"] == "listVaultsTool"
+    assert captured["headers"]["x-api-key"] == "sk_test"
+    assert captured["body"]["params"]["name"] == "list-vaults"
     assert result.ok is True
+
+
+def test_retired_memory_key_mutations_fail_without_a_request():
+    client = MemoryClient(api_key="sk_test")
+    with pytest.raises(MemoryApiError, match="Legacy Memory key issuance"):
+        client.access.issue_key(granteeIdentity="fixture@example.test", vaults=["Personal"])
 
 
 @responses.activate
 def test_json_rpc_error_raises_memory_api_error():
     responses.add(
         responses.POST,
-        f"{BASE_URL}/mcp",
+        BASE_URL,
         json={"jsonrpc": "2.0", "id": 1, "error": {"code": -32602, "message": "Invalid params"}},
         status=200,
     )
 
-    client = MemoryClient(api_key="mk_test")
+    client = MemoryClient(api_key="sk_test")
     with pytest.raises(MemoryApiError, match="Invalid params"):
         client.memory.search(query="x")
 
@@ -171,7 +177,7 @@ def test_json_rpc_error_raises_memory_api_error():
 def test_mcp_tool_level_is_error_raises_memory_api_error():
     responses.add(
         responses.POST,
-        f"{BASE_URL}/mcp",
+        BASE_URL,
         json={
             "jsonrpc": "2.0",
             "id": 1,
@@ -180,16 +186,16 @@ def test_mcp_tool_level_is_error_raises_memory_api_error():
         status=200,
     )
 
-    client = MemoryClient(api_key="mk_test")
+    client = MemoryClient(api_key="sk_test")
     with pytest.raises(MemoryApiError, match="vault not found"):
         client.vaults.list_vaults()
 
 
 @responses.activate
 def test_non_2xx_http_response_raises_memory_api_error():
-    responses.add(responses.POST, f"{BASE_URL}/mcp", body="server error", status=500)
+    responses.add(responses.POST, BASE_URL, body="server error", status=500)
 
-    client = MemoryClient(api_key="mk_test")
+    client = MemoryClient(api_key="sk_test")
     with pytest.raises(MemoryApiError) as exc_info:
         client.memory.search(query="x")
     assert exc_info.value.http_status == 500
@@ -204,8 +210,8 @@ def test_direct_research_and_crm_namespaces_preserve_domain_specific_wire_names(
         calls.append(body["params"])
         return (200, {}, json.dumps({"jsonrpc": "2.0", "id": body["id"], "result": {"structuredContent": {"ok": True, "message": "accepted"}}}))
 
-    responses.add_callback(responses.POST, f"{BASE_URL}/mcp", callback=handler, content_type="application/json")
-    client = MemoryClient(api_key="mk_test")
+    responses.add_callback(responses.POST, BASE_URL, callback=handler, content_type="application/json")
+    client = MemoryClient(api_key="sk_test")
     client.research.person_capture(
         baseRevision=0,
         idempotencyKey="research-person-1",
@@ -219,7 +225,7 @@ def test_direct_research_and_crm_namespaces_preserve_domain_specific_wire_names(
         relationshipTypes=["coworker"],
     )
 
-    assert [call["name"] for call in calls] == ["researchPersonCaptureTool", "crmUpsertPersonTool"]
+    assert [call["name"] for call in calls] == ["research-person-capture", "crm-person-upsert"]
 
 
 def test_governed_models_reject_cross_domain_unknown_fields():

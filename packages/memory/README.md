@@ -1,10 +1,12 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for all 377 tools at [mcpscraper.dev](https://mcpscraper.dev) plus the direct 148-tool [memory.mcpscraper.dev](https://memory.mcpscraper.dev) API.
+Official TypeScript/JavaScript clients for the unified 375-tool MCP Scraper catalog. The direct
+148-tool Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-These are thin clients: `MemoryClient` calls the direct memory MCP with a memory Bearer key, while `McpToolsClient` calls the unified MCP with a scraper API key. No product logic lives in this package.
+Both `MemoryClient` and `McpToolsClient` call `https://mcpscraper.dev/mcp` with the same MCP Scraper
+API key. No product logic lives in this package.
 
 ## Install
 
@@ -35,7 +37,7 @@ OAuth connect/reconnect and direct connected-service operations do not currently
 ```ts
 import { MemoryClient, MemoryApiError } from 'mcpscraper-memory-sdk'
 
-const client = new MemoryClient({ apiKey: process.env.MCP_MEMORY_API_KEY! })
+const client = new MemoryClient({ apiKey: process.env.MCP_SCRAPER_API_KEY! })
 
 try {
   const results = await client.memory.search({ query: 'q3 roadmap decisions' })
@@ -54,7 +56,10 @@ try {
 
 ## Namespaces
 
-The direct Memory contract contains 148 tools. `MemoryClient` preserves the established compatibility namespaces and adds source-generated `assistant`, `research`, and `crm` namespaces. Use Research for sourced knowledge about a subject and CRM for an actual relationship such as a friend, coworker, prospect, or customer. Counterpart operations are explicit preview/apply links and copy no fields. External CRM providers remain unavailable; this package exposes no provider setup or write wrapper. `McpToolsClient` is generated from [`contracts/mcp.tools.json`](../../contracts/mcp.tools.json) and contains all 377 unified tools. Scheduled results and saved artifact templates remain under `client.schedule`; run IDs and cursors are opaque, and `artifactSelection: { mode: 'none' }` does not disable Memory-note writing.
+`MemoryClient` preserves the established compatibility namespaces and maps them to public root tool
+IDs. Research remains sourced knowledge; CRM remains actual relationships. External CRM providers
+remain unavailable. Retired direct-key issue/scope methods fail explicitly. `McpToolsClient` contains
+all 375 unified tools.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
@@ -68,7 +73,8 @@ Every method's input/output types are generated from the live tool schemas (see 
 
 ## Getting an API key
 
-Issue one via the `access-issue-key` tool (or `client.access.issueKey(...)` once you have an initial key), or through the memory dashboard.
+Create or rotate the one MCP Scraper key at the account dashboard and expose it as
+`MCP_SCRAPER_API_KEY`. Do not create a separate Memory key for new setup.
 
 ## Errors
 

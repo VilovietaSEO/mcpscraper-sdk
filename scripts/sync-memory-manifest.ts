@@ -1,7 +1,6 @@
 import { readFileSync } from 'node:fs'
 
 const MANIFEST_PATH = new URL('../contracts/memory.tools.json', import.meta.url)
-const ENDPOINT = 'https://memory.mcpscraper.dev/mcp'
 
 interface ManifestTool {
   name: string
@@ -15,40 +14,6 @@ interface Manifest {
 interface RpcTool {
   name: string
   inputSchema: unknown
-}
-
-async function readRpcPayload<T>(response: Response): Promise<T> {
-  const text = await response.text()
-  if (!response.headers.get('content-type')?.includes('text/event-stream')) return JSON.parse(text) as T
-  const data = text
-    .split(/\r?\n/)
-    .filter(line => line.startsWith('data:'))
-    .map(line => line.slice(5).trim())
-    .filter(Boolean)
-  if (!data.length) throw new Error('tools/list returned an empty event stream')
-  return JSON.parse(data.at(-1)!) as T
-}
-
-async function fetchLiveTools(apiKey: string): Promise<RpcTool[]> {
-  const res = await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      Accept: 'application/json, text/event-stream',
-    },
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'tools/list',
-    }),
-  })
-  if (!res.ok) {
-    throw new Error(`tools/list failed: ${res.status} ${await res.text()}`)
-  }
-  const body = await readRpcPayload<{ result?: { tools?: RpcTool[] }; error?: { message: string } }>(res)
-  if (body.error) throw new Error(`tools/list RPC error: ${body.error.message}`)
-  return body.result?.tools ?? []
 }
 
 function canonicalize(value: unknown): unknown {
@@ -71,9 +36,8 @@ function schemaSignature(schema: unknown): string {
 
 async function main(): Promise<void> {
   const localManifestPath = process.env.MCP_MEMORY_TOOL_MANIFEST_PATH
-  const apiKey = process.env.MCP_MEMORY_API_KEY
-  if (!localManifestPath && !apiKey) {
-    console.error('MCP_MEMORY_TOOL_MANIFEST_PATH or MCP_MEMORY_API_KEY is required to check tool drift.')
+  if (!localManifestPath) {
+    console.error('MCP_MEMORY_TOOL_MANIFEST_PATH is required to check direct-runtime tool drift.')
     process.exitCode = 1
     return
   }
@@ -81,9 +45,7 @@ async function main(): Promise<void> {
   const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8')) as Manifest
   const manifestByName = new Map(manifest.tools.map(t => [t.name, t]))
 
-  const live = localManifestPath
-    ? ((JSON.parse(readFileSync(localManifestPath, 'utf8')) as { tools?: RpcTool[] }).tools ?? [])
-    : await fetchLiveTools(apiKey!)
+  const live = (JSON.parse(readFileSync(localManifestPath, 'utf8')) as { tools?: RpcTool[] }).tools ?? []
   const liveByName = new Map(live.map(t => [t.name, t]))
 
   const missingFromLive = [...manifestByName.keys()].filter(name => !liveByName.has(name))
@@ -105,7 +67,7 @@ async function main(): Promise<void> {
   if (missingFromManifest.length) console.log('Live but missing from manifest:', missingFromManifest)
   if (schemaDrift.length) console.log('Input schema drift:', schemaDrift)
   console.log(clean
-    ? localManifestPath ? 'OK — manifest matches the complete local Memory registry.' : 'OK — manifest matches live tools/list.'
+    ? 'OK — manifest matches the complete local Memory registry.'
     : 'DRIFT DETECTED — update contracts/memory.tools.json.')
 
   process.exitCode = clean ? 0 : 1

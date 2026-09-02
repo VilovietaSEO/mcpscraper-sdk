@@ -19,9 +19,13 @@ function fakeFetch(handler: (url: string, init: RequestInit) => { status: number
 
 test('memory.search sends a tools/call JSON-RPC request and parses structuredContent', async () => {
   let capturedBody: any
+  let capturedUrl = ''
+  let capturedHeaders: HeadersInit | undefined
   const client = new MemoryClient({
-    apiKey: 'mk_test',
+    apiKey: 'sk_test',
     fetch: fakeFetch((url, init) => {
+      capturedUrl = url
+      capturedHeaders = init.headers
       capturedBody = JSON.parse(String(init.body))
       return {
         status: 200,
@@ -39,16 +43,35 @@ test('memory.search sends a tools/call JSON-RPC request and parses structuredCon
   const result = await client.memory.search({ query: 'hello world' })
 
   assert.equal(capturedBody.method, 'tools/call')
-  assert.equal(capturedBody.params.name, 'searchTool')
+  assert.equal(capturedBody.params.name, 'memory-search')
   assert.deepEqual(capturedBody.params.arguments, { query: 'hello world' })
+  assert.equal(capturedUrl, 'https://mcpscraper.dev/mcp')
+  assert.equal((capturedHeaders as Record<string, string>)['x-api-key'], 'sk_test')
+  assert.equal('authorization' in (capturedHeaders as Record<string, string>), false)
   assert.equal(result.ok, true)
   assert.equal(result.results?.[0]?.text, 'hello')
+})
+
+test('retired Memory key mutations fail before any network request', async () => {
+  let calls = 0
+  const client = new MemoryClient({
+    apiKey: 'sk_test',
+    fetch: fakeFetch(() => {
+      calls += 1
+      return { status: 500, json: {} }
+    }),
+  })
+  await assert.rejects(
+    () => client.access.issueKey({ granteeIdentity: 'fixture@example.test', vaults: ['Personal'] }),
+    /Legacy Memory key issuance and scope mutation are retired/,
+  )
+  assert.equal(calls, 0)
 })
 
 test('files.fileAssetSave exposes original attachment persistence with the exact wire contract', async () => {
   let capturedBody: any
   const client = new MemoryClient({
-    apiKey: 'mk_test',
+    apiKey: 'sk_test',
     fetch: fakeFetch((_url, init) => {
       capturedBody = JSON.parse(String(init.body))
       return {
@@ -79,7 +102,7 @@ test('files.fileAssetSave exposes original attachment persistence with the exact
 
 test('access.acceptShare round-trips through a text content block', async () => {
   const client = new MemoryClient({
-    apiKey: 'mk_test',
+    apiKey: 'sk_test',
     fetch: fakeFetch(() => ({
       status: 200,
       json: {
@@ -96,7 +119,7 @@ test('access.acceptShare round-trips through a text content block', async () => 
 
 test('a JSON-RPC error response throws MemoryApiError', async () => {
   const client = new MemoryClient({
-    apiKey: 'mk_test',
+    apiKey: 'sk_test',
     fetch: fakeFetch(() => ({
       status: 200,
       json: { jsonrpc: '2.0', id: 1, error: { code: -32602, message: 'Invalid params' } },
@@ -116,7 +139,7 @@ test('a JSON-RPC error response throws MemoryApiError', async () => {
 
 test('an MCP tool-level isError result throws MemoryApiError', async () => {
   const client = new MemoryClient({
-    apiKey: 'mk_test',
+    apiKey: 'sk_test',
     fetch: fakeFetch(() => ({
       status: 200,
       json: {
@@ -142,7 +165,7 @@ test('an MCP tool-level isError result throws MemoryApiError', async () => {
 
 test('a non-2xx HTTP response throws MemoryApiError with httpStatus set', async () => {
   const client = new MemoryClient({
-    apiKey: 'mk_bad',
+    apiKey: 'sk_bad',
     fetch: fakeFetch(() => ({ status: 401, json: { error: 'unauthorized' } })),
   })
 
@@ -257,7 +280,7 @@ test('durable PAA sends two-page acquisition through one generated job workflow'
 test('direct Memory assistant client creates a context packet with the exact tool name', async () => {
   let capturedBody: any
   const client = new MemoryClient({
-    apiKey: 'mk_test',
+    apiKey: 'sk_test',
     fetch: fakeFetch((_url, init) => {
       capturedBody = JSON.parse(String(init.body))
       return {
@@ -282,7 +305,7 @@ test('direct Memory assistant client creates a context packet with the exact too
 test('direct Research and CRM namespaces preserve domain-specific wire names', async () => {
   const calls: Array<{ name: string; arguments: Record<string, unknown> }> = []
   const client = new MemoryClient({
-    apiKey: 'mk_test',
+    apiKey: 'sk_test',
     fetch: fakeFetch((_url, init) => {
       const body = JSON.parse(String(init.body))
       calls.push(body.params)
@@ -306,7 +329,7 @@ test('direct Research and CRM namespaces preserve domain-specific wire names', a
     relationshipTypes: ['coworker'],
   })
 
-  assert.deepEqual(calls.map(call => call.name), ['researchPersonCaptureTool', 'crmUpsertPersonTool'])
+  assert.deepEqual(calls.map(call => call.name), ['research-person-capture', 'crm-person-upsert'])
 })
 
 test('McpToolsClient typed methods call the unified MCP wire name', async () => {

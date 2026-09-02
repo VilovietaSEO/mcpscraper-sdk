@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated 377-tool MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
+`client.tools` is the generated 375-tool MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
 
 For durable PAA acquisition, call
 `client.tools.other.harvest_paa_start(pages=2, ...)`, then poll its `job_id` with
@@ -126,14 +126,14 @@ print(page["memory"])  # {"deposited": True, "vault": "competitors", "noteId": "
 
 ## Memory tools, using only this API key
 
-`client.memory_tools.call_tool(name, args)` dispatches to any of the 121 memory.mcpscraper.dev tools through `POST /memory/mcp-call`, using only this mcpscraper.dev API key — no separate memory key needed:
+`client.memory_tools.call_tool(name, args)` dispatches to supported Memory tools through the root `POST /memory/mcp-call` bridge, using the same MCP Scraper API key:
 
 ```python
 hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing pages"})
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 377 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 375 unified MCP tools.
 
 ## Regenerating models
 

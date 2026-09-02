@@ -14,4 +14,9 @@ class ImageFolderCreateInput(BaseModel):
 
 
 class ImageFolderCreateOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+    ok: bool = Field(..., alias="ok", description="")
+    folder: dict[str, Any] | None = Field(None, alias="folder", description="")
+    code: str | None = Field(None, alias="code", description="")
+    error: str | None = Field(None, alias="error", description="")

@@ -54,7 +54,7 @@ test('complete local Memory registry adds file assets without a production round
 
   const result = spawnSync(process.execPath, ['--import', tsxLoader, updater], {
     cwd: directory,
-    env: { ...process.env, MCP_MEMORY_TOOL_MANIFEST_PATH: sourcePath, MCP_MEMORY_API_KEY: '' },
+    env: { ...process.env, MCP_MEMORY_TOOL_MANIFEST_PATH: sourcePath },
     encoding: 'utf8',
   })
   assert.equal(result.status, 0, result.stderr)

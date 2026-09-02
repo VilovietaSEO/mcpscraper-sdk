@@ -5,14 +5,12 @@ import * as AccessApproveSender from './tools/access-approve-sender.js'
 import * as AccessDeclineShare from './tools/access-decline-share.js'
 import * as AccessInboxSettings from './tools/access-inbox-settings.js'
 import * as AccessInviteAccount from './tools/access-invite-account.js'
-import * as AccessIssueKey from './tools/access-issue-key.js'
 import * as AccessListApprovedSenders from './tools/access-list-approved-senders.js'
 import * as AccessListKeys from './tools/access-list-keys.js'
 import * as AccessNoteInbox from './tools/access-note-inbox.js'
 import * as AccessRemoveApprovedSender from './tools/access-remove-approved-sender.js'
 import * as AccessRevokeKey from './tools/access-revoke-key.js'
 import * as AccessRevokeShare from './tools/access-revoke-share.js'
-import * as AccessSetScope from './tools/access-set-scope.js'
 import * as AccessShareNote from './tools/access-share-note.js'
 import * as AccessShareVault from './tools/access-share-vault.js'
 import * as AccessSwapVault from './tools/access-swap-vault.js'
@@ -31,16 +29,19 @@ import * as VaultsListSharedWithMe from './tools/list-shared-with-me.js'
 import * as VaultsListVaults from './tools/list-vaults.js'
 import * as VaultsProvisionDefaults from './tools/provision-defaults.js'
 import * as VaultsRouteMemory from './tools/route-memory.js'
+import * as AnalyticsApplySiteSetup from './tools/analytics_apply_site_setup.js'
 import * as AnalyticsArchiveEventDefinition from './tools/analytics_archive_event_definition.js'
 import * as AnalyticsCommitCrmImport from './tools/analytics_commit_crm_import.js'
 import * as AnalyticsCreateActivationDestination from './tools/analytics_create_activation_destination.js'
 import * as AnalyticsCreateCampaignLink from './tools/analytics_create_campaign_link.js'
 import * as AnalyticsCreateConversionRule from './tools/analytics_create_conversion_rule.js'
 import * as AnalyticsCreateEventDefinition from './tools/analytics_create_event_definition.js'
+import * as AnalyticsCreateExperiment from './tools/analytics_create_experiment.js'
 import * as AnalyticsCreateExport from './tools/analytics_create_export.js'
 import * as AnalyticsCreateForm from './tools/analytics_create_form.js'
 import * as AnalyticsCreateFunnel from './tools/analytics_create_funnel.js'
 import * as AnalyticsCreateLeadScore from './tools/analytics_create_lead_score.js'
+import * as AnalyticsCreatePostPurchaseSurvey from './tools/analytics_create_post_purchase_survey.js'
 import * as AnalyticsCreatePredictionTarget from './tools/analytics_create_prediction_target.js'
 import * as AnalyticsCreateSavedView from './tools/analytics_create_saved_view.js'
 import * as AnalyticsDeletePrivacySubject from './tools/analytics_delete_privacy_subject.js'
@@ -51,6 +52,7 @@ import * as AnalyticsExportGoogleAdsCsv from './tools/analytics_export_google_ad
 import * as AnalyticsExportMetaTechnical from './tools/analytics_export_meta_technical.js'
 import * as AnalyticsExportPrivacySubject from './tools/analytics_export_privacy_subject.js'
 import * as AnalyticsGetAcquisition from './tools/analytics_get_acquisition.js'
+import * as AnalyticsGetAttributionMethodology from './tools/analytics_get_attribution_methodology.js'
 import * as AnalyticsGetBusinessMetrics from './tools/analytics_get_business_metrics.js'
 import * as AnalyticsGetCandidateCoverage from './tools/analytics_get_candidate_coverage.js'
 import * as AnalyticsGetChannelBreakdown from './tools/analytics_get_channel_breakdown.js'
@@ -61,16 +63,20 @@ import * as AnalyticsGetCoverage from './tools/analytics_get_coverage.js'
 import * as AnalyticsGetDimensions from './tools/analytics_get_dimensions.js'
 import * as AnalyticsGetEntitlement from './tools/analytics_get_entitlement.js'
 import * as AnalyticsGetEvents from './tools/analytics_get_events.js'
+import * as AnalyticsGetExperiment from './tools/analytics_get_experiment.js'
 import * as AnalyticsGetForecast from './tools/analytics_get_forecast.js'
 import * as AnalyticsGetFunnel from './tools/analytics_get_funnel.js'
 import * as AnalyticsGetHealth from './tools/analytics_get_health.js'
+import * as AnalyticsGetImpactReport from './tools/analytics_get_impact_report.js'
 import * as AnalyticsGetOnboardingState from './tools/analytics_get_onboarding_state.js'
 import * as AnalyticsGetOverview from './tools/analytics_get_overview.js'
 import * as AnalyticsGetPaths from './tools/analytics_get_paths.js'
 import * as AnalyticsGetPersonJourney from './tools/analytics_get_person_journey.js'
+import * as AnalyticsGetPostPurchaseSurveyReport from './tools/analytics_get_post_purchase_survey_report.js'
 import * as AnalyticsGetPredictionEligibility from './tools/analytics_get_prediction_eligibility.js'
 import * as AnalyticsGetSessionTimeline from './tools/analytics_get_session_timeline.js'
 import * as AnalyticsGetTimeseries from './tools/analytics_get_timeseries.js'
+import * as AnalyticsGetViewEvidenceStatus from './tools/analytics_get_view_evidence_status.js'
 import * as AnalyticsGetVisitorJourney from './tools/analytics_get_visitor_journey.js'
 import * as AnalyticsListActivationDestinations from './tools/analytics_list_activation_destinations.js'
 import * as AnalyticsListActivationReceipts from './tools/analytics_list_activation_receipts.js'
@@ -91,11 +97,15 @@ import * as AnalyticsListSavedViews from './tools/analytics_list_saved_views.js'
 import * as AnalyticsListSessions from './tools/analytics_list_sessions.js'
 import * as AnalyticsListSites from './tools/analytics_list_sites.js'
 import * as AnalyticsListVisitors from './tools/analytics_list_visitors.js'
+import * as AnalyticsPrepareSiteSetup from './tools/analytics_prepare_site_setup.js'
 import * as AnalyticsPreviewCrmImport from './tools/analytics_preview_crm_import.js'
 import * as AnalyticsRecordExternalEvent from './tools/analytics_record_external_event.js'
 import * as AnalyticsRetryActivationDelivery from './tools/analytics_retry_activation_delivery.js'
 import * as AnalyticsSaveActivationMapping from './tools/analytics_save_activation_mapping.js'
 import * as AnalyticsSetActivationAutomation from './tools/analytics_set_activation_automation.js'
+import * as AnalyticsSetExperimentState from './tools/analytics_set_experiment_state.js'
+import * as AnalyticsSetPostPurchaseSurveyState from './tools/analytics_set_post_purchase_survey_state.js'
+import * as AnalyticsSetupSite from './tools/analytics_setup_site.js'
 import * as AnalyticsTestActivationDestination from './tools/analytics_test_activation_destination.js'
 import * as AnalyticsTestEventDefinition from './tools/analytics_test_event_definition.js'
 import * as AnalyticsTestFunnel from './tools/analytics_test_funnel.js'
@@ -103,20 +113,8 @@ import * as AnalyticsUpdateEventDefinition from './tools/analytics_update_event_
 import * as AnalyticsUpdateOnboardingPreferences from './tools/analytics_update_onboarding_preferences.js'
 import * as AnalyticsValidateActivationMapping from './tools/analytics_validate_activation_mapping.js'
 import * as AnalyticsVerifyLiveEventDefinition from './tools/analytics_verify_live_event_definition.js'
-import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js'
-import * as AnalyticsApplySiteSetup from './tools/analytics_apply_site_setup.js'
-import * as AnalyticsCreateExperiment from './tools/analytics_create_experiment.js'
-import * as AnalyticsGetExperiment from './tools/analytics_get_experiment.js'
-import * as AnalyticsPrepareSiteSetup from './tools/analytics_prepare_site_setup.js'
-import * as AnalyticsSetExperimentState from './tools/analytics_set_experiment_state.js'
-import * as AnalyticsSetupSite from './tools/analytics_setup_site.js'
 import * as AnalyticsVerifySiteSetup from './tools/analytics_verify_site_setup.js'
-import * as AnalyticsCreatePostPurchaseSurvey from './tools/analytics_create_post_purchase_survey.js'
-import * as AnalyticsGetAttributionMethodology from './tools/analytics_get_attribution_methodology.js'
-import * as AnalyticsGetImpactReport from './tools/analytics_get_impact_report.js'
-import * as AnalyticsGetPostPurchaseSurveyReport from './tools/analytics_get_post_purchase_survey_report.js'
-import * as AnalyticsGetViewEvidenceStatus from './tools/analytics_get_view_evidence_status.js'
-import * as AnalyticsSetPostPurchaseSurveyState from './tools/analytics_set_post_purchase_survey_state.js'
+import * as AnalyticsWithdrawConsent from './tools/analytics_withdraw_consent.js'
 import * as WebAnalyzeSiteSimilarity from './tools/analyze_site_similarity.js'
 import * as WebArchiveRead from './tools/archive_read.js'
 import * as WebAuditSite from './tools/audit_site.js'
@@ -265,6 +263,27 @@ import * as WebhooksCreateWebhook from './tools/create-webhook.js'
 import * as WebhooksListWebhooks from './tools/list-webhooks.js'
 import * as WebhooksRevokeWebhook from './tools/revoke-webhook.js'
 import * as BillingCreditsInfo from './tools/credits_info.js'
+import * as CrmActivityAppend from './tools/crm-activity-append.js'
+import * as CrmCounterpartApply from './tools/crm-counterpart-apply.js'
+import * as CrmCounterpartPreview from './tools/crm-counterpart-preview.js'
+import * as CrmDealTransition from './tools/crm-deal-transition.js'
+import * as CrmDealUpsert from './tools/crm-deal-upsert.js'
+import * as CrmDuplicateSearch from './tools/crm-duplicate-search.js'
+import * as CrmImportApply from './tools/crm-import-apply.js'
+import * as CrmImportPreview from './tools/crm-import-preview.js'
+import * as CrmMergeApply from './tools/crm-merge-apply.js'
+import * as CrmMergePreview from './tools/crm-merge-preview.js'
+import * as CrmOrganizationGet from './tools/crm-organization-get.js'
+import * as CrmOrganizationSearch from './tools/crm-organization-search.js'
+import * as CrmOrganizationUpsert from './tools/crm-organization-upsert.js'
+import * as CrmPersonGet from './tools/crm-person-get.js'
+import * as CrmPersonSearch from './tools/crm-person-search.js'
+import * as CrmPersonUpsert from './tools/crm-person-upsert.js'
+import * as CrmPipelineList from './tools/crm-pipeline-list.js'
+import * as CrmPipelineUpsert from './tools/crm-pipeline-upsert.js'
+import * as CrmQualityList from './tools/crm-quality-list.js'
+import * as CrmTaskUpsert from './tools/crm-task-upsert.js'
+import * as CrmWorkSearch from './tools/crm-work-search.js'
 import * as DirectoryRun from './tools/directory_workflow.js'
 import * as DirectoryWorkflowStatus from './tools/directory_workflow_status.js'
 import * as DirectoryGetLocalSourcebookContract from './tools/get-local-sourcebook-contract.js'
@@ -336,6 +355,12 @@ import * as WorkflowsStep from './tools/workflow_step.js'
 import * as WorkflowsSuggest from './tools/workflow_suggest.js'
 import * as RedditThread from './tools/reddit_thread.js'
 import * as RedditTrending from './tools/reddit_trending.js'
+import * as ResearchOrganizationCapture from './tools/research-organization-capture.js'
+import * as ResearchOrganizationGet from './tools/research-organization-get.js'
+import * as ResearchOrganizationSearch from './tools/research-organization-search.js'
+import * as ResearchPersonCapture from './tools/research-person-capture.js'
+import * as ResearchPersonGet from './tools/research-person-get.js'
+import * as ResearchPersonSearch from './tools/research-person-search.js'
 import * as TablesCreate from './tools/table-create.js'
 import * as TablesDeleteRows from './tools/table-delete-rows.js'
 import * as TablesDescribe from './tools/table-describe.js'
@@ -350,33 +375,6 @@ import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
 import * as VideoAnalyzeStatus from './tools/video-analyze-status.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
-import * as CrmActivityAppend from './tools/crm-activity-append.js'
-import * as CrmCounterpartApply from './tools/crm-counterpart-apply.js'
-import * as CrmCounterpartPreview from './tools/crm-counterpart-preview.js'
-import * as CrmDealTransition from './tools/crm-deal-transition.js'
-import * as CrmDealUpsert from './tools/crm-deal-upsert.js'
-import * as CrmDuplicateSearch from './tools/crm-duplicate-search.js'
-import * as CrmImportApply from './tools/crm-import-apply.js'
-import * as CrmImportPreview from './tools/crm-import-preview.js'
-import * as CrmMergeApply from './tools/crm-merge-apply.js'
-import * as CrmMergePreview from './tools/crm-merge-preview.js'
-import * as CrmOrganizationGet from './tools/crm-organization-get.js'
-import * as CrmOrganizationSearch from './tools/crm-organization-search.js'
-import * as CrmOrganizationUpsert from './tools/crm-organization-upsert.js'
-import * as CrmPersonGet from './tools/crm-person-get.js'
-import * as CrmPersonSearch from './tools/crm-person-search.js'
-import * as CrmPersonUpsert from './tools/crm-person-upsert.js'
-import * as CrmPipelineList from './tools/crm-pipeline-list.js'
-import * as CrmPipelineUpsert from './tools/crm-pipeline-upsert.js'
-import * as CrmQualityList from './tools/crm-quality-list.js'
-import * as CrmTaskUpsert from './tools/crm-task-upsert.js'
-import * as CrmWorkSearch from './tools/crm-work-search.js'
-import * as ResearchOrganizationCapture from './tools/research-organization-capture.js'
-import * as ResearchOrganizationGet from './tools/research-organization-get.js'
-import * as ResearchOrganizationSearch from './tools/research-organization-search.js'
-import * as ResearchPersonCapture from './tools/research-person-capture.js'
-import * as ResearchPersonGet from './tools/research-person-get.js'
-import * as ResearchPersonSearch from './tools/research-person-search.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -403,11 +401,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "access-invite-account",
     "category": "access",
     "methodName": "inviteAccount"
-  },
-  {
-    "name": "access-issue-key",
-    "category": "access",
-    "methodName": "issueKey"
   },
   {
     "name": "access-list-approved-senders",
@@ -440,11 +433,6 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "revokeShare"
   },
   {
-    "name": "access-set-scope",
-    "category": "access",
-    "methodName": "setScope"
-  },
-  {
     "name": "access-share-note",
     "category": "access",
     "methodName": "shareNote"
@@ -473,6 +461,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "add-vault",
     "category": "vaults",
     "methodName": "addVault"
+  },
+  {
+    "name": "analytics_apply_site_setup",
+    "category": "analytics",
+    "methodName": "applySiteSetup"
   },
   {
     "name": "analytics_archive_event_definition",
@@ -505,6 +498,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "createEventDefinition"
   },
   {
+    "name": "analytics_create_experiment",
+    "category": "analytics",
+    "methodName": "createExperiment"
+  },
+  {
     "name": "analytics_create_export",
     "category": "analytics",
     "methodName": "createExport"
@@ -523,6 +521,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_create_lead_score",
     "category": "analytics",
     "methodName": "createLeadScore"
+  },
+  {
+    "name": "analytics_create_post_purchase_survey",
+    "category": "analytics",
+    "methodName": "createPostPurchaseSurvey"
   },
   {
     "name": "analytics_create_prediction_target",
@@ -575,6 +578,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getAcquisition"
   },
   {
+    "name": "analytics_get_attribution_methodology",
+    "category": "analytics",
+    "methodName": "getAttributionMethodology"
+  },
+  {
     "name": "analytics_get_business_metrics",
     "category": "analytics",
     "methodName": "getBusinessMetrics"
@@ -625,6 +633,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getEvents"
   },
   {
+    "name": "analytics_get_experiment",
+    "category": "analytics",
+    "methodName": "getExperiment"
+  },
+  {
     "name": "analytics_get_forecast",
     "category": "analytics",
     "methodName": "getForecast"
@@ -638,6 +651,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_get_health",
     "category": "analytics",
     "methodName": "getHealth"
+  },
+  {
+    "name": "analytics_get_impact_report",
+    "category": "analytics",
+    "methodName": "getImpactReport"
   },
   {
     "name": "analytics_get_onboarding_state",
@@ -660,6 +678,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "getPersonJourney"
   },
   {
+    "name": "analytics_get_post_purchase_survey_report",
+    "category": "analytics",
+    "methodName": "getPostPurchaseSurveyReport"
+  },
+  {
     "name": "analytics_get_prediction_eligibility",
     "category": "analytics",
     "methodName": "getPredictionEligibility"
@@ -673,6 +696,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_get_timeseries",
     "category": "analytics",
     "methodName": "getTimeseries"
+  },
+  {
+    "name": "analytics_get_view_evidence_status",
+    "category": "analytics",
+    "methodName": "getViewEvidenceStatus"
   },
   {
     "name": "analytics_get_visitor_journey",
@@ -775,6 +803,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "listVisitors"
   },
   {
+    "name": "analytics_prepare_site_setup",
+    "category": "analytics",
+    "methodName": "prepareSiteSetup"
+  },
+  {
     "name": "analytics_preview_crm_import",
     "category": "analytics",
     "methodName": "previewCrmImport"
@@ -798,6 +831,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_set_activation_automation",
     "category": "analytics",
     "methodName": "setActivationAutomation"
+  },
+  {
+    "name": "analytics_set_experiment_state",
+    "category": "analytics",
+    "methodName": "setExperimentState"
+  },
+  {
+    "name": "analytics_set_post_purchase_survey_state",
+    "category": "analytics",
+    "methodName": "setPostPurchaseSurveyState"
+  },
+  {
+    "name": "analytics_setup_site",
+    "category": "analytics",
+    "methodName": "setupSite"
   },
   {
     "name": "analytics_test_activation_destination",
@@ -833,6 +881,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "analytics_verify_live_event_definition",
     "category": "analytics",
     "methodName": "verifyLiveEventDefinition"
+  },
+  {
+    "name": "analytics_verify_site_setup",
+    "category": "analytics",
+    "methodName": "verifySiteSetup"
   },
   {
     "name": "analytics_withdraw_consent",
@@ -1218,6 +1271,111 @@ export const MCP_TOOL_BINDINGS = [
     "name": "credits_info",
     "category": "billing",
     "methodName": "creditsInfo"
+  },
+  {
+    "name": "crm-activity-append",
+    "category": "crm",
+    "methodName": "activityAppend"
+  },
+  {
+    "name": "crm-counterpart-apply",
+    "category": "crm",
+    "methodName": "counterpartApply"
+  },
+  {
+    "name": "crm-counterpart-preview",
+    "category": "crm",
+    "methodName": "counterpartPreview"
+  },
+  {
+    "name": "crm-deal-transition",
+    "category": "crm",
+    "methodName": "dealTransition"
+  },
+  {
+    "name": "crm-deal-upsert",
+    "category": "crm",
+    "methodName": "dealUpsert"
+  },
+  {
+    "name": "crm-duplicate-search",
+    "category": "crm",
+    "methodName": "duplicateSearch"
+  },
+  {
+    "name": "crm-import-apply",
+    "category": "crm",
+    "methodName": "importApply"
+  },
+  {
+    "name": "crm-import-preview",
+    "category": "crm",
+    "methodName": "importPreview"
+  },
+  {
+    "name": "crm-merge-apply",
+    "category": "crm",
+    "methodName": "mergeApply"
+  },
+  {
+    "name": "crm-merge-preview",
+    "category": "crm",
+    "methodName": "mergePreview"
+  },
+  {
+    "name": "crm-organization-get",
+    "category": "crm",
+    "methodName": "organizationGet"
+  },
+  {
+    "name": "crm-organization-search",
+    "category": "crm",
+    "methodName": "organizationSearch"
+  },
+  {
+    "name": "crm-organization-upsert",
+    "category": "crm",
+    "methodName": "organizationUpsert"
+  },
+  {
+    "name": "crm-person-get",
+    "category": "crm",
+    "methodName": "personGet"
+  },
+  {
+    "name": "crm-person-search",
+    "category": "crm",
+    "methodName": "personSearch"
+  },
+  {
+    "name": "crm-person-upsert",
+    "category": "crm",
+    "methodName": "personUpsert"
+  },
+  {
+    "name": "crm-pipeline-list",
+    "category": "crm",
+    "methodName": "pipelineList"
+  },
+  {
+    "name": "crm-pipeline-upsert",
+    "category": "crm",
+    "methodName": "pipelineUpsert"
+  },
+  {
+    "name": "crm-quality-list",
+    "category": "crm",
+    "methodName": "qualityList"
+  },
+  {
+    "name": "crm-task-upsert",
+    "category": "crm",
+    "methodName": "taskUpsert"
+  },
+  {
+    "name": "crm-work-search",
+    "category": "crm",
+    "methodName": "workSearch"
   },
   {
     "name": "delete-note",
@@ -1820,6 +1978,36 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "read"
   },
   {
+    "name": "research-organization-capture",
+    "category": "research",
+    "methodName": "organizationCapture"
+  },
+  {
+    "name": "research-organization-get",
+    "category": "research",
+    "methodName": "organizationGet"
+  },
+  {
+    "name": "research-organization-search",
+    "category": "research",
+    "methodName": "organizationSearch"
+  },
+  {
+    "name": "research-person-capture",
+    "category": "research",
+    "methodName": "personCapture"
+  },
+  {
+    "name": "research-person-get",
+    "category": "research",
+    "methodName": "personGet"
+  },
+  {
+    "name": "research-person-search",
+    "category": "research",
+    "methodName": "personSearch"
+  },
+  {
     "name": "resolve-local-sourcebook-tags",
     "category": "directory",
     "methodName": "resolveLocalSourcebookTags"
@@ -2063,206 +2251,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "zoom_create_meeting",
     "category": "connections",
     "methodName": "zoomCreateMeeting"
-  },
-  {
-    "name": "analytics_apply_site_setup",
-    "category": "analytics",
-    "methodName": "applySiteSetup"
-  },
-  {
-    "name": "analytics_create_experiment",
-    "category": "analytics",
-    "methodName": "createExperiment"
-  },
-  {
-    "name": "analytics_get_experiment",
-    "category": "analytics",
-    "methodName": "getExperiment"
-  },
-  {
-    "name": "analytics_prepare_site_setup",
-    "category": "analytics",
-    "methodName": "prepareSiteSetup"
-  },
-  {
-    "name": "analytics_set_experiment_state",
-    "category": "analytics",
-    "methodName": "setExperimentState"
-  },
-  {
-    "name": "analytics_setup_site",
-    "category": "analytics",
-    "methodName": "setupSite"
-  },
-  {
-    "name": "analytics_verify_site_setup",
-    "category": "analytics",
-    "methodName": "verifySiteSetup"
-  },
-  {
-    "name": "analytics_create_post_purchase_survey",
-    "category": "analytics",
-    "methodName": "createPostPurchaseSurvey"
-  },
-  {
-    "name": "analytics_get_attribution_methodology",
-    "category": "analytics",
-    "methodName": "getAttributionMethodology"
-  },
-  {
-    "name": "analytics_get_impact_report",
-    "category": "analytics",
-    "methodName": "getImpactReport"
-  },
-  {
-    "name": "analytics_get_post_purchase_survey_report",
-    "category": "analytics",
-    "methodName": "getPostPurchaseSurveyReport"
-  },
-  {
-    "name": "analytics_get_view_evidence_status",
-    "category": "analytics",
-    "methodName": "getViewEvidenceStatus"
-  },
-  {
-    "name": "analytics_set_post_purchase_survey_state",
-    "category": "analytics",
-    "methodName": "setPostPurchaseSurveyState"
-  },
-  {
-    "name": "crm-activity-append",
-    "category": "crm",
-    "methodName": "activityAppend"
-  },
-  {
-    "name": "crm-counterpart-apply",
-    "category": "crm",
-    "methodName": "counterpartApply"
-  },
-  {
-    "name": "crm-counterpart-preview",
-    "category": "crm",
-    "methodName": "counterpartPreview"
-  },
-  {
-    "name": "crm-deal-transition",
-    "category": "crm",
-    "methodName": "dealTransition"
-  },
-  {
-    "name": "crm-deal-upsert",
-    "category": "crm",
-    "methodName": "dealUpsert"
-  },
-  {
-    "name": "crm-duplicate-search",
-    "category": "crm",
-    "methodName": "duplicateSearch"
-  },
-  {
-    "name": "crm-import-apply",
-    "category": "crm",
-    "methodName": "importApply"
-  },
-  {
-    "name": "crm-import-preview",
-    "category": "crm",
-    "methodName": "importPreview"
-  },
-  {
-    "name": "crm-merge-apply",
-    "category": "crm",
-    "methodName": "mergeApply"
-  },
-  {
-    "name": "crm-merge-preview",
-    "category": "crm",
-    "methodName": "mergePreview"
-  },
-  {
-    "name": "crm-organization-get",
-    "category": "crm",
-    "methodName": "organizationGet"
-  },
-  {
-    "name": "crm-organization-search",
-    "category": "crm",
-    "methodName": "organizationSearch"
-  },
-  {
-    "name": "crm-organization-upsert",
-    "category": "crm",
-    "methodName": "organizationUpsert"
-  },
-  {
-    "name": "crm-person-get",
-    "category": "crm",
-    "methodName": "personGet"
-  },
-  {
-    "name": "crm-person-search",
-    "category": "crm",
-    "methodName": "personSearch"
-  },
-  {
-    "name": "crm-person-upsert",
-    "category": "crm",
-    "methodName": "personUpsert"
-  },
-  {
-    "name": "crm-pipeline-list",
-    "category": "crm",
-    "methodName": "pipelineList"
-  },
-  {
-    "name": "crm-pipeline-upsert",
-    "category": "crm",
-    "methodName": "pipelineUpsert"
-  },
-  {
-    "name": "crm-quality-list",
-    "category": "crm",
-    "methodName": "qualityList"
-  },
-  {
-    "name": "crm-task-upsert",
-    "category": "crm",
-    "methodName": "taskUpsert"
-  },
-  {
-    "name": "crm-work-search",
-    "category": "crm",
-    "methodName": "workSearch"
-  },
-  {
-    "name": "research-organization-capture",
-    "category": "research",
-    "methodName": "organizationCapture"
-  },
-  {
-    "name": "research-organization-get",
-    "category": "research",
-    "methodName": "organizationGet"
-  },
-  {
-    "name": "research-organization-search",
-    "category": "research",
-    "methodName": "organizationSearch"
-  },
-  {
-    "name": "research-person-capture",
-    "category": "research",
-    "methodName": "personCapture"
-  },
-  {
-    "name": "research-person-get",
-    "category": "research",
-    "methodName": "personGet"
-  },
-  {
-    "name": "research-person-search",
-    "category": "research",
-    "methodName": "personSearch"
   }
 ] as const
 export const MCP_TOOL_COUNT = MCP_TOOL_BINDINGS.length
@@ -2290,10 +2278,6 @@ export class AccessNamespace {
     return this.callTool('access-invite-account', input) as Promise<AccessInviteAccount.Output>
   }
 
-  async issueKey(input: AccessIssueKey.Input): Promise<AccessIssueKey.Output> {
-    return this.callTool('access-issue-key', input) as Promise<AccessIssueKey.Output>
-  }
-
   async listApprovedSenders(input: AccessListApprovedSenders.Input = {} as AccessListApprovedSenders.Input): Promise<AccessListApprovedSenders.Output> {
     return this.callTool('access-list-approved-senders', input) as Promise<AccessListApprovedSenders.Output>
   }
@@ -2316,10 +2300,6 @@ export class AccessNamespace {
 
   async revokeShare(input: AccessRevokeShare.Input): Promise<AccessRevokeShare.Output> {
     return this.callTool('access-revoke-share', input) as Promise<AccessRevokeShare.Output>
-  }
-
-  async setScope(input: AccessSetScope.Input): Promise<AccessSetScope.Output> {
-    return this.callTool('access-set-scope', input) as Promise<AccessSetScope.Output>
   }
 
   async shareNote(input: AccessShareNote.Input): Promise<AccessShareNote.Output> {
@@ -2402,6 +2382,10 @@ export class VaultsNamespace {
 export class AnalyticsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
+  async applySiteSetup(input: AnalyticsApplySiteSetup.Input): Promise<AnalyticsApplySiteSetup.Output> {
+    return this.callTool('analytics_apply_site_setup', input) as Promise<AnalyticsApplySiteSetup.Output>
+  }
+
   async archiveEventDefinition(input: AnalyticsArchiveEventDefinition.Input): Promise<AnalyticsArchiveEventDefinition.Output> {
     return this.callTool('analytics_archive_event_definition', input) as Promise<AnalyticsArchiveEventDefinition.Output>
   }
@@ -2426,6 +2410,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_create_event_definition', input) as Promise<AnalyticsCreateEventDefinition.Output>
   }
 
+  async createExperiment(input: AnalyticsCreateExperiment.Input): Promise<AnalyticsCreateExperiment.Output> {
+    return this.callTool('analytics_create_experiment', input) as Promise<AnalyticsCreateExperiment.Output>
+  }
+
   async createExport(input: AnalyticsCreateExport.Input): Promise<AnalyticsCreateExport.Output> {
     return this.callTool('analytics_create_export', input) as Promise<AnalyticsCreateExport.Output>
   }
@@ -2440,6 +2428,10 @@ export class AnalyticsNamespace {
 
   async createLeadScore(input: AnalyticsCreateLeadScore.Input): Promise<AnalyticsCreateLeadScore.Output> {
     return this.callTool('analytics_create_lead_score', input) as Promise<AnalyticsCreateLeadScore.Output>
+  }
+
+  async createPostPurchaseSurvey(input: AnalyticsCreatePostPurchaseSurvey.Input): Promise<AnalyticsCreatePostPurchaseSurvey.Output> {
+    return this.callTool('analytics_create_post_purchase_survey', input) as Promise<AnalyticsCreatePostPurchaseSurvey.Output>
   }
 
   async createPredictionTarget(input: AnalyticsCreatePredictionTarget.Input): Promise<AnalyticsCreatePredictionTarget.Output> {
@@ -2482,6 +2474,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_acquisition', input) as Promise<AnalyticsGetAcquisition.Output>
   }
 
+  async getAttributionMethodology(input: AnalyticsGetAttributionMethodology.Input): Promise<AnalyticsGetAttributionMethodology.Output> {
+    return this.callTool('analytics_get_attribution_methodology', input) as Promise<AnalyticsGetAttributionMethodology.Output>
+  }
+
   async getBusinessMetrics(input: AnalyticsGetBusinessMetrics.Input): Promise<AnalyticsGetBusinessMetrics.Output> {
     return this.callTool('analytics_get_business_metrics', input) as Promise<AnalyticsGetBusinessMetrics.Output>
   }
@@ -2522,6 +2518,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_events', input) as Promise<AnalyticsGetEvents.Output>
   }
 
+  async getExperiment(input: AnalyticsGetExperiment.Input): Promise<AnalyticsGetExperiment.Output> {
+    return this.callTool('analytics_get_experiment', input) as Promise<AnalyticsGetExperiment.Output>
+  }
+
   async getForecast(input: AnalyticsGetForecast.Input): Promise<AnalyticsGetForecast.Output> {
     return this.callTool('analytics_get_forecast', input) as Promise<AnalyticsGetForecast.Output>
   }
@@ -2532,6 +2532,10 @@ export class AnalyticsNamespace {
 
   async getHealth(input: AnalyticsGetHealth.Input): Promise<AnalyticsGetHealth.Output> {
     return this.callTool('analytics_get_health', input) as Promise<AnalyticsGetHealth.Output>
+  }
+
+  async getImpactReport(input: AnalyticsGetImpactReport.Input): Promise<AnalyticsGetImpactReport.Output> {
+    return this.callTool('analytics_get_impact_report', input) as Promise<AnalyticsGetImpactReport.Output>
   }
 
   async getOnboardingState(input: AnalyticsGetOnboardingState.Input): Promise<AnalyticsGetOnboardingState.Output> {
@@ -2550,6 +2554,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_get_person_journey', input) as Promise<AnalyticsGetPersonJourney.Output>
   }
 
+  async getPostPurchaseSurveyReport(input: AnalyticsGetPostPurchaseSurveyReport.Input): Promise<AnalyticsGetPostPurchaseSurveyReport.Output> {
+    return this.callTool('analytics_get_post_purchase_survey_report', input) as Promise<AnalyticsGetPostPurchaseSurveyReport.Output>
+  }
+
   async getPredictionEligibility(input: AnalyticsGetPredictionEligibility.Input): Promise<AnalyticsGetPredictionEligibility.Output> {
     return this.callTool('analytics_get_prediction_eligibility', input) as Promise<AnalyticsGetPredictionEligibility.Output>
   }
@@ -2560,6 +2568,10 @@ export class AnalyticsNamespace {
 
   async getTimeseries(input: AnalyticsGetTimeseries.Input): Promise<AnalyticsGetTimeseries.Output> {
     return this.callTool('analytics_get_timeseries', input) as Promise<AnalyticsGetTimeseries.Output>
+  }
+
+  async getViewEvidenceStatus(input: AnalyticsGetViewEvidenceStatus.Input): Promise<AnalyticsGetViewEvidenceStatus.Output> {
+    return this.callTool('analytics_get_view_evidence_status', input) as Promise<AnalyticsGetViewEvidenceStatus.Output>
   }
 
   async getVisitorJourney(input: AnalyticsGetVisitorJourney.Input): Promise<AnalyticsGetVisitorJourney.Output> {
@@ -2642,6 +2654,10 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_list_visitors', input) as Promise<AnalyticsListVisitors.Output>
   }
 
+  async prepareSiteSetup(input: AnalyticsPrepareSiteSetup.Input): Promise<AnalyticsPrepareSiteSetup.Output> {
+    return this.callTool('analytics_prepare_site_setup', input) as Promise<AnalyticsPrepareSiteSetup.Output>
+  }
+
   async previewCrmImport(input: AnalyticsPreviewCrmImport.Input): Promise<AnalyticsPreviewCrmImport.Output> {
     return this.callTool('analytics_preview_crm_import', input) as Promise<AnalyticsPreviewCrmImport.Output>
   }
@@ -2660,6 +2676,18 @@ export class AnalyticsNamespace {
 
   async setActivationAutomation(input: AnalyticsSetActivationAutomation.Input): Promise<AnalyticsSetActivationAutomation.Output> {
     return this.callTool('analytics_set_activation_automation', input) as Promise<AnalyticsSetActivationAutomation.Output>
+  }
+
+  async setExperimentState(input: AnalyticsSetExperimentState.Input): Promise<AnalyticsSetExperimentState.Output> {
+    return this.callTool('analytics_set_experiment_state', input) as Promise<AnalyticsSetExperimentState.Output>
+  }
+
+  async setPostPurchaseSurveyState(input: AnalyticsSetPostPurchaseSurveyState.Input): Promise<AnalyticsSetPostPurchaseSurveyState.Output> {
+    return this.callTool('analytics_set_post_purchase_survey_state', input) as Promise<AnalyticsSetPostPurchaseSurveyState.Output>
+  }
+
+  async setupSite(input: AnalyticsSetupSite.Input = {} as AnalyticsSetupSite.Input): Promise<AnalyticsSetupSite.Output> {
+    return this.callTool('analytics_setup_site', input) as Promise<AnalyticsSetupSite.Output>
   }
 
   async testActivationDestination(input: AnalyticsTestActivationDestination.Input): Promise<AnalyticsTestActivationDestination.Output> {
@@ -2690,60 +2718,12 @@ export class AnalyticsNamespace {
     return this.callTool('analytics_verify_live_event_definition', input) as Promise<AnalyticsVerifyLiveEventDefinition.Output>
   }
 
-  async withdrawConsent(input: AnalyticsWithdrawConsent.Input): Promise<AnalyticsWithdrawConsent.Output> {
-    return this.callTool('analytics_withdraw_consent', input) as Promise<AnalyticsWithdrawConsent.Output>
-  }
-
-  async applySiteSetup(input: AnalyticsApplySiteSetup.Input): Promise<AnalyticsApplySiteSetup.Output> {
-    return this.callTool('analytics_apply_site_setup', input) as Promise<AnalyticsApplySiteSetup.Output>
-  }
-
-  async createExperiment(input: AnalyticsCreateExperiment.Input): Promise<AnalyticsCreateExperiment.Output> {
-    return this.callTool('analytics_create_experiment', input) as Promise<AnalyticsCreateExperiment.Output>
-  }
-
-  async getExperiment(input: AnalyticsGetExperiment.Input): Promise<AnalyticsGetExperiment.Output> {
-    return this.callTool('analytics_get_experiment', input) as Promise<AnalyticsGetExperiment.Output>
-  }
-
-  async prepareSiteSetup(input: AnalyticsPrepareSiteSetup.Input): Promise<AnalyticsPrepareSiteSetup.Output> {
-    return this.callTool('analytics_prepare_site_setup', input) as Promise<AnalyticsPrepareSiteSetup.Output>
-  }
-
-  async setExperimentState(input: AnalyticsSetExperimentState.Input): Promise<AnalyticsSetExperimentState.Output> {
-    return this.callTool('analytics_set_experiment_state', input) as Promise<AnalyticsSetExperimentState.Output>
-  }
-
-  async setupSite(input: AnalyticsSetupSite.Input = {} as AnalyticsSetupSite.Input): Promise<AnalyticsSetupSite.Output> {
-    return this.callTool('analytics_setup_site', input) as Promise<AnalyticsSetupSite.Output>
-  }
-
   async verifySiteSetup(input: AnalyticsVerifySiteSetup.Input): Promise<AnalyticsVerifySiteSetup.Output> {
     return this.callTool('analytics_verify_site_setup', input) as Promise<AnalyticsVerifySiteSetup.Output>
   }
 
-  async createPostPurchaseSurvey(input: AnalyticsCreatePostPurchaseSurvey.Input): Promise<AnalyticsCreatePostPurchaseSurvey.Output> {
-    return this.callTool('analytics_create_post_purchase_survey', input) as Promise<AnalyticsCreatePostPurchaseSurvey.Output>
-  }
-
-  async getAttributionMethodology(input: AnalyticsGetAttributionMethodology.Input): Promise<AnalyticsGetAttributionMethodology.Output> {
-    return this.callTool('analytics_get_attribution_methodology', input) as Promise<AnalyticsGetAttributionMethodology.Output>
-  }
-
-  async getImpactReport(input: AnalyticsGetImpactReport.Input): Promise<AnalyticsGetImpactReport.Output> {
-    return this.callTool('analytics_get_impact_report', input) as Promise<AnalyticsGetImpactReport.Output>
-  }
-
-  async getPostPurchaseSurveyReport(input: AnalyticsGetPostPurchaseSurveyReport.Input): Promise<AnalyticsGetPostPurchaseSurveyReport.Output> {
-    return this.callTool('analytics_get_post_purchase_survey_report', input) as Promise<AnalyticsGetPostPurchaseSurveyReport.Output>
-  }
-
-  async getViewEvidenceStatus(input: AnalyticsGetViewEvidenceStatus.Input): Promise<AnalyticsGetViewEvidenceStatus.Output> {
-    return this.callTool('analytics_get_view_evidence_status', input) as Promise<AnalyticsGetViewEvidenceStatus.Output>
-  }
-
-  async setPostPurchaseSurveyState(input: AnalyticsSetPostPurchaseSurveyState.Input): Promise<AnalyticsSetPostPurchaseSurveyState.Output> {
-    return this.callTool('analytics_set_post_purchase_survey_state', input) as Promise<AnalyticsSetPostPurchaseSurveyState.Output>
+  async withdrawConsent(input: AnalyticsWithdrawConsent.Input): Promise<AnalyticsWithdrawConsent.Output> {
+    return this.callTool('analytics_withdraw_consent', input) as Promise<AnalyticsWithdrawConsent.Output>
   }
 }
 
@@ -3391,6 +3371,94 @@ export class BillingNamespace {
   }
 }
 
+export class CrmNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async activityAppend(input: CrmActivityAppend.Input): Promise<CrmActivityAppend.Output> {
+    return this.callTool('crm-activity-append', input) as Promise<CrmActivityAppend.Output>
+  }
+
+  async counterpartApply(input: CrmCounterpartApply.Input): Promise<CrmCounterpartApply.Output> {
+    return this.callTool('crm-counterpart-apply', input) as Promise<CrmCounterpartApply.Output>
+  }
+
+  async counterpartPreview(input: CrmCounterpartPreview.Input): Promise<CrmCounterpartPreview.Output> {
+    return this.callTool('crm-counterpart-preview', input) as Promise<CrmCounterpartPreview.Output>
+  }
+
+  async dealTransition(input: CrmDealTransition.Input): Promise<CrmDealTransition.Output> {
+    return this.callTool('crm-deal-transition', input) as Promise<CrmDealTransition.Output>
+  }
+
+  async dealUpsert(input: CrmDealUpsert.Input): Promise<CrmDealUpsert.Output> {
+    return this.callTool('crm-deal-upsert', input) as Promise<CrmDealUpsert.Output>
+  }
+
+  async duplicateSearch(input: CrmDuplicateSearch.Input): Promise<CrmDuplicateSearch.Output> {
+    return this.callTool('crm-duplicate-search', input) as Promise<CrmDuplicateSearch.Output>
+  }
+
+  async importApply(input: CrmImportApply.Input): Promise<CrmImportApply.Output> {
+    return this.callTool('crm-import-apply', input) as Promise<CrmImportApply.Output>
+  }
+
+  async importPreview(input: CrmImportPreview.Input): Promise<CrmImportPreview.Output> {
+    return this.callTool('crm-import-preview', input) as Promise<CrmImportPreview.Output>
+  }
+
+  async mergeApply(input: CrmMergeApply.Input): Promise<CrmMergeApply.Output> {
+    return this.callTool('crm-merge-apply', input) as Promise<CrmMergeApply.Output>
+  }
+
+  async mergePreview(input: CrmMergePreview.Input): Promise<CrmMergePreview.Output> {
+    return this.callTool('crm-merge-preview', input) as Promise<CrmMergePreview.Output>
+  }
+
+  async organizationGet(input: CrmOrganizationGet.Input): Promise<CrmOrganizationGet.Output> {
+    return this.callTool('crm-organization-get', input) as Promise<CrmOrganizationGet.Output>
+  }
+
+  async organizationSearch(input: CrmOrganizationSearch.Input = {} as CrmOrganizationSearch.Input): Promise<CrmOrganizationSearch.Output> {
+    return this.callTool('crm-organization-search', input) as Promise<CrmOrganizationSearch.Output>
+  }
+
+  async organizationUpsert(input: CrmOrganizationUpsert.Input): Promise<CrmOrganizationUpsert.Output> {
+    return this.callTool('crm-organization-upsert', input) as Promise<CrmOrganizationUpsert.Output>
+  }
+
+  async personGet(input: CrmPersonGet.Input): Promise<CrmPersonGet.Output> {
+    return this.callTool('crm-person-get', input) as Promise<CrmPersonGet.Output>
+  }
+
+  async personSearch(input: CrmPersonSearch.Input = {} as CrmPersonSearch.Input): Promise<CrmPersonSearch.Output> {
+    return this.callTool('crm-person-search', input) as Promise<CrmPersonSearch.Output>
+  }
+
+  async personUpsert(input: CrmPersonUpsert.Input): Promise<CrmPersonUpsert.Output> {
+    return this.callTool('crm-person-upsert', input) as Promise<CrmPersonUpsert.Output>
+  }
+
+  async pipelineList(input: CrmPipelineList.Input = {} as CrmPipelineList.Input): Promise<CrmPipelineList.Output> {
+    return this.callTool('crm-pipeline-list', input) as Promise<CrmPipelineList.Output>
+  }
+
+  async pipelineUpsert(input: CrmPipelineUpsert.Input): Promise<CrmPipelineUpsert.Output> {
+    return this.callTool('crm-pipeline-upsert', input) as Promise<CrmPipelineUpsert.Output>
+  }
+
+  async qualityList(input: CrmQualityList.Input = {} as CrmQualityList.Input): Promise<CrmQualityList.Output> {
+    return this.callTool('crm-quality-list', input) as Promise<CrmQualityList.Output>
+  }
+
+  async taskUpsert(input: CrmTaskUpsert.Input): Promise<CrmTaskUpsert.Output> {
+    return this.callTool('crm-task-upsert', input) as Promise<CrmTaskUpsert.Output>
+  }
+
+  async workSearch(input: CrmWorkSearch.Input = {} as CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
+    return this.callTool('crm-work-search', input) as Promise<CrmWorkSearch.Output>
+  }
+}
+
 export class DirectoryNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3747,6 +3815,34 @@ export class RedditNamespace {
   }
 }
 
+export class ResearchNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async organizationCapture(input: ResearchOrganizationCapture.Input): Promise<ResearchOrganizationCapture.Output> {
+    return this.callTool('research-organization-capture', input) as Promise<ResearchOrganizationCapture.Output>
+  }
+
+  async organizationGet(input: ResearchOrganizationGet.Input): Promise<ResearchOrganizationGet.Output> {
+    return this.callTool('research-organization-get', input) as Promise<ResearchOrganizationGet.Output>
+  }
+
+  async organizationSearch(input: ResearchOrganizationSearch.Input = {} as ResearchOrganizationSearch.Input): Promise<ResearchOrganizationSearch.Output> {
+    return this.callTool('research-organization-search', input) as Promise<ResearchOrganizationSearch.Output>
+  }
+
+  async personCapture(input: ResearchPersonCapture.Input): Promise<ResearchPersonCapture.Output> {
+    return this.callTool('research-person-capture', input) as Promise<ResearchPersonCapture.Output>
+  }
+
+  async personGet(input: ResearchPersonGet.Input): Promise<ResearchPersonGet.Output> {
+    return this.callTool('research-person-get', input) as Promise<ResearchPersonGet.Output>
+  }
+
+  async personSearch(input: ResearchPersonSearch.Input = {} as ResearchPersonSearch.Input): Promise<ResearchPersonSearch.Output> {
+    return this.callTool('research-person-search', input) as Promise<ResearchPersonSearch.Output>
+  }
+}
+
 export class TablesNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3819,122 +3915,6 @@ export class YoutubeNamespace {
   }
 }
 
-export class CrmNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async activityAppend(input: CrmActivityAppend.Input): Promise<CrmActivityAppend.Output> {
-    return this.callTool('crm-activity-append', input) as Promise<CrmActivityAppend.Output>
-  }
-
-  async counterpartApply(input: CrmCounterpartApply.Input): Promise<CrmCounterpartApply.Output> {
-    return this.callTool('crm-counterpart-apply', input) as Promise<CrmCounterpartApply.Output>
-  }
-
-  async counterpartPreview(input: CrmCounterpartPreview.Input): Promise<CrmCounterpartPreview.Output> {
-    return this.callTool('crm-counterpart-preview', input) as Promise<CrmCounterpartPreview.Output>
-  }
-
-  async dealTransition(input: CrmDealTransition.Input): Promise<CrmDealTransition.Output> {
-    return this.callTool('crm-deal-transition', input) as Promise<CrmDealTransition.Output>
-  }
-
-  async dealUpsert(input: CrmDealUpsert.Input): Promise<CrmDealUpsert.Output> {
-    return this.callTool('crm-deal-upsert', input) as Promise<CrmDealUpsert.Output>
-  }
-
-  async duplicateSearch(input: CrmDuplicateSearch.Input): Promise<CrmDuplicateSearch.Output> {
-    return this.callTool('crm-duplicate-search', input) as Promise<CrmDuplicateSearch.Output>
-  }
-
-  async importApply(input: CrmImportApply.Input): Promise<CrmImportApply.Output> {
-    return this.callTool('crm-import-apply', input) as Promise<CrmImportApply.Output>
-  }
-
-  async importPreview(input: CrmImportPreview.Input): Promise<CrmImportPreview.Output> {
-    return this.callTool('crm-import-preview', input) as Promise<CrmImportPreview.Output>
-  }
-
-  async mergeApply(input: CrmMergeApply.Input): Promise<CrmMergeApply.Output> {
-    return this.callTool('crm-merge-apply', input) as Promise<CrmMergeApply.Output>
-  }
-
-  async mergePreview(input: CrmMergePreview.Input): Promise<CrmMergePreview.Output> {
-    return this.callTool('crm-merge-preview', input) as Promise<CrmMergePreview.Output>
-  }
-
-  async organizationGet(input: CrmOrganizationGet.Input): Promise<CrmOrganizationGet.Output> {
-    return this.callTool('crm-organization-get', input) as Promise<CrmOrganizationGet.Output>
-  }
-
-  async organizationSearch(input: CrmOrganizationSearch.Input = {} as CrmOrganizationSearch.Input): Promise<CrmOrganizationSearch.Output> {
-    return this.callTool('crm-organization-search', input) as Promise<CrmOrganizationSearch.Output>
-  }
-
-  async organizationUpsert(input: CrmOrganizationUpsert.Input): Promise<CrmOrganizationUpsert.Output> {
-    return this.callTool('crm-organization-upsert', input) as Promise<CrmOrganizationUpsert.Output>
-  }
-
-  async personGet(input: CrmPersonGet.Input): Promise<CrmPersonGet.Output> {
-    return this.callTool('crm-person-get', input) as Promise<CrmPersonGet.Output>
-  }
-
-  async personSearch(input: CrmPersonSearch.Input = {} as CrmPersonSearch.Input): Promise<CrmPersonSearch.Output> {
-    return this.callTool('crm-person-search', input) as Promise<CrmPersonSearch.Output>
-  }
-
-  async personUpsert(input: CrmPersonUpsert.Input): Promise<CrmPersonUpsert.Output> {
-    return this.callTool('crm-person-upsert', input) as Promise<CrmPersonUpsert.Output>
-  }
-
-  async pipelineList(input: CrmPipelineList.Input = {} as CrmPipelineList.Input): Promise<CrmPipelineList.Output> {
-    return this.callTool('crm-pipeline-list', input) as Promise<CrmPipelineList.Output>
-  }
-
-  async pipelineUpsert(input: CrmPipelineUpsert.Input): Promise<CrmPipelineUpsert.Output> {
-    return this.callTool('crm-pipeline-upsert', input) as Promise<CrmPipelineUpsert.Output>
-  }
-
-  async qualityList(input: CrmQualityList.Input = {} as CrmQualityList.Input): Promise<CrmQualityList.Output> {
-    return this.callTool('crm-quality-list', input) as Promise<CrmQualityList.Output>
-  }
-
-  async taskUpsert(input: CrmTaskUpsert.Input): Promise<CrmTaskUpsert.Output> {
-    return this.callTool('crm-task-upsert', input) as Promise<CrmTaskUpsert.Output>
-  }
-
-  async workSearch(input: CrmWorkSearch.Input = {} as CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
-    return this.callTool('crm-work-search', input) as Promise<CrmWorkSearch.Output>
-  }
-}
-
-export class ResearchNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async organizationCapture(input: ResearchOrganizationCapture.Input): Promise<ResearchOrganizationCapture.Output> {
-    return this.callTool('research-organization-capture', input) as Promise<ResearchOrganizationCapture.Output>
-  }
-
-  async organizationGet(input: ResearchOrganizationGet.Input): Promise<ResearchOrganizationGet.Output> {
-    return this.callTool('research-organization-get', input) as Promise<ResearchOrganizationGet.Output>
-  }
-
-  async organizationSearch(input: ResearchOrganizationSearch.Input = {} as ResearchOrganizationSearch.Input): Promise<ResearchOrganizationSearch.Output> {
-    return this.callTool('research-organization-search', input) as Promise<ResearchOrganizationSearch.Output>
-  }
-
-  async personCapture(input: ResearchPersonCapture.Input): Promise<ResearchPersonCapture.Output> {
-    return this.callTool('research-person-capture', input) as Promise<ResearchPersonCapture.Output>
-  }
-
-  async personGet(input: ResearchPersonGet.Input): Promise<ResearchPersonGet.Output> {
-    return this.callTool('research-person-get', input) as Promise<ResearchPersonGet.Output>
-  }
-
-  async personSearch(input: ResearchPersonSearch.Input = {} as ResearchPersonSearch.Input): Promise<ResearchPersonSearch.Output> {
-    return this.callTool('research-person-search', input) as Promise<ResearchPersonSearch.Output>
-  }
-}
-
 export class GeneratedMcpToolsClient {
   readonly access: AccessNamespace
   readonly vaults: VaultsNamespace
@@ -3952,6 +3932,7 @@ export class GeneratedMcpToolsClient {
   readonly channels: ChannelsNamespace
   readonly webhooks: WebhooksNamespace
   readonly billing: BillingNamespace
+  readonly crm: CrmNamespace
   readonly directory: DirectoryNamespace
   readonly facebook: FacebookNamespace
   readonly facts: FactsNamespace
@@ -3970,12 +3951,11 @@ export class GeneratedMcpToolsClient {
   readonly capture: CaptureNamespace
   readonly workflows: WorkflowsNamespace
   readonly reddit: RedditNamespace
+  readonly research: ResearchNamespace
   readonly tables: TablesNamespace
   readonly recall: RecallNamespace
   readonly video: VideoNamespace
   readonly youtube: YoutubeNamespace
-  readonly crm: CrmNamespace
-  readonly research: ResearchNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.access = new AccessNamespace(callTool)
@@ -3994,6 +3974,7 @@ export class GeneratedMcpToolsClient {
     this.channels = new ChannelsNamespace(callTool)
     this.webhooks = new WebhooksNamespace(callTool)
     this.billing = new BillingNamespace(callTool)
+    this.crm = new CrmNamespace(callTool)
     this.directory = new DirectoryNamespace(callTool)
     this.facebook = new FacebookNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
@@ -4012,11 +3993,10 @@ export class GeneratedMcpToolsClient {
     this.capture = new CaptureNamespace(callTool)
     this.workflows = new WorkflowsNamespace(callTool)
     this.reddit = new RedditNamespace(callTool)
+    this.research = new ResearchNamespace(callTool)
     this.tables = new TablesNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
     this.video = new VideoNamespace(callTool)
     this.youtube = new YoutubeNamespace(callTool)
-    this.crm = new CrmNamespace(callTool)
-    this.research = new ResearchNamespace(callTool)
   }
 }

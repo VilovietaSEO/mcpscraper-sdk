@@ -9,6 +9,7 @@ MANIFEST_PATH = REPO_ROOT / "contracts" / "memory.tools.json"
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 MODELS_DIR = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "direct_models"
 CLIENT_GENERATED_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_direct_generated_client.py"
+NAME_MAP_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_direct_tool_name_map.py"
 
 CATEGORIES = [
     "access", "assistant", "capture", "channels", "crm", "facts", "graph", "library", "memory", "recall",
@@ -150,6 +151,12 @@ def main() -> None:
         + "\n"
     )
     CLIENT_GENERATED_PATH.write_text(generated.rstrip() + "\n")
+    name_map = {tool["name"]: tool["legacyId"] for tool in tools}
+    NAME_MAP_PATH.write_text(
+        "DIRECT_TO_UNIFIED_TOOL_NAMES: dict[str, str] = "
+        + repr(dict(sorted(name_map.items())))
+        + "\n"
+    )
 
     print(f"Generated {len(tools)} tool model pairs across {len(by_category)} categories.")
 

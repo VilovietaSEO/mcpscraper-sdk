@@ -1,7 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-const ENDPOINT = 'https://memory.mcpscraper.dev/mcp'
 const MANIFEST_PATH = join(process.cwd(), 'contracts/memory.tools.json')
 
 interface ToolEntry {
@@ -25,6 +24,8 @@ interface Manifest {
 
 interface LiveTool {
   name: string
+  legacyId?: string
+  category?: string
   description?: string
   inputSchema: unknown
   outputSchema?: unknown
@@ -117,38 +118,19 @@ const PRE_RELEASE_NAME_ALIASES: Record<string, string> = {
   archive_scheduled_run: 'archiveScheduledRunTool',
 }
 
-async function fetchLiveTools(apiKey: string): Promise<LiveTool[]> {
-  const response = await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      Accept: 'application/json, text/event-stream',
-    },
-    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
-  })
-  if (!response.ok) throw new Error(`tools/list failed: ${response.status} ${await response.text()}`)
-  const payload = (await response.json()) as { result?: { tools?: LiveTool[] }; error?: { message?: string } }
-  if (payload.error) throw new Error(payload.error.message ?? 'tools/list RPC error')
-  return payload.result?.tools ?? []
-}
-
 async function main(): Promise<void> {
   const localManifestPath = process.env.MCP_MEMORY_TOOL_MANIFEST_PATH
-  const apiKey = process.env.MCP_MEMORY_API_KEY
-  if (!localManifestPath && !apiKey) {
-    throw new Error('MCP_MEMORY_TOOL_MANIFEST_PATH or MCP_MEMORY_API_KEY is required')
-  }
+  if (!localManifestPath) throw new Error('MCP_MEMORY_TOOL_MANIFEST_PATH is required')
   const manifest = JSON.parse(await readFile(MANIFEST_PATH, 'utf8')) as Manifest
   const existing = new Map(manifest.tools.map(tool => [tool.name, tool]))
-  const localManifest = localManifestPath
-    ? JSON.parse(await readFile(localManifestPath, 'utf8')) as { generatedAt?: string; tools?: LiveTool[]; serverInfo?: { name?: string; version?: string }; generatedFrom?: string }
-    : null
-  const live = localManifest?.tools ?? await fetchLiveTools(apiKey!)
+  const localManifest = JSON.parse(await readFile(localManifestPath, 'utf8')) as { generatedAt?: string; tools?: LiveTool[]; serverInfo?: { name?: string; version?: string }; generatedFrom?: string }
+  const live = localManifest.tools ?? []
 
   const tools: ToolEntry[] = live.map(tool => {
     const prior = existing.get(tool.name) ?? existing.get(PRE_RELEASE_NAME_ALIASES[tool.name])
-    const metadata = prior ?? NEW_TOOL_METADATA[tool.name]
+    const metadata = tool.legacyId && tool.category
+      ? { legacyId: tool.legacyId, category: tool.category }
+      : prior ?? NEW_TOOL_METADATA[tool.name]
     if (!metadata) throw new Error(`No SDK category/legacyId mapping for live tool ${tool.name}`)
     return {
       name: tool.name,
@@ -163,11 +145,9 @@ async function main(): Promise<void> {
 
   const updated: Manifest = {
     ...manifest,
-    generatedAt: localManifest?.generatedAt ?? new Date().toISOString(),
-    generatedFrom: localManifest
-      ? `${localManifest.serverInfo?.name ?? 'mcp-memory'} ${localManifest.serverInfo?.version ?? 'unversioned'} ${localManifest.generatedFrom ?? 'complete build manifest'} (${tools.length} registered tools)`
-      : `mcp-memory live tools/list (${tools.length} registered tools)`,
-    ...(localManifest?.serverInfo ? { serverInfo: localManifest.serverInfo } : {}),
+    generatedAt: localManifest.generatedAt ?? new Date().toISOString(),
+    generatedFrom: `${localManifest.serverInfo?.name ?? 'mcp-memory'} ${localManifest.serverInfo?.version ?? 'unversioned'} ${localManifest.generatedFrom ?? 'complete build manifest'} (${tools.length} registered tools)`,
+    ...(localManifest.serverInfo ? { serverInfo: localManifest.serverInfo } : {}),
     toolCount: tools.length,
     tools,
   }

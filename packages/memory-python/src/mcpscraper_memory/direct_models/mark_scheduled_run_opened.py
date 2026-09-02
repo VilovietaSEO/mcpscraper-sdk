@@ -11,4 +11,10 @@ class MarkScheduledRunOpenedInput(BaseModel):
 
 
 class MarkScheduledRunOpenedOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+    ok: bool = Field(..., alias="ok", description="")
+    run: dict[str, Any] | None = Field(None, alias="run", description="")
+    error: str | None = Field(None, alias="error", description="")
+    error_code: Literal['invalid_request', 'not_found', 'conflict', 'template_archived', 'renderer_unavailable', 'artifact_unavailable', 'view_link_unavailable', 'internal_error'] | None = Field(None, alias="errorCode", description="")
+    request_id: str | None = Field(None, alias="requestId", description="")

@@ -1,4 +1,4 @@
-# All 377 MCP tools with cURL
+# All 375 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (377)
+## Complete catalog (375)
 
 ## access
 
@@ -90,14 +90,12 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `access-decline-share` — Decline Shared Note
 - `access-inbox-settings` — Inbox Settings
 - `access-invite-account` — Invite To Account
-- `access-issue-key` — Issue API Key
 - `access-list-approved-senders` — List Approved Senders
 - `access-list-keys` — List API Keys
 - `access-note-inbox` — Note Inbox
 - `access-remove-approved-sender` — Remove Approved Sender
 - `access-revoke-key` — Revoke API Key
 - `access-revoke-share` — Revoke Note Share
-- `access-set-scope` — Set Key Scope / Plan
 - `access-share-note` — Share Note
 - `access-share-vault` — Share Vault Entitlement
 - `access-swap-vault` — Swap Active Vault
@@ -122,16 +120,19 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 ## analytics
 
+- `analytics_apply_site_setup` — Apply X-Ray Site Setup
 - `analytics_archive_event_definition` — Archive Browser Event Definition
 - `analytics_commit_crm_import` — Commit CRM CSV Import
 - `analytics_create_activation_destination` — Create Ad Activation Destination
 - `analytics_create_campaign_link` — Create Campaign Link
 - `analytics_create_conversion_rule` — Create Conversion Rule
 - `analytics_create_event_definition` — Create Browser Event Definition
+- `analytics_create_experiment` — Create X-Ray Experiment Draft
 - `analytics_create_export` — Create Analytics Export
 - `analytics_create_form` — Create Pixel-linked Form
 - `analytics_create_funnel` — Create Lead Funnel
 - `analytics_create_lead_score` — Create Lead Score
+- `analytics_create_post_purchase_survey` — Create Post-Purchase Survey Draft
 - `analytics_create_prediction_target` — Create Prediction Target
 - `analytics_create_saved_view` — Create Saved Analytics View
 - `analytics_delete_privacy_subject` — Delete Privacy Subject
@@ -142,6 +143,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_export_meta_technical` — Export Meta Technical JSONL
 - `analytics_export_privacy_subject` — Export Privacy Subject
 - `analytics_get_acquisition` — Analytics Acquisition
+- `analytics_get_attribution_methodology` — Get X-Ray Attribution Methodology
 - `analytics_get_business_metrics` — Analytics Business Metrics
 - `analytics_get_candidate_coverage` — Get Candidate Coverage
 - `analytics_get_channel_breakdown` — Analytics Channel Breakdowns
@@ -152,16 +154,20 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_get_dimensions` — Analytics Dimensions
 - `analytics_get_entitlement` — Get X-Ray Pixel Access
 - `analytics_get_events` — Analytics Events
+- `analytics_get_experiment` — Get X-Ray Experiment
 - `analytics_get_forecast` — Analytics Forecast
 - `analytics_get_funnel` — Get Lead Funnel Report
 - `analytics_get_health` — Analytics Pixel Health
+- `analytics_get_impact_report` — Get Observed and Reported Impact
 - `analytics_get_onboarding_state` — Get X-Ray Setup State
 - `analytics_get_overview` — Analytics Overview
 - `analytics_get_paths` — Analytics Conversion Paths
 - `analytics_get_person_journey` — Get Person Journey
+- `analytics_get_post_purchase_survey_report` — Get Post-Purchase Survey Report
 - `analytics_get_prediction_eligibility` — Get Prediction Eligibility
 - `analytics_get_session_timeline` — Get Session Timeline
 - `analytics_get_timeseries` — Analytics Timeseries
+- `analytics_get_view_evidence_status` — Get Provider View Evidence Status
 - `analytics_get_visitor_journey` — Get Visitor Journey
 - `analytics_list_activation_destinations` — List Ad Activation Destinations
 - `analytics_list_activation_receipts` — List Ad Activation Receipts
@@ -182,11 +188,15 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_list_sessions` — List X-Ray Sessions
 - `analytics_list_sites` — List Analytics Businesses
 - `analytics_list_visitors` — List X-Ray Visitors
+- `analytics_prepare_site_setup` — Prepare X-Ray Site Setup
 - `analytics_preview_crm_import` — Preview CRM CSV Import
 - `analytics_record_external_event` — Record Server Event
 - `analytics_retry_activation_delivery` — Retry Ad Activation Delivery
 - `analytics_save_activation_mapping` — Save Activation Event Mapping
 - `analytics_set_activation_automation` — Set Activation Automation
+- `analytics_set_experiment_state` — Set X-Ray Experiment State
+- `analytics_set_post_purchase_survey_state` — Set Post-Purchase Survey State
+- `analytics_setup_site` — Install X-Ray on a Site
 - `analytics_test_activation_destination` — Test Ad Activation Destination
 - `analytics_test_event_definition` — Preview Browser Event Definition
 - `analytics_test_funnel` — Test Lead Funnel
@@ -194,20 +204,8 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `analytics_update_onboarding_preferences` — Update X-Ray Setup Preferences
 - `analytics_validate_activation_mapping` — Validate Activation Event Mapping
 - `analytics_verify_live_event_definition` — Verify Live Browser Event
-- `analytics_withdraw_consent` — Withdraw Analytics Consent
-- `analytics_apply_site_setup` — Apply X-Ray Site Setup
-- `analytics_create_experiment` — Create X-Ray Experiment Draft
-- `analytics_get_experiment` — Get X-Ray Experiment
-- `analytics_prepare_site_setup` — Prepare X-Ray Site Setup
-- `analytics_set_experiment_state` — Set X-Ray Experiment State
-- `analytics_setup_site` — Install X-Ray on a Site
 - `analytics_verify_site_setup` — Verify X-Ray Site Setup
-- `analytics_create_post_purchase_survey` — Create Post-Purchase Survey Draft
-- `analytics_get_attribution_methodology` — Get X-Ray Attribution Methodology
-- `analytics_get_impact_report` — Get Observed and Reported Impact
-- `analytics_get_post_purchase_survey_report` — Get Post-Purchase Survey Report
-- `analytics_get_view_evidence_status` — Get Provider View Evidence Status
-- `analytics_set_post_purchase_survey_state` — Set Post-Purchase Survey State
+- `analytics_withdraw_consent` — Withdraw Analytics Consent
 
 ## web
 
@@ -396,6 +394,30 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 - `credits_info` — MCP Scraper Credits & Costs
 
+## crm
+
+- `crm-activity-append` — Append CRM Activity
+- `crm-counterpart-apply` — Apply CRM Counterpart Link
+- `crm-counterpart-preview` — Preview CRM Counterpart Link
+- `crm-deal-transition` — Transition CRM Deal
+- `crm-deal-upsert` — Upsert CRM Deal
+- `crm-duplicate-search` — Search CRM Duplicates
+- `crm-import-apply` — Apply CRM Import
+- `crm-import-preview` — Preview CRM Import
+- `crm-merge-apply` — Apply CRM Merge
+- `crm-merge-preview` — Preview CRM Merge
+- `crm-organization-get` — Get CRM Organization
+- `crm-organization-search` — Search CRM Organizations
+- `crm-organization-upsert` — Upsert CRM Organization
+- `crm-person-get` — Get CRM Person
+- `crm-person-search` — Search CRM People
+- `crm-person-upsert` — Upsert CRM Person
+- `crm-pipeline-list` — List CRM Pipelines
+- `crm-pipeline-upsert` — Upsert CRM Pipeline
+- `crm-quality-list` — List CRM Quality Issues
+- `crm-task-upsert` — Upsert CRM Task
+- `crm-work-search` — Search CRM Work
+
 ## directory
 
 - `directory_workflow` — Directory Workflow: Markets + Maps
@@ -521,6 +543,15 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `reddit_thread` — Reddit Thread + Comments
 - `reddit_trending` — Reddit Trending
 
+## research
+
+- `research-organization-capture` — Capture Research Organization
+- `research-organization-get` — Get Research Organization
+- `research-organization-search` — Search Research Organizations
+- `research-person-capture` — Capture Research Person
+- `research-person-get` — Get Research Person
+- `research-person-search` — Search Research People
+
 ## tables
 
 - `table-create` — Create Table
@@ -546,36 +577,3 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 - `youtube_harvest` — YouTube Video Harvest
 - `youtube_transcribe` — YouTube Transcription
-
-## crm
-
-- `crm-activity-append` — Append CRM Activity
-- `crm-counterpart-apply` — Apply CRM Counterpart Link
-- `crm-counterpart-preview` — Preview CRM Counterpart Link
-- `crm-deal-transition` — Transition CRM Deal
-- `crm-deal-upsert` — Upsert CRM Deal
-- `crm-duplicate-search` — Search CRM Duplicates
-- `crm-import-apply` — Apply CRM Import
-- `crm-import-preview` — Preview CRM Import
-- `crm-merge-apply` — Apply CRM Merge
-- `crm-merge-preview` — Preview CRM Merge
-- `crm-organization-get` — Get CRM Organization
-- `crm-organization-search` — Search CRM Organizations
-- `crm-organization-upsert` — Upsert CRM Organization
-- `crm-person-get` — Get CRM Person
-- `crm-person-search` — Search CRM People
-- `crm-person-upsert` — Upsert CRM Person
-- `crm-pipeline-list` — List CRM Pipelines
-- `crm-pipeline-upsert` — Upsert CRM Pipeline
-- `crm-quality-list` — List CRM Quality Issues
-- `crm-task-upsert` — Upsert CRM Task
-- `crm-work-search` — Search CRM Work
-
-## research
-
-- `research-organization-capture` — Capture Research Organization
-- `research-organization-get` — Get Research Organization
-- `research-organization-search` — Search Research Organizations
-- `research-person-capture` — Capture Research Person
-- `research-person-get` — Get Research Person
-- `research-person-search` — Search Research People
