@@ -23029,7 +23029,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_thread",
     "category": "reddit",
     "title": "Reddit Thread + Comments",
-    "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. It makes up to two fresh managed residential browser attempts, then up to two managed-browser backup attempts that can recover the post and 25 comments, stopping on the first accepted result. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
+    "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. Each of up to two primary attempts finds and clicks the exact URL through a site-restricted web search before landing with a managed residential browser; up to two managed-browser backup attempts can then recover the post and 25 comments. It stops on the first accepted result. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
     "inputSchema": {
       "type": "object",
       "properties": {
