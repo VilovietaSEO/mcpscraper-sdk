@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto'
 import { MemoryClient } from '../packages/memory/dist/index.js'
 
-const apiKey = process.env.MCP_MEMORY_API_KEY
-if (!apiKey) throw new Error('Set MCP_MEMORY_API_KEY to a synthetic test identity')
+const apiKey = process.env.MCP_SCRAPER_API_KEY
+if (!apiKey) throw new Error('Set MCP_SCRAPER_API_KEY to a synthetic test identity')
 
 const client = new MemoryClient({ apiKey })
 const observedAt = new Date().toISOString()

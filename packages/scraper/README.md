@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated, typed 377-tool MCP surface from `contracts/mcp.tools.json`, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
+`client.tools` is the generated, typed 375-tool MCP surface from `contracts/mcp.tools.json`, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
@@ -177,7 +177,7 @@ const hits = await client.memoryTools.memory.search({ query: 'competitor pricing
 const vaults = await client.memoryTools.vaults.listVaults({})
 ```
 
-Use `mcpscraper-memory-sdk`'s own `MemoryClient` instead if you already have a dedicated `mk_...` memory key and want to talk to `memory.mcpscraper.dev` directly.
+Use `mcpscraper-memory-sdk`'s `MemoryClient` when you prefer its Memory-first namespaces; it uses the same MCP Scraper key and root endpoint.
 
 ## Regenerating types
 

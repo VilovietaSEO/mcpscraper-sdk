@@ -18,9 +18,12 @@ import {
   WebhooksNamespace,
 } from './generated/methods.js'
 import { AssistantNamespace, CrmNamespace, ResearchNamespace } from './generated/direct/methods.js'
+import { DIRECT_TO_UNIFIED_TOOL_NAMES } from './generated/direct/name-map.js'
 
 export interface MemoryClientOptions {
+  /** The same MCP_SCRAPER_API_KEY used for scraper calls. */
   apiKey: string
+  /** Canonical MCP URL. Defaults to https://mcpscraper.dev/mcp. */
   baseUrl?: string
   fetch?: typeof globalThis.fetch
 }
@@ -70,7 +73,7 @@ export class MemoryClient {
 
   constructor(options: MemoryClientOptions) {
     this.apiKey = options.apiKey
-    this.baseUrl = options.baseUrl ?? 'https://memory.mcpscraper.dev'
+    this.baseUrl = (options.baseUrl ?? 'https://mcpscraper.dev/mcp').replace(/\/$/, '')
     this.fetchImpl = options.fetch ?? globalThis.fetch
 
     const callTool = this.callTool.bind(this)
@@ -96,18 +99,22 @@ export class MemoryClient {
   }
 
   private async callTool(name: string, args: unknown): Promise<unknown> {
-    const res = await this.fetchImpl(`${this.baseUrl}/mcp`, {
+    const unifiedName = DIRECT_TO_UNIFIED_TOOL_NAMES[name] ?? name
+    if (unifiedName === 'access-issue-key' || unifiedName === 'access-set-scope') {
+      throw new MemoryApiError('Legacy Memory key issuance and scope mutation are retired; use MCP_SCRAPER_API_KEY with https://mcpscraper.dev/mcp.')
+    }
+    const res = await this.fetchImpl(this.baseUrl, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         accept: 'application/json, text/event-stream',
-        authorization: `Bearer ${this.apiKey}`,
+        'x-api-key': this.apiKey,
       },
       body: JSON.stringify({
         jsonrpc: '2.0',
         id: ++this.rpcId,
         method: 'tools/call',
-        params: { name, arguments: args },
+        params: { name: unifiedName, arguments: args },
       }),
     })
 

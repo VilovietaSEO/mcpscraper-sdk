@@ -135,6 +135,13 @@ async function main(): Promise<void> {
   ].join('\n')
 
   await writeFile(join(OUT_DIR, 'methods.ts'), methodsFile)
+  const nameMap = Object.fromEntries(
+    manifest.tools.map(tool => [tool.name, tool.legacyId]).sort(([left], [right]) => left.localeCompare(right)),
+  )
+  await writeFile(
+    join(OUT_DIR, 'name-map.ts'),
+    `export const DIRECT_TO_UNIFIED_TOOL_NAMES: Readonly<Record<string, string>> = ${JSON.stringify(nameMap, null, 2)}\n`,
+  )
 
   console.log(`Generated ${manifest.tools.length} tool files across ${byCategory.size} categories.`)
   if (fallbacks.length) {

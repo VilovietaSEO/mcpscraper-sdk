@@ -11,4 +11,9 @@ class ImageProjectListInput(BaseModel):
 
 
 class ImageProjectListOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+    ok: bool = Field(..., alias="ok", description="")
+    projects: list[dict[str, Any]] | None = Field(None, alias="projects", description="")
+    code: str | None = Field(None, alias="code", description="")
+    error: str | None = Field(None, alias="error", description="")

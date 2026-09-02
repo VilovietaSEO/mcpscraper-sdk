@@ -76,7 +76,7 @@ test('unified client creates an immutable editorial artifact template', async ()
 test('direct Memory client uses hosted tool names for result and template contracts', async () => {
   const called: string[] = []
   const client = new MemoryClient({
-    apiKey: 'mk_test',
+    apiKey: 'sk_test',
     fetch: fakeFetch(body => {
       called.push(body.params.name)
       if (body.params.name === 'list_scheduled_runs') {

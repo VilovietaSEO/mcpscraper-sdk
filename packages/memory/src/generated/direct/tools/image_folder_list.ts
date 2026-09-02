@@ -11,21 +11,17 @@ export interface Input {
   projectId: string;
 }
 
-export type Output =
-  | {
-      ok: true;
-      folders: {
-        id: string;
-        projectId: string;
-        parentId: string | null;
-        name: string;
-        depth: number;
-        createdAt: string;
-        updatedAt: string;
-      }[];
-    }
-  | {
-      ok: false;
-      code: string;
-      error: string;
-    };
+export interface Output {
+  ok: boolean;
+  folders?: {
+    id: string;
+    projectId: string;
+    parentId: string | null;
+    name: string;
+    depth: number;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+  code?: string;
+  error?: string;
+}

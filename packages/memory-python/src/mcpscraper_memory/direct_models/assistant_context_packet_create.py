@@ -19,4 +19,9 @@ class AssistantContextPacketCreateInput(BaseModel):
 
 
 class AssistantContextPacketCreateOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+    ok: bool = Field(..., alias="ok", description="")
+    packet: dict[str, Any] | None = Field(None, alias="packet", description="")
+    code: Literal['auth_error', 'scope_error', 'invalid_request', 'not_found', 'revision_conflict', 'expired', 'data_integrity_error'] | None = Field(None, alias="code", description="")
+    error: str | None = Field(None, alias="error", description="")

@@ -168,89 +168,6 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
-    "name": "access-issue-key",
-    "category": "access",
-    "title": "Issue API Key",
-    "description": "Issue a new API key for another identity, scoped to vaults the caller already holds, with a plan and optional expiry. The secret is returned exactly once and can never be retrieved again — capture it immediately. Requires write scope; you can only grant vaults you hold.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "granteeIdentity": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Identity that will own the newly issued key (e.g. an email or user id)."
-        },
-        "vaults": {
-          "minItems": 1,
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1
-          },
-          "description": "Vaults the new key is entitled to; the caller must already hold each. At least one required."
-        },
-        "scope": {
-          "description": "Scope grant (read/write/export/index/admin/swap). Optional; omit for least-privilege read-only.",
-          "type": "object",
-          "properties": {
-            "read": {
-              "description": "Whether this scope permits reading.",
-              "type": "boolean"
-            },
-            "write": {
-              "description": "Whether this scope permits writing.",
-              "type": "boolean"
-            },
-            "export": {
-              "description": "Whether this scope permits full-vault export.",
-              "type": "boolean"
-            },
-            "index": {
-              "description": "Ordered zero-based or one-based position defined by the surrounding collection.",
-              "type": "boolean"
-            },
-            "admin": {
-              "description": "Whether this scope grants administrative control.",
-              "type": "boolean"
-            },
-            "swap": {
-              "description": "Whether this scope permits changing the account active vault.",
-              "type": "boolean"
-            }
-          }
-        },
-        "plan": {
-          "description": "Subscription plan carried by the key. Optional; defaults to free.",
-          "type": "string",
-          "enum": [
-            "free",
-            "pro",
-            "team",
-            "enterprise"
-          ]
-        },
-        "expiresInDays": {
-          "description": "Days until the key expires (1-3650). Optional; omit for a non-expiring key.",
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 3650
-        }
-      },
-      "required": [
-        "granteeIdentity",
-        "vaults"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Issue API Key",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": false,
-      "openWorldHint": false
-    }
-  },
-  {
     "name": "access-list-approved-senders",
     "category": "access",
     "title": "List Approved Senders",
@@ -388,73 +305,6 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Revoke Note Share",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "access-set-scope",
-    "category": "access",
-    "title": "Set Key Scope / Plan",
-    "description": "Raise or lower an owned API key's access scope (read/write/export/index/admin/swap) and/or billing plan tier. Partial scope updates replace the full scope with the normalized set provided. Only the owning identity may change a key; requires write scope.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "keyId": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Identifier of the key to modify (from access-list-keys). Must be a key the caller owns."
-        },
-        "scope": {
-          "description": "New scope set. Partial; the provided keys are normalized and REPLACE the full existing scope. Optional, but supply scope and/or plan.",
-          "type": "object",
-          "properties": {
-            "read": {
-              "description": "Whether this scope permits reading.",
-              "type": "boolean"
-            },
-            "write": {
-              "description": "Whether this scope permits writing.",
-              "type": "boolean"
-            },
-            "export": {
-              "description": "Whether this scope permits full-vault export.",
-              "type": "boolean"
-            },
-            "index": {
-              "description": "Ordered zero-based or one-based position defined by the surrounding collection.",
-              "type": "boolean"
-            },
-            "admin": {
-              "description": "Whether this scope grants administrative control.",
-              "type": "boolean"
-            },
-            "swap": {
-              "description": "Whether this scope permits changing the account active vault.",
-              "type": "boolean"
-            }
-          }
-        },
-        "plan": {
-          "description": "New subscription plan. Optional, but supply scope and/or plan.",
-          "type": "string",
-          "enum": [
-            "free",
-            "pro",
-            "team",
-            "enterprise"
-          ]
-        }
-      },
-      "required": [
-        "keyId"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Set Key Scope / Plan",
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -702,6 +552,61 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_apply_site_setup",
+    "category": "analytics",
+    "title": "Apply X-Ray Site Setup",
+    "description": "Publish a confirmed measurement-plan revision to the installed X-Ray tag using an idempotent retry key. No repository access or visitor-experiment authority.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id owning the setup."
+        },
+        "setupId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Durable owner-bound setup id returned by an X-Ray setup operation; it is not a browser session id."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
+        },
+        "confirmed": {
+          "type": "boolean",
+          "const": true,
+          "description": "Confirms publishing this exact measurement manifest to the installed X-Ray tag runtime. This does not activate an experiment."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "setupId",
+        "revision",
+        "confirmed",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Apply X-Ray Site Setup",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
     }
   },
   {
@@ -1316,6 +1221,465 @@ export const MCP_TOOL_CATALOG = [
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_create_experiment",
+    "category": "analytics",
+    "title": "Create X-Ray Experiment Draft",
+    "description": "Create an owner-bound, preregistered experiment draft from a measured site. Requires a hypothesis, primary metric, guardrails, audience, duration, sample threshold, expiry, control, allocations, and only allowlisted visual operations. It never approves or activates the experiment.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "plan": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Owner-facing experiment name."
+            },
+            "hypothesis": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 500,
+              "description": "Falsifiable prediction connecting the declared change to the primary metric."
+            },
+            "primaryMetricEvent": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]{1,79}$",
+              "description": "Persisted X-Ray event used as the sole primary outcome metric."
+            },
+            "guardrailEvents": {
+              "default": [],
+              "description": "Events monitored for unacceptable harm; these do not replace the primary metric.",
+              "maxItems": 10,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{1,79}$"
+              }
+            },
+            "guardrailMaximumAbsoluteIncrease": {
+              "default": 0.05,
+              "description": "Maximum allowed absolute increase in any declared harm-event rate versus control before automatic pause.",
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1
+            },
+            "stoppingRule": {
+              "default": {
+                "method": "fixed_horizon",
+                "actionOnSampleRatioMismatch": "pause",
+                "actionOnGuardrailBreach": "pause",
+                "winnerRequiresSignificance": true
+              },
+              "description": "Pre-registered stopping behavior; no continuous peeking or automatic winner rollout.",
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string",
+                  "const": "fixed_horizon",
+                  "description": "Evaluate only after the registered minimum duration and sample."
+                },
+                "actionOnSampleRatioMismatch": {
+                  "type": "string",
+                  "const": "pause",
+                  "description": "Pause when assignment balance is invalid."
+                },
+                "actionOnGuardrailBreach": {
+                  "type": "string",
+                  "const": "pause",
+                  "description": "Pause when a registered harm guardrail is breached."
+                },
+                "winnerRequiresSignificance": {
+                  "type": "boolean",
+                  "const": true,
+                  "description": "Require the registered significance threshold before calling a winner."
+                }
+              },
+              "required": [
+                "method",
+                "actionOnSampleRatioMismatch",
+                "actionOnGuardrailBreach",
+                "winnerRequiresSignificance"
+              ],
+              "additionalProperties": false
+            },
+            "rollbackPlan": {
+              "default": {
+                "action": "restore_control",
+                "triggers": [
+                  "pause",
+                  "kill",
+                  "expiry",
+                  "manifest_error",
+                  "selector_ambiguity",
+                  "performance_guardrail"
+                ]
+              },
+              "description": "Closed rollback contract executed by the Pixel.",
+              "type": "object",
+              "properties": {
+                "action": {
+                  "type": "string",
+                  "const": "restore_control",
+                  "description": "Restore every captured control value."
+                },
+                "triggers": {
+                  "minItems": 6,
+                  "maxItems": 6,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "pause",
+                      "kill",
+                      "expiry",
+                      "manifest_error",
+                      "selector_ambiguity",
+                      "performance_guardrail"
+                    ],
+                    "description": "Fail-to-control condition."
+                  },
+                  "description": "Complete closed rollback trigger set."
+                }
+              },
+              "required": [
+                "action",
+                "triggers"
+              ],
+              "additionalProperties": false
+            },
+            "performanceGuardrailMs": {
+              "default": 16,
+              "description": "Maximum synchronous DOM-application time before the Pixel restores control.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "audience": {
+              "type": "object",
+              "properties": {
+                "routePrefixes": {
+                  "minItems": 1,
+                  "maxItems": 25,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 2000,
+                    "pattern": "^\\/.*"
+                  },
+                  "description": "Approved route prefixes eligible for assignment."
+                },
+                "trafficClass": {
+                  "default": "production",
+                  "description": "Declared traffic population; canary state remains separately gated.",
+                  "type": "string",
+                  "enum": [
+                    "internal",
+                    "test",
+                    "production"
+                  ]
+                }
+              },
+              "required": [
+                "routePrefixes"
+              ],
+              "additionalProperties": false,
+              "description": "Bounded route and traffic audience."
+            },
+            "assignmentUnit": {
+              "default": "visitor",
+              "description": "Stable mutually exclusive assignment unit.",
+              "type": "string",
+              "enum": [
+                "visitor",
+                "session"
+              ]
+            },
+            "minimumDurationHours": {
+              "type": "integer",
+              "minimum": 24,
+              "maximum": 2160,
+              "description": "Minimum active hours before a result may be called."
+            },
+            "minimumExposures": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 10000000,
+              "description": "Minimum visible variant exposures before evaluation."
+            },
+            "minimumDetectableEffect": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1,
+              "description": "Smallest absolute effect worth detecting, expressed from 0 to 1."
+            },
+            "alpha": {
+              "default": 0.05,
+              "description": "Pre-registered false-positive threshold.",
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 0.2
+            },
+            "power": {
+              "default": 0.8,
+              "description": "Pre-registered statistical power target.",
+              "type": "number",
+              "minimum": 0.7,
+              "maximum": 0.99
+            },
+            "variants": {
+              "minItems": 2,
+              "maxItems": 8,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "variantId": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]{1,79}$",
+                    "description": "Stable variant identifier."
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "description": "Owner-facing variant label."
+                  },
+                  "allocation": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1,
+                    "description": "Traffic allocation from 0 to 1; all variants must total 1."
+                  },
+                  "operations": {
+                    "maxItems": 12,
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "replace_text",
+                              "description": "Replace plain text only."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique bounded CSS selector."
+                            },
+                            "text": {
+                              "type": "string",
+                              "maxLength": 240,
+                              "description": "Replacement text without markup."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "set_style_token",
+                              "description": "Apply one product-owned style token."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique bounded CSS selector."
+                            },
+                            "token": {
+                              "type": "string",
+                              "enum": [
+                                "cta_primary",
+                                "cta_secondary",
+                                "cta_contrast",
+                                "muted",
+                                "highlight"
+                              ],
+                              "description": "Allowlisted style token."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "token"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "swap_image",
+                              "description": "Swap one image using HTTPS."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique image selector."
+                            },
+                            "src": {
+                              "type": "string",
+                              "maxLength": 2000,
+                              "format": "uri",
+                              "description": "HTTPS image URL."
+                            },
+                            "alt": {
+                              "type": "string",
+                              "maxLength": 240,
+                              "description": "Required bounded alternative text."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "src",
+                            "alt"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "move_relative",
+                              "description": "Move one sibling before or after another."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique element selector."
+                            },
+                            "anchorSelector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique sibling anchor selector."
+                            },
+                            "position": {
+                              "type": "string",
+                              "enum": [
+                                "before",
+                                "after"
+                              ],
+                              "description": "Placement relative to the anchor."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "anchorSelector",
+                            "position"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {
+                              "type": "string",
+                              "const": "set_visibility",
+                              "description": "Show or hide one unique element."
+                            },
+                            "selector": {
+                              "type": "string",
+                              "minLength": 1,
+                              "maxLength": 500,
+                              "description": "Unique bounded CSS selector."
+                            },
+                            "visible": {
+                              "type": "boolean",
+                              "description": "Whether the selected element should be visible."
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "selector",
+                            "visible"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "description": "Closed, data-only presentation operations; an empty list is the control."
+                  }
+                },
+                "required": [
+                  "variantId",
+                  "label",
+                  "allocation",
+                  "operations"
+                ],
+                "additionalProperties": false,
+                "description": "One control or treatment variant."
+              },
+              "description": "Two to eight mutually exclusive variants including one control."
+            },
+            "expiresAt": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+              "description": "Hard experiment expiry; the Pixel rolls back after this instant."
+            }
+          },
+          "required": [
+            "name",
+            "hypothesis",
+            "primaryMetricEvent",
+            "audience",
+            "minimumDurationHours",
+            "minimumExposures",
+            "minimumDetectableEffect",
+            "variants",
+            "expiresAt"
+          ],
+          "additionalProperties": false,
+          "description": "Preregistered hypothesis, metric, audience, sample requirements, expiry, allocations, and allowlisted visual operations. One control variant must have no operations."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "plan",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create X-Ray Experiment Draft",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
       "openWorldHint": false
     }
   },
@@ -2286,6 +2650,132 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Create Lead Score",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_create_post_purchase_survey",
+    "category": "analytics",
+    "title": "Create Post-Purchase Survey Draft",
+    "description": "Create an idempotent, structured, contact-free post-purchase survey draft. Customer answers remain reported influence and cannot establish identity, mutate CRM, qualify activation, or change observed touches.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "description": "Owner-facing survey name."
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Customer-visible structured influence question; do not request contact data or free text."
+        },
+        "selectionMode": {
+          "type": "string",
+          "enum": [
+            "single",
+            "multiple"
+          ],
+          "description": "Whether a respondent may select one influence or several."
+        },
+        "eligibleOutcomeFamilies": {
+          "minItems": 1,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "description": "Authoritative outcome families eligible to receive an invitation."
+        },
+        "exchangeTtlSeconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 86400,
+          "description": "Short-lived merchant exchange-code lifetime."
+        },
+        "sessionTtlSeconds": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 86400,
+          "description": "Hosted survey session lifetime after one-time exchange."
+        },
+        "approvedCopyId": {
+          "description": "Versioned privacy disclosure approval. A draft may omit it; production publication may not.",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "options": {
+          "minItems": 2,
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "optionId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "description": "Stable opaque option id; changing a label never changes this id."
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "Bounded owner-authored influence label. Free-text customer testimony is not accepted."
+              }
+            },
+            "required": [
+              "optionId",
+              "label"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Two to twenty stable structured influences."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "name",
+        "question",
+        "selectionMode",
+        "eligibleOutcomeFamilies",
+        "exchangeTtlSeconds",
+        "sessionTtlSeconds",
+        "options",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create Post-Purchase Survey Draft",
       "readOnlyHint": false,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -3434,6 +3924,34 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Analytics Acquisition",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_attribution_methodology",
+    "category": "analytics",
+    "title": "Get X-Ray Attribution Methodology",
+    "description": "Read the seven observed models, default position weights, explicit observed-plus-reported methodology, and evidence boundaries. Use before requesting combined impact; this never turns survey testimony or aggregate impressions into deterministic touches.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get X-Ray Attribution Methodology",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -5068,6 +5586,41 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_experiment",
+    "category": "analytics",
+    "title": "Get X-Ray Experiment",
+    "description": "Read the preregistered plan, exact state, assignment counts, exposures, outcomes, and decision status for one authorized experiment. Browser intent is never reported as a terminal business outcome.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "experimentId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound experiment id returned by analytics_create_experiment."
+        }
+      },
+      "required": [
+        "siteId",
+        "experimentId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get X-Ray Experiment",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_forecast",
     "category": "analytics",
     "title": "Analytics Forecast",
@@ -5602,6 +6155,163 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Analytics Pixel Health",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_impact_report",
+    "category": "analytics",
+    "title": "Get Observed and Reported Impact",
+    "description": "Read an opt-in impact projection that keeps observed attribution and customer-reported influence in separate ledgers. Requires a published survey, one existing observed model, an immutable methodology version, and explicit weights totaling 1,000,000 micros.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "surveyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Published or paused post-purchase survey whose immutable responses supply the reported ledger."
+        },
+        "baseModel": {
+          "type": "string",
+          "enum": [
+            "first_touch",
+            "last_touch",
+            "last_non_direct",
+            "linear",
+            "time_decay",
+            "position_based",
+            "custom_weighted"
+          ],
+          "description": "Existing observed attribution model; observed_plus_reported is deliberately not an observed model."
+        },
+        "observedWeightMicros": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000,
+          "description": "Observed share in micros. It must total exactly 1,000,000 with reportedWeightMicros."
+        },
+        "reportedWeightMicros": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000,
+          "description": "Customer-reported share in micros. It must total exactly 1,000,000 with observedWeightMicros."
+        },
+        "methodologyVersion": {
+          "type": "string",
+          "const": "xray_observed_plus_reported_equal_selected_v1",
+          "description": "Immutable methodology selected after reading analytics_get_attribution_methodology."
+        },
+        "from": {
+          "description": "Inclusive observed-evidence start. Omit with to for the last 30 days.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "to": {
+          "description": "Exclusive observed-evidence end. Omit to use now.",
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+        },
+        "clickWindow": {
+          "default": 90,
+          "description": "Independent observed click window.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        },
+        "viewWindow": {
+          "default": 90,
+          "description": "Independent view window; provider-unavailable state never manufactures view touches.",
+          "anyOf": [
+            {
+              "type": "number",
+              "const": 7
+            },
+            {
+              "type": "number",
+              "const": 14
+            },
+            {
+              "type": "number",
+              "const": 30
+            },
+            {
+              "type": "number",
+              "const": 60
+            },
+            {
+              "type": "number",
+              "const": 90
+            },
+            {
+              "type": "number",
+              "const": 180
+            },
+            {
+              "type": "number",
+              "const": 365
+            },
+            {
+              "type": "string",
+              "const": "lifetime"
+            }
+          ]
+        }
+      },
+      "required": [
+        "siteId",
+        "surveyId",
+        "baseModel",
+        "observedWeightMicros",
+        "reportedWeightMicros",
+        "methodologyVersion"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Observed and Reported Impact",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -6166,6 +6876,41 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_get_post_purchase_survey_report",
+    "category": "analytics",
+    "title": "Get Post-Purchase Survey Report",
+    "description": "Read aggregate response coverage, option counts, and separately labeled reported-influence evidence for one survey. The output excludes contact fields, raw invitation tokens, and deterministic touch claims.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "surveyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound survey id."
+        }
+      },
+      "required": [
+        "siteId",
+        "surveyId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Post-Purchase Survey Report",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "analytics_get_prediction_eligibility",
     "category": "analytics",
     "title": "Get Prediction Eligibility",
@@ -6489,6 +7234,34 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Analytics Timeseries",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_get_view_evidence_status",
+    "category": "analytics",
+    "title": "Get Provider View Evidence Status",
+    "description": "Read provider-by-provider availability for event-level view evidence. Unavailable or unproven is an honest result; aggregate campaign impressions can never create person-level attribution touches.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        }
+      },
+      "required": [
+        "siteId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Get Provider View Evidence Status",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
@@ -7804,6 +8577,88 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "analytics_prepare_site_setup",
+    "category": "analytics",
+    "title": "Prepare X-Ray Site Setup",
+    "description": "Inspect the public site and prepare an expiring measurement plan for an already installed X-Ray tag. No repository access, credentials, code changes, visitor delivery, or MCP Scraper Credits.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id returned by analytics_list_sites."
+        },
+        "startUrl": {
+          "type": "string",
+          "maxLength": 3000,
+          "format": "uri",
+          "description": "Public same-origin URL from which X-Ray discovers bounded routes and rendering surfaces."
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Plain-language customer outcome to measure; do not paste credentials, source code, form contents, or visitor data."
+        },
+        "businessModel": {
+          "description": "Optional user-confirmed model; omit to receive an evidence-backed recommendation.",
+          "type": "string",
+          "enum": [
+            "saas",
+            "lead_generation",
+            "ecommerce"
+          ]
+        },
+        "scope": {
+          "default": "same_origin",
+          "description": "Bounded route discovery scope; neither mode authorizes third-party crawling.",
+          "type": "string",
+          "enum": [
+            "same_origin",
+            "sitemap"
+          ]
+        },
+        "maxPages": {
+          "default": 50,
+          "description": "Maximum pages inspected under the X-Ray entitlement; this consumes zero MCP Scraper Credits.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 250
+        },
+        "pixelId": {
+          "description": "Optional existing Pixel belonging to the Site; omit to let the service resolve the canonical Pixel.",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "consentMode": {
+          "default": "required",
+          "description": "Consent expectation for non-delivering discovery. It never grants a visitor consent choice.",
+          "type": "string",
+          "enum": [
+            "required",
+            "granted_test",
+            "unknown"
+          ]
+        }
+      },
+      "required": [
+        "siteId",
+        "startUrl"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Prepare X-Ray Site Setup",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "analytics_preview_crm_import",
     "category": "analytics",
     "title": "Preview CRM CSV Import",
@@ -8357,6 +9212,238 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_set_experiment_state",
+    "category": "analytics",
+    "title": "Set X-Ray Experiment State",
+    "description": "Approve, canary, activate, pause, kill, or archive one exact experiment revision. Approval and visitor activation are separate confirmed steps. Activation publishes the signed tag manifest; pause and kill publish rollback. Reuse the same idempotency key only for the identical transition.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "experimentId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound experiment id returned by analytics_create_experiment."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact experiment revision being changed."
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "approve",
+            "activate_canary",
+            "activate",
+            "pause",
+            "kill",
+            "archive"
+          ],
+          "description": "Approval and activation are distinct operations. Pause and kill publish rollback immediately."
+        },
+        "confirmed": {
+          "description": "Required for approve, activate_canary, and activate. This confirms only the exact state transition.",
+          "type": "boolean",
+          "const": true
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "experimentId",
+        "revision",
+        "operation",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Set X-Ray Experiment State",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_set_post_purchase_survey_state",
+    "category": "analytics",
+    "title": "Set Post-Purchase Survey State",
+    "description": "Publish, pause, or irreversibly archive one exact survey revision. Production publication requires approved privacy disclosure evidence. Reuse the same idempotency key only for the identical transition; archive cannot be undone.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id."
+        },
+        "surveyId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Owner-bound survey id."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact survey revision being changed."
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "published",
+            "paused",
+            "archived"
+          ],
+          "description": "Publish or pause this revision. Archive is irreversible."
+        },
+        "approvedCopyId": {
+          "description": "Approved privacy disclosure identifier required for production publication; it is not legal approval by itself.",
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "surveyId",
+        "revision",
+        "state",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Set Post-Purchase Survey State",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_setup_site",
+    "category": "analytics",
+    "title": "Install X-Ray on a Site",
+    "description": "Use for “set up X-Ray” or “tell me what drives customers.” One installed X-Ray tag loads a digest-bound, versioned measurement manifest across approved pages; GitHub access is not required. State is a durable owner-bound setupId and revision, never a browser session. Setup charges zero MCP Scraper Credits. Apply publishes measurement rules only. Experiment approval and activation are separate. Returns exactly one honest next action.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "description": "Authorized Analytics Site id. Supply siteId or startUrl on the first call.",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "startUrl": {
+          "description": "Public same-origin URL to set up. Supply only when siteId is not yet known.",
+          "type": "string",
+          "maxLength": 3000,
+          "format": "uri"
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Plain-language customer outcome to measure; do not paste credentials, source code, form contents, or visitor data."
+        },
+        "setupId": {
+          "description": "Reuse to continue an existing durable setup after approval, deployment, or reconnecting.",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
+        },
+        "businessModel": {
+          "description": "Optional explicit business model; omit to infer it from bounded site evidence.",
+          "type": "string",
+          "enum": [
+            "saas",
+            "lead_generation",
+            "ecommerce"
+          ]
+        },
+        "goalAction": {
+          "default": "continue",
+          "description": "Desired lifecycle step. Continue lets the façade select the single safe next operation from durable state.",
+          "type": "string",
+          "enum": [
+            "continue",
+            "prepare",
+            "apply",
+            "verify",
+            "first_answers"
+          ]
+        },
+        "authority": {
+          "description": "Source authority or ownership context supporting this content.",
+          "type": "object",
+          "properties": {
+            "confirmed": {
+              "description": "Confirms publishing this exact setup revision to the installed X-Ray tag runtime. It does not authorize a visitor experiment.",
+              "type": "boolean",
+              "const": true
+            },
+            "confirmedCanary": {
+              "description": "Separately authorizes labeled verification canaries for this exact revision; it does not authorize apply, merge, or deploy.",
+              "type": "boolean",
+              "const": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "idempotencyKey": {
+          "description": "Required only for apply or canary-capable verify; reuse for the exact same intent after an unknown result.",
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Install X-Ray on a Site",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
     }
   },
   {
@@ -9104,6 +10191,60 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": false
+    }
+  },
+  {
+    "name": "analytics_verify_site_setup",
+    "category": "analytics",
+    "title": "Verify X-Ray Site Setup",
+    "description": "Expert live proof. Defaults non-delivering; confirmedCanary allows labeled canaries. A PR/build is not deployed definition or outcome proof.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "siteId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Authorized Analytics Site id owning the setup."
+        },
+        "setupId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Durable owner-bound setup id returned by an X-Ray setup operation; it is not a browser session id."
+        },
+        "revision": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
+        },
+        "confirmedCanary": {
+          "description": "Omit for non-delivering interception. True separately authorizes only labeled, bounded canaries; it does not authorize merge or deploy.",
+          "type": "boolean",
+          "const": true
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 160,
+          "description": "Retry key; reuse only for this exact mutation."
+        }
+      },
+      "required": [
+        "siteId",
+        "setupId",
+        "revision",
+        "idempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Verify X-Ray Site Setup",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
     }
   },
   {
@@ -16411,6 +17552,1940 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "crm-activity-append",
+    "category": "crm",
+    "title": "Append CRM Activity",
+    "description": "Append one idempotent governed CRM activity to canonical Communication, linked only to stable CRM…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        },
+        "personEntityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM Person entity identifier; Research identifiers are rejected."
+        },
+        "entityIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "maxItems": 100,
+          "default": [],
+          "description": "Stable CRM entity identifiers associated with this CRM activity, task, or deal."
+        },
+        "activityType": {
+          "type": "string",
+          "enum": [
+            "call",
+            "meeting",
+            "email",
+            "message",
+            "form",
+            "form_submission",
+            "conversion",
+            "note",
+            "calendar_event"
+          ],
+          "description": "Canonical CRM activity family recorded on the associated CRM relationship."
+        },
+        "kind": {
+          "type": "string",
+          "const": "form_submission",
+          "description": "Governed type discriminator for this rule, score, event, or record."
+        },
+        "occurredAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when the source event actually occurred."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "default": "Form submission",
+          "description": "Human-readable title for the proposed record or authored content."
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 200000,
+          "default": "",
+          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
+        },
+        "submittedFields": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Bounded submitted form fields retained only on the canonical CRM Communication."
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {},
+          "description": "Complete governed note properties required by the target vault contract."
+        }
+      },
+      "required": [
+        "idempotencyKey",
+        "occurredAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Append CRM Activity",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-counterpart-apply",
+    "category": "crm",
+    "title": "Apply CRM Counterpart Link",
+    "description": "Apply an unexpired owner-scoped counterpart link preview using its exact handle and digest. The…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "planId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Durable CRM provisioning-plan identifier returned by the planning operation."
+        },
+        "planHandle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Owner-scoped opaque preview handle returned with the plan."
+        },
+        "digest": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "description": "Exact SHA-256 digest returned by the preview; any changed input invalidates it."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        }
+      },
+      "required": [
+        "planId",
+        "planHandle",
+        "digest",
+        "idempotencyKey"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Apply CRM Counterpart Link",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-counterpart-preview",
+    "category": "crm",
+    "title": "Preview CRM Counterpart Link",
+    "description": "Preview an explicit link between one Research record and one CRM record of the same kind. Link-only is…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "researchEntityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable Research entity identifier used only for explicit counterpart planning."
+        },
+        "crmEntityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM entity identifier; it is distinct from any Research record identifier."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "ttlMinutes": {
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 1440,
+          "default": 60,
+          "description": "Bounded preview lifetime in minutes before the plan expires."
+        },
+        "mode": {
+          "type": "string",
+          "const": "link_only",
+          "default": "link_only",
+          "description": "Governed execution mode for this operation."
+        }
+      },
+      "required": [
+        "researchEntityId",
+        "crmEntityId",
+        "idempotencyKey"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Preview CRM Counterpart Link",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-deal-transition",
+    "category": "crm",
+    "title": "Transition CRM Deal",
+    "description": "Apply one governed deal-stage transition after enforcing the pipeline’s allowed forward/backward moves…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "dealId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM deal or opportunity identifier."
+        },
+        "pipelineId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Exact CRM pipeline identifier selected from authorized tenant discovery."
+        },
+        "targetStageId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Governed destination stage identifier for this deal transition."
+        },
+        "baseRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {},
+          "description": "Ordered form-field definitions to render and validate for submissions."
+        }
+      },
+      "required": [
+        "dealId",
+        "pipelineId",
+        "targetStageId",
+        "baseRevision",
+        "idempotencyKey"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Transition CRM Deal",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-deal-upsert",
+    "category": "crm",
+    "title": "Upsert CRM Deal",
+    "description": "Create or revision-check a canonical Deal associated only with stable CRM people or organizations. A…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "dealId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM deal or opportunity identifier."
+        },
+        "baseRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "entityIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "minItems": 1,
+          "maxItems": 100,
+          "description": "Stable CRM entity identifiers associated with this CRM activity, task, or deal."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Human-readable title for the proposed record or authored content."
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 200000,
+          "default": "",
+          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
+        },
+        "pipelineId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Exact CRM pipeline identifier selected from authorized tenant discovery."
+        },
+        "stageId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Exact CRM stage identifier required for the conversion rule to match."
+        },
+        "probability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Deal probability from zero through one hundred for the selected governed stage."
+        },
+        "party": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM person or organization party associated with the deal."
+        },
+        "enteredAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 time when the deal entered the selected pipeline stage."
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Typed bounded comparison or field value for this declarative rule."
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Three-letter ISO currency code for the event value."
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {},
+          "description": "Complete governed note properties required by the target vault contract."
+        }
+      },
+      "required": [
+        "baseRevision",
+        "idempotencyKey",
+        "entityIds",
+        "title",
+        "pipelineId",
+        "stageId",
+        "probability",
+        "party",
+        "enteredAt"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Upsert CRM Deal",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-duplicate-search",
+    "category": "crm",
+    "title": "Search CRM Duplicates",
+    "description": "Search reviewable duplicate candidates within one CRM person or organization domain using stable…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": [
+            "crm_person",
+            "crm_organization"
+          ],
+          "description": "Exact governed entity domain selected from the operation contract; callers cannot choose a Research domain for CRM imports."
+        },
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+          "description": "Confirmed contact email authorized for this CRM operation."
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Confirmed contact phone authorized for this CRM operation."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
+        }
+      },
+      "required": [
+        "domain"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Search CRM Duplicates",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-import-apply",
+    "category": "crm",
+    "title": "Apply CRM Import",
+    "description": "Apply an unexpired CRM import preview with its exact owner-scoped handle, digest, explicit confirmation…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "importId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Owner-scoped governed CRM import plan identifier returned by preview."
+        },
+        "planHandle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Owner-scoped opaque preview handle returned with the plan."
+        },
+        "digest": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "description": "Exact SHA-256 digest returned by the preview; any changed input invalidates it."
+        },
+        "confirmationToken": {
+          "type": "string",
+          "minLength": 8,
+          "description": "Explicit confirmation token bound to the exact governed preview plan."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        }
+      },
+      "required": [
+        "importId",
+        "planHandle",
+        "digest",
+        "confirmationToken",
+        "idempotencyKey"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Apply CRM Import",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-import-preview",
+    "category": "crm",
+    "title": "Preview CRM Import",
+    "description": "Preview a CRM-owned import before any row is applied. Rows may target only CRM People or CRM…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "ttlMinutes": {
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 1440,
+          "default": 60,
+          "description": "Bounded preview lifetime in minutes before the plan expires."
+        },
+        "mapping": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "CSV-column mapping used to identify and protect supported CRM fields."
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "rowNumber": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "One-based source row number retained for exact validation and error receipts."
+              },
+              "domain": {
+                "type": "string",
+                "enum": [
+                  "crm_person",
+                  "crm_organization"
+                ],
+                "description": "Exact governed entity domain selected from the operation contract; callers cannot choose a Research domain for CRM imports."
+              },
+              "values": {
+                "type": "object",
+                "additionalProperties": {},
+                "description": "Normalized source values for this CRM import row; provider fields and Research domains are rejected."
+              }
+            },
+            "required": [
+              "rowNumber",
+              "domain",
+              "values"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 50000,
+          "description": "Bounded normalized import rows; every row must target crm_person or crm_organization."
+        }
+      },
+      "required": [
+        "idempotencyKey",
+        "mapping",
+        "rows"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Preview CRM Import",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-merge-apply",
+    "category": "crm",
+    "title": "Apply CRM Merge",
+    "description": "Apply an explicitly owner-confirmed, unexpired CRM merge plan with its exact handle, digest, and…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "mergeId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Owner-scoped merge plan identifier returned by merge preview."
+        },
+        "planHandle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Owner-scoped opaque preview handle returned with the plan."
+        },
+        "digest": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "description": "Exact SHA-256 digest returned by the preview; any changed input invalidates it."
+        },
+        "ownerConfirmation": {
+          "type": "string",
+          "minLength": 8,
+          "description": "Explicit owner confirmation bound to the exact non-expired merge plan."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        }
+      },
+      "required": [
+        "mergeId",
+        "planHandle",
+        "digest",
+        "ownerConfirmation",
+        "idempotencyKey"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Apply CRM Merge",
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-merge-preview",
+    "category": "crm",
+    "title": "Preview CRM Merge",
+    "description": "Preview a reversible duplicate merge inside one CRM domain. Shows field conflicts and affected…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "masterEntityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM record selected as the surviving master in a merge preview."
+        },
+        "duplicateEntityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM record selected as the duplicate candidate in a merge preview."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "ttlMinutes": {
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 1440,
+          "default": 60,
+          "description": "Bounded preview lifetime in minutes before the plan expires."
+        }
+      },
+      "required": [
+        "masterEntityId",
+        "duplicateEntityId",
+        "idempotencyKey"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Preview CRM Merge",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-organization-get",
+    "category": "crm",
+    "title": "Get CRM Organization",
+    "description": "Get one managed CRM Organization by stable entity ID with aliases, associations, and optional Research…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        }
+      },
+      "required": [
+        "entityId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Get CRM Organization",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-organization-search",
+    "category": "crm",
+    "title": "Search CRM Organizations",
+    "description": "Search owner-managed CRM Organizations such as prospect accounts, customers, employers, vendors…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Text filter applied to the selected result inventory."
+        },
+        "relationshipType": {
+          "type": "string",
+          "enum": [
+            "prospect",
+            "customer",
+            "former_customer",
+            "friend",
+            "coworker",
+            "collaborator",
+            "vendor",
+            "partner",
+            "advisor",
+            "media",
+            "community",
+            "other"
+          ],
+          "description": "One managed relationship type used to filter CRM records."
+        },
+        "relationshipStatus": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive",
+            "archived",
+            "merged"
+          ],
+          "description": "Operational relationship status independent of optional commercial lifecycle."
+        },
+        "commercialLifecycle": {
+          "type": "string",
+          "enum": [
+            "lead",
+            "qualified",
+            "opportunity",
+            "customer",
+            "retained",
+            "churned",
+            "disqualified"
+          ],
+          "description": "Optional commercial lifecycle; friends, coworkers, and other non-commercial relationships may leave it null."
+        },
+        "relationshipOwnerId": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Optional owner identifier responsible for the CRM relationship."
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Search CRM Organizations",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-organization-upsert",
+    "category": "crm",
+    "title": "Upsert CRM Organization",
+    "description": "Create or revision-check a managed CRM Organization. Relationship type is required while commercial…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        },
+        "baseRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 200000,
+          "default": "",
+          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
+        },
+        "relationshipTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "prospect",
+              "customer",
+              "former_customer",
+              "friend",
+              "coworker",
+              "collaborator",
+              "vendor",
+              "partner",
+              "advisor",
+              "media",
+              "community",
+              "other"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 12,
+          "description": "One or more owner-declared relationship types; at least one is required for CRM creation."
+        },
+        "relationshipStatus": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive",
+            "archived",
+            "merged"
+          ],
+          "default": "active",
+          "description": "Operational relationship status independent of optional commercial lifecycle."
+        },
+        "commercialLifecycle": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "lead",
+                "qualified",
+                "opportunity",
+                "customer",
+                "retained",
+                "churned",
+                "disqualified"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional commercial lifecycle; friends, coworkers, and other non-commercial relationships may leave it null."
+        },
+        "relationshipOwnerId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 300
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional owner identifier responsible for the CRM relationship."
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "primaryDomain": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "Canonical public domain associated with this CRM organization; it does not create a provider connection."
+            },
+            "website": {
+              "type": "string",
+              "format": "uri",
+              "description": "Canonical public website associated with this CRM organization."
+            },
+            "phone": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Confirmed contact phone authorized for this CRM operation."
+            },
+            "address": {
+              "type": "string",
+              "maxLength": 2000,
+              "description": "Owner-authorized contact address stored only on the CRM record."
+            }
+          },
+          "additionalProperties": false,
+          "default": {},
+          "description": "Purpose-authorized confirmed contact projection; candidate evidence is forbidden."
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {},
+          "description": "Complete governed note properties required by the target vault contract."
+        },
+        "lineage": {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "string",
+              "enum": [
+                "memory_manual",
+                "memory_agent",
+                "connected_source",
+                "crm_import",
+                "xray_derived"
+              ],
+              "default": "memory_agent",
+              "description": "Source authority or ownership context supporting this content."
+            },
+            "sensitivity": {
+              "type": "string",
+              "enum": [
+                "public",
+                "internal",
+                "personal",
+                "restricted"
+              ],
+              "default": "internal",
+              "description": "Governed field sensitivity: public, internal, personal, or restricted."
+            },
+            "sourceRef": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Original source URL or opaque artifact reference preserved as image provenance."
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp when this source or governed value was observed."
+            },
+            "confidence": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bounded confidence value for the supplied assertion."
+            }
+          },
+          "required": [
+            "observedAt"
+          ],
+          "additionalProperties": false,
+          "description": "Field authority, sensitivity, source, observation time, and confidence recorded with this governed write."
+        }
+      },
+      "required": [
+        "baseRevision",
+        "idempotencyKey",
+        "displayName",
+        "relationshipTypes",
+        "lineage"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Upsert CRM Organization",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-person-get",
+    "category": "crm",
+    "title": "Get CRM Person",
+    "description": "Get one owner-managed CRM Person by stable entity ID with its governed relationship record, aliases…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        }
+      },
+      "required": [
+        "entityId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Get CRM Person",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-person-search",
+    "category": "crm",
+    "title": "Search CRM People",
+    "description": "Search owner-managed CRM People: prospects, customers, friends, coworkers, collaborators, vendors…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Text filter applied to the selected result inventory."
+        },
+        "relationshipType": {
+          "type": "string",
+          "enum": [
+            "prospect",
+            "customer",
+            "former_customer",
+            "friend",
+            "coworker",
+            "collaborator",
+            "vendor",
+            "partner",
+            "advisor",
+            "media",
+            "community",
+            "other"
+          ],
+          "description": "One managed relationship type used to filter CRM records."
+        },
+        "relationshipStatus": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive",
+            "archived",
+            "merged"
+          ],
+          "description": "Operational relationship status independent of optional commercial lifecycle."
+        },
+        "commercialLifecycle": {
+          "type": "string",
+          "enum": [
+            "lead",
+            "qualified",
+            "opportunity",
+            "customer",
+            "retained",
+            "churned",
+            "disqualified"
+          ],
+          "description": "Optional commercial lifecycle; friends, coworkers, and other non-commercial relationships may leave it null."
+        },
+        "relationshipOwnerId": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Optional owner identifier responsible for the CRM relationship."
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Search CRM People",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-person-upsert",
+    "category": "crm",
+    "title": "Upsert CRM Person",
+    "description": "Create or revision-check a managed CRM Person. Relationship type is required, but sales lifecycle and…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        },
+        "baseRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 200000,
+          "default": "",
+          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
+        },
+        "relationshipTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "prospect",
+              "customer",
+              "former_customer",
+              "friend",
+              "coworker",
+              "collaborator",
+              "vendor",
+              "partner",
+              "advisor",
+              "media",
+              "community",
+              "other"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 12,
+          "description": "One or more owner-declared relationship types; at least one is required for CRM creation."
+        },
+        "relationshipStatus": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive",
+            "archived",
+            "merged"
+          ],
+          "default": "active",
+          "description": "Operational relationship status independent of optional commercial lifecycle."
+        },
+        "commercialLifecycle": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "lead",
+                "qualified",
+                "opportunity",
+                "customer",
+                "retained",
+                "churned",
+                "disqualified"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional commercial lifecycle; friends, coworkers, and other non-commercial relationships may leave it null."
+        },
+        "relationshipOwnerId": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 300
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional owner identifier responsible for the CRM relationship."
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+              "description": "Confirmed contact email authorized for this CRM operation."
+            },
+            "phone": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Confirmed contact phone authorized for this CRM operation."
+            },
+            "address": {
+              "type": "string",
+              "maxLength": 2000,
+              "description": "Owner-authorized contact address stored only on the CRM record."
+            }
+          },
+          "additionalProperties": false,
+          "default": {},
+          "description": "Purpose-authorized confirmed contact projection; candidate evidence is forbidden."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Bridge-compatible top-level email; normalized into contact provenance.",
+          "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Bridge-compatible top-level phone; normalized into contact provenance."
+        },
+        "organizationName": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Bridge-compatible organization label; it never creates or resolves an organization by inference."
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "description": "Governed type discriminator for this rule, score, event, or record."
+            },
+            "siteId": {
+              "type": "string",
+              "description": "Analytics Site id returned by analytics_list_sites."
+            },
+            "formId": {
+              "type": "string",
+              "description": "Stable X-Ray form identifier associated with this governed CRM source receipt."
+            },
+            "submissionId": {
+              "type": "string",
+              "description": "Stable X-Ray form submission identifier used for replay-safe CRM delivery."
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp when this source or governed value was observed."
+            }
+          },
+          "required": [
+            "kind",
+            "observedAt"
+          ],
+          "additionalProperties": false,
+          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {},
+          "description": "Complete governed note properties required by the target vault contract."
+        },
+        "lineage": {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "string",
+              "enum": [
+                "memory_manual",
+                "memory_agent",
+                "connected_source",
+                "crm_import",
+                "xray_derived"
+              ],
+              "default": "memory_agent",
+              "description": "Source authority or ownership context supporting this content."
+            },
+            "sensitivity": {
+              "type": "string",
+              "enum": [
+                "public",
+                "internal",
+                "personal",
+                "restricted"
+              ],
+              "default": "personal",
+              "description": "Governed field sensitivity: public, internal, personal, or restricted."
+            },
+            "sourceRef": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Original source URL or opaque artifact reference preserved as image provenance."
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp when this source or governed value was observed."
+            },
+            "confidence": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bounded confidence value for the supplied assertion."
+            }
+          },
+          "required": [
+            "observedAt"
+          ],
+          "additionalProperties": false,
+          "description": "Field authority, sensitivity, source, observation time, and confidence recorded with this governed write."
+        }
+      },
+      "required": [
+        "idempotencyKey",
+        "displayName",
+        "relationshipTypes"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Upsert CRM Person",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-pipeline-list",
+    "category": "crm",
+    "title": "List CRM Pipelines",
+    "description": "List owner-scoped native CRM deal pipelines with ordered stages, required fields, allowed transitions…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "List CRM Pipelines",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-pipeline-upsert",
+    "category": "crm",
+    "title": "Upsert CRM Pipeline",
+    "description": "Create or revision-check an owner-scoped native CRM deal pipeline with governed stages and transitions…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "pipelineId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing owner-scoped pipeline UUID; omit to create a pipeline."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Human-readable pipeline label."
+        },
+        "baseVersion": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Expected pipeline version for concurrency control; use 0 only when creating."
+        },
+        "isDefault": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this should become the owner default pipeline."
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "stageId": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Existing stage UUID when revising a pipeline; omit only for a new stage."
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "Human-readable stage label."
+              },
+              "outcome": {
+                "type": "string",
+                "enum": [
+                  "open",
+                  "won",
+                  "lost"
+                ],
+                "description": "Commercial outcome represented by the stage."
+              },
+              "probability": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Governed stage probability from 0 through 1; won must be 1 and lost must be 0."
+              },
+              "requiredFields": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "maxItems": 100,
+                "default": [],
+                "description": "Field names required before entering this stage."
+              },
+              "allowedNextStageIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "maxItems": 100,
+                "default": [],
+                "description": "Stage UUIDs that this stage may transition to."
+              }
+            },
+            "required": [
+              "label",
+              "outcome",
+              "probability"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 2,
+          "maxItems": 100,
+          "description": "Complete ordered stage definition for the pipeline."
+        }
+      },
+      "required": [
+        "label",
+        "baseVersion",
+        "stages"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Upsert CRM Pipeline",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-quality-list",
+    "category": "crm",
+    "title": "List CRM Quality Issues",
+    "description": "List owner-scoped relationship quality issues for classification, invalid names, duplicates, imports…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "queue": {
+          "type": "string",
+          "enum": [
+            "classification",
+            "naming",
+            "duplicates",
+            "imports",
+            "merges",
+            "work"
+          ],
+          "description": "Governance queue to list: classification, naming, identity, duplicates, or delivery."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 50,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "List CRM Quality Issues",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-task-upsert",
+    "category": "crm",
+    "title": "Upsert CRM Task",
+    "description": "Create or revision-check a canonical Task linked only to stable CRM entity IDs. Tasks remain in the…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "taskId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM Task entity identifier for create or revision-checked update."
+        },
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        },
+        "baseRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "personEntityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM Person entity identifier; Research identifiers are rejected."
+        },
+        "communicationEntityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stable CRM Communication entity identifier returned by the activity append operation."
+        },
+        "entityIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "maxItems": 100,
+          "default": [],
+          "description": "Stable CRM entity identifiers associated with this CRM activity, task, or deal."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Human-readable title for the proposed record or authored content."
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 200000,
+          "default": "",
+          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "todo",
+            "in_progress",
+            "blocked",
+            "done",
+            "cancelled"
+          ],
+          "default": "todo",
+          "description": "Lifecycle status used to filter or update the selected records."
+        },
+        "dueAt": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional ISO 8601 due time for the CRM Task."
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": {},
+          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {},
+          "description": "Complete governed note properties required by the target vault contract."
+        }
+      },
+      "required": [
+        "idempotencyKey",
+        "title"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Upsert CRM Task",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "crm-work-search",
+    "category": "crm",
+    "title": "Search CRM Work",
+    "description": "Search owner-scoped canonical CRM activities, tasks, or deals in deterministic updated-time order…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+            },
+            "sessionId": {
+              "type": "string",
+              "description": "Optional MCP session identifier used for active account context."
+            },
+            "entityId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional stable CRM person or organization entity ID associated with the work record."
+            },
+            "entityIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "minItems": 1,
+              "maxItems": 10,
+              "description": "Optional stable CRM entity IDs that must all be associated with the work record."
+            },
+            "workId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional exact canonical CRM activity, task, or deal work ID."
+            },
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "description": "Optional case-insensitive title search."
+            },
+            "cursor": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048,
+              "description": "Opaque cursor returned by the previous crm-work-search page."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Maximum work records to return before cursor pagination."
+            },
+            "objectKind": {
+              "type": "string",
+              "const": "activity",
+              "description": "Search only canonical CRM activity records."
+            }
+          },
+          "required": [
+            "objectKind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+            },
+            "sessionId": {
+              "type": "string",
+              "description": "Optional MCP session identifier used for active account context."
+            },
+            "entityId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional stable CRM person or organization entity ID associated with the work record."
+            },
+            "entityIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "minItems": 1,
+              "maxItems": 10,
+              "description": "Optional stable CRM entity IDs that must all be associated with the work record."
+            },
+            "workId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional exact canonical CRM activity, task, or deal work ID."
+            },
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "description": "Optional case-insensitive title search."
+            },
+            "cursor": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048,
+              "description": "Opaque cursor returned by the previous crm-work-search page."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Maximum work records to return before cursor pagination."
+            },
+            "objectKind": {
+              "type": "string",
+              "const": "task",
+              "description": "Search only canonical Task records through the CRM lens."
+            },
+            "taskStatuses": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "todo",
+                  "in_progress",
+                  "blocked",
+                  "done",
+                  "cancelled"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "description": "Optional canonical Task statuses to include."
+            },
+            "dueBefore": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Inclusive upper due-time bound for canonical Tasks."
+            },
+            "dueAfter": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Inclusive lower due-time bound for canonical Tasks."
+            },
+            "dueUnscheduled": {
+              "type": "boolean",
+              "description": "Set true to return only canonical Tasks without a due date."
+            },
+            "taskOwnerId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "description": "Exact owner identifier stored on the canonical Task."
+            },
+            "dealId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Exact native CRM deal UUID linked from the canonical Task."
+            }
+          },
+          "required": [
+            "objectKind"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Caller API key. Omit when the MCP transport already authenticated this request."
+            },
+            "sessionId": {
+              "type": "string",
+              "description": "Optional MCP session identifier used for active account context."
+            },
+            "entityId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional stable CRM person or organization entity ID associated with the work record."
+            },
+            "entityIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "minItems": 1,
+              "maxItems": 10,
+              "description": "Optional stable CRM entity IDs that must all be associated with the work record."
+            },
+            "workId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional exact canonical CRM activity, task, or deal work ID."
+            },
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 300,
+              "description": "Optional case-insensitive title search."
+            },
+            "cursor": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048,
+              "description": "Opaque cursor returned by the previous crm-work-search page."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25,
+              "description": "Maximum work records to return before cursor pagination."
+            },
+            "objectKind": {
+              "type": "string",
+              "const": "deal",
+              "description": "Search only native CRM deal records."
+            },
+            "pipelineId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Optional exact native CRM pipeline UUID."
+            },
+            "stageIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "minItems": 1,
+              "maxItems": 100,
+              "description": "Optional native CRM stage UUIDs to include."
+            },
+            "minValue": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Optional inclusive minimum deal value in the stored currency."
+            },
+            "maxValue": {
+              "type": "number",
+              "minimum": 0,
+              "description": "Optional inclusive maximum deal value in the stored currency."
+            }
+          },
+          "required": [
+            "objectKind"
+          ],
+          "additionalProperties": false
+        }
+      ],
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Search CRM Work",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "delete-note",
     "category": "memory",
     "title": "Delete Memory Note",
@@ -23321,6 +26396,498 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "research-organization-capture",
+    "category": "research",
+    "title": "Capture Research Organization",
+    "description": "Create or revision-check a sourced Research Organization. Requires evidence and rejects CRM…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        },
+        "baseRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 200000,
+          "default": "",
+          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
+        },
+        "sourceEvidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sourceRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000,
+                "description": "Original source URL or opaque artifact reference preserved as image provenance."
+              },
+              "claim": {
+                "type": "string",
+                "maxLength": 4000,
+                "description": "Bounded factual claim supported by the accompanying Research source reference."
+              }
+            },
+            "required": [
+              "sourceRef"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 100,
+          "description": "One or more cited source references supporting this Research capture."
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "maxItems": 100,
+          "default": [],
+          "description": "Research topics supported by the captured source evidence."
+        },
+        "researchRoles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "maxItems": 100,
+          "default": [],
+          "description": "Sourced roles associated with this Research subject."
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {},
+          "description": "Complete governed note properties required by the target vault contract."
+        },
+        "lineage": {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "string",
+              "enum": [
+                "memory_manual",
+                "memory_agent",
+                "connected_source",
+                "crm_import",
+                "xray_derived"
+              ],
+              "default": "memory_agent",
+              "description": "Source authority or ownership context supporting this content."
+            },
+            "sensitivity": {
+              "type": "string",
+              "enum": [
+                "public",
+                "internal",
+                "personal",
+                "restricted"
+              ],
+              "description": "Governed field sensitivity: public, internal, personal, or restricted."
+            },
+            "sourceRef": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Original source URL or opaque artifact reference preserved as image provenance."
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp when this source or governed value was observed."
+            },
+            "confidence": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bounded confidence value for the supplied assertion."
+            }
+          },
+          "required": [
+            "sensitivity",
+            "observedAt"
+          ],
+          "additionalProperties": false,
+          "description": "Field authority, sensitivity, source, observation time, and confidence recorded with this governed write."
+        }
+      },
+      "required": [
+        "baseRevision",
+        "idempotencyKey",
+        "displayName",
+        "sourceEvidence",
+        "lineage"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Capture Research Organization",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "research-organization-get",
+    "category": "research",
+    "title": "Get Research Organization",
+    "description": "Get one sourced Research Organization by stable entity ID with aliases, associations, and optional…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        }
+      },
+      "required": [
+        "entityId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Get Research Organization",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "research-organization-search",
+    "category": "research",
+    "title": "Search Research Organizations",
+    "description": "Search sourced Research Organizations studied as knowledge. Never infer an organization from an email…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Text filter applied to the selected result inventory."
+        },
+        "topic": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Research topic used to filter sourced records."
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Primary conversion or supporting observation role for this enabled mapping."
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Search Research Organizations",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "research-person-capture",
+    "category": "research",
+    "title": "Capture Research Person",
+    "description": "Create or revision-check an independently governed Research Person for sourced knowledge, including…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        },
+        "baseRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 200,
+          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 200000,
+          "default": "",
+          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
+        },
+        "sourceEvidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "sourceRef": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000,
+                "description": "Original source URL or opaque artifact reference preserved as image provenance."
+              },
+              "claim": {
+                "type": "string",
+                "maxLength": 4000,
+                "description": "Bounded factual claim supported by the accompanying Research source reference."
+              }
+            },
+            "required": [
+              "sourceRef"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 100,
+          "description": "One or more cited source references supporting this Research capture."
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "maxItems": 100,
+          "default": [],
+          "description": "Research topics supported by the captured source evidence."
+        },
+        "researchRoles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "maxItems": 100,
+          "default": [],
+          "description": "Sourced roles associated with this Research subject."
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {},
+          "default": {},
+          "description": "Complete governed note properties required by the target vault contract."
+        },
+        "lineage": {
+          "type": "object",
+          "properties": {
+            "authority": {
+              "type": "string",
+              "enum": [
+                "memory_manual",
+                "memory_agent",
+                "connected_source",
+                "crm_import",
+                "xray_derived"
+              ],
+              "default": "memory_agent",
+              "description": "Source authority or ownership context supporting this content."
+            },
+            "sensitivity": {
+              "type": "string",
+              "enum": [
+                "public",
+                "internal",
+                "personal",
+                "restricted"
+              ],
+              "description": "Governed field sensitivity: public, internal, personal, or restricted."
+            },
+            "sourceRef": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Original source URL or opaque artifact reference preserved as image provenance."
+            },
+            "observedAt": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp when this source or governed value was observed."
+            },
+            "confidence": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bounded confidence value for the supplied assertion."
+            }
+          },
+          "required": [
+            "sensitivity",
+            "observedAt"
+          ],
+          "additionalProperties": false,
+          "description": "Field authority, sensitivity, source, observation time, and confidence recorded with this governed write."
+        }
+      },
+      "required": [
+        "baseRevision",
+        "idempotencyKey",
+        "displayName",
+        "sourceEvidence",
+        "lineage"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Capture Research Person",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "research-person-get",
+    "category": "research",
+    "title": "Get Research Person",
+    "description": "Get one sourced Research Person by stable entity ID with aliases, associations, and an optional…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Existing governed entity identifier for this relation or edit."
+        }
+      },
+      "required": [
+        "entityId"
+      ],
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Get Research Person",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "research-person-search",
+    "category": "research",
+    "title": "Search Research People",
+    "description": "Search sourced Research People, including historical figures and living subjects studied as knowledge…",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Text filter applied to the selected result inventory."
+        },
+        "topic": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Research topic used to filter sourced records."
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "Primary conversion or supporting observation role for this enabled mapping."
+        },
+        "cursor": {
+          "type": "string",
+          "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 25,
+          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    },
+    "annotations": {
+      "title": "Search Research People",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "resolve-local-sourcebook-tags",
     "category": "directory",
     "title": "Resolve Local Sourcebook Tags",
@@ -26207,3723 +29774,6 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": true
-    }
-  },
-  {
-    "name": "analytics_apply_site_setup",
-    "category": "analytics",
-    "title": "Apply X-Ray Site Setup",
-    "description": "Publish a confirmed measurement-plan revision to the installed X-Ray tag using an idempotent retry key. No repository access or visitor-experiment authority.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id owning the setup."
-        },
-        "setupId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Durable owner-bound setup id returned by an X-Ray setup operation; it is not a browser session id."
-        },
-        "revision": {
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991,
-          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
-        },
-        "confirmed": {
-          "type": "boolean",
-          "const": true,
-          "description": "Confirms publishing this exact measurement manifest to the installed X-Ray tag runtime. This does not activate an experiment."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "setupId",
-        "revision",
-        "confirmed",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Apply X-Ray Site Setup",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": true
-    }
-  },
-  {
-    "name": "analytics_create_experiment",
-    "category": "analytics",
-    "title": "Create X-Ray Experiment Draft",
-    "description": "Create an owner-bound, preregistered experiment draft from a measured site. Requires a hypothesis, primary metric, guardrails, audience, duration, sample threshold, expiry, control, allocations, and only allowlisted visual operations. It never approves or activates the experiment.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "plan": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 120,
-              "description": "Owner-facing experiment name."
-            },
-            "hypothesis": {
-              "type": "string",
-              "minLength": 10,
-              "maxLength": 500,
-              "description": "Falsifiable prediction connecting the declared change to the primary metric."
-            },
-            "primaryMetricEvent": {
-              "type": "string",
-              "pattern": "^[a-z][a-z0-9_]{1,79}$",
-              "description": "Persisted X-Ray event used as the sole primary outcome metric."
-            },
-            "guardrailEvents": {
-              "default": [],
-              "description": "Events monitored for unacceptable harm; these do not replace the primary metric.",
-              "maxItems": 10,
-              "type": "array",
-              "items": {
-                "type": "string",
-                "pattern": "^[a-z][a-z0-9_]{1,79}$"
-              }
-            },
-            "guardrailMaximumAbsoluteIncrease": {
-              "default": 0.05,
-              "description": "Maximum allowed absolute increase in any declared harm-event rate versus control before automatic pause.",
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "maximum": 1
-            },
-            "stoppingRule": {
-              "default": {
-                "method": "fixed_horizon",
-                "actionOnSampleRatioMismatch": "pause",
-                "actionOnGuardrailBreach": "pause",
-                "winnerRequiresSignificance": true
-              },
-              "description": "Pre-registered stopping behavior; no continuous peeking or automatic winner rollout.",
-              "type": "object",
-              "properties": {
-                "method": {
-                  "type": "string",
-                  "const": "fixed_horizon",
-                  "description": "Evaluate only after the registered minimum duration and sample."
-                },
-                "actionOnSampleRatioMismatch": {
-                  "type": "string",
-                  "const": "pause",
-                  "description": "Pause when assignment balance is invalid."
-                },
-                "actionOnGuardrailBreach": {
-                  "type": "string",
-                  "const": "pause",
-                  "description": "Pause when a registered harm guardrail is breached."
-                },
-                "winnerRequiresSignificance": {
-                  "type": "boolean",
-                  "const": true,
-                  "description": "Require the registered significance threshold before calling a winner."
-                }
-              },
-              "required": [
-                "method",
-                "actionOnSampleRatioMismatch",
-                "actionOnGuardrailBreach",
-                "winnerRequiresSignificance"
-              ],
-              "additionalProperties": false
-            },
-            "rollbackPlan": {
-              "default": {
-                "action": "restore_control",
-                "triggers": [
-                  "pause",
-                  "kill",
-                  "expiry",
-                  "manifest_error",
-                  "selector_ambiguity",
-                  "performance_guardrail"
-                ]
-              },
-              "description": "Closed rollback contract executed by the Pixel.",
-              "type": "object",
-              "properties": {
-                "action": {
-                  "type": "string",
-                  "const": "restore_control",
-                  "description": "Restore every captured control value."
-                },
-                "triggers": {
-                  "minItems": 6,
-                  "maxItems": 6,
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": [
-                      "pause",
-                      "kill",
-                      "expiry",
-                      "manifest_error",
-                      "selector_ambiguity",
-                      "performance_guardrail"
-                    ],
-                    "description": "Fail-to-control condition."
-                  },
-                  "description": "Complete closed rollback trigger set."
-                }
-              },
-              "required": [
-                "action",
-                "triggers"
-              ],
-              "additionalProperties": false
-            },
-            "performanceGuardrailMs": {
-              "default": 16,
-              "description": "Maximum synchronous DOM-application time before the Pixel restores control.",
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 50
-            },
-            "audience": {
-              "type": "object",
-              "properties": {
-                "routePrefixes": {
-                  "minItems": 1,
-                  "maxItems": 25,
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "maxLength": 2000,
-                    "pattern": "^\\/.*"
-                  },
-                  "description": "Approved route prefixes eligible for assignment."
-                },
-                "trafficClass": {
-                  "default": "production",
-                  "description": "Declared traffic population; canary state remains separately gated.",
-                  "type": "string",
-                  "enum": [
-                    "internal",
-                    "test",
-                    "production"
-                  ]
-                }
-              },
-              "required": [
-                "routePrefixes"
-              ],
-              "additionalProperties": false,
-              "description": "Bounded route and traffic audience."
-            },
-            "assignmentUnit": {
-              "default": "visitor",
-              "description": "Stable mutually exclusive assignment unit.",
-              "type": "string",
-              "enum": [
-                "visitor",
-                "session"
-              ]
-            },
-            "minimumDurationHours": {
-              "type": "integer",
-              "minimum": 24,
-              "maximum": 2160,
-              "description": "Minimum active hours before a result may be called."
-            },
-            "minimumExposures": {
-              "type": "integer",
-              "minimum": 100,
-              "maximum": 10000000,
-              "description": "Minimum visible variant exposures before evaluation."
-            },
-            "minimumDetectableEffect": {
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "maximum": 1,
-              "description": "Smallest absolute effect worth detecting, expressed from 0 to 1."
-            },
-            "alpha": {
-              "default": 0.05,
-              "description": "Pre-registered false-positive threshold.",
-              "type": "number",
-              "exclusiveMinimum": 0,
-              "maximum": 0.2
-            },
-            "power": {
-              "default": 0.8,
-              "description": "Pre-registered statistical power target.",
-              "type": "number",
-              "minimum": 0.7,
-              "maximum": 0.99
-            },
-            "variants": {
-              "minItems": 2,
-              "maxItems": 8,
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "variantId": {
-                    "type": "string",
-                    "pattern": "^[a-z][a-z0-9_-]{1,79}$",
-                    "description": "Stable variant identifier."
-                  },
-                  "label": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 120,
-                    "description": "Owner-facing variant label."
-                  },
-                  "allocation": {
-                    "type": "number",
-                    "exclusiveMinimum": 0,
-                    "maximum": 1,
-                    "description": "Traffic allocation from 0 to 1; all variants must total 1."
-                  },
-                  "operations": {
-                    "maxItems": 12,
-                    "type": "array",
-                    "items": {
-                      "oneOf": [
-                        {
-                          "type": "object",
-                          "properties": {
-                            "kind": {
-                              "type": "string",
-                              "const": "replace_text",
-                              "description": "Replace plain text only."
-                            },
-                            "selector": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 500,
-                              "description": "Unique bounded CSS selector."
-                            },
-                            "text": {
-                              "type": "string",
-                              "maxLength": 240,
-                              "description": "Replacement text without markup."
-                            }
-                          },
-                          "required": [
-                            "kind",
-                            "selector",
-                            "text"
-                          ],
-                          "additionalProperties": false
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "kind": {
-                              "type": "string",
-                              "const": "set_style_token",
-                              "description": "Apply one product-owned style token."
-                            },
-                            "selector": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 500,
-                              "description": "Unique bounded CSS selector."
-                            },
-                            "token": {
-                              "type": "string",
-                              "enum": [
-                                "cta_primary",
-                                "cta_secondary",
-                                "cta_contrast",
-                                "muted",
-                                "highlight"
-                              ],
-                              "description": "Allowlisted style token."
-                            }
-                          },
-                          "required": [
-                            "kind",
-                            "selector",
-                            "token"
-                          ],
-                          "additionalProperties": false
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "kind": {
-                              "type": "string",
-                              "const": "swap_image",
-                              "description": "Swap one image using HTTPS."
-                            },
-                            "selector": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 500,
-                              "description": "Unique image selector."
-                            },
-                            "src": {
-                              "type": "string",
-                              "maxLength": 2000,
-                              "format": "uri",
-                              "description": "HTTPS image URL."
-                            },
-                            "alt": {
-                              "type": "string",
-                              "maxLength": 240,
-                              "description": "Required bounded alternative text."
-                            }
-                          },
-                          "required": [
-                            "kind",
-                            "selector",
-                            "src",
-                            "alt"
-                          ],
-                          "additionalProperties": false
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "kind": {
-                              "type": "string",
-                              "const": "move_relative",
-                              "description": "Move one sibling before or after another."
-                            },
-                            "selector": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 500,
-                              "description": "Unique element selector."
-                            },
-                            "anchorSelector": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 500,
-                              "description": "Unique sibling anchor selector."
-                            },
-                            "position": {
-                              "type": "string",
-                              "enum": [
-                                "before",
-                                "after"
-                              ],
-                              "description": "Placement relative to the anchor."
-                            }
-                          },
-                          "required": [
-                            "kind",
-                            "selector",
-                            "anchorSelector",
-                            "position"
-                          ],
-                          "additionalProperties": false
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "kind": {
-                              "type": "string",
-                              "const": "set_visibility",
-                              "description": "Show or hide one unique element."
-                            },
-                            "selector": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 500,
-                              "description": "Unique bounded CSS selector."
-                            },
-                            "visible": {
-                              "type": "boolean",
-                              "description": "Whether the selected element should be visible."
-                            }
-                          },
-                          "required": [
-                            "kind",
-                            "selector",
-                            "visible"
-                          ],
-                          "additionalProperties": false
-                        }
-                      ]
-                    },
-                    "description": "Closed, data-only presentation operations; an empty list is the control."
-                  }
-                },
-                "required": [
-                  "variantId",
-                  "label",
-                  "allocation",
-                  "operations"
-                ],
-                "additionalProperties": false,
-                "description": "One control or treatment variant."
-              },
-              "description": "Two to eight mutually exclusive variants including one control."
-            },
-            "expiresAt": {
-              "type": "string",
-              "format": "date-time",
-              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-              "description": "Hard experiment expiry; the Pixel rolls back after this instant."
-            }
-          },
-          "required": [
-            "name",
-            "hypothesis",
-            "primaryMetricEvent",
-            "audience",
-            "minimumDurationHours",
-            "minimumExposures",
-            "minimumDetectableEffect",
-            "variants",
-            "expiresAt"
-          ],
-          "additionalProperties": false,
-          "description": "Preregistered hypothesis, metric, audience, sample requirements, expiry, allocations, and allowlisted visual operations. One control variant must have no operations."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "plan",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Create X-Ray Experiment Draft",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_get_experiment",
-    "category": "analytics",
-    "title": "Get X-Ray Experiment",
-    "description": "Read the preregistered plan, exact state, assignment counts, exposures, outcomes, and decision status for one authorized experiment. Browser intent is never reported as a terminal business outcome.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "experimentId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Owner-bound experiment id returned by analytics_create_experiment."
-        }
-      },
-      "required": [
-        "siteId",
-        "experimentId"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Get X-Ray Experiment",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_prepare_site_setup",
-    "category": "analytics",
-    "title": "Prepare X-Ray Site Setup",
-    "description": "Inspect the public site and prepare an expiring measurement plan for an already installed X-Ray tag. No repository access, credentials, code changes, visitor delivery, or MCP Scraper Credits.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id returned by analytics_list_sites."
-        },
-        "startUrl": {
-          "type": "string",
-          "maxLength": 3000,
-          "format": "uri",
-          "description": "Public same-origin URL from which X-Ray discovers bounded routes and rendering surfaces."
-        },
-        "goal": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 500,
-          "description": "Plain-language customer outcome to measure; do not paste credentials, source code, form contents, or visitor data."
-        },
-        "businessModel": {
-          "description": "Optional user-confirmed model; omit to receive an evidence-backed recommendation.",
-          "type": "string",
-          "enum": [
-            "saas",
-            "lead_generation",
-            "ecommerce"
-          ]
-        },
-        "scope": {
-          "default": "same_origin",
-          "description": "Bounded route discovery scope; neither mode authorizes third-party crawling.",
-          "type": "string",
-          "enum": [
-            "same_origin",
-            "sitemap"
-          ]
-        },
-        "maxPages": {
-          "default": 50,
-          "description": "Maximum pages inspected under the X-Ray entitlement; this consumes zero MCP Scraper Credits.",
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 250
-        },
-        "pixelId": {
-          "description": "Optional existing Pixel belonging to the Site; omit to let the service resolve the canonical Pixel.",
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-        },
-        "consentMode": {
-          "default": "required",
-          "description": "Consent expectation for non-delivering discovery. It never grants a visitor consent choice.",
-          "type": "string",
-          "enum": [
-            "required",
-            "granted_test",
-            "unknown"
-          ]
-        }
-      },
-      "required": [
-        "siteId",
-        "startUrl"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Prepare X-Ray Site Setup",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": false,
-      "openWorldHint": true
-    }
-  },
-  {
-    "name": "analytics_set_experiment_state",
-    "category": "analytics",
-    "title": "Set X-Ray Experiment State",
-    "description": "Approve, canary, activate, pause, kill, or archive one exact experiment revision. Approval and visitor activation are separate confirmed steps. Activation publishes the signed tag manifest; pause and kill publish rollback. Reuse the same idempotency key only for the identical transition.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "experimentId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Owner-bound experiment id returned by analytics_create_experiment."
-        },
-        "revision": {
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991,
-          "description": "Exact experiment revision being changed."
-        },
-        "operation": {
-          "type": "string",
-          "enum": [
-            "approve",
-            "activate_canary",
-            "activate",
-            "pause",
-            "kill",
-            "archive"
-          ],
-          "description": "Approval and activation are distinct operations. Pause and kill publish rollback immediately."
-        },
-        "confirmed": {
-          "description": "Required for approve, activate_canary, and activate. This confirms only the exact state transition.",
-          "type": "boolean",
-          "const": true
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "experimentId",
-        "revision",
-        "operation",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Set X-Ray Experiment State",
-      "readOnlyHint": false,
-      "destructiveHint": true,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_setup_site",
-    "category": "analytics",
-    "title": "Install X-Ray on a Site",
-    "description": "Use for “set up X-Ray” or “tell me what drives customers.” One installed X-Ray tag loads a digest-bound, versioned measurement manifest across approved pages; GitHub access is not required. State is a durable owner-bound setupId and revision, never a browser session. Setup charges zero MCP Scraper Credits. Apply publishes measurement rules only. Experiment approval and activation are separate. Returns exactly one honest next action.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "description": "Authorized Analytics Site id. Supply siteId or startUrl on the first call.",
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-        },
-        "startUrl": {
-          "description": "Public same-origin URL to set up. Supply only when siteId is not yet known.",
-          "type": "string",
-          "maxLength": 3000,
-          "format": "uri"
-        },
-        "goal": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 500,
-          "description": "Plain-language customer outcome to measure; do not paste credentials, source code, form contents, or visitor data."
-        },
-        "setupId": {
-          "description": "Reuse to continue an existing durable setup after approval, deployment, or reconnecting.",
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
-        },
-        "revision": {
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991,
-          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
-        },
-        "businessModel": {
-          "description": "Optional explicit business model; omit to infer it from bounded site evidence.",
-          "type": "string",
-          "enum": [
-            "saas",
-            "lead_generation",
-            "ecommerce"
-          ]
-        },
-        "goalAction": {
-          "default": "continue",
-          "description": "Desired lifecycle step. Continue lets the façade select the single safe next operation from durable state.",
-          "type": "string",
-          "enum": [
-            "continue",
-            "prepare",
-            "apply",
-            "verify",
-            "first_answers"
-          ]
-        },
-        "authority": {
-          "description": "Source authority or ownership context supporting this content.",
-          "type": "object",
-          "properties": {
-            "confirmed": {
-              "description": "Confirms publishing this exact setup revision to the installed X-Ray tag runtime. It does not authorize a visitor experiment.",
-              "type": "boolean",
-              "const": true
-            },
-            "confirmedCanary": {
-              "description": "Separately authorizes labeled verification canaries for this exact revision; it does not authorize apply, merge, or deploy.",
-              "type": "boolean",
-              "const": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "idempotencyKey": {
-          "description": "Required only for apply or canary-capable verify; reuse for the exact same intent after an unknown result.",
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160
-        }
-      },
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Install X-Ray on a Site",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": false,
-      "openWorldHint": true
-    }
-  },
-  {
-    "name": "analytics_verify_site_setup",
-    "category": "analytics",
-    "title": "Verify X-Ray Site Setup",
-    "description": "Expert live proof. Defaults non-delivering; confirmedCanary allows labeled canaries. A PR/build is not deployed definition or outcome proof.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id owning the setup."
-        },
-        "setupId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Durable owner-bound setup id returned by an X-Ray setup operation; it is not a browser session id."
-        },
-        "revision": {
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991,
-          "description": "Exact current setup revision. Reload stale revisions before any mutation or canary."
-        },
-        "confirmedCanary": {
-          "description": "Omit for non-delivering interception. True separately authorizes only labeled, bounded canaries; it does not authorize merge or deploy.",
-          "type": "boolean",
-          "const": true
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "setupId",
-        "revision",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Verify X-Ray Site Setup",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": true
-    }
-  },
-  {
-    "name": "analytics_create_post_purchase_survey",
-    "category": "analytics",
-    "title": "Create Post-Purchase Survey Draft",
-    "description": "Create an idempotent, structured, contact-free post-purchase survey draft. Customer answers remain reported influence and cannot establish identity, mutate CRM, qualify activation, or change observed touches.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "name": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160,
-          "description": "Owner-facing survey name."
-        },
-        "question": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 500,
-          "description": "Customer-visible structured influence question; do not request contact data or free text."
-        },
-        "selectionMode": {
-          "type": "string",
-          "enum": [
-            "single",
-            "multiple"
-          ],
-          "description": "Whether a respondent may select one influence or several."
-        },
-        "eligibleOutcomeFamilies": {
-          "minItems": 1,
-          "maxItems": 20,
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 80
-          },
-          "description": "Authoritative outcome families eligible to receive an invitation."
-        },
-        "exchangeTtlSeconds": {
-          "type": "integer",
-          "minimum": 60,
-          "maximum": 86400,
-          "description": "Short-lived merchant exchange-code lifetime."
-        },
-        "sessionTtlSeconds": {
-          "type": "integer",
-          "minimum": 60,
-          "maximum": 86400,
-          "description": "Hosted survey session lifetime after one-time exchange."
-        },
-        "approvedCopyId": {
-          "description": "Versioned privacy disclosure approval. A draft may omit it; production publication may not.",
-          "anyOf": [
-            {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 200
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "options": {
-          "minItems": 2,
-          "maxItems": 20,
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "optionId": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 80,
-                "description": "Stable opaque option id; changing a label never changes this id."
-              },
-              "label": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 160,
-                "description": "Bounded owner-authored influence label. Free-text customer testimony is not accepted."
-              }
-            },
-            "required": [
-              "optionId",
-              "label"
-            ],
-            "additionalProperties": false
-          },
-          "description": "Two to twenty stable structured influences."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "name",
-        "question",
-        "selectionMode",
-        "eligibleOutcomeFamilies",
-        "exchangeTtlSeconds",
-        "sessionTtlSeconds",
-        "options",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Create Post-Purchase Survey Draft",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_get_attribution_methodology",
-    "category": "analytics",
-    "title": "Get X-Ray Attribution Methodology",
-    "description": "Read the seven observed models, default position weights, explicit observed-plus-reported methodology, and evidence boundaries. Use before requesting combined impact; this never turns survey testimony or aggregate impressions into deterministic touches.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        }
-      },
-      "required": [
-        "siteId"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Get X-Ray Attribution Methodology",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_get_impact_report",
-    "category": "analytics",
-    "title": "Get Observed and Reported Impact",
-    "description": "Read an opt-in impact projection that keeps observed attribution and customer-reported influence in separate ledgers. Requires a published survey, one existing observed model, an immutable methodology version, and explicit weights totaling 1,000,000 micros.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "surveyId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Published or paused post-purchase survey whose immutable responses supply the reported ledger."
-        },
-        "baseModel": {
-          "type": "string",
-          "enum": [
-            "first_touch",
-            "last_touch",
-            "last_non_direct",
-            "linear",
-            "time_decay",
-            "position_based",
-            "custom_weighted"
-          ],
-          "description": "Existing observed attribution model; observed_plus_reported is deliberately not an observed model."
-        },
-        "observedWeightMicros": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 1000000,
-          "description": "Observed share in micros. It must total exactly 1,000,000 with reportedWeightMicros."
-        },
-        "reportedWeightMicros": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 1000000,
-          "description": "Customer-reported share in micros. It must total exactly 1,000,000 with observedWeightMicros."
-        },
-        "methodologyVersion": {
-          "type": "string",
-          "const": "xray_observed_plus_reported_equal_selected_v1",
-          "description": "Immutable methodology selected after reading analytics_get_attribution_methodology."
-        },
-        "from": {
-          "description": "Inclusive observed-evidence start. Omit with to for the last 30 days.",
-          "type": "string",
-          "format": "date-time",
-          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-        },
-        "to": {
-          "description": "Exclusive observed-evidence end. Omit to use now.",
-          "type": "string",
-          "format": "date-time",
-          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-        },
-        "clickWindow": {
-          "default": 90,
-          "description": "Independent observed click window.",
-          "anyOf": [
-            {
-              "type": "number",
-              "const": 7
-            },
-            {
-              "type": "number",
-              "const": 14
-            },
-            {
-              "type": "number",
-              "const": 30
-            },
-            {
-              "type": "number",
-              "const": 60
-            },
-            {
-              "type": "number",
-              "const": 90
-            },
-            {
-              "type": "number",
-              "const": 180
-            },
-            {
-              "type": "number",
-              "const": 365
-            },
-            {
-              "type": "string",
-              "const": "lifetime"
-            }
-          ]
-        },
-        "viewWindow": {
-          "default": 90,
-          "description": "Independent view window; provider-unavailable state never manufactures view touches.",
-          "anyOf": [
-            {
-              "type": "number",
-              "const": 7
-            },
-            {
-              "type": "number",
-              "const": 14
-            },
-            {
-              "type": "number",
-              "const": 30
-            },
-            {
-              "type": "number",
-              "const": 60
-            },
-            {
-              "type": "number",
-              "const": 90
-            },
-            {
-              "type": "number",
-              "const": 180
-            },
-            {
-              "type": "number",
-              "const": 365
-            },
-            {
-              "type": "string",
-              "const": "lifetime"
-            }
-          ]
-        }
-      },
-      "required": [
-        "siteId",
-        "surveyId",
-        "baseModel",
-        "observedWeightMicros",
-        "reportedWeightMicros",
-        "methodologyVersion"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Get Observed and Reported Impact",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_get_post_purchase_survey_report",
-    "category": "analytics",
-    "title": "Get Post-Purchase Survey Report",
-    "description": "Read aggregate response coverage, option counts, and separately labeled reported-influence evidence for one survey. The output excludes contact fields, raw invitation tokens, and deterministic touch claims.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "surveyId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Owner-bound survey id."
-        }
-      },
-      "required": [
-        "siteId",
-        "surveyId"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Get Post-Purchase Survey Report",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_get_view_evidence_status",
-    "category": "analytics",
-    "title": "Get Provider View Evidence Status",
-    "description": "Read provider-by-provider availability for event-level view evidence. Unavailable or unproven is an honest result; aggregate campaign impressions can never create person-level attribution touches.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        }
-      },
-      "required": [
-        "siteId"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Get Provider View Evidence Status",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "analytics_set_post_purchase_survey_state",
-    "category": "analytics",
-    "title": "Set Post-Purchase Survey State",
-    "description": "Publish, pause, or irreversibly archive one exact survey revision. Production publication requires approved privacy disclosure evidence. Reuse the same idempotency key only for the identical transition; archive cannot be undone.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "siteId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Authorized Analytics Site id."
-        },
-        "surveyId": {
-          "type": "string",
-          "format": "uuid",
-          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
-          "description": "Owner-bound survey id."
-        },
-        "revision": {
-          "type": "integer",
-          "exclusiveMinimum": 0,
-          "maximum": 9007199254740991,
-          "description": "Exact survey revision being changed."
-        },
-        "state": {
-          "type": "string",
-          "enum": [
-            "published",
-            "paused",
-            "archived"
-          ],
-          "description": "Publish or pause this revision. Archive is irreversible."
-        },
-        "approvedCopyId": {
-          "description": "Approved privacy disclosure identifier required for production publication; it is not legal approval by itself.",
-          "anyOf": [
-            {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 200
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 160,
-          "description": "Retry key; reuse only for this exact mutation."
-        }
-      },
-      "required": [
-        "siteId",
-        "surveyId",
-        "revision",
-        "state",
-        "idempotencyKey"
-      ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema"
-    },
-    "annotations": {
-      "title": "Set Post-Purchase Survey State",
-      "readOnlyHint": false,
-      "destructiveHint": true,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-activity-append",
-    "category": "crm",
-    "title": "Append CRM Activity",
-    "description": "Append one idempotent governed CRM activity to canonical Communication, linked only to stable CRM…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        },
-        "personEntityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM Person entity identifier; Research identifiers are rejected."
-        },
-        "entityIds": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "maxItems": 100,
-          "default": [],
-          "description": "Stable CRM entity identifiers associated with this CRM activity, task, or deal."
-        },
-        "activityType": {
-          "type": "string",
-          "enum": [
-            "call",
-            "meeting",
-            "email",
-            "message",
-            "form",
-            "form_submission",
-            "conversion",
-            "note",
-            "calendar_event"
-          ],
-          "description": "Canonical CRM activity family recorded on the associated CRM relationship."
-        },
-        "kind": {
-          "type": "string",
-          "const": "form_submission",
-          "description": "Governed type discriminator for this rule, score, event, or record."
-        },
-        "occurredAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "ISO 8601 timestamp when the source event actually occurred."
-        },
-        "title": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 300,
-          "default": "Form submission",
-          "description": "Human-readable title for the proposed record or authored content."
-        },
-        "content": {
-          "type": "string",
-          "maxLength": 200000,
-          "default": "",
-          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
-        },
-        "submittedFields": {
-          "type": "object",
-          "additionalProperties": {},
-          "description": "Bounded submitted form fields retained only on the canonical CRM Communication."
-        },
-        "source": {
-          "type": "object",
-          "additionalProperties": {},
-          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
-        },
-        "props": {
-          "type": "object",
-          "additionalProperties": {},
-          "default": {},
-          "description": "Complete governed note properties required by the target vault contract."
-        }
-      },
-      "required": [
-        "idempotencyKey",
-        "occurredAt"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Append CRM Activity",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-counterpart-apply",
-    "category": "crm",
-    "title": "Apply CRM Counterpart Link",
-    "description": "Apply an unexpired owner-scoped counterpart link preview using its exact handle and digest. The…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "planId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Durable CRM provisioning-plan identifier returned by the planning operation."
-        },
-        "planHandle": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Owner-scoped opaque preview handle returned with the plan."
-        },
-        "digest": {
-          "type": "string",
-          "minLength": 64,
-          "maxLength": 64,
-          "description": "Exact SHA-256 digest returned by the preview; any changed input invalidates it."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        }
-      },
-      "required": [
-        "planId",
-        "planHandle",
-        "digest",
-        "idempotencyKey"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Apply CRM Counterpart Link",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-counterpart-preview",
-    "category": "crm",
-    "title": "Preview CRM Counterpart Link",
-    "description": "Preview an explicit link between one Research record and one CRM record of the same kind. Link-only is…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "researchEntityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable Research entity identifier used only for explicit counterpart planning."
-        },
-        "crmEntityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM entity identifier; it is distinct from any Research record identifier."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "ttlMinutes": {
-          "type": "integer",
-          "minimum": 5,
-          "maximum": 1440,
-          "default": 60,
-          "description": "Bounded preview lifetime in minutes before the plan expires."
-        },
-        "mode": {
-          "type": "string",
-          "const": "link_only",
-          "default": "link_only",
-          "description": "Governed execution mode for this operation."
-        }
-      },
-      "required": [
-        "researchEntityId",
-        "crmEntityId",
-        "idempotencyKey"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Preview CRM Counterpart Link",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-deal-transition",
-    "category": "crm",
-    "title": "Transition CRM Deal",
-    "description": "Apply one governed deal-stage transition after enforcing the pipeline’s allowed forward/backward moves…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "dealId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM deal or opportunity identifier."
-        },
-        "pipelineId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Exact CRM pipeline identifier selected from authorized tenant discovery."
-        },
-        "targetStageId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Governed destination stage identifier for this deal transition."
-        },
-        "baseRevision": {
-          "type": "integer",
-          "minimum": 1,
-          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "fields": {
-          "type": "object",
-          "additionalProperties": {},
-          "default": {},
-          "description": "Ordered form-field definitions to render and validate for submissions."
-        }
-      },
-      "required": [
-        "dealId",
-        "pipelineId",
-        "targetStageId",
-        "baseRevision",
-        "idempotencyKey"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Transition CRM Deal",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-deal-upsert",
-    "category": "crm",
-    "title": "Upsert CRM Deal",
-    "description": "Create or revision-check a canonical Deal associated only with stable CRM people or organizations. A…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "dealId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM deal or opportunity identifier."
-        },
-        "baseRevision": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "entityIds": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "minItems": 1,
-          "maxItems": 100,
-          "description": "Stable CRM entity identifiers associated with this CRM activity, task, or deal."
-        },
-        "title": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 300,
-          "description": "Human-readable title for the proposed record or authored content."
-        },
-        "content": {
-          "type": "string",
-          "maxLength": 200000,
-          "default": "",
-          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
-        },
-        "pipelineId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Exact CRM pipeline identifier selected from authorized tenant discovery."
-        },
-        "stageId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Exact CRM stage identifier required for the conversion rule to match."
-        },
-        "probability": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1,
-          "description": "Deal probability from zero through one hundred for the selected governed stage."
-        },
-        "party": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM person or organization party associated with the deal."
-        },
-        "enteredAt": {
-          "type": "string",
-          "format": "date-time",
-          "description": "ISO 8601 time when the deal entered the selected pipeline stage."
-        },
-        "value": {
-          "anyOf": [
-            {
-              "type": "number",
-              "minimum": 0
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Typed bounded comparison or field value for this declarative rule."
-        },
-        "currency": {
-          "anyOf": [
-            {
-              "type": "string",
-              "pattern": "^[A-Z]{3}$"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Three-letter ISO currency code for the event value."
-        },
-        "props": {
-          "type": "object",
-          "additionalProperties": {},
-          "default": {},
-          "description": "Complete governed note properties required by the target vault contract."
-        }
-      },
-      "required": [
-        "baseRevision",
-        "idempotencyKey",
-        "entityIds",
-        "title",
-        "pipelineId",
-        "stageId",
-        "probability",
-        "party",
-        "enteredAt"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Upsert CRM Deal",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-duplicate-search",
-    "category": "crm",
-    "title": "Search CRM Duplicates",
-    "description": "Search reviewable duplicate candidates within one CRM person or organization domain using stable…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "domain": {
-          "type": "string",
-          "enum": [
-            "crm_person",
-            "crm_organization"
-          ],
-          "description": "Exact governed entity domain selected from the operation contract; callers cannot choose a Research domain for CRM imports."
-        },
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        },
-        "displayName": {
-          "type": "string",
-          "maxLength": 300,
-          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
-        },
-        "email": {
-          "type": "string",
-          "format": "email",
-          "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
-          "description": "Confirmed contact email authorized for this CRM operation."
-        },
-        "phone": {
-          "type": "string",
-          "maxLength": 100,
-          "description": "Confirmed contact phone authorized for this CRM operation."
-        },
-        "limit": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 100,
-          "default": 25,
-          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
-        }
-      },
-      "required": [
-        "domain"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Search CRM Duplicates",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-import-apply",
-    "category": "crm",
-    "title": "Apply CRM Import",
-    "description": "Apply an unexpired CRM import preview with its exact owner-scoped handle, digest, explicit confirmation…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "importId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Owner-scoped governed CRM import plan identifier returned by preview."
-        },
-        "planHandle": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Owner-scoped opaque preview handle returned with the plan."
-        },
-        "digest": {
-          "type": "string",
-          "minLength": 64,
-          "maxLength": 64,
-          "description": "Exact SHA-256 digest returned by the preview; any changed input invalidates it."
-        },
-        "confirmationToken": {
-          "type": "string",
-          "minLength": 8,
-          "description": "Explicit confirmation token bound to the exact governed preview plan."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        }
-      },
-      "required": [
-        "importId",
-        "planHandle",
-        "digest",
-        "confirmationToken",
-        "idempotencyKey"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Apply CRM Import",
-      "readOnlyHint": false,
-      "destructiveHint": true,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-import-preview",
-    "category": "crm",
-    "title": "Preview CRM Import",
-    "description": "Preview a CRM-owned import before any row is applied. Rows may target only CRM People or CRM…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "ttlMinutes": {
-          "type": "integer",
-          "minimum": 5,
-          "maximum": 1440,
-          "default": 60,
-          "description": "Bounded preview lifetime in minutes before the plan expires."
-        },
-        "mapping": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "CSV-column mapping used to identify and protect supported CRM fields."
-        },
-        "rows": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "rowNumber": {
-                "type": "integer",
-                "minimum": 1,
-                "description": "One-based source row number retained for exact validation and error receipts."
-              },
-              "domain": {
-                "type": "string",
-                "enum": [
-                  "crm_person",
-                  "crm_organization"
-                ],
-                "description": "Exact governed entity domain selected from the operation contract; callers cannot choose a Research domain for CRM imports."
-              },
-              "values": {
-                "type": "object",
-                "additionalProperties": {},
-                "description": "Normalized source values for this CRM import row; provider fields and Research domains are rejected."
-              }
-            },
-            "required": [
-              "rowNumber",
-              "domain",
-              "values"
-            ],
-            "additionalProperties": false
-          },
-          "minItems": 1,
-          "maxItems": 50000,
-          "description": "Bounded normalized import rows; every row must target crm_person or crm_organization."
-        }
-      },
-      "required": [
-        "idempotencyKey",
-        "mapping",
-        "rows"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Preview CRM Import",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-merge-apply",
-    "category": "crm",
-    "title": "Apply CRM Merge",
-    "description": "Apply an explicitly owner-confirmed, unexpired CRM merge plan with its exact handle, digest, and…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "mergeId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Owner-scoped merge plan identifier returned by merge preview."
-        },
-        "planHandle": {
-          "type": "string",
-          "minLength": 1,
-          "description": "Owner-scoped opaque preview handle returned with the plan."
-        },
-        "digest": {
-          "type": "string",
-          "minLength": 64,
-          "maxLength": 64,
-          "description": "Exact SHA-256 digest returned by the preview; any changed input invalidates it."
-        },
-        "ownerConfirmation": {
-          "type": "string",
-          "minLength": 8,
-          "description": "Explicit owner confirmation bound to the exact non-expired merge plan."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        }
-      },
-      "required": [
-        "mergeId",
-        "planHandle",
-        "digest",
-        "ownerConfirmation",
-        "idempotencyKey"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Apply CRM Merge",
-      "readOnlyHint": false,
-      "destructiveHint": true,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-merge-preview",
-    "category": "crm",
-    "title": "Preview CRM Merge",
-    "description": "Preview a reversible duplicate merge inside one CRM domain. Shows field conflicts and affected…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "masterEntityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM record selected as the surviving master in a merge preview."
-        },
-        "duplicateEntityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM record selected as the duplicate candidate in a merge preview."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "ttlMinutes": {
-          "type": "integer",
-          "minimum": 5,
-          "maximum": 1440,
-          "default": 60,
-          "description": "Bounded preview lifetime in minutes before the plan expires."
-        }
-      },
-      "required": [
-        "masterEntityId",
-        "duplicateEntityId",
-        "idempotencyKey"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Preview CRM Merge",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-organization-get",
-    "category": "crm",
-    "title": "Get CRM Organization",
-    "description": "Get one managed CRM Organization by stable entity ID with aliases, associations, and optional Research…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        }
-      },
-      "required": [
-        "entityId"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Get CRM Organization",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-organization-search",
-    "category": "crm",
-    "title": "Search CRM Organizations",
-    "description": "Search owner-managed CRM Organizations such as prospect accounts, customers, employers, vendors…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "query": {
-          "type": "string",
-          "maxLength": 500,
-          "description": "Text filter applied to the selected result inventory."
-        },
-        "relationshipType": {
-          "type": "string",
-          "enum": [
-            "prospect",
-            "customer",
-            "former_customer",
-            "friend",
-            "coworker",
-            "collaborator",
-            "vendor",
-            "partner",
-            "advisor",
-            "media",
-            "community",
-            "other"
-          ],
-          "description": "One managed relationship type used to filter CRM records."
-        },
-        "relationshipStatus": {
-          "type": "string",
-          "enum": [
-            "active",
-            "inactive",
-            "archived",
-            "merged"
-          ],
-          "description": "Operational relationship status independent of optional commercial lifecycle."
-        },
-        "commercialLifecycle": {
-          "type": "string",
-          "enum": [
-            "lead",
-            "qualified",
-            "opportunity",
-            "customer",
-            "retained",
-            "churned",
-            "disqualified"
-          ],
-          "description": "Optional commercial lifecycle; friends, coworkers, and other non-commercial relationships may leave it null."
-        },
-        "relationshipOwnerId": {
-          "type": "string",
-          "maxLength": 300,
-          "description": "Optional owner identifier responsible for the CRM relationship."
-        },
-        "cursor": {
-          "type": "string",
-          "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
-        },
-        "limit": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 100,
-          "default": 25,
-          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
-        }
-      },
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Search CRM Organizations",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-organization-upsert",
-    "category": "crm",
-    "title": "Upsert CRM Organization",
-    "description": "Create or revision-check a managed CRM Organization. Relationship type is required while commercial…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        },
-        "baseRevision": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "displayName": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 300,
-          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
-        },
-        "content": {
-          "type": "string",
-          "maxLength": 200000,
-          "default": "",
-          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
-        },
-        "relationshipTypes": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "prospect",
-              "customer",
-              "former_customer",
-              "friend",
-              "coworker",
-              "collaborator",
-              "vendor",
-              "partner",
-              "advisor",
-              "media",
-              "community",
-              "other"
-            ]
-          },
-          "minItems": 1,
-          "maxItems": 12,
-          "description": "One or more owner-declared relationship types; at least one is required for CRM creation."
-        },
-        "relationshipStatus": {
-          "type": "string",
-          "enum": [
-            "active",
-            "inactive",
-            "archived",
-            "merged"
-          ],
-          "default": "active",
-          "description": "Operational relationship status independent of optional commercial lifecycle."
-        },
-        "commercialLifecycle": {
-          "anyOf": [
-            {
-              "type": "string",
-              "enum": [
-                "lead",
-                "qualified",
-                "opportunity",
-                "customer",
-                "retained",
-                "churned",
-                "disqualified"
-              ]
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Optional commercial lifecycle; friends, coworkers, and other non-commercial relationships may leave it null."
-        },
-        "relationshipOwnerId": {
-          "anyOf": [
-            {
-              "type": "string",
-              "maxLength": 300
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Optional owner identifier responsible for the CRM relationship."
-        },
-        "contact": {
-          "type": "object",
-          "properties": {
-            "primaryDomain": {
-              "type": "string",
-              "maxLength": 500,
-              "description": "Canonical public domain associated with this CRM organization; it does not create a provider connection."
-            },
-            "website": {
-              "type": "string",
-              "format": "uri",
-              "description": "Canonical public website associated with this CRM organization."
-            },
-            "phone": {
-              "type": "string",
-              "maxLength": 100,
-              "description": "Confirmed contact phone authorized for this CRM operation."
-            },
-            "address": {
-              "type": "string",
-              "maxLength": 2000,
-              "description": "Owner-authorized contact address stored only on the CRM record."
-            }
-          },
-          "additionalProperties": false,
-          "default": {},
-          "description": "Purpose-authorized confirmed contact projection; candidate evidence is forbidden."
-        },
-        "props": {
-          "type": "object",
-          "additionalProperties": {},
-          "default": {},
-          "description": "Complete governed note properties required by the target vault contract."
-        },
-        "lineage": {
-          "type": "object",
-          "properties": {
-            "authority": {
-              "type": "string",
-              "enum": [
-                "memory_manual",
-                "memory_agent",
-                "connected_source",
-                "crm_import",
-                "xray_derived"
-              ],
-              "default": "memory_agent",
-              "description": "Source authority or ownership context supporting this content."
-            },
-            "sensitivity": {
-              "type": "string",
-              "enum": [
-                "public",
-                "internal",
-                "personal",
-                "restricted"
-              ],
-              "default": "internal",
-              "description": "Governed field sensitivity: public, internal, personal, or restricted."
-            },
-            "sourceRef": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 2000
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Original source URL or opaque artifact reference preserved as image provenance."
-            },
-            "observedAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "ISO 8601 timestamp when this source or governed value was observed."
-            },
-            "confidence": {
-              "anyOf": [
-                {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 1
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Bounded confidence value for the supplied assertion."
-            }
-          },
-          "required": [
-            "observedAt"
-          ],
-          "additionalProperties": false,
-          "description": "Field authority, sensitivity, source, observation time, and confidence recorded with this governed write."
-        }
-      },
-      "required": [
-        "baseRevision",
-        "idempotencyKey",
-        "displayName",
-        "relationshipTypes",
-        "lineage"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Upsert CRM Organization",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-person-get",
-    "category": "crm",
-    "title": "Get CRM Person",
-    "description": "Get one owner-managed CRM Person by stable entity ID with its governed relationship record, aliases…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        }
-      },
-      "required": [
-        "entityId"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Get CRM Person",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-person-search",
-    "category": "crm",
-    "title": "Search CRM People",
-    "description": "Search owner-managed CRM People: prospects, customers, friends, coworkers, collaborators, vendors…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "query": {
-          "type": "string",
-          "maxLength": 500,
-          "description": "Text filter applied to the selected result inventory."
-        },
-        "relationshipType": {
-          "type": "string",
-          "enum": [
-            "prospect",
-            "customer",
-            "former_customer",
-            "friend",
-            "coworker",
-            "collaborator",
-            "vendor",
-            "partner",
-            "advisor",
-            "media",
-            "community",
-            "other"
-          ],
-          "description": "One managed relationship type used to filter CRM records."
-        },
-        "relationshipStatus": {
-          "type": "string",
-          "enum": [
-            "active",
-            "inactive",
-            "archived",
-            "merged"
-          ],
-          "description": "Operational relationship status independent of optional commercial lifecycle."
-        },
-        "commercialLifecycle": {
-          "type": "string",
-          "enum": [
-            "lead",
-            "qualified",
-            "opportunity",
-            "customer",
-            "retained",
-            "churned",
-            "disqualified"
-          ],
-          "description": "Optional commercial lifecycle; friends, coworkers, and other non-commercial relationships may leave it null."
-        },
-        "relationshipOwnerId": {
-          "type": "string",
-          "maxLength": 300,
-          "description": "Optional owner identifier responsible for the CRM relationship."
-        },
-        "cursor": {
-          "type": "string",
-          "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
-        },
-        "limit": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 100,
-          "default": 25,
-          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
-        }
-      },
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Search CRM People",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-person-upsert",
-    "category": "crm",
-    "title": "Upsert CRM Person",
-    "description": "Create or revision-check a managed CRM Person. Relationship type is required, but sales lifecycle and…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        },
-        "baseRevision": {
-          "type": "integer",
-          "minimum": 0,
-          "default": 0,
-          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "displayName": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 300,
-          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
-        },
-        "content": {
-          "type": "string",
-          "maxLength": 200000,
-          "default": "",
-          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
-        },
-        "relationshipTypes": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enum": [
-              "prospect",
-              "customer",
-              "former_customer",
-              "friend",
-              "coworker",
-              "collaborator",
-              "vendor",
-              "partner",
-              "advisor",
-              "media",
-              "community",
-              "other"
-            ]
-          },
-          "minItems": 1,
-          "maxItems": 12,
-          "description": "One or more owner-declared relationship types; at least one is required for CRM creation."
-        },
-        "relationshipStatus": {
-          "type": "string",
-          "enum": [
-            "active",
-            "inactive",
-            "archived",
-            "merged"
-          ],
-          "default": "active",
-          "description": "Operational relationship status independent of optional commercial lifecycle."
-        },
-        "commercialLifecycle": {
-          "anyOf": [
-            {
-              "type": "string",
-              "enum": [
-                "lead",
-                "qualified",
-                "opportunity",
-                "customer",
-                "retained",
-                "churned",
-                "disqualified"
-              ]
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Optional commercial lifecycle; friends, coworkers, and other non-commercial relationships may leave it null."
-        },
-        "relationshipOwnerId": {
-          "anyOf": [
-            {
-              "type": "string",
-              "maxLength": 300
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Optional owner identifier responsible for the CRM relationship."
-        },
-        "contact": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "format": "email",
-              "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
-              "description": "Confirmed contact email authorized for this CRM operation."
-            },
-            "phone": {
-              "type": "string",
-              "maxLength": 100,
-              "description": "Confirmed contact phone authorized for this CRM operation."
-            },
-            "address": {
-              "type": "string",
-              "maxLength": 2000,
-              "description": "Owner-authorized contact address stored only on the CRM record."
-            }
-          },
-          "additionalProperties": false,
-          "default": {},
-          "description": "Purpose-authorized confirmed contact projection; candidate evidence is forbidden."
-        },
-        "email": {
-          "type": "string",
-          "format": "email",
-          "description": "Bridge-compatible top-level email; normalized into contact provenance.",
-          "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
-        },
-        "phone": {
-          "type": "string",
-          "maxLength": 100,
-          "description": "Bridge-compatible top-level phone; normalized into contact provenance."
-        },
-        "organizationName": {
-          "type": "string",
-          "maxLength": 300,
-          "description": "Bridge-compatible organization label; it never creates or resolves an organization by inference."
-        },
-        "source": {
-          "type": "object",
-          "properties": {
-            "kind": {
-              "type": "string",
-              "description": "Governed type discriminator for this rule, score, event, or record."
-            },
-            "siteId": {
-              "type": "string",
-              "description": "Analytics Site id returned by analytics_list_sites."
-            },
-            "formId": {
-              "type": "string",
-              "description": "Stable X-Ray form identifier associated with this governed CRM source receipt."
-            },
-            "submissionId": {
-              "type": "string",
-              "description": "Stable X-Ray form submission identifier used for replay-safe CRM delivery."
-            },
-            "observedAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "ISO 8601 timestamp when this source or governed value was observed."
-            }
-          },
-          "required": [
-            "kind",
-            "observedAt"
-          ],
-          "additionalProperties": false,
-          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
-        },
-        "props": {
-          "type": "object",
-          "additionalProperties": {},
-          "default": {},
-          "description": "Complete governed note properties required by the target vault contract."
-        },
-        "lineage": {
-          "type": "object",
-          "properties": {
-            "authority": {
-              "type": "string",
-              "enum": [
-                "memory_manual",
-                "memory_agent",
-                "connected_source",
-                "crm_import",
-                "xray_derived"
-              ],
-              "default": "memory_agent",
-              "description": "Source authority or ownership context supporting this content."
-            },
-            "sensitivity": {
-              "type": "string",
-              "enum": [
-                "public",
-                "internal",
-                "personal",
-                "restricted"
-              ],
-              "default": "personal",
-              "description": "Governed field sensitivity: public, internal, personal, or restricted."
-            },
-            "sourceRef": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 2000
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Original source URL or opaque artifact reference preserved as image provenance."
-            },
-            "observedAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "ISO 8601 timestamp when this source or governed value was observed."
-            },
-            "confidence": {
-              "anyOf": [
-                {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 1
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Bounded confidence value for the supplied assertion."
-            }
-          },
-          "required": [
-            "observedAt"
-          ],
-          "additionalProperties": false,
-          "description": "Field authority, sensitivity, source, observation time, and confidence recorded with this governed write."
-        }
-      },
-      "required": [
-        "idempotencyKey",
-        "displayName",
-        "relationshipTypes"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Upsert CRM Person",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-pipeline-list",
-    "category": "crm",
-    "title": "List CRM Pipelines",
-    "description": "List owner-scoped native CRM deal pipelines with ordered stages, required fields, allowed transitions…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {},
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "List CRM Pipelines",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-pipeline-upsert",
-    "category": "crm",
-    "title": "Upsert CRM Pipeline",
-    "description": "Create or revision-check an owner-scoped native CRM deal pipeline with governed stages and transitions…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "pipelineId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing owner-scoped pipeline UUID; omit to create a pipeline."
-        },
-        "label": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 120,
-          "description": "Human-readable pipeline label."
-        },
-        "baseVersion": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Expected pipeline version for concurrency control; use 0 only when creating."
-        },
-        "isDefault": {
-          "type": "boolean",
-          "default": false,
-          "description": "Whether this should become the owner default pipeline."
-        },
-        "stages": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "stageId": {
-                "type": "string",
-                "format": "uuid",
-                "description": "Existing stage UUID when revising a pipeline; omit only for a new stage."
-              },
-              "label": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 120,
-                "description": "Human-readable stage label."
-              },
-              "outcome": {
-                "type": "string",
-                "enum": [
-                  "open",
-                  "won",
-                  "lost"
-                ],
-                "description": "Commercial outcome represented by the stage."
-              },
-              "probability": {
-                "type": "number",
-                "minimum": 0,
-                "maximum": 1,
-                "description": "Governed stage probability from 0 through 1; won must be 1 and lost must be 0."
-              },
-              "requiredFields": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 120
-                },
-                "maxItems": 100,
-                "default": [],
-                "description": "Field names required before entering this stage."
-              },
-              "allowedNextStageIds": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "format": "uuid"
-                },
-                "maxItems": 100,
-                "default": [],
-                "description": "Stage UUIDs that this stage may transition to."
-              }
-            },
-            "required": [
-              "label",
-              "outcome",
-              "probability"
-            ],
-            "additionalProperties": false
-          },
-          "minItems": 2,
-          "maxItems": 100,
-          "description": "Complete ordered stage definition for the pipeline."
-        }
-      },
-      "required": [
-        "label",
-        "baseVersion",
-        "stages"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Upsert CRM Pipeline",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-quality-list",
-    "category": "crm",
-    "title": "List CRM Quality Issues",
-    "description": "List owner-scoped relationship quality issues for classification, invalid names, duplicates, imports…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "queue": {
-          "type": "string",
-          "enum": [
-            "classification",
-            "naming",
-            "duplicates",
-            "imports",
-            "merges",
-            "work"
-          ],
-          "description": "Governance queue to list: classification, naming, identity, duplicates, or delivery."
-        },
-        "limit": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 100,
-          "default": 50,
-          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
-        }
-      },
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "List CRM Quality Issues",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-task-upsert",
-    "category": "crm",
-    "title": "Upsert CRM Task",
-    "description": "Create or revision-check a canonical Task linked only to stable CRM entity IDs. Tasks remain in the…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "taskId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM Task entity identifier for create or revision-checked update."
-        },
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        },
-        "baseRevision": {
-          "type": "integer",
-          "minimum": 0,
-          "default": 0,
-          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "personEntityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM Person entity identifier; Research identifiers are rejected."
-        },
-        "communicationEntityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Stable CRM Communication entity identifier returned by the activity append operation."
-        },
-        "entityIds": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "maxItems": 100,
-          "default": [],
-          "description": "Stable CRM entity identifiers associated with this CRM activity, task, or deal."
-        },
-        "title": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 300,
-          "description": "Human-readable title for the proposed record or authored content."
-        },
-        "content": {
-          "type": "string",
-          "maxLength": 200000,
-          "default": "",
-          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
-        },
-        "status": {
-          "type": "string",
-          "enum": [
-            "todo",
-            "in_progress",
-            "blocked",
-            "done",
-            "cancelled"
-          ],
-          "default": "todo",
-          "description": "Lifecycle status used to filter or update the selected records."
-        },
-        "dueAt": {
-          "anyOf": [
-            {
-              "type": "string",
-              "format": "date-time"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Optional ISO 8601 due time for the CRM Task."
-        },
-        "source": {
-          "type": "object",
-          "additionalProperties": {},
-          "description": "Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended."
-        },
-        "props": {
-          "type": "object",
-          "additionalProperties": {},
-          "default": {},
-          "description": "Complete governed note properties required by the target vault contract."
-        }
-      },
-      "required": [
-        "idempotencyKey",
-        "title"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Upsert CRM Task",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "crm-work-search",
-    "category": "crm",
-    "title": "Search CRM Work",
-    "description": "Search owner-scoped canonical CRM activities, tasks, or deals in deterministic updated-time order…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {},
-      "anyOf": [
-        {
-          "type": "object",
-          "properties": {
-            "apiKey": {
-              "type": "string",
-              "description": "Caller API key. Omit when the MCP transport already authenticated this request."
-            },
-            "sessionId": {
-              "type": "string",
-              "description": "Optional MCP session identifier used for active account context."
-            },
-            "entityId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Optional stable CRM person or organization entity ID associated with the work record."
-            },
-            "entityIds": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "minItems": 1,
-              "maxItems": 10,
-              "description": "Optional stable CRM entity IDs that must all be associated with the work record."
-            },
-            "workId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Optional exact canonical CRM activity, task, or deal work ID."
-            },
-            "query": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 300,
-              "description": "Optional case-insensitive title search."
-            },
-            "cursor": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 2048,
-              "description": "Opaque cursor returned by the previous crm-work-search page."
-            },
-            "limit": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 25,
-              "description": "Maximum work records to return before cursor pagination."
-            },
-            "objectKind": {
-              "type": "string",
-              "const": "activity",
-              "description": "Search only canonical CRM activity records."
-            }
-          },
-          "required": [
-            "objectKind"
-          ],
-          "additionalProperties": false
-        },
-        {
-          "type": "object",
-          "properties": {
-            "apiKey": {
-              "type": "string",
-              "description": "Caller API key. Omit when the MCP transport already authenticated this request."
-            },
-            "sessionId": {
-              "type": "string",
-              "description": "Optional MCP session identifier used for active account context."
-            },
-            "entityId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Optional stable CRM person or organization entity ID associated with the work record."
-            },
-            "entityIds": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "minItems": 1,
-              "maxItems": 10,
-              "description": "Optional stable CRM entity IDs that must all be associated with the work record."
-            },
-            "workId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Optional exact canonical CRM activity, task, or deal work ID."
-            },
-            "query": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 300,
-              "description": "Optional case-insensitive title search."
-            },
-            "cursor": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 2048,
-              "description": "Opaque cursor returned by the previous crm-work-search page."
-            },
-            "limit": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 25,
-              "description": "Maximum work records to return before cursor pagination."
-            },
-            "objectKind": {
-              "type": "string",
-              "const": "task",
-              "description": "Search only canonical Task records through the CRM lens."
-            },
-            "taskStatuses": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": [
-                  "todo",
-                  "in_progress",
-                  "blocked",
-                  "done",
-                  "cancelled"
-                ]
-              },
-              "minItems": 1,
-              "maxItems": 100,
-              "description": "Optional canonical Task statuses to include."
-            },
-            "dueBefore": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Inclusive upper due-time bound for canonical Tasks."
-            },
-            "dueAfter": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Inclusive lower due-time bound for canonical Tasks."
-            },
-            "dueUnscheduled": {
-              "type": "boolean",
-              "description": "Set true to return only canonical Tasks without a due date."
-            },
-            "taskOwnerId": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 200,
-              "description": "Exact owner identifier stored on the canonical Task."
-            },
-            "dealId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Exact native CRM deal UUID linked from the canonical Task."
-            }
-          },
-          "required": [
-            "objectKind"
-          ],
-          "additionalProperties": false
-        },
-        {
-          "type": "object",
-          "properties": {
-            "apiKey": {
-              "type": "string",
-              "description": "Caller API key. Omit when the MCP transport already authenticated this request."
-            },
-            "sessionId": {
-              "type": "string",
-              "description": "Optional MCP session identifier used for active account context."
-            },
-            "entityId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Optional stable CRM person or organization entity ID associated with the work record."
-            },
-            "entityIds": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "minItems": 1,
-              "maxItems": 10,
-              "description": "Optional stable CRM entity IDs that must all be associated with the work record."
-            },
-            "workId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Optional exact canonical CRM activity, task, or deal work ID."
-            },
-            "query": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 300,
-              "description": "Optional case-insensitive title search."
-            },
-            "cursor": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 2048,
-              "description": "Opaque cursor returned by the previous crm-work-search page."
-            },
-            "limit": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 25,
-              "description": "Maximum work records to return before cursor pagination."
-            },
-            "objectKind": {
-              "type": "string",
-              "const": "deal",
-              "description": "Search only native CRM deal records."
-            },
-            "pipelineId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "Optional exact native CRM pipeline UUID."
-            },
-            "stageIds": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "minItems": 1,
-              "maxItems": 100,
-              "description": "Optional native CRM stage UUIDs to include."
-            },
-            "minValue": {
-              "type": "number",
-              "minimum": 0,
-              "description": "Optional inclusive minimum deal value in the stored currency."
-            },
-            "maxValue": {
-              "type": "number",
-              "minimum": 0,
-              "description": "Optional inclusive maximum deal value in the stored currency."
-            }
-          },
-          "required": [
-            "objectKind"
-          ],
-          "additionalProperties": false
-        }
-      ],
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Search CRM Work",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "research-organization-capture",
-    "category": "research",
-    "title": "Capture Research Organization",
-    "description": "Create or revision-check a sourced Research Organization. Requires evidence and rejects CRM…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        },
-        "baseRevision": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "displayName": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 300,
-          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
-        },
-        "content": {
-          "type": "string",
-          "maxLength": 200000,
-          "default": "",
-          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
-        },
-        "sourceEvidence": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "sourceRef": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 2000,
-                "description": "Original source URL or opaque artifact reference preserved as image provenance."
-              },
-              "claim": {
-                "type": "string",
-                "maxLength": 4000,
-                "description": "Bounded factual claim supported by the accompanying Research source reference."
-              }
-            },
-            "required": [
-              "sourceRef"
-            ],
-            "additionalProperties": false
-          },
-          "minItems": 1,
-          "maxItems": 100,
-          "description": "One or more cited source references supporting this Research capture."
-        },
-        "topics": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 200
-          },
-          "maxItems": 100,
-          "default": [],
-          "description": "Research topics supported by the captured source evidence."
-        },
-        "researchRoles": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 200
-          },
-          "maxItems": 100,
-          "default": [],
-          "description": "Sourced roles associated with this Research subject."
-        },
-        "props": {
-          "type": "object",
-          "additionalProperties": {},
-          "default": {},
-          "description": "Complete governed note properties required by the target vault contract."
-        },
-        "lineage": {
-          "type": "object",
-          "properties": {
-            "authority": {
-              "type": "string",
-              "enum": [
-                "memory_manual",
-                "memory_agent",
-                "connected_source",
-                "crm_import",
-                "xray_derived"
-              ],
-              "default": "memory_agent",
-              "description": "Source authority or ownership context supporting this content."
-            },
-            "sensitivity": {
-              "type": "string",
-              "enum": [
-                "public",
-                "internal",
-                "personal",
-                "restricted"
-              ],
-              "description": "Governed field sensitivity: public, internal, personal, or restricted."
-            },
-            "sourceRef": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 2000
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Original source URL or opaque artifact reference preserved as image provenance."
-            },
-            "observedAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "ISO 8601 timestamp when this source or governed value was observed."
-            },
-            "confidence": {
-              "anyOf": [
-                {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 1
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Bounded confidence value for the supplied assertion."
-            }
-          },
-          "required": [
-            "sensitivity",
-            "observedAt"
-          ],
-          "additionalProperties": false,
-          "description": "Field authority, sensitivity, source, observation time, and confidence recorded with this governed write."
-        }
-      },
-      "required": [
-        "baseRevision",
-        "idempotencyKey",
-        "displayName",
-        "sourceEvidence",
-        "lineage"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Capture Research Organization",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "research-organization-get",
-    "category": "research",
-    "title": "Get Research Organization",
-    "description": "Get one sourced Research Organization by stable entity ID with aliases, associations, and optional…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        }
-      },
-      "required": [
-        "entityId"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Get Research Organization",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "research-organization-search",
-    "category": "research",
-    "title": "Search Research Organizations",
-    "description": "Search sourced Research Organizations studied as knowledge. Never infer an organization from an email…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "query": {
-          "type": "string",
-          "maxLength": 500,
-          "description": "Text filter applied to the selected result inventory."
-        },
-        "topic": {
-          "type": "string",
-          "maxLength": 200,
-          "description": "Research topic used to filter sourced records."
-        },
-        "role": {
-          "type": "string",
-          "maxLength": 200,
-          "description": "Primary conversion or supporting observation role for this enabled mapping."
-        },
-        "cursor": {
-          "type": "string",
-          "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
-        },
-        "limit": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 100,
-          "default": 25,
-          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
-        }
-      },
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Search Research Organizations",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "research-person-capture",
-    "category": "research",
-    "title": "Capture Research Person",
-    "description": "Create or revision-check an independently governed Research Person for sourced knowledge, including…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        },
-        "baseRevision": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Last revision read by the caller; supply it to reject an update if the record changed meanwhile."
-        },
-        "idempotencyKey": {
-          "type": "string",
-          "minLength": 8,
-          "maxLength": 200,
-          "description": "Caller-owned opaque key for this intended operation; reuse only when retrying the same operation."
-        },
-        "displayName": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 300,
-          "description": "Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected."
-        },
-        "content": {
-          "type": "string",
-          "maxLength": 200000,
-          "default": "",
-          "description": "Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required."
-        },
-        "sourceEvidence": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "sourceRef": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 2000,
-                "description": "Original source URL or opaque artifact reference preserved as image provenance."
-              },
-              "claim": {
-                "type": "string",
-                "maxLength": 4000,
-                "description": "Bounded factual claim supported by the accompanying Research source reference."
-              }
-            },
-            "required": [
-              "sourceRef"
-            ],
-            "additionalProperties": false
-          },
-          "minItems": 1,
-          "maxItems": 100,
-          "description": "One or more cited source references supporting this Research capture."
-        },
-        "topics": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 200
-          },
-          "maxItems": 100,
-          "default": [],
-          "description": "Research topics supported by the captured source evidence."
-        },
-        "researchRoles": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 200
-          },
-          "maxItems": 100,
-          "default": [],
-          "description": "Sourced roles associated with this Research subject."
-        },
-        "props": {
-          "type": "object",
-          "additionalProperties": {},
-          "default": {},
-          "description": "Complete governed note properties required by the target vault contract."
-        },
-        "lineage": {
-          "type": "object",
-          "properties": {
-            "authority": {
-              "type": "string",
-              "enum": [
-                "memory_manual",
-                "memory_agent",
-                "connected_source",
-                "crm_import",
-                "xray_derived"
-              ],
-              "default": "memory_agent",
-              "description": "Source authority or ownership context supporting this content."
-            },
-            "sensitivity": {
-              "type": "string",
-              "enum": [
-                "public",
-                "internal",
-                "personal",
-                "restricted"
-              ],
-              "description": "Governed field sensitivity: public, internal, personal, or restricted."
-            },
-            "sourceRef": {
-              "anyOf": [
-                {
-                  "type": "string",
-                  "maxLength": 2000
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Original source URL or opaque artifact reference preserved as image provenance."
-            },
-            "observedAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "ISO 8601 timestamp when this source or governed value was observed."
-            },
-            "confidence": {
-              "anyOf": [
-                {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 1
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "Bounded confidence value for the supplied assertion."
-            }
-          },
-          "required": [
-            "sensitivity",
-            "observedAt"
-          ],
-          "additionalProperties": false,
-          "description": "Field authority, sensitivity, source, observation time, and confidence recorded with this governed write."
-        }
-      },
-      "required": [
-        "baseRevision",
-        "idempotencyKey",
-        "displayName",
-        "sourceEvidence",
-        "lineage"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Capture Research Person",
-      "readOnlyHint": false,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "research-person-get",
-    "category": "research",
-    "title": "Get Research Person",
-    "description": "Get one sourced Research Person by stable entity ID with aliases, associations, and an optional…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "entityId": {
-          "type": "string",
-          "format": "uuid",
-          "description": "Existing governed entity identifier for this relation or edit."
-        }
-      },
-      "required": [
-        "entityId"
-      ],
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Get Research Person",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
-    }
-  },
-  {
-    "name": "research-person-search",
-    "category": "research",
-    "title": "Search Research People",
-    "description": "Search sourced Research People, including historical figures and living subjects studied as knowledge…",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "query": {
-          "type": "string",
-          "maxLength": 500,
-          "description": "Text filter applied to the selected result inventory."
-        },
-        "topic": {
-          "type": "string",
-          "maxLength": 200,
-          "description": "Research topic used to filter sourced records."
-        },
-        "role": {
-          "type": "string",
-          "maxLength": 200,
-          "description": "Primary conversion or supporting observation role for this enabled mapping."
-        },
-        "cursor": {
-          "type": "string",
-          "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
-        },
-        "limit": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 100,
-          "default": 25,
-          "description": "Maximum rows or records to return on this page; use the returned cursor for more."
-        }
-      },
-      "additionalProperties": false,
-      "$schema": "http://json-schema.org/draft-07/schema#"
-    },
-    "annotations": {
-      "title": "Search Research People",
-      "readOnlyHint": true,
-      "destructiveHint": false,
-      "idempotentHint": true,
-      "openWorldHint": false
     }
   }
 ] as const

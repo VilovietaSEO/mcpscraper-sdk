@@ -25,4 +25,10 @@ class ImageAssetSearchInput(BaseModel):
 
 
 class ImageAssetSearchOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+    ok: bool = Field(..., alias="ok", description="")
+    results: list[dict[str, Any]] | None = Field(None, alias="results", description="")
+    count: float | None = Field(None, alias="count", description="")
+    code: str | None = Field(None, alias="code", description="")
+    error: str | None = Field(None, alias="error", description="")
