@@ -23029,7 +23029,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_thread",
     "category": "reddit",
     "title": "Reddit Thread + Comments",
-    "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. The managed residential browser is primary; a bounded managed-browser backup can recover the post and up to 25 comments when the primary fails. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
+    "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. Each of up to two primary attempts finds and clicks the exact URL through a site-restricted web search before landing with a managed residential browser; up to two managed-browser backup attempts can then recover the post and 25 comments. It stops on the first accepted result. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23062,7 +23062,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_trending",
     "category": "reddit",
     "title": "Reddit Trending",
-    "description": "Discover Reddit conversations through a site-restricted web search for the last week, month, or all time. With includeComments:true, each candidate is opened on current Reddit through a managed residential browser, with a bounded backup of up to 25 comments after primary failure, and ranked from rendered engagement; discovery, each hydrated thread, and returned comments are billed separately. Set includeComments:false for the faster discovery-only result, and inspect resultQuality and discoverySource before treating an empty result as meaningful.",
+    "description": "Discover Reddit conversations through a site-restricted web search for the last week, month, or all time. With includeComments:true, each candidate is hydrated with up to two fresh managed residential browser attempts followed by up to two managed-browser backup attempts capped at 25 comments, stopping on the first accepted result, and ranked from rendered engagement; discovery, each hydrated thread, and returned comments are billed separately. Set includeComments:false for the faster discovery-only result, and inspect resultQuality and discoverySource before treating an empty result as meaningful.",
     "inputSchema": {
       "type": "object",
       "properties": {
