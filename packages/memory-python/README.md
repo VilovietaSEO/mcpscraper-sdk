@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk (Python)
 
-Official Python clients for the unified 375-tool [mcpscraper.dev](https://mcpscraper.dev) MCP catalog.
+Official Python clients for the unified 376-tool [mcpscraper.dev](https://mcpscraper.dev) MCP catalog.
 The direct 148-tool Memory manifest remains checked for runtime compatibility.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
@@ -33,7 +33,7 @@ except MemoryApiError as err:
 
 `client.access`, `client.capture`, `client.channels`, `client.crm`, `client.facts`, `client.files`, `client.graph`, `client.library`, `client.memory`, `client.recall`, `client.research`, `client.schedule`, `client.storage`, `client.tables`, `client.tags`, `client.vaults`, `client.video`, `client.webhooks` — one method per tool, snake_case, typed with generated Pydantic models. Use Research for sourced knowledge and CRM for an actual relationship; counterpart operations link records without copying fields. External CRM providers remain unavailable, with no setup or write wrapper. Original Gmail attachment bytes saved to Memory are available through `client.files.file_asset_save(...)` and `client.files.file_asset_get(...)`.
 
-Use the same key with `McpToolsClient` for all 375 unified scraper and Memory tools.
+Use the same key with `McpToolsClient` for all 376 unified scraper and Memory tools.
 
 Use `client.call_tool_result(name, args)` for native MCP image, audio, or resource blocks. The existing `call_tool` method keeps returning the parsed structured/text value.
 
@@ -59,3 +59,5 @@ python scripts/generate_models.py
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) (also reaches these 148 tools via a scraper key) · [`mcpscraper-cli`](../cli)
+
+Release changes: [SDK 0.43.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.43.0).

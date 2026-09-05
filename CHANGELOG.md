@@ -4,10 +4,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.43.0] - 2026-09-04 — targets mcp-scraper 0.89.0
+
 ### Added
 
 - Add `facebook_reels_inventory` to generated Node, Python, CLI, and cURL contracts, including anonymous limits, partial-result reasons, saved-profile options, and retained URLs for another scan.
-- Add a runnable Facebook profile inventory example that hands selected Reel URLs to video transcription. The candidate targets MCP Scraper 0.89.0; publication waits for the corresponding server release.
+- Add a runnable Facebook profile inventory example that hands selected Reel URLs to video transcription. Targets MCP Scraper 0.89.0.
 
 ## [0.42.0] - 2026-09-02 — verified against mcp-scraper 0.88.0 / mcp-memory 1.22.0
 
@@ -635,3 +637,5 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Added `POST /memory/mcp-call` to the contract and `client.memoryTools.*` to the SDK — all 74 memory.mcpscraper.dev tools, callable with only a scraper API key (reuses `mcpscraper-memory-sdk`'s generated namespace classes as a workspace dependency; no code duplicated).
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
+
+[0.43.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.42.0...v0.43.0
