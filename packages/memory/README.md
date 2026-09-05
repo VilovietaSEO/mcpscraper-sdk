@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for the unified 375-tool MCP Scraper catalog. The direct
+Official TypeScript/JavaScript clients for the unified 376-tool MCP Scraper catalog. The direct
 148-tool Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
@@ -59,7 +59,7 @@ try {
 `MemoryClient` preserves the established compatibility namespaces and maps them to public root tool
 IDs. Research remains sourced knowledge; CRM remains actual relationships. External CRM providers
 remain unavailable. Retired direct-key issue/scope methods fail explicitly. `McpToolsClient` contains
-all 375 unified tools.
+all 376 unified tools.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
@@ -83,3 +83,5 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 148 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
+
+Release changes: [SDK 0.43.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.43.0).

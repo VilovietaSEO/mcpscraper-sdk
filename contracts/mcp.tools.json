@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.88.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "dc9131efeef1833f4db81ad3344364fa808d20cb91f80c047677991791fce09f",
-  "toolCount": 375,
+  "generatedFrom": "mcp-scraper 0.89.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "6c4f4b16d45fd8db495b096a98a866ab1d34daeb6bd5e131888bc240ec75af5d",
+  "toolCount": 376,
   "tools": [
     {
       "name": "access-accept-share",
@@ -56270,6 +56270,406 @@
       }
     },
     {
+      "name": "facebook_reels_inventory",
+      "title": "Facebook Profile Reel URL Inventory",
+      "description": "Discover public Reel URLs before choosing individual videos for facebook_video_transcribe. Collect canonical Reel URLs from a Facebook profile or Page without opening individual Reels. Logged-out scans are capped at 60 URLs. Pass a saved Facebook browser profile to continue toward a larger maxUrls request. Progress is preserved: if Facebook interrupts pagination after URLs were found, the tool returns them as a partial result with an explicit stopping reason; pass those URLs back in resumeUrls to retain and deduplicate them during a new scan. This is live browser collection, not an exhaustive history or a stored cursor. Scans cost 4 credits and are refunded if no new URLs are added.",
+      "category": "facebook",
+      "methodName": "reelsInventory",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public Facebook profile or Page URL whose Reel URLs should be collected. Do not pass an individual Reel, video, post, share, group, or event URL."
+          },
+          "maxUrls": {
+            "default": 60,
+            "description": "Maximum Reel URLs requested. Logged-out collection is capped at 60 even when this is higher; a valid saved Facebook browser profile can continue toward the requested maximum.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2000
+          },
+          "profile": {
+            "description": "Optional saved hosted browser profile name containing a Facebook login. Set one up with browser_profile_connect first. An expired or logged-out profile falls back to the anonymous 60-URL cap.",
+            "type": "string",
+            "minLength": 1
+          },
+          "saveProfileChanges": {
+            "description": "Save browser changes back to the hosted profile. Leave unset unless intentionally updating the saved Facebook login.",
+            "type": "boolean"
+          },
+          "resumeUrls": {
+            "default": [],
+            "description": "Previously returned Reel URLs to retain and deduplicate while continuing an interrupted collection.",
+            "maxItems": 2000,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "maxScrolls": {
+            "default": 250,
+            "description": "Safety ceiling for pagination attempts. Default 250; collection normally stops earlier at maxUrls or a Facebook access boundary.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 250
+          },
+          "scrollDelayMs": {
+            "default": 1200,
+            "description": "Delay after each scroll before collecting the next DOM batch.",
+            "type": "integer",
+            "minimum": 250,
+            "maximum": 5000
+          },
+          "stableScrollLimit": {
+            "default": 4,
+            "description": "Stop after this many consecutive pagination attempts add no Reel URLs.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "sourceUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "profileUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "pageUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "profileName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "browser": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string",
+                "const": "hosted"
+              },
+              "requestedMode": {
+                "type": "string",
+                "const": "hosted"
+              },
+              "profileName": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "profileSource": {
+                "type": "string",
+                "const": "hosted"
+              }
+            },
+            "required": [
+              "mode",
+              "requestedMode",
+              "profileName",
+              "profileSource"
+            ],
+            "additionalProperties": false
+          },
+          "requestedMaxUrls": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2000
+          },
+          "effectiveMaxUrls": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2000
+          },
+          "anonymousCap": {
+            "type": "number",
+            "const": 60
+          },
+          "anonymousCapApplied": {
+            "type": "boolean"
+          },
+          "savedProfileRequested": {
+            "type": "boolean"
+          },
+          "authenticationStatus": {
+            "type": "string",
+            "enum": [
+              "authenticated",
+              "logged_out",
+              "unknown"
+            ]
+          },
+          "collectedUrlCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "resumedUrlCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "newlyCollectedUrlCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "complete": {
+            "type": "boolean"
+          },
+          "partial": {
+            "type": "boolean"
+          },
+          "stoppedReason": {
+            "type": "string",
+            "enum": [
+              "max_urls",
+              "anonymous_cap",
+              "deadline",
+              "login_wall",
+              "stable_scrolls",
+              "max_scrolls",
+              "no_scrolls",
+              "navigation_error",
+              "browser_error"
+            ]
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "maxScrolls": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 250
+              },
+              "attemptedScrolls": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "stableScrolls": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "stableScrollLimit": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "scrollDelayMs": {
+                "type": "integer",
+                "minimum": 250,
+                "maximum": 5000
+              },
+              "stages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "stage": {
+                      "type": "string"
+                    },
+                    "itemCount": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "addedCount": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "scrollY": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "scrollHeight": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "loginWallVisible": {
+                      "type": "boolean"
+                    },
+                    "dismissibleLoginOverlayVisible": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "stage",
+                    "itemCount",
+                    "addedCount",
+                    "scrollY",
+                    "scrollHeight",
+                    "loginWallVisible",
+                    "dismissibleLoginOverlayVisible"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "maxScrolls",
+              "attemptedScrolls",
+              "stableScrolls",
+              "stableScrollLimit",
+              "scrollDelayMs",
+              "stages"
+            ],
+            "additionalProperties": false
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "reelId": {
+                  "type": "string"
+                },
+                "viewCountText": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "anchorText": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "firstSeenStage": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "url",
+                "reelId",
+                "viewCountText",
+                "anchorText",
+                "firstSeenStage"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recoverableError": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "stage": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "stage",
+                  "message"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "extractedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sourceUrl",
+          "profileUrl",
+          "pageUrl",
+          "profileName",
+          "browser",
+          "requestedMaxUrls",
+          "effectiveMaxUrls",
+          "anonymousCap",
+          "anonymousCapApplied",
+          "savedProfileRequested",
+          "authenticationStatus",
+          "collectedUrlCount",
+          "resumedUrlCount",
+          "newlyCollectedUrlCount",
+          "complete",
+          "partial",
+          "stoppedReason",
+          "pagination",
+          "items",
+          "limitations",
+          "recoverableError",
+          "extractedAt"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Facebook Profile Reel URL Inventory",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
       "name": "facebook_video_transcribe",
       "title": "Facebook Organic Video Transcription",
       "description": "Transcribe audio from a public Facebook reel/video/post/share URL (including fb.watch). Renders the public page, selects the best progressive MP4, and returns transcript plus resolved metadata and a low-speech signal. For a connected paused ad, use meta_ad_creative_media first; pass its public post/permalink candidate here only when no direct Graph source is available. Dark/unpublished ads may not have a public route.",
@@ -65869,11 +66269,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "deleted": {
             "type": "boolean"
@@ -65937,11 +66333,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "asset": {
             "type": "object",
@@ -65978,6 +66370,10 @@
               },
               "bytes": {
                 "type": "number"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
               },
               "width": {
                 "type": "number"
@@ -66048,6 +66444,7 @@
               "sourceKind",
               "mimeType",
               "bytes",
+              "sha256",
               "width",
               "height",
               "projectId",
@@ -66166,11 +66563,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "assets": {
             "type": "array",
@@ -66209,6 +66602,10 @@
                 },
                 "bytes": {
                   "type": "number"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
                 },
                 "width": {
                   "type": "number"
@@ -66279,6 +66676,7 @@
                 "sourceKind",
                 "mimeType",
                 "bytes",
+                "sha256",
                 "width",
                 "height",
                 "projectId",
@@ -66370,11 +66768,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "asset": {
             "type": "object",
@@ -66411,6 +66805,10 @@
               },
               "bytes": {
                 "type": "number"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
               },
               "width": {
                 "type": "number"
@@ -66481,6 +66879,7 @@
               "sourceKind",
               "mimeType",
               "bytes",
+              "sha256",
               "width",
               "height",
               "projectId",
@@ -66618,11 +67017,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "asset": {
             "type": "object",
@@ -66659,6 +67054,10 @@
               },
               "bytes": {
                 "type": "number"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
               },
               "width": {
                 "type": "number"
@@ -66729,6 +67128,7 @@
               "sourceKind",
               "mimeType",
               "bytes",
+              "sha256",
               "width",
               "height",
               "projectId",
@@ -66879,11 +67279,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "results": {
             "type": "array",
@@ -66925,6 +67321,10 @@
                     },
                     "bytes": {
                       "type": "number"
+                    },
+                    "sha256": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
                     },
                     "width": {
                       "type": "number"
@@ -66995,6 +67395,7 @@
                     "sourceKind",
                     "mimeType",
                     "bytes",
+                    "sha256",
                     "width",
                     "height",
                     "projectId",
@@ -67099,11 +67500,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "folder": {
             "type": "object",
@@ -67191,11 +67588,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "folders": {
             "type": "array",
@@ -67296,11 +67689,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "project": {
             "type": "object",
@@ -67372,11 +67761,7 @@
         "type": "object",
         "properties": {
           "ok": {
-            "type": "boolean",
-            "enum": [
-              true,
-              false
-            ]
+            "type": "boolean"
           },
           "projects": {
             "type": "array",

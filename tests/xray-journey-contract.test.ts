@@ -22,7 +22,7 @@ test('analytics_list_journeys projects its selector, evidence tier, null branche
   const manifest = JSON.parse(files.contract) as { toolCount: number; tools: Array<Record<string, any>> }
   const tool = manifest.tools.find(candidate => candidate.name === 'analytics_list_journeys')
   assert.ok(tool)
-  assert.equal(manifest.toolCount, 375)
+  assert.equal(manifest.toolCount, 376)
   assert.deepEqual(tool.inputSchema.properties.journeyTier.enum, ['confirmed', 'best_guess', 'all'])
   assert.equal(tool.inputSchema.properties.journeyTier.default, 'confirmed')
   assert.equal(tool.outputSchema.properties.bestGuess.anyOf[0].properties.journeyTier.const, 'candidate_assisted')

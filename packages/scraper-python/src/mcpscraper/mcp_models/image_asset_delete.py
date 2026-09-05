@@ -13,7 +13,7 @@ class ImageAssetDeleteInput(BaseModel):
 class ImageAssetDeleteOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: Literal[True, False] = Field(..., alias="ok", description="")
+    ok: bool = Field(..., alias="ok", description="")
     deleted: bool | None = Field(None, alias="deleted", description="")
     asset_id: str | None = Field(None, alias="assetId", description="")
     code: str | None = Field(None, alias="code", description="")

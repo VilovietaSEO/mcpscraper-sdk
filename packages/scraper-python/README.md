@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated 375-tool MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
+`client.tools` is the generated 376-tool MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
 
 For durable PAA acquisition, call
 `client.tools.other.harvest_paa_start(pages=2, ...)`, then poll its `job_id` with
@@ -133,7 +133,7 @@ hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 375 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 376 unified MCP tools.
 
 ## Regenerating models
 
@@ -154,3 +154,5 @@ uv run datamodel-codegen \
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk` on npm](../scraper) (Node, full `memory_tools` typed surface) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
+
+Release changes: [SDK 0.43.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.43.0).

@@ -45,7 +45,7 @@ Current Google search pricing is 60 Credits per SERP search and 400 Credits plus
 
 ## API surface
 
-`client.tools` is the generated, typed 375-tool MCP surface from `contracts/mcp.tools.json`, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
+`client.tools` is the generated, typed 376-tool MCP surface from `contracts/mcp.tools.json`, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
@@ -190,3 +190,5 @@ npm run generate
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 121-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
+
+Release changes: [SDK 0.43.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.43.0).
