@@ -298,6 +298,7 @@ import * as DirectoryValidateLocalSourcebookWrite from './tools/validate-local-s
 import * as FacebookAdSearch from './tools/facebook_ad_search.js'
 import * as FacebookAdTranscribe from './tools/facebook_ad_transcribe.js'
 import * as FacebookPageIntel from './tools/facebook_page_intel.js'
+import * as FacebookReelsInventory from './tools/facebook_reels_inventory.js'
 import * as FacebookVideoTranscribe from './tools/facebook_video_transcribe.js'
 import * as FactsHistory from './tools/fact-history.js'
 import * as FactsRecordFact from './tools/record-fact.js'
@@ -1451,6 +1452,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "facebook_page_intel",
     "category": "facebook",
     "methodName": "pageIntel"
+  },
+  {
+    "name": "facebook_reels_inventory",
+    "category": "facebook",
+    "methodName": "reelsInventory"
   },
   {
     "name": "facebook_video_transcribe",
@@ -3520,6 +3526,10 @@ export class FacebookNamespace {
 
   async pageIntel(input: FacebookPageIntel.Input = {} as FacebookPageIntel.Input): Promise<FacebookPageIntel.Output> {
     return this.callTool('facebook_page_intel', input) as Promise<FacebookPageIntel.Output>
+  }
+
+  async reelsInventory(input: FacebookReelsInventory.Input): Promise<FacebookReelsInventory.Output> {
+    return this.callTool('facebook_reels_inventory', input) as Promise<FacebookReelsInventory.Output>
   }
 
   async videoTranscribe(input: FacebookVideoTranscribe.Input): Promise<FacebookVideoTranscribe.Output> {

@@ -14,7 +14,7 @@ export interface Input {
 }
 
 export interface Output {
-  ok: true | false;
+  ok: boolean;
   deleted?: boolean;
   assetId?: string;
   code?: string;

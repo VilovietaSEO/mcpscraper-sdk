@@ -6,7 +6,7 @@ export interface Input {
 }
 
 export interface Output {
-  ok: true | false;
+  ok: boolean;
   projects?: {
     id: string;
     name: string;

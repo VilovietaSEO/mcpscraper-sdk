@@ -22,7 +22,7 @@ class ImageAssetSaveInput(BaseModel):
 class ImageAssetSaveOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: Literal[True, False] = Field(..., alias="ok", description="")
+    ok: bool = Field(..., alias="ok", description="")
     asset: dict[str, Any] | None = Field(None, alias="asset", description="")
     reused_object: bool | None = Field(None, alias="reusedObject", description="")
     next_action: str | None = Field(None, alias="nextAction", description="")

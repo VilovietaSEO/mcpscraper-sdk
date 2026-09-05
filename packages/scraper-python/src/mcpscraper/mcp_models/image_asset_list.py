@@ -20,7 +20,7 @@ class ImageAssetListInput(BaseModel):
 class ImageAssetListOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: Literal[True, False] = Field(..., alias="ok", description="")
+    ok: bool = Field(..., alias="ok", description="")
     assets: list[dict[str, Any]] | None = Field(None, alias="assets", description="")
     count: float | None = Field(None, alias="count", description="")
     code: str | None = Field(None, alias="code", description="")

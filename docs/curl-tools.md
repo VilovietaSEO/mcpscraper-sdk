@@ -1,4 +1,4 @@
-# All 375 MCP tools with cURL
+# All 376 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (375)
+## Complete catalog (376)
 
 ## access
 
@@ -437,6 +437,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `facebook_ad_search` — Facebook Ad Library Search
 - `facebook_ad_transcribe` — Facebook Ad Transcription
 - `facebook_page_intel` — Facebook Advertiser Ad Intel
+- `facebook_reels_inventory` — Facebook Profile Reel URL Inventory
 - `facebook_video_transcribe` — Facebook Organic Video Transcription
 
 ## facts

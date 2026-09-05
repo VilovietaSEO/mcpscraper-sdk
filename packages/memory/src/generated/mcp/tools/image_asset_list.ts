@@ -176,7 +176,7 @@ export interface Input {
 }
 
 export interface Output {
-  ok: true | false;
+  ok: boolean;
   assets?: {
     assetId: string;
     title: string;
@@ -186,6 +186,7 @@ export interface Output {
     sourceKind: string;
     mimeType: string;
     bytes: number;
+    sha256: string;
     width: number;
     height: number;
     projectId: string | null;

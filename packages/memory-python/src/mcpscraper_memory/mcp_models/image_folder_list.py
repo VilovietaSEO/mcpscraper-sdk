@@ -12,7 +12,7 @@ class ImageFolderListInput(BaseModel):
 class ImageFolderListOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: Literal[True, False] = Field(..., alias="ok", description="")
+    ok: bool = Field(..., alias="ok", description="")
     folders: list[dict[str, Any]] | None = Field(None, alias="folders", description="")
     code: str | None = Field(None, alias="code", description="")
     error: str | None = Field(None, alias="error", description="")

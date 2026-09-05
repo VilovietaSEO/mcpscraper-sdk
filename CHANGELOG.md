@@ -4,6 +4,11 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+### Added
+
+- Add `facebook_reels_inventory` to generated Node, Python, CLI, and cURL contracts, including anonymous limits, partial-result reasons, saved-profile options, and retained URLs for another scan.
+- Add a runnable Facebook profile inventory example that hands selected Reel URLs to video transcription. The candidate targets MCP Scraper 0.89.0; publication waits for the corresponding server release.
+
 ## [0.42.0] - 2026-09-02 — verified against mcp-scraper 0.88.0 / mcp-memory 1.22.0
 
 ### Changed

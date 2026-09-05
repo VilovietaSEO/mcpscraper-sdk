@@ -18,7 +18,7 @@ export interface Input {
 }
 
 export interface Output {
-  ok: true | false;
+  ok: boolean;
   folder?: {
     id: string;
     projectId: string;

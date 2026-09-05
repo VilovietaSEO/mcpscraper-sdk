@@ -783,3 +783,7 @@ npm run smoke-test           # live smoke test against prod using test/throwaway
 ```
 
 Package-specific docs: [`packages/scraper`](./packages/scraper) · [`packages/memory`](./packages/memory) · [`packages/scraper-python`](./packages/scraper-python) · [`packages/memory-python`](./packages/memory-python) · [`packages/cli`](./packages/cli)
+
+### Facebook Reel inventory
+
+Run `MCP_SCRAPER_API_KEY=... FACEBOOK_PROFILE_URL=https://www.facebook.com/your-page node examples/facebook-reels.mjs` after the corresponding server release. The new `client.tools.facebook.reelsInventory` method returns public Reel URLs and explicit partial-result status; select a returned URL for `client.tools.facebook.videoTranscribe`. Anonymous scans return at most 60 URLs and may return fewer.

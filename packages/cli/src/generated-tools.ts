@@ -20466,6 +20466,80 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "facebook_reels_inventory",
+    "category": "facebook",
+    "title": "Facebook Profile Reel URL Inventory",
+    "description": "Discover public Reel URLs before choosing individual videos for facebook_video_transcribe. Collect canonical Reel URLs from a Facebook profile or Page without opening individual Reels. Logged-out scans are capped at 60 URLs. Pass a saved Facebook browser profile to continue toward a larger maxUrls request. Progress is preserved: if Facebook interrupts pagination after URLs were found, the tool returns them as a partial result with an explicit stopping reason; pass those URLs back in resumeUrls to retain and deduplicate them during a new scan. This is live browser collection, not an exhaustive history or a stored cursor. Scans cost 4 credits and are refunded if no new URLs are added.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Public Facebook profile or Page URL whose Reel URLs should be collected. Do not pass an individual Reel, video, post, share, group, or event URL."
+        },
+        "maxUrls": {
+          "default": 60,
+          "description": "Maximum Reel URLs requested. Logged-out collection is capped at 60 even when this is higher; a valid saved Facebook browser profile can continue toward the requested maximum.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000
+        },
+        "profile": {
+          "description": "Optional saved hosted browser profile name containing a Facebook login. Set one up with browser_profile_connect first. An expired or logged-out profile falls back to the anonymous 60-URL cap.",
+          "type": "string",
+          "minLength": 1
+        },
+        "saveProfileChanges": {
+          "description": "Save browser changes back to the hosted profile. Leave unset unless intentionally updating the saved Facebook login.",
+          "type": "boolean"
+        },
+        "resumeUrls": {
+          "default": [],
+          "description": "Previously returned Reel URLs to retain and deduplicate while continuing an interrupted collection.",
+          "maxItems": 2000,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "maxScrolls": {
+          "default": 250,
+          "description": "Safety ceiling for pagination attempts. Default 250; collection normally stops earlier at maxUrls or a Facebook access boundary.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 250
+        },
+        "scrollDelayMs": {
+          "default": 1200,
+          "description": "Delay after each scroll before collecting the next DOM batch.",
+          "type": "integer",
+          "minimum": 250,
+          "maximum": 5000
+        },
+        "stableScrollLimit": {
+          "default": 4,
+          "description": "Stop after this many consecutive pagination attempts add no Reel URLs.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Facebook Profile Reel URL Inventory",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "facebook_video_transcribe",
     "category": "facebook",
     "title": "Facebook Organic Video Transcription",
