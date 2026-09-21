@@ -11972,10 +11972,10 @@ export const MCP_TOOL_CATALOG = [
           "type": "boolean"
         },
         "timeout_seconds": {
-          "description": "Session lifetime before auto-termination. Defaults to 600.",
+          "description": "Session lifetime before auto-termination. Defaults to 600 and cannot exceed 600.",
           "type": "integer",
           "minimum": 60,
-          "maximum": 259200
+          "maximum": 600
         },
         "extension_names": {
           "description": "Names of extensions previously added with browser_extension_import (see browser_extension_list for what's available) to load into this session. Loading extensions restarts the browser, adding a few seconds to startup.",
@@ -12069,10 +12069,10 @@ export const MCP_TOOL_CATALOG = [
           "type": "string"
         },
         "timeout_seconds": {
-          "description": "Sign-in session lifetime before auto-termination. Defaults to 600.",
+          "description": "Sign-in session lifetime before auto-termination. Defaults to 600 and cannot exceed 600.",
           "type": "integer",
           "minimum": 60,
-          "maximum": 259200
+          "maximum": 600
         }
       },
       "$schema": "https://json-schema.org/draft/2020-12/schema"
@@ -20237,7 +20237,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "extract_url",
     "category": "web",
     "title": "Single URL Extract",
-    "description": "Extract structured data from one public URL: content, schema, headings, metadata, screenshots, branding, featured image, or media assets. Tries a plain HTTP fetch first and only opens a stealth browser when that fetch is blocked, hits a bot check, or returns unusably thin content — most calls never need the browser, and a bot_check_unresolved error means the browser already tried and failed, not that a retry will help. Wayback replay URLs automatically return the archived page copy without playback chrome. Use delivery:auto for bounded inline results with automatic artifact offload, delivery:artifact for a durable owner-scoped report, or delivery:memory to save the full page into hosted MCP Memory. preserveMedia is the preferred media-retention flag; depositToVault and downloadMedia remain temporary compatibility aliases.",
+    "description": "Start a durable extraction of one public URL and return a job receipt before ordinary MCP client deadlines. Poll jobId with extract_url_status; replaying the same idempotencyKey recovers the same extraction without another charge. Extracts content, schema, headings, metadata, screenshots, branding, featured image, or media assets. Tries plain HTTP first and opens a stealth browser only for blocked, challenged, or unusably thin content. Wayback replay URLs return archived copy without playback chrome. Use delivery:auto for bounded output, artifact for an owner-scoped report, or memory to retain the full page.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -20348,8 +20348,36 @@ export const MCP_TOOL_CATALOG = [
       "title": "Single URL Extract",
       "readOnlyHint": false,
       "destructiveHint": false,
-      "idempotentHint": false,
+      "idempotentHint": true,
       "openWorldHint": true
+    }
+  },
+  {
+    "name": "extract_url_status",
+    "category": "other",
+    "title": "Check Durable Single URL Extract",
+    "description": "Poll the owner-scoped job returned by extract_url. Polling never starts or bills another extraction. Terminal success returns the extracted page result; terminal failure returns the settled public error and billing state.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "The jobId returned by extract_url. Polling never starts or bills another extraction."
+        }
+      },
+      "required": [
+        "jobId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Check Durable Single URL Extract",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
     }
   },
   {
@@ -21916,10 +21944,10 @@ export const MCP_TOOL_CATALOG = [
         },
         "maxQuestions": {
           "default": 30,
-          "description": "PAA questions to extract. Default 30, maximum 200. Use 10 for quick probes, 100-200 for deep research. Billed per extracted question; unused hold refunded.",
+          "description": "PAA questions to extract. Default 30, maximum 100. Use 10 for quick probes and 100 for deep research. Billed per extracted question; unused hold refunded.",
           "type": "integer",
           "minimum": 1,
-          "maximum": 200
+          "maximum": 100
         },
         "gl": {
           "default": "us",
@@ -22023,10 +22051,10 @@ export const MCP_TOOL_CATALOG = [
         },
         "maxQuestions": {
           "default": 30,
-          "description": "PAA questions to extract. Default 30, maximum 200. Use 10 for quick probes, 100-200 for deep research. Billed per extracted question; unused hold refunded.",
+          "description": "PAA questions to extract. Default 30, maximum 100. Use 10 for quick probes and 100 for deep research. Billed per extracted question; unused hold refunded.",
           "type": "integer",
           "minimum": 1,
-          "maximum": 200
+          "maximum": 100
         },
         "gl": {
           "default": "us",
@@ -27269,7 +27297,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Google SERP lookup without PAA expansion. Defaults to organic rankings and Google entity IDs; request local pack, forums, videos, AI surfaces, and What People Are Saying with individual include flags or includeAllSerpFeatures at the same product price. Use gl for country and location only when city or regional context matters. Costs 60 Credits per search. Call credits_info for current pricing and balance.",
+    "description": "Start a durable Google SERP lookup without PAA expansion and return a job receipt before ordinary MCP client deadlines. Poll the returned jobId with search_serp_status; replaying the same idempotencyKey recovers the same search without another charge. Defaults to organic rankings and Google entity IDs; request local pack, forums, videos, AI surfaces, and What People Are Saying with individual include flags or includeAllSerpFeatures at the same product price. Use gl for country and location only when city or regional context matters. Costs 60 Credits per search. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -27373,6 +27401,34 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": false,
       "openWorldHint": true
+    }
+  },
+  {
+    "name": "search_serp_status",
+    "category": "other",
+    "title": "Check Durable Google SERP Lookup",
+    "description": "Poll the owner-scoped job returned by search_serp. Polling never starts or bills another search. Terminal success returns the same organic, local, AI, and entity output fields as the completed lookup.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "The jobId returned by search_serp."
+        }
+      },
+      "required": [
+        "jobId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Check Durable Google SERP Lookup",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
     }
   },
   {

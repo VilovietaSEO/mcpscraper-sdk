@@ -12,7 +12,7 @@ class BrowserProfileConnectInput(BaseModel):
     url: str | None = Field(None, alias="url", description="Deprecated alias for login_url.")
     note: str | None = Field(None, alias="note", description="Free-text note describing this login. Surfaced by browser_profile_list.")
     label: str | None = Field(None, alias="label", description="Optional human label for this sign-in setup session.")
-    timeout_seconds: int | None = Field(None, alias="timeout_seconds", description="Sign-in session lifetime before auto-termination. Defaults to 600.")
+    timeout_seconds: int | None = Field(None, alias="timeout_seconds", description="Sign-in session lifetime before auto-termination. Defaults to 600 and cannot exceed 600.")
 
 
 class BrowserProfileConnectOutput(BaseModel):

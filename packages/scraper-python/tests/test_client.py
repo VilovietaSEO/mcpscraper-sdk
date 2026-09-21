@@ -589,6 +589,10 @@ def test_unified_bindings_contain_every_contract_tool():
 @responses.activate
 def test_unified_tool_dispatches_through_mcp():
     search_result = {
+        "jobId": None,
+        "status": "done",
+        "statusTool": None,
+        "replayed": False,
         "query": "roofers denver",
         "location": None,
         "organicResults": [],

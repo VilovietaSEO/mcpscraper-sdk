@@ -12,6 +12,7 @@ test('PAA tools expose bounded organic pagination and one page-one PAA graph', a
   const status = byName.get('harvest_paa_status') as any
 
   for (const tool of [sync, start]) {
+    assert.equal(tool.inputSchema.properties.maxQuestions.maximum, 100)
     assert.deepEqual(tool.inputSchema.properties.pages, {
       default: 1,
       description: 'Organic result pages to capture. Default 1, maximum 2. Page 2 is captured when available before harvesting PAA on the original first page; it does not add a second PAA graph. Pagination output reports the pages actually captured.',

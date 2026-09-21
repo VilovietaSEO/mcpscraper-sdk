@@ -295,6 +295,10 @@ import * as DirectoryLocationMarkets from './tools/location_markets.js'
 import * as DirectoryPrepareLocalSourcebookWrite from './tools/prepare-local-sourcebook-write.js'
 import * as DirectoryResolveLocalSourcebookTags from './tools/resolve-local-sourcebook-tags.js'
 import * as DirectoryValidateLocalSourcebookWrite from './tools/validate-local-sourcebook-write.js'
+import * as OtherExtractUrlStatus from './tools/extract_url_status.js'
+import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
+import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
+import * as OtherSearchSerpStatus from './tools/search_serp_status.js'
 import * as FacebookAdSearch from './tools/facebook_ad_search.js'
 import * as FacebookAdTranscribe from './tools/facebook_ad_transcribe.js'
 import * as FacebookPageIntel from './tools/facebook_page_intel.js'
@@ -314,8 +318,6 @@ import * as SearchSearchSerp from './tools/search_serp.js'
 import * as SearchSerpIdentityCreate from './tools/serp_identity_create.js'
 import * as SearchSerpIdentityDelete from './tools/serp_identity_delete.js'
 import * as SearchSerpIdentityList from './tools/serp_identity_list.js'
-import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
-import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
 import * as ImagesAssetDelete from './tools/image_asset_delete.js'
 import * as ImagesAssetGet from './tools/image_asset_get.js'
 import * as ImagesAssetList from './tools/image_asset_list.js'
@@ -1439,6 +1441,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "extractUrl"
   },
   {
+    "name": "extract_url_status",
+    "category": "other",
+    "methodName": "extractUrlStatus"
+  },
+  {
     "name": "facebook_ad_search",
     "category": "facebook",
     "methodName": "adSearch"
@@ -2062,6 +2069,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "search_serp",
     "category": "search",
     "methodName": "searchSerp"
+  },
+  {
+    "name": "search_serp_status",
+    "category": "other",
+    "methodName": "searchSerpStatus"
   },
   {
     "name": "serp_identity_create",
@@ -3513,6 +3525,26 @@ export class DirectoryNamespace {
   }
 }
 
+export class OtherNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async extractUrlStatus(input: OtherExtractUrlStatus.Input): Promise<OtherExtractUrlStatus.Output> {
+    return this.callTool('extract_url_status', input) as Promise<OtherExtractUrlStatus.Output>
+  }
+
+  async harvestPaaStart(input: OtherHarvestPaaStart.Input): Promise<OtherHarvestPaaStart.Output> {
+    return this.callTool('harvest_paa_start', input) as Promise<OtherHarvestPaaStart.Output>
+  }
+
+  async harvestPaaStatus(input: OtherHarvestPaaStatus.Input): Promise<OtherHarvestPaaStatus.Output> {
+    return this.callTool('harvest_paa_status', input) as Promise<OtherHarvestPaaStatus.Output>
+  }
+
+  async searchSerpStatus(input: OtherSearchSerpStatus.Input): Promise<OtherSearchSerpStatus.Output> {
+    return this.callTool('search_serp_status', input) as Promise<OtherSearchSerpStatus.Output>
+  }
+}
+
 export class FacebookNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3610,18 +3642,6 @@ export class SearchNamespace {
 
   async serpIdentityList(input: SearchSerpIdentityList.Input = {} as SearchSerpIdentityList.Input): Promise<SearchSerpIdentityList.Output> {
     return this.callTool('serp_identity_list', input) as Promise<SearchSerpIdentityList.Output>
-  }
-}
-
-export class OtherNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async harvestPaaStart(input: OtherHarvestPaaStart.Input): Promise<OtherHarvestPaaStart.Output> {
-    return this.callTool('harvest_paa_start', input) as Promise<OtherHarvestPaaStart.Output>
-  }
-
-  async harvestPaaStatus(input: OtherHarvestPaaStatus.Input): Promise<OtherHarvestPaaStatus.Output> {
-    return this.callTool('harvest_paa_status', input) as Promise<OtherHarvestPaaStatus.Output>
   }
 }
 
@@ -3944,13 +3964,13 @@ export class GeneratedMcpToolsClient {
   readonly billing: BillingNamespace
   readonly crm: CrmNamespace
   readonly directory: DirectoryNamespace
+  readonly other: OtherNamespace
   readonly facebook: FacebookNamespace
   readonly facts: FactsNamespace
   readonly reviews: ReviewsNamespace
   readonly artifacts: ArtifactsNamespace
   readonly googleAds: GoogleAdsNamespace
   readonly search: SearchNamespace
-  readonly other: OtherNamespace
   readonly images: ImagesNamespace
   readonly instagram: InstagramNamespace
   readonly leads: LeadsNamespace
@@ -3986,13 +4006,13 @@ export class GeneratedMcpToolsClient {
     this.billing = new BillingNamespace(callTool)
     this.crm = new CrmNamespace(callTool)
     this.directory = new DirectoryNamespace(callTool)
+    this.other = new OtherNamespace(callTool)
     this.facebook = new FacebookNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
     this.reviews = new ReviewsNamespace(callTool)
     this.artifacts = new ArtifactsNamespace(callTool)
     this.googleAds = new GoogleAdsNamespace(callTool)
     this.search = new SearchNamespace(callTool)
-    this.other = new OtherNamespace(callTool)
     this.images = new ImagesNamespace(callTool)
     this.instagram = new InstagramNamespace(callTool)
     this.leads = new LeadsNamespace(callTool)

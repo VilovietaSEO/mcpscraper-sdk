@@ -20,7 +20,7 @@ export interface Input {
    */
   save_profile_changes?: boolean;
   /**
-   * Session lifetime before auto-termination. Defaults to 600.
+   * Session lifetime before auto-termination. Defaults to 600 and cannot exceed 600.
    */
   timeout_seconds?: number;
   /**

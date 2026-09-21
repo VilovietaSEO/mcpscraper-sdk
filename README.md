@@ -3,7 +3,7 @@
 Official client libraries for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP: web intelligence,
 hosted Memory, governed Research and CRM, scheduled actions, and more through one endpoint and key.
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or assistant policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **375 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or assistant policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **378 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Personal assistant
 
@@ -511,7 +511,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 375 unified tools in both Node and Python.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 378 unified tools in both Node and Python.
 
 ## Scheduled results and artifact templates
 
