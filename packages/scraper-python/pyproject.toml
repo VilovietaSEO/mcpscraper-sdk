@@ -1,6 +1,6 @@
 [project]
 name = "mcpscraper-sdk"
-version = "0.42.0"
+version = "0.43.0"
 description = "Official Python client for all 378 mcpscraper.dev MCP tools and the REST API"
 readme = "README.md"
 license = "MIT"

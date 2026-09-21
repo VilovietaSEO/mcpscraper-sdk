@@ -27297,7 +27297,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Start a durable Google SERP lookup without PAA expansion and return a job receipt before ordinary MCP client deadlines. Poll the returned jobId with search_serp_status; replaying the same idempotencyKey recovers the same search without another charge. Defaults to organic rankings and Google entity IDs; request local pack, forums, videos, AI surfaces, and What People Are Saying with individual include flags or includeAllSerpFeatures at the same product price. Use gl for country and location only when city or regional context matters. Costs 60 Credits per search. Call credits_info for current pricing and balance.",
+    "description": "Run one bounded Google SERP lookup without PAA expansion. The server sends query exactly as supplied, returns directly instead of creating a background Task, and stops within its short server deadline. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. Defaults to organic rankings and Google entity IDs; request local pack, forums, videos, AI surfaces, and What People Are Saying with individual include flags or includeAllSerpFeatures at the same product price. Use gl for country and location only when city or regional context matters. Costs 60 Credits per search. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -27407,7 +27407,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp_status",
     "category": "other",
     "title": "Check Durable Google SERP Lookup",
-    "description": "Poll the owner-scoped job returned by search_serp. Polling never starts or bills another search. Terminal success returns the same organic, local, AI, and entity output fields as the completed lookup.",
+    "description": "Read an existing durable SERP job created through the legacy HTTP job API. Ordinary search_serp calls now return directly and do not create a job to poll. Reading status never starts or bills another search.",
     "inputSchema": {
       "type": "object",
       "properties": {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.89.8 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "90937a303507dee459d455e6a4e21c2081ca625f440332c80743233999b5020b",
+  "generatedFrom": "mcp-scraper 0.89.9 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "17d557df85c0ffb8b81d0c733f444ccac99e598fa9fd60d4238d0e86739a6a7a",
   "toolCount": 378,
   "tools": [
     {
@@ -64137,6 +64137,44 @@
                     "minimum": 0,
                     "maximum": 9007199254740991
                   },
+                  "retryBreakdown": {
+                    "type": "object",
+                    "properties": {
+                      "controlRetries": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "browserRetries": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "providerFallbacks": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "runtimeRecoveries": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "idempotentReplays": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "controlRetries",
+                      "browserRetries",
+                      "providerFallbacks",
+                      "runtimeRecoveries",
+                      "idempotentReplays"
+                    ],
+                    "additionalProperties": false
+                  },
                   "knownQuestions": {
                     "type": "integer",
                     "minimum": 0,
@@ -64191,6 +64229,7 @@
                   "materialStatus",
                   "completionReason",
                   "automaticRetries",
+                  "retryBreakdown",
                   "knownQuestions",
                   "processedQuestions",
                   "failedInteractions",
@@ -64200,6 +64239,52 @@
                   "dispatchedInteractions",
                   "confirmedInteractions",
                   "unconfirmedInteractions"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "phaseTimings": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "providerConnectMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "navigationMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "serpParseMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "paaExpansionMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "linkResolutionMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "totalServerMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "totalServerMs"
                 ],
                 "additionalProperties": false
               },
@@ -64732,6 +64817,7 @@
           "degradationReasons",
           "retryRecommended",
           "paaLifecycle",
+          "phaseTimings",
           "pagination",
           "questions",
           "organicResults",
@@ -65261,6 +65347,44 @@
                         "minimum": 0,
                         "maximum": 9007199254740991
                       },
+                      "retryBreakdown": {
+                        "type": "object",
+                        "properties": {
+                          "controlRetries": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "browserRetries": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "providerFallbacks": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "runtimeRecoveries": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "idempotentReplays": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "controlRetries",
+                          "browserRetries",
+                          "providerFallbacks",
+                          "runtimeRecoveries",
+                          "idempotentReplays"
+                        ],
+                        "additionalProperties": false
+                      },
                       "knownQuestions": {
                         "type": "integer",
                         "minimum": 0,
@@ -65315,6 +65439,7 @@
                       "materialStatus",
                       "completionReason",
                       "automaticRetries",
+                      "retryBreakdown",
                       "knownQuestions",
                       "processedQuestions",
                       "failedInteractions",
@@ -65767,6 +65892,44 @@
                             "minimum": 0,
                             "maximum": 9007199254740991
                           },
+                          "retryBreakdown": {
+                            "type": "object",
+                            "properties": {
+                              "controlRetries": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "browserRetries": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "providerFallbacks": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "runtimeRecoveries": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              },
+                              "idempotentReplays": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 9007199254740991
+                              }
+                            },
+                            "required": [
+                              "controlRetries",
+                              "browserRetries",
+                              "providerFallbacks",
+                              "runtimeRecoveries",
+                              "idempotentReplays"
+                            ],
+                            "additionalProperties": false
+                          },
                           "knownQuestions": {
                             "type": "integer",
                             "minimum": 0,
@@ -65821,6 +65984,7 @@
                           "materialStatus",
                           "completionReason",
                           "automaticRetries",
+                          "retryBreakdown",
                           "knownQuestions",
                           "processedQuestions",
                           "failedInteractions",
@@ -65830,6 +65994,52 @@
                           "dispatchedInteractions",
                           "confirmedInteractions",
                           "unconfirmedInteractions"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "phaseTimings": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "providerConnectMs": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "navigationMs": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "serpParseMs": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "paaExpansionMs": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "linkResolutionMs": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "totalServerMs": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "totalServerMs"
                         ],
                         "additionalProperties": false
                       },
@@ -66276,6 +66486,7 @@
                   "resultQuality",
                   "retryRecommended",
                   "paaLifecycle",
+                  "phaseTimings",
                   "questionCount",
                   "questions",
                   "organicResults",
@@ -85606,7 +85817,7 @@
     {
       "name": "search_serp",
       "title": "Google SERP Lookup",
-      "description": "Start a durable Google SERP lookup without PAA expansion and return a job receipt before ordinary MCP client deadlines. Poll the returned jobId with search_serp_status; replaying the same idempotencyKey recovers the same search without another charge. Defaults to organic rankings and Google entity IDs; request local pack, forums, videos, AI surfaces, and What People Are Saying with individual include flags or includeAllSerpFeatures at the same product price. Use gl for country and location only when city or regional context matters. Costs 60 Credits per search. Call credits_info for current pricing and balance.",
+      "description": "Run one bounded Google SERP lookup without PAA expansion. The server sends query exactly as supplied, returns directly instead of creating a background Task, and stops within its short server deadline. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. Defaults to organic rankings and Google entity IDs; request local pack, forums, videos, AI surfaces, and What People Are Saying with individual include flags or includeAllSerpFeatures at the same product price. Use gl for country and location only when city or regional context matters. Costs 60 Credits per search. Call credits_info for current pricing and balance.",
       "category": "search",
       "methodName": "searchSerp",
       "inputSchema": {
@@ -86111,6 +86322,69 @@
                 "type": "null"
               }
             ]
+          },
+          "phaseTimings": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "providerConnectMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "navigationMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "serpParseMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "paaExpansionMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "linkResolutionMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "totalServerMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "totalServerMs"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "durationMs": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "attemptCount": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
           }
         },
         "required": [
@@ -86127,7 +86401,10 @@
           "organicResults",
           "localPack",
           "aiOverview",
-          "entityIds"
+          "entityIds",
+          "phaseTimings",
+          "durationMs",
+          "attemptCount"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
@@ -86144,7 +86421,7 @@
     {
       "name": "search_serp_status",
       "title": "Check Durable Google SERP Lookup",
-      "description": "Poll the owner-scoped job returned by search_serp. Polling never starts or bills another search. Terminal success returns the same organic, local, AI, and entity output fields as the completed lookup.",
+      "description": "Read an existing durable SERP job created through the legacy HTTP job API. Ordinary search_serp calls now return directly and do not create a job to poll. Reading status never starts or bills another search.",
       "category": "other",
       "methodName": "searchSerpStatus",
       "inputSchema": {
@@ -86567,6 +86844,69 @@
                 "type": "null"
               }
             ]
+          },
+          "phaseTimings": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "providerConnectMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "navigationMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "serpParseMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "paaExpansionMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "linkResolutionMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "totalServerMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "totalServerMs"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "durationMs": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "attemptCount": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
           }
         },
         "required": [
@@ -86583,7 +86923,10 @@
           "organicResults",
           "localPack",
           "aiOverview",
-          "entityIds"
+          "entityIds",
+          "phaseTimings",
+          "durationMs",
+          "attemptCount"
         ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
