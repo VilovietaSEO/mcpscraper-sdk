@@ -62,6 +62,10 @@ export interface Input {
 }
 
 export interface Output {
+  jobId: string | null;
+  status: "pending" | "running" | "done";
+  statusTool: string | null;
+  replayed: boolean;
   query: string;
   location: string | null;
   resultQuality: string | null;

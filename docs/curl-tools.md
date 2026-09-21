@@ -1,4 +1,4 @@
-# All 376 MCP tools with cURL
+# All 378 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (376)
+## Complete catalog (378)
 
 ## access
 
@@ -432,6 +432,13 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `resolve-local-sourcebook-tags` — Resolve Local Sourcebook Tags
 - `validate-local-sourcebook-write` — Validate Local Sourcebook Write
 
+## other
+
+- `extract_url_status` — Check Durable Single URL Extract
+- `harvest_paa_start` — Start Durable Google PAA Harvest
+- `harvest_paa_status` — Check Durable Google PAA Harvest
+- `search_serp_status` — Check Durable Google SERP Lookup
+
 ## facebook
 
 - `facebook_ad_search` — Facebook Ad Library Search
@@ -468,11 +475,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `serp_identity_create` — Create and Take Over Persistent SERP Identity
 - `serp_identity_delete` — Delete Persistent SERP Identity
 - `serp_identity_list` — List Persistent SERP Identities
-
-## other
-
-- `harvest_paa_start` — Start Durable Google PAA Harvest
-- `harvest_paa_status` — Check Durable Google PAA Harvest
 
 ## images
 

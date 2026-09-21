@@ -4,6 +4,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.44.0] - 2026-09-21 — targets mcp-scraper 0.89.8
+
+### Changed
+
+- Regenerated the 378-tool Node, Python, CLI, and cURL contract from MCP Scraper 0.89.8, including the 100-question PAA cap and current timeout guidance.
+- Place `search_serp_status` in the Search namespace and `extract_url_status` in the Web namespace instead of the generic fallback namespace.
+- Prepared `mcpscraper-sdk` 0.44.0, `mcpscraper-memory-sdk` 0.44.0, `mcpscraper-cli` 0.43.0, Python `mcpscraper-sdk` 0.42.0, and Python `mcpscraper-memory-sdk` 0.40.0.
+
 ## [0.43.0] - 2026-09-04 — targets mcp-scraper 0.89.0
 
 ### Added

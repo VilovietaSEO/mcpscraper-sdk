@@ -28,7 +28,7 @@ export interface Input {
    */
   label?: string;
   /**
-   * Sign-in session lifetime before auto-termination. Defaults to 600.
+   * Sign-in session lifetime before auto-termination. Defaults to 600 and cannot exceed 600.
    */
   timeout_seconds?: number;
 }

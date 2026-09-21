@@ -12,7 +12,7 @@ export interface Input {
    */
   location?: string;
   /**
-   * PAA questions to extract. Default 30, maximum 200. Use 10 for quick probes, 100-200 for deep research. Billed per extracted question; unused hold refunded.
+   * PAA questions to extract. Default 30, maximum 100. Use 10 for quick probes and 100 for deep research. Billed per extracted question; unused hold refunded.
    */
   maxQuestions?: number;
   /**

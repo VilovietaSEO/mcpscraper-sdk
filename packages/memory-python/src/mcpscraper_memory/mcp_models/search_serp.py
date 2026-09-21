@@ -25,6 +25,10 @@ class SearchSerpInput(BaseModel):
 class SearchSerpOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
+    job_id: Any = Field(..., alias="jobId", description="")
+    status: Literal['pending', 'running', 'done'] = Field(..., alias="status", description="")
+    status_tool: Any = Field(..., alias="statusTool", description="")
+    replayed: bool = Field(..., alias="replayed", description="")
     query: str = Field(..., alias="query", description="")
     location: Any = Field(..., alias="location", description="")
     result_quality: Any = Field(..., alias="resultQuality", description="")
