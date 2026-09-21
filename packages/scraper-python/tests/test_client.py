@@ -603,6 +603,9 @@ def test_unified_tool_dispatches_through_mcp():
         "degradedResult": False,
         "degradationReasons": [],
         "retryRecommended": False,
+        "phaseTimings": None,
+        "durationMs": None,
+        "attemptCount": 1,
     }
     responses.add(
         responses.POST,

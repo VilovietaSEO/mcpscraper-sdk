@@ -77,6 +77,13 @@ export interface Output {
       materialStatus: "complete" | "partial";
       completionReason: string;
       automaticRetries: number;
+      retryBreakdown: {
+        controlRetries: number;
+        browserRetries: number;
+        providerFallbacks: number;
+        runtimeRecoveries: number;
+        idempotentReplays: number;
+      };
       knownQuestions: number;
       processedQuestions: number;
       failedInteractions: number;
@@ -5011,6 +5018,13 @@ export interface Output {
       materialStatus: "complete" | "partial";
       completionReason: string;
       automaticRetries: number;
+      retryBreakdown: {
+        controlRetries: number;
+        browserRetries: number;
+        providerFallbacks: number;
+        runtimeRecoveries: number;
+        idempotentReplays: number;
+      };
       knownQuestions: number;
       processedQuestions: number;
       failedInteractions: number;
@@ -5020,6 +5034,14 @@ export interface Output {
       dispatchedInteractions: number;
       confirmedInteractions: number;
       unconfirmedInteractions: number;
+    } | null;
+    phaseTimings: {
+      providerConnectMs?: number;
+      navigationMs?: number;
+      serpParseMs?: number;
+      paaExpansionMs?: number;
+      linkResolutionMs?: number;
+      totalServerMs: number;
     } | null;
     questionCount: number;
     questions: {

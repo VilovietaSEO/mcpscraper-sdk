@@ -34,6 +34,7 @@ class HarvestPaaOutput(BaseModel):
     degradation_reasons: list[str] = Field(..., alias="degradationReasons", description="")
     retry_recommended: Any = Field(..., alias="retryRecommended", description="")
     paa_lifecycle: Any = Field(..., alias="paaLifecycle", description="")
+    phase_timings: Any = Field(..., alias="phaseTimings", description="")
     pagination: Any = Field(..., alias="pagination", description="")
     questions: list[dict[str, Any]] = Field(..., alias="questions", description="")
     organic_results: list[dict[str, Any]] = Field(..., alias="organicResults", description="")

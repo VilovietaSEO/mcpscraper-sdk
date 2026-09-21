@@ -4,6 +4,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.45.0] - 2026-09-21 — targets mcp-scraper 0.89.9
+
+### Changed
+
+- Regenerated all 378 Node, Python, CLI, and cURL tool contracts for direct ten-second SERP calls and durable PAA's single 400-second lifetime.
+- Added typed phase-timing and retry-breakdown fields to SERP and PAA results so clients can distinguish navigation, expansion, fallback, recovery, and replay costs.
+- Prepared `mcpscraper-sdk` 0.45.0, `mcpscraper-memory-sdk` 0.45.0, `mcpscraper-cli` 0.44.0, Python `mcpscraper-sdk` 0.43.0, and Python `mcpscraper-memory-sdk` 0.41.0.
+
 ## [0.44.0] - 2026-09-21 — targets mcp-scraper 0.89.8
 
 ### Changed

@@ -39,3 +39,6 @@ class SearchSerpOutput(BaseModel):
     local_pack: list[dict[str, Any]] = Field(..., alias="localPack", description="")
     ai_overview: Any = Field(..., alias="aiOverview", description="")
     entity_ids: Any = Field(..., alias="entityIds", description="")
+    phase_timings: Any = Field(..., alias="phaseTimings", description="")
+    duration_ms: Any = Field(..., alias="durationMs", description="")
+    attempt_count: int = Field(..., alias="attemptCount", description="")

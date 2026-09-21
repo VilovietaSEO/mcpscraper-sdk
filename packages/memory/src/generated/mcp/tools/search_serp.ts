@@ -120,4 +120,14 @@ export interface Output {
     cids: string[];
     gcids: string[];
   } | null;
+  phaseTimings: {
+    providerConnectMs?: number;
+    navigationMs?: number;
+    serpParseMs?: number;
+    paaExpansionMs?: number;
+    linkResolutionMs?: number;
+    totalServerMs: number;
+  } | null;
+  durationMs: number | null;
+  attemptCount: number;
 }
