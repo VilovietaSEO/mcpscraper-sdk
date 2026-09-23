@@ -1,12 +1,5 @@
 export { MemoryClient } from './client.js'
 export type { MemoryClientOptions } from './client.js'
-export type {
-  AssistantApprovalDecision,
-  AssistantCommand,
-  AssistantCursor,
-  AssistantIdempotencyKey,
-  AssistantPageRequest,
-} from './assistant.js'
 export { MemoryApiError } from './errors.js'
 export type { MemoryApiErrorDetails } from './errors.js'
 export {
@@ -27,7 +20,7 @@ export {
   VideoNamespace,
   WebhooksNamespace,
 } from './generated/methods.js'
-export { AssistantNamespace, CrmNamespace, ResearchNamespace } from './generated/direct/methods.js'
+export { CrmNamespace, ResearchNamespace } from './generated/direct/methods.js'
 export type { CallToolFn } from './generated/methods.js'
 export { McpToolsClient, McpToolError } from './mcp-client.js'
 export type { McpToolsClientOptions, McpToolDescriptor, McpToolErrorDetails, McpContentBlock, McpToolCallResult } from './mcp-client.js'

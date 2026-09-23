@@ -13,23 +13,17 @@ function main(): void {
     ['--import', 'tsx', 'scripts/check-scheduled-results-contract.ts'],
   )
   const openapiOk = run('Legacy REST OpenAPI lint', 'npx', ['-y', '@redocly/cli', 'lint', 'contracts/scraper.openapi.yaml'])
-  const assistantOpenapiOk = run(
-    'Assistant owner OpenAPI lint',
-    'npx',
-    ['-y', '@redocly/cli', 'lint', 'contracts/assistant.openapi.yaml'],
-  )
   const manifestOk = run('Memory manifest drift check', 'npx', ['tsx', 'scripts/sync-memory-manifest.ts'])
   const unifiedManifestOk = run('Unified manifest drift check', 'npx', ['tsx', 'scripts/sync-mcp-manifest.ts'])
   const parityOk = run('All SDK/CLI/cURL parity', 'npm', ['run', 'verify:parity'])
 
   console.log(`\nScheduled results contract: ${scheduledResultsOk ? 'PASS' : 'FAIL'}`)
   console.log(`\nLegacy REST OpenAPI lint: ${openapiOk ? 'PASS' : 'FAIL'}`)
-  console.log(`Assistant owner OpenAPI lint: ${assistantOpenapiOk ? 'PASS' : 'FAIL'}`)
   console.log(`Memory manifest drift: ${manifestOk ? 'PASS' : 'FAIL'}`)
   console.log(`Unified manifest drift: ${unifiedManifestOk ? 'PASS' : 'FAIL'}`)
   console.log(`All-surface parity: ${parityOk ? 'PASS' : 'FAIL'}`)
 
-  process.exitCode = scheduledResultsOk && openapiOk && assistantOpenapiOk
+  process.exitCode = scheduledResultsOk && openapiOk
     && manifestOk && unifiedManifestOk && parityOk ? 0 : 1
 }
 

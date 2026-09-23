@@ -16,8 +16,95 @@ export interface Output {
   degradedResult: boolean | null;
   degradationReasons: string[];
   retryRecommended: boolean | null;
+  pagination: {
+    requestedPages: 1 | 2;
+    capturedPages: 1 | 2;
+    page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
+    page1OrganicCount: number;
+    page2OrganicCount: number;
+    failureCode?:
+      | "missing_next"
+      | "invalid_next"
+      | "empty_page"
+      | "captcha"
+      | "timeout"
+      | "navigation_error"
+      | "unsupported_driver";
+  } | null;
+  serpCompleteness: {
+    pagination: {
+      status: "complete" | "incomplete";
+      /**
+       * @minItems 1
+       * @maxItems 2
+       */
+      requestedPages: [1 | 2] | [1 | 2, 1 | 2];
+      /**
+       * @maxItems 2
+       */
+      attemptedPages: [] | [1 | 2] | [1 | 2, 1 | 2];
+      /**
+       * @maxItems 2
+       */
+      capturedPages: [] | [1 | 2] | [1 | 2, 1 | 2];
+      /**
+       * @maxItems 2
+       */
+      pageResultCounts:
+        | []
+        | [
+            {
+              page: 1 | 2;
+              resultCount: number;
+            }
+          ]
+        | [
+            {
+              page: 1 | 2;
+              resultCount: number;
+            },
+            {
+              page: 1 | 2;
+              resultCount: number;
+            }
+          ];
+      providerRequestCount: number;
+      failureCode: string | null;
+    };
+    features: {
+      localPack: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
+      forums: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
+      videos: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
+      aiOverview: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
+      whatPeopleSaying: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
+    };
+    queryIntegrity: {
+      status: "matched" | "unresolved_location" | "query_mismatch";
+      queryHash: string;
+      normalizedQueryTokens: string[];
+      canonicalLocation: string | null;
+      locationResolutionSource: string;
+      locationAmbiguousCandidates: number;
+      uulePresent: boolean;
+      uuleHash: string | null;
+      outboundProviderMethod: string;
+      finalQueryHash: string | null;
+    };
+    failureStage:
+      | (
+          | "provider_transport"
+          | "invalid_payload"
+          | "serp_readiness"
+          | "query_integrity"
+          | "pagination"
+          | "optional_feature_parsing"
+          | "unknown"
+        )
+      | null;
+  } | null;
   organicResults: {
     position: number;
+    sourcePage?: 1 | 2;
     title: string;
     url: string;
     rawUrl: string;

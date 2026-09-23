@@ -22,11 +22,6 @@ import * as AddVault from './tools/add-vault.js'
 import * as AnswerInboxItemTool from './tools/answerInboxItemTool.js'
 import * as ArchiveArtifactTemplate from './tools/archive_artifact_template.js'
 import * as ArchiveScheduledRun from './tools/archive_scheduled_run.js'
-import * as AssistantContextPacketCreate from './tools/assistant_context_packet_create.js'
-import * as AssistantContextPacketGet from './tools/assistant_context_packet_get.js'
-import * as AssistantContextPacketLifecycle from './tools/assistant_context_packet_lifecycle.js'
-import * as AssistantContextPacketList from './tools/assistant_context_packet_list.js'
-import * as AssistantContextPacketShareAccept from './tools/assistant_context_packet_share_accept.js'
 import * as AutoOptimizationTool from './tools/autoOptimizationTool.js'
 import * as BulkDeleteNotes from './tools/bulk-delete-notes.js'
 import * as CostUsage from './tools/cost-usage.js'
@@ -250,30 +245,6 @@ export class ArchiveNamespace {
 
   async scheduledRun(input: ArchiveScheduledRun.Input): Promise<ArchiveScheduledRun.Output> {
     return this.callTool('archive_scheduled_run', input) as Promise<ArchiveScheduledRun.Output>
-  }
-}
-
-export class AssistantNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async contextPacketCreate(input: AssistantContextPacketCreate.Input): Promise<AssistantContextPacketCreate.Output> {
-    return this.callTool('assistant_context_packet_create', input) as Promise<AssistantContextPacketCreate.Output>
-  }
-
-  async contextPacketGet(input: AssistantContextPacketGet.Input): Promise<AssistantContextPacketGet.Output> {
-    return this.callTool('assistant_context_packet_get', input) as Promise<AssistantContextPacketGet.Output>
-  }
-
-  async contextPacketLifecycle(input: AssistantContextPacketLifecycle.Input): Promise<AssistantContextPacketLifecycle.Output> {
-    return this.callTool('assistant_context_packet_lifecycle', input) as Promise<AssistantContextPacketLifecycle.Output>
-  }
-
-  async contextPacketList(input: AssistantContextPacketList.Input): Promise<AssistantContextPacketList.Output> {
-    return this.callTool('assistant_context_packet_list', input) as Promise<AssistantContextPacketList.Output>
-  }
-
-  async contextPacketShareAccept(input: AssistantContextPacketShareAccept.Input): Promise<AssistantContextPacketShareAccept.Output> {
-    return this.callTool('assistant_context_packet_share_accept', input) as Promise<AssistantContextPacketShareAccept.Output>
   }
 }
 
