@@ -145,6 +145,7 @@ export interface Output {
   }[];
   organicResults: {
     position: number;
+    sourcePage?: 1 | 2;
     title: string;
     url: string;
     rawUrl: string;

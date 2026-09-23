@@ -47,9 +47,6 @@ async function compileSchema(schema: unknown, exportName: string, toolName: stri
   } catch (error) {
     throw new Error(`Schema compilation failed for ${toolName} (${exportName}); refusing an unknown/index-signature fallback`, { cause: error })
   }
-  if (toolName.startsWith('assistant_') && /\[key:\s*string\]\s*:\s*unknown|\[k:\s*string\]\s*:\s*unknown/.test(generated)) {
-    throw new Error(`Schema compilation produced an unknown index-signature fallback for ${toolName} (${exportName})`)
-  }
   return generated
 }
 

@@ -21,11 +21,6 @@ export type {
   ConcurrencyAccountViewBody,
 } from './errors.js'
 export type { components, operations, paths } from './schema.js'
-export type {
-  components as assistantComponents,
-  operations as assistantOperations,
-  paths as assistantPaths,
-} from './assistant-schema.js'
 export {
   McpToolsClient,
   McpToolError,
@@ -34,11 +29,6 @@ export {
   GeneratedMcpToolsClient,
 } from 'mcpscraper-memory-sdk'
 export type {
-  AssistantApprovalDecision,
-  AssistantCommand,
-  AssistantCursor,
-  AssistantIdempotencyKey,
-  AssistantPageRequest,
   McpToolsClientOptions,
   McpToolDescriptor,
   McpToolErrorDetails,

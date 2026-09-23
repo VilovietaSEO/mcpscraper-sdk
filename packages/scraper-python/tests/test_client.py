@@ -5,30 +5,7 @@ import responses
 import requests
 
 from mcpscraper import ScraperClient, ScraperApiError
-from mcpscraper import AssistantApprovalDecision, AssistantPageRequest
 from mcpscraper._mcp_generated_client import MCP_TOOL_BINDINGS, MCP_TOOL_COUNT
-
-
-def test_assistant_types_preserve_pagination_and_idempotency_fields():
-    page = AssistantPageRequest(state="pending", cursor="cursor_2", page_size=25)
-    decision = AssistantApprovalDecision(
-        approval_ref="appr_123",
-        command_ref="cmd_123",
-        plan_digest="a" * 64,
-        context_version_ref="ctx_123",
-        action_digest="b" * 64,
-        argument_digest="c" * 64,
-        decision="approve",
-        decided_at="2026-08-28T00:00:00.000Z",
-        idempotency_key="approval:appr_123:v1",
-    )
-
-    assert page.model_dump(by_alias=True, exclude_none=True) == {
-        "state": "pending",
-        "cursor": "cursor_2",
-        "pageSize": 25,
-    }
-    assert decision.model_dump(by_alias=True, exclude_none=True)["idempotencyKey"] == "approval:appr_123:v1"
 
 
 @responses.activate
@@ -606,6 +583,8 @@ def test_unified_tool_dispatches_through_mcp():
         "phaseTimings": None,
         "durationMs": None,
         "attemptCount": 1,
+        "pagination": None,
+        "serpCompleteness": None,
     }
     responses.add(
         responses.POST,

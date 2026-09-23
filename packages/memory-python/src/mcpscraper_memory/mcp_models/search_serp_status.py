@@ -21,6 +21,8 @@ class SearchSerpStatusOutput(BaseModel):
     degraded_result: Any = Field(..., alias="degradedResult", description="")
     degradation_reasons: list[str] = Field(..., alias="degradationReasons", description="")
     retry_recommended: Any = Field(..., alias="retryRecommended", description="")
+    pagination: Any = Field(..., alias="pagination", description="")
+    serp_completeness: Any = Field(..., alias="serpCompleteness", description="")
     organic_results: list[dict[str, Any]] = Field(..., alias="organicResults", description="")
     local_pack: list[dict[str, Any]] = Field(..., alias="localPack", description="")
     ai_overview: Any = Field(..., alias="aiOverview", description="")

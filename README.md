@@ -3,13 +3,7 @@
 Official client libraries for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP: web intelligence,
 hosted Memory, governed Research and CRM, scheduled actions, and more through one endpoint and key.
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or assistant policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **378 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
-
-## Personal assistant
-
-The generated `assistant` namespace submits commands, reads conversations and execution status, lists or decides approvals with opaque cursor pagination, manages grants, and performs reviewed phone-number and messaging actions. Every mutation accepts the source contract's idempotency key; callers must reuse a key only for an identical retry. See [`examples/personal-assistant.ts`](./examples/personal-assistant.ts) and [`examples/personal_assistant.py`](./examples/personal_assistant.py).
-
-The assistant-only owner REST contract lives at [`contracts/assistant.openapi.yaml`](./contracts/assistant.openapi.yaml) and is exported as `assistantPaths`, `assistantOperations`, and `assistantComponents`. The established web-intelligence REST contract remains separately versioned at `contracts/scraper.openapi.yaml`. Memory context-packet methods are available on the direct `MemoryClient.assistant` namespace.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **361 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Install
 
@@ -511,7 +505,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 378 unified tools in both Node and Python.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 361 unified tools in both Node and Python.
 
 ## Scheduled results and artifact templates
 
@@ -734,7 +728,7 @@ This is a one-result snapshot with a 1 MB limit—not whole-account pagination, 
 
 Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Python, scraper) or `MemoryApiError` (Node/Python, memory), each carrying the HTTP status, an error code, and the safe public response body. The scraper envelope includes `error_code`, `error_type`, `message`, `retryable`, and—when known—retry timing, charge status, and bounded recovery details. `ScraperApiError` adds helpers for insufficient balance, concurrency, verification challenges, and timeouts. The CLI catches these and prints a clean one-line message instead of a stack trace.
 
-## All 375 MCP tools
+## All 361 MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -756,7 +750,7 @@ The authoritative tool names, descriptions, complete input/output schemas, annot
 
 ## The CLI
 
-`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 375 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 361 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -764,10 +758,9 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 375 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 361 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
-- [`contracts/assistant.openapi.yaml`](./contracts/assistant.openapi.yaml) — OpenAPI 3.1 owner contract for the personal assistant. Source of truth for the additive `assistantPaths`, `assistantOperations`, and `assistantComponents` TypeScript exports; private worker, Cron, webhook, credential, and database operations are intentionally absent.
-- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — direct runtime compatibility manifest for all 148 Memory tools. Customer SDK calls map those methods to the unified root contract.
+- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — direct runtime compatibility manifest for all 143 Memory tools. Customer SDK calls map those methods to the unified root contract.
 
 The contracts are checked-in public release artifacts. The unified MCP contract is generated only from the server's complete build manifest; the live runtime inventory is used for name and input-schema drift checks and is expected to advertise zero output schemas. The memory manifest is generated from its server inventory, while the REST OpenAPI contract is curated. Release validation (`npm run validate-contracts`) checks them against the live servers for drift.
 

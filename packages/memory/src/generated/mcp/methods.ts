@@ -150,23 +150,6 @@ import * as ScheduleSetScheduleDefaults from './tools/set-schedule-defaults.js'
 import * as ScheduleSetScheduleEntitlement from './tools/set-schedule-entitlement.js'
 import * as ScheduleUpdateArtifactTemplate from './tools/update_artifact_template.js'
 import * as ScheduleUpdateScheduledAction from './tools/update-scheduled-action.js'
-import * as AssistantApprovalDecide from './tools/assistant_approval_decide.js'
-import * as AssistantApprovalsList from './tools/assistant_approvals_list.js'
-import * as AssistantBulkSend from './tools/assistant_bulk_send.js'
-import * as AssistantCommand from './tools/assistant_command.js'
-import * as AssistantConversationGet from './tools/assistant_conversation_get.js'
-import * as AssistantDeliveryTest from './tools/assistant_delivery_test.js'
-import * as AssistantDiagnosticsGet from './tools/assistant_diagnostics_get.js'
-import * as AssistantExecutionStatus from './tools/assistant_execution_status.js'
-import * as AssistantGrantCreate from './tools/assistant_grant_create.js'
-import * as AssistantGrantRevoke from './tools/assistant_grant_revoke.js'
-import * as AssistantGrantsList from './tools/assistant_grants_list.js'
-import * as AssistantMessageSend from './tools/assistant_message_send.js'
-import * as AssistantNumberPurchase from './tools/assistant_number_purchase.js'
-import * as AssistantNumberRelease from './tools/assistant_number_release.js'
-import * as AssistantNumberSearch from './tools/assistant_number_search.js'
-import * as AssistantNumberStatus from './tools/assistant_number_status.js'
-import * as AssistantStatus from './tools/assistant_status.js'
 import * as BrowserClick from './tools/browser_click.js'
 import * as BrowserClose from './tools/browser_close.js'
 import * as BrowserExtensionDelete from './tools/browser_extension_delete.js'
@@ -914,91 +897,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "archive_scheduled_run",
     "category": "schedule",
     "methodName": "archiveScheduledRun"
-  },
-  {
-    "name": "assistant_approval_decide",
-    "category": "assistant",
-    "methodName": "approvalDecide"
-  },
-  {
-    "name": "assistant_approvals_list",
-    "category": "assistant",
-    "methodName": "approvalsList"
-  },
-  {
-    "name": "assistant_bulk_send",
-    "category": "assistant",
-    "methodName": "bulkSend"
-  },
-  {
-    "name": "assistant_command",
-    "category": "assistant",
-    "methodName": "command"
-  },
-  {
-    "name": "assistant_conversation_get",
-    "category": "assistant",
-    "methodName": "conversationGet"
-  },
-  {
-    "name": "assistant_delivery_test",
-    "category": "assistant",
-    "methodName": "deliveryTest"
-  },
-  {
-    "name": "assistant_diagnostics_get",
-    "category": "assistant",
-    "methodName": "diagnosticsGet"
-  },
-  {
-    "name": "assistant_execution_status",
-    "category": "assistant",
-    "methodName": "executionStatus"
-  },
-  {
-    "name": "assistant_grant_create",
-    "category": "assistant",
-    "methodName": "grantCreate"
-  },
-  {
-    "name": "assistant_grant_revoke",
-    "category": "assistant",
-    "methodName": "grantRevoke"
-  },
-  {
-    "name": "assistant_grants_list",
-    "category": "assistant",
-    "methodName": "grantsList"
-  },
-  {
-    "name": "assistant_message_send",
-    "category": "assistant",
-    "methodName": "messageSend"
-  },
-  {
-    "name": "assistant_number_purchase",
-    "category": "assistant",
-    "methodName": "numberPurchase"
-  },
-  {
-    "name": "assistant_number_release",
-    "category": "assistant",
-    "methodName": "numberRelease"
-  },
-  {
-    "name": "assistant_number_search",
-    "category": "assistant",
-    "methodName": "numberSearch"
-  },
-  {
-    "name": "assistant_number_status",
-    "category": "assistant",
-    "methodName": "numberStatus"
-  },
-  {
-    "name": "assistant_status",
-    "category": "assistant",
-    "methodName": "status"
   },
   {
     "name": "audit_site",
@@ -2893,78 +2791,6 @@ export class ScheduleNamespace {
   }
 }
 
-export class AssistantNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async approvalDecide(input: AssistantApprovalDecide.Input): Promise<AssistantApprovalDecide.Output> {
-    return this.callTool('assistant_approval_decide', input) as Promise<AssistantApprovalDecide.Output>
-  }
-
-  async approvalsList(input: AssistantApprovalsList.Input = {} as AssistantApprovalsList.Input): Promise<AssistantApprovalsList.Output> {
-    return this.callTool('assistant_approvals_list', input) as Promise<AssistantApprovalsList.Output>
-  }
-
-  async bulkSend(input: AssistantBulkSend.Input): Promise<AssistantBulkSend.Output> {
-    return this.callTool('assistant_bulk_send', input) as Promise<AssistantBulkSend.Output>
-  }
-
-  async command(input: AssistantCommand.Input): Promise<AssistantCommand.Output> {
-    return this.callTool('assistant_command', input) as Promise<AssistantCommand.Output>
-  }
-
-  async conversationGet(input: AssistantConversationGet.Input): Promise<AssistantConversationGet.Output> {
-    return this.callTool('assistant_conversation_get', input) as Promise<AssistantConversationGet.Output>
-  }
-
-  async deliveryTest(input: AssistantDeliveryTest.Input): Promise<AssistantDeliveryTest.Output> {
-    return this.callTool('assistant_delivery_test', input) as Promise<AssistantDeliveryTest.Output>
-  }
-
-  async diagnosticsGet(input: AssistantDiagnosticsGet.Input = {} as AssistantDiagnosticsGet.Input): Promise<AssistantDiagnosticsGet.Output> {
-    return this.callTool('assistant_diagnostics_get', input) as Promise<AssistantDiagnosticsGet.Output>
-  }
-
-  async executionStatus(input: AssistantExecutionStatus.Input): Promise<AssistantExecutionStatus.Output> {
-    return this.callTool('assistant_execution_status', input) as Promise<AssistantExecutionStatus.Output>
-  }
-
-  async grantCreate(input: AssistantGrantCreate.Input): Promise<AssistantGrantCreate.Output> {
-    return this.callTool('assistant_grant_create', input) as Promise<AssistantGrantCreate.Output>
-  }
-
-  async grantRevoke(input: AssistantGrantRevoke.Input): Promise<AssistantGrantRevoke.Output> {
-    return this.callTool('assistant_grant_revoke', input) as Promise<AssistantGrantRevoke.Output>
-  }
-
-  async grantsList(input: AssistantGrantsList.Input = {} as AssistantGrantsList.Input): Promise<AssistantGrantsList.Output> {
-    return this.callTool('assistant_grants_list', input) as Promise<AssistantGrantsList.Output>
-  }
-
-  async messageSend(input: AssistantMessageSend.Input): Promise<AssistantMessageSend.Output> {
-    return this.callTool('assistant_message_send', input) as Promise<AssistantMessageSend.Output>
-  }
-
-  async numberPurchase(input: AssistantNumberPurchase.Input): Promise<AssistantNumberPurchase.Output> {
-    return this.callTool('assistant_number_purchase', input) as Promise<AssistantNumberPurchase.Output>
-  }
-
-  async numberRelease(input: AssistantNumberRelease.Input): Promise<AssistantNumberRelease.Output> {
-    return this.callTool('assistant_number_release', input) as Promise<AssistantNumberRelease.Output>
-  }
-
-  async numberSearch(input: AssistantNumberSearch.Input): Promise<AssistantNumberSearch.Output> {
-    return this.callTool('assistant_number_search', input) as Promise<AssistantNumberSearch.Output>
-  }
-
-  async numberStatus(input: AssistantNumberStatus.Input): Promise<AssistantNumberStatus.Output> {
-    return this.callTool('assistant_number_status', input) as Promise<AssistantNumberStatus.Output>
-  }
-
-  async status(input: AssistantStatus.Input = {} as AssistantStatus.Input): Promise<AssistantStatus.Output> {
-    return this.callTool('assistant_status', input) as Promise<AssistantStatus.Output>
-  }
-}
-
 export class BrowserNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3951,7 +3777,6 @@ export class GeneratedMcpToolsClient {
   readonly analytics: AnalyticsNamespace
   readonly web: WebNamespace
   readonly schedule: ScheduleNamespace
-  readonly assistant: AssistantNamespace
   readonly browser: BrowserNamespace
   readonly memory: MemoryNamespace
   readonly connections: ConnectionsNamespace
@@ -3993,7 +3818,6 @@ export class GeneratedMcpToolsClient {
     this.analytics = new AnalyticsNamespace(callTool)
     this.web = new WebNamespace(callTool)
     this.schedule = new ScheduleNamespace(callTool)
-    this.assistant = new AssistantNamespace(callTool)
     this.browser = new BrowserNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)
     this.connections = new ConnectionsNamespace(callTool)

@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.46.0] - 2026-09-22 — targets mcp-scraper 0.90.6 / mcp-memory 1.22.1
+
+### Changed
+
+- Regenerated the Node, Python, CLI, and cURL clients from the exact 361-tool unified contract and 143-tool direct Memory contract.
+- Added current two-page SERP completeness, provider-evidence, and Maps retry diagnostics to every generated client surface.
+
+### Removed
+
+- Removed the inactive Personal Assistant MCP, owner OpenAPI, direct Memory context-packet, example, and helper-type surfaces so released clients no longer advertise unavailable production methods.
+- Prepared `mcpscraper-sdk` 0.46.0, `mcpscraper-memory-sdk` 0.46.0, `mcpscraper-cli` 0.45.0, Python `mcpscraper-sdk` 0.44.0, and Python `mcpscraper-memory-sdk` 0.42.0.
+
 ## [0.45.0] - 2026-09-21 — targets mcp-scraper 0.89.9
 
 ### Changed

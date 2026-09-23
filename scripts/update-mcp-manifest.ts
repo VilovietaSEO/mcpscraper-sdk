@@ -120,7 +120,6 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
 }
 
 const SCRAPER_PREFIX_CATEGORIES: Array<[string, string]> = [
-  ['assistant_', 'assistant'],
   ['analytics_', 'analytics'],
   ['browser_', 'browser'],
   ['commons_', 'commons'],

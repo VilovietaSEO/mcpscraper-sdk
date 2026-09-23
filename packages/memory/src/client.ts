@@ -17,7 +17,7 @@ import {
   VideoNamespace,
   WebhooksNamespace,
 } from './generated/methods.js'
-import { AssistantNamespace, CrmNamespace, ResearchNamespace } from './generated/direct/methods.js'
+import { CrmNamespace, ResearchNamespace } from './generated/direct/methods.js'
 import { DIRECT_TO_UNIFIED_TOOL_NAMES } from './generated/direct/name-map.js'
 
 export interface MemoryClientOptions {
@@ -47,7 +47,6 @@ interface JsonRpcResponse {
 
 export class MemoryClient {
   readonly access: AccessNamespace
-  readonly assistant: AssistantNamespace
   readonly crm: CrmNamespace
   readonly capture: CaptureNamespace
   readonly channels: ChannelsNamespace
@@ -78,7 +77,6 @@ export class MemoryClient {
 
     const callTool = this.callTool.bind(this)
     this.access = new AccessNamespace(callTool)
-    this.assistant = new AssistantNamespace(callTool)
     this.crm = new CrmNamespace(callTool)
     this.capture = new CaptureNamespace(callTool)
     this.channels = new ChannelsNamespace(callTool)
