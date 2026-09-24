@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.47.0] - 2026-09-24 — targets mcp-scraper 0.91.0
+
+### Added
+
+- Added typed TikTok video transcription to the unified 362-tool contract, Node and Python clients, CLI catalog, and cURL reference. The tool accepts a public video or short share URL and returns timed speech or matching public captions.
+
+### Changed
+
+- Regenerated `mcpscraper-sdk` and `mcpscraper-memory-sdk` 0.47.0, `mcpscraper-cli` 0.46.0, Python `mcpscraper-sdk` 0.45.0, and Python `mcpscraper-memory-sdk` 0.43.0 from the MCP Scraper 0.91.0 contract.
+
+
 ## [0.46.0] - 2026-09-22 — targets mcp-scraper 0.90.6 / mcp-memory 1.22.1
 
 ### Changed
@@ -666,4 +677,6 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.47.0...HEAD
+[0.47.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.46.0...v0.47.0
 [0.43.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.42.0...v0.43.0
