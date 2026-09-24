@@ -4,19 +4,19 @@ export interface Input {
    */
   query: string;
   /**
-   * Where Google should think the searcher is. Sets the Google UULE parameter only — it never changes your query text and never selects a proxy. To put the place in the search terms too, write it into query.
+   * Compatibility field. Ordinary search ignores this. Include a place in query when needed.
    */
   location?: string;
   /**
-   * Google country code inferred from location or user language.
+   * Compatibility field. Ordinary search uses its fixed default market.
    */
   gl?: string;
   /**
-   * Google interface/content language inferred from user request.
+   * Compatibility field. Ordinary search uses its fixed default language.
    */
   hl?: string;
   /**
-   * SERP device context. Use mobile only for mobile rankings.
+   * Compatibility field. Ordinary search uses desktop results.
    */
   device?: "desktop" | "mobile";
   /**
@@ -28,35 +28,35 @@ export interface Input {
    */
   serpIdentity?: string;
   /**
-   * Capture every optional same-page SERP surface: local pack, forums, videos, AI Overview/AI Mode, and What People Are Saying.
+   * Compatibility field. Ordinary search returns organic results only.
    */
   includeAllSerpFeatures?: boolean;
   /**
-   * Include Google local/map-pack businesses and merge their entity IDs.
+   * Compatibility field. Ordinary search does not include the local pack.
    */
   includeLocalPack?: boolean;
   /**
-   * Include Discussions and Forums results.
+   * Compatibility field. Ordinary search does not include forum modules.
    */
   includeForums?: boolean;
   /**
-   * Include video result names and URLs present on the original SERP.
+   * Compatibility field. Ordinary search does not include video modules.
    */
   includeVideos?: boolean;
   /**
-   * Include AI Overview and AI Mode text and citations when present.
+   * Compatibility field. Ordinary search does not include AI modules.
    */
   includeAiOverview?: boolean;
   /**
-   * Include the What People Are Saying social surface when present.
+   * Compatibility field. Ordinary search does not include social modules.
    */
   includeWhatPeopleSaying?: boolean;
   /**
-   * Number of result pages to fetch (1–2).
+   * Request one page by default or two pages of organic results.
    */
   pages?: number;
   /**
-   * Restrict results to a recent time window (Google "past day/week/month/year" filter). Omit for all-time. Useful for "what is being said this week" style queries; pairs well with a site: operator in the query.
+   * Compatibility field. Ordinary search does not apply a date filter.
    */
   recency?: "day" | "week" | "month" | "year";
 }

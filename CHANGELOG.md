@@ -4,6 +4,13 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.48.0] - 2026-09-24 — targets mcp-scraper 0.92.0
+
+### Changed
+
+- Regenerated the unified Node, Python, and CLI `search_serp` contract and verified the cURL catalog. Its organic response includes positions, URLs, titles, and descriptions from one page by default or two when requested; legacy location, language, device, recency, and optional-module fields remain accepted but do not alter ordinary searches.
+- Prepared `mcpscraper-sdk` and `mcpscraper-memory-sdk` 0.48.0, `mcpscraper-cli` 0.47.0, Python `mcpscraper-sdk` 0.46.0, and Python `mcpscraper-memory-sdk` 0.44.0 for the MCP Scraper 0.92.0 contract.
+
 ## [0.47.0] - 2026-09-24 — targets mcp-scraper 0.91.0
 
 ### Added
@@ -677,6 +684,7 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.47.0...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.48.0...HEAD
+[0.48.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.46.0...v0.47.0
 [0.43.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.42.0...v0.43.0
