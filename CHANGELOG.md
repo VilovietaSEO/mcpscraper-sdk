@@ -4,6 +4,16 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.49.0] - 2026-09-24 — targets mcp-scraper 0.93.0
+
+### Added
+
+- Expose the Google Search light/full mode input and structured same-page SERP feature results in the generated Node, Python, CLI, and cURL contracts. Both modes default to one page; callers request `pages: 2` explicitly.
+
+### Changed
+
+- Document 20 Credits per delivered light page when the primary search succeeds and 35 Credits per delivered full or backup page. Prepared Node `mcpscraper-sdk` and `mcpscraper-memory-sdk` 0.49.0, `mcpscraper-cli` 0.48.0, Python `mcpscraper-sdk` 0.47.0, and Python `mcpscraper-memory-sdk` 0.45.0 for the server 0.93.0 contract.
+
 ## [0.48.1] - 2026-09-24 — targets mcp-scraper 0.92.1
 
 ### Changed
@@ -691,7 +701,8 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.48.1...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.49.0...HEAD
+[0.49.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.48.1...v0.49.0
 [0.48.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.48.0...v0.48.1
 [0.48.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.46.0...v0.47.0

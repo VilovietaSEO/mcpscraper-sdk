@@ -566,6 +566,7 @@ def test_unified_bindings_contain_every_contract_tool():
 @responses.activate
 def test_unified_tool_dispatches_through_mcp():
     search_result = {
+        "mode": "light",
         "jobId": None,
         "status": "done",
         "statusTool": None,
@@ -575,6 +576,14 @@ def test_unified_tool_dispatches_through_mcp():
         "organicResults": [],
         "localPack": [],
         "aiOverview": None,
+        "aiMode": None,
+        "forums": [],
+        "videos": [],
+        "whatPeopleSaying": [],
+        "paaPreview": [],
+        "additionalSerpFeatures": [],
+        "featureStatus": {},
+        "featurePages": [],
         "entityIds": None,
         "resultQuality": None,
         "degradedResult": False,

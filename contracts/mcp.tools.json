@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.92.1 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "e0ad6c0b28717a43ec3f578c04f625a2e0a4ddade350338eba1ab20173533b68",
+  "generatedFrom": "mcp-scraper 0.93.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "8b338808178f3664b871dca8574a862d1be6e13465662036335fe35c50b91457",
   "toolCount": 362,
   "tools": [
     {
@@ -71954,12 +71954,21 @@
     {
       "name": "search_serp",
       "title": "Google SERP Lookup",
-      "description": "Search current Google organic results, returning positions, URLs, titles, and descriptions without PAA expansion. Query is sent unchanged. One page is returned by default; set pages to 2 for a second page. Ordinary searches cost 20 Credits per page, or 35 Credits per page if the backup provider supplies the result. A temporary 35-Credit-per-page hold is settled to the delivered rate. Location, language, device, recency, and optional SERP module fields are accepted for compatibility but do not alter ordinary searches. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate. Call credits_info for current pricing and balance.",
+      "description": "Search Google once. Light mode (default) returns organic position, URL, title, and description. Full mode returns those results plus available same-page SERP features: local pack, discussions/forums, videos, AI Overview, AI Mode, What People Are Saying, entity IDs, and on-page PAA preview when present. Feature status distinguishes present, absent, incomplete, unknown, and unsupported. Both modes default to one page; set pages:2 only when the user explicitly requests two pages. Full does not expand PAA, open Maps profiles, or scrape result sites. Light costs 20 Credits per delivered page, or 35 if the backup supplies it; full costs 35 Credits per delivered page. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate; it cannot be combined with full mode. Call credits_info for current pricing and balance.",
       "category": "search",
       "methodName": "searchSerp",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "mode": {
+            "default": "light",
+            "description": "Light returns organic results. Full returns available same-page SERP features. Both default to one page; full never implies two pages.",
+            "type": "string",
+            "enum": [
+              "light",
+              "full"
+            ]
+          },
           "query": {
             "type": "string",
             "minLength": 1,
@@ -72001,39 +72010,9 @@
             "type": "string",
             "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
           },
-          "includeAllSerpFeatures": {
-            "default": false,
-            "description": "Compatibility field. Ordinary search returns organic results only.",
-            "type": "boolean"
-          },
-          "includeLocalPack": {
-            "default": false,
-            "description": "Compatibility field. Ordinary search does not include the local pack.",
-            "type": "boolean"
-          },
-          "includeForums": {
-            "default": false,
-            "description": "Compatibility field. Ordinary search does not include forum modules.",
-            "type": "boolean"
-          },
-          "includeVideos": {
-            "default": false,
-            "description": "Compatibility field. Ordinary search does not include video modules.",
-            "type": "boolean"
-          },
-          "includeAiOverview": {
-            "default": false,
-            "description": "Compatibility field. Ordinary search does not include AI modules.",
-            "type": "boolean"
-          },
-          "includeWhatPeopleSaying": {
-            "default": false,
-            "description": "Compatibility field. Ordinary search does not include social modules.",
-            "type": "boolean"
-          },
           "pages": {
             "default": 1,
-            "description": "Request one page by default or two pages of organic results.",
+            "description": "One page by default in light and full modes. Set 2 only when the user explicitly requests two pages.",
             "type": "integer",
             "minimum": 1,
             "maximum": 2
@@ -72057,6 +72036,13 @@
       "outputSchema": {
         "type": "object",
         "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "light",
+              "full"
+            ]
+          },
           "jobId": {
             "anyOf": [
               {
@@ -72345,7 +72331,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       },
                       "forums": {
@@ -72355,7 +72342,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       },
                       "videos": {
@@ -72365,7 +72353,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       },
                       "aiOverview": {
@@ -72375,7 +72364,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       },
                       "whatPeopleSaying": {
@@ -72385,7 +72375,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       }
                     },
@@ -72759,6 +72750,283 @@
               }
             ]
           },
+          "aiMode": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "detected": {
+                    "type": "boolean"
+                  },
+                  "text": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "citations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "href": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "text",
+                        "href"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "detected",
+                  "text",
+                  "citations"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "forums": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "source",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "videos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "channel": {
+                  "type": "string"
+                },
+                "platform": {
+                  "type": "string"
+                },
+                "duration": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "title",
+                "channel",
+                "platform",
+                "duration",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "whatPeopleSaying": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "paaPreview": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "question",
+                "answer",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "additionalSerpFeatures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "attributes": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "url": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "description": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "position": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "url",
+                      "description",
+                      "position"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "attributes",
+                "items"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "featureStatus": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "observed_present",
+                "observed_absent",
+                "incomplete",
+                "not_requested",
+                "unknown",
+                "unsupported"
+              ]
+            }
+          },
+          "featurePages": {
+            "maxItems": 2,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
           "entityIds": {
             "anyOf": [
               {
@@ -72910,6 +73178,7 @@
           }
         },
         "required": [
+          "mode",
           "jobId",
           "status",
           "statusTool",
@@ -72925,6 +73194,14 @@
           "organicResults",
           "localPack",
           "aiOverview",
+          "aiMode",
+          "forums",
+          "videos",
+          "whatPeopleSaying",
+          "paaPreview",
+          "additionalSerpFeatures",
+          "featureStatus",
+          "featurePages",
           "entityIds",
           "phaseTimings",
           "durationMs",
@@ -72966,6 +73243,13 @@
       "outputSchema": {
         "type": "object",
         "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "light",
+              "full"
+            ]
+          },
           "jobId": {
             "anyOf": [
               {
@@ -73254,7 +73538,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       },
                       "forums": {
@@ -73264,7 +73549,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       },
                       "videos": {
@@ -73274,7 +73560,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       },
                       "aiOverview": {
@@ -73284,7 +73571,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       },
                       "whatPeopleSaying": {
@@ -73294,7 +73582,8 @@
                           "observed_absent",
                           "incomplete",
                           "not_requested",
-                          "unknown"
+                          "unknown",
+                          "unsupported"
                         ]
                       }
                     },
@@ -73668,6 +73957,283 @@
               }
             ]
           },
+          "aiMode": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "detected": {
+                    "type": "boolean"
+                  },
+                  "text": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "citations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string"
+                        },
+                        "href": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "text",
+                        "href"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "detected",
+                  "text",
+                  "citations"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "forums": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "source",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "videos": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "channel": {
+                  "type": "string"
+                },
+                "platform": {
+                  "type": "string"
+                },
+                "duration": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "title",
+                "channel",
+                "platform",
+                "duration",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "whatPeopleSaying": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "paaPreview": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "url": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "question",
+                "answer",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "additionalSerpFeatures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "attributes": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "url": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "description": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "position": {
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "title",
+                      "url",
+                      "description",
+                      "position"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "attributes",
+                "items"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "featureStatus": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "observed_present",
+                "observed_absent",
+                "incomplete",
+                "not_requested",
+                "unknown",
+                "unsupported"
+              ]
+            }
+          },
+          "featurePages": {
+            "maxItems": 2,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
           "entityIds": {
             "anyOf": [
               {
@@ -73819,6 +74385,7 @@
           }
         },
         "required": [
+          "mode",
           "jobId",
           "status",
           "statusTool",
@@ -73834,6 +74401,14 @@
           "organicResults",
           "localPack",
           "aiOverview",
+          "aiMode",
+          "forums",
+          "videos",
+          "whatPeopleSaying",
+          "paaPreview",
+          "additionalSerpFeatures",
+          "featureStatus",
+          "featurePages",
           "entityIds",
           "phaseTimings",
           "durationMs",

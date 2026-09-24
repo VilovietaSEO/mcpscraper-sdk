@@ -6,6 +6,7 @@ export interface Input {
 }
 
 export interface Output {
+  mode: "light" | "full";
   jobId: string | null;
   status: "pending" | "running" | "done";
   statusTool: string | null;
@@ -72,11 +73,12 @@ export interface Output {
       failureCode: string | null;
     };
     features: {
-      localPack: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
-      forums: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
-      videos: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
-      aiOverview: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
-      whatPeopleSaying: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
+      localPack: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+      forums: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+      videos: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+      aiOverview: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+      whatPeopleSaying:
+        "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
     };
     queryIntegrity: {
       status: "matched" | "unresolved_location" | "query_mismatch";
@@ -137,6 +139,68 @@ export interface Output {
     sections: string[];
     shareUrl?: string | null;
   } | null;
+  aiMode: {
+    detected: boolean;
+    text: string | null;
+    citations: {
+      text: string;
+      href: string;
+    }[];
+  } | null;
+  forums: {
+    title: string;
+    source: string;
+    url: string;
+  }[];
+  videos: {
+    type: string;
+    title: string;
+    channel: string;
+    platform: string;
+    duration: string;
+    url: string;
+  }[];
+  whatPeopleSaying: {
+    [k: string]: unknown;
+  }[];
+  paaPreview: {
+    question: string;
+    answer: string | null;
+    url: string | null;
+  }[];
+  additionalSerpFeatures: {
+    name: string;
+    attributes: {
+      [k: string]: string | number | boolean | null;
+    };
+    items: {
+      title: string | null;
+      url: string | null;
+      description: string | null;
+      position: number | null;
+    }[];
+  }[];
+  featureStatus: {
+    [k: string]: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+  };
+  /**
+   * @maxItems 2
+   */
+  featurePages:
+    | []
+    | [
+        {
+          [k: string]: unknown;
+        }
+      ]
+    | [
+        {
+          [k: string]: unknown;
+        },
+        {
+          [k: string]: unknown;
+        }
+      ];
   entityIds: {
     /**
      * Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility.
