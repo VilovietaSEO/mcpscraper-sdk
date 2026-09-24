@@ -282,6 +282,7 @@ import * as OtherExtractUrlStatus from './tools/extract_url_status.js'
 import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
 import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
 import * as OtherSearchSerpStatus from './tools/search_serp_status.js'
+import * as OtherTiktokVideoTranscribe from './tools/tiktok_video_transcribe.js'
 import * as FacebookAdSearch from './tools/facebook_ad_search.js'
 import * as FacebookAdTranscribe from './tools/facebook_ad_transcribe.js'
 import * as FacebookPageIntel from './tools/facebook_page_intel.js'
@@ -2074,6 +2075,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "testServiceConnection"
   },
   {
+    "name": "tiktok_video_transcribe",
+    "category": "other",
+    "methodName": "tiktokVideoTranscribe"
+  },
+  {
     "name": "trustpilot_reviews",
     "category": "reviews",
     "methodName": "trustpilotReviews"
@@ -3368,6 +3374,10 @@ export class OtherNamespace {
 
   async searchSerpStatus(input: OtherSearchSerpStatus.Input): Promise<OtherSearchSerpStatus.Output> {
     return this.callTool('search_serp_status', input) as Promise<OtherSearchSerpStatus.Output>
+  }
+
+  async tiktokVideoTranscribe(input: OtherTiktokVideoTranscribe.Input): Promise<OtherTiktokVideoTranscribe.Output> {
+    return this.callTool('tiktok_video_transcribe', input) as Promise<OtherTiktokVideoTranscribe.Output>
   }
 }
 

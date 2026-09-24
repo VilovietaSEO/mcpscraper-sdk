@@ -4,7 +4,7 @@ Command-line interface for the unified [mcpscraper.dev](https://mcpscraper.dev) 
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 361 unified MCP tools, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 362 unified MCP tools, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
 ## Install
 
@@ -41,7 +41,7 @@ mcpscraper tools call gmail_prepare_selection --args '{"connectionId":"gmail_con
 mcpscraper tools call gmail_import_status --args '{"ingestId":"opaque_ingest_id"}' --json
 ```
 
-`tools list` contains exactly 361 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains exactly 362 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release. Scheduled occurrences cost 75 Credits; agent-mode runs also add 1.5 times OpenRouter's actual reported cost. Inspect the live policy with `mcpscraper tools call get-schedule-status --args '{}'`.
 
@@ -139,4 +139,4 @@ $ mcpscraper map https://example.com --json
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) · [`mcpscraper-memory-sdk`](../memory) · Python: [`mcpscraper-sdk`](../scraper-python) · [`mcpscraper-memory-sdk`](../memory-python)
 
-Release changes: [SDK 0.46.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.46.0).
+Release changes: [SDK 0.47.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.47.0).
