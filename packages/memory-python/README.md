@@ -60,4 +60,4 @@ python scripts/generate_models.py
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) (also reaches these 143 tools via a scraper key) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.47.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.47.0).
+Release changes: [SDK 0.48.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.48.0).

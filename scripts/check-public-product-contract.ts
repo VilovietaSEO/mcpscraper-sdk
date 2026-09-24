@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   }
 
   const byName = new Map(manifest.tools.map(tool => [tool.name, tool]))
-  requireMatch(byName.get('search_serp')?.description ?? '', /Costs 60 Credits per search\./, 'search_serp rate')
+  requireMatch(byName.get('search_serp')?.description ?? '', /Costs 60 Credits per search\b/, 'search_serp rate')
   requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 400 Credits per harvest plus 10 Credits per question/, 'harvest_paa rate')
   requireMatch(byName.get('capture_serp_snapshot')?.description ?? '', /Costs 60 Credits/, 'capture_serp_snapshot rate')
 

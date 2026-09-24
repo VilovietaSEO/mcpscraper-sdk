@@ -26214,7 +26214,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Run one bounded Google SERP lookup without PAA expansion. The server sends query exactly as supplied, returns directly instead of creating a background Task, and stops within its short server deadline. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. Defaults to organic rankings and Google entity IDs; request local pack, forums, videos, AI surfaces, and What People Are Saying with individual include flags or includeAllSerpFeatures at the same product price. Use gl for country and location only when city or regional context matters. Costs 60 Credits per search. Call credits_info for current pricing and balance.",
+    "description": "Search current Google organic results, returning positions, URLs, titles, and descriptions without PAA expansion. Query is sent unchanged. One page is returned by default; set pages to 2 for a second page. Location, language, device, recency, and optional SERP module fields are accepted for compatibility but do not alter ordinary searches. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context. Costs 60 Credits per search, including internal recovery attempts. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26224,24 +26224,24 @@ export const MCP_TOOL_CATALOG = [
           "description": "The search topic, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location."
         },
         "location": {
-          "description": "Where Google should think the searcher is. Sets the Google UULE parameter only — it never changes your query text and never selects a proxy. To put the place in the search terms too, write it into query.",
+          "description": "Compatibility field. Ordinary search ignores this. Include a place in query when needed.",
           "type": "string"
         },
         "gl": {
           "default": "us",
-          "description": "Google country code inferred from location or user language.",
+          "description": "Compatibility field. Ordinary search uses its fixed default market.",
           "type": "string",
           "minLength": 2,
           "maxLength": 2
         },
         "hl": {
           "default": "en",
-          "description": "Google interface/content language inferred from user request.",
+          "description": "Compatibility field. Ordinary search uses its fixed default language.",
           "type": "string"
         },
         "device": {
           "default": "desktop",
-          "description": "SERP device context. Use mobile only for mobile rankings.",
+          "description": "Compatibility field. Ordinary search uses desktop results.",
           "type": "string",
           "enum": [
             "desktop",
@@ -26261,43 +26261,43 @@ export const MCP_TOOL_CATALOG = [
         },
         "includeAllSerpFeatures": {
           "default": false,
-          "description": "Capture every optional same-page SERP surface: local pack, forums, videos, AI Overview/AI Mode, and What People Are Saying.",
+          "description": "Compatibility field. Ordinary search returns organic results only.",
           "type": "boolean"
         },
         "includeLocalPack": {
           "default": false,
-          "description": "Include Google local/map-pack businesses and merge their entity IDs.",
+          "description": "Compatibility field. Ordinary search does not include the local pack.",
           "type": "boolean"
         },
         "includeForums": {
           "default": false,
-          "description": "Include Discussions and Forums results.",
+          "description": "Compatibility field. Ordinary search does not include forum modules.",
           "type": "boolean"
         },
         "includeVideos": {
           "default": false,
-          "description": "Include video result names and URLs present on the original SERP.",
+          "description": "Compatibility field. Ordinary search does not include video modules.",
           "type": "boolean"
         },
         "includeAiOverview": {
           "default": false,
-          "description": "Include AI Overview and AI Mode text and citations when present.",
+          "description": "Compatibility field. Ordinary search does not include AI modules.",
           "type": "boolean"
         },
         "includeWhatPeopleSaying": {
           "default": false,
-          "description": "Include the What People Are Saying social surface when present.",
+          "description": "Compatibility field. Ordinary search does not include social modules.",
           "type": "boolean"
         },
         "pages": {
           "default": 1,
-          "description": "Number of result pages to fetch (1–2).",
+          "description": "Request one page by default or two pages of organic results.",
           "type": "integer",
           "minimum": 1,
           "maximum": 2
         },
         "recency": {
-          "description": "Restrict results to a recent time window (Google \"past day/week/month/year\" filter). Omit for all-time. Useful for \"what is being said this week\" style queries; pairs well with a site: operator in the query.",
+          "description": "Compatibility field. Ordinary search does not apply a date filter.",
           "type": "string",
           "enum": [
             "day",
