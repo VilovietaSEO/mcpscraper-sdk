@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   }
 
   const byName = new Map(manifest.tools.map(tool => [tool.name, tool]))
-  requireMatch(byName.get('search_serp')?.description ?? '', /Costs 60 Credits per search\b/, 'search_serp rate')
+  requireMatch(byName.get('search_serp')?.description ?? '', /20 Credits per page.*35 Credits per page/, 'search_serp rates')
   requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 400 Credits per harvest plus 10 Credits per question/, 'harvest_paa rate')
   requireMatch(byName.get('capture_serp_snapshot')?.description ?? '', /Costs 60 Credits/, 'capture_serp_snapshot rate')
 
@@ -26,7 +26,7 @@ async function main(): Promise<void> {
   }
 
   const openapi = await readFile('contracts/scraper.openapi.yaml', 'utf8')
-  requireMatch(openapi, /pure organic-results\/SERP call \(60 Credits\)/, 'REST SERP rate')
+  requireMatch(openapi, /pure organic-results\/SERP call \(20 Credits per/, 'REST SERP rate')
   requireMatch(openapi, /400 Credit base \+ 10 Credits per question actually returned/, 'REST PAA rate')
   requireMatch(openapi, /unit_amount_usd: \{ type: number, enum: \[5\] \}/, 'concurrency pack monthly price')
   requireMatch(openapi, /slots_per_pack: \{ type: integer, enum: \[2\] \}/, 'concurrency pack slot count')
@@ -45,7 +45,7 @@ async function main(): Promise<void> {
     requireMatch(text, toolCountPattern, `${path} inventory`)
   }
   for (const { path, text } of docs.filter(entry => entry.path !== 'docs/curl-tools.md')) {
-    requireMatch(text, /60 Credits/, `${path} SERP rate`)
+    requireMatch(text, /20 Credits per delivered SERP page/, `${path} SERP rate`)
     requireMatch(text, /400 Credits/, `${path} PAA base rate`)
     requireMatch(text, /10 Credits per (?:returned )?question/, `${path} PAA question rate`)
     requireMatch(text, /two (?:browser slots|extra browser slots)|two-browser/i, `${path} concurrency pack size`)

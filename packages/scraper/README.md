@@ -41,7 +41,7 @@ Every non-2xx response throws a `ScraperApiError` with `status`, `code`, and the
 - `err.isConcurrencyLimitExceeded()` — narrows `err.body` to `{ active, limit, retryable, upgrade, ... }`.
 - `err.isVerificationChallenge()` / `err.isTimeout()` — preserve actionable, vendor-neutral retry and charge details returned by the service.
 
-Current Google search pricing is 60 Credits per SERP search and 400 Credits plus 10 Credits per returned question for PAA. One optional concurrency pack adds two browser slots for $5/month; quantity `n` adds `2n` slots for `$5n` without changing the base plan.
+Current ordinary Google search pricing is 20 Credits per delivered SERP page, or 35 Credits per delivered page when the backup supplies the result. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity `n` adds `2n` slots for `$5n` without changing the base plan.
 
 ## API surface
 
@@ -191,4 +191,4 @@ npm run generate
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 121-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.48.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.48.0).
+Release changes: [SDK 0.48.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.48.1).

@@ -45,7 +45,7 @@ mcpscraper tools call gmail_import_status --args '{"ingestId":"opaque_ingest_id"
 
 Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release. Scheduled occurrences cost 75 Credits; agent-mode runs also add 1.5 times OpenRouter's actual reported cost. Inspect the live policy with `mcpscraper tools call get-schedule-status --args '{}'`.
 
-Current Google search pricing is 60 Credits per SERP search and 400 Credits plus 10 Credits per returned question for PAA. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
+Current ordinary Google search pricing is 20 Credits per delivered SERP page, or 35 Credits per delivered page when the backup supplies the result. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
 Use `mcpscraper tools call harvest_paa_start --args '{"query":"...","pages":2,"idempotencyKey":"..."}' --json`
 to request a second organic-results page, then poll the returned `jobId` with
@@ -139,4 +139,4 @@ $ mcpscraper map https://example.com --json
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) · [`mcpscraper-memory-sdk`](../memory) · Python: [`mcpscraper-sdk`](../scraper-python) · [`mcpscraper-memory-sdk`](../memory-python)
 
-Release changes: [SDK 0.48.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.48.0).
+Release changes: [SDK 0.48.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.48.1).
