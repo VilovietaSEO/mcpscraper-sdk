@@ -24,7 +24,7 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 
 | Feature | What it does | REST endpoint | Cost |
 |---|---|---|---|
-| [Search](#search) | Google SERP + optional full People-Also-Ask harvest | `POST /harvest/sync` | 60 Credits for SERP; PAA is 400 Credits + 10 Credits per returned question |
+| [Search](#search) | Google SERP + optional full People-Also-Ask harvest | `POST /harvest/sync` | 20 Credits per delivered SERP page, or 35 when the backup supplies it; PAA is 400 Credits + 10 Credits per returned question |
 | [Scrape](#scrape) | One page → markdown/HTML/headings, optional screenshot, optional deposit into your memory vault | `POST /extract-url` | 1 credit |
 | [Crawl](#crawl) | Every page of a site, one call | `POST /extract-site` | 1 credit/page |
 | [Map](#map) | Discover a site's full URL inventory | `POST /map-urls` | 5 credits flat |
@@ -37,7 +37,7 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 
 Every example below runs the *same* operation four ways.
 
-Current Google search pricing is 60 Credits per SERP search and 400 Credits plus 10 Credits per returned question for PAA. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
+Current ordinary Google search pricing is 20 Credits per delivered SERP page, or 35 Credits per delivered page when the backup supplies the result. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
 ### Lead-list enrichment
 

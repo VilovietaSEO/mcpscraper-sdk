@@ -40,7 +40,9 @@ export interface paths {
         put?: never;
         /**
          * Run a Google SERP search, or a full People-Also-Ask harvest
-         * @description Set `serpOnly: true` for a pure organic-results/SERP call (60 Credits).
+         * @description Set `serpOnly: true` for a pure organic-results/SERP call (20 Credits per
+         *     delivered page, or 35 Credits per delivered page if the backup supplies
+         *     the result). A 35-Credit-per-requested-page hold is settled after delivery.
          *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
          *     (400 Credit base + 10 Credits per question actually returned; unused estimate is
          *     refunded). Runs synchronously and returns the result inline.
@@ -1070,7 +1072,7 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Call one Memory tool by name through mcpscraper.dev using this account's API key
+         * Call one memory.mcpscraper.dev tool by name, using this account's mcpscraper.dev API key
          * @description Generic dispatch: names one of the 116 tools documented in this repo's
          *     `contracts/memory.tools.json` and forwards `args` to it, using a memory identity
          *     auto-provisioned for the calling mcpscraper.dev account. The response shape depends

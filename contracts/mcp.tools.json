@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.92.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "cb0d484563785827fff86e8118089db1d1689282aedcccd8e5ce7e7fce963268",
+  "generatedFrom": "mcp-scraper 0.92.1 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "e0ad6c0b28717a43ec3f578c04f625a2e0a4ddade350338eba1ab20173533b68",
   "toolCount": 362,
   "tools": [
     {
@@ -71954,7 +71954,7 @@
     {
       "name": "search_serp",
       "title": "Google SERP Lookup",
-      "description": "Search current Google organic results, returning positions, URLs, titles, and descriptions without PAA expansion. Query is sent unchanged. One page is returned by default; set pages to 2 for a second page. Location, language, device, recency, and optional SERP module fields are accepted for compatibility but do not alter ordinary searches. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context. Costs 60 Credits per search, including internal recovery attempts. Call credits_info for current pricing and balance.",
+      "description": "Search current Google organic results, returning positions, URLs, titles, and descriptions without PAA expansion. Query is sent unchanged. One page is returned by default; set pages to 2 for a second page. Ordinary searches cost 20 Credits per page, or 35 Credits per page if the backup provider supplies the result. A temporary 35-Credit-per-page hold is settled to the delivered rate. Location, language, device, recency, and optional SERP module fields are accepted for compatibility but do not alter ordinary searches. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate. Call credits_info for current pricing and balance.",
       "category": "search",
       "methodName": "searchSerp",
       "inputSchema": {

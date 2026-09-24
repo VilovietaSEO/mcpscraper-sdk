@@ -26214,7 +26214,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Search current Google organic results, returning positions, URLs, titles, and descriptions without PAA expansion. Query is sent unchanged. One page is returned by default; set pages to 2 for a second page. Location, language, device, recency, and optional SERP module fields are accepted for compatibility but do not alter ordinary searches. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context. Costs 60 Credits per search, including internal recovery attempts. Call credits_info for current pricing and balance.",
+    "description": "Search current Google organic results, returning positions, URLs, titles, and descriptions without PAA expansion. Query is sent unchanged. One page is returned by default; set pages to 2 for a second page. Ordinary searches cost 20 Credits per page, or 35 Credits per page if the backup provider supplies the result. A temporary 35-Credit-per-page hold is settled to the delivered rate. Location, language, device, recency, and optional SERP module fields are accepted for compatibility but do not alter ordinary searches. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
