@@ -26214,10 +26214,19 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Search current Google organic results, returning positions, URLs, titles, and descriptions without PAA expansion. Query is sent unchanged. One page is returned by default; set pages to 2 for a second page. Ordinary searches cost 20 Credits per page, or 35 Credits per page if the backup provider supplies the result. A temporary 35-Credit-per-page hold is settled to the delivered rate. Location, language, device, recency, and optional SERP module fields are accepted for compatibility but do not alter ordinary searches. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate. Call credits_info for current pricing and balance.",
+    "description": "Search Google once. Light mode (default) returns organic position, URL, title, and description. Full mode returns those results plus available same-page SERP features: local pack, discussions/forums, videos, AI Overview, AI Mode, What People Are Saying, entity IDs, and on-page PAA preview when present. Feature status distinguishes present, absent, incomplete, unknown, and unsupported. Both modes default to one page; set pages:2 only when the user explicitly requests two pages. Full does not expand PAA, open Maps profiles, or scrape result sites. Light costs 20 Credits per delivered page, or 35 if the backup supplies it; full costs 35 Credits per delivered page. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate; it cannot be combined with full mode. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
+        "mode": {
+          "default": "light",
+          "description": "Light returns organic results. Full returns available same-page SERP features. Both default to one page; full never implies two pages.",
+          "type": "string",
+          "enum": [
+            "light",
+            "full"
+          ]
+        },
         "query": {
           "type": "string",
           "minLength": 1,
@@ -26259,39 +26268,9 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"
         },
-        "includeAllSerpFeatures": {
-          "default": false,
-          "description": "Compatibility field. Ordinary search returns organic results only.",
-          "type": "boolean"
-        },
-        "includeLocalPack": {
-          "default": false,
-          "description": "Compatibility field. Ordinary search does not include the local pack.",
-          "type": "boolean"
-        },
-        "includeForums": {
-          "default": false,
-          "description": "Compatibility field. Ordinary search does not include forum modules.",
-          "type": "boolean"
-        },
-        "includeVideos": {
-          "default": false,
-          "description": "Compatibility field. Ordinary search does not include video modules.",
-          "type": "boolean"
-        },
-        "includeAiOverview": {
-          "default": false,
-          "description": "Compatibility field. Ordinary search does not include AI modules.",
-          "type": "boolean"
-        },
-        "includeWhatPeopleSaying": {
-          "default": false,
-          "description": "Compatibility field. Ordinary search does not include social modules.",
-          "type": "boolean"
-        },
         "pages": {
           "default": 1,
-          "description": "Request one page by default or two pages of organic results.",
+          "description": "One page by default in light and full modes. Set 2 only when the user explicitly requests two pages.",
           "type": "integer",
           "minimum": 1,
           "maximum": 2

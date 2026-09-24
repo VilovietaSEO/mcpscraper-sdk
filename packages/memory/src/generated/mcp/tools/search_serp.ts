@@ -1,5 +1,9 @@
 export interface Input {
   /**
+   * Light returns organic results. Full returns available same-page SERP features. Both default to one page; full never implies two pages.
+   */
+  mode?: "light" | "full";
+  /**
    * The search topic, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.
    */
   query: string;
@@ -28,31 +32,7 @@ export interface Input {
    */
   serpIdentity?: string;
   /**
-   * Compatibility field. Ordinary search returns organic results only.
-   */
-  includeAllSerpFeatures?: boolean;
-  /**
-   * Compatibility field. Ordinary search does not include the local pack.
-   */
-  includeLocalPack?: boolean;
-  /**
-   * Compatibility field. Ordinary search does not include forum modules.
-   */
-  includeForums?: boolean;
-  /**
-   * Compatibility field. Ordinary search does not include video modules.
-   */
-  includeVideos?: boolean;
-  /**
-   * Compatibility field. Ordinary search does not include AI modules.
-   */
-  includeAiOverview?: boolean;
-  /**
-   * Compatibility field. Ordinary search does not include social modules.
-   */
-  includeWhatPeopleSaying?: boolean;
-  /**
-   * Request one page by default or two pages of organic results.
+   * One page by default in light and full modes. Set 2 only when the user explicitly requests two pages.
    */
   pages?: number;
   /**
@@ -62,6 +42,7 @@ export interface Input {
 }
 
 export interface Output {
+  mode: "light" | "full";
   jobId: string | null;
   status: "pending" | "running" | "done";
   statusTool: string | null;
@@ -128,11 +109,12 @@ export interface Output {
       failureCode: string | null;
     };
     features: {
-      localPack: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
-      forums: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
-      videos: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
-      aiOverview: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
-      whatPeopleSaying: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown";
+      localPack: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+      forums: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+      videos: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+      aiOverview: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+      whatPeopleSaying:
+        "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
     };
     queryIntegrity: {
       status: "matched" | "unresolved_location" | "query_mismatch";
@@ -193,6 +175,68 @@ export interface Output {
     sections: string[];
     shareUrl?: string | null;
   } | null;
+  aiMode: {
+    detected: boolean;
+    text: string | null;
+    citations: {
+      text: string;
+      href: string;
+    }[];
+  } | null;
+  forums: {
+    title: string;
+    source: string;
+    url: string;
+  }[];
+  videos: {
+    type: string;
+    title: string;
+    channel: string;
+    platform: string;
+    duration: string;
+    url: string;
+  }[];
+  whatPeopleSaying: {
+    [k: string]: unknown;
+  }[];
+  paaPreview: {
+    question: string;
+    answer: string | null;
+    url: string | null;
+  }[];
+  additionalSerpFeatures: {
+    name: string;
+    attributes: {
+      [k: string]: string | number | boolean | null;
+    };
+    items: {
+      title: string | null;
+      url: string | null;
+      description: string | null;
+      position: number | null;
+    }[];
+  }[];
+  featureStatus: {
+    [k: string]: "observed_present" | "observed_absent" | "incomplete" | "not_requested" | "unknown" | "unsupported";
+  };
+  /**
+   * @maxItems 2
+   */
+  featurePages:
+    | []
+    | [
+        {
+          [k: string]: unknown;
+        }
+      ]
+    | [
+        {
+          [k: string]: unknown;
+        },
+        {
+          [k: string]: unknown;
+        }
+      ];
   entityIds: {
     /**
      * Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility.
