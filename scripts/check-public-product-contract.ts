@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   }
 
   const byName = new Map(manifest.tools.map(tool => [tool.name, tool]))
-  requireMatch(byName.get('search_serp')?.description ?? '', /Light costs 20 Credits per delivered page.*full costs 35 Credits per delivered page/i, 'search_serp mode rates')
+  requireMatch(byName.get('search_serp')?.description ?? '', /Light costs 20 Credits per delivered page, or 35 if the backup supplies it; one-page full costs 35 Credits; explicit two-page full costs 40 Credits/i, 'search_serp mode rates')
   requireMatch(byName.get('search_serp')?.description ?? '', /Both modes default to one page; set pages:2 only when the user explicitly requests two pages/, 'search_serp page default')
   requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 400 Credits per harvest plus 10 Credits per question/, 'harvest_paa rate')
   requireMatch(byName.get('capture_serp_snapshot')?.description ?? '', /Costs 60 Credits/, 'capture_serp_snapshot rate')

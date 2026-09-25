@@ -178,6 +178,7 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
           device: 'desktop',
           proxyMode: 'none',
           pages: 1,
+          mode: 'light',
           debug: false,
         })
         printResult(result, Boolean(opts.json), (r) => {

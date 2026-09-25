@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.50.0] - 2026-09-25 — targets mcp-scraper 0.94.0
+
+### Added
+
+- Expose recoverable Google Maps place runs in the generated Node, Python, CLI, and cURL contracts. New status and resume methods read saved profile fields, reviews, and image references, while `include: ['all']` requests every supported field group.
+- Add a bounded Maps example that polls the original run and makes another paid attempt only when resume is explicitly enabled.
+
+### Changed
+
+- Release Node scraper and Memory SDKs 0.50.0, CLI 0.49.0, Python scraper 0.48.0, and Python Memory SDK 0.46.0 with the 364-tool MCP Scraper 0.94.0 contract.
+
 ## [0.49.1] - 2026-09-24 — targets mcp-scraper 0.93.1
 
 ### Fixed
@@ -711,7 +722,8 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.49.1...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.50.0...HEAD
+[0.50.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.49.1...v0.50.0
 [0.49.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.49.0...v0.49.1
 [0.49.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.48.1...v0.49.0
 [0.48.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.48.0...v0.48.1

@@ -192,8 +192,47 @@ class MapsNamespace:
     def search(self, params: JsonDict) -> Any:
         return self._r.call("POST", "/maps/search", params)
 
-    def place(self, params: JsonDict) -> Any:
-        return self._r.call("POST", "/maps/place", params)
+    def place(self, params: JsonDict, *, idempotency_key: str | None = None, run_id: str | None = None) -> Any:
+        headers = {}
+        if idempotency_key:
+            headers["Idempotency-Key"] = idempotency_key
+        if run_id:
+            headers["X-Maps-Run-Id"] = run_id
+        return self._r.call("POST", "/maps/place", params, headers)
+
+    def place_status(self, run_id: str, *, reviews_cursor: str | None = None,
+                     images_cursor: str | None = None, limit: int | None = None) -> Any:
+        params = []
+        if reviews_cursor:
+            params.append(f"reviewsCursor={quote(reviews_cursor, safe='')}")
+        if images_cursor:
+            params.append(f"imagesCursor={quote(images_cursor, safe='')}")
+        if limit is not None:
+            params.append(f"limit={limit}")
+        suffix = f"?{'&'.join(params)}" if params else ""
+        return self._r.call("GET", f"/maps/place/runs/{quote(run_id, safe='')}{suffix}")
+
+    def place_reviews(self, run_id: str, *, cursor: str | None = None, limit: int | None = None) -> Any:
+        params = []
+        if cursor:
+            params.append(f"cursor={quote(cursor, safe='')}")
+        if limit is not None:
+            params.append(f"limit={limit}")
+        suffix = f"?{'&'.join(params)}" if params else ""
+        return self._r.call("GET", f"/maps/place/runs/{quote(run_id, safe='')}/reviews{suffix}")
+
+    def place_images(self, run_id: str, *, cursor: str | None = None, limit: int | None = None) -> Any:
+        params = []
+        if cursor:
+            params.append(f"cursor={quote(cursor, safe='')}")
+        if limit is not None:
+            params.append(f"limit={limit}")
+        suffix = f"?{'&'.join(params)}" if params else ""
+        return self._r.call("GET", f"/maps/place/runs/{quote(run_id, safe='')}/images{suffix}")
+
+    def place_resume(self, run_id: str, resume_idempotency_key: str) -> Any:
+        return self._r.call("POST", f"/maps/place/runs/{quote(run_id, safe='')}/resume",
+                            headers={"Idempotency-Key": resume_idempotency_key})
 
 
 class DirectoryNamespace:

@@ -284,8 +284,38 @@ class MapsNamespace {
   search(params: RequestBodyOf<'mapsSearch'>, options: ScraperRequestOptions = {}) {
     return this.r.call<'mapsSearch'>('POST', '/maps/search', params, {}, options)
   }
-  place(params: RequestBodyOf<'mapsPlaceIntel'>) {
-    return this.r.call<'mapsPlaceIntel'>('POST', '/maps/place', params)
+  place(params: RequestBodyOf<'mapsPlaceIntel'>, options: ScraperRequestOptions & { idempotencyKey?: string; runId?: string } = {}) {
+    const headers = {
+      ...(options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {}),
+      ...(options.runId ? { 'X-Maps-Run-Id': options.runId } : {}),
+    }
+    return this.r.call<'mapsPlaceIntel'>('POST', '/maps/place', params, headers, options)
+  }
+  placeStatus(runId: string, options: { reviewsCursor?: string; imagesCursor?: string; limit?: number } = {}) {
+    const query = new URLSearchParams()
+    if (options.reviewsCursor) query.set('reviewsCursor', options.reviewsCursor)
+    if (options.imagesCursor) query.set('imagesCursor', options.imagesCursor)
+    if (options.limit != null) query.set('limit', String(options.limit))
+    const suffix = query.size ? `?${query.toString()}` : ''
+    return this.r.call<'mapsPlaceStatus'>('GET', `/maps/place/runs/${encodeURIComponent(runId)}${suffix}`)
+  }
+  placeReviews(runId: string, cursor?: string, limit?: number) {
+    const query = new URLSearchParams()
+    if (cursor) query.set('cursor', cursor)
+    if (limit != null) query.set('limit', String(limit))
+    const suffix = query.size ? `?${query.toString()}` : ''
+    return this.r.call<'mapsPlaceReviews'>('GET', `/maps/place/runs/${encodeURIComponent(runId)}/reviews${suffix}`)
+  }
+  placeImages(runId: string, cursor?: string, limit?: number) {
+    const query = new URLSearchParams()
+    if (cursor) query.set('cursor', cursor)
+    if (limit != null) query.set('limit', String(limit))
+    const suffix = query.size ? `?${query.toString()}` : ''
+    return this.r.call<'mapsPlaceImages'>('GET', `/maps/place/runs/${encodeURIComponent(runId)}/images${suffix}`)
+  }
+  placeResume(runId: string, resumeIdempotencyKey: string, options: ScraperRequestOptions = {}) {
+    return this.r.call<'mapsPlaceResume'>('POST', `/maps/place/runs/${encodeURIComponent(runId)}/resume`,
+      undefined, { 'Idempotency-Key': resumeIdempotencyKey }, options)
   }
 }
 

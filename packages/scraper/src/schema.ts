@@ -40,9 +40,12 @@ export interface paths {
         put?: never;
         /**
          * Run a Google SERP search, or a full People-Also-Ask harvest
-         * @description Set `serpOnly: true` for a pure organic-results/SERP call (20 Credits per
-         *     delivered page, or 35 Credits per delivered page if the backup supplies
-         *     the result). A 35-Credit-per-requested-page hold is settled after delivery.
+         * @description Set `serpOnly: true` for a Google search. Light mode returns organic
+         *     positions, URLs, titles, and descriptions for 20 Credits per delivered
+         *     page, or 35 Credits when the backup supplies the result. Full mode adds
+         *     available same-page SERP features for 35 Credits per delivered page.
+         *     Both modes default to one page; set `pages: 2` explicitly for two.
+         *     A 35-Credit-per-requested-page hold is settled after delivery.
          *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
          *     (400 Credit base + 10 Credits per question actually returned; unused estimate is
          *     refunded). Runs synchronously and returns the result inline.
@@ -661,10 +664,78 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Deep-dive one Google Maps business by name and location, with reviews
-         * @description 60 credits base; +1 credit per review card when `includeReviews` is true.
+         * Start a recoverable Google Maps business profile lookup
+         * @description Provide an Idempotency-Key and X-Maps-Run-Id to recover an unknown transport outcome. A maximum declared charge is held before browsing; completed work settles at 60 credits plus 1 credit per saved review card.
          */
         post: operations["mapsPlaceIntel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/maps/place/runs/{runId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read an owner-scoped saved Maps place run */
+        get: operations["mapsPlaceStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/maps/place/runs/{runId}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Page through saved review cards */
+        get: operations["mapsPlaceReviews"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/maps/place/runs/{runId}/images": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Page through saved image references */
+        get: operations["mapsPlaceImages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/maps/place/runs/{runId}/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Explicitly resume a partial or reconciled interrupted Maps place run */
+        post: operations["mapsPlaceResume"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1218,10 +1289,16 @@ export interface components {
             /** @description Optional US ZIP override. */
             proxyZip?: string;
             /**
-             * @description Organic result pages to fetch.
+             * @description Google result pages to fetch. Full mode alone does not request page 2.
              * @default 1
              */
             pages: number;
+            /**
+             * @description For serpOnly searches: light returns organic results; full adds available same-page SERP features.
+             * @default light
+             * @enum {string}
+             */
+            mode: "light" | "full";
             /**
              * @description true = pure SERP call (search_serp); false = full PAA harvest.
              * @default false
@@ -1696,6 +1773,48 @@ export interface components {
             includeReviews: boolean;
             /** @default 50 */
             maxReviews: number;
+            /** @default false */
+            includeServices: boolean;
+            /** @default false */
+            includeImages: boolean;
+            include?: ("core" | "hours" | "services" | "areasServed" | "reviews" | "images" | "all")[];
+            /**
+             * @default all
+             * @enum {string}
+             */
+            imageScope: "owner" | "all";
+            /** @default 100 */
+            maxImages: number;
+            /** @default 3 */
+            maxInlineImages: number;
+        };
+        MapsPlaceRunResponse: {
+            /** Format: uuid */
+            runId: string;
+            /** @enum {string} */
+            runStatus: "queued" | "running" | "interrupted" | "complete" | "partial" | "failed" | "cancelled";
+            verified: boolean;
+            checkpointRevision: number;
+            billingState: string;
+            name?: string | null;
+            placeUrl?: string | null;
+            completedFields?: string[];
+            pendingFields?: string[];
+            unavailableFields?: string[];
+            reviewsCollected?: number;
+            imagesCollected?: number;
+            reviewsNextCursor?: string | null;
+            imagesNextCursor?: string | null;
+        } & {
+            [key: string]: unknown;
+        };
+        MapsPlaceItemPage: {
+            /** Format: uuid */
+            runId: string;
+            items: {
+                [key: string]: unknown;
+            }[];
+            nextCursor: string | null;
         };
         SerpIntelligenceCaptureRequest: {
             query: string;
@@ -3360,7 +3479,12 @@ export interface operations {
     mapsPlaceIntel: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Caller-generated key for same-request replay. */
+                "Idempotency-Key"?: string;
+                /** @description Caller-generated run ID for status recovery after response loss. */
+                "X-Maps-Run-Id"?: string;
+            };
             path?: never;
             cookie?: never;
         };
@@ -3370,23 +3494,178 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Place detail with optional reviews. */
+            /** @description Complete or partial saved place result. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["MapsPlaceRunResponse"];
+                };
+            };
+            /** @description Running or interrupted place run with any verified checkpoints saved so far. */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapsPlaceRunResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
             402: components["responses"]["InsufficientBalance"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
-            /** @description Temporarily blocked — retryable. */
-            503: {
+        };
+    };
+    mapsPlaceStatus: {
+        parameters: {
+            query?: {
+                /** @description Opaque saved-review cursor. */
+                reviewsCursor?: string;
+                /** @description Opaque saved-image cursor. */
+                imagesCursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                runId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Saved terminal run */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapsPlaceRunResponse"];
+                };
+            };
+            /** @description Saved running or interrupted run */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapsPlaceRunResponse"];
+                };
+            };
+            /** @description Run not found for this owner. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    mapsPlaceReviews: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                runId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Saved review page with items and nextCursor. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapsPlaceItemPage"];
+                };
+            };
+            /** @description Run not found for this owner. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    mapsPlaceImages: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                runId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Saved image page with items and nextCursor. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapsPlaceItemPage"];
+                };
+            };
+            /** @description Run not found for this owner. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    mapsPlaceResume: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                runId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Saved terminal run. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapsPlaceRunResponse"];
+                };
+            };
+            /** @description Resumed attempt in progress. */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapsPlaceRunResponse"];
+                };
+            };
+            /** @description Run not found for this owner. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Run or previous billing state cannot resume. */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

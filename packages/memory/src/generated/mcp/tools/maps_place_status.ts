@@ -1,52 +1,20 @@
 export interface Input {
   /**
-   * Business name only, e.g. "Elite Roofing" (not "Elite Roofing Denver CO" — put the city in location).
+   * Maps place run ID returned by maps_place_intel.
    */
-  businessName: string;
+  runId: string;
   /**
-   * City/region/country where the business should be searched, e.g. "Denver, CO".
+   * Opaque cursor for the next page of saved reviews.
    */
-  location: string;
+  reviewsCursor?: string;
   /**
-   * Google country code inferred from location.
+   * Opaque cursor for the next page of saved images.
    */
-  gl?: string;
+  imagesCursor?: string;
   /**
-   * Language inferred from user request.
+   * Page size; reviews are capped at 50 and images at 100.
    */
-  hl?: string;
-  /**
-   * Fetch individual review cards — for reviews, customer pain, complaints, or praise themes.
-   */
-  includeReviews?: boolean;
-  /**
-   * Max review cards when includeReviews is true. Default 50, maximum 500.
-   */
-  maxReviews?: number;
-  /**
-   * Collect the exact business's configured services and areas served when available. These fields are absent on some profiles.
-   */
-  includeServices?: boolean;
-  /**
-   * Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.
-   */
-  includeImages?: boolean;
-  /**
-   * Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.
-   */
-  include?: ("core" | "hours" | "services" | "areasServed" | "reviews" | "images" | "all")[];
-  /**
-   * owner collects only the Google Maps By owner gallery. all collects the full gallery and labels exact owner matches versus other/unknown media.
-   */
-  imageScope?: "owner" | "all";
-  /**
-   * Maximum photos to collect when includeImages is true. Default 100, maximum 250.
-   */
-  maxImages?: number;
-  /**
-   * Maximum downloaded photos attached as MCP image blocks for direct AI vision. The ZIP and structured manifest still contain the wider result.
-   */
-  maxInlineImages?: number;
+  limit?: number;
 }
 
 export interface Output {

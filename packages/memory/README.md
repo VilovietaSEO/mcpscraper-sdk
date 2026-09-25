@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for the unified 362-tool MCP Scraper catalog. The direct
+Official TypeScript/JavaScript clients for the unified 364-tool MCP Scraper catalog. The direct
 143-tool Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
@@ -59,7 +59,7 @@ try {
 `MemoryClient` preserves the established compatibility namespaces and maps them to public root tool
 IDs. Research remains sourced knowledge; CRM remains actual relationships. External CRM providers
 remain unavailable. Retired direct-key issue/scope methods fail explicitly. `McpToolsClient` contains
-all 362 unified tools.
+all 364 unified tools.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 

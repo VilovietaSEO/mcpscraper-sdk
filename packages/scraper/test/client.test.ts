@@ -57,6 +57,31 @@ test('startHarvest uses the durable endpoint and returns its job id', async () =
   assert.equal(result.status, 'pending')
 })
 
+test('Maps place methods keep the run ID and retry keys across recovery reads', async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = []
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    calls.push({ url: String(url), init })
+    return jsonResponse(200, { runId: 'maps-run-1', runStatus: 'partial', items: [] })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  await client.maps.place({ businessName: 'Roofing Co', include: ['all'] } as never, {
+    idempotencyKey: 'start-key', runId: 'maps-run-1',
+  })
+  await client.maps.placeStatus('maps-run-1', { reviewsCursor: 'next review', limit: 25 })
+  await client.maps.placeReviews('maps-run-1', 'next review', 25)
+  await client.maps.placeImages('maps-run-1', 'next image', 10)
+  await client.maps.placeResume('maps-run-1', 'resume-key')
+
+  assert.equal(calls[0].url, 'https://mcpscraper.dev/maps/place')
+  assert.equal((calls[0].init?.headers as Record<string, string>)['Idempotency-Key'], 'start-key')
+  assert.equal((calls[0].init?.headers as Record<string, string>)['X-Maps-Run-Id'], 'maps-run-1')
+  assert.equal(calls[1].url, 'https://mcpscraper.dev/maps/place/runs/maps-run-1?reviewsCursor=next+review&limit=25')
+  assert.equal(calls[2].url, 'https://mcpscraper.dev/maps/place/runs/maps-run-1/reviews?cursor=next+review&limit=25')
+  assert.equal(calls[3].url, 'https://mcpscraper.dev/maps/place/runs/maps-run-1/images?cursor=next+image&limit=10')
+  assert.equal(calls[4].url, 'https://mcpscraper.dev/maps/place/runs/maps-run-1/resume')
+  assert.equal((calls[4].init?.headers as Record<string, string>)['Idempotency-Key'], 'resume-key')
+})
+
 test('extractSite sends the caller idempotency key and abort options', async () => {
   let capturedInit: RequestInit | undefined
   const controller = new AbortController()
