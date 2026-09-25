@@ -23234,10 +23234,10 @@ export const MCP_TOOL_CATALOG = [
         },
         "maxReviews": {
           "default": 50,
-          "description": "Max review cards when includeReviews is true. Default 50, maximum 500.",
+          "description": "Max review cards when includeReviews is true. Default 50, maximum 1,000. Collection is resumable; actual availability depends on the profile.",
           "type": "integer",
           "minimum": 1,
-          "maximum": 500
+          "maximum": 1000
         },
         "includeServices": {
           "default": false,

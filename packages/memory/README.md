@@ -84,4 +84,4 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 143 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.49.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.49.0).
+Release changes: [SDK 0.50.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.50.1).

@@ -10,7 +10,7 @@ class MapsPlaceIntelInput(BaseModel):
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location.")
     hl: str | None = Field(None, alias="hl", description="Language inferred from user request.")
     include_reviews: bool | None = Field(None, alias="includeReviews", description="Fetch individual review cards — for reviews, customer pain, complaints, or praise themes.")
-    max_reviews: int | None = Field(None, alias="maxReviews", description="Max review cards when includeReviews is true. Default 50, maximum 500.")
+    max_reviews: int | None = Field(None, alias="maxReviews", description="Max review cards when includeReviews is true. Default 50, maximum 1,000. Collection is resumable; actual availability depends on the profile.")
     include_services: bool | None = Field(None, alias="includeServices", description="Collect the exact business's configured services and areas served when available. These fields are absent on some profiles.")
     include_images: bool | None = Field(None, alias="includeImages", description="Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.")
     include: list[Literal['core', 'hours', 'services', 'areasServed', 'reviews', 'images', 'all']] | None = Field(None, alias="include", description="Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.")

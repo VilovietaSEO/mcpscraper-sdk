@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from enum import Enum, IntEnum
 from typing import Any
+from uuid import UUID
 
 from pydantic import (
     AnyUrl,
@@ -192,6 +193,15 @@ class ProxyMode(Enum):
     none = 'none'
 
 
+class Mode(Enum):
+    """
+    For serpOnly searches: light returns organic results; full adds available same-page SERP features.
+    """
+
+    light = 'light'
+    full = 'full'
+
+
 class Recency(Enum):
     """
     Optional Google time filter (past day/week/month/year). Omit for all-time. Pairs well with a site: operator in the query.
@@ -225,7 +235,14 @@ class HarvestSyncRequest(BaseModel):
         None, description='Optional US ZIP override.', pattern='^\\d{5}$'
     )
     pages: int | None = Field(
-        1, description='Organic result pages to fetch.', ge=1, le=2
+        1,
+        description='Google result pages to fetch. Full mode alone does not request page 2.',
+        ge=1,
+        le=2,
+    )
+    mode: Mode | None = Field(
+        'light',
+        description='For serpOnly searches: light returns organic results; full adds available same-page SERP features.',
     )
     serpOnly: bool | None = Field(
         False,
@@ -253,11 +270,30 @@ class HarvestSyncResponse(BaseModel):
     error: str | None = None
 
 
+class Status1(Enum):
+    pending = 'pending'
+
+
+class HarvestQueuedResponse(BaseModel):
+    job_id: str
+    status: Status1
+
+
+class Status2(Enum):
+    pending = 'pending'
+    running = 'running'
+    done = 'done'
+    failed = 'failed'
+    cancelled = 'cancelled'
+
+
 class JobRecord(BaseModel):
     id: str | None = None
-    status: str | None = None
+    status: Status2 | None = None
     query: str | None = None
     result: dict[str, Any] | None = None
+    error: str | None = None
+    attempts: list[dict[str, Any]] | None = None
     created_at: str | None = None
 
 
@@ -554,13 +590,13 @@ class ExtractSiteResponse(BaseModel):
     )
 
 
-class Status1(Enum):
+class Status3(Enum):
     pending = 'pending'
 
 
 class ExtractSiteQueuedResponse(BaseModel):
     jobId: str
-    status: Status1
+    status: Status3
     statusUrl: str
 
 
@@ -625,13 +661,87 @@ class SiteExportImageResponse(BaseModel):
     dataBase64: Base64Str
 
 
-class Mode(Enum):
+class ArchiveReadRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    url: AnyUrl = Field(
+        ..., description='Public HTTPS ZIP URL, including a signed crawl bundle URL.'
+    )
+    path: str | None = Field(
+        None,
+        description='Exact archive entry path. Mutually exclusive with pathPrefix.',
+        max_length=2000,
+        min_length=1,
+    )
+    pathPrefix: str | None = Field(
+        None,
+        description='Archive path prefix for a bounded multi-file UTF-8 read. Mutually exclusive with path.',
+        max_length=2000,
+        min_length=1,
+    )
+    offset: int | None = Field(
+        0, description='UTF-8 byte offset for a selected text entry.', ge=0
+    )
+    maxBytes: int | None = Field(50000, ge=1, le=200000)
+    maxEntries: int | None = Field(200, ge=1, le=1000)
+    maxTotalBytes: int | None = Field(
+        5000000,
+        description='Maximum expanded UTF-8 bytes returned by a pathPrefix batch.',
+        ge=1,
+        le=20000000,
+    )
+    depositToLibrary: bool | None = Field(
+        False,
+        description='Preserve the complete selected text entry in the tenant Library vault.',
+    )
+
+
+class Mode1(Enum):
+    list = 'list'
+    read = 'read'
+    batch = 'batch'
+
+
+class File(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    path: str
+    contentType: str
+    fileBytes: int
+    content: str
+
+
+class ArchiveReadResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    mode: Mode1
+    archiveUrl: str | None = None
+    entries: list[dict[str, Any]] | None = None
+    path: str | None = None
+    pathPrefix: str | None = None
+    matchedEntryCount: int | None = None
+    selectedEntryCount: int | None = None
+    selectedTotalBytes: int | None = None
+    entriesTruncated: bool | None = None
+    files: list[File] | None = None
+    content: str | None = None
+    contentType: str | None = None
+    fileBytes: int | None = None
+    offset: int | None = None
+    nextOffset: int | None = None
+    memory: dict[str, Any] | None = None
+
+
+class Mode2(Enum):
     search = 'search'
     channel = 'channel'
 
 
 class YoutubeHarvestRequest(BaseModel):
-    mode: Mode
+    mode: Mode2
     query: str | None = Field(None, description='Required when mode is search.')
     channelHandle: str | None = Field(
         None, description='Required when mode is channel — @handle or UC... channel ID.'
@@ -665,19 +775,70 @@ class MapsSearchRequest(BaseModel):
     debug: bool | None = False
 
 
+class IncludeEnum(Enum):
+    core = 'core'
+    hours = 'hours'
+    services = 'services'
+    areasServed = 'areasServed'
+    reviews = 'reviews'
+    images = 'images'
+    all = 'all'
+
+
+class ImageScope(Enum):
+    owner = 'owner'
+    all = 'all'
+
+
 class MapsPlaceRequest(BaseModel):
     businessName: str
     location: str
     gl: str | None = 'us'
     hl: str | None = 'en'
     includeReviews: bool | None = False
-    maxReviews: int | None = Field(50, ge=1, le=500)
+    maxReviews: int | None = Field(50, ge=1, le=1000)
     includeServices: bool | None = False
     includeImages: bool | None = False
-    include: list[str] | None = None
-    imageScope: str | None = 'all'
+    include: list[IncludeEnum] | None = None
+    imageScope: ImageScope | None = 'all'
     maxImages: int | None = Field(100, ge=1, le=250)
     maxInlineImages: int | None = Field(3, ge=0, le=5)
+
+
+class RunStatus(Enum):
+    queued = 'queued'
+    running = 'running'
+    interrupted = 'interrupted'
+    complete = 'complete'
+    partial = 'partial'
+    failed = 'failed'
+    cancelled = 'cancelled'
+
+
+class MapsPlaceRunResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    runId: UUID
+    runStatus: RunStatus
+    verified: bool
+    checkpointRevision: int = Field(..., ge=0)
+    billingState: str
+    name: str | None = None
+    placeUrl: str | None = None
+    completedFields: list[str] | None = None
+    pendingFields: list[str] | None = None
+    unavailableFields: list[str] | None = None
+    reviewsCollected: int | None = Field(None, ge=0)
+    imagesCollected: int | None = Field(None, ge=0)
+    reviewsNextCursor: str | None = None
+    imagesNextCursor: str | None = None
+
+
+class MapsPlaceItemPage(BaseModel):
+    runId: UUID
+    items: list[dict[str, Any]]
+    nextCursor: str
 
 
 class SerpIntelligenceCaptureRequest(BaseModel):
@@ -830,7 +991,7 @@ class SerpIntelligenceHarvestResult(BaseModel):
     whatPeopleSaying: list[Any] | None = None
 
 
-class Status2(Enum):
+class Status4(Enum):
     captured = 'captured'
     skipped = 'skipped'
     failed = 'failed'
@@ -868,7 +1029,7 @@ class SerpPageSnapshotCapture(BaseModel):
     finalUrl: str | None = None
     sourceKind: SourceKind | None = 'configured_target'
     sourcePosition: int | None = None
-    status: Status2 | None = None
+    status: Status4 | None = None
     fetchedVia: FetchedVia | None = None
     httpStatus: int | None = None
     contentType: str | None = None
@@ -898,7 +1059,7 @@ class SerpIntelligencePageSnapshotsResponse(BaseModel):
     pageSnapshotArtifacts: list[SerpPageSnapshotCapture] | None = None
 
 
-class Status3(Enum):
+class Status5(Enum):
     queued = 'queued'
     running = 'running'
     succeeded = 'succeeded'
@@ -920,7 +1081,7 @@ class WorkflowRun(BaseModel):
     )
     id: str | None = None
     workflow_id: str | None = None
-    status: Status3 | None = None
+    status: Status5 | None = None
     input: dict[str, Any] | None = None
     step_index: int | None = None
     created_at: str | None = None
@@ -954,7 +1115,7 @@ class WorkflowRunStepResponse(BaseModel):
     done: bool | None = None
 
 
-class Status4(Enum):
+class Status6(Enum):
     active = 'active'
     paused = 'paused'
 
@@ -969,7 +1130,7 @@ class WorkflowSchedule(BaseModel):
     id: str | None = None
     workflow_id: str | None = None
     name: str | None = None
-    status: Status4 | None = None
+    status: Status6 | None = None
     input: dict[str, Any] | None = None
     cadence: Cadence | None = None
     timezone: str | None = None
@@ -998,6 +1159,205 @@ class CallMemoryToolResponse(BaseModel):
     )
     ok: bool | None = None
     error: str | None = Field(None, description='Present when ok is false.')
+
+
+class GmailSearchMessagesRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    connectionId: str = Field(..., max_length=500, min_length=1)
+    query: str = Field(..., max_length=1000, min_length=1)
+    limit: int | None = Field(50, ge=1, le=500)
+    cursor: str | None = Field(None, max_length=500, min_length=1)
+
+
+class GmailGetMessageRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    connectionId: str = Field(..., max_length=500, min_length=1)
+    includeRawArtifact: bool | None = True
+
+
+class GmailGetAttachmentRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    attachmentRef: str = Field(..., max_length=500, min_length=1)
+
+
+class Kind(Enum):
+    query = 'query'
+
+
+class GmailSelectionSource1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    kind: Kind
+    query: str = Field(..., max_length=1000, min_length=1)
+
+
+class Kind1(Enum):
+    message_ids = 'message_ids'
+
+
+class MessageId(RootModel[str]):
+    root: str = Field(..., max_length=500, min_length=1)
+
+
+class GmailSelectionSource2(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    kind: Kind1
+    messageIds: list[MessageId] = Field(..., max_length=5000, min_length=1)
+
+
+class GmailSelectionSource(RootModel[GmailSelectionSource1 | GmailSelectionSource2]):
+    root: GmailSelectionSource1 | GmailSelectionSource2
+
+
+class Purpose(Enum):
+    export = 'export'
+    mailbox_action = 'mailbox_action'
+    memory_import = 'memory_import'
+
+
+class GmailPrepareSelectionRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    connectionId: str = Field(..., max_length=500, min_length=1)
+    purpose: Purpose
+    source: GmailSelectionSource
+
+
+class GmailSelectionReceiptRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    connectionId: str = Field(..., max_length=500, min_length=1)
+    selectionSha256: str = Field(..., pattern='^[a-f0-9]{64}$')
+    expectedCount: int = Field(..., ge=1, le=5000)
+
+
+class Kind2(Enum):
+    mark_read = 'mark_read'
+    mark_unread = 'mark_unread'
+    archive = 'archive'
+    move_to_inbox = 'move_to_inbox'
+    trash = 'trash'
+    restore = 'restore'
+
+
+class Operation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    kind: Kind2
+
+
+class Kind3(Enum):
+    labels = 'labels'
+
+
+class AddLabelId(RootModel[str]):
+    root: str = Field(..., min_length=1)
+
+
+class RemoveLabelId(RootModel[str]):
+    root: str = Field(..., min_length=1)
+
+
+class Operation1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    kind: Kind3
+    addLabelIds: list[AddLabelId] | None = Field(None, max_length=100, min_length=1)
+    removeLabelIds: list[RemoveLabelId] | None = Field(
+        None, max_length=100, min_length=1
+    )
+
+
+class GmailBulkManageRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    connectionId: str = Field(..., max_length=500, min_length=1)
+    selectionSha256: str = Field(..., pattern='^[a-f0-9]{64}$')
+    expectedCount: int = Field(..., ge=1, le=5000)
+    operation: Operation | Operation1
+
+
+class ConfirmPermanentDelete(Enum):
+    boolean_True = True
+
+
+class GmailBulkDeleteRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    connectionId: str = Field(..., max_length=500, min_length=1)
+    selectionSha256: str = Field(..., pattern='^[a-f0-9]{64}$')
+    expectedCount: int = Field(..., ge=1, le=5000)
+    confirmPermanentDelete: ConfirmPermanentDelete
+
+
+class FilingPolicy(Enum):
+    source_archive = 'source_archive'
+    relationship_communications = 'relationship_communications'
+
+
+class Mode3(Enum):
+    auto = 'auto'
+
+
+class Destination(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    mode: Mode3
+
+
+class Mode4(Enum):
+    vault = 'vault'
+
+
+class Destination1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    mode: Mode4
+    vault: str = Field(..., max_length=120, min_length=1)
+
+
+class AttachmentPolicy(Enum):
+    preserve_all = 'preserve_all'
+    index_supported = 'index_supported'
+    metadata_only = 'metadata_only'
+    exclude = 'exclude'
+
+
+class GmailPrepareMemoryImportRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    connectionId: str = Field(..., max_length=500, min_length=1)
+    selectionId: str = Field(..., max_length=500, min_length=1)
+    selectionSha256: str = Field(..., pattern='^[a-f0-9]{64}$')
+    filingPolicy: FilingPolicy | None = 'source_archive'
+    destination: Destination | Destination1 | None = None
+    attachmentPolicy: AttachmentPolicy | None = 'preserve_all'
+
+
+class GmailWorkflowResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    ok: bool
+    error: str
 
 
 class Error(BaseModel):

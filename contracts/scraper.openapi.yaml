@@ -2122,7 +2122,7 @@ components:
         gl: { type: string, default: us }
         hl: { type: string, default: en }
         includeReviews: { type: boolean, default: false }
-        maxReviews: { type: integer, minimum: 1, maximum: 500, default: 50 }
+        maxReviews: { type: integer, minimum: 1, maximum: 1000, default: 50 }
         includeServices: { type: boolean, default: false }
         includeImages: { type: boolean, default: false }
         include:
