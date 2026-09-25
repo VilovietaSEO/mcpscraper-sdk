@@ -20,7 +20,7 @@ export interface Input {
    */
   includeReviews?: boolean;
   /**
-   * Max review cards when includeReviews is true. Default 50, maximum 500.
+   * Max review cards when includeReviews is true. Default 50, maximum 1,000. Collection is resumable; actual availability depends on the profile.
    */
   maxReviews?: number;
   /**
