@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-cli",
-  "version": "0.48.0",
+  "version": "0.48.1",
   "description": "Command-line interface for the unified mcpscraper.dev MCP and REST APIs",
   "license": "MIT",
   "type": "module",
