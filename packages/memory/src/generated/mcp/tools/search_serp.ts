@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Light returns organic results. Full returns available same-page SERP features. Both default to one page; full never implies two pages.
+   * Light returns organic results. Full adds available SERP features for one page. With an explicit two-page request, only organic results are available and feature status is unsupported. Both default to one page.
    */
   mode?: "light" | "full";
   /**
@@ -32,7 +32,7 @@ export interface Input {
    */
   serpIdentity?: string;
   /**
-   * One page by default in light and full modes. Set 2 only when the user explicitly requests two pages.
+   * One page by default. Set 2 only when the user explicitly requests two pages; two-page results include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.
    */
   pages?: number;
   /**

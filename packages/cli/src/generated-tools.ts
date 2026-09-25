@@ -26214,13 +26214,13 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Search Google once. Light mode (default) returns organic position, URL, title, and description. Full mode returns those results plus available same-page SERP features: local pack, discussions/forums, videos, AI Overview, AI Mode, What People Are Saying, entity IDs, and on-page PAA preview when present. Feature status distinguishes present, absent, incomplete, unknown, and unsupported. Both modes default to one page; set pages:2 only when the user explicitly requests two pages. Full does not expand PAA, open Maps profiles, or scrape result sites. Light costs 20 Credits per delivered page, or 35 if the backup supplies it; full costs 35 Credits per delivered page. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate; it cannot be combined with full mode. Call credits_info for current pricing and balance.",
+    "description": "Search Google once. Light mode (default) returns organic position, URL, title, and description. Full mode returns those results plus available same-page SERP features: local pack, discussions/forums, videos, AI Overview, AI Mode, What People Are Saying, entity IDs, and on-page PAA preview when present. Feature status distinguishes present, absent, incomplete, unknown, and unsupported. Both modes default to one page; set pages:2 only when the user explicitly requests two pages. Two-page requests use organic results only and mark rich features unsupported. If page 2 fails, an available page 1 is returned as partial and billed for one delivered page. Full does not expand PAA, open Maps profiles, or scrape result sites. Light costs 20 Credits per delivered page, or 35 if the backup supplies it; one-page full costs 35 Credits; explicit two-page full costs 40 Credits for organic results only. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate; it cannot be combined with full mode. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "mode": {
           "default": "light",
-          "description": "Light returns organic results. Full returns available same-page SERP features. Both default to one page; full never implies two pages.",
+          "description": "Light returns organic results. Full adds available SERP features for one page. With an explicit two-page request, only organic results are available and feature status is unsupported. Both default to one page.",
           "type": "string",
           "enum": [
             "light",
@@ -26270,7 +26270,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "pages": {
           "default": 1,
-          "description": "One page by default in light and full modes. Set 2 only when the user explicitly requests two pages.",
+          "description": "One page by default. Set 2 only when the user explicitly requests two pages; two-page results include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.",
           "type": "integer",
           "minimum": 1,
           "maximum": 2

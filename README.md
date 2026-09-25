@@ -37,7 +37,7 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 
 Every example below runs the *same* operation four ways.
 
-Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. Full mode adds available same-page SERP features for 35 Credits per delivered page. Both modes default to one page; request two pages explicitly. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
+Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; request two pages explicitly for organic results only at 40 Credits. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
 ### Lead-list enrichment
 
@@ -207,8 +207,9 @@ curl https://mcpscraper.dev/mcp \
 
 `search_serp` defaults to light mode and one page. Use `mode: 'full'` for
 available features on that same page. Set `pages: 2` only when a second
-Google results page is wanted. Full mode does not expand PAA, open Maps
-profiles, or scrape ranking URLs.
+Google results page is wanted. Two-page requests return organic results only;
+if page 2 fails, an available page 1 is returned as partial and billed for
+one page. Full mode does not expand PAA, open Maps profiles, or scrape ranking URLs.
 
 PAA harvests capture one organic page by default. Pass `pages: 2` to add the
 second organic-results page when Google offers it; the service preserves page

@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class SearchSerpInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    mode: Literal['light', 'full'] | None = Field(None, alias="mode", description="Light returns organic results. Full returns available same-page SERP features. Both default to one page; full never implies two pages.")
+    mode: Literal['light', 'full'] | None = Field(None, alias="mode", description="Light returns organic results. Full adds available SERP features for one page. With an explicit two-page request, only organic results are available and feature status is unsupported. Both default to one page.")
     query: str = Field(..., alias="query", description="The search topic, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.")
     location: str | None = Field(None, alias="location", description="Compatibility field. Ordinary search ignores this. Include a place in query when needed.")
     gl: str | None = Field(None, alias="gl", description="Compatibility field. Ordinary search uses its fixed default market.")
@@ -13,7 +13,7 @@ class SearchSerpInput(BaseModel):
     device: Literal['desktop', 'mobile'] | None = Field(None, alias="device", description="Compatibility field. Ordinary search uses desktop results.")
     idempotency_key: str | None = Field(None, alias="idempotencyKey", description="Retry key: reuse after a timeout to avoid re-billing. New key per search.")
     serp_identity: str | None = Field(None, alias="serpIdentity", description="Optional persistent SERP identity created with serp_identity_create. Reuses the same saved browser state and fixed network address across calls.")
-    pages: int | None = Field(None, alias="pages", description="One page by default in light and full modes. Set 2 only when the user explicitly requests two pages.")
+    pages: int | None = Field(None, alias="pages", description="One page by default. Set 2 only when the user explicitly requests two pages; two-page results include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.")
     recency: Literal['day', 'week', 'month', 'year'] | None = Field(None, alias="recency", description="Compatibility field. Ordinary search does not apply a date filter.")
 
 
