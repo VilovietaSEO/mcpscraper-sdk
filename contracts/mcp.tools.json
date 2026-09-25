@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.93.1 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "8e1a66a486d94e8cc7f6a65d4568c45b54498d3abdad319e6b1beedc98640d4c",
-  "toolCount": 362,
+  "generatedFrom": "mcp-scraper 0.94.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "10067f1137f262764949e9b8bfa600c6318546db8df28c45b74b9c9684603daa",
+  "toolCount": 364,
   "tools": [
     {
       "name": "access-accept-share",
@@ -62638,7 +62638,7 @@
     {
       "name": "maps_place_intel",
       "title": "Google Maps Business Profile Details",
-      "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, website, full hours, About attributes, entity IDs/CID, configured services/areas, and optional photos. Set includeImages:true for a provenance-aware manifest, bounded AI image blocks, and an owner-scoped ZIP; choose imageScope:\"owner\" for listing-owner photos only. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
+      "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, website, full hours, About attributes, entity IDs/CID, configured services/areas, and optional photos. Use include:[\"all\"] for every supported field group, with maxReviews and maxImages as limits; existing includeReviews, includeServices, and includeImages flags also work. Set includeImages:true for a provenance-aware manifest, bounded AI image blocks, and an owner-scoped ZIP; choose imageScope:\"owner\" for listing-owner photos only. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
       "category": "maps",
       "methodName": "placeIntel",
       "inputSchema": {
@@ -62682,13 +62682,29 @@
           },
           "includeServices": {
             "default": false,
-            "description": "Fetch the business's configured services list and areas-served list, when the profile has them. Adds one extra page visit; not present for every business.",
+            "description": "Collect the exact business's configured services and areas served when available. These fields are absent on some profiles.",
             "type": "boolean"
           },
           "includeImages": {
             "default": false,
             "description": "Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.",
             "type": "boolean"
+          },
+          "include": {
+            "description": "Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "core",
+                "hours",
+                "services",
+                "areasServed",
+                "reviews",
+                "images",
+                "all"
+              ]
+            }
           },
           "imageScope": {
             "default": "all",
@@ -62723,8 +62739,113 @@
       "outputSchema": {
         "type": "object",
         "properties": {
-          "name": {
+          "runId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "runStatus": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "interrupted",
+              "complete",
+              "partial",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "checkpointRevision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "completedFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pendingFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unavailableFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requestedMaxReviews": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "requestedMaxImages": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "imagesCollected": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "billingState": {
             "type": "string"
+          },
+          "statusPath": {
+            "type": "string"
+          },
+          "reviewsNextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "imagesNextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "maximumAuthorizationMc": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "provider": {
+            "type": "string"
+          },
+          "fallbackFrom": {
+            "type": "string"
+          },
+          "acquisitionProvider": {
+            "type": "string"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "placeUrl": {
             "anyOf": [
@@ -63314,57 +63435,9 @@
                 }
               }
             },
-            "required": [
-              "status",
-              "scope",
-              "requestedMaxImages",
-              "imagesCollected",
-              "imagesDownloaded",
-              "ownerImagesCollected",
-              "otherImagesCollected",
-              "unknownOriginImagesCollected",
-              "ownerGalleryAvailable",
-              "ownerGalleryExhausted",
-              "ownerPhotosDiscovered",
-              "allPhotosDiscovered",
-              "exhausted",
-              "stopReason",
-              "images",
-              "artifact",
-              "warnings"
-            ],
             "additionalProperties": false
           }
         },
-        "required": [
-          "name",
-          "placeUrl",
-          "rating",
-          "reviewCount",
-          "category",
-          "address",
-          "phone",
-          "website",
-          "hoursSummary",
-          "hoursTable",
-          "plusCode",
-          "bookingUrl",
-          "kgmid",
-          "cidDecimal",
-          "cidUrl",
-          "lat",
-          "lng",
-          "reviewsStatus",
-          "reviewsCollected",
-          "reviews",
-          "reviewHistogram",
-          "reviewTopics",
-          "services",
-          "areasServed",
-          "servicesStatus",
-          "aboutAttributes",
-          "media"
-        ],
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "additionalProperties": false
       },
@@ -63378,9 +63451,1501 @@
       }
     },
     {
+      "name": "maps_place_resume",
+      "title": "Resume Google Maps Place Run",
+      "description": "Explicitly resume a partial Maps place run using a fresh idempotency key. This may launch a new paid provider attempt and requires a new maximum credit authorization. Repeating the same key only reads its status.",
+      "category": "maps",
+      "methodName": "placeResume",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Partial or reconciled interrupted Maps place run to resume."
+          },
+          "resumeIdempotencyKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "A new key for this explicit attempt; reuse the same key to read its status."
+          }
+        },
+        "required": [
+          "runId",
+          "resumeIdempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "runStatus": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "interrupted",
+              "complete",
+              "partial",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "checkpointRevision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "completedFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pendingFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unavailableFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requestedMaxReviews": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "requestedMaxImages": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "imagesCollected": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "billingState": {
+            "type": "string"
+          },
+          "statusPath": {
+            "type": "string"
+          },
+          "reviewsNextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "imagesNextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "maximumAuthorizationMc": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "provider": {
+            "type": "string"
+          },
+          "fallbackFrom": {
+            "type": "string"
+          },
+          "acquisitionProvider": {
+            "type": "string"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "placeUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewCount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hoursSummary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hoursTable": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string"
+                },
+                "hours": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "day",
+                "hours"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "plusCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bookingUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kgmid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cidDecimal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cidUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lng": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewsStatus": {
+            "type": "string"
+          },
+          "reviewsCollected": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reviewId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "stars": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "date": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "text": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "ownerResponse": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "reviewId",
+                "author",
+                "stars",
+                "date",
+                "text",
+                "ownerResponse"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "reviewHistogram": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stars": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "count": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "stars",
+                "count"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "reviewTopics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label",
+                "count"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "services": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "areasServed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "servicesStatus": {
+            "type": "string"
+          },
+          "aboutAttributes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "section": {
+                  "type": "string"
+                },
+                "attribute": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "section",
+                "attribute"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "media": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "string",
+                "enum": [
+                  "owner",
+                  "all"
+                ]
+              },
+              "requestedMaxImages": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "imagesCollected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "imagesDownloaded": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "ownerImagesCollected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "otherImagesCollected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "unknownOriginImagesCollected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "ownerGalleryAvailable": {
+                "type": "boolean"
+              },
+              "ownerGalleryExhausted": {
+                "type": "boolean"
+              },
+              "ownerPhotosDiscovered": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "allPhotosDiscovered": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "exhausted": {
+                "type": "boolean"
+              },
+              "stopReason": {
+                "type": "string"
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "index": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "galleryPosition": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "sourceUrl": {
+                      "type": "string"
+                    },
+                    "mediaKey": {
+                      "type": "string"
+                    },
+                    "origin": {
+                      "type": "string",
+                      "enum": [
+                        "owner",
+                        "other",
+                        "unknown"
+                      ]
+                    },
+                    "originConfidence": {
+                      "type": "string"
+                    },
+                    "filename": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "mimeType": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "bytes": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "downloadStatus": {
+                      "type": "string"
+                    },
+                    "downloadError": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "contentIndex": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "index",
+                    "galleryPosition",
+                    "sourceUrl",
+                    "mediaKey",
+                    "origin",
+                    "originConfidence",
+                    "filename",
+                    "mimeType",
+                    "bytes",
+                    "downloadStatus",
+                    "downloadError",
+                    "contentIndex"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "artifact": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "artifactId": {
+                        "type": "string"
+                      },
+                      "filename": {
+                        "type": "string"
+                      },
+                      "contentType": {
+                        "type": "string"
+                      },
+                      "bytes": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "sha256": {
+                        "type": "string"
+                      },
+                      "expiresAt": {
+                        "type": "string"
+                      },
+                      "downloadUrl": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "downloadUrlExpiresAt": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "localPath": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "artifactId",
+                      "filename",
+                      "contentType",
+                      "bytes",
+                      "sha256",
+                      "expiresAt",
+                      "downloadUrl",
+                      "downloadUrlExpiresAt",
+                      "localPath"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Resume Google Maps Place Run",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "maps_place_status",
+      "title": "Google Maps Place Run Status",
+      "description": "Read a saved Maps place run by ID, including partial results and paginated reviews or images. This read never starts a browser or creates a charge.",
+      "category": "maps",
+      "methodName": "placeStatus",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+            "description": "Maps place run ID returned by maps_place_intel."
+          },
+          "reviewsCursor": {
+            "description": "Opaque cursor for the next page of saved reviews.",
+            "type": "string"
+          },
+          "imagesCursor": {
+            "description": "Opaque cursor for the next page of saved images.",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Page size; reviews are capped at 50 and images at 100.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "runId"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "runStatus": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "interrupted",
+              "complete",
+              "partial",
+              "failed",
+              "cancelled"
+            ]
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "checkpointRevision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "completedFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pendingFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "unavailableFields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "requestedMaxReviews": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "requestedMaxImages": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "imagesCollected": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "billingState": {
+            "type": "string"
+          },
+          "statusPath": {
+            "type": "string"
+          },
+          "reviewsNextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "imagesNextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "maximumAuthorizationMc": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "provider": {
+            "type": "string"
+          },
+          "fallbackFrom": {
+            "type": "string"
+          },
+          "acquisitionProvider": {
+            "type": "string"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "placeUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewCount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hoursSummary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hoursTable": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": {
+                  "type": "string"
+                },
+                "hours": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "day",
+                "hours"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "plusCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bookingUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kgmid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cidDecimal": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cidUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lng": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reviewsStatus": {
+            "type": "string"
+          },
+          "reviewsCollected": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "reviewId": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "author": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "stars": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "date": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "text": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "ownerResponse": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "reviewId",
+                "author",
+                "stars",
+                "date",
+                "text",
+                "ownerResponse"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "reviewHistogram": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stars": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "count": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "stars",
+                "count"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "reviewTopics": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label",
+                "count"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "services": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "areasServed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "servicesStatus": {
+            "type": "string"
+          },
+          "aboutAttributes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "section": {
+                  "type": "string"
+                },
+                "attribute": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "section",
+                "attribute"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "media": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "string",
+                "enum": [
+                  "owner",
+                  "all"
+                ]
+              },
+              "requestedMaxImages": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "imagesCollected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "imagesDownloaded": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "ownerImagesCollected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "otherImagesCollected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "unknownOriginImagesCollected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "ownerGalleryAvailable": {
+                "type": "boolean"
+              },
+              "ownerGalleryExhausted": {
+                "type": "boolean"
+              },
+              "ownerPhotosDiscovered": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "allPhotosDiscovered": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "exhausted": {
+                "type": "boolean"
+              },
+              "stopReason": {
+                "type": "string"
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "index": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 9007199254740991
+                    },
+                    "galleryPosition": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "sourceUrl": {
+                      "type": "string"
+                    },
+                    "mediaKey": {
+                      "type": "string"
+                    },
+                    "origin": {
+                      "type": "string",
+                      "enum": [
+                        "owner",
+                        "other",
+                        "unknown"
+                      ]
+                    },
+                    "originConfidence": {
+                      "type": "string"
+                    },
+                    "filename": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "mimeType": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "bytes": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "downloadStatus": {
+                      "type": "string"
+                    },
+                    "downloadError": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "contentIndex": {
+                      "anyOf": [
+                        {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 9007199254740991
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "index",
+                    "galleryPosition",
+                    "sourceUrl",
+                    "mediaKey",
+                    "origin",
+                    "originConfidence",
+                    "filename",
+                    "mimeType",
+                    "bytes",
+                    "downloadStatus",
+                    "downloadError",
+                    "contentIndex"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "artifact": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "artifactId": {
+                        "type": "string"
+                      },
+                      "filename": {
+                        "type": "string"
+                      },
+                      "contentType": {
+                        "type": "string"
+                      },
+                      "bytes": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "sha256": {
+                        "type": "string"
+                      },
+                      "expiresAt": {
+                        "type": "string"
+                      },
+                      "downloadUrl": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "downloadUrlExpiresAt": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "localPath": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "artifactId",
+                      "filename",
+                      "contentType",
+                      "bytes",
+                      "sha256",
+                      "expiresAt",
+                      "downloadUrl",
+                      "downloadUrlExpiresAt",
+                      "localPath"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "additionalProperties": false
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Google Maps Place Run Status",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
       "name": "maps_search",
       "title": "Google Maps Business Search",
-      "description": "Search Google Maps for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. Use gl for country and location only when city or regional context matters. Returns up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. Set includeServices:true to expand each selected profile and return its complete configured services and areas served when available.",
+      "description": "Search Google Maps for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. For ordinary searches, enter a US state in location to target that state; omit location for direct search. Returns up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. Set includeServices:true to open organic Businesses profiles for configured services and areas served when available.",
       "category": "maps",
       "methodName": "search",
       "inputSchema": {
@@ -63389,10 +64954,10 @@
           "query": {
             "type": "string",
             "minLength": 1,
-            "description": "Business category, niche, or search term, e.g. \"roofers\". You may include the place here; Google Maps has no UULE, so the server appends location to the search text only when the query does not already name it."
+            "description": "Business category, niche, or search term, e.g. \"roofers\"."
           },
           "location": {
-            "description": "City, region, country, or service area, e.g. \"Denver, CO\".",
+            "description": "Enter a US state name or code, e.g. Utah or UT, for a state-targeted search. Omit for direct search.",
             "type": "string"
           },
           "gl": {
@@ -63418,7 +64983,7 @@
           },
           "includeServices": {
             "default": false,
-            "description": "Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards.",
+            "description": "Open organic Businesses profiles for configured services and areas served. For more than three requested results, first click More businesses. Does not collect review cards; plain searches use the Google Maps feed.",
             "type": "boolean"
           }
         },
@@ -63430,6 +64995,15 @@
       "outputSchema": {
         "type": "object",
         "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "fallbackFrom": {
+            "type": "string"
+          },
+          "acquisitionProvider": {
+            "type": "string"
+          },
           "query": {
             "type": "string"
           },

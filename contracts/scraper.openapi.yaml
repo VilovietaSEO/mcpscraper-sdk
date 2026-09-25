@@ -956,8 +956,17 @@ paths:
     post:
       tags: [Maps]
       operationId: mapsPlaceIntel
-      summary: Deep-dive one Google Maps business by name and location, with reviews
-      description: 60 credits base; +1 credit per review card when `includeReviews` is true.
+      summary: Start a recoverable Google Maps business profile lookup
+      description: Provide an Idempotency-Key and X-Maps-Run-Id to recover an unknown transport outcome. A maximum declared charge is held before browsing; completed work settles at 60 credits plus 1 credit per saved review card.
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          schema: { type: string, minLength: 1, maxLength: 500 }
+          description: Caller-generated key for same-request replay.
+        - in: header
+          name: X-Maps-Run-Id
+          schema: { type: string, format: uuid }
+          description: Caller-generated run ID for status recovery after response loss.
       requestBody:
         required: true
         content:
@@ -965,14 +974,72 @@ paths:
             schema: { $ref: '#/components/schemas/MapsPlaceRequest' }
       responses:
         '200':
-          description: Place detail with optional reviews.
+          description: Complete or partial saved place result.
           content:
-            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains business overview fields and a `reviews` array when requested.' } }
+            application/json: { schema: { $ref: '#/components/schemas/MapsPlaceRunResponse' } }
+        '202':
+          description: Running or interrupted place run with any verified checkpoints saved so far.
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/MapsPlaceRunResponse' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '402': { $ref: '#/components/responses/InsufficientBalance' }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
-        '503': { description: Temporarily blocked — retryable. }
+
+  /maps/place/runs/{runId}:
+    get:
+      tags: [Maps]
+      operationId: mapsPlaceStatus
+      summary: Read an owner-scoped saved Maps place run
+      parameters:
+        - { in: path, name: runId, required: true, schema: { type: string, format: uuid } }
+        - { in: query, name: reviewsCursor, schema: { type: string }, description: Opaque saved-review cursor. }
+        - { in: query, name: imagesCursor, schema: { type: string }, description: Opaque saved-image cursor. }
+        - { in: query, name: limit, schema: { type: integer, minimum: 1, maximum: 100 } }
+      responses:
+        '200': { description: Saved terminal run, content: { application/json: { schema: { $ref: '#/components/schemas/MapsPlaceRunResponse' } } } }
+        '202': { description: Saved running or interrupted run, content: { application/json: { schema: { $ref: '#/components/schemas/MapsPlaceRunResponse' } } } }
+        '404': { description: Run not found for this owner. }
+
+  /maps/place/runs/{runId}/reviews:
+    get:
+      tags: [Maps]
+      operationId: mapsPlaceReviews
+      summary: Page through saved review cards
+      parameters:
+        - { in: path, name: runId, required: true, schema: { type: string, format: uuid } }
+        - { in: query, name: cursor, schema: { type: string } }
+        - { in: query, name: limit, schema: { type: integer, minimum: 1, maximum: 50 } }
+      responses:
+        '200': { description: Saved review page with items and nextCursor., content: { application/json: { schema: { $ref: '#/components/schemas/MapsPlaceItemPage' } } } }
+        '404': { description: Run not found for this owner. }
+
+  /maps/place/runs/{runId}/images:
+    get:
+      tags: [Maps]
+      operationId: mapsPlaceImages
+      summary: Page through saved image references
+      parameters:
+        - { in: path, name: runId, required: true, schema: { type: string, format: uuid } }
+        - { in: query, name: cursor, schema: { type: string } }
+        - { in: query, name: limit, schema: { type: integer, minimum: 1, maximum: 100 } }
+      responses:
+        '200': { description: Saved image page with items and nextCursor., content: { application/json: { schema: { $ref: '#/components/schemas/MapsPlaceItemPage' } } } }
+        '404': { description: Run not found for this owner. }
+
+  /maps/place/runs/{runId}/resume:
+    post:
+      tags: [Maps]
+      operationId: mapsPlaceResume
+      summary: Explicitly resume a partial or reconciled interrupted Maps place run
+      parameters:
+        - { in: path, name: runId, required: true, schema: { type: string, format: uuid } }
+        - { in: header, name: Idempotency-Key, required: true, schema: { type: string, minLength: 1, maxLength: 500 } }
+      responses:
+        '200': { description: Saved terminal run., content: { application/json: { schema: { $ref: '#/components/schemas/MapsPlaceRunResponse' } } } }
+        '202': { description: Resumed attempt in progress., content: { application/json: { schema: { $ref: '#/components/schemas/MapsPlaceRunResponse' } } } }
+        '404': { description: Run not found for this owner. }
+        '409': { description: Run or previous billing state cannot resume. }
 
   /directory/run:
     post:
@@ -2056,6 +2123,42 @@ components:
         hl: { type: string, default: en }
         includeReviews: { type: boolean, default: false }
         maxReviews: { type: integer, minimum: 1, maximum: 500, default: 50 }
+        includeServices: { type: boolean, default: false }
+        includeImages: { type: boolean, default: false }
+        include:
+          type: array
+          items: { type: string, enum: [core, hours, services, areasServed, reviews, images, all] }
+        imageScope: { type: string, enum: [owner, all], default: all }
+        maxImages: { type: integer, minimum: 1, maximum: 250, default: 100 }
+        maxInlineImages: { type: integer, minimum: 0, maximum: 5, default: 3 }
+
+    MapsPlaceRunResponse:
+      type: object
+      required: [runId, runStatus, verified, checkpointRevision, billingState]
+      properties:
+        runId: { type: string, format: uuid }
+        runStatus: { type: string, enum: [queued, running, interrupted, complete, partial, failed, cancelled] }
+        verified: { type: boolean }
+        checkpointRevision: { type: integer, minimum: 0 }
+        billingState: { type: string }
+        name: { type: string, nullable: true }
+        placeUrl: { type: string, nullable: true }
+        completedFields: { type: array, items: { type: string } }
+        pendingFields: { type: array, items: { type: string } }
+        unavailableFields: { type: array, items: { type: string } }
+        reviewsCollected: { type: integer, minimum: 0 }
+        imagesCollected: { type: integer, minimum: 0 }
+        reviewsNextCursor: { type: string, nullable: true }
+        imagesNextCursor: { type: string, nullable: true }
+      additionalProperties: true
+
+    MapsPlaceItemPage:
+      type: object
+      required: [runId, items, nextCursor]
+      properties:
+        runId: { type: string, format: uuid }
+        items: { type: array, items: { type: object, additionalProperties: true } }
+        nextCursor: { type: string, nullable: true }
 
     SerpIntelligenceCaptureRequest:
       type: object

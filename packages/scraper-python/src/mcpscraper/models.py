@@ -672,6 +672,12 @@ class MapsPlaceRequest(BaseModel):
     hl: str | None = 'en'
     includeReviews: bool | None = False
     maxReviews: int | None = Field(50, ge=1, le=500)
+    includeServices: bool | None = False
+    includeImages: bool | None = False
+    include: list[str] | None = None
+    imageScope: str | None = 'all'
+    maxImages: int | None = Field(100, ge=1, le=250)
+    maxInlineImages: int | None = Field(3, ge=0, le=5)
 
 
 class SerpIntelligenceCaptureRequest(BaseModel):

@@ -5,17 +5,20 @@ from pydantic import BaseModel, ConfigDict, Field
 class MapsSearchInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    query: str = Field(..., alias="query", description="Business category, niche, or search term, e.g. \"roofers\". You may include the place here; Google Maps has no UULE, so the server appends location to the search text only when the query does not already name it.")
-    location: str | None = Field(None, alias="location", description="City, region, country, or service area, e.g. \"Denver, CO\".")
+    query: str = Field(..., alias="query", description="Business category, niche, or search term, e.g. \"roofers\".")
+    location: str | None = Field(None, alias="location", description="Enter a US state name or code, e.g. Utah or UT, for a state-targeted search. Omit for direct search.")
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location.")
     hl: str | None = Field(None, alias="hl", description="Language inferred from user request.")
     max_results: int | None = Field(None, alias="maxResults", description="Number of candidates to return. Default 10, maximum 50.")
-    include_services: bool | None = Field(None, alias="includeServices", description="Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards.")
+    include_services: bool | None = Field(None, alias="includeServices", description="Open organic Businesses profiles for configured services and areas served. For more than three requested results, first click More businesses. Does not collect review cards; plain searches use the Google Maps feed.")
 
 
 class MapsSearchOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
+    provider: str | None = Field(None, alias="provider", description="")
+    fallback_from: str | None = Field(None, alias="fallbackFrom", description="")
+    acquisition_provider: str | None = Field(None, alias="acquisitionProvider", description="")
     query: str = Field(..., alias="query", description="")
     location: Any = Field(..., alias="location", description="")
     search_query: str = Field(..., alias="searchQuery", description="")

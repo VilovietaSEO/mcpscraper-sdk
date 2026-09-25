@@ -1,10 +1,10 @@
 export interface Input {
   /**
-   * Business category, niche, or search term, e.g. "roofers". You may include the place here; Google Maps has no UULE, so the server appends location to the search text only when the query does not already name it.
+   * Business category, niche, or search term, e.g. "roofers".
    */
   query: string;
   /**
-   * City, region, country, or service area, e.g. "Denver, CO".
+   * Enter a US state name or code, e.g. Utah or UT, for a state-targeted search. Omit for direct search.
    */
   location?: string;
   /**
@@ -20,12 +20,15 @@ export interface Input {
    */
   maxResults?: number;
   /**
-   * Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards.
+   * Open organic Businesses profiles for configured services and areas served. For more than three requested results, first click More businesses. Does not collect review cards; plain searches use the Google Maps feed.
    */
   includeServices?: boolean;
 }
 
 export interface Output {
+  provider?: string;
+  fallbackFrom?: string;
+  acquisitionProvider?: string;
   query: string;
   location: string | null;
   searchQuery: string;

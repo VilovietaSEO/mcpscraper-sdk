@@ -324,6 +324,8 @@ import * as TagsMergeMemoryTags from './tools/merge-memory-tags.js'
 import * as TagsResolveMemoryTags from './tools/resolve-memory-tags.js'
 import * as TagsUpsertMemoryTag from './tools/upsert-memory-tag.js'
 import * as MapsPlaceIntel from './tools/maps_place_intel.js'
+import * as MapsPlaceResume from './tools/maps_place_resume.js'
+import * as MapsPlaceStatus from './tools/maps_place_status.js'
 import * as MapsSearch from './tools/maps_search.js'
 import * as GraphMemoryBacklinks from './tools/memory-backlinks.js'
 import * as GraphMemoryGraphPath from './tools/memory-graph-path.js'
@@ -1703,6 +1705,16 @@ export const MCP_TOOL_BINDINGS = [
     "name": "maps_place_intel",
     "category": "maps",
     "methodName": "placeIntel"
+  },
+  {
+    "name": "maps_place_resume",
+    "category": "maps",
+    "methodName": "placeResume"
+  },
+  {
+    "name": "maps_place_status",
+    "category": "maps",
+    "methodName": "placeStatus"
   },
   {
     "name": "maps_search",
@@ -3590,6 +3602,14 @@ export class MapsNamespace {
 
   async placeIntel(input: MapsPlaceIntel.Input): Promise<MapsPlaceIntel.Output> {
     return this.callTool('maps_place_intel', input) as Promise<MapsPlaceIntel.Output>
+  }
+
+  async placeResume(input: MapsPlaceResume.Input): Promise<MapsPlaceResume.Output> {
+    return this.callTool('maps_place_resume', input) as Promise<MapsPlaceResume.Output>
+  }
+
+  async placeStatus(input: MapsPlaceStatus.Input): Promise<MapsPlaceStatus.Output> {
+    return this.callTool('maps_place_status', input) as Promise<MapsPlaceStatus.Output>
   }
 
   async search(input: MapsSearch.Input): Promise<MapsSearch.Output> {

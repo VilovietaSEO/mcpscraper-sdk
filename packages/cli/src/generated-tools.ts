@@ -23199,7 +23199,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "maps_place_intel",
     "category": "maps",
     "title": "Google Maps Business Profile Details",
-    "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, website, full hours, About attributes, entity IDs/CID, configured services/areas, and optional photos. Set includeImages:true for a provenance-aware manifest, bounded AI image blocks, and an owner-scoped ZIP; choose imageScope:\"owner\" for listing-owner photos only. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
+    "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, website, full hours, About attributes, entity IDs/CID, configured services/areas, and optional photos. Use include:[\"all\"] for every supported field group, with maxReviews and maxImages as limits; existing includeReviews, includeServices, and includeImages flags also work. Set includeImages:true for a provenance-aware manifest, bounded AI image blocks, and an owner-scoped ZIP; choose imageScope:\"owner\" for listing-owner photos only. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23241,13 +23241,29 @@ export const MCP_TOOL_CATALOG = [
         },
         "includeServices": {
           "default": false,
-          "description": "Fetch the business's configured services list and areas-served list, when the profile has them. Adds one extra page visit; not present for every business.",
+          "description": "Collect the exact business's configured services and areas served when available. These fields are absent on some profiles.",
           "type": "boolean"
         },
         "includeImages": {
           "default": false,
           "description": "Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.",
           "type": "boolean"
+        },
+        "include": {
+          "description": "Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "core",
+              "hours",
+              "services",
+              "areasServed",
+              "reviews",
+              "images",
+              "all"
+            ]
+          }
         },
         "imageScope": {
           "default": "all",
@@ -23288,20 +23304,98 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "maps_place_resume",
+    "category": "maps",
+    "title": "Resume Google Maps Place Run",
+    "description": "Explicitly resume a partial Maps place run using a fresh idempotency key. This may launch a new paid provider attempt and requires a new maximum credit authorization. Repeating the same key only reads its status.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Partial or reconciled interrupted Maps place run to resume."
+        },
+        "resumeIdempotencyKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "A new key for this explicit attempt; reuse the same key to read its status."
+        }
+      },
+      "required": [
+        "runId",
+        "resumeIdempotencyKey"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Resume Google Maps Place Run",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "maps_place_status",
+    "category": "maps",
+    "title": "Google Maps Place Run Status",
+    "description": "Read a saved Maps place run by ID, including partial results and paginated reviews or images. This read never starts a browser or creates a charge.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+          "description": "Maps place run ID returned by maps_place_intel."
+        },
+        "reviewsCursor": {
+          "description": "Opaque cursor for the next page of saved reviews.",
+          "type": "string"
+        },
+        "imagesCursor": {
+          "description": "Opaque cursor for the next page of saved images.",
+          "type": "string"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Page size; reviews are capped at 50 and images at 100.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "runId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Google Maps Place Run Status",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "maps_search",
     "category": "maps",
     "title": "Google Maps Business Search",
-    "description": "Search Google Maps for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. Use gl for country and location only when city or regional context matters. Returns up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. Set includeServices:true to expand each selected profile and return its complete configured services and areas served when available.",
+    "description": "Search Google Maps for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. For ordinary searches, enter a US state in location to target that state; omit location for direct search. Returns up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. Set includeServices:true to open organic Businesses profiles for configured services and areas served when available.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
           "minLength": 1,
-          "description": "Business category, niche, or search term, e.g. \"roofers\". You may include the place here; Google Maps has no UULE, so the server appends location to the search text only when the query does not already name it."
+          "description": "Business category, niche, or search term, e.g. \"roofers\"."
         },
         "location": {
-          "description": "City, region, country, or service area, e.g. \"Denver, CO\".",
+          "description": "Enter a US state name or code, e.g. Utah or UT, for a state-targeted search. Omit for direct search.",
           "type": "string"
         },
         "gl": {
@@ -23327,7 +23421,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "includeServices": {
           "default": false,
-          "description": "Open each returned business profile to include its configured services and areas served when available. Adds a page visit per business; does not collect review cards.",
+          "description": "Open organic Businesses profiles for configured services and areas served. For more than three requested results, first click More businesses. Does not collect review cards; plain searches use the Google Maps feed.",
           "type": "boolean"
         }
       },

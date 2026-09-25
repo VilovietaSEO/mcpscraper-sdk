@@ -2,24 +2,14 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class MapsPlaceIntelInput(BaseModel):
+class MapsPlaceResumeInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    business_name: str = Field(..., alias="businessName", description="Business name only, e.g. \"Elite Roofing\" (not \"Elite Roofing Denver CO\" — put the city in location).")
-    location: str = Field(..., alias="location", description="City/region/country where the business should be searched, e.g. \"Denver, CO\".")
-    gl: str | None = Field(None, alias="gl", description="Google country code inferred from location.")
-    hl: str | None = Field(None, alias="hl", description="Language inferred from user request.")
-    include_reviews: bool | None = Field(None, alias="includeReviews", description="Fetch individual review cards — for reviews, customer pain, complaints, or praise themes.")
-    max_reviews: int | None = Field(None, alias="maxReviews", description="Max review cards when includeReviews is true. Default 50, maximum 500.")
-    include_services: bool | None = Field(None, alias="includeServices", description="Collect the exact business's configured services and areas served when available. These fields are absent on some profiles.")
-    include_images: bool | None = Field(None, alias="includeImages", description="Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.")
-    include: list[Literal['core', 'hours', 'services', 'areasServed', 'reviews', 'images', 'all']] | None = Field(None, alias="include", description="Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.")
-    image_scope: Literal['owner', 'all'] | None = Field(None, alias="imageScope", description="owner collects only the Google Maps By owner gallery. all collects the full gallery and labels exact owner matches versus other/unknown media.")
-    max_images: int | None = Field(None, alias="maxImages", description="Maximum photos to collect when includeImages is true. Default 100, maximum 250.")
-    max_inline_images: int | None = Field(None, alias="maxInlineImages", description="Maximum downloaded photos attached as MCP image blocks for direct AI vision. The ZIP and structured manifest still contain the wider result.")
+    run_id: str = Field(..., alias="runId", description="Partial or reconciled interrupted Maps place run to resume.")
+    resume_idempotency_key: str = Field(..., alias="resumeIdempotencyKey", description="A new key for this explicit attempt; reuse the same key to read its status.")
 
 
-class MapsPlaceIntelOutput(BaseModel):
+class MapsPlaceResumeOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     run_id: str | None = Field(None, alias="runId", description="")
