@@ -1,6 +1,6 @@
 {
   "name": "mcpscraper-cli",
-  "version": "0.49.1",
+  "version": "0.50.0",
   "description": "Command-line interface for the unified mcpscraper.dev MCP and REST APIs",
   "license": "MIT",
   "type": "module",
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "commander": "^12.0.0",
-    "mcpscraper-sdk": "^0.50.1"
+    "mcpscraper-sdk": "^0.51.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0"

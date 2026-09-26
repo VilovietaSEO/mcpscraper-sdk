@@ -26308,13 +26308,13 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Search Google once. Light mode (default) returns organic position, URL, title, and description. Full mode returns those results plus available same-page SERP features: local pack, discussions/forums, videos, AI Overview, AI Mode, What People Are Saying, entity IDs, and on-page PAA preview when present. Feature status distinguishes present, absent, incomplete, unknown, and unsupported. Both modes default to one page; set pages:2 only when the user explicitly requests two pages. Two-page requests use organic results only and mark rich features unsupported. If page 2 fails, an available page 1 is returned as partial and billed for one delivered page. Full does not expand PAA, open Maps profiles, or scrape result sites. Light costs 20 Credits per delivered page, or 35 if the backup supplies it; one-page full costs 35 Credits; explicit two-page full costs 40 Credits for organic results only. Reuse the same idempotencyKey after an unknown response to recover the same billed operation. A saved serpIdentity uses its browser context and retains its 60-Credit search rate; it cannot be combined with full mode. Call credits_info for current pricing and balance.",
+    "description": "Search Google. Light mode returns organic positions, URLs, titles, and descriptions. Unfiltered one-page full mode adds available same-page local, forum, video, AI, entity, and PAA-preview features; their status distinguishes present, absent, incomplete, unknown, and unsupported. One page is the default. Set pages:2 only when the user asks for two pages. Set recency:week or recency:month for Google's past-week or past-month filter. Filtered searches use a managed browser and return organic results only at 35 Credits per delivered page (70 for two). Unfiltered searches use the browser only as the final backup. Browser and two-page results mark rich features unsupported. If page 2 fails, available page 1 is marked partial and billed for one page. Unfiltered light costs 20 Credits per delivered page, or 35 if a backup supplies it; one-page full costs 35; unfiltered two-page full costs 40 for organic results. Full does not open result sites, expand PAA, or open Maps profiles. Reuse the same idempotencyKey after an uncertain response. A saved serpIdentity keeps its 60-Credit search rate and cannot be combined with full mode. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "mode": {
           "default": "light",
-          "description": "Light returns organic results. Full adds available SERP features for one page. With an explicit two-page request, only organic results are available and feature status is unsupported. Both default to one page.",
+          "description": "Light returns organic results. Full adds available same-page features for an unfiltered one-page search. Date-filtered, two-page, and browser-backup results contain organic listings only and mark rich features unsupported.",
           "type": "string",
           "enum": [
             "light",
@@ -26370,13 +26370,11 @@ export const MCP_TOOL_CATALOG = [
           "maximum": 2
         },
         "recency": {
-          "description": "Compatibility field. Ordinary search does not apply a date filter.",
+          "description": "Limit Google results to the past week or past month. A date-filtered search uses the managed browser and returns organic listings only. It costs 35 Credits for one page or 70 Credits when two requested pages are delivered. Omit for unfiltered results.",
           "type": "string",
           "enum": [
-            "day",
             "week",
-            "month",
-            "year"
+            "month"
           ]
         }
       },
