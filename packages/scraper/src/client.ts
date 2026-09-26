@@ -79,6 +79,9 @@ export type HarvestParams =
   Omit<RequestBodyOf<'startHarvest'>, HarvestDefaultedKey>
   & Partial<Pick<RequestBodyOf<'startHarvest'>, HarvestDefaultedKey>>
 
+export type SearchSerpParams = Omit<RequestBodyOf<'harvestSync'>, 'serpOnly' | 'recency'>
+  & { recency?: 'week' | 'month' }
+
 type ArchiveReadDefaultedKey =
   | 'offset'
   | 'maxBytes'
@@ -534,7 +537,7 @@ export class ScraperClient {
   }
 
   searchSerp(
-    params: Omit<RequestBodyOf<'harvestSync'>, 'serpOnly'>,
+    params: SearchSerpParams,
     options: ScraperRequestOptions = {},
   ) {
     return this.r.call<'harvestSync'>('POST', '/harvest/sync', { ...params, serpOnly: true }, {}, options)

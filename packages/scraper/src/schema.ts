@@ -1305,7 +1305,7 @@ export interface components {
              */
             serpOnly: boolean;
             /**
-             * @description Optional Google time filter (past day/week/month/year). Omit for all-time. Pairs well with a site: operator in the query.
+             * @description Optional Google time filter. Ordinary search_serp accepts week or month and returns organic browser results; PAA harvest also accepts day and year. Omit for all-time results.
              * @enum {string}
              */
             recency?: "day" | "week" | "month" | "year";

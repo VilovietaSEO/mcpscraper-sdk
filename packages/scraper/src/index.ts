@@ -4,6 +4,7 @@ export type {
   ScraperRequestOptions,
   ExtractSiteOptions,
   HarvestParams,
+  SearchSerpParams,
   ArchiveReadParams,
   SerpIntelligenceCaptureParams,
   SerpIntelligenceCaptureOptions,

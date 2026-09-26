@@ -1663,7 +1663,7 @@ components:
         pages: { type: integer, minimum: 1, maximum: 2, default: 1, description: 'Google result pages to fetch. Full mode alone does not request page 2.' }
         mode: { type: string, enum: [light, full], default: light, description: 'For serpOnly searches: light returns organic results; full adds available same-page SERP features.' }
         serpOnly: { type: boolean, default: false, description: 'true = pure SERP call (search_serp); false = full PAA harvest.' }
-        recency: { type: string, enum: [day, week, month, year], description: 'Optional Google time filter (past day/week/month/year). Omit for all-time. Pairs well with a site: operator in the query.' }
+        recency: { type: string, enum: [day, week, month, year], description: 'Optional Google time filter. Ordinary search_serp accepts week or month and returns organic browser results; PAA harvest also accepts day and year. Omit for all-time results.' }
         debug: { type: boolean, default: false }
 
     HarvestSyncResponse:

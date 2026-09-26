@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Light returns organic results. Full adds available SERP features for one page. With an explicit two-page request, only organic results are available and feature status is unsupported. Both default to one page.
+   * Light returns organic results. Full adds available same-page features for an unfiltered one-page search. Date-filtered, two-page, and browser-backup results contain organic listings only and mark rich features unsupported.
    */
   mode?: "light" | "full";
   /**
@@ -36,9 +36,9 @@ export interface Input {
    */
   pages?: number;
   /**
-   * Compatibility field. Ordinary search does not apply a date filter.
+   * Limit Google results to the past week or past month. A date-filtered search uses the managed browser and returns organic listings only. It costs 35 Credits for one page or 70 Credits when two requested pages are delivered. Omit for unfiltered results.
    */
-  recency?: "day" | "week" | "month" | "year";
+  recency?: "week" | "month";
 }
 
 export interface Output {
