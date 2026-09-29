@@ -1,3 +1,5 @@
+# Curated base for public REST routes. Maps search and directory operations are server-owned overlays.
+# Run npm run generate:rest and consume scraper.openapi.generated.json for the complete contract.
 openapi: 3.0.3
 info:
   title: mcpscraper.dev API
@@ -932,25 +934,13 @@ paths:
 
   /maps/search:
     post:
-      tags: [Maps]
       operationId: mapsSearch
-      summary: Search Google Maps for businesses matching a query and location
-      description: Costs 5 credits. Returns up to 50 business/profile candidates.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: '#/components/schemas/MapsSearchRequest' }
       responses:
-        '200':
-          description: Search results.
-          content:
-            application/json: { schema: { type: object, additionalProperties: true, description: 'Contains `searchQuery`, `resultCount`, and business result candidates.' } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '402': { $ref: '#/components/responses/InsufficientBalance' }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
-        '503': { description: Temporarily blocked — retryable. }
+        '503': { description: Temporarily blocked. }
 
   /maps/place:
     post:
@@ -1043,45 +1033,20 @@ paths:
 
   /directory/run:
     post:
-      tags: [Directory]
       operationId: directoryWorkflow
-      summary: Run Google Maps business search across many cities in a state/region at once
-      description: Cost is `5 credits × number of markets resolved` for the query — see `GET /workflows/definitions` for related workflow shapes. Failed cities are refunded individually.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [query, state]
-              properties:
-                query: { type: string, description: 'Business category to search, e.g. "roofers".' }
-                state: { type: string, description: 'US state code or name.' }
-                minPop: { type: integer, description: 'Minimum city population to include as a market.' }
-                perCity: { type: integer, description: 'Max results per city.' }
       responses:
-        '200':
-          description: Per-city results.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  query: { type: string }
-                  state: { type: string }
-                  totalResultCount: { type: integer }
-                  cities:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        city: { type: string }
-                        status: { type: string, enum: [done, failed] }
-                        results: { type: array, items: { type: object, additionalProperties: true } }
         '400': { $ref: '#/components/responses/BadRequest' }
         '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '409': { description: Idempotency-Key already used with different input. }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { description: Directory workflow failed. }
+
+  /directory/jobs/{jobId}:
+    get:
+      operationId: directoryJobStatus
+      parameters:
+        - { in: path, name: jobId, required: true, schema: { type: string } }
+      responses: {}
 
   /serp-intelligence/capture:
     post:
@@ -1571,12 +1536,8 @@ components:
       type: object
       description: Stable public failure envelope shared across REST and MCP operations.
       properties:
-        error_code:
-          type: string
-          enum: [request_aborted, captcha_exhausted, captcha_or_blocked, location_mismatch, proxy_tunnel_failed, proxy_unavailable, harvest_timeout, mcp_request_timeout, mcp_http_error, extraction_failed, concurrency_limit_exceeded, unauthorized, forbidden, invalid_request, rate_limited, upstream_rate_limited, insufficient_balance, service_unavailable, response_lost, vendor_unavailable, page_not_found, page_forbidden, page_rate_limited, page_server_error, page_http_error, bot_check_unresolved, page_too_large, page_unreachable, browser_session_interrupted, site_export_not_found, site_export_format_unavailable, site_export_read_failed, site_export_image_not_found]
-        error_type:
-          type: string
-          enum: [request_aborted, captcha, location_mismatch, connection, timeout, extraction, concurrency_limit, unauthorized, forbidden, invalid_request, rate_limit, billing, service_unavailable]
+        error_code: { type: string }
+        error_type: { type: string }
         message: { type: string }
         retryable: { type: boolean }
         retry_after_seconds: { type: integer, minimum: 1, maximum: 86400 }
@@ -2098,20 +2059,6 @@ components:
         durationMs: { type: number }
         markdown: { type: string }
         html: { type: string }
-
-    MapsSearchRequest:
-      type: object
-      required: [query]
-      properties:
-        query: { type: string }
-        location: { type: string }
-        gl: { type: string, default: us }
-        hl: { type: string, default: en }
-        maxResults: { type: integer, minimum: 1, maximum: 50, default: 10 }
-        includeServices: { type: boolean, default: false }
-        proxyMode: { type: string, enum: [configured, none], default: none }
-        proxyZip: { type: string, pattern: '^\d{5}$' }
-        debug: { type: boolean, default: false }
 
     MapsPlaceRequest:
       type: object

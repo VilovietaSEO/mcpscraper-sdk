@@ -139,4 +139,4 @@ $ mcpscraper map https://example.com --json
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) · [`mcpscraper-memory-sdk`](../memory) · Python: [`mcpscraper-sdk`](../scraper-python) · [`mcpscraper-memory-sdk`](../memory-python)
 
-Release changes: [SDK 0.51.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.51.0).
+Release changes: [SDK 0.52.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.52.0).

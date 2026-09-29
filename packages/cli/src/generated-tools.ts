@@ -18655,7 +18655,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "directory_workflow_status",
     "category": "directory",
     "title": "Directory Workflow Status",
-    "description": "Check a directory_workflow job. Returns progress while queued/running and the completed city results, billing settlement, and CSV artifact when terminal.",
+    "description": "Poll the jobId returned by directory_workflow without starting or billing another search. Returns queued/running progress and terminal city results, billing settlement, and any CSV artifact. An unknown or unowned job returns not found.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23385,7 +23385,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "maps_search",
     "category": "maps",
     "title": "Google Maps Business Search",
-    "description": "Search Google Maps for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. For ordinary searches, enter a US state in location to target that state; omit location for direct search. Returns up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. Set includeServices:true to open organic Businesses profiles for configured services and areas served when available.",
+    "description": "Search Google Maps for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. For ordinary searches, enter a US state in location to target that state; omit location for direct search. Returns up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. websiteUrl may be null; ordinary search does not open every profile and profileDetailsStatus:not_requested is expected. Use maps_place_intel selectively for complete website/profile fields (a separately billed lookup). Set includeServices:true to open organic Businesses profiles for configured services and areas served when available.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26308,7 +26308,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Search Google. Light mode returns organic positions, URLs, titles, and descriptions. Unfiltered one-page full mode adds available same-page local, forum, video, AI, entity, and PAA-preview features; their status distinguishes present, absent, incomplete, unknown, and unsupported. One page is the default. Set pages:2 only when the user asks for two pages. Set recency:week or recency:month for Google's past-week or past-month filter. Filtered searches use a managed browser and return organic results only at 35 Credits per delivered page (70 for two). Unfiltered searches use the browser only as the final backup. Browser and two-page results mark rich features unsupported. If page 2 fails, available page 1 is marked partial and billed for one page. Unfiltered light costs 20 Credits per delivered page, or 35 if a backup supplies it; one-page full costs 35; unfiltered two-page full costs 40 for organic results. Full does not open result sites, expand PAA, or open Maps profiles. Reuse the same idempotencyKey after an uncertain response. A saved serpIdentity keeps its 60-Credit search rate and cannot be combined with full mode. Call credits_info for current pricing and balance.",
+    "description": "Search Google. Light mode returns organic listings. Set mode:full on an unfiltered one-page search to request available same-page local-pack, forum, video, AI, entity, and PAA-preview features; includeLocalPack alone does not enable local-pack extraction. Feature status shows presence and completeness. One page is the default. Set pages:2 only when the user asks for two pages. Set recency:week or recency:month for Google's past-week or past-month filter. Filtered searches use a managed browser and return organic results only at 35 Credits per delivered page (70 for two). Unfiltered searches use browser as final backup. Browser/two-page results mark rich features unsupported. If page 2 fails, available page 1 is marked partial and billed for one page. Unfiltered light costs 20 Credits per delivered page, or 35 if a backup supplies it; one-page full costs 35; unfiltered two-page full costs 40 for organic results. Full does not open result sites, expand PAA, or open Maps profiles. Reuse the same idempotencyKey after an uncertain response. A saved serpIdentity keeps its 60-Credit search rate and cannot be combined with full mode. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -28555,7 +28555,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "workflow_artifact_read",
     "category": "workflows",
     "title": "Read Workflow Artifact",
-    "description": "Read a workflow artifact back into context by run id and artifact id, so final deliverables are grounded in generated evidence rather than memory. Use workflow_status first when artifact ids are unknown. Use maxBytes to limit large artifacts.",
+    "description": "Read an available workflow artifact by run id and artifact id. Use workflow_status first when artifact ids are unknown and maxBytes to limit large artifacts. Some file-backed artifacts are temporary and can become unavailable even soon after a run; the HTTP route returns 410 when the file is gone.",
     "inputSchema": {
       "type": "object",
       "properties": {

@@ -16,8 +16,8 @@ async function main(): Promise<void> {
   }
 
   const byName = new Map(manifest.tools.map(tool => [tool.name, tool]))
-  requireMatch(byName.get('search_serp')?.description ?? '', /Light costs 20 Credits per delivered page, or 35 if the backup supplies it; one-page full costs 35 Credits; explicit two-page full costs 40 Credits/i, 'search_serp mode rates')
-  requireMatch(byName.get('search_serp')?.description ?? '', /Both modes default to one page; set pages:2 only when the user explicitly requests two pages/, 'search_serp page default')
+  requireMatch(byName.get('search_serp')?.description ?? '', /Unfiltered light costs 20 Credits per delivered page, or 35 if a backup supplies it; one-page full costs 35; unfiltered two-page full costs 40 for organic results/i, 'search_serp mode rates')
+  requireMatch(byName.get('search_serp')?.description ?? '', /One page is the default\. Set pages:2 only when the user asks for two pages/, 'search_serp page default')
   requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 400 Credits per harvest plus 10 Credits per question/, 'harvest_paa rate')
   requireMatch(byName.get('capture_serp_snapshot')?.description ?? '', /Costs 60 Credits/, 'capture_serp_snapshot rate')
 
@@ -32,6 +32,17 @@ async function main(): Promise<void> {
   requireMatch(openapi, /unit_amount_usd: \{ type: number, enum: \[5\] \}/, 'concurrency pack monthly price')
   requireMatch(openapi, /slots_per_pack: \{ type: integer, enum: \[2\] \}/, 'concurrency pack slot count')
   requireMatch(openapi, /PublicErrorEnvelope:/, 'public error envelope')
+  const generatedOpenApi = JSON.parse(await readFile('contracts/scraper.openapi.generated.json', 'utf8')) as {
+    components: { schemas: { PublicErrorEnvelope: { properties: {
+      error_code: { enum: string[] }; error_type: { enum: string[] }
+    } } } }
+  }
+  if (!generatedOpenApi.components.schemas.PublicErrorEnvelope.properties.error_code.enum.includes('directory_job_not_found')) {
+    throw new Error('Generated REST error codes omit directory_job_not_found')
+  }
+  if (!generatedOpenApi.components.schemas.PublicErrorEnvelope.properties.error_type.enum.includes('not_found')) {
+    throw new Error('Generated REST error types omit not_found')
+  }
 
   const docs = await Promise.all([
     'README.md',

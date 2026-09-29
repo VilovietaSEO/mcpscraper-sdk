@@ -4,7 +4,7 @@ Official TypeScript/JavaScript client for the [mcpscraper.dev](https://mcpscrape
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-This is a thin HTTP client generated against [`../../contracts/scraper.openapi.yaml`](../../contracts/scraper.openapi.yaml), the public contract for the hosted API. It contains no scraping, proxy, or billing logic — only typed request/response plumbing.
+This is a thin HTTP client generated against [`../../contracts/scraper.openapi.generated.json`](../../contracts/scraper.openapi.generated.json), the complete public REST contract for the hosted API. It contains no scraping, proxy, or billing logic — only typed request/response plumbing.
 
 ## Install
 
@@ -181,14 +181,15 @@ Use `mcpscraper-memory-sdk`'s `MemoryClient` when you prefer its Memory-first na
 
 ## Regenerating types
 
-`src/schema.ts` is generated from the OpenAPI spec and checked in. After editing `../../contracts/scraper.openapi.yaml`, regenerate with:
+`src/schema.ts` is generated from the complete OpenAPI projection and checked in. For server-owned Maps search and directory routes, update `contracts/server-rest.v1.json` from the server artifact. Other public routes remain in the curated `contracts/scraper.openapi.yaml` base. Regenerate both language models from the repository root:
 
 ```bash
-npm run generate
+npm run generate:rest
+npm run verify:rest-contract
 ```
 
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 121-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.51.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.51.0).
+Release changes: [SDK 0.52.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.52.0).
