@@ -82,6 +82,27 @@ test('Maps place methods keep the run ID and retry keys across recovery reads', 
   assert.equal((calls[4].init?.headers as Record<string, string>)['Idempotency-Key'], 'resume-key')
 })
 
+test('directory run keeps the retry key and status polls the returned job without another POST', async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = []
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    calls.push({ url: String(url), init })
+    return jsonResponse(calls.length === 1 ? 202 : 200, {
+      jobId: 'dir_abc', status: calls.length === 1 ? 'queued' : 'complete',
+      statusUrl: '/directory/jobs/dir_abc', query: 'roofers', state: 'TX',
+      progress: { completedCities: calls.length === 1 ? 0 : 1, totalCities: 1, failedCities: 0 },
+      billing: { heldMc: 5000, finalMc: calls.length === 1 ? null : 5000, refundMc: null }, cities: [],
+    })
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  const started = await client.directory.run({ query: 'roofers', state: 'TX', maxCities: 1 }, { idempotencyKey: 'same-job' })
+  const polled = await client.directory.status(started.jobId!)
+  assert.equal(started.status, 'queued')
+  assert.equal(polled.status, 'complete')
+  assert.equal((calls[0].init?.headers as Record<string, string>)['Idempotency-Key'], 'same-job')
+  assert.equal(calls[1].url, 'https://mcpscraper.dev/directory/jobs/dir_abc')
+  assert.equal(calls[1].init?.method, 'GET')
+})
+
 test('extractSite sends the caller idempotency key and abort options', async () => {
   let capturedInit: RequestInit | undefined
   const controller = new AbortController()
@@ -281,6 +302,15 @@ test('namespaced methods hit the right path', async () => {
 
   await client.workflows.getRun('run_123')
   assert.equal(capturedUrl, 'https://mcpscraper.dev/workflows/runs/run_123')
+})
+
+test('Maps search forwards the retry identity', async () => {
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    assert.equal((init?.headers as Record<string, string>)['Idempotency-Key'], 'maps:roofers:austin')
+    return jsonResponse(200, {})
+  }
+  const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
+  await client.maps.search({ query: 'roofers' }, { idempotencyKey: 'maps:roofers:austin' })
 })
 
 test('Gmail REST namespace preserves opaque path handles and idempotency headers', async () => {

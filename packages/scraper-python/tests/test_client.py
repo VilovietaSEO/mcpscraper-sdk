@@ -383,11 +383,29 @@ def test_namespaced_methods_hit_the_right_path():
     responses.add(responses.GET, "https://mcpscraper.dev/workflows/runs/run_123", json={}, status=200)
 
     client = ScraperClient(api_key="sk_test")
-    client.maps.search({"query": "roofers", "location": "Austin, TX"})
+    client.maps.search({"query": "roofers", "location": "Austin, TX"}, idempotency_key="maps:roofers:austin")
     client.workflows.get_run("run_123")
 
     assert responses.calls[0].request.url == "https://mcpscraper.dev/maps/search"
+    assert responses.calls[0].request.headers["Idempotency-Key"] == "maps:roofers:austin"
     assert responses.calls[1].request.url == "https://mcpscraper.dev/workflows/runs/run_123"
+
+
+@responses.activate
+def test_directory_job_start_and_status_keep_identity():
+    responses.add(responses.POST, "https://mcpscraper.dev/directory/run",
+                  json={"jobId": "dir_abc", "status": "queued"}, status=202)
+    responses.add(responses.GET, "https://mcpscraper.dev/directory/jobs/dir_abc",
+                  json={"jobId": "dir_abc", "status": "complete"}, status=200)
+
+    client = ScraperClient(api_key="sk_test")
+    started = client.directory.run({"query": "roofers", "state": "TX"}, idempotency_key="same-job")
+    polled = client.directory.status(started["jobId"])
+
+    assert started["status"] == "queued"
+    assert polled["status"] == "complete"
+    assert responses.calls[0].request.headers["Idempotency-Key"] == "same-job"
+    assert responses.calls[1].request.method == "GET"
 
 
 @responses.activate

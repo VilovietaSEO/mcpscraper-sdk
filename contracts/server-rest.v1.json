@@ -1,0 +1,1802 @@
+{
+  "schemaVersion": 1,
+  "operations": [
+    {
+      "operationId": "mapsSearch",
+      "method": "POST",
+      "path": "/maps/search",
+      "tag": "Maps",
+      "summary": "Search Google Maps for business candidates",
+      "description": "Costs 5 Credits. Returns up to 50 candidates. websiteUrl can be null and ordinary search does not open every profile; use /maps/place selectively for complete profile fields.",
+      "docsLimit": "maxResults 1-50; selectively hydrate candidates through /maps/place",
+      "requestHeaders": [
+        {
+          "name": "Idempotency-Key",
+          "description": "Reuse only for an identical retry after an uncertain response."
+        }
+      ],
+      "requestSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1
+          },
+          "location": {
+            "type": "string"
+          },
+          "gl": {
+            "default": "us",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "hl": {
+            "default": "en",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "maxResults": {
+            "default": 10,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "includeServices": {
+            "default": false,
+            "type": "boolean"
+          },
+          "proxyMode": {
+            "default": "none",
+            "type": "string",
+            "enum": [
+              "location",
+              "configured",
+              "none"
+            ]
+          },
+          "proxyZip": {
+            "type": "string",
+            "pattern": "^\\d{5}$"
+          },
+          "debug": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "responses": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "type": "string"
+            },
+            "fallbackFrom": {
+              "type": "string"
+            },
+            "acquisitionProvider": {
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "location": {
+              "nullable": true,
+              "type": "string"
+            },
+            "searchQuery": {
+              "type": "string"
+            },
+            "searchUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "extractedAt": {
+              "type": "string"
+            },
+            "requestedMaxResults": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "resultCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 50
+            },
+            "results": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "position": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "placeUrl": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "cid": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "cidDecimal": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "rating": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "reviewCount": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "category": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "address": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "phone": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "hoursStatus": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "websiteUrl": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "directionsUrl": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "services": {
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "areasServed": {
+                    "default": [],
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "profileDetailsStatus": {
+                    "default": "unavailable",
+                    "type": "string",
+                    "enum": [
+                      "collected",
+                      "none_exist",
+                      "unavailable",
+                      "not_requested"
+                    ]
+                  }
+                },
+                "required": [
+                  "position",
+                  "name",
+                  "placeUrl",
+                  "cid",
+                  "cidDecimal",
+                  "rating",
+                  "reviewCount",
+                  "category",
+                  "address",
+                  "phone",
+                  "hoursStatus",
+                  "websiteUrl",
+                  "directionsUrl",
+                  "metadata",
+                  "services",
+                  "areasServed",
+                  "profileDetailsStatus"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "durationMs": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "query",
+            "location",
+            "searchQuery",
+            "searchUrl",
+            "extractedAt",
+            "requestedMaxResults",
+            "resultCount",
+            "results",
+            "durationMs"
+          ],
+          "additionalProperties": {}
+        }
+      }
+    },
+    {
+      "operationId": "directoryWorkflow",
+      "method": "POST",
+      "path": "/directory/run",
+      "tag": "Directory",
+      "summary": "Start a directory search across selected US cities",
+      "description": "Defaults to a durable background job. Poll its statusUrl without starting another search. background:false runs synchronously. Each failed city is refunded.",
+      "docsLimit": "Idempotency-Key recommended; background:false runs synchronously",
+      "requestHeaders": [
+        {
+          "name": "Idempotency-Key",
+          "description": "Reuse only for the same intended directory job."
+        }
+      ],
+      "requestSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "default": "TN",
+            "type": "string",
+            "minLength": 2
+          },
+          "minPopulation": {
+            "default": 100000,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "populationYear": {
+            "default": 2025,
+            "anyOf": [
+              {
+                "type": "number",
+                "enum": [
+                  2020
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  2021
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  2022
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  2023
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  2024
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  2025
+                ]
+              }
+            ]
+          },
+          "maxCities": {
+            "default": 25,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "maxResultsPerCity": {
+            "default": 50,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "concurrency": {
+            "default": 5,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "includeZipGroups": {
+            "default": true,
+            "type": "boolean"
+          },
+          "saveCsv": {
+            "default": true,
+            "type": "boolean"
+          },
+          "background": {
+            "default": true,
+            "type": "boolean"
+          },
+          "gl": {
+            "default": "us",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "hl": {
+            "default": "en",
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "proxyMode": {
+            "default": "none",
+            "type": "string",
+            "enum": [
+              "configured",
+              "none"
+            ]
+          },
+          "proxyZip": {
+            "type": "string",
+            "pattern": "^\\d{5}$"
+          },
+          "debug": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "responses": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "jobId": {
+              "nullable": true,
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "queued",
+                "running",
+                "complete",
+                "partial",
+                "empty",
+                "failed"
+              ]
+            },
+            "statusUrl": {
+              "nullable": true,
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "minPopulation": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "populationYear": {
+              "type": "integer",
+              "minimum": 2020,
+              "maximum": 2025
+            },
+            "maxResultsPerCity": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "concurrency": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "censusSourceUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "usZipsSourcePath": {
+              "nullable": true,
+              "type": "string"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "extractedAt": {
+              "type": "string"
+            },
+            "selectedCityCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "totalResultCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "csvPath": {
+              "nullable": true,
+              "type": "string"
+            },
+            "csvArtifact": {
+              "nullable": true,
+              "type": "object",
+              "properties": {
+                "artifactId": {
+                  "type": "string"
+                },
+                "filename": {
+                  "type": "string"
+                },
+                "contentType": {
+                  "type": "string"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "rowCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "sha256": {
+                  "type": "string"
+                },
+                "expiresAt": {
+                  "type": "string"
+                },
+                "downloadUrl": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "downloadUrlExpiresAt": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "artifactId",
+                "filename",
+                "contentType",
+                "bytes",
+                "rowCount",
+                "sha256",
+                "expiresAt",
+                "downloadUrl",
+                "downloadUrlExpiresAt"
+              ],
+              "additionalProperties": false
+            },
+            "progress": {
+              "type": "object",
+              "properties": {
+                "completedCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "totalCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "failedCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "completedCities",
+                "totalCities",
+                "failedCities"
+              ],
+              "additionalProperties": false
+            },
+            "billing": {
+              "type": "object",
+              "properties": {
+                "heldMc": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "finalMc": {
+                  "nullable": true,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "refundMc": {
+                  "nullable": true,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "heldMc",
+                "finalMc",
+                "refundMc"
+              ],
+              "additionalProperties": false
+            },
+            "errorCode": {
+              "nullable": true,
+              "type": "string"
+            },
+            "error": {
+              "nullable": true,
+              "type": "string"
+            },
+            "retryable": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "cities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "cityKey": {
+                    "type": "string"
+                  },
+                  "censusName": {
+                    "type": "string"
+                  },
+                  "population": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "populationYear": {
+                    "type": "integer",
+                    "minimum": 2020,
+                    "maximum": 2025
+                  },
+                  "zips": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "counties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "ok",
+                      "empty",
+                      "failed"
+                    ]
+                  },
+                  "error": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "errorCode": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "resultCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "durationMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "results": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 9007199254740991
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "placeUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "cid": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "cidDecimal": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "rating": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "reviewCount": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "category": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "address": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "phone": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "hoursStatus": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "websiteUrl": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "directionsUrl": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "metadata": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "position",
+                        "name",
+                        "placeUrl",
+                        "cid",
+                        "cidDecimal",
+                        "rating",
+                        "reviewCount",
+                        "category",
+                        "address",
+                        "phone",
+                        "hoursStatus",
+                        "websiteUrl",
+                        "directionsUrl",
+                        "metadata"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "city",
+                  "state",
+                  "location",
+                  "cityKey",
+                  "censusName",
+                  "population",
+                  "populationYear",
+                  "zips",
+                  "counties",
+                  "status",
+                  "error",
+                  "resultCount",
+                  "durationMs",
+                  "results"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "durationMs": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "truncatedCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "artifact": {
+              "type": "object",
+              "properties": {
+                "artifactId": {
+                  "type": "string"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "expiresAt": {
+                  "type": "string"
+                },
+                "preview": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "artifactId",
+                "bytes",
+                "expiresAt",
+                "preview"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "jobId",
+            "status",
+            "statusUrl",
+            "query",
+            "state",
+            "minPopulation",
+            "populationYear",
+            "maxResultsPerCity",
+            "concurrency",
+            "censusSourceUrl",
+            "usZipsSourcePath",
+            "warnings",
+            "extractedAt",
+            "selectedCityCount",
+            "totalResultCount",
+            "csvPath",
+            "csvArtifact",
+            "progress",
+            "billing",
+            "errorCode",
+            "error",
+            "retryable",
+            "cities",
+            "durationMs"
+          ],
+          "additionalProperties": {}
+        },
+        "202": {
+          "type": "object",
+          "properties": {
+            "jobId": {
+              "nullable": true,
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "queued",
+                "running",
+                "complete",
+                "partial",
+                "empty",
+                "failed"
+              ]
+            },
+            "statusUrl": {
+              "nullable": true,
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "minPopulation": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "populationYear": {
+              "type": "integer",
+              "minimum": 2020,
+              "maximum": 2025
+            },
+            "maxResultsPerCity": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "concurrency": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "censusSourceUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "usZipsSourcePath": {
+              "nullable": true,
+              "type": "string"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "extractedAt": {
+              "type": "string"
+            },
+            "selectedCityCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "totalResultCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "csvPath": {
+              "nullable": true,
+              "type": "string"
+            },
+            "csvArtifact": {
+              "nullable": true,
+              "type": "object",
+              "properties": {
+                "artifactId": {
+                  "type": "string"
+                },
+                "filename": {
+                  "type": "string"
+                },
+                "contentType": {
+                  "type": "string"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "rowCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "sha256": {
+                  "type": "string"
+                },
+                "expiresAt": {
+                  "type": "string"
+                },
+                "downloadUrl": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "downloadUrlExpiresAt": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "artifactId",
+                "filename",
+                "contentType",
+                "bytes",
+                "rowCount",
+                "sha256",
+                "expiresAt",
+                "downloadUrl",
+                "downloadUrlExpiresAt"
+              ],
+              "additionalProperties": false
+            },
+            "progress": {
+              "type": "object",
+              "properties": {
+                "completedCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "totalCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "failedCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "completedCities",
+                "totalCities",
+                "failedCities"
+              ],
+              "additionalProperties": false
+            },
+            "billing": {
+              "type": "object",
+              "properties": {
+                "heldMc": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "finalMc": {
+                  "nullable": true,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "refundMc": {
+                  "nullable": true,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "heldMc",
+                "finalMc",
+                "refundMc"
+              ],
+              "additionalProperties": false
+            },
+            "errorCode": {
+              "nullable": true,
+              "type": "string"
+            },
+            "error": {
+              "nullable": true,
+              "type": "string"
+            },
+            "retryable": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "cities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "cityKey": {
+                    "type": "string"
+                  },
+                  "censusName": {
+                    "type": "string"
+                  },
+                  "population": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "populationYear": {
+                    "type": "integer",
+                    "minimum": 2020,
+                    "maximum": 2025
+                  },
+                  "zips": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "counties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "ok",
+                      "empty",
+                      "failed"
+                    ]
+                  },
+                  "error": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "errorCode": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "resultCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "durationMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "results": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 9007199254740991
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "placeUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "cid": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "cidDecimal": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "rating": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "reviewCount": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "category": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "address": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "phone": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "hoursStatus": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "websiteUrl": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "directionsUrl": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "metadata": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "position",
+                        "name",
+                        "placeUrl",
+                        "cid",
+                        "cidDecimal",
+                        "rating",
+                        "reviewCount",
+                        "category",
+                        "address",
+                        "phone",
+                        "hoursStatus",
+                        "websiteUrl",
+                        "directionsUrl",
+                        "metadata"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "city",
+                  "state",
+                  "location",
+                  "cityKey",
+                  "censusName",
+                  "population",
+                  "populationYear",
+                  "zips",
+                  "counties",
+                  "status",
+                  "error",
+                  "resultCount",
+                  "durationMs",
+                  "results"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "durationMs": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "truncatedCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "artifact": {
+              "type": "object",
+              "properties": {
+                "artifactId": {
+                  "type": "string"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "expiresAt": {
+                  "type": "string"
+                },
+                "preview": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "artifactId",
+                "bytes",
+                "expiresAt",
+                "preview"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "jobId",
+            "status",
+            "statusUrl",
+            "query",
+            "state",
+            "minPopulation",
+            "populationYear",
+            "maxResultsPerCity",
+            "concurrency",
+            "censusSourceUrl",
+            "usZipsSourcePath",
+            "warnings",
+            "extractedAt",
+            "selectedCityCount",
+            "totalResultCount",
+            "csvPath",
+            "csvArtifact",
+            "progress",
+            "billing",
+            "errorCode",
+            "error",
+            "retryable",
+            "cities",
+            "durationMs"
+          ],
+          "additionalProperties": {}
+        }
+      }
+    },
+    {
+      "operationId": "directoryJobStatus",
+      "method": "GET",
+      "path": "/directory/jobs/{jobId}",
+      "tag": "Directory",
+      "summary": "Poll an owner-scoped directory job",
+      "description": "Returns progress, terminal city results, billing settlement, and any CSV artifact without starting or billing another search.",
+      "docsLimit": "Owner scoped; polling does not bill another search",
+      "requestHeaders": [],
+      "requestSchema": null,
+      "responses": {
+        "200": {
+          "type": "object",
+          "properties": {
+            "jobId": {
+              "nullable": true,
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "queued",
+                "running",
+                "complete",
+                "partial",
+                "empty",
+                "failed"
+              ]
+            },
+            "statusUrl": {
+              "nullable": true,
+              "type": "string"
+            },
+            "query": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "minPopulation": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "populationYear": {
+              "type": "integer",
+              "minimum": 2020,
+              "maximum": 2025
+            },
+            "maxResultsPerCity": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "concurrency": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "censusSourceUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "usZipsSourcePath": {
+              "nullable": true,
+              "type": "string"
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "extractedAt": {
+              "type": "string"
+            },
+            "selectedCityCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "totalResultCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "csvPath": {
+              "nullable": true,
+              "type": "string"
+            },
+            "csvArtifact": {
+              "nullable": true,
+              "type": "object",
+              "properties": {
+                "artifactId": {
+                  "type": "string"
+                },
+                "filename": {
+                  "type": "string"
+                },
+                "contentType": {
+                  "type": "string"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "rowCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "sha256": {
+                  "type": "string"
+                },
+                "expiresAt": {
+                  "type": "string"
+                },
+                "downloadUrl": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "downloadUrlExpiresAt": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "artifactId",
+                "filename",
+                "contentType",
+                "bytes",
+                "rowCount",
+                "sha256",
+                "expiresAt",
+                "downloadUrl",
+                "downloadUrlExpiresAt"
+              ],
+              "additionalProperties": false
+            },
+            "progress": {
+              "type": "object",
+              "properties": {
+                "completedCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "totalCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "failedCities": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "completedCities",
+                "totalCities",
+                "failedCities"
+              ],
+              "additionalProperties": false
+            },
+            "billing": {
+              "type": "object",
+              "properties": {
+                "heldMc": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "finalMc": {
+                  "nullable": true,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "refundMc": {
+                  "nullable": true,
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "heldMc",
+                "finalMc",
+                "refundMc"
+              ],
+              "additionalProperties": false
+            },
+            "errorCode": {
+              "nullable": true,
+              "type": "string"
+            },
+            "error": {
+              "nullable": true,
+              "type": "string"
+            },
+            "retryable": {
+              "nullable": true,
+              "type": "boolean"
+            },
+            "cities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "cityKey": {
+                    "type": "string"
+                  },
+                  "censusName": {
+                    "type": "string"
+                  },
+                  "population": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "populationYear": {
+                    "type": "integer",
+                    "minimum": 2020,
+                    "maximum": 2025
+                  },
+                  "zips": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "counties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "ok",
+                      "empty",
+                      "failed"
+                    ]
+                  },
+                  "error": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "errorCode": {
+                    "nullable": true,
+                    "type": "string"
+                  },
+                  "retryable": {
+                    "type": "boolean"
+                  },
+                  "resultCount": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "durationMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "results": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "position": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 9007199254740991
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "placeUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "cid": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "cidDecimal": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "rating": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "reviewCount": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "category": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "address": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "phone": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "hoursStatus": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "websiteUrl": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "directionsUrl": {
+                          "nullable": true,
+                          "type": "string"
+                        },
+                        "metadata": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "position",
+                        "name",
+                        "placeUrl",
+                        "cid",
+                        "cidDecimal",
+                        "rating",
+                        "reviewCount",
+                        "category",
+                        "address",
+                        "phone",
+                        "hoursStatus",
+                        "websiteUrl",
+                        "directionsUrl",
+                        "metadata"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": [
+                  "city",
+                  "state",
+                  "location",
+                  "cityKey",
+                  "censusName",
+                  "population",
+                  "populationYear",
+                  "zips",
+                  "counties",
+                  "status",
+                  "error",
+                  "resultCount",
+                  "durationMs",
+                  "results"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "durationMs": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "truncatedCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "artifact": {
+              "type": "object",
+              "properties": {
+                "artifactId": {
+                  "type": "string"
+                },
+                "bytes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "expiresAt": {
+                  "type": "string"
+                },
+                "preview": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "artifactId",
+                "bytes",
+                "expiresAt",
+                "preview"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "jobId",
+            "status",
+            "statusUrl",
+            "query",
+            "state",
+            "minPopulation",
+            "populationYear",
+            "maxResultsPerCity",
+            "concurrency",
+            "censusSourceUrl",
+            "usZipsSourcePath",
+            "warnings",
+            "extractedAt",
+            "selectedCityCount",
+            "totalResultCount",
+            "csvPath",
+            "csvArtifact",
+            "progress",
+            "billing",
+            "errorCode",
+            "error",
+            "retryable",
+            "cities",
+            "durationMs"
+          ],
+          "additionalProperties": {}
+        },
+        "404": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "enum": [
+                "Directory workflow job not found."
+              ]
+            },
+            "error_code": {
+              "type": "string",
+              "enum": [
+                "directory_job_not_found"
+              ]
+            },
+            "retryable": {
+              "type": "boolean",
+              "enum": [
+                false
+              ]
+            }
+          },
+          "required": [
+            "error",
+            "error_code",
+            "retryable"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ],
+  "publicErrorCodes": [
+    "request_aborted",
+    "captcha_exhausted",
+    "captcha_or_blocked",
+    "location_mismatch",
+    "proxy_tunnel_failed",
+    "proxy_unavailable",
+    "harvest_timeout",
+    "mcp_request_timeout",
+    "mcp_http_error",
+    "extraction_failed",
+    "concurrency_limit_exceeded",
+    "unauthorized",
+    "forbidden",
+    "invalid_request",
+    "rate_limited",
+    "upstream_rate_limited",
+    "insufficient_balance",
+    "service_unavailable",
+    "response_lost",
+    "vendor_unavailable",
+    "page_not_found",
+    "page_forbidden",
+    "page_rate_limited",
+    "page_server_error",
+    "page_http_error",
+    "bot_check_unresolved",
+    "page_too_large",
+    "page_unreachable",
+    "browser_session_interrupted",
+    "site_export_not_found",
+    "directory_job_not_found",
+    "site_export_format_unavailable",
+    "site_export_read_failed",
+    "site_export_image_not_found",
+    "image_url_invalid",
+    "image_url_not_https",
+    "image_host_unresolvable",
+    "image_host_blocked",
+    "image_redirect_invalid",
+    "image_source_unavailable",
+    "image_too_large",
+    "image_redirect_limit",
+    "image_base64_invalid",
+    "image_source_missing",
+    "image_source_ambiguous",
+    "image_source_type_invalid",
+    "image_artifact_not_found",
+    "image_page_too_large",
+    "page_image_not_found",
+    "page_image_candidates_unusable",
+    "image_format_unsupported",
+    "image_storage_unconfigured",
+    "featured_image_unhostable"
+  ],
+  "publicErrorTypes": [
+    "request_aborted",
+    "captcha",
+    "location_mismatch",
+    "connection",
+    "timeout",
+    "extraction",
+    "concurrency_limit",
+    "unauthorized",
+    "forbidden",
+    "invalid_request",
+    "not_found",
+    "rate_limit",
+    "billing",
+    "service_unavailable"
+  ],
+  "sourceContractSha256": "15681bc921e79f2adfa23ba396791d76fbdd750a16750e315d959fed1f8a09db"
+}

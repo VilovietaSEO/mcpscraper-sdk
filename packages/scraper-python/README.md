@@ -4,7 +4,7 @@ Official Python client for the [mcpscraper.dev](https://mcpscraper.dev) REST API
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-This is a thin HTTP client generated against [`../../contracts/scraper.openapi.yaml`](../../contracts/scraper.openapi.yaml), the public contract for the hosted API. It contains no scraping, proxy, or billing logic — only typed request/response plumbing over `requests`.
+This is a thin HTTP client generated against [`../../contracts/scraper.openapi.generated.json`](../../contracts/scraper.openapi.generated.json), the complete public REST contract for the hosted API. It contains no scraping, proxy, or billing logic — only typed request/response plumbing over `requests`.
 
 ## Install
 
@@ -137,22 +137,15 @@ This generic compatibility bridge remains available, but new integrations should
 
 ## Regenerating models
 
-`src/mcpscraper/models.py` is generated from the OpenAPI spec and checked in. After editing `../../contracts/scraper.openapi.yaml`, regenerate with:
+`src/mcpscraper/models.py` is generated from the complete OpenAPI projection and checked in. From the repository root, update the server artifact, then regenerate Node and Python together:
 
 ```bash
-uv run datamodel-codegen \
-  --input ../../contracts/scraper.openapi.yaml \
-  --input-file-type openapi \
-  --output src/mcpscraper/models.py \
-  --output-model-type pydantic_v2.BaseModel \
-  --field-constraints \
-  --use-schema-description \
-  --target-python-version 3.10 \
-  --disable-timestamp
+npm run generate:rest
+npm run verify:rest-contract
 ```
 
 ## See also
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk` on npm](../scraper) (Node, full `memory_tools` typed surface) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.51.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.51.0).
+Release changes: [SDK 0.52.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.52.0).

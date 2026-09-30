@@ -33,7 +33,7 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 | [Lead-list enrichment](#lead-list-enrichment) | Enrich pasted rows or imported CSV/TSV/XLSX files with business contacts and optional owner/leadership evidence | MCP `lead_list_*` tools | Underlying Maps, page, and SERP attempts |
 | [Memory search](#memory-search-using-only-your-scraper-key) | Semantic search across your mcp-memory vaults | `POST /memory/mcp-call` | — |
 | [Complete Gmail workflows](#complete-gmail-workflows) | Full reads and attachments, immutable bulk selections, exports/actions, resumable Memory import | MCP `gmail_*` / `POST /api/gmail/*` | Current connected-operation policy |
-| YouTube, Facebook/Google Ads, Instagram, Reddit, video, directory workflows | See [`packages/scraper`](./packages/scraper) and [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) for the full 56-operation REST contract | — | — |
+| YouTube, Facebook/Google Ads, Instagram, Reddit, video, directory workflows | See [`packages/scraper`](./packages/scraper) and the [generated OpenAPI contract](./contracts/scraper.openapi.generated.json) for the full REST contract | — | — |
 
 Every example below runs the *same* operation four ways.
 
@@ -401,12 +401,48 @@ mcpscraper map https://example.com
 ```
 </details>
 
+### Directory jobs
+
+`directory.run` defaults to a background job. Save the returned `jobId` and poll
+`directory.status(jobId)` until `complete`, `partial`, `empty`, or `failed`. The
+status read does not start or bill another search. Use the same idempotency key
+only to recover the same intended run. Set `background: false` if a synchronous
+response is required. A failed city is refunded individually; check `billing`
+for the final settlement and `csvArtifact` for an available export.
+
+```ts
+const job = await client.directory.run(
+  { query: 'roofers', state: 'TX', maxCities: 1 },
+  { idempotencyKey: crypto.randomUUID() },
+)
+if (job.jobId) {
+  const current = await client.directory.status(job.jobId)
+  console.log(current.status, current.billing)
+}
+```
+
+For ordinary `search_serp`, request `mode: 'full'` on one unfiltered page to
+extract the available same-page local pack. `includeLocalPack` alone does not
+enable it. Local features can still be absent or incomplete. Workflow artifact
+files can become unavailable and return HTTP 410. For errors, use `retryable`
+to decide automated retries; use `charge_status` to reconcile Credits. A
+refunded operation is not necessarily safe to retry automatically.
+
 ### Maps search
+
+Search returns candidates, not guaranteed complete profiles. `results[].websiteUrl` can be
+`null`; `profileDetailsStatus: "not_requested"` means ordinary search did not open that
+profile. Hydrate only the selected candidates that need a website or deeper fields with
+`maps.place` (a separate 60-Credit base lookup). There is currently no bulk place
+hydration method in this REST SDK. A configured proxy mode uses the server's proxy
+configuration; `proxyZip` does not create or assign an account proxy, and a SERP
+identity is not a Maps search identity.
+
 
 <details open><summary>Node.js</summary>
 
 ```ts
-const places = await client.maps.search({ query: 'roofers', location: 'Denver, CO' })
+const places = await client.maps.search({ query: 'roofers', location: 'CO', maxResults: 50 })
 ```
 </details>
 
@@ -772,10 +808,10 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 ## Contracts
 
 - [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 364 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
-- [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) — OpenAPI 3.0.3 spec, 43 operations, hand-curated public REST convenience contract for mcpscraper.dev. Source of truth for the additional REST-style methods in `mcpscraper-sdk` (Node and Python). Browse it rendered: `npx serve .` from the repo root, then open `http://localhost:<port>/docs/`.
+- [`contracts/scraper.openapi.generated.json`](./contracts/scraper.openapi.generated.json) — complete OpenAPI 3.0.3 projection used to generate the Node and Python REST models. [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) is the curated base for operations not yet migrated to the server-owned REST registry. [`contracts/server-rest.v1.json`](./contracts/server-rest.v1.json) contains the checked-in server projection for Maps search and directory run/status, including its source digest.
 - [`contracts/memory.tools.json`](./contracts/memory.tools.json) — direct runtime compatibility manifest for all 143 Memory tools. Customer SDK calls map those methods to the unified root contract.
 
-The contracts are checked-in public release artifacts. The unified MCP contract is generated only from the server's complete build manifest; the live runtime inventory is used for name and input-schema drift checks and is expected to advertise zero output schemas. The memory manifest is generated from its server inventory, while the REST OpenAPI contract is curated. Release validation (`npm run validate-contracts`) checks them against the live servers for drift.
+The contracts are checked-in public release artifacts. The unified MCP contract is generated only from the server's complete build manifest; the live runtime inventory is used for name and input-schema drift checks and is expected to advertise zero output schemas. The Memory manifest is generated from its server inventory. For REST, the server-owned operations overlay the curated OpenAPI base; `npm run generate:rest` creates the complete OpenAPI, Node types, and Python models together. `npm run verify:rest-contract` checks every generated file offline, and `npm run verify:rest-source-contract -- --source=/path/to/server/contracts/public-rest.v1.json` checks the checked-in source against a fresh server artifact. Release validation (`npm run validate-contracts`) requires `MCP_REST_CONTRACT_PATH` to point to the current server artifact and checks both source parity and generated-file drift.
 
 ## Development
 

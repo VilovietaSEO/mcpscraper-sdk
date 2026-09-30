@@ -5,6 +5,8 @@ export type {
   ExtractSiteOptions,
   HarvestParams,
   SearchSerpParams,
+  MapsSearchParams,
+  DirectoryRunParams,
   ArchiveReadParams,
   SerpIntelligenceCaptureParams,
   SerpIntelligenceCaptureOptions,

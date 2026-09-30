@@ -60,6 +60,16 @@ export interface ScraperRequestOptions {
   timeoutMs?: number
 }
 
+type MapsSearchDefaultedKey = 'gl' | 'hl' | 'maxResults' | 'includeServices' | 'proxyMode' | 'debug'
+export type MapsSearchParams = Omit<RequestBodyOf<'mapsSearch'>, MapsSearchDefaultedKey>
+  & Partial<Pick<RequestBodyOf<'mapsSearch'>, MapsSearchDefaultedKey>>
+
+type DirectoryDefaultedKey = 'state' | 'minPopulation' | 'populationYear' | 'maxCities'
+  | 'maxResultsPerCity' | 'concurrency' | 'includeZipGroups' | 'saveCsv'
+  | 'background' | 'gl' | 'hl' | 'proxyMode' | 'debug'
+export type DirectoryRunParams = Omit<RequestBodyOf<'directoryWorkflow'>, DirectoryDefaultedKey>
+  & Partial<Pick<RequestBodyOf<'directoryWorkflow'>, DirectoryDefaultedKey>>
+
 export interface ExtractSiteOptions extends ScraperRequestOptions {
   idempotencyKey?: string
 }
@@ -284,8 +294,9 @@ class VideoNamespace {
 
 class MapsNamespace {
   constructor(private readonly r: Requester) {}
-  search(params: RequestBodyOf<'mapsSearch'>, options: ScraperRequestOptions = {}) {
-    return this.r.call<'mapsSearch'>('POST', '/maps/search', params, {}, options)
+  search(params: MapsSearchParams, options: ScraperRequestOptions & IdempotentRequestOptions = {}) {
+    const headers: Record<string, string> = options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {}
+    return this.r.call<'mapsSearch'>('POST', '/maps/search', params as RequestBodyOf<'mapsSearch'>, headers, options)
   }
   place(params: RequestBodyOf<'mapsPlaceIntel'>, options: ScraperRequestOptions & { idempotencyKey?: string; runId?: string } = {}) {
     const headers = {
@@ -324,8 +335,13 @@ class MapsNamespace {
 
 class DirectoryNamespace {
   constructor(private readonly r: Requester) {}
-  run(params: RequestBodyOf<'directoryWorkflow'>) {
-    return this.r.call<'directoryWorkflow'>('POST', '/directory/run', params)
+  run(params: DirectoryRunParams, options: ScraperRequestOptions & { idempotencyKey?: string } = {}) {
+    return this.r.call<'directoryWorkflow'>('POST', '/directory/run',
+      params as RequestBodyOf<'directoryWorkflow'>,
+      options.idempotencyKey ? { 'Idempotency-Key': options.idempotencyKey } : {}, options)
+  }
+  status(jobId: string, options: ScraperRequestOptions = {}) {
+    return this.r.call<'directoryJobStatus'>('GET', `/directory/jobs/${encodeURIComponent(jobId)}`, undefined, {}, options)
   }
 }
 

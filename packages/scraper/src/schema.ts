@@ -644,8 +644,8 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Search Google Maps for businesses matching a query and location
-         * @description Costs 5 credits. Returns up to 50 business/profile candidates.
+         * Search Google Maps for business candidates
+         * @description Costs 5 Credits. Returns up to 50 candidates. websiteUrl can be null and ordinary search does not open every profile; use /maps/place selectively for complete profile fields.
          */
         post: operations["mapsSearch"];
         delete?: never;
@@ -752,10 +752,30 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Run Google Maps business search across many cities in a state/region at once
-         * @description Cost is `5 credits × number of markets resolved` for the query — see `GET /workflows/definitions` for related workflow shapes. Failed cities are refunded individually.
+         * Start a directory search across selected US cities
+         * @description Defaults to a durable background job. Poll its statusUrl without starting another search. background:false runs synchronously. Each failed city is refunded.
          */
         post: operations["directoryWorkflow"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/directory/jobs/{jobId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Poll an owner-scoped directory job
+         * @description Returns progress, terminal city results, billing settlement, and any CSV artifact without starting or billing another search.
+         */
+        get: operations["directoryJobStatus"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1182,9 +1202,9 @@ export interface components {
         /** @description Stable public failure envelope shared across REST and MCP operations. */
         PublicErrorEnvelope: {
             /** @enum {string} */
-            error_code: "request_aborted" | "captcha_exhausted" | "captcha_or_blocked" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "harvest_timeout" | "mcp_request_timeout" | "mcp_http_error" | "extraction_failed" | "concurrency_limit_exceeded" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limited" | "upstream_rate_limited" | "insufficient_balance" | "service_unavailable" | "response_lost" | "vendor_unavailable" | "page_not_found" | "page_forbidden" | "page_rate_limited" | "page_server_error" | "page_http_error" | "bot_check_unresolved" | "page_too_large" | "page_unreachable" | "browser_session_interrupted" | "site_export_not_found" | "site_export_format_unavailable" | "site_export_read_failed" | "site_export_image_not_found";
+            error_code: "request_aborted" | "captcha_exhausted" | "captcha_or_blocked" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "harvest_timeout" | "mcp_request_timeout" | "mcp_http_error" | "extraction_failed" | "concurrency_limit_exceeded" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limited" | "upstream_rate_limited" | "insufficient_balance" | "service_unavailable" | "response_lost" | "vendor_unavailable" | "page_not_found" | "page_forbidden" | "page_rate_limited" | "page_server_error" | "page_http_error" | "bot_check_unresolved" | "page_too_large" | "page_unreachable" | "browser_session_interrupted" | "site_export_not_found" | "directory_job_not_found" | "site_export_format_unavailable" | "site_export_read_failed" | "site_export_image_not_found" | "image_url_invalid" | "image_url_not_https" | "image_host_unresolvable" | "image_host_blocked" | "image_redirect_invalid" | "image_source_unavailable" | "image_too_large" | "image_redirect_limit" | "image_base64_invalid" | "image_source_missing" | "image_source_ambiguous" | "image_source_type_invalid" | "image_artifact_not_found" | "image_page_too_large" | "page_image_not_found" | "page_image_candidates_unusable" | "image_format_unsupported" | "image_storage_unconfigured" | "featured_image_unhostable";
             /** @enum {string} */
-            error_type: "request_aborted" | "captcha" | "location_mismatch" | "connection" | "timeout" | "extraction" | "concurrency_limit" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limit" | "billing" | "service_unavailable";
+            error_type: "request_aborted" | "captcha" | "location_mismatch" | "connection" | "timeout" | "extraction" | "concurrency_limit" | "unauthorized" | "forbidden" | "invalid_request" | "not_found" | "rate_limit" | "billing" | "service_unavailable";
             message: string;
             retryable: boolean;
             retry_after_seconds?: number;
@@ -1742,26 +1762,6 @@ export interface components {
             markdown?: string;
             html?: string;
         };
-        MapsSearchRequest: {
-            query: string;
-            location?: string;
-            /** @default us */
-            gl: string;
-            /** @default en */
-            hl: string;
-            /** @default 10 */
-            maxResults: number;
-            /** @default false */
-            includeServices: boolean;
-            /**
-             * @default none
-             * @enum {string}
-             */
-            proxyMode: "configured" | "none";
-            proxyZip?: string;
-            /** @default false */
-            debug: boolean;
-        };
         MapsPlaceRequest: {
             businessName: string;
             location: string;
@@ -2148,6 +2148,198 @@ export interface components {
             error: string | null;
         } & {
             [key: string]: unknown;
+        };
+        MapsSearchRequest: {
+            query: string;
+            location?: string;
+            /** @default us */
+            gl: string;
+            /** @default en */
+            hl: string;
+            /** @default 10 */
+            maxResults: number;
+            /** @default false */
+            includeServices: boolean;
+            /**
+             * @default none
+             * @enum {string}
+             */
+            proxyMode: "location" | "configured" | "none";
+            proxyZip?: string;
+            /** @default false */
+            debug: boolean;
+        };
+        MapsSearchResponse: {
+            provider?: string;
+            fallbackFrom?: string;
+            acquisitionProvider?: string;
+            query: string;
+            location: string | null;
+            searchQuery: string;
+            /** Format: uri */
+            searchUrl: string;
+            extractedAt: string;
+            requestedMaxResults: number;
+            resultCount: number;
+            results: {
+                position: number;
+                name: string;
+                /** Format: uri */
+                placeUrl: string;
+                cid: string | null;
+                cidDecimal: string | null;
+                rating: string | null;
+                reviewCount: string | null;
+                category: string | null;
+                address: string | null;
+                phone: string | null;
+                hoursStatus: string | null;
+                websiteUrl: string | null;
+                directionsUrl: string | null;
+                metadata: string[];
+                /** @default [] */
+                services: string[];
+                /** @default [] */
+                areasServed: string[];
+                /**
+                 * @default unavailable
+                 * @enum {string}
+                 */
+                profileDetailsStatus: "collected" | "none_exist" | "unavailable" | "not_requested";
+            }[];
+            durationMs: number;
+        } & {
+            [key: string]: unknown;
+        };
+        DirectoryRunRequest: {
+            query: string;
+            /** @default TN */
+            state: string;
+            /** @default 100000 */
+            minPopulation: number;
+            /** @default 2025 */
+            populationYear: 2020 | 2021 | 2022 | 2023 | 2024 | 2025;
+            /** @default 25 */
+            maxCities: number;
+            /** @default 50 */
+            maxResultsPerCity: number;
+            /** @default 5 */
+            concurrency: number;
+            /** @default true */
+            includeZipGroups: boolean;
+            /** @default true */
+            saveCsv: boolean;
+            /** @default true */
+            background: boolean;
+            /** @default us */
+            gl: string;
+            /** @default en */
+            hl: string;
+            /**
+             * @default none
+             * @enum {string}
+             */
+            proxyMode: "configured" | "none";
+            proxyZip?: string;
+            /** @default false */
+            debug: boolean;
+        };
+        DirectoryJobResponse: {
+            jobId: string | null;
+            /** @enum {string} */
+            status: "queued" | "running" | "complete" | "partial" | "empty" | "failed";
+            statusUrl: string | null;
+            query: string;
+            state: string;
+            minPopulation: number;
+            populationYear: number;
+            maxResultsPerCity: number;
+            concurrency: number;
+            /** Format: uri */
+            censusSourceUrl: string;
+            usZipsSourcePath: string | null;
+            warnings: string[];
+            extractedAt: string;
+            selectedCityCount: number;
+            totalResultCount: number;
+            csvPath: string | null;
+            csvArtifact: {
+                artifactId: string;
+                filename: string;
+                contentType: string;
+                bytes: number;
+                rowCount: number;
+                sha256: string;
+                expiresAt: string;
+                downloadUrl: string | null;
+                downloadUrlExpiresAt: string | null;
+            } | null;
+            progress: {
+                completedCities: number;
+                totalCities: number;
+                failedCities: number;
+            };
+            billing: {
+                heldMc: number;
+                finalMc: number | null;
+                refundMc: number | null;
+            };
+            errorCode: string | null;
+            error: string | null;
+            retryable: boolean | null;
+            cities: {
+                city: string;
+                state: string;
+                location: string;
+                cityKey: string;
+                censusName: string;
+                population: number;
+                populationYear: number;
+                zips: string[];
+                counties: string[];
+                /** @enum {string} */
+                status: "ok" | "empty" | "failed";
+                error: string | null;
+                errorCode?: string | null;
+                retryable?: boolean;
+                resultCount: number;
+                durationMs: number;
+                results: {
+                    position: number;
+                    name: string;
+                    /** Format: uri */
+                    placeUrl: string;
+                    cid: string | null;
+                    cidDecimal: string | null;
+                    rating: string | null;
+                    reviewCount: string | null;
+                    category: string | null;
+                    address: string | null;
+                    phone: string | null;
+                    hoursStatus: string | null;
+                    websiteUrl: string | null;
+                    directionsUrl: string | null;
+                    metadata: string[];
+                }[];
+            }[];
+            durationMs: number;
+            truncatedCount?: number;
+            artifact?: {
+                artifactId: string;
+                bytes: number;
+                expiresAt: string;
+                preview: string;
+            };
+        } & {
+            [key: string]: unknown;
+        };
+        DirectoryJobNotFound: {
+            /** @enum {string} */
+            error: "Directory workflow job not found.";
+            /** @enum {string} */
+            error_code: "directory_job_not_found";
+            /** @enum {boolean} */
+            retryable: false;
         };
     };
     responses: {
@@ -3442,7 +3634,10 @@ export interface operations {
     mapsSearch: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Reuse only for an identical retry after an uncertain response. */
+                "Idempotency-Key"?: string;
+            };
             path?: never;
             cookie?: never;
         };
@@ -3452,22 +3647,20 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Search results. */
+            /** @description Search Google Maps for business candidates */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["MapsSearchResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
             402: components["responses"]["InsufficientBalance"];
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
-            /** @description Temporarily blocked — retryable. */
+            /** @description Temporarily blocked. */
             503: {
                 headers: {
                     [name: string]: unknown;
@@ -3676,48 +3869,46 @@ export interface operations {
     directoryWorkflow: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                /** @description Reuse only for the same intended directory job. */
+                "Idempotency-Key"?: string;
+            };
             path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": {
-                    /** @description Business category to search, e.g. "roofers". */
-                    query: string;
-                    /** @description US state code or name. */
-                    state: string;
-                    /** @description Minimum city population to include as a market. */
-                    minPop?: number;
-                    /** @description Max results per city. */
-                    perCity?: number;
-                };
+                "application/json": components["schemas"]["DirectoryRunRequest"];
             };
         };
         responses: {
-            /** @description Per-city results. */
+            /** @description Start a directory search across selected US cities */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        query?: string;
-                        state?: string;
-                        totalResultCount?: number;
-                        cities?: {
-                            city?: string;
-                            /** @enum {string} */
-                            status?: "done" | "failed";
-                            results?: {
-                                [key: string]: unknown;
-                            }[];
-                        }[];
-                    };
+                    "application/json": components["schemas"]["DirectoryJobResponse"];
+                };
+            };
+            /** @description Start a directory search across selected US cities */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DirectoryJobResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
             402: components["responses"]["InsufficientBalance"];
+            /** @description Idempotency-Key already used with different input. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             429: components["responses"]["ConcurrencyLimitExceeded"];
             /** @description Directory workflow failed. */
             500: {
@@ -3725,6 +3916,37 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    directoryJobStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                jobId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Poll an owner-scoped directory job */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DirectoryJobResponse"];
+                };
+            };
+            /** @description Poll an owner-scoped directory job */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DirectoryJobNotFound"];
+                };
             };
         };
     };

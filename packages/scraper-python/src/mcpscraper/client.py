@@ -189,8 +189,9 @@ class MapsNamespace:
     def __init__(self, r: _Requester) -> None:
         self._r = r
 
-    def search(self, params: JsonDict) -> Any:
-        return self._r.call("POST", "/maps/search", params)
+    def search(self, params: JsonDict, *, idempotency_key: str | None = None) -> Any:
+        headers = {"Idempotency-Key": idempotency_key} if idempotency_key else None
+        return self._r.call("POST", "/maps/search", params, headers)
 
     def place(self, params: JsonDict, *, idempotency_key: str | None = None, run_id: str | None = None) -> Any:
         headers = {}
@@ -239,8 +240,12 @@ class DirectoryNamespace:
     def __init__(self, r: _Requester) -> None:
         self._r = r
 
-    def run(self, params: JsonDict) -> Any:
-        return self._r.call("POST", "/directory/run", params)
+    def run(self, params: JsonDict, *, idempotency_key: str | None = None) -> Any:
+        headers = {"Idempotency-Key": idempotency_key} if idempotency_key else {}
+        return self._r.call("POST", "/directory/run", params, headers)
+
+    def status(self, job_id: str) -> Any:
+        return self._r.call("GET", f"/directory/jobs/{quote(job_id, safe='')}")
 
 
 class SerpIntelligenceNamespace:
