@@ -15,6 +15,7 @@ export type {
   GmailMutationOptions,
 } from './client.js'
 export { ScraperApiError } from './errors.js'
+export type { ScraperApiErrorDetails } from './errors.js'
 export type {
   InsufficientBalanceBody,
   ConcurrencyLimitBody,
@@ -37,4 +38,9 @@ export type {
   McpToolErrorDetails,
   McpContentBlock,
   McpToolCallResult,
+  ClientAttribution,
+  ClientMetadataOptions,
+  ResponseMetadata,
+  ArtifactDelivery,
+  DeliveredNamespace,
 } from 'mcpscraper-memory-sdk'

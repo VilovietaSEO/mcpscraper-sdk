@@ -1,3 +1,5 @@
+import ast
+import importlib.util
 import json
 import keyword
 import re
@@ -10,6 +12,9 @@ PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 MODELS_DIR = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "direct_models"
 CLIENT_GENERATED_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_direct_generated_client.py"
 NAME_MAP_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_direct_tool_name_map.py"
+LEGACY_CLIENT_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_generated_client.py"
+DELIVERY_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_artifact_delivery.py"
+UNIFIED_MANIFEST_PATH = REPO_ROOT / "contracts" / "mcp.tools.json"
 
 CATEGORIES = [
     "access", "assistant", "capture", "channels", "crm", "facts", "graph", "library", "memory", "recall",
@@ -81,9 +86,85 @@ def render_model(class_name: str, schema: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_artifact_delivery(unified_manifest: dict) -> str:
+    """Reuse the server's common delivery alternative; never maintain a second schema."""
+    tool = next((tool for tool in unified_manifest["tools"] if tool["name"] == "artifact_describe"), None)
+    if tool is None:
+        raise RuntimeError("Unified contract is missing artifact_describe")
+    alternatives = tool["outputSchema"].get("anyOf", [])
+    schemas = [schema for schema in alternatives
+               if schema.get("properties", {}).get("delivery", {}).get("properties", {})
+               .get("mode", {}).get("const") == "artifact"]
+    if len(schemas) != 1:
+        raise RuntimeError("artifact_describe must declare exactly one common artifact delivery alternative")
+    spec = importlib.util.spec_from_file_location("mcp_python_generator", REPO_ROOT / "scripts" / "generate-mcp-python.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    model = module.render_model("ArtifactDelivery", schemas[0], strict=True)
+    return (
+        '"""Generated from artifact_describe in contracts/mcp.tools.json."""\n\n'
+        "from typing import Annotated, Any, Literal, TypeVar, Union\n"
+        "from typing_extensions import NotRequired, Required, TypedDict\n"
+        "from pydantic import BaseModel, ConfigDict, Field, TypeAdapter\n\n"
+        + model + "\n"
+        + "_ArtifactDeliveryAdapter = TypeAdapter(ArtifactDelivery)\n"
+        + '_OutputModel = TypeVar("_OutputModel", bound=BaseModel)\n\n'
+        + "def validate_tool_output(value: Any, output_model: type[_OutputModel]) -> _OutputModel | ArtifactDelivery:\n"
+        + '    if isinstance(value, dict) and "delivery" in value:\n'
+        + "        return _ArtifactDeliveryAdapter.validate_python(value)\n"
+        + "    return output_model.model_validate(value)\n"
+    )
+
+
+def refresh_legacy_client(source: str) -> str:
+    """Keep legacy model imports and method bindings while updating their result seam."""
+    tree = ast.parse(source)
+    lines = source.splitlines(keepends=True)
+    methods = [method for cls in tree.body if isinstance(cls, ast.ClassDef)
+               for method in cls.body if isinstance(method, ast.FunctionDef) and method.name != "__init__"]
+    if not methods:
+        raise RuntimeError("Legacy generated client contains no convenience methods")
+    for method in methods:
+        annotation = method.returns
+        if isinstance(annotation, ast.BinOp) and isinstance(annotation.op, ast.BitOr):
+            if not isinstance(annotation.right, ast.Name) or annotation.right.id != "ArtifactDelivery":
+                raise RuntimeError(f"Unexpected legacy output annotation: {method.name}")
+            annotation = annotation.left
+        if not isinstance(annotation, ast.Name) or not annotation.id.endswith("Output"):
+            raise RuntimeError(f"Unexpected legacy output model: {method.name}")
+        output = annotation.id
+        returns = [node for node in method.body if isinstance(node, ast.Return)]
+        if len(returns) != 1:
+            raise RuntimeError(f"Expected exactly one legacy result validation: {method.name}")
+        result = returns[0]
+        expression = ast.unparse(result.value)
+        if expression not in (f"{output}.model_validate(result)", f"validate_tool_output(result, {output})"):
+            raise RuntimeError(f"Unexpected legacy result validation: {method.name}")
+        header = lines[method.lineno - 1]
+        suffix = f" -> {output} | ArtifactDelivery:"
+        updated, count = re.subn(r" -> " + re.escape(output) + r"(?: \| ArtifactDelivery)?:", suffix, header)
+        if count != 1:
+            raise RuntimeError(f"Unexpected legacy method declaration: {method.name}")
+        lines[method.lineno - 1] = updated
+        indent = lines[result.lineno - 1][:result.col_offset]
+        lines[result.lineno - 1] = f"{indent}return validate_tool_output(result, {output})\n"
+        for node in method.body:
+            if isinstance(node, ast.Assign):
+                line = lines[node.lineno - 1]
+                if ".model_dump(" in line:
+                    lines[node.lineno - 1] = line.replace("exclude_none=True", "exclude_unset=True")
+    source = "".join(lines)
+    import_line = "from ._artifact_delivery import ArtifactDelivery, validate_tool_output\n"
+    if import_line not in source:
+        source = import_line + source
+    return source
+
+
 def main() -> None:
     manifest = json.loads(MANIFEST_PATH.read_text())
     tools = manifest["tools"]
+    delivery = render_artifact_delivery(json.loads(UNIFIED_MANIFEST_PATH.read_text()))
+    legacy_client = refresh_legacy_client(LEGACY_CLIENT_PATH.read_text())
 
     shutil.rmtree(MODELS_DIR, ignore_errors=True)
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
@@ -131,10 +212,10 @@ def main() -> None:
                 f"from .direct_models.{module_name} import {input_class}, {output_class}"
             )
             method_blocks.append(
-                f'    def {method_name}(self, **kwargs: Any) -> {output_class}:\n'
-                f'        payload = {input_class}(**kwargs).model_dump(by_alias=True, exclude_none=True)\n'
+                f'    def {method_name}(self, **kwargs: Any) -> {output_class} | ArtifactDelivery:\n'
+                f'        payload = {input_class}(**kwargs).model_dump(by_alias=True, exclude_unset=True)\n'
                 f'        result = self._call_tool("{wire_name}", payload)\n'
-                f'        return {output_class}.model_validate(result)\n'
+                f'        return validate_tool_output(result, {output_class})\n'
             )
         namespace_blocks.append(
             f"class {class_name}:\n"
@@ -144,12 +225,15 @@ def main() -> None:
         )
 
     generated = (
-        "from typing import Any, Callable\n\n"
+        "from typing import Any, Callable\n"
+        + "from ._artifact_delivery import ArtifactDelivery, validate_tool_output\n\n"
         + "\n".join(sorted(set(import_lines)))
         + "\n\n\n"
         + "\n\n".join(namespace_blocks)
         + "\n"
     )
+    DELIVERY_PATH.write_text(delivery)
+    LEGACY_CLIENT_PATH.write_text(legacy_client)
     CLIENT_GENERATED_PATH.write_text(generated.rstrip() + "\n")
     name_map = {tool["name"]: tool["legacyId"] for tool in tools}
     NAME_MAP_PATH.write_text(

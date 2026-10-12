@@ -5,5111 +5,5170 @@ export interface Input {
   jobId: string;
 }
 
-export interface Output {
-  jobId: string;
-  operationId: string;
-  taskId: string;
-  status:
-    | {
-        state: "pending";
-        terminal: false;
-        pollAfterSeconds: number;
-        retryGuidance: string;
-      }
-    | {
-        state: "running";
-        terminal: false;
-        pollAfterSeconds: number;
-        retryGuidance: string;
-      }
-    | {
-        state: "done";
-        terminal: true;
-        pollAfterSeconds: null;
-        retryGuidance: string;
-      }
-    | {
-        state: "failed";
-        terminal: true;
-        pollAfterSeconds: null;
-        retryGuidance: string;
-      }
-    | {
-        state: "cancelled";
-        terminal: true;
-        pollAfterSeconds: null;
+export type Output =
+  | {
+      jobId: string;
+      operationId: string;
+      taskId: string;
+      status:
+        | {
+            state: "pending";
+            terminal: false;
+            pollAfterSeconds: number;
+            retryGuidance: string;
+          }
+        | {
+            state: "running";
+            terminal: false;
+            pollAfterSeconds: number;
+            retryGuidance: string;
+          }
+        | {
+            state: "done";
+            terminal: true;
+            pollAfterSeconds: null;
+            retryGuidance: string;
+          }
+        | {
+            state: "failed";
+            terminal: true;
+            pollAfterSeconds: null;
+            retryGuidance: string;
+          }
+        | {
+            state: "cancelled";
+            terminal: true;
+            pollAfterSeconds: null;
+            retryGuidance: string;
+          };
+      execution?: {
+        state: "unknown";
+        physicalOutcome: "unknown";
+        holdState: "held" | "unconfirmed";
         retryGuidance: string;
       };
-  replayed: boolean;
-  progress: {
-    pagination: {
-      requestedPages: 1 | 2;
-      capturedPages: 1 | 2;
-      page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
-      page1OrganicCount: number;
-      page2OrganicCount: number;
-      failureCode?:
-        | "missing_next"
-        | "invalid_next"
-        | "empty_page"
-        | "captcha"
-        | "timeout"
-        | "navigation_error"
-        | "unsupported_driver";
-    } | null;
-    requestedQuestions: number | null;
-    capturedQuestions: number;
-    answeredQuestions: number;
-    sourcedQuestions: number;
-    missingAnswers: number;
-    missingSources: number;
-    lifecycle: {
-      requestedQuestions: number;
-      questionsFound: number;
-      targetStatus: "met" | "not_met";
-      discoveryStatus:
-        | "in_progress"
-        | "target_reached"
-        | "frontier_exhausted"
-        | "no_paa_observed"
-        | "interrupted"
-        | "recovery_exhausted";
-      materialStatus: "complete" | "partial";
-      completionReason: string;
-      automaticRetries: number;
-      retryBreakdown: {
-        controlRetries: number;
-        browserRetries: number;
-        providerFallbacks: number;
-        runtimeRecoveries: number;
-        idempotentReplays: number;
+      replayed: boolean;
+      progress: {
+        pagination: {
+          requestedPages: 1 | 2;
+          capturedPages: 1 | 2;
+          page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
+          page1OrganicCount: number;
+          page2OrganicCount: number;
+          failureCode?:
+            | "missing_next"
+            | "invalid_next"
+            | "empty_page"
+            | "captcha"
+            | "timeout"
+            | "navigation_error"
+            | "unsupported_driver";
+        } | null;
+        requestedQuestions: number | null;
+        capturedQuestions: number;
+        answeredQuestions: number;
+        sourcedQuestions: number;
+        missingAnswers: number;
+        missingSources: number;
+        incompleteAnswers?: number;
+        lifecycle: {
+          requestedQuestions: number;
+          questionsFound: number;
+          targetStatus: "met" | "not_met";
+          discoveryStatus:
+            | "in_progress"
+            | "target_reached"
+            | "frontier_exhausted"
+            | "no_paa_observed"
+            | "interrupted"
+            | "recovery_exhausted";
+          materialStatus: "complete" | "partial";
+          completionReason: string;
+          automaticRetries: number;
+          retryBreakdown: {
+            controlRetries: number;
+            browserRetries: number;
+            providerFallbacks: number;
+            runtimeRecoveries: number;
+            idempotentReplays: number;
+          };
+          knownQuestions: number;
+          processedQuestions: number;
+          failedInteractions: number;
+          noGrowthConfirmations: number;
+          visibleControls: number;
+          eligibleControls: number;
+          dispatchedInteractions: number;
+          confirmedInteractions: number;
+          unconfirmedInteractions: number;
+        } | null;
+        interactionSummary: {
+          observations: number;
+          dispatched: number;
+          confirmed: number;
+          unconfirmed: number;
+          dispatchFailures: number;
+          confirmedWithoutDispatchAck: number;
+          expandedSignals: number;
+          answerSignals: number;
+          sourceSignals: number;
+          questionGrowthBatches: number;
+          checkpoint700ms: number;
+          checkpoint1000ms: number;
+          checkpoint1400ms: number;
+        };
+        /**
+         * @maxItems 20
+         */
+        recentInteractions:
+          | []
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ]
+          | [
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              },
+              {
+                id: string;
+                questionId: string;
+                question: string;
+                batchNumber: number;
+                controlAttempt: number;
+                observedAt: string | null;
+                dispatched: boolean;
+                outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
+                confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
+                confirmationCheckpointMs: (700 | 1000 | 1400) | null;
+                confirmedAtMs: number | null;
+                dispatchDurationMs: number;
+                totalDurationMs: number;
+                beforeQuestionCount: number;
+                afterQuestionCount: number;
+                newQuestionCount: number;
+                expandedBefore: boolean;
+                expandedAfter: boolean;
+                answerObserved: boolean;
+                sourceCount: number;
+                errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
+              }
+            ];
       };
-      knownQuestions: number;
-      processedQuestions: number;
-      failedInteractions: number;
-      noGrowthConfirmations: number;
-      visibleControls: number;
-      eligibleControls: number;
-      dispatchedInteractions: number;
-      confirmedInteractions: number;
-      unconfirmedInteractions: number;
-    } | null;
-    interactionSummary: {
-      observations: number;
-      dispatched: number;
-      confirmed: number;
-      unconfirmed: number;
-      dispatchFailures: number;
-      confirmedWithoutDispatchAck: number;
-      expandedSignals: number;
-      answerSignals: number;
-      sourceSignals: number;
-      questionGrowthBatches: number;
-      checkpoint700ms: number;
-      checkpoint1000ms: number;
-      checkpoint1400ms: number;
+      result: {
+        pagination: {
+          requestedPages: 1 | 2;
+          capturedPages: 1 | 2;
+          page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
+          page1OrganicCount: number;
+          page2OrganicCount: number;
+          failureCode?:
+            | "missing_next"
+            | "invalid_next"
+            | "empty_page"
+            | "captcha"
+            | "timeout"
+            | "navigation_error"
+            | "unsupported_driver";
+        } | null;
+        completionStatus: string | null;
+        resultQuality: string | null;
+        retryRecommended: boolean | null;
+        paaLifecycle: {
+          requestedQuestions: number;
+          questionsFound: number;
+          targetStatus: "met" | "not_met";
+          discoveryStatus:
+            | "in_progress"
+            | "target_reached"
+            | "frontier_exhausted"
+            | "no_paa_observed"
+            | "interrupted"
+            | "recovery_exhausted";
+          materialStatus: "complete" | "partial";
+          completionReason: string;
+          automaticRetries: number;
+          retryBreakdown: {
+            controlRetries: number;
+            browserRetries: number;
+            providerFallbacks: number;
+            runtimeRecoveries: number;
+            idempotentReplays: number;
+          };
+          knownQuestions: number;
+          processedQuestions: number;
+          failedInteractions: number;
+          noGrowthConfirmations: number;
+          visibleControls: number;
+          eligibleControls: number;
+          dispatchedInteractions: number;
+          confirmedInteractions: number;
+          unconfirmedInteractions: number;
+        } | null;
+        phaseTimings: {
+          providerConnectMs?: number;
+          navigationMs?: number;
+          serpParseMs?: number;
+          paaExpansionMs?: number;
+          linkResolutionMs?: number;
+          totalServerMs: number;
+        } | null;
+        questionCount: number;
+        paaIncompleteAnswers?: number;
+        questions: {
+          questionId: string;
+          googleLinkId: string | null;
+          googleEvidenceId: string | null;
+          question: string;
+          answer: string | null;
+          /**
+           * True when a captured answer still has unexpanded content.
+           */
+          answerExpansionIncomplete?: boolean;
+          sources: {
+            url: string;
+            rawUrl: string;
+            resolvedUrl: string | null;
+            linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
+            resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
+            title: string | null;
+            site: string | null;
+            /**
+             * Captured source-card description from Google, when present.
+             */
+            description?: string | null;
+          }[];
+          sourceTitle: string | null;
+          sourceSite: string | null;
+          sourceUrl: string | null;
+        }[];
+        organicResults: {
+          position: number;
+          sourcePage?: 1 | 2;
+          title: string;
+          url: string;
+          rawUrl: string;
+          resolvedUrl: string | null;
+          linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
+          resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
+          domain: string;
+          snippet: string | null;
+        }[];
+        aiOverview: {
+          detected: boolean;
+          text: string | null;
+          citations: {
+            text: string;
+            href: string;
+            rawUrl: string;
+            resolvedUrl: string | null;
+            linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
+            resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
+          }[];
+          expanded: boolean;
+          fullyExpanded: boolean;
+          sections: string[];
+          shareUrl?: string | null;
+        } | null;
+        entityIds: {
+          /**
+           * Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility.
+           */
+          entities: {
+            name: string;
+            kgId: string | null;
+            cid: string | null;
+            gcid: string | null;
+          }[];
+          kgIds: string[];
+          cids: string[];
+          gcids: string[];
+        } | null;
+      } | null;
+      billing: {
+        state: "held" | "settled" | "refund_pending" | "refunded" | "unknown";
+        holdMc: number | null;
+        billedMc: number | null;
+        refundMc: number | null;
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-    /**
-     * @maxItems 20
-     */
-    recentInteractions:
-      | []
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ]
-      | [
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          },
-          {
-            id: string;
-            questionId: string;
-            question: string;
-            batchNumber: number;
-            controlAttempt: number;
-            observedAt: string | null;
-            dispatched: boolean;
-            outcome: "confirmed" | "unconfirmed" | "dispatch_failed";
-            confirmationSignals: ("expanded" | "answer" | "source" | "question_growth")[];
-            confirmationCheckpointMs: (700 | 1000 | 1400) | null;
-            confirmedAtMs: number | null;
-            dispatchDurationMs: number;
-            totalDurationMs: number;
-            beforeQuestionCount: number;
-            afterQuestionCount: number;
-            newQuestionCount: number;
-            expandedBefore: boolean;
-            expandedAfter: boolean;
-            answerObserved: boolean;
-            sourceCount: number;
-            errorCode: ("click_failed" | "click_ack_timeout" | "control_missing" | "confirmation_timeout") | null;
-          }
-        ];
-  };
-  result: {
-    pagination: {
-      requestedPages: 1 | 2;
-      capturedPages: 1 | 2;
-      page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
-      page1OrganicCount: number;
-      page2OrganicCount: number;
-      failureCode?:
-        | "missing_next"
-        | "invalid_next"
-        | "empty_page"
-        | "captcha"
-        | "timeout"
-        | "navigation_error"
-        | "unsupported_driver";
-    } | null;
-    completionStatus: string | null;
-    resultQuality: string | null;
-    retryRecommended: boolean | null;
-    paaLifecycle: {
-      requestedQuestions: number;
-      questionsFound: number;
-      targetStatus: "met" | "not_met";
-      discoveryStatus:
-        | "in_progress"
-        | "target_reached"
-        | "frontier_exhausted"
-        | "no_paa_observed"
-        | "interrupted"
-        | "recovery_exhausted";
-      materialStatus: "complete" | "partial";
-      completionReason: string;
-      automaticRetries: number;
-      retryBreakdown: {
-        controlRetries: number;
-        browserRetries: number;
-        providerFallbacks: number;
-        runtimeRecoveries: number;
-        idempotentReplays: number;
-      };
-      knownQuestions: number;
-      processedQuestions: number;
-      failedInteractions: number;
-      noGrowthConfirmations: number;
-      visibleControls: number;
-      eligibleControls: number;
-      dispatchedInteractions: number;
-      confirmedInteractions: number;
-      unconfirmedInteractions: number;
-    } | null;
-    phaseTimings: {
-      providerConnectMs?: number;
-      navigationMs?: number;
-      serpParseMs?: number;
-      paaExpansionMs?: number;
-      linkResolutionMs?: number;
-      totalServerMs: number;
-    } | null;
-    questionCount: number;
-    questions: {
-      questionId: string;
-      googleLinkId: string | null;
-      googleEvidenceId: string | null;
-      question: string;
-      answer: string | null;
-      sources: {
-        url: string;
-        rawUrl: string;
-        resolvedUrl: string | null;
-        linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
-        resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
-        title: string | null;
-        site: string | null;
-      }[];
-      sourceTitle: string | null;
-      sourceSite: string | null;
-      sourceUrl: string | null;
-    }[];
-    organicResults: {
-      position: number;
-      sourcePage?: 1 | 2;
-      title: string;
-      url: string;
-      rawUrl: string;
-      resolvedUrl: string | null;
-      linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
-      resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
-      domain: string;
-      snippet: string | null;
-    }[];
-    aiOverview: {
-      detected: boolean;
-      text: string | null;
-      citations: {
-        text: string;
-        href: string;
-        rawUrl: string;
-        resolvedUrl: string | null;
-        linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
-        resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
-      }[];
-      expanded: boolean;
-      fullyExpanded: boolean;
-      sections: string[];
-      shareUrl?: string | null;
-    } | null;
-    entityIds: {
-      /**
-       * Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility.
-       */
-      entities: {
-        name: string;
-        kgId: string | null;
-        cid: string | null;
-        gcid: string | null;
-      }[];
-      kgIds: string[];
-      cids: string[];
-      gcids: string[];
-    } | null;
-  } | null;
-  billing: {
-    state: "held" | "settled" | "refund_pending" | "refunded" | "unknown";
-    holdMc: number | null;
-    billedMc: number | null;
-    refundMc: number | null;
-  };
-}

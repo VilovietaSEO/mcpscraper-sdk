@@ -3,7 +3,7 @@
 Official client libraries for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP: web intelligence,
 hosted Memory, governed Research and CRM, scheduled actions, and more through one endpoint and key.
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **364 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **367 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Install
 
@@ -19,6 +19,47 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 
 - **mcpscraper.dev**: `npx -y -p mcp-scraper@latest mcp-scraper-cli billing concurrency info`, or the [account dashboard](https://mcpscraper.dev).
 - The same MCP Scraper key is used for scraping and Memory. Set it as `MCP_SCRAPER_API_KEY`.
+
+## Client attribution and request correlation
+
+Node and Python clients label SDK calls as `sdk`. Installation route and the calling AI application/model are optional declarations; they are not inferred from your API key or an upstream model. Set only values your application knows. These headers help private customer reporting and never grant permissions or change billing.
+
+```ts
+import { ScraperClient } from 'mcpscraper-sdk'
+
+const client = new ScraperClient({
+  apiKey: process.env.MCP_SCRAPER_API_KEY!,
+  baseUrl: 'https://mcpscraper.dev', // Select your branch preview here when testing it.
+  clientAttribution: { installChannel: 'npm', aiClient: 'codex', aiModel: 'your-explicit-model-id' },
+  onResponse: ({ requestId, status }) => {
+    // Keep the request ID with your own call record for operator troubleshooting.
+  },
+})
+```
+
+```python
+import os
+from mcpscraper import ScraperClient
+
+client = ScraperClient(
+    api_key=os.environ["MCP_SCRAPER_API_KEY"],
+    base_url="https://mcpscraper.dev",
+    client_attribution={"ai_client": "claude-code"},
+    on_response=lambda metadata: print(metadata["request_id"], metadata["status"]),
+)
+```
+
+The same attribution and callback options work on `MemoryClient` and `McpToolsClient`. Install channels are `npx`, `npm`, `mcpb`, or `source`; AI clients are `claude`, `claude-desktop`, `claude-code`, `chatgpt`, `codex`, `cursor`, `gemini`, or `other`. Unknown/invalid declarations are omitted. Python uses snake_case keys. Use a response callback for correlation when requests overlap; errors also retain their own request ID. A missing server ID remains unavailable. The server must deploy and enable its reporting capture before these labels appear in live analytics.
+
+## Complete results and artifact access
+
+Generated tool outputs accept either their inline domain result or a delivery envelope containing a representative preview and retained artifact pointers. Memory convenience methods also accept that envelope while keeping their existing inputs and inline models. A preview is not the complete transcript or scrape. Preserve the returned `delivery`, `scope` and `recovery` fields; check them before treating a result as complete. Python union outputs return the matching model directly, keeping established attributes such as `transcript_text`; use `pydantic.TypeAdapter(Output)` when validating an output union independently.
+
+Use `client.tools.artifacts.describe({ artifactId })`, `readRetained({ artifactId, offset, maxBytes })`, or `download({ artifactId })` in Node. Python uses `describe(artifact_id=...)`, `read_retained(artifact_id=..., offset=..., max_bytes=...)`, and `download(artifact_id=...)`. The old `artifacts.read` / `read` binding still calls `report_artifact_read` for compatibility. Generic tool calls use the original names `artifact_describe`, `artifact_read` and `artifact_download`.
+
+For complete text, follow `nextOffset` (Python `next_offset`) until null and concatenate the returned text. Binary files use the download capability or a format reader. Stable artifact IDs remain authorized for their stated retention; signed download URLs expire separately, normally after 15 minutes, and can be renewed without rerunning acquisition. Respect the returned `expiresAt`; a server-local path is not proof the client can open that file.
+
+Use Node `callToolResult(...)` or Python `call_tool_result(...)` to retain native MCP content/resource-link blocks alongside structured data. CLI `tools call --raw-result` keeps the MCP envelope, metadata and resource links; inline binary content is saved locally and replaced with file metadata. Ordinary `--json` retains its established parsed result behavior. Retry keys, job IDs and status routes in recovery metadata refer to existing work; reuse the original idempotency key after an uncertain outcome rather than starting another paid operation.
 
 ## Feature overview
 
@@ -37,7 +78,7 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 
 Every example below runs the *same* operation four ways.
 
-Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches use a managed browser for organic results at 35 Credits per delivered page, and unfiltered searches use it only as the final backup. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
+Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches use a managed browser for organic results at 35 Credits per delivered page. Unfiltered light searches try the primary path twice, then one API fallback; an unfiltered one-page full search uses the feature-capable API directly. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
 ### Lead-list enrichment
 
@@ -552,7 +593,7 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 364 unified tools in both Node and Python.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 367 unified tools in both Node and Python.
 
 ## Scheduled results and artifact templates
 
@@ -775,7 +816,7 @@ This is a one-result snapshot with a 1 MB limit—not whole-account pagination, 
 
 Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Python, scraper) or `MemoryApiError` (Node/Python, memory), each carrying the HTTP status, an error code, and the safe public response body. The scraper envelope includes `error_code`, `error_type`, `message`, `retryable`, and—when known—retry timing, charge status, and bounded recovery details. `ScraperApiError` adds helpers for insufficient balance, concurrency, verification challenges, and timeouts. The CLI catches these and prints a clean one-line message instead of a stack trace.
 
-## All 364 MCP tools
+## All 367 MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -799,7 +840,7 @@ For a Maps place lookup, `client.tools.maps.placeIntel` returns a run ID and sav
 
 ## The CLI
 
-`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 364 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 367 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -807,7 +848,7 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 364 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 367 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.generated.json`](./contracts/scraper.openapi.generated.json) — complete OpenAPI 3.0.3 projection used to generate the Node and Python REST models. [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) is the curated base for operations not yet migrated to the server-owned REST registry. [`contracts/server-rest.v1.json`](./contracts/server-rest.v1.json) contains the checked-in server projection for Maps search and directory run/status, including its source digest.
 - [`contracts/memory.tools.json`](./contracts/memory.tools.json) — direct runtime compatibility manifest for all 143 Memory tools. Customer SDK calls map those methods to the unified root contract.
 

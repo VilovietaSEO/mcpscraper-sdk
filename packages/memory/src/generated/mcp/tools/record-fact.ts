@@ -25,103 +25,146 @@ export interface Input {
   reason?: string;
 }
 
-export interface Output {
-  /**
-   * True when the fact was recorded (whether or not it superseded one); false on auth/scope/validation error.
-   */
-  ok: boolean;
-  /**
-   * The new (or refreshed) active fact. Present when ok is true.
-   */
-  fact?: {
-    /**
-     * Stable id of the fact.
-     */
-    id: string;
-    /**
-     * Canonical subject key the fact is about (lowercased/trimmed).
-     */
-    subject: string;
-    /**
-     * The asserted value/conclusion.
-     */
-    value: string;
-    /**
-     * Where the fact came from (chat / library:… / tool / user).
-     */
-    source: string;
-    /**
-     * Salience/confidence 0..1 recorded on write.
-     */
-    confidence: number;
-    /**
-     * "active" for the current truth, "superseded" once replaced.
-     */
-    status: "active" | "superseded";
-    /**
-     * Why this fact was superseded; null while active.
-     */
-    resolution: string | null;
-    /**
-     * Which policy decided supersession (recency/source-priority/intent-aware); null while active.
-     */
-    precedence: string | null;
-    /**
-     * ISO-8601 creation timestamp.
-     */
-    createdAt: string;
-    /**
-     * ISO-8601 last-update timestamp.
-     */
-    updatedAt: string;
-  };
-  /**
-   * The previously-active fact that this one replaced, with its resolution/precedence. Absent on an idempotent no-op or first assertion.
-   */
-  superseded?: {
-    /**
-     * Stable id of the fact.
-     */
-    id: string;
-    /**
-     * Canonical subject key the fact is about (lowercased/trimmed).
-     */
-    subject: string;
-    /**
-     * The asserted value/conclusion.
-     */
-    value: string;
-    /**
-     * Where the fact came from (chat / library:… / tool / user).
-     */
-    source: string;
-    /**
-     * Salience/confidence 0..1 recorded on write.
-     */
-    confidence: number;
-    /**
-     * "active" for the current truth, "superseded" once replaced.
-     */
-    status: "active" | "superseded";
-    /**
-     * Why this fact was superseded; null while active.
-     */
-    resolution: string | null;
-    /**
-     * Which policy decided supersession (recency/source-priority/intent-aware); null while active.
-     */
-    precedence: string | null;
-    /**
-     * ISO-8601 creation timestamp.
-     */
-    createdAt: string;
-    /**
-     * ISO-8601 last-update timestamp.
-     */
-    updatedAt: string;
-  };
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when the fact was recorded (whether or not it superseded one); false on auth/scope/validation error.
+       */
+      ok: boolean;
+      /**
+       * The new (or refreshed) active fact. Present when ok is true.
+       */
+      fact?: {
+        /**
+         * Stable id of the fact.
+         */
+        id: string;
+        /**
+         * Canonical subject key the fact is about (lowercased/trimmed).
+         */
+        subject: string;
+        /**
+         * The asserted value/conclusion.
+         */
+        value: string;
+        /**
+         * Where the fact came from (chat / library:… / tool / user).
+         */
+        source: string;
+        /**
+         * Salience/confidence 0..1 recorded on write.
+         */
+        confidence: number;
+        /**
+         * "active" for the current truth, "superseded" once replaced.
+         */
+        status: "active" | "superseded";
+        /**
+         * Why this fact was superseded; null while active.
+         */
+        resolution: string | null;
+        /**
+         * Which policy decided supersession (recency/source-priority/intent-aware); null while active.
+         */
+        precedence: string | null;
+        /**
+         * ISO-8601 creation timestamp.
+         */
+        createdAt: string;
+        /**
+         * ISO-8601 last-update timestamp.
+         */
+        updatedAt: string;
+      };
+      /**
+       * The previously-active fact that this one replaced, with its resolution/precedence. Absent on an idempotent no-op or first assertion.
+       */
+      superseded?: {
+        /**
+         * Stable id of the fact.
+         */
+        id: string;
+        /**
+         * Canonical subject key the fact is about (lowercased/trimmed).
+         */
+        subject: string;
+        /**
+         * The asserted value/conclusion.
+         */
+        value: string;
+        /**
+         * Where the fact came from (chat / library:… / tool / user).
+         */
+        source: string;
+        /**
+         * Salience/confidence 0..1 recorded on write.
+         */
+        confidence: number;
+        /**
+         * "active" for the current truth, "superseded" once replaced.
+         */
+        status: "active" | "superseded";
+        /**
+         * Why this fact was superseded; null while active.
+         */
+        resolution: string | null;
+        /**
+         * Which policy decided supersession (recency/source-priority/intent-aware); null while active.
+         */
+        precedence: string | null;
+        /**
+         * ISO-8601 creation timestamp.
+         */
+        createdAt: string;
+        /**
+         * ISO-8601 last-update timestamp.
+         */
+        updatedAt: string;
+      };
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

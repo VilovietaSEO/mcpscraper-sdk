@@ -17,98 +17,141 @@ export interface Input {
   to?: string;
 }
 
-export interface Output {
-  ok: true;
-  data: {
-    subject: {
-      kind: "person" | "visitor" | "session";
-      reference: string;
-      personRef: string | null;
+export type Output =
+  | {
+      ok: true;
+      data: {
+        subject: {
+          kind: "person" | "visitor" | "session";
+          reference: string;
+          personRef: string | null;
+        };
+        range: {
+          from: string;
+          to: string;
+          fromInclusive: true;
+          toExclusive: true;
+        };
+        journeyTier: "confirmed";
+        candidateAssisted: null;
+        summary: {
+          sessions: number;
+          pageviews: number;
+          events: number;
+          conversions: number;
+          revenue: {
+            valueMinor: number;
+            currency: string | null;
+          } | null;
+          totalEngagementMs: number | null;
+          averageEngagementMs: number | null;
+        };
+        commonPages: {
+          path: string;
+          visits: number;
+          uniqueSessions: number;
+          engagedMs: number | null;
+          conversions: number;
+        }[];
+        acquisition: {
+          source: string | null;
+          medium: string | null;
+          campaign: string | null;
+          referrer: string | null;
+          sessions: number;
+          events: number;
+          conversions: number;
+        }[];
+        eventBreakdown: {
+          name: string;
+          count: number;
+          uniqueSessions: number;
+          conversions: number;
+        }[];
+        sessions: {
+          sessionRef: string;
+          startedAt: string;
+          endedAt: string | null;
+          durationMs: number | null;
+          pageviews: number;
+          events: number;
+          conversions: number;
+          revenue: {
+            valueMinor: number;
+            currency: string | null;
+          } | null;
+          landingPath: string | null;
+          exitPath: string | null;
+          acquisition: {
+            source: string | null;
+            medium: string | null;
+            campaign: string | null;
+            referrer: string | null;
+          } | null;
+        }[];
+        items: {
+          occurredAt: string;
+          type: string;
+          name: string;
+          path: string | null;
+          referrer: string | null;
+          acquisition: {
+            source: string | null;
+            medium: string | null;
+            campaign: string | null;
+          } | null;
+          value: {
+            valueMinor: number;
+            currency: string | null;
+          } | null;
+          evidenceClass: "deterministic" | "candidate";
+          provenance: string;
+        }[];
+        pageInfo: {
+          nextCursor: string | null;
+          hasNextPage: boolean;
+        };
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-    range: {
-      from: string;
-      to: string;
-      fromInclusive: true;
-      toExclusive: true;
-    };
-    journeyTier: "confirmed";
-    candidateAssisted: null;
-    summary: {
-      sessions: number;
-      pageviews: number;
-      events: number;
-      conversions: number;
-      revenue: {
-        valueMinor: number;
-        currency: string | null;
-      } | null;
-      totalEngagementMs: number | null;
-      averageEngagementMs: number | null;
-    };
-    commonPages: {
-      path: string;
-      visits: number;
-      uniqueSessions: number;
-      engagedMs: number | null;
-      conversions: number;
-    }[];
-    acquisition: {
-      source: string | null;
-      medium: string | null;
-      campaign: string | null;
-      referrer: string | null;
-      sessions: number;
-      events: number;
-      conversions: number;
-    }[];
-    eventBreakdown: {
-      name: string;
-      count: number;
-      uniqueSessions: number;
-      conversions: number;
-    }[];
-    sessions: {
-      sessionRef: string;
-      startedAt: string;
-      endedAt: string | null;
-      durationMs: number | null;
-      pageviews: number;
-      events: number;
-      conversions: number;
-      revenue: {
-        valueMinor: number;
-        currency: string | null;
-      } | null;
-      landingPath: string | null;
-      exitPath: string | null;
-      acquisition: {
-        source: string | null;
-        medium: string | null;
-        campaign: string | null;
-        referrer: string | null;
-      } | null;
-    }[];
-    items: {
-      occurredAt: string;
-      type: string;
-      name: string;
-      path: string | null;
-      referrer: string | null;
-      acquisition: {
-        source: string | null;
-        medium: string | null;
-        campaign: string | null;
-      } | null;
-      value: {
-        valueMinor: number;
-        currency: string | null;
-      } | null;
-      evidenceClass: "deterministic" | "candidate";
-      provenance: string;
-    }[];
-    pageInfo: {
-      nextCursor: string | null;
-      hasNextPage: boolean;
-    };
-  };
-}

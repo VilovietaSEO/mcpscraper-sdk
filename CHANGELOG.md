@@ -4,6 +4,24 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+### Added
+
+- Send explicit client surface, installation channel and AI client/model labels from Node, Python and CLI requests for customer reporting. Keep the server request ID with each response callback and API error, including overlapping calls; observer failures cannot replace a received result.
+- Generate the updated 367-tool server catalog and retained artifact describe, text-read and download methods. Preserve the existing report-artifact read binding and complete MCP content and resource links.
+- Select the server endpoint and client labels in the CLI, and use `--raw-result` to retain the MCP envelope, metadata and resource links without changing existing parsed JSON output. Inline binary content is saved to local files.
+
+### Changed
+
+- Represent inline and artifact alternatives as generated Python output unions. Client methods return the selected model; callers validating payloads directly should use `pydantic.TypeAdapter(Output)` instead of `Output.model_validate(...)`.
+- Include artifact delivery in Memory convenience output types while preserving method names and inputs. Check `delivery.mode` before accessing inline result fields, then read or download the complete retained content.
+
+### Fixed
+
+- Accept complete artifact delivery envelopes in Python methods and Memory convenience clients. Preserve explicit null inputs, nullable output fields and numeric values without requiring a newer Pydantic minimum.
+- Retain safe recovery identifiers and caller retry keys after uncertain outcomes so clients can inspect or resume existing paid work. Support streamed Memory responses without dropping result content, and attach request IDs to malformed-response errors without repeating the call.
+
+Verified against the updated 367-tool server contract. Package versions and published packages are unchanged. Saved client attribution requires server request capture to be enabled.
+
 ## [0.52.0] - 2026-09-29 — targets mcp-scraper 0.95.2
 
 ### Added

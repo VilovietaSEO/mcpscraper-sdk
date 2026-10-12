@@ -13,29 +13,72 @@ export interface Input {
   delivery?: "auto" | "inline" | "artifact";
 }
 
-export interface Output {
-  startUrl: string;
-  totalFound: number;
-  truncated: boolean;
-  okCount: number;
-  redirectCount: number;
-  brokenCount: number;
-  urls: {
-    url: string;
-    status: number | null;
-  }[];
-  durationMs: number;
-  truncatedCount?: number;
-  artifact?: {
-    artifactId: string;
-    bytes: number;
-    expiresAt: string;
-    preview: string;
-  };
-  delivery: {
-    requested: "auto" | "inline" | "artifact";
-    effective: "inline" | "artifact";
-    retained: boolean;
-    nextAction: string | null;
-  };
-}
+export type Output =
+  | {
+      startUrl: string;
+      totalFound: number;
+      truncated: boolean;
+      okCount: number;
+      redirectCount: number;
+      brokenCount: number;
+      urls: {
+        url: string;
+        status: number | null;
+      }[];
+      durationMs: number;
+      truncatedCount?: number;
+      artifact?: {
+        artifactId: string;
+        bytes: number;
+        expiresAt: string;
+        preview: string;
+      };
+      delivery: {
+        requested: "auto" | "inline" | "artifact";
+        effective: "inline" | "artifact";
+        retained: boolean;
+        nextAction: string | null;
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

@@ -54,37 +54,80 @@ export interface Input {
   relatedVaultNotes?: string[];
 }
 
-export interface Output {
-  /**
-   * True when the item was stored; false on auth/scope error.
-   */
-  ok: boolean;
-  /**
-   * The vault the item was stored in (after defaulting).
-   */
-  vault?: string;
-  /**
-   * Internal id of the created note.
-   */
-  noteId?: string;
-  /**
-   * Vault-relative path the item was stored at (under library/...).
-   */
-  path?: string;
-  /**
-   * Number of search chunks indexed (0 if embedding failed but the note still saved).
-   */
-  indexed?: number;
-  /**
-   * Recommended extraction action after the raw Library source is safe.
-   */
-  nextStep?: string;
-  /**
-   * Machine-readable denial code when ok is false: quota_exceeded or free_cost_cap.
-   */
-  code?: string;
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when the item was stored; false on auth/scope error.
+       */
+      ok: boolean;
+      /**
+       * The vault the item was stored in (after defaulting).
+       */
+      vault?: string;
+      /**
+       * Internal id of the created note.
+       */
+      noteId?: string;
+      /**
+       * Vault-relative path the item was stored at (under library/...).
+       */
+      path?: string;
+      /**
+       * Number of search chunks indexed (0 if embedding failed but the note still saved).
+       */
+      indexed?: number;
+      /**
+       * Recommended extraction action after the raw Library source is safe.
+       */
+      nextStep?: string;
+      /**
+       * Machine-readable denial code when ok is false: quota_exceeded or free_cost_cap.
+       */
+      code?: string;
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

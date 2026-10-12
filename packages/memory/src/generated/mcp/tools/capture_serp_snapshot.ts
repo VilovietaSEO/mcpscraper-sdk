@@ -33,33 +33,76 @@ export interface Input {
   pageSnapshotLimit?: number;
 }
 
-export interface Output {
-  schemaVersion: "serp-intelligence.capture.v1";
-  status: string;
-  query: string | null;
-  location: string | null;
-  capturedAt: string | null;
-  resultCount: number | null;
-  organicResultCount: number;
-  localPackResultCount: number;
-  pageSnapshotCount: number;
-  pageSnapshotFailedCount: number;
-  snapshotId: string | null;
-  resolvedInputs: {
-    [k: string]: unknown;
-  };
-  artifacts: {
-    [k: string]: unknown;
-  }[];
-  billing: {
-    creditsUsed: number | null;
-    requestId: string | null;
-    jobId: string | null;
-  } | null;
-  diagnostics: {
-    [k: string]: unknown;
-  } | null;
-  providerPayload: {
-    [k: string]: unknown;
-  };
-}
+export type Output =
+  | {
+      schemaVersion: "serp-intelligence.capture.v1";
+      status: string;
+      query: string | null;
+      location: string | null;
+      capturedAt: string | null;
+      resultCount: number | null;
+      organicResultCount: number;
+      localPackResultCount: number;
+      pageSnapshotCount: number;
+      pageSnapshotFailedCount: number;
+      snapshotId: string | null;
+      resolvedInputs: {
+        [k: string]: unknown;
+      };
+      artifacts: {
+        [k: string]: unknown;
+      }[];
+      billing: {
+        creditsUsed: number | null;
+        requestId: string | null;
+        jobId: string | null;
+      } | null;
+      diagnostics: {
+        [k: string]: unknown;
+      } | null;
+      providerPayload: {
+        [k: string]: unknown;
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

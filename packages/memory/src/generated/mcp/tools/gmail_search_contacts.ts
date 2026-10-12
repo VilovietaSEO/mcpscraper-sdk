@@ -17,37 +17,80 @@ export interface Input {
   pageToken?: string;
 }
 
-export interface Output {
-  ok: boolean;
-  /**
-   * Gmail's estimated total matches for the query, independent of how many were fetched this call.
-   */
-  totalMatches?: number;
-  messagesFetched?: number;
-  /**
-   * True when totalMatches exceeds messagesFetched — more results exist, use nextPageToken.
-   */
-  truncated?: boolean;
-  nextPageToken: string | null;
-  messages?: {
-    id: string;
-    date: string | null;
-    from: string | null;
-    to: string | null;
-    subject: string | null;
-    snippet: string | null;
-  }[];
-  /**
-   * Messages deduped by sender email address, newest-to-oldest within this fetch only — not the full query result set when truncated.
-   */
-  contacts?: {
-    email: string;
-    name: string | null;
-    domain: string | null;
-    messageCount: number;
-    firstSeen: string | null;
-    lastSeen: string | null;
-    sampleSubjects: string[];
-  }[];
-  error: string | null;
-}
+export type Output =
+  | {
+      ok: boolean;
+      /**
+       * Gmail's estimated total matches for the query, independent of how many were fetched this call.
+       */
+      totalMatches?: number;
+      messagesFetched?: number;
+      /**
+       * True when totalMatches exceeds messagesFetched — more results exist, use nextPageToken.
+       */
+      truncated?: boolean;
+      nextPageToken: string | null;
+      messages?: {
+        id: string;
+        date: string | null;
+        from: string | null;
+        to: string | null;
+        subject: string | null;
+        snippet: string | null;
+      }[];
+      /**
+       * Messages deduped by sender email address, newest-to-oldest within this fetch only — not the full query result set when truncated.
+       */
+      contacts?: {
+        email: string;
+        name: string | null;
+        domain: string | null;
+        messageCount: number;
+        firstSeen: string | null;
+        lastSeen: string | null;
+        sampleSubjects: string[];
+      }[];
+      error: string | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

@@ -29,43 +29,86 @@ export interface Input {
   attribution?: string;
 }
 
-export interface Output {
-  ok: boolean;
-  data?: {
-    /**
-     * Stable Commons image ID.
-     */
-    id: string;
-    /**
-     * Permanent Commons URL to use as featuredImage.url.
-     */
-    url: string;
-    contentType: "image/jpeg" | "image/png" | "image/gif" | "image/webp";
-    bytes: number;
-    digest: string;
-    /**
-     * Sanitized direct asset URL that supplied the hosted bytes, when applicable.
-     */
-    sourceUrl: string | null;
-    /**
-     * Sanitized webpage URL from which the image was discovered, when applicable.
-     */
-    sourcePageUrl: string | null;
-    sourceKind: "uploaded" | "ai_generated" | "artifact" | "direct_url" | "webpage" | "registered";
-    selectionSource:
-      | "provided_bytes"
-      | "artifact"
-      | "direct_url"
-      | "og:image"
-      | "twitter:image"
-      | "json-ld"
-      | "content-image"
-      | "registered";
-    /**
-     * True when identical image bytes were already stored.
-     */
-    reused: boolean;
-  };
-  error?: string;
-  message?: string;
-}
+export type Output =
+  | {
+      ok: boolean;
+      data?: {
+        /**
+         * Stable Commons image ID.
+         */
+        id: string;
+        /**
+         * Permanent Commons URL to use as featuredImage.url.
+         */
+        url: string;
+        contentType: "image/jpeg" | "image/png" | "image/gif" | "image/webp";
+        bytes: number;
+        digest: string;
+        /**
+         * Sanitized direct asset URL that supplied the hosted bytes, when applicable.
+         */
+        sourceUrl: string | null;
+        /**
+         * Sanitized webpage URL from which the image was discovered, when applicable.
+         */
+        sourcePageUrl: string | null;
+        sourceKind: "uploaded" | "ai_generated" | "artifact" | "direct_url" | "webpage" | "registered";
+        selectionSource:
+          | "provided_bytes"
+          | "artifact"
+          | "direct_url"
+          | "og:image"
+          | "twitter:image"
+          | "json-ld"
+          | "content-image"
+          | "registered";
+        /**
+         * True when identical image bytes were already stored.
+         */
+        reused: boolean;
+      };
+      error?: string;
+      message?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

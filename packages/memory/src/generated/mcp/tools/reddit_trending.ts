@@ -1,5 +1,9 @@
 export interface Input {
   /**
+   * One logical request identity. Retry identical inputs with the same key to replay or recover without repeating provider work. Omit for a fresh intent; use the key returned with the result or transport error for retries.
+   */
+  idempotencyKey?: string;
+  /**
    * Topic to scan (e.g. "crm for small business"). Include quotation marks inside the value for an exact-phrase site search. Not a URL — pass a known thread URL to reddit_thread instead.
    */
   topic: string;
@@ -25,37 +29,85 @@ export interface Input {
   maxCommentsPerThread?: number;
 }
 
-export interface Output {
-  topic: string;
-  subreddit: string | null;
-  window: string;
-  totals: {
-    threads: number;
-    upvotes: number;
-    comments: number;
-  };
-  rankedThreads: {
-    title: string;
-    url: string;
-    subreddit: string;
-    score: number;
-    commentCount: number;
-    engagementScore: number;
-    ageText: string;
-    topQuestions: string[];
-  }[];
-  questions: {
-    question: string;
-    threadUrl: string;
-  }[];
-  threadsScraped: number;
-  candidatesFound: number;
-  partial: boolean;
-  searchQuery: string;
-  discoverySource: "web_search" | "google_serp" | "reddit_search_fallback" | "none";
-  resultQuality: "complete" | "partial" | "degraded";
-  degradedResult: boolean;
-  degradationReasons: string[];
-  retryRecommended: boolean;
-  billingRefunded: boolean;
-}
+export type Output =
+  | {
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      topic: string;
+      subreddit: string | null;
+      window: string;
+      totals: {
+        threads: number;
+        upvotes: number;
+        comments: number;
+      };
+      rankedThreads: {
+        title: string;
+        url: string;
+        subreddit: string;
+        score: number;
+        commentCount: number;
+        engagementScore: number;
+        ageText: string;
+        topQuestions: string[];
+      }[];
+      questions: {
+        question: string;
+        threadUrl: string;
+      }[];
+      threadsScraped: number;
+      candidatesFound: number;
+      partial: boolean;
+      searchQuery: string;
+      discoverySource: "web_search" | "google_serp" | "reddit_search_fallback" | "none";
+      resultQuality: "complete" | "partial" | "degraded";
+      degradedResult: boolean;
+      degradationReasons: string[];
+      retryRecommended: boolean;
+      billingRefunded: boolean;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

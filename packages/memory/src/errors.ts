@@ -3,6 +3,7 @@ export interface MemoryApiErrorDetails {
   rpcCode?: number
   data?: unknown
   toolError?: unknown
+  requestId?: string
 }
 
 export class MemoryApiError extends Error {
@@ -10,6 +11,7 @@ export class MemoryApiError extends Error {
   readonly rpcCode?: number
   readonly data?: unknown
   readonly toolError?: unknown
+  readonly requestId?: string
 
   constructor(message: string, details: MemoryApiErrorDetails = {}) {
     super(message)
@@ -18,5 +20,6 @@ export class MemoryApiError extends Error {
     this.rpcCode = details.rpcCode
     this.data = details.data
     this.toolError = details.toolError
+    this.requestId = details.requestId
   }
 }

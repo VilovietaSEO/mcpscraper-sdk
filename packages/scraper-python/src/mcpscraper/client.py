@@ -5,6 +5,7 @@ from urllib.parse import quote
 
 import requests
 
+from .client_attribution import ClientAttribution, ResponseCallback, ResponseMetadata, client_attribution_headers, notify_response
 from .errors import ScraperApiError
 from .mcp_client import McpToolsClient
 
@@ -27,11 +28,21 @@ def _camelize(value: Any) -> Any:
 
 
 class _Requester:
-    def __init__(self, api_key: str, base_url: str, session: requests.Session, timeout: float) -> None:
+    def __init__(self, api_key: str, base_url: str, session: requests.Session, timeout: float,
+                 client_attribution: ClientAttribution | None = None, on_response: ResponseCallback | None = None) -> None:
         self._api_key = api_key
         self._base_url = base_url.rstrip("/")
         self._session = session
         self._timeout = timeout
+        self._client_headers = client_attribution_headers(client_attribution)
+        self._on_response = on_response
+        self.last_request_id: str | None = None
+
+    def _observe(self, response: requests.Response) -> str | None:
+        request_id = response.headers.get("x-mcp-request-id")
+        self.last_request_id = request_id
+        notify_response(self._on_response, {"request_id": request_id, "status": response.status_code})
+        return request_id
 
     def call(
         self,
@@ -50,7 +61,7 @@ class _Requester:
         body: Optional[JsonDict] = None,
         headers: Optional[dict[str, str]] = None,
     ) -> tuple[Any, requests.Response]:
-        request_headers = {"x-api-key": self._api_key}
+        request_headers = {**self._client_headers, "x-api-key": self._api_key}
         if headers:
             request_headers.update(headers)
         payload = _camelize(body) if body is not None else None
@@ -70,16 +81,17 @@ class _Requester:
                 "message": f"The client stopped waiting after {self._timeout:g}s. This does not prove server-side work stopped; reuse the same Idempotency-Key or poll its job before starting another paid run.",
                 "retryable": True,
             }) from error
+        request_id = self._observe(response)
         try:
             data = response.json()
         except ValueError:
             data = None
         if not response.ok:
-            raise ScraperApiError(response.status_code, data)
+            raise ScraperApiError(response.status_code, data, request_id=request_id)
         return data, response
 
     def call_raw(self, method: str, path: str) -> bytes:
-        headers = {"x-api-key": self._api_key}
+        headers = {**self._client_headers, "x-api-key": self._api_key}
         try:
             response = self._session.request(method, f"{self._base_url}{path}", headers=headers, timeout=self._timeout)
         except requests.Timeout as error:
@@ -90,12 +102,13 @@ class _Requester:
                 "message": f"The client stopped waiting after {self._timeout:g}s. This does not prove server-side work stopped.",
                 "retryable": True,
             }) from error
+        request_id = self._observe(response)
         if not response.ok:
             try:
                 data = response.json()
             except ValueError:
                 data = None
-            raise ScraperApiError(response.status_code, data)
+            raise ScraperApiError(response.status_code, data, request_id=request_id)
         return response.content
 
 
@@ -170,8 +183,9 @@ class RedditNamespace:
     def __init__(self, r: _Requester) -> None:
         self._r = r
 
-    def thread(self, params: JsonDict) -> Any:
-        return self._r.call("POST", "/reddit/thread", params)
+    def thread(self, params: JsonDict, *, idempotency_key: str | None = None) -> Any:
+        headers = {"Idempotency-Key": idempotency_key} if idempotency_key is not None else None
+        return self._r.call("POST", "/reddit/thread", params, headers)
 
 
 class VideoNamespace:
@@ -365,19 +379,27 @@ class MemoryTools:
         self._r = r
 
     def call_tool(self, tool_name: str, args: Optional[JsonDict] = None) -> Any:
-        result = self._r.call("POST", "/memory/mcp-call", {"toolName": tool_name, "args": args or {}})
+        result, response = self._r.call_with_receipt("POST", "/memory/mcp-call", {"toolName": tool_name, "args": args or {}})
         if isinstance(result, dict) and result.get("ok") is False:
-            raise ScraperApiError(200, {"message": result.get("error"), **result})
+            raise ScraperApiError(200, {"message": result.get("error"), **result}, request_id=response.headers.get("x-mcp-request-id"))
         return result
 
 
 class ScraperClient:
-    def __init__(self, api_key: str, base_url: str = "https://mcpscraper.dev", session: Optional[requests.Session] = None, request_timeout: float = 590.0) -> None:
+    def __init__(self, api_key: str, base_url: str = "https://mcpscraper.dev", session: Optional[requests.Session] = None, request_timeout: float = 590.0,
+                 *, client_attribution: ClientAttribution | None = None, on_response: ResponseCallback | None = None) -> None:
         if request_timeout <= 0:
             raise ValueError("request_timeout must be positive")
         active_session = session or requests.Session()
-        self._r = _Requester(api_key, base_url, active_session, request_timeout)
-        self.tools = McpToolsClient(api_key, base_url, active_session, request_timeout=request_timeout)
+        self.last_request_id: str | None = None
+
+        def observe(metadata: ResponseMetadata) -> None:
+            self.last_request_id = metadata["request_id"]
+            notify_response(on_response, metadata)
+
+        self._r = _Requester(api_key, base_url, active_session, request_timeout, client_attribution, observe)
+        self.tools = McpToolsClient(api_key, base_url, active_session, request_timeout=request_timeout,
+                                    client_attribution=client_attribution, on_response=observe)
         self.youtube = YoutubeNamespace(self._r)
         self.screenshot = ScreenshotNamespace(self._r)
         self.facebook = FacebookNamespace(self._r)

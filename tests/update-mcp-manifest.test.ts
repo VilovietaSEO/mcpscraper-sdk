@@ -106,3 +106,26 @@ test('a source without server identity fails before writing', async () => {
   assert.match(result.stderr, /serverInfo\.name and serverInfo\.version/)
   assert.equal(await readFile(join(directory, 'contracts/mcp.tools.json'), 'utf8'), priorText)
 })
+
+test('shared artifact reads coexist with the existing report reader binding', async () => {
+  const { directory, sourcePath } = await fixture({ type: 'object' })
+  const contractPath = join(directory, 'contracts/mcp.tools.json')
+  const prior = JSON.parse(await readFile(contractPath, 'utf8'))
+  prior.tools[0].name = 'report_artifact_read'
+  prior.tools[0].category = 'artifacts'
+  prior.tools[0].methodName = 'read'
+  await writeFile(contractPath, JSON.stringify(prior))
+  const source = JSON.parse(await readFile(sourcePath, 'utf8'))
+  const shape = source.tools[0]
+  source.tools = ['report_artifact_read', 'artifact_read', 'artifact_describe', 'artifact_download']
+    .map(name => ({ ...shape, name }))
+  source.counts.unified_stdio = source.tools.length
+  await writeFile(sourcePath, JSON.stringify(source))
+  const result = run(directory, { MCP_TOOL_MANIFEST_PATH: sourcePath })
+  assert.equal(result.status, 0, result.stderr)
+  const generated = JSON.parse(await readFile(contractPath, 'utf8'))
+  assert.deepEqual(generated.tools.map((tool: { category: string; methodName: string }) =>
+    `${tool.category}.${tool.methodName}`), [
+    'artifacts.read', 'artifacts.readRetained', 'artifacts.describe', 'artifacts.download',
+  ])
+})

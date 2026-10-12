@@ -10480,6 +10480,104 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "artifact_describe",
+    "category": "artifacts",
+    "title": "Describe Retained File",
+    "description": "Inspect owned artifactId MIME, bytes, SHA-256, capabilities, expiry and download access. Denies foreign or expired files.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "artifactId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "description": "Artifact ID returned by a completed MCP result. Access remains bound to this authenticated caller."
+        }
+      },
+      "required": [
+        "artifactId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Describe Retained File",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "artifact_download",
+    "category": "artifacts",
+    "title": "Download Retained File",
+    "description": "Get or renew owned artifactId downloads without reacquisition. Links expire in 15 minutes; retention is separate. Local paths are server-side; client access is unqualified. Denies expired or foreign files.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "artifactId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "description": "Artifact ID returned by a completed MCP result. Access remains bound to this authenticated caller."
+        }
+      },
+      "required": [
+        "artifactId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Download Retained File",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "artifact_read",
+    "category": "artifacts",
+    "title": "Read Retained File",
+    "description": "Read owned retained text by artifactId. Follow nextOffset until null for complete UTF-8 content. Binary files need artifact_download or a format reader. Denies expired or foreign files; no reacquisition.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "artifactId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "description": "Artifact ID returned by a completed MCP result. Access remains bound to this authenticated caller."
+        },
+        "offset": {
+          "default": 0,
+          "description": "UTF-8 byte offset; use the exact nextOffset from the previous read.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxBytes": {
+          "default": 8000,
+          "description": "Requested maximum bytes. The common serialized response budget may return a smaller window; follow nextOffset until null for the complete file.",
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 100000
+        }
+      },
+      "required": [
+        "artifactId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Read Retained File",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "audit_site",
     "category": "web",
     "title": "Technical SEO Audit",
@@ -20839,7 +20937,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa",
     "category": "search",
     "title": "Google PAA + SERP Harvest",
-    "description": "Expand one Google People Also Ask SERP into questions, answers, every preserved source, AI Overview evidence, ranking URLs, and entity IDs. Set pages to 2 to add the second organic-results page when available; PAA is still expanded once on the preserved first page, and pagination reports what was captured. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; a failed click or browser timeout is never reported as exhaustion. This compatibility tool waits; use harvest_paa_start plus harvest_paa_status for long runs. Optional SERP modules require their include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+    "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Optional SERP modules require include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -21054,7 +21152,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_status",
     "category": "other",
     "title": "Check Durable Google PAA Harvest",
-    "description": "Poll an owner-scoped harvest_paa_start job. Returns the job/operation/task correlation ID, saved progress, automatic-recovery count, target and discovery status, material completeness, bounded organic-page pagination, recent per-control interaction outcomes with 0.7/1.0/1.4-second confirmation telemetry, provider-session-correlated attempts, terminal rows, and billing. Page-two outcomes describe organic results only; the PAA graph always comes from the preserved first page. frontier_exhausted means every observed eligible PAA control was processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
+    "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, correlated provider attempts, terminal rows, and billing. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23199,7 +23297,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "maps_place_intel",
     "category": "maps",
     "title": "Google Maps Business Profile Details",
-    "description": "Deep-dive one known/named Google Business Profile: rating, reviews, category, address, phone, website, full hours, About attributes, entity IDs/CID, configured services/areas, and optional photos. Use include:[\"all\"] for every supported field group, with maxReviews and maxImages as limits; existing includeReviews, includeServices, and includeImages flags also work. Set includeImages:true for a provenance-aware manifest, bounded AI image blocks, and an owner-scoped ZIP; choose imageScope:\"owner\" for listing-owner photos only. Not for category searches or multi-business prospect lists; use maps_search for those. Split business name from location.",
+    "description": "Inspect one named Google Business Profile: rating, reviews, category, address, phone, website, hours, About attributes, entity IDs/CID, services/areas, and optional photos when available. Use include:[\"all\"] or includeReviews/includeServices/includeImages; maxReviews and maxImages bound collection. Page saved reviews/images with maps_place_status and returned cursors. includeImages:true supplies a manifest, bounded AI image blocks, and an owner-scoped ZIP; imageScope:\"owner\" selects listing-owner photos. For category searches or multi-business lists use maps_search. Split business name from location.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23234,7 +23332,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "maxReviews": {
           "default": 50,
-          "description": "Max review cards when includeReviews is true. Default 50, maximum 1,000. Collection is resumable; actual availability depends on the profile.",
+          "description": "Max review cards when includeReviews is true. Default 50, maximum 1,000. Availability depends on the profile. Partial or interrupted runs can resume.",
           "type": "integer",
           "minimum": 1,
           "maximum": 1000
@@ -25235,6 +25333,12 @@ export const MCP_TOOL_CATALOG = [
     "inputSchema": {
       "type": "object",
       "properties": {
+        "idempotencyKey": {
+          "description": "One logical request identity. Retry identical inputs with the same key to replay or recover without repeating provider work. Omit for a fresh intent; use the key returned with the result or transport error for retries.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
         "url": {
           "type": "string",
           "minLength": 1,
@@ -25268,6 +25372,12 @@ export const MCP_TOOL_CATALOG = [
     "inputSchema": {
       "type": "object",
       "properties": {
+        "idempotencyKey": {
+          "description": "One logical request identity. Retry identical inputs with the same key to replay or recover without repeating provider work. Omit for a fresh intent; use the key returned with the result or transport error for retries.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
         "topic": {
           "type": "string",
           "minLength": 1,
@@ -26308,7 +26418,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Search Google. Light mode returns organic listings. Set mode:full on an unfiltered one-page search to request available same-page local-pack, forum, video, AI, entity, and PAA-preview features; includeLocalPack alone does not enable local-pack extraction. Feature status shows presence and completeness. One page is the default. Set pages:2 only when the user asks for two pages. Set recency:week or recency:month for Google's past-week or past-month filter. Filtered searches use a managed browser and return organic results only at 35 Credits per delivered page (70 for two). Unfiltered searches use browser as final backup. Browser/two-page results mark rich features unsupported. If page 2 fails, available page 1 is marked partial and billed for one page. Unfiltered light costs 20 Credits per delivered page, or 35 if a backup supplies it; one-page full costs 35; unfiltered two-page full costs 40 for organic results. Full does not open result sites, expand PAA, or open Maps profiles. Reuse the same idempotencyKey after an uncertain response. A saved serpIdentity keeps its 60-Credit search rate and cannot be combined with full mode. Call credits_info for current pricing and balance.",
+    "description": "Search Google. Light mode returns organic listings. Set mode:full on an unfiltered one-page search to request available same-page local-pack, forum, video, AI, entity, and PAA-preview features; includeLocalPack alone does not enable local-pack extraction. Feature status shows presence and completeness. One page is the default. Set pages:2 only when the user asks for two pages. Set recency:week or recency:month for Google's past-week or past-month filter. Filtered searches use a managed browser and return organic results only at 35 Credits per delivered page (70 for two). Unfiltered light tries twice, then an API fallback. Browser/two-page results mark rich features unsupported. If page 2 fails, available page 1 is marked partial and billed for one page. Unfiltered light costs 20 Credits per delivered page, or 35 if a backup supplies it; one-page full costs 35; unfiltered two-page full costs 40 for organic results. Full does not open result sites, expand PAA, or open Maps profiles. Reuse the same idempotencyKey after an uncertain response. A saved serpIdentity keeps its 60-Credit search rate and cannot be combined with full mode. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {

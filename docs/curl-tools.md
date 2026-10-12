@@ -1,4 +1,4 @@
-# All 364 MCP tools with cURL
+# All 367 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (364)
+## Complete catalog (367)
 
 ## access
 
@@ -247,6 +247,14 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `set-schedule-entitlement` — Set Schedule Entitlement
 - `update_artifact_template` — Update Template
 - `update-scheduled-action` — Update Scheduled Action
+
+## artifacts
+
+- `artifact_describe` — Describe Retained File
+- `artifact_download` — Download Retained File
+- `artifact_read` — Read Retained File
+- `get_artifact_template_example` — Preview Template Example
+- `report_artifact_read` — Read Stored Artifact
 
 ## browser
 
@@ -437,11 +445,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 - `g2_reviews` — G2 Review Harvest
 - `trustpilot_reviews` — Trustpilot Review Harvest
-
-## artifacts
-
-- `get_artifact_template_example` — Preview Template Example
-- `report_artifact_read` — Read Stored Artifact
 
 ## googleAds
 

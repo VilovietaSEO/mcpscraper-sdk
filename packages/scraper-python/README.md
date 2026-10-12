@@ -41,11 +41,11 @@ Every non-2xx response raises a `ScraperApiError` with `.status`, `.code`, and t
 - `err.is_concurrency_limit_exceeded()` — `err.body` has `active`, `limit`, `retryable`, and pack upgrade details.
 - `err.is_verification_challenge()` / `err.is_timeout()` — preserve actionable, vendor-neutral retry and charge details returned by the service.
 
-Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches use a managed browser for organic results at 35 Credits per delivered page, and unfiltered searches use it only as the final backup. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity `n` adds `2n` slots for `$5n` without changing the base plan.
+Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches use a managed browser for organic results at 35 Credits per delivered page. Unfiltered light searches try the primary path twice, then one API fallback; an unfiltered one-page full search uses the feature-capable API directly. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity `n` adds `2n` slots for `$5n` without changing the base plan.
 
 ## API surface
 
-`client.tools` is the generated 364-tool MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
+`client.tools` is the generated 367-tool MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
 
 For durable PAA acquisition, call
 `client.tools.other.harvest_paa_start(pages=2, ...)`, then poll its `job_id` with
@@ -133,7 +133,7 @@ hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 364 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 367 unified MCP tools.
 
 ## Regenerating models
 
@@ -149,3 +149,9 @@ npm run verify:rest-contract
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk` on npm](../scraper) (Node, full `memory_tools` typed surface) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
 
 Release changes: [SDK 0.52.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.52.0).
+
+## Client attribution and full results
+
+Clients accept `client_attribution={"install_channel": ..., "ai_client": ..., "ai_model": ...}` and default to calling surface `sdk`. Set only known caller labels; unspecified labels stay unknown. `on_response` receives a metadata dictionary with `request_id` and `status` per response, and errors keep their own `request_id`. These options also apply to `McpToolsClient` and `MemoryClient`; labels are reporting declarations, not authorization.
+
+Generated output unions return the matching model directly, preserving attributes such as `transcript_text`. Use `pydantic.TypeAdapter(Output)` when independently validating an output union. Large outputs may have `delivery`, `scope` and `recovery` instead of inline data. Preserve them, then use `tools.artifacts.describe`, `read_retained` (follow `next_offset` to None), or `download` with the artifact ID. The legacy `artifacts.read` method remains the report reader. `call_tool_result` preserves native content/resource links. Download URL expiry differs from retention; renew through `download` without rerunning acquisition. Use the returned capability for binary files.

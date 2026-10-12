@@ -20,7 +20,7 @@ export interface Input {
    */
   includeReviews?: boolean;
   /**
-   * Max review cards when includeReviews is true. Default 50, maximum 1,000. Collection is resumable; actual availability depends on the profile.
+   * Max review cards when includeReviews is true. Default 50, maximum 1,000. Availability depends on the profile. Partial or interrupted runs can resume.
    */
   maxReviews?: number;
   /**
@@ -49,110 +49,157 @@ export interface Input {
   maxInlineImages?: number;
 }
 
-export interface Output {
-  runId?: string;
-  runStatus?: "queued" | "running" | "interrupted" | "complete" | "partial" | "failed" | "cancelled";
-  verified?: boolean;
-  checkpointRevision?: number;
-  completedFields?: string[];
-  pendingFields?: string[];
-  unavailableFields?: string[];
-  requestedMaxReviews?: number;
-  requestedMaxImages?: number;
-  imagesCollected?: number;
-  billingState?: string;
-  statusPath?: string;
-  reviewsNextCursor?: string | null;
-  imagesNextCursor?: string | null;
-  maximumAuthorizationMc?: number;
-  provider?: string;
-  fallbackFrom?: string;
-  acquisitionProvider?: string;
-  name?: string | null;
-  placeUrl?: string | null;
-  rating?: string | null;
-  reviewCount?: string | null;
-  category?: string | null;
-  address?: string | null;
-  phone?: string | null;
-  website?: string | null;
-  hoursSummary?: string | null;
-  hoursTable?: {
-    day: string;
-    hours: string;
-  }[];
-  plusCode?: string | null;
-  bookingUrl?: string | null;
-  kgmid?: string | null;
-  cidDecimal?: string | null;
-  cidUrl?: string | null;
-  lat?: number | null;
-  lng?: number | null;
-  reviewsStatus?: string;
-  reviewsCollected?: number;
-  reviews?: {
-    reviewId: string | null;
-    author: string | null;
-    stars: string | null;
-    date: string | null;
-    text: string | null;
-    ownerResponse: string | null;
-  }[];
-  reviewHistogram?: {
-    stars: number;
-    count: string;
-  }[];
-  reviewTopics?: {
-    label: string;
-    count: string;
-  }[];
-  services?: string[];
-  areasServed?: string[];
-  servicesStatus?: string;
-  aboutAttributes?: {
-    section: string;
-    attribute: string;
-  }[];
-  media?: {
-    status?: string;
-    scope?: "owner" | "all";
-    requestedMaxImages?: number;
-    imagesCollected?: number;
-    imagesDownloaded?: number;
-    ownerImagesCollected?: number;
-    otherImagesCollected?: number;
-    unknownOriginImagesCollected?: number;
-    ownerGalleryAvailable?: boolean;
-    ownerGalleryExhausted?: boolean;
-    ownerPhotosDiscovered?: number;
-    allPhotosDiscovered?: number;
-    exhausted?: boolean;
-    stopReason?: string;
-    images?: {
-      index: number;
-      galleryPosition: number | null;
-      sourceUrl: string;
-      mediaKey: string;
-      origin: "owner" | "other" | "unknown";
-      originConfidence: string;
-      filename: string | null;
-      mimeType: string | null;
-      bytes: number | null;
-      downloadStatus: string;
-      downloadError: string | null;
-      contentIndex: number | null;
-    }[];
-    artifact?: {
-      artifactId: string;
-      filename: string;
-      contentType: string;
-      bytes: number;
-      sha256: string;
-      expiresAt: string;
-      downloadUrl: string | null;
-      downloadUrlExpiresAt: string | null;
-      localPath: string | null;
-    } | null;
-    warnings?: string[];
-  };
-}
+export type Output =
+  | {
+      runId?: string;
+      runStatus?: "queued" | "running" | "interrupted" | "complete" | "partial" | "failed" | "cancelled";
+      verified?: boolean;
+      checkpointRevision?: number;
+      completedFields?: string[];
+      pendingFields?: string[];
+      unavailableFields?: string[];
+      requestedMaxReviews?: number;
+      requestedMaxImages?: number;
+      imagesCollected?: number;
+      billingState?: string;
+      statusPath?: string;
+      reviewsNextCursor?: string | null;
+      imagesNextCursor?: string | null;
+      maximumAuthorizationMc?: number;
+      provider?: string;
+      fallbackFrom?: string;
+      acquisitionProvider?: string;
+      name?: string | null;
+      placeUrl?: string | null;
+      rating?: string | null;
+      reviewCount?: string | null;
+      category?: string | null;
+      address?: string | null;
+      phone?: string | null;
+      website?: string | null;
+      hoursSummary?: string | null;
+      hoursTable?: {
+        day: string;
+        hours: string;
+      }[];
+      plusCode?: string | null;
+      bookingUrl?: string | null;
+      kgmid?: string | null;
+      cidDecimal?: string | null;
+      cidUrl?: string | null;
+      lat?: number | null;
+      lng?: number | null;
+      reviewsStatus?: string;
+      reviewsCollected?: number;
+      reviews?: {
+        reviewId: string | null;
+        author: string | null;
+        stars: string | null;
+        date: string | null;
+        text: string | null;
+        ownerResponse: string | null;
+        /**
+         * True when a visible expansion control remained; the captured review text may be incomplete.
+         */
+        reviewExpansionIncomplete?: boolean;
+      }[];
+      reviewHistogram?: {
+        stars: number;
+        count: string;
+      }[];
+      reviewTopics?: {
+        label: string;
+        count: string;
+      }[];
+      services?: string[];
+      areasServed?: string[];
+      servicesStatus?: string;
+      aboutAttributes?: {
+        section: string;
+        attribute: string;
+      }[];
+      media?: {
+        status?: string;
+        scope?: "owner" | "all";
+        requestedMaxImages?: number;
+        imagesCollected?: number;
+        imagesDownloaded?: number;
+        ownerImagesCollected?: number;
+        otherImagesCollected?: number;
+        unknownOriginImagesCollected?: number;
+        ownerGalleryAvailable?: boolean;
+        ownerGalleryExhausted?: boolean;
+        ownerPhotosDiscovered?: number;
+        allPhotosDiscovered?: number;
+        exhausted?: boolean;
+        stopReason?: string;
+        images?: {
+          index: number;
+          galleryPosition: number | null;
+          sourceUrl: string;
+          mediaKey: string;
+          origin: "owner" | "other" | "unknown";
+          originConfidence: string;
+          filename: string | null;
+          mimeType: string | null;
+          bytes: number | null;
+          downloadStatus: string;
+          downloadError: string | null;
+          contentIndex: number | null;
+        }[];
+        artifact?: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          localPath: string | null;
+        } | null;
+        warnings?: string[];
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

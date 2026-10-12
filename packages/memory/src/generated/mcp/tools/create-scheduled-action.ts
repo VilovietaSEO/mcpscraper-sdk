@@ -53,53 +53,96 @@ export interface Input {
       };
 }
 
-export interface Output {
-  /**
-   * True when the scheduled action was created.
-   */
-  ok: boolean;
-  /**
-   * The new scheduled action id.
-   */
-  id?: string;
-  /**
-   * When it will first run.
-   */
-  nextRunAt?: string;
-  /**
-   * The stored execution mode. Defaults to agent when omitted from the request.
-   */
-  executionMode?: "agent" | "connection_sync";
-  /**
-   * The exact stored artifact selection.
-   */
-  artifactSelection?:
-    | {
-        /**
-         * Governed execution mode for this operation.
-         */
-        mode: "none";
-      }
-    | {
-        /**
-         * Governed execution mode for this operation.
-         */
-        mode: "saved_template";
-        /**
-         * Opaque saved-template identifier returned by an artifact-template tool.
-         */
-        templateId: string;
-        /**
-         * Immutable saved-template version selected for rendering.
-         */
-        templateVersionId: string;
+export type Output =
+  | {
+      /**
+       * True when the scheduled action was created.
+       */
+      ok: boolean;
+      /**
+       * The new scheduled action id.
+       */
+      id?: string;
+      /**
+       * When it will first run.
+       */
+      nextRunAt?: string;
+      /**
+       * The stored execution mode. Defaults to agent when omitted from the request.
+       */
+      executionMode?: "agent" | "connection_sync";
+      /**
+       * The exact stored artifact selection.
+       */
+      artifactSelection?:
+        | {
+            /**
+             * Governed execution mode for this operation.
+             */
+            mode: "none";
+          }
+        | {
+            /**
+             * Governed execution mode for this operation.
+             */
+            mode: "saved_template";
+            /**
+             * Opaque saved-template identifier returned by an artifact-template tool.
+             */
+            templateId: string;
+            /**
+             * Immutable saved-template version selected for rendering.
+             */
+            templateVersionId: string;
+          };
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+      /**
+       * Machine-readable denial code when creation is refused.
+       */
+      code?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
       };
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-  /**
-   * Machine-readable denial code when creation is refused.
-   */
-  code?: string;
-}
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

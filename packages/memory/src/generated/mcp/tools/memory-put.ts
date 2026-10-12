@@ -109,67 +109,110 @@ export interface Input {
   };
 }
 
-export interface Output {
-  /**
-   * True when the note was stored; false on auth/scope error, empty content, or a revision conflict.
-   */
-  ok: boolean;
-  /**
-   * The stored note metadata. Present when ok is true.
-   */
-  note?: {
-    /**
-     * Vault-relative path the note was stored at.
-     */
-    path: string;
-    /**
-     * Stored note title.
-     */
-    title: string;
-    /**
-     * ISO-8601 timestamp of the write.
-     */
-    updatedAt: string;
-    /**
-     * New revision number after this write. Pass this as baseRevision on the next edit.
-     */
-    revision: number;
-  };
-  /**
-   * Number of search chunks indexed for the content (0 if embedding failed but the note still saved).
-   */
-  indexed?: number;
-  /**
-   * True when baseRevision did not match the current revision: someone else changed the note first. No write happened.
-   */
-  conflict?: boolean;
-  /**
-   * Present only when conflict is true: the note as it stands now, so the caller can reconcile and retry without another round trip.
-   */
-  current?: {
-    /**
-     * The note as it currently stands (so a re-read is unnecessary).
-     */
-    content: string;
-    /**
-     * Current revision. Use this as the new baseRevision after reconciling.
-     */
-    revision: number;
-    /**
-     * Identity that made the conflicting write.
-     */
-    updatedBy: string | null;
-    /**
-     * When the conflicting write happened.
-     */
-    updatedAt: string;
-  };
-  /**
-   * Machine-readable denial code when ok is false: quota_exceeded, free_cost_cap, or revision_conflict.
-   */
-  code?: string;
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when the note was stored; false on auth/scope error, empty content, or a revision conflict.
+       */
+      ok: boolean;
+      /**
+       * The stored note metadata. Present when ok is true.
+       */
+      note?: {
+        /**
+         * Vault-relative path the note was stored at.
+         */
+        path: string;
+        /**
+         * Stored note title.
+         */
+        title: string;
+        /**
+         * ISO-8601 timestamp of the write.
+         */
+        updatedAt: string;
+        /**
+         * New revision number after this write. Pass this as baseRevision on the next edit.
+         */
+        revision: number;
+      };
+      /**
+       * Number of search chunks indexed for the content (0 if embedding failed but the note still saved).
+       */
+      indexed?: number;
+      /**
+       * True when baseRevision did not match the current revision: someone else changed the note first. No write happened.
+       */
+      conflict?: boolean;
+      /**
+       * Present only when conflict is true: the note as it stands now, so the caller can reconcile and retry without another round trip.
+       */
+      current?: {
+        /**
+         * The note as it currently stands (so a re-read is unnecessary).
+         */
+        content: string;
+        /**
+         * Current revision. Use this as the new baseRevision after reconciling.
+         */
+        revision: number;
+        /**
+         * Identity that made the conflicting write.
+         */
+        updatedBy: string | null;
+        /**
+         * When the conflicting write happened.
+         */
+        updatedAt: string;
+      };
+      /**
+       * Machine-readable denial code when ok is false: quota_exceeded, free_cost_cap, or revision_conflict.
+       */
+      code?: string;
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

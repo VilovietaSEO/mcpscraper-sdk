@@ -3834,26 +3834,69 @@ export interface Input {
   };
 }
 
-export interface Output {
-  ok: boolean;
-  resolutions?: {
-    candidate: string;
-    normalized: string;
-    action: "reuse" | "review" | "create" | "omit";
-    tag?: string;
-    matchedBy?: "exact" | "alias" | "near";
-    matchedVia?: "key" | "alias" | "stem" | "trigram" | "embedding";
-    score?: number;
-    /**
-     * Ranked existing tags to choose from when action is review. Nothing is merged automatically.
-     */
-    candidates?: {
-      tag: string;
-      matchedVia: "key" | "alias" | "stem" | "trigram" | "embedding";
-      score: number;
-      description: string | null;
-    }[];
-    reason: string;
-  }[];
-  error?: string;
-}
+export type Output =
+  | {
+      ok: boolean;
+      resolutions?: {
+        candidate: string;
+        normalized: string;
+        action: "reuse" | "review" | "create" | "omit";
+        tag?: string;
+        matchedBy?: "exact" | "alias" | "near";
+        matchedVia?: "key" | "alias" | "stem" | "trigram" | "embedding";
+        score?: number;
+        /**
+         * Ranked existing tags to choose from when action is review. Nothing is merged automatically.
+         */
+        candidates?: {
+          tag: string;
+          matchedVia: "key" | "alias" | "stem" | "trigram" | "embedding";
+          score: number;
+          description: string | null;
+        }[];
+        reason: string;
+      }[];
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

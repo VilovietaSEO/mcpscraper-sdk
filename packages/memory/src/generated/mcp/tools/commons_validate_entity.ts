@@ -797,51 +797,94 @@ export interface Input {
   reviewPolicy?: "auto_publish_if_safe" | "always_review";
 }
 
-export interface Output {
-  ok: boolean;
-  data?: {
-    ok: true;
-    valid: boolean;
-    publishable: boolean;
-    autoPublishEligible: boolean;
-    errors: string[];
-    warnings: string[];
-    /**
-     * Read-only image readiness and recovery guidance for this payload.
-     */
-    imageDiagnostics: {
-      /**
-       * Featured-image storage readiness determined without fetching or storing external bytes.
-       */
-      featuredImage: {
+export type Output =
+  | {
+      ok: boolean;
+      data?: {
+        ok: true;
+        valid: boolean;
+        publishable: boolean;
+        autoPublishEligible: boolean;
+        errors: string[];
+        warnings: string[];
         /**
-         * Storage-readiness state for the candidate featured image.
+         * Read-only image readiness and recovery guidance for this payload.
          */
-        state: "missing" | "external_unhosted" | "commons_hosted";
-        /**
-         * Normalized candidate featured-image URL, or null when none was supplied.
-         */
-        url: string | null;
-        /**
-         * Registered Commons image ID when metadata proves the image is hosted, otherwise null.
-         */
-        commonsImageId: string | null;
-        /**
-         * Whether Commons storage metadata proves this featured image is ready to publish.
-         */
-        readyForPublish: boolean;
-        /**
-         * Whether submit will use its compatibility fallback to try hosting this external image.
-         */
-        submitWillAttemptAutoHost: boolean;
-        /**
-         * Action the caller must take before submit, or null when the image is ready.
-         */
-        requiredAction: string | null;
+        imageDiagnostics: {
+          /**
+           * Featured-image storage readiness determined without fetching or storing external bytes.
+           */
+          featuredImage: {
+            /**
+             * Storage-readiness state for the candidate featured image.
+             */
+            state: "missing" | "external_unhosted" | "commons_hosted";
+            /**
+             * Normalized candidate featured-image URL, or null when none was supplied.
+             */
+            url: string | null;
+            /**
+             * Registered Commons image ID when metadata proves the image is hosted, otherwise null.
+             */
+            commonsImageId: string | null;
+            /**
+             * Whether Commons storage metadata proves this featured image is ready to publish.
+             */
+            readyForPublish: boolean;
+            /**
+             * Whether submit will use its compatibility fallback to try hosting this external image.
+             */
+            submitWillAttemptAutoHost: boolean;
+            /**
+             * Action the caller must take before submit, or null when the image is ready.
+             */
+            requiredAction: string | null;
+          };
+        };
+        [k: string]: unknown;
+      };
+      error?: string;
+      message?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
       };
     };
-    [k: string]: unknown;
-  };
-  error?: string;
-  message?: string;
-}

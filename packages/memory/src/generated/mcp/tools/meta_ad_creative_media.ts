@@ -17,40 +17,83 @@ export interface Input {
   maxInlineImages?: number;
 }
 
-export interface Output {
-  ok: boolean;
-  adId: string;
-  adName: string | null;
-  adAccountId: string | null;
-  creativeId: string;
-  creativeName: string | null;
-  effectiveObjectStoryId: string | null;
-  sourceFacebookPostId: string | null;
-  objectStoryId: string | null;
-  pageId: string | null;
-  postId: string | null;
-  publicPostCandidateUrl: string | null;
-  publicPostStatus: "unverified";
-  mediaType: "image" | "video" | "carousel" | "mixed" | "unknown";
-  images: {
-    [k: string]: unknown;
-  }[];
-  videos: {
-    [k: string]: unknown;
-  }[];
-  inlineImages: {
-    sourceUrl: string;
-    mimeType: string;
-    bytes: number;
-    contentIndex: number;
-  }[];
-  nextActions: {
-    tool: "facebook_ad_transcribe" | "facebook_video_transcribe" | "video_frame_analysis";
-    args: {
-      [k: string]: unknown;
+export type Output =
+  | {
+      ok: boolean;
+      adId: string;
+      adName: string | null;
+      adAccountId: string | null;
+      creativeId: string;
+      creativeName: string | null;
+      effectiveObjectStoryId: string | null;
+      sourceFacebookPostId: string | null;
+      objectStoryId: string | null;
+      pageId: string | null;
+      postId: string | null;
+      publicPostCandidateUrl: string | null;
+      publicPostStatus: "unverified";
+      mediaType: "image" | "video" | "carousel" | "mixed" | "unknown";
+      images: {
+        [k: string]: unknown;
+      }[];
+      videos: {
+        [k: string]: unknown;
+      }[];
+      inlineImages: {
+        sourceUrl: string;
+        mimeType: string;
+        bytes: number;
+        contentIndex: number;
+      }[];
+      nextActions: {
+        tool: "facebook_ad_transcribe" | "facebook_video_transcribe" | "video_frame_analysis";
+        args: {
+          [k: string]: unknown;
+        };
+        reason: string;
+      }[];
+      warnings: string[];
+      limitations: string[];
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-    reason: string;
-  }[];
-  warnings: string[];
-  limitations: string[];
-}

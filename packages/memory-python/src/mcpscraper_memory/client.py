@@ -5,6 +5,8 @@ from typing import Any
 import requests
 
 from .errors import MemoryApiError
+from .client_attribution import ClientAttribution, ResponseCallback, client_attribution_headers, notify_response
+from .mcp_client import McpToolError, _parse_json_rpc_response
 from ._generated_client import (
     AccessNamespace,
     CaptureNamespace,
@@ -35,7 +37,13 @@ class MemoryClient:
         api_key: str,
         base_url: str = DEFAULT_BASE_URL,
         session: requests.Session | None = None,
+        *,
+        client_attribution: ClientAttribution | None = None,
+        on_response: ResponseCallback | None = None,
     ) -> None:
+        self._client_headers = client_attribution_headers(client_attribution)
+        self._on_response = on_response
+        self.last_request_id: str | None = None
         self._api_key = api_key
         self._base_url = base_url.rstrip("/")
         self._session = session or requests.Session()
@@ -71,6 +79,7 @@ class MemoryClient:
         response = self._session.post(
             self._base_url,
             headers={
+                **self._client_headers,
                 "content-type": "application/json",
                 "accept": "application/json, text/event-stream",
                 "x-api-key": self._api_key,
@@ -83,14 +92,22 @@ class MemoryClient:
             },
         )
 
+        request_id = response.headers.get("x-mcp-request-id")
+        self.last_request_id = request_id
+        notify_response(self._on_response, {"request_id": request_id, "status": response.status_code})
+
         if not response.ok:
             raise MemoryApiError(
                 f'HTTP {response.status_code} calling tool "{name}"',
                 http_status=response.status_code,
                 data=response.text,
+                request_id=request_id,
             )
 
-        payload = response.json()
+        try:
+            payload = _parse_json_rpc_response(response)
+        except (McpToolError, ValueError) as error:
+            raise MemoryApiError("MCP endpoint returned an invalid response", request_id=request_id) from error
 
         if payload.get("error"):
             error = payload["error"]
@@ -98,6 +115,7 @@ class MemoryClient:
                 error.get("message", f'tool "{name}" failed'),
                 rpc_code=error.get("code"),
                 data=error.get("data"),
+                request_id=request_id,
             )
 
         result = payload.get("result") or {}
@@ -123,6 +141,6 @@ class MemoryClient:
                 if isinstance(parsed, str)
                 else f'Tool "{name}" failed'
             )
-            raise MemoryApiError(str(message), tool_error=parsed)
+            raise MemoryApiError(str(message), tool_error=parsed, request_id=request_id)
 
         return parsed

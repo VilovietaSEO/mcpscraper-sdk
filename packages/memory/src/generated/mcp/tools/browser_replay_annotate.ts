@@ -169,25 +169,68 @@ export interface Input {
   source_top_offset?: number;
 }
 
-export interface Output {
-  /**
-   * Whether the browser-agent action succeeded.
-   */
-  ok: boolean;
-  tool: "browser_replay_annotate";
-  /**
-   * Browser session id when the response is scoped to a session.
-   */
-  session_id: string | null;
-  /**
-   * Replay id when the response is scoped to a replay.
-   */
-  replay_id: string | null;
-  source_file_path: string | null;
-  annotated_file_path: string | null;
-  bytes: number | null;
-  width: number | null;
-  height: number | null;
-  annotation_count: number | null;
-  mime_type: string | null;
-}
+export type Output =
+  | {
+      /**
+       * Whether the browser-agent action succeeded.
+       */
+      ok: boolean;
+      tool: "browser_replay_annotate";
+      /**
+       * Browser session id when the response is scoped to a session.
+       */
+      session_id: string | null;
+      /**
+       * Replay id when the response is scoped to a replay.
+       */
+      replay_id: string | null;
+      source_file_path: string | null;
+      annotated_file_path: string | null;
+      bytes: number | null;
+      width: number | null;
+      height: number | null;
+      annotation_count: number | null;
+      mime_type: string | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

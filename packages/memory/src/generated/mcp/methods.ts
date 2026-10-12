@@ -150,6 +150,11 @@ import * as ScheduleSetScheduleDefaults from './tools/set-schedule-defaults.js'
 import * as ScheduleSetScheduleEntitlement from './tools/set-schedule-entitlement.js'
 import * as ScheduleUpdateArtifactTemplate from './tools/update_artifact_template.js'
 import * as ScheduleUpdateScheduledAction from './tools/update-scheduled-action.js'
+import * as ArtifactsDescribe from './tools/artifact_describe.js'
+import * as ArtifactsDownload from './tools/artifact_download.js'
+import * as ArtifactsReadRetained from './tools/artifact_read.js'
+import * as ArtifactsGetArtifactTemplateExample from './tools/get_artifact_template_example.js'
+import * as ArtifactsRead from './tools/report_artifact_read.js'
 import * as BrowserClick from './tools/browser_click.js'
 import * as BrowserClose from './tools/browser_close.js'
 import * as BrowserExtensionDelete from './tools/browser_extension_delete.js'
@@ -292,8 +297,6 @@ import * as FactsHistory from './tools/fact-history.js'
 import * as FactsRecordFact from './tools/record-fact.js'
 import * as ReviewsG2Reviews from './tools/g2_reviews.js'
 import * as ReviewsTrustpilotReviews from './tools/trustpilot_reviews.js'
-import * as ArtifactsGetArtifactTemplateExample from './tools/get_artifact_template_example.js'
-import * as ArtifactsRead from './tools/report_artifact_read.js'
 import * as GoogleAdsPageIntel from './tools/google_ads_page_intel.js'
 import * as GoogleAdsSearch from './tools/google_ads_search.js'
 import * as GoogleAdsTranscribe from './tools/google_ads_transcribe.js'
@@ -900,6 +903,21 @@ export const MCP_TOOL_BINDINGS = [
     "name": "archive_scheduled_run",
     "category": "schedule",
     "methodName": "archiveScheduledRun"
+  },
+  {
+    "name": "artifact_describe",
+    "category": "artifacts",
+    "methodName": "describe"
+  },
+  {
+    "name": "artifact_download",
+    "category": "artifacts",
+    "methodName": "download"
+  },
+  {
+    "name": "artifact_read",
+    "category": "artifacts",
+    "methodName": "readRetained"
   },
   {
     "name": "audit_site",
@@ -2809,6 +2827,30 @@ export class ScheduleNamespace {
   }
 }
 
+export class ArtifactsNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async describe(input: ArtifactsDescribe.Input): Promise<ArtifactsDescribe.Output> {
+    return this.callTool('artifact_describe', input) as Promise<ArtifactsDescribe.Output>
+  }
+
+  async download(input: ArtifactsDownload.Input): Promise<ArtifactsDownload.Output> {
+    return this.callTool('artifact_download', input) as Promise<ArtifactsDownload.Output>
+  }
+
+  async readRetained(input: ArtifactsReadRetained.Input): Promise<ArtifactsReadRetained.Output> {
+    return this.callTool('artifact_read', input) as Promise<ArtifactsReadRetained.Output>
+  }
+
+  async getArtifactTemplateExample(input: ArtifactsGetArtifactTemplateExample.Input): Promise<ArtifactsGetArtifactTemplateExample.Output> {
+    return this.callTool('get_artifact_template_example', input) as Promise<ArtifactsGetArtifactTemplateExample.Output>
+  }
+
+  async read(input: ArtifactsRead.Input): Promise<ArtifactsRead.Output> {
+    return this.callTool('report_artifact_read', input) as Promise<ArtifactsRead.Output>
+  }
+}
+
 export class BrowserNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3441,18 +3483,6 @@ export class ReviewsNamespace {
   }
 }
 
-export class ArtifactsNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async getArtifactTemplateExample(input: ArtifactsGetArtifactTemplateExample.Input): Promise<ArtifactsGetArtifactTemplateExample.Output> {
-    return this.callTool('get_artifact_template_example', input) as Promise<ArtifactsGetArtifactTemplateExample.Output>
-  }
-
-  async read(input: ArtifactsRead.Input): Promise<ArtifactsRead.Output> {
-    return this.callTool('report_artifact_read', input) as Promise<ArtifactsRead.Output>
-  }
-}
-
 export class GoogleAdsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3807,6 +3837,7 @@ export class GeneratedMcpToolsClient {
   readonly analytics: AnalyticsNamespace
   readonly web: WebNamespace
   readonly schedule: ScheduleNamespace
+  readonly artifacts: ArtifactsNamespace
   readonly browser: BrowserNamespace
   readonly memory: MemoryNamespace
   readonly connections: ConnectionsNamespace
@@ -3823,7 +3854,6 @@ export class GeneratedMcpToolsClient {
   readonly facebook: FacebookNamespace
   readonly facts: FactsNamespace
   readonly reviews: ReviewsNamespace
-  readonly artifacts: ArtifactsNamespace
   readonly googleAds: GoogleAdsNamespace
   readonly search: SearchNamespace
   readonly images: ImagesNamespace
@@ -3848,6 +3878,7 @@ export class GeneratedMcpToolsClient {
     this.analytics = new AnalyticsNamespace(callTool)
     this.web = new WebNamespace(callTool)
     this.schedule = new ScheduleNamespace(callTool)
+    this.artifacts = new ArtifactsNamespace(callTool)
     this.browser = new BrowserNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)
     this.connections = new ConnectionsNamespace(callTool)
@@ -3864,7 +3895,6 @@ export class GeneratedMcpToolsClient {
     this.facebook = new FacebookNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
     this.reviews = new ReviewsNamespace(callTool)
-    this.artifacts = new ArtifactsNamespace(callTool)
     this.googleAds = new GoogleAdsNamespace(callTool)
     this.search = new SearchNamespace(callTool)
     this.images = new ImagesNamespace(callTool)

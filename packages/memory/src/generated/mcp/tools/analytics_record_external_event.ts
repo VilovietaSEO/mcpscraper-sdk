@@ -148,31 +148,74 @@ export interface Input {
   idempotencyKey: string;
 }
 
-export interface Output {
-  ok: boolean;
-  id: string | null;
-  created: boolean;
-  personId: string | null;
-  identityTier: "confirmed" | "unlinked";
-  namespaceId: string | null;
-  /**
-   * @maxItems 500
-   */
-  conversionIds: string[];
-  consentEligibility: {
-    [k: string]: unknown;
-  };
-  valueProvenance: {
-    [k: string]: {
-      [k: string]: unknown;
+export type Output =
+  | {
+      ok: boolean;
+      id: string | null;
+      created: boolean;
+      personId: string | null;
+      identityTier: "confirmed" | "unlinked";
+      namespaceId: string | null;
+      /**
+       * @maxItems 500
+       */
+      conversionIds: string[];
+      consentEligibility: {
+        [k: string]: unknown;
+      };
+      valueProvenance: {
+        [k: string]: {
+          [k: string]: unknown;
+        };
+      };
+      /**
+       * @maxItems 500
+       */
+      scoreEvaluationIds: string[];
+      predictionEvidence: unknown;
+      candidatePromotion: {
+        [k: string]: unknown;
+      } | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-  };
-  /**
-   * @maxItems 500
-   */
-  scoreEvaluationIds: string[];
-  predictionEvidence: unknown;
-  candidatePromotion: {
-    [k: string]: unknown;
-  } | null;
-}

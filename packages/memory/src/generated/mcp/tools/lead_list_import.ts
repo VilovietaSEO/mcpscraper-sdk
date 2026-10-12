@@ -57,272 +57,315 @@ export interface Input {
       };
 }
 
-export interface Output {
-  status: "ready" | "sheet_selection_required";
-  leadListId: string | null;
-  sourceFormat: "rows" | "csv" | "tsv" | "xlsx";
-  sheets: {
-    name: string;
-    rowCount: number;
-    columnCount: number;
-    hidden?: boolean;
-    state?: "visible" | "hidden" | "veryHidden";
-  }[];
-  selectedSheet: string | null;
-  /**
-   * @maxItems 100
-   */
-  headers: string[];
-  rowCount: number;
-  columnCount: number;
-  /**
-   * @maxItems 10
-   */
-  sampleRows:
-    | []
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ]
-    | [
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        },
-        {
-          [k: string]: string | number | boolean | null;
-        }
-      ];
-  suggestedColumnMap: {
-    name: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
+export type Output =
+  | {
+      status: "ready" | "sheet_selection_required";
+      leadListId: string | null;
+      sourceFormat: "rows" | "csv" | "tsv" | "xlsx";
+      sheets: {
+        name: string;
+        rowCount: number;
+        columnCount: number;
+        hidden?: boolean;
+        state?: "visible" | "hidden" | "veryHidden";
+      }[];
+      selectedSheet: string | null;
+      /**
+       * @maxItems 100
+       */
+      headers: string[];
+      rowCount: number;
+      columnCount: number;
+      /**
+       * @maxItems 10
+       */
+      sampleRows:
+        | []
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ]
+        | [
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            },
+            {
+              [k: string]: string | number | boolean | null;
+            }
+          ];
+      suggestedColumnMap: {
+        name: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        location?: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        city?: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        region?: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        organization?: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        websiteUrl?: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        profileUrl?: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        phone?: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        entityType?: {
+          header: string | null;
+          confidence: number;
+          reason: string;
+          accepted: boolean;
+        };
+        [k: string]: unknown;
+      };
+      warnings: string[];
+      scanState?: "structurally_validated" | null;
+      expiresAt: string | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-    location?: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
-    };
-    city?: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
-    };
-    region?: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
-    };
-    organization?: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
-    };
-    websiteUrl?: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
-    };
-    profileUrl?: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
-    };
-    phone?: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
-    };
-    entityType?: {
-      header: string | null;
-      confidence: number;
-      reason: string;
-      accepted: boolean;
-    };
-    [k: string]: unknown;
-  };
-  warnings: string[];
-  scanState?: "structurally_validated" | null;
-  expiresAt: string | null;
-}

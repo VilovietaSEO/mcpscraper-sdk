@@ -1,6 +1,6 @@
 # mcpscraper-memory-sdk (Python)
 
-Official Python clients for the unified 364-tool [mcpscraper.dev](https://mcpscraper.dev) MCP catalog.
+Official Python clients for the unified 367-tool [mcpscraper.dev](https://mcpscraper.dev) MCP catalog.
 The direct 143-tool Memory manifest remains checked for runtime compatibility.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
@@ -33,7 +33,7 @@ except MemoryApiError as err:
 
 `client.access`, `client.capture`, `client.channels`, `client.crm`, `client.facts`, `client.files`, `client.graph`, `client.library`, `client.memory`, `client.recall`, `client.research`, `client.schedule`, `client.storage`, `client.tables`, `client.tags`, `client.vaults`, `client.video`, `client.webhooks` — one method per tool, snake_case, typed with generated Pydantic models. Use Research for sourced knowledge and CRM for an actual relationship; counterpart operations link records without copying fields. External CRM providers remain unavailable, with no setup or write wrapper. Original Gmail attachment bytes saved to Memory are available through `client.files.file_asset_save(...)` and `client.files.file_asset_get(...)`.
 
-Use the same key with `McpToolsClient` for all 364 unified scraper and Memory tools.
+Use the same key with `McpToolsClient` for all 367 unified scraper and Memory tools.
 
 Use `client.call_tool_result(name, args)` for native MCP image, audio, or resource blocks. The existing `call_tool` method keeps returning the parsed structured/text value.
 
@@ -61,3 +61,9 @@ python scripts/generate_models.py
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) (also reaches these 143 tools via a scraper key) · [`mcpscraper-cli`](../cli)
 
 Release changes: [SDK 0.51.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.51.0).
+
+## Client attribution and full results
+
+Clients accept `client_attribution={"install_channel": ..., "ai_client": ..., "ai_model": ...}` and default to calling surface `sdk`. Set only known caller labels; unspecified labels stay unknown. `on_response` receives a metadata dictionary with `request_id` and `status` per response, and errors keep their own `request_id`. These options also apply to `McpToolsClient` and `MemoryClient`; labels are reporting declarations, not authorization.
+
+Generated output unions return the matching model directly, preserving attributes such as `transcript_text`. Use `pydantic.TypeAdapter(Output)` when independently validating an output union. Large outputs may have `delivery`, `scope` and `recovery` instead of inline data. Preserve them, then use `tools.artifacts.describe`, `read_retained` (follow `next_offset` to None), or `download` with the artifact ID. The legacy `artifacts.read` method remains the report reader. `call_tool_result` preserves native content/resource links. Download URL expiry differs from retention; renew through `download` without rerunning acquisition. Use the returned capability for binary files.

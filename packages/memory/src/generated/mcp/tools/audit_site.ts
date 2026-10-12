@@ -37,72 +37,115 @@ export interface Input {
   downloadImages?: boolean;
 }
 
-export interface Output {
-  url: string;
-  /**
-   * Absent when background is true — the audit has not finished yet.
-   */
-  pageCount?: number;
-  /**
-   * Absent when background is true — the audit has not finished yet.
-   */
-  durationMs?: number;
-  /**
-   * Absent when background is true — the audit has not finished yet.
-   */
-  bulkFolder?: string | null;
-  /**
-   * Absent when background is true — the audit has not finished yet.
-   */
-  issues?: {
-    [k: string]: number;
-  };
-  /**
-   * Absent when background is true — the audit has not finished yet.
-   */
-  images?: {
-    unique: number;
-    totalBytes: number;
-    over100kb: number;
-    legacyFormat: number;
-  };
-  /**
-   * Absent when background is true — the audit has not finished yet.
-   */
-  links?: {
-    internal: number;
-    external: number;
-    orphans: number;
-    brokenInternal: number;
-    externalDomains: number;
-  };
-  artifact?: {
-    artifactId: string;
-    bytes: number;
-    expiresAt: string;
-    preview: string;
-  };
-  /**
-   * Present when background (or downloadImages) was set — poll with check_site_export.
-   */
-  jobId?: string;
-  /**
-   * Present when background (or downloadImages) was set.
-   */
-  status?: "pending";
-  /**
-   * Present when background (or downloadImages) was set — informational; use check_site_export with jobId, not this URL directly.
-   */
-  statusUrl?: string;
-  requestedMaxPages?: number;
-  effectiveMaxPages?: number;
-  creditLimited?: boolean;
-  creditTruncated?: boolean;
-  delivery?: {
-    requested: "auto" | "artifact";
-    effective: "artifact";
-    retained: boolean;
-    preserveMedia: boolean;
-    nextAction: string;
-  };
-}
+export type Output =
+  | {
+      url: string;
+      /**
+       * Absent when background is true — the audit has not finished yet.
+       */
+      pageCount?: number;
+      /**
+       * Absent when background is true — the audit has not finished yet.
+       */
+      durationMs?: number;
+      /**
+       * Absent when background is true — the audit has not finished yet.
+       */
+      bulkFolder?: string | null;
+      /**
+       * Absent when background is true — the audit has not finished yet.
+       */
+      issues?: {
+        [k: string]: number;
+      };
+      /**
+       * Absent when background is true — the audit has not finished yet.
+       */
+      images?: {
+        unique: number;
+        totalBytes: number;
+        over100kb: number;
+        legacyFormat: number;
+      };
+      /**
+       * Absent when background is true — the audit has not finished yet.
+       */
+      links?: {
+        internal: number;
+        external: number;
+        orphans: number;
+        brokenInternal: number;
+        externalDomains: number;
+      };
+      artifact?: {
+        artifactId: string;
+        bytes: number;
+        expiresAt: string;
+        preview: string;
+      };
+      /**
+       * Present when background (or downloadImages) was set — poll with check_site_export.
+       */
+      jobId?: string;
+      /**
+       * Present when background (or downloadImages) was set.
+       */
+      status?: "pending";
+      /**
+       * Present when background (or downloadImages) was set — informational; use check_site_export with jobId, not this URL directly.
+       */
+      statusUrl?: string;
+      requestedMaxPages?: number;
+      effectiveMaxPages?: number;
+      creditLimited?: boolean;
+      creditTruncated?: boolean;
+      delivery?: {
+        requested: "auto" | "artifact";
+        effective: "artifact";
+        retained: boolean;
+        preserveMedia: boolean;
+        nextAction: string;
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

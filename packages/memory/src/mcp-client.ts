@@ -1,6 +1,7 @@
 import { GeneratedMcpToolsClient } from './generated/mcp/methods.js'
+import { clientAttributionHeaders, notifyResponse, responseMetadata, type ClientMetadataOptions, type ResponseMetadata } from './client-metadata.js'
 
-export interface McpToolsClientOptions {
+export interface McpToolsClientOptions extends ClientMetadataOptions {
   apiKey: string
   baseUrl?: string
   fetch?: typeof globalThis.fetch
@@ -24,6 +25,7 @@ export interface McpToolErrorDetails {
   rpcCode?: number
   data?: unknown
   toolError?: unknown
+  requestId?: string
 }
 
 export class McpToolError extends Error {
@@ -31,6 +33,7 @@ export class McpToolError extends Error {
   readonly rpcCode?: number
   readonly data?: unknown
   readonly toolError?: unknown
+  readonly requestId?: string
 
   constructor(message: string, details: McpToolErrorDetails = {}) {
     super(message)
@@ -39,6 +42,7 @@ export class McpToolError extends Error {
     this.rpcCode = details.rpcCode
     this.data = details.data
     this.toolError = details.toolError
+    this.requestId = details.requestId
   }
 }
 
@@ -71,7 +75,7 @@ interface JsonRpcResponse<T> {
   result?: T
 }
 
-function parseMcpJsonRpcResponse<T>(raw: string): JsonRpcResponse<T> {
+export function parseMcpJsonRpcResponse<T>(raw: string): JsonRpcResponse<T> {
   const trimmed = raw.trim()
   if (!trimmed) throw new McpToolError('MCP endpoint returned an empty response')
   if (!trimmed.startsWith('event:') && !trimmed.startsWith('data:')) {
@@ -94,6 +98,8 @@ class McpJsonRpcTransport {
   private readonly listRetries: number
   private readonly retryDelayMs: number
   private readonly requestTimeoutMs: number
+  private readonly attributionHeaders: Record<string, string>
+  private readonly onResponse: ClientMetadataOptions['onResponse']
   private rpcId = 0
 
   constructor(options: McpToolsClientOptions) {
@@ -103,10 +109,12 @@ class McpJsonRpcTransport {
     this.listRetries = options.listRetries ?? 2
     this.retryDelayMs = options.retryDelayMs ?? 250
     this.requestTimeoutMs = options.requestTimeoutMs ?? 590_000
+    this.attributionHeaders = clientAttributionHeaders(options.clientAttribution)
+    this.onResponse = options.onResponse
     if (!Number.isFinite(this.requestTimeoutMs) || this.requestTimeoutMs <= 0) throw new TypeError('requestTimeoutMs must be a positive number')
   }
 
-  private async request<T>(method: string, params?: Record<string, unknown>): Promise<T> {
+  private async request<T>(method: string, params?: Record<string, unknown>): Promise<{ data: T; metadata: ResponseMetadata }> {
     const attempts = method === 'tools/list' ? this.listRetries + 1 : 1
     let response: Response | undefined
     for (let attempt = 0; attempt < attempts; attempt += 1) {
@@ -114,6 +122,7 @@ class McpJsonRpcTransport {
         response = await this.fetchImpl(`${this.baseUrl}/mcp`, {
           method: 'POST',
           headers: {
+            ...this.attributionHeaders,
             'x-api-key': this.apiKey,
             'content-type': 'application/json',
             accept: 'application/json, text/event-stream',
@@ -126,6 +135,7 @@ class McpJsonRpcTransport {
           }),
           signal: AbortSignal.timeout(this.requestTimeoutMs),
         })
+        notifyResponse(this.onResponse, responseMetadata(response))
       } catch (error) {
         if (error instanceof DOMException && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
           const envelope = {
@@ -144,6 +154,7 @@ class McpJsonRpcTransport {
     }
 
     if (!response) throw new McpToolError(`MCP method "${method}" produced no HTTP response`)
+    const metadata = responseMetadata(response)
 
     if (!response.ok) {
       const raw = await response.text().catch(() => '')
@@ -159,27 +170,38 @@ class McpJsonRpcTransport {
         httpStatus: response.status,
         data,
         ...(publicBody ? { toolError: publicBody } : {}),
+        requestId: metadata.requestId,
       })
     }
 
-    const payload = parseMcpJsonRpcResponse<T>(await response.text())
+    let payload: JsonRpcResponse<T>
+    try {
+      payload = parseMcpJsonRpcResponse<T>(await response.text())
+      if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('Invalid JSON-RPC envelope')
+    } catch {
+      throw new McpToolError('MCP endpoint returned an invalid response', {
+        httpStatus: response.status,
+        requestId: metadata.requestId,
+      })
+    }
     if (payload.error) {
       throw new McpToolError(payload.error.message, {
         rpcCode: payload.error.code,
         data: payload.error.data,
+        requestId: metadata.requestId,
       })
     }
-    if (payload.result === undefined) throw new McpToolError(`MCP method "${method}" returned no result`)
-    return payload.result
+    if (payload.result === undefined) throw new McpToolError(`MCP method "${method}" returned no result`, { requestId: metadata.requestId })
+    return { data: payload.result, metadata }
   }
 
   async listTools(): Promise<McpToolDescriptor[]> {
     const result = await this.request<{ tools?: McpToolDescriptor[] }>('tools/list')
-    return result.tools ?? []
+    return result.data.tools ?? []
   }
 
   async callToolResult(name: string, args: unknown = {}): Promise<McpToolCallResult> {
-    const result = await this.request<McpToolCallResult>('tools/call', {
+    const { data: result, metadata } = await this.request<McpToolCallResult>('tools/call', {
       name,
       arguments: (args ?? {}) as Record<string, unknown>,
     })
@@ -191,7 +213,7 @@ class McpJsonRpcTransport {
           : typeof parsed === 'string'
             ? parsed
             : `Tool "${name}" failed`
-      throw new McpToolError(message, { toolError: parsed })
+      throw new McpToolError(message, { toolError: parsed, requestId: metadata.requestId })
     }
     return result
   }
