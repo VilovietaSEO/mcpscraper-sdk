@@ -8,7 +8,7 @@
     "projectedContractSha256": "b0afdb5ace48e811d4e820d4f3810edaa699e81e60a860450e1d18ecdbbd2bca",
     "restSourceSha256": "15681bc921e79f2adfa23ba396791d76fbdd750a16750e315d959fed1f8a09db",
     "toolCount": 367,
-    "directMemoryVersion": "1.23.0",
+    "directMemoryVersion": "1.23.1",
     "directMemoryToolCount": 146
   },
   "verification": {

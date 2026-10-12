@@ -24,7 +24,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 - Accept complete artifact delivery envelopes in Python methods and Memory convenience clients. Preserve explicit null inputs, nullable output fields and numeric values without requiring a newer Pydantic minimum.
 - Retain safe recovery identifiers and caller retry keys after uncertain outcomes so clients can inspect or resume existing paid work. Support streamed Memory responses without dropping result content, and attach request IDs to malformed-response errors without repeating the call.
 
-Verified against MCP Scraper 0.96.0 with 367 unified tools and 146 direct Memory tools. Package versions are Node scraper 0.53.0, Node Memory 0.52.0, CLI 0.51.0, Python scraper 0.51.0 and Python Memory 0.48.0. Saved client attribution requires server request capture to be enabled.
+Verified against MCP Scraper 0.96.0 with 367 unified tools and Memory 1.23.1 with 146 direct tools. Package versions are Node scraper 0.53.0, Node Memory 0.52.0, CLI 0.51.0, Python scraper 0.51.0 and Python Memory 0.48.0. Saved client attribution requires server request capture to be enabled.
 
 ## [0.52.0] - 2026-09-29 — targets mcp-scraper 0.95.2
 
