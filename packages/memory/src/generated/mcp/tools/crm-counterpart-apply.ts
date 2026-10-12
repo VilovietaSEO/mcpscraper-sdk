@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Durable CRM provisioning-plan identifier returned by the planning operation.
+   * Exact owner-scoped counterpart plan identifier returned by crm-counterpart-preview; use its matching unexpired planHandle and digest.
    */
   planId: string;
   /**
@@ -76,5 +76,22 @@ export type Output =
           idempotencyKey: string;
           state: string;
         };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
       };
     };

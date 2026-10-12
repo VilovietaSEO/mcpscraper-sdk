@@ -16,7 +16,7 @@ export interface Input {
    */
   destinationUrl: string;
   /**
-   * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+   * Required utm_source value identifying the acquisition source, such as google or a newsletter name.
    */
   source: string;
   /**
@@ -32,7 +32,7 @@ export interface Input {
    */
   term?: string;
   /**
-   * Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.
+   * Optional utm_content label identifying the ad creative or link variant; this is not document content.
    */
   content?: string;
   /**

@@ -7,15 +7,15 @@ class CrmDealUpsertInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
     deal_id: Union[str, None] = Field(None, alias='dealId', description='Stable CRM deal or opportunity identifier.')
-    base_revision: Annotated[int, Field(ge=0)] = Field(..., alias='baseRevision', description='Last revision read by the caller; supply it to reject an update if the record changed meanwhile.')
+    base_revision: Annotated[int, Field(ge=0)] = Field(..., alias='baseRevision', description='Use 0 to create a deal; for an edit, supply dealId and the current positive revision read from crm-work-get.')
     idempotency_key: Annotated[str, Field(min_length=8, max_length=200)] = Field(..., alias='idempotencyKey', description='Caller-owned opaque key for this intended operation; reuse only when retrying the same operation.')
     entity_ids: Annotated[list[str], Field(min_length=1, max_length=100)] = Field(..., alias='entityIds', description='Stable CRM entity identifiers associated with this CRM activity, task, or deal.')
     title: Annotated[str, Field(min_length=1, max_length=300)] = Field(..., alias='title', description='Human-readable title for the proposed record or authored content.')
     content: Union[Annotated[str, Field(max_length=200000)], None] = Field(None, alias='content', description='Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.')
     pipeline_id: str = Field(..., alias='pipelineId', description='Exact CRM pipeline identifier selected from authorized tenant discovery.')
     stage_id: str = Field(..., alias='stageId', description='Exact CRM stage identifier required for the conversion rule to match.')
-    probability: Annotated[Union[float, int], Field(ge=0, le=1)] = Field(..., alias='probability', description='Deal probability from zero through one hundred for the selected governed stage.')
-    party: str = Field(..., alias='party', description='Stable CRM person or organization party associated with the deal.')
+    probability: Annotated[Union[float, int], Field(ge=0, le=1)] = Field(..., alias='probability', description='Deal probability from 0 through 1; must equal the selected stage probability returned by crm-pipeline-list.')
+    party: str = Field(..., alias='party', description='Stable CRM person or organization party for the deal; this identifier must also appear in entityIds.')
     entered_at: str = Field(..., alias='enteredAt', description='ISO 8601 time when the deal entered the selected pipeline stage.')
     value: Union[Union[Annotated[Union[float, int], Field(ge=0)], None], None] = Field(None, alias='value', description='Typed bounded comparison or field value for this declarative rule.')
     currency: Union[Union[str, None], None] = Field(None, alias='currency', description='Three-letter ISO currency code for the event value.')
@@ -114,8 +114,30 @@ class CrmDealUpsertOutputVariant2(BaseModel):
     recovery: CrmDealUpsertOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmDealUpsertOutputVariant3Operation = TypedDict('CrmDealUpsertOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmDealUpsertOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmDealUpsertOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmDealUpsertOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmDealUpsertOutput).
-CrmDealUpsertOutput = Union[CrmDealUpsertOutputVariant2, CrmDealUpsertOutputVariant1]
+CrmDealUpsertOutput = Union[CrmDealUpsertOutputVariant2, CrmDealUpsertOutputVariant3, CrmDealUpsertOutputVariant1]
 
 _CrmDealUpsertInputAdapter = TypeAdapter(CrmDealUpsertInput)
 _CrmDealUpsertOutputAdapter = TypeAdapter(CrmDealUpsertOutput)

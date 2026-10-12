@@ -3,60 +3,26 @@ from typing_extensions import NotRequired, Required, TypedDict
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 
-class CrmWorkSearchInputVariant1(BaseModel):
+class CrmWorkSearchInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    api_key: Union[str, None] = Field(None, alias='apiKey', description='Caller API key. Omit when the MCP transport already authenticated this request.')
-    session_id: Union[str, None] = Field(None, alias='sessionId', description='Optional MCP session identifier used for active account context.')
     entity_id: Union[str, None] = Field(None, alias='entityId', description='Optional stable CRM person or organization entity ID associated with the work record.')
     entity_ids: Union[Annotated[list[str], Field(min_length=1, max_length=10)], None] = Field(None, alias='entityIds', description='Optional stable CRM entity IDs that must all be associated with the work record.')
     work_id: Union[str, None] = Field(None, alias='workId', description='Optional exact canonical CRM activity, task, or deal work ID.')
     query: Union[Annotated[str, Field(min_length=1, max_length=300)], None] = Field(None, alias='query', description='Optional case-insensitive title search.')
     cursor: Union[Annotated[str, Field(min_length=1, max_length=2048)], None] = Field(None, alias='cursor', description='Opaque cursor returned by the previous crm-work-search page.')
     limit: Union[Annotated[int, Field(ge=1, le=100)], None] = Field(None, alias='limit', description='Maximum work records to return before cursor pagination.')
-    object_kind: Literal['activity'] = Field(..., alias='objectKind', description='Search only canonical CRM activity records.')
-
-
-class CrmWorkSearchInputVariant2(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
-
-    api_key: Union[str, None] = Field(None, alias='apiKey', description='Caller API key. Omit when the MCP transport already authenticated this request.')
-    session_id: Union[str, None] = Field(None, alias='sessionId', description='Optional MCP session identifier used for active account context.')
-    entity_id: Union[str, None] = Field(None, alias='entityId', description='Optional stable CRM person or organization entity ID associated with the work record.')
-    entity_ids: Union[Annotated[list[str], Field(min_length=1, max_length=10)], None] = Field(None, alias='entityIds', description='Optional stable CRM entity IDs that must all be associated with the work record.')
-    work_id: Union[str, None] = Field(None, alias='workId', description='Optional exact canonical CRM activity, task, or deal work ID.')
-    query: Union[Annotated[str, Field(min_length=1, max_length=300)], None] = Field(None, alias='query', description='Optional case-insensitive title search.')
-    cursor: Union[Annotated[str, Field(min_length=1, max_length=2048)], None] = Field(None, alias='cursor', description='Opaque cursor returned by the previous crm-work-search page.')
-    limit: Union[Annotated[int, Field(ge=1, le=100)], None] = Field(None, alias='limit', description='Maximum work records to return before cursor pagination.')
-    object_kind: Literal['task'] = Field(..., alias='objectKind', description='Search only canonical Task records through the CRM lens.')
-    task_statuses: Union[Annotated[list[Literal['todo', 'in_progress', 'blocked', 'done', 'cancelled']], Field(min_length=1, max_length=100)], None] = Field(None, alias='taskStatuses', description='Optional canonical Task statuses to include.')
-    due_before: Union[str, None] = Field(None, alias='dueBefore', description='Inclusive upper due-time bound for canonical Tasks.')
-    due_after: Union[str, None] = Field(None, alias='dueAfter', description='Inclusive lower due-time bound for canonical Tasks.')
-    due_unscheduled: Union[bool, None] = Field(None, alias='dueUnscheduled', description='Set true to return only canonical Tasks without a due date.')
-    task_owner_id: Union[Annotated[str, Field(min_length=1, max_length=200)], None] = Field(None, alias='taskOwnerId', description='Exact owner identifier stored on the canonical Task.')
-    deal_id: Union[str, None] = Field(None, alias='dealId', description='Exact native CRM deal UUID linked from the canonical Task.')
-
-
-class CrmWorkSearchInputVariant3(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
-
-    api_key: Union[str, None] = Field(None, alias='apiKey', description='Caller API key. Omit when the MCP transport already authenticated this request.')
-    session_id: Union[str, None] = Field(None, alias='sessionId', description='Optional MCP session identifier used for active account context.')
-    entity_id: Union[str, None] = Field(None, alias='entityId', description='Optional stable CRM person or organization entity ID associated with the work record.')
-    entity_ids: Union[Annotated[list[str], Field(min_length=1, max_length=10)], None] = Field(None, alias='entityIds', description='Optional stable CRM entity IDs that must all be associated with the work record.')
-    work_id: Union[str, None] = Field(None, alias='workId', description='Optional exact canonical CRM activity, task, or deal work ID.')
-    query: Union[Annotated[str, Field(min_length=1, max_length=300)], None] = Field(None, alias='query', description='Optional case-insensitive title search.')
-    cursor: Union[Annotated[str, Field(min_length=1, max_length=2048)], None] = Field(None, alias='cursor', description='Opaque cursor returned by the previous crm-work-search page.')
-    limit: Union[Annotated[int, Field(ge=1, le=100)], None] = Field(None, alias='limit', description='Maximum work records to return before cursor pagination.')
-    object_kind: Literal['deal'] = Field(..., alias='objectKind', description='Search only native CRM deal records.')
-    pipeline_id: Union[str, None] = Field(None, alias='pipelineId', description='Optional exact native CRM pipeline UUID.')
-    stage_ids: Union[Annotated[list[str], Field(min_length=1, max_length=100)], None] = Field(None, alias='stageIds', description='Optional native CRM stage UUIDs to include.')
-    min_value: Union[Annotated[Union[float, int], Field(ge=0)], None] = Field(None, alias='minValue', description='Optional inclusive minimum deal value in the stored currency.')
-    max_value: Union[Annotated[Union[float, int], Field(ge=0)], None] = Field(None, alias='maxValue', description='Optional inclusive maximum deal value in the stored currency.')
-
-
-# Union schema: validate external payloads with TypeAdapter(CrmWorkSearchInput).
-CrmWorkSearchInput = Union[CrmWorkSearchInputVariant1, CrmWorkSearchInputVariant2, CrmWorkSearchInputVariant3]
+    object_kind: Literal['activity', 'task', 'deal'] = Field(..., alias='objectKind', description='Search exactly one canonical CRM work kind.')
+    task_statuses: Union[Annotated[list[Literal['todo', 'in_progress', 'blocked', 'done', 'cancelled']], Field(min_length=1, max_length=100)], None] = Field(None, alias='taskStatuses', description='Task-only statuses to include.')
+    due_before: Union[str, None] = Field(None, alias='dueBefore', description='Task-only inclusive upper due-time bound.')
+    due_after: Union[str, None] = Field(None, alias='dueAfter', description='Task-only inclusive lower due-time bound.')
+    due_unscheduled: Union[bool, None] = Field(None, alias='dueUnscheduled', description='Task-only filter for records without a due date.')
+    task_owner_id: Union[Annotated[str, Field(min_length=1, max_length=200)], None] = Field(None, alias='taskOwnerId', description='Task-only exact owner identifier.')
+    deal_id: Union[str, None] = Field(None, alias='dealId', description='Task-only native CRM deal UUID.')
+    pipeline_id: Union[str, None] = Field(None, alias='pipelineId', description='Deal-only native CRM pipeline UUID.')
+    stage_ids: Union[Annotated[list[str], Field(min_length=1, max_length=100)], None] = Field(None, alias='stageIds', description='Deal-only native CRM stage UUIDs.')
+    min_value: Union[Annotated[Union[float, int], Field(ge=0)], None] = Field(None, alias='minValue', description='Deal-only inclusive minimum value.')
+    max_value: Union[Annotated[Union[float, int], Field(ge=0)], None] = Field(None, alias='maxValue', description='Deal-only inclusive maximum value.')
 
 
 CrmWorkSearchOutputVariant1ItemsItemEntitiesItem = TypedDict('CrmWorkSearchOutputVariant1ItemsItemEntitiesItem', {
@@ -179,8 +145,30 @@ class CrmWorkSearchOutputVariant2(BaseModel):
     recovery: CrmWorkSearchOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmWorkSearchOutputVariant3Operation = TypedDict('CrmWorkSearchOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmWorkSearchOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmWorkSearchOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmWorkSearchOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmWorkSearchOutput).
-CrmWorkSearchOutput = Union[CrmWorkSearchOutputVariant2, CrmWorkSearchOutputVariant1]
+CrmWorkSearchOutput = Union[CrmWorkSearchOutputVariant2, CrmWorkSearchOutputVariant3, CrmWorkSearchOutputVariant1]
 
 _CrmWorkSearchInputAdapter = TypeAdapter(CrmWorkSearchInput)
 _CrmWorkSearchOutputAdapter = TypeAdapter(CrmWorkSearchOutput)

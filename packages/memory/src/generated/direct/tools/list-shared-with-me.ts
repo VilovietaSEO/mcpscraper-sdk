@@ -9,47 +9,107 @@ export interface Input {
   sessionId?: string;
 }
 
-export interface Output {
-  /**
-   * True on success; false on auth error.
-   */
-  ok: boolean;
-  /**
-   * Notes shared with you and accepted. Present when ok is true.
-   */
-  notes?: {
-    /**
-     * Pass this as shareId to memory-get/memory-put/delete-note/unlink-share.
-     */
-    shareId: string;
-    /**
-     * Identity who shared the note.
-     */
-    owner: string;
-    /**
-     * Note title.
-     */
-    title: string;
-    /**
-     * Your permissions on this note.
-     */
-    permissions: {
-      read: boolean;
-      edit: boolean;
-      delete: boolean;
-      reshare: boolean;
+export type Output =
+  | {
+      /**
+       * True on success; false on auth error.
+       */
+      ok: boolean;
+      /**
+       * Notes shared with you and accepted. Present when ok is true.
+       */
+      notes?: {
+        /**
+         * Pass this as shareId to memory-get/memory-put/delete-note/unlink-share.
+         */
+        shareId: string;
+        /**
+         * Identity who shared the note.
+         */
+        owner: string;
+        /**
+         * Note title.
+         */
+        title: string;
+        /**
+         * Your permissions on this note.
+         */
+        permissions: {
+          read: boolean;
+          edit: boolean;
+          delete: boolean;
+          reshare: boolean;
+        };
+        /**
+         * Current revision (pass as baseRevision when editing).
+         */
+        revision: number;
+        /**
+         * Last update timestamp.
+         */
+        updatedAt: string;
+      }[];
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
     };
-    /**
-     * Current revision (pass as baseRevision when editing).
-     */
-    revision: number;
-    /**
-     * Last update timestamp.
-     */
-    updatedAt: string;
-  }[];
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}

@@ -16,7 +16,7 @@ class CreateScheduledRunViewLinkOutputVariant1(BaseModel):
 
     ok: bool = Field(..., alias='ok', description='')
     share_id: Union[str, None] = Field(None, alias='shareId', description='')
-    run_id: Union[Annotated[str, Field(min_length=1, max_length=200)], None] = Field(None, alias='runId', description='Opaque scheduled-run identifier returned by a scheduled-results tool.')
+    run_id: Union[Annotated[str, Field(min_length=1, max_length=200)], None] = Field(None, alias='runId', description='')
     artifact_id: Union[Annotated[str, Field(min_length=1, max_length=1000)], None] = Field(None, alias='artifactId', description='')
     url: Union[str, None] = Field(None, alias='url', description='')
     expires_at: Union[str, None] = Field(None, alias='expiresAt', description='')

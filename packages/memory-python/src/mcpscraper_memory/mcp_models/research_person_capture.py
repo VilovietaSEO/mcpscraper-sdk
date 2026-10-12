@@ -24,7 +24,7 @@ class ResearchPersonCaptureInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
     entity_id: Union[str, None] = Field(None, alias='entityId', description='Existing governed entity identifier for this relation or edit.')
-    base_revision: Annotated[int, Field(ge=0)] = Field(..., alias='baseRevision', description='Last revision read by the caller; supply it to reject an update if the record changed meanwhile.')
+    base_revision: Annotated[int, Field(ge=0)] = Field(..., alias='baseRevision', description='Use 0 to create a Research Person; for an edit, supply the current positive revision read from research-person-get.')
     idempotency_key: Annotated[str, Field(min_length=8, max_length=200)] = Field(..., alias='idempotencyKey', description='Caller-owned opaque key for this intended operation; reuse only when retrying the same operation.')
     display_name: Annotated[str, Field(min_length=1, max_length=300)] = Field(..., alias='displayName', description='Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected.')
     content: Union[Annotated[str, Field(max_length=200000)], None] = Field(None, alias='content', description='Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.')
@@ -136,8 +136,30 @@ class ResearchPersonCaptureOutputVariant2(BaseModel):
     recovery: ResearchPersonCaptureOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+ResearchPersonCaptureOutputVariant3Operation = TypedDict('ResearchPersonCaptureOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+ResearchPersonCaptureOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class ResearchPersonCaptureOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[ResearchPersonCaptureOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(ResearchPersonCaptureOutput).
-ResearchPersonCaptureOutput = Union[ResearchPersonCaptureOutputVariant2, ResearchPersonCaptureOutputVariant1]
+ResearchPersonCaptureOutput = Union[ResearchPersonCaptureOutputVariant2, ResearchPersonCaptureOutputVariant3, ResearchPersonCaptureOutputVariant1]
 
 _ResearchPersonCaptureInputAdapter = TypeAdapter(ResearchPersonCaptureInput)
 _ResearchPersonCaptureOutputAdapter = TypeAdapter(ResearchPersonCaptureOutput)

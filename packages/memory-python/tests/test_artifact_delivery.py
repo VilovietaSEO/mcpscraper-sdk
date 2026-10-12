@@ -107,3 +107,19 @@ def test_legacy_generator_refresh_is_idempotent_and_refuses_an_unrecognized_vali
     invalid = transformed.replace("return validate_tool_output(result, MemoryGetOutput)", "return result", 1)
     with pytest.raises(RuntimeError, match="Unexpected legacy result validation"):
         generator.refresh_legacy_client(invalid)
+
+
+def test_direct_generator_preserves_inline_fields_beside_delivery_and_error_alternatives():
+    path = ROOT / "packages/memory-python/scripts/generate_models.py"
+    spec = importlib.util.spec_from_file_location("memory_models_generator", path)
+    generator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(generator)
+    manifest = json.loads((ROOT / "contracts/memory.tools.json").read_text())
+    tool = next(tool for tool in manifest["tools"] if tool["name"] == "researchPersonCaptureTool")
+    inline = generator.inline_output_schema(tool["outputSchema"])
+    assert {"ok", "message"}.issubset(inline["properties"])
+    assert {"ok", "message"}.issubset(inline["required"])
+    assert ResearchPersonCaptureOutput.model_fields["ok"].is_required()
+    assert ResearchPersonCaptureOutput.model_fields["message"].is_required()
+    with pytest.raises(ValidationError):
+        ResearchPersonCaptureOutput.model_validate({"record": {"content": "Incomplete result"}})

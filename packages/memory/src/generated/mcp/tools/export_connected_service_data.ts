@@ -174,21 +174,9 @@ export type Output =
         };
       };
       continuation?: {
-        /**
-         * Opaque continuation cursor returned by the previous page; omit for the first page.
-         */
         cursor: string;
-        /**
-         * Inclusive ISO 8601 lower time bound.
-         */
         from: string;
-        /**
-         * Exclusive ISO 8601 upper time bound.
-         */
         to: string;
-        /**
-         * Connected-service dataset to export in this operation.
-         */
         dataset:
           | "emails"
           | "calendar_events"
@@ -204,21 +192,9 @@ export type Output =
           | "resend_contacts"
           | "resend_broadcasts"
           | "resend_templates";
-        /**
-         * Read, write, and administrative permissions granted to this member or key.
-         */
         scope?: {
-          /**
-           * Slack export options for the selected connected-service dataset.
-           */
           slack?: {
-            /**
-             * Slack channel identifier returned by the connected service.
-             */
             channelId: string;
-            /**
-             * When true, include Slack thread replies with channel history.
-             */
             includeThreads: boolean;
           };
         };

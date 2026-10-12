@@ -26,7 +26,7 @@ export interface Input {
      */
     mappings: {
       /**
-       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       * Required canonical source event name used by this activation mapping.
        */
       source: string;
       /**

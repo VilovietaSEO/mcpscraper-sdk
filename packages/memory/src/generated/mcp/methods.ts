@@ -3358,7 +3358,7 @@ export class CrmNamespace {
     return this.callTool('crm-task-upsert', input) as Promise<CrmTaskUpsert.Output>
   }
 
-  async workSearch(input: CrmWorkSearch.Input = {} as CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
+  async workSearch(input: CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
     return this.callTool('crm-work-search', input) as Promise<CrmWorkSearch.Output>
   }
 }

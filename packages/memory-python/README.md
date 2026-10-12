@@ -1,7 +1,7 @@
 # mcpscraper-memory-sdk (Python)
 
 Official Python clients for the unified 367-tool [mcpscraper.dev](https://mcpscraper.dev) MCP catalog.
-The direct 143-tool Memory manifest remains checked for runtime compatibility.
+The direct 146-tool Memory manifest remains checked for runtime compatibility.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
@@ -58,9 +58,9 @@ python scripts/generate_models.py
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) (also reaches these 143 tools via a scraper key) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) (also reaches these 146 tools via a scraper key) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.51.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.51.0).
+Release changes: [SDK 0.53.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.53.0).
 
 ## Client attribution and full results
 

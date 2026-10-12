@@ -192,7 +192,7 @@ npm run verify:rest-contract
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 121-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.52.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.52.0).
+Release changes: [SDK 0.53.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.53.0).
 
 ## Client attribution and full results
 

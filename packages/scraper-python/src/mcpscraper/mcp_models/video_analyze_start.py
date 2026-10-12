@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class VideoAnalyzeStartInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    source_url: str = Field(..., alias='sourceUrl', description='A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov/.gif).')
+    source_url: str = Field(..., alias='sourceUrl', description='A YouTube, Facebook, Instagram, TikTok, or Vimeo URL, or a direct video file URL (.mp4/.webm/.mov/.gif). Maximum duration: 60 minutes.')
     interval_s: Union[Annotated[Union[float, int], Field(ge=1, le=30)], None] = Field(None, alias='intervalS', description='Preferred seconds between sampled frames (1-30). Default 2. For long videos the interval is automatically widened so the whole video is covered within the frame budget. Lower = denser sampling where the video is short enough to allow it.')
     max_frames: Union[Annotated[int, Field(ge=1, le=480)], None] = Field(None, alias='maxFrames', description='Hard cap on frames analyzed (≤480). Default 120. Frames are spread across the whole duration; lowest sampling interval is 1 second, so short videos cannot use more frames than their length in seconds.')
     detail: Union[Literal['fast', 'standard', 'deep'], None] = Field(None, alias='detail', description='Analysis depth. Default standard.')

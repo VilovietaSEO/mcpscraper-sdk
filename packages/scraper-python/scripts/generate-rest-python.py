@@ -15,6 +15,7 @@ subprocess.run(
         "--output-model-type", "pydantic_v2.BaseModel",
         "--field-constraints",
         "--use-schema-description",
+        "--strict-nullable",
         "--target-python-version", "3.10",
         "--disable-timestamp",
     ],

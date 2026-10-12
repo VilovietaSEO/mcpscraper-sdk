@@ -1,14 +1,14 @@
 export interface Input {
   /**
-   * Stable CRM Task entity identifier for create or revision-checked update.
+   * Task workId returned by crm-work-search; omit to create a new task.
    */
   taskId?: string;
   /**
-   * Existing governed entity identifier for this relation or edit.
+   * Compatibility alias for taskId, not a CRM relationship ID; taskId takes precedence.
    */
   entityId?: string;
   /**
-   * Last revision read by the caller; supply it to reject an update if the record changed meanwhile.
+   * Use 0 to create a Task; for an edit, supply taskId or entityId and the current positive revision read from crm-work-get.
    */
   baseRevision?: number;
   /**
@@ -46,7 +46,7 @@ export interface Input {
    */
   dueAt?: string | null;
   /**
-   * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+   * Optional source provenance stored with the Task; this is not a record filter.
    */
   source?: {
     [k: string]: unknown;
@@ -118,5 +118,22 @@ export type Output =
           idempotencyKey: string;
           state: string;
         };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
       };
     };

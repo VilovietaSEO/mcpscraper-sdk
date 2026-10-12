@@ -45,46 +45,106 @@ export interface Input {
       };
 }
 
-export interface Output {
-  /**
-   * True when the scheduled action was updated.
-   */
-  ok: boolean;
-  /**
-   * The updated scheduled action.
-   */
-  action?: {
-    id: string;
-    description: string;
-    vault: string;
-    cadence: "once" | "daily" | "weekly" | "monthly";
-    executionMode: "agent" | "connection_sync";
-    timeOfDay: string | null;
-    timezone: string;
-    status: "active" | "paused" | "completed";
-    nextRunAt: string;
-    lastRunAt: string | null;
-    lastRunStatus: string | null;
-    artifactSelection:
-      | {
-          mode: "none";
-        }
-      | {
-          mode: "saved_template";
-          templateId: string;
-          templateVersionId: string;
+export type Output =
+  | {
+      /**
+       * True when the scheduled action was updated.
+       */
+      ok: boolean;
+      /**
+       * The updated scheduled action.
+       */
+      action?: {
+        id: string;
+        description: string;
+        vault: string;
+        cadence: "once" | "daily" | "weekly" | "monthly";
+        executionMode: "agent" | "connection_sync";
+        timeOfDay: string | null;
+        timezone: string;
+        status: "active" | "paused" | "completed";
+        nextRunAt: string;
+        lastRunAt: string | null;
+        lastRunStatus: string | null;
+        artifactSelection:
+          | {
+              mode: "none";
+            }
+          | {
+              mode: "saved_template";
+              templateId: string;
+              templateVersionId: string;
+            };
+      };
+      /**
+       * When it will next run after this update.
+       */
+      nextRunAt?: string;
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+      /**
+       * Machine-readable denial code when the update is refused.
+       */
+      code?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
         };
-  };
-  /**
-   * When it will next run after this update.
-   */
-  nextRunAt?: string;
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-  /**
-   * Machine-readable denial code when the update is refused.
-   */
-  code?: string;
-}
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
+    };

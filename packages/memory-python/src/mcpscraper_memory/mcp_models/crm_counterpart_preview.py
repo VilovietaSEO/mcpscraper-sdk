@@ -99,8 +99,30 @@ class CrmCounterpartPreviewOutputVariant2(BaseModel):
     recovery: CrmCounterpartPreviewOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmCounterpartPreviewOutputVariant3Operation = TypedDict('CrmCounterpartPreviewOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmCounterpartPreviewOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmCounterpartPreviewOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmCounterpartPreviewOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmCounterpartPreviewOutput).
-CrmCounterpartPreviewOutput = Union[CrmCounterpartPreviewOutputVariant2, CrmCounterpartPreviewOutputVariant1]
+CrmCounterpartPreviewOutput = Union[CrmCounterpartPreviewOutputVariant2, CrmCounterpartPreviewOutputVariant3, CrmCounterpartPreviewOutputVariant1]
 
 _CrmCounterpartPreviewInputAdapter = TypeAdapter(CrmCounterpartPreviewInput)
 _CrmCounterpartPreviewOutputAdapter = TypeAdapter(CrmCounterpartPreviewOutput)

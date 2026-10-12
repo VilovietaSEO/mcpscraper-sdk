@@ -4,7 +4,7 @@ export interface Input {
    */
   dealId?: string;
   /**
-   * Last revision read by the caller; supply it to reject an update if the record changed meanwhile.
+   * Use 0 to create a deal; for an edit, supply dealId and the current positive revision read from crm-work-get.
    */
   baseRevision: number;
   /**
@@ -35,11 +35,11 @@ export interface Input {
    */
   stageId: string;
   /**
-   * Deal probability from zero through one hundred for the selected governed stage.
+   * Deal probability from 0 through 1; must equal the selected stage probability returned by crm-pipeline-list.
    */
   probability: number;
   /**
-   * Stable CRM person or organization party associated with the deal.
+   * Stable CRM person or organization party for the deal; this identifier must also appear in entityIds.
    */
   party: string;
   /**
@@ -121,5 +121,22 @@ export type Output =
           idempotencyKey: string;
           state: string;
         };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
       };
     };

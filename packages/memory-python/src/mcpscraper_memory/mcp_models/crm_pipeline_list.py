@@ -107,8 +107,30 @@ class CrmPipelineListOutputVariant2(BaseModel):
     recovery: CrmPipelineListOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmPipelineListOutputVariant3Operation = TypedDict('CrmPipelineListOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmPipelineListOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmPipelineListOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmPipelineListOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmPipelineListOutput).
-CrmPipelineListOutput = Union[CrmPipelineListOutputVariant2, CrmPipelineListOutputVariant1]
+CrmPipelineListOutput = Union[CrmPipelineListOutputVariant2, CrmPipelineListOutputVariant3, CrmPipelineListOutputVariant1]
 
 _CrmPipelineListInputAdapter = TypeAdapter(CrmPipelineListInput)
 _CrmPipelineListOutputAdapter = TypeAdapter(CrmPipelineListOutput)

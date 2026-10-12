@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.95.2 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "30f9d6e829778c2fedfdeb52a425b5ff62e3708f3daef79b3edfb46c9ba9640b",
+  "generatedFrom": "mcp-scraper 0.96.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "8394638ac2b4ccd0d2e34d14a9d3146086769c17529a1acbc9d0dbbe93bee109",
   "toolCount": 10,
   "tools": [
     {
@@ -34,7 +34,7 @@
     },
     {
       "name": "gmail_prepare_memory_import",
-      "sha256": "7c28ffc67303fc95df51d5cea9bd777f3a7f2ef5123810b0011cee38862a59e9"
+      "sha256": "1f53be6b4781f7fcca7ca877effd245dd212e9e800a048e7f8e97ee2ecce3aaa"
     },
     {
       "name": "gmail_prepare_selection",

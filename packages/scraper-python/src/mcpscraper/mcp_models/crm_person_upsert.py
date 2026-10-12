@@ -35,7 +35,7 @@ class CrmPersonUpsertInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
     entity_id: Union[str, None] = Field(None, alias='entityId', description='Existing governed entity identifier for this relation or edit.')
-    base_revision: Union[Annotated[int, Field(ge=0)], None] = Field(None, alias='baseRevision', description='Last revision read by the caller; supply it to reject an update if the record changed meanwhile.')
+    base_revision: Union[Annotated[int, Field(ge=0)], None] = Field(None, alias='baseRevision', description='Use 0 to create a CRM Person; for an edit, supply entityId and the current positive revision read from crm-person-get.')
     idempotency_key: Annotated[str, Field(min_length=8, max_length=200)] = Field(..., alias='idempotencyKey', description='Caller-owned opaque key for this intended operation; reuse only when retrying the same operation.')
     display_name: Annotated[str, Field(min_length=1, max_length=300)] = Field(..., alias='displayName', description='Human-readable person or organization name; paths, filenames, Vault references, and email-only labels are rejected.')
     content: Union[Annotated[str, Field(max_length=200000)], None] = Field(None, alias='content', description='Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.')
@@ -47,9 +47,9 @@ class CrmPersonUpsertInput(BaseModel):
     email: Union[str, None] = Field(None, alias='email', description='Bridge-compatible top-level email; normalized into contact provenance.')
     phone: Union[Annotated[str, Field(max_length=100)], None] = Field(None, alias='phone', description='Bridge-compatible top-level phone; normalized into contact provenance.')
     organization_name: Union[Annotated[str, Field(max_length=300)], None] = Field(None, alias='organizationName', description='Bridge-compatible organization label; it never creates or resolves an organization by inference.')
-    source: Union[CrmPersonUpsertInputSource, None] = Field(None, alias='source', description='Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.')
+    source: Union[CrmPersonUpsertInputSource, None] = Field(None, alias='source', description='Optional governed form-source receipt associated with this CRM Person; this records provenance rather than filtering records.')
     props: Union[dict[str, Any], None] = Field(None, alias='props', description='Complete governed note properties required by the target vault contract.')
-    lineage: Union[CrmPersonUpsertInputLineage, None] = Field(None, alias='lineage', description='Field authority, sensitivity, source, observation time, and confidence recorded with this governed write.')
+    lineage: Union[CrmPersonUpsertInputLineage, None] = Field(None, alias='lineage', description='Supply explicit unchanged lineage, including observedAt, for reliable idempotency replay. If both lineage and source are omitted, a timestamp is generated on every call; the same key prevents another write but a retry may report an idempotency conflict.')
 
 
 CrmPersonUpsertOutputVariant1Record = TypedDict('CrmPersonUpsertOutputVariant1Record', {
@@ -153,8 +153,30 @@ class CrmPersonUpsertOutputVariant2(BaseModel):
     recovery: CrmPersonUpsertOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmPersonUpsertOutputVariant3Operation = TypedDict('CrmPersonUpsertOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmPersonUpsertOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmPersonUpsertOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmPersonUpsertOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmPersonUpsertOutput).
-CrmPersonUpsertOutput = Union[CrmPersonUpsertOutputVariant2, CrmPersonUpsertOutputVariant1]
+CrmPersonUpsertOutput = Union[CrmPersonUpsertOutputVariant2, CrmPersonUpsertOutputVariant3, CrmPersonUpsertOutputVariant1]
 
 _CrmPersonUpsertInputAdapter = TypeAdapter(CrmPersonUpsertInput)
 _CrmPersonUpsertOutputAdapter = TypeAdapter(CrmPersonUpsertOutput)

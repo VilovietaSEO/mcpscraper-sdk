@@ -9,10 +9,11 @@ import test from 'node:test'
 const updater = resolve('scripts/update-memory-manifest.ts')
 const tsxLoader = createRequire(join(process.cwd(), 'package.json')).resolve('tsx')
 
-test('released Memory contract exposes 27 governed tools and no external CRM provider wrapper', async () => {
+test('current Memory contract exposes 27 governed tools and no external CRM provider wrapper', async () => {
   const manifest = JSON.parse(await readFile(resolve('contracts/memory.tools.json'), 'utf8'))
   const governed = manifest.tools.filter((tool: { category: string }) => ['research', 'crm'].includes(tool.category))
-  assert.equal(manifest.toolCount, 143)
+  assert.equal(manifest.toolCount, manifest.tools.length)
+  assert.equal(new Set(manifest.tools.map((tool: { name: string }) => tool.name)).size, manifest.toolCount)
   assert.equal(governed.filter((tool: { category: string }) => tool.category === 'research').length, 6)
   assert.equal(governed.filter((tool: { category: string }) => tool.category === 'crm').length, 21)
   assert.equal(governed.length, 27)

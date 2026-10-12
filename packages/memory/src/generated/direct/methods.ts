@@ -22,6 +22,9 @@ import * as AddVault from './tools/add-vault.js'
 import * as AnswerInboxItemTool from './tools/answerInboxItemTool.js'
 import * as ArchiveArtifactTemplate from './tools/archive_artifact_template.js'
 import * as ArchiveScheduledRun from './tools/archive_scheduled_run.js'
+import * as ArtifactDescribe from './tools/artifact_describe.js'
+import * as ArtifactDownload from './tools/artifact_download.js'
+import * as ArtifactRead from './tools/artifact_read.js'
 import * as AutoOptimizationTool from './tools/autoOptimizationTool.js'
 import * as BulkDeleteNotes from './tools/bulk-delete-notes.js'
 import * as CostUsage from './tools/cost-usage.js'
@@ -245,6 +248,22 @@ export class ArchiveNamespace {
 
   async scheduledRun(input: ArchiveScheduledRun.Input): Promise<ArchiveScheduledRun.Output> {
     return this.callTool('archive_scheduled_run', input) as Promise<ArchiveScheduledRun.Output>
+  }
+}
+
+export class ArtifactNamespace {
+  constructor(private readonly callTool: CallToolFn) {}
+
+  async describe(input: ArtifactDescribe.Input): Promise<ArtifactDescribe.Output> {
+    return this.callTool('artifact_describe', input) as Promise<ArtifactDescribe.Output>
+  }
+
+  async download(input: ArtifactDownload.Input): Promise<ArtifactDownload.Output> {
+    return this.callTool('artifact_download', input) as Promise<ArtifactDownload.Output>
+  }
+
+  async read(input: ArtifactRead.Input): Promise<ArtifactRead.Output> {
+    return this.callTool('artifact_read', input) as Promise<ArtifactRead.Output>
   }
 }
 

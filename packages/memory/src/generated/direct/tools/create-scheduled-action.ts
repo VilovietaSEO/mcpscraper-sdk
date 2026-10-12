@@ -49,41 +49,101 @@ export interface Input {
   deployDate?: string;
 }
 
-export interface Output {
-  /**
-   * True when the scheduled action was created.
-   */
-  ok: boolean;
-  /**
-   * The new scheduled action id.
-   */
-  id?: string;
-  /**
-   * When it will first run.
-   */
-  nextRunAt?: string;
-  /**
-   * The stored execution mode. Defaults to agent when omitted from the request.
-   */
-  executionMode?: "agent" | "connection_sync";
-  /**
-   * The exact stored artifact selection.
-   */
-  artifactSelection?:
-    | {
-        mode: "none";
-      }
-    | {
-        mode: "saved_template";
-        templateId: string;
-        templateVersionId: string;
+export type Output =
+  | {
+      /**
+       * True when the scheduled action was created.
+       */
+      ok: boolean;
+      /**
+       * The new scheduled action id.
+       */
+      id?: string;
+      /**
+       * When it will first run.
+       */
+      nextRunAt?: string;
+      /**
+       * The stored execution mode. Defaults to agent when omitted from the request.
+       */
+      executionMode?: "agent" | "connection_sync";
+      /**
+       * The exact stored artifact selection.
+       */
+      artifactSelection?:
+        | {
+            mode: "none";
+          }
+        | {
+            mode: "saved_template";
+            templateId: string;
+            templateVersionId: string;
+          };
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+      /**
+       * Machine-readable denial code when creation is refused.
+       */
+      code?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
       };
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-  /**
-   * Machine-readable denial code when creation is refused.
-   */
-  code?: string;
-}
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
+    };

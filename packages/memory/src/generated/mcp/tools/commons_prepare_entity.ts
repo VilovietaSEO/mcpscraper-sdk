@@ -259,7 +259,7 @@ export interface Input {
        */
       url?: string;
       /**
-       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       * Source or publisher name for this citation, preserved as attribution.
        */
       source?: string;
       /**

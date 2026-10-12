@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class CrmQualityListInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    queue: Union[Literal['classification', 'naming', 'duplicates', 'imports', 'merges', 'work'], None] = Field(None, alias='queue', description='Governance queue to list: classification, naming, identity, duplicates, or delivery.')
+    queue: Union[Literal['classification', 'naming', 'duplicates', 'imports', 'merges', 'work'], None] = Field(None, alias='queue', description='Governance queue to list: classification, naming, duplicates, imports, merges, or work.')
     limit: Union[Annotated[int, Field(ge=1, le=100)], None] = Field(None, alias='limit', description='Maximum rows or records to return on this page; use the returned cursor for more.')
 
 
@@ -83,8 +83,30 @@ class CrmQualityListOutputVariant2(BaseModel):
     recovery: CrmQualityListOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmQualityListOutputVariant3Operation = TypedDict('CrmQualityListOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmQualityListOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmQualityListOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmQualityListOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmQualityListOutput).
-CrmQualityListOutput = Union[CrmQualityListOutputVariant2, CrmQualityListOutputVariant1]
+CrmQualityListOutput = Union[CrmQualityListOutputVariant2, CrmQualityListOutputVariant3, CrmQualityListOutputVariant1]
 
 _CrmQualityListInputAdapter = TypeAdapter(CrmQualityListInput)
 _CrmQualityListOutputAdapter = TypeAdapter(CrmQualityListOutput)

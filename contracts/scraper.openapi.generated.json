@@ -5638,7 +5638,8 @@
         "properties": {
           "position": {
             "type": "integer",
-            "minimum": 1
+            "minimum": 1,
+            "maximum": 9007199254740991
           },
           "title": {
             "type": "string"
@@ -5646,23 +5647,63 @@
           "url": {
             "type": "string"
           },
+          "rawUrl": {
+            "type": "string"
+          },
+          "resolvedUrl": {
+            "nullable": true,
+            "type": "string"
+          },
+          "linkType": {
+            "type": "string",
+            "enum": [
+              "plain",
+              "google_url_redirect",
+              "google_goto_redirect"
+            ]
+          },
+          "resolutionStatus": {
+            "type": "string",
+            "enum": [
+              "not_needed",
+              "resolved",
+              "unresolved",
+              "rejected"
+            ]
+          },
+          "sourcePage": {
+            "anyOf": [
+              {
+                "type": "number",
+                "enum": [
+                  1
+                ]
+              },
+              {
+                "type": "number",
+                "enum": [
+                  2
+                ]
+              }
+            ]
+          },
           "domain": {
             "type": "string"
           },
           "cite": {
-            "type": "string",
-            "nullable": true
+            "nullable": true,
+            "type": "string"
           },
           "snippet": {
-            "type": "string",
-            "nullable": true
+            "nullable": true,
+            "type": "string"
           },
           "isRedditStyle": {
             "type": "boolean"
           },
           "inlineRating": {
-            "type": "object",
             "nullable": true,
+            "type": "object",
             "properties": {
               "value": {
                 "type": "string"
@@ -5670,9 +5711,25 @@
               "count": {
                 "type": "string"
               }
-            }
+            },
+            "required": [
+              "value",
+              "count"
+            ],
+            "additionalProperties": false
           }
-        }
+        },
+        "required": [
+          "position",
+          "title",
+          "url",
+          "domain",
+          "cite",
+          "snippet",
+          "isRedditStyle",
+          "inlineRating"
+        ],
+        "additionalProperties": false
       },
       "SerpIntelligenceHarvestResult": {
         "type": "object",
@@ -5681,14 +5738,16 @@
             "type": "string"
           },
           "location": {
-            "type": "string",
-            "nullable": true
+            "nullable": true,
+            "type": "string"
           },
           "extractedAt": {
             "type": "string"
           },
           "totalQuestions": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
           },
           "surface": {
             "type": "string",
@@ -5705,8 +5764,8 @@
                 "type": "boolean"
               },
               "text": {
-                "type": "string",
-                "nullable": true
+                "nullable": true,
+                "type": "string"
               },
               "citations": {
                 "type": "array",
@@ -5718,11 +5777,62 @@
                     },
                     "href": {
                       "type": "string"
+                    },
+                    "rawUrl": {
+                      "type": "string"
+                    },
+                    "resolvedUrl": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "linkType": {
+                      "type": "string",
+                      "enum": [
+                        "plain",
+                        "google_url_redirect",
+                        "google_goto_redirect"
+                      ]
+                    },
+                    "resolutionStatus": {
+                      "type": "string",
+                      "enum": [
+                        "not_needed",
+                        "resolved",
+                        "unresolved",
+                        "rejected"
+                      ]
                     }
-                  }
+                  },
+                  "required": [
+                    "text",
+                    "href"
+                  ],
+                  "additionalProperties": false
                 }
+              },
+              "expanded": {
+                "type": "boolean"
+              },
+              "fullyExpanded": {
+                "type": "boolean"
+              },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "shareUrl": {
+                "nullable": true,
+                "type": "string"
               }
-            }
+            },
+            "required": [
+              "detected",
+              "text",
+              "citations"
+            ],
+            "additionalProperties": false
           },
           "aiMode": {
             "type": "object",
@@ -5731,8 +5841,8 @@
                 "type": "boolean"
               },
               "text": {
-                "type": "string",
-                "nullable": true
+                "nullable": true,
+                "type": "string"
               },
               "citations": {
                 "type": "array",
@@ -5744,27 +5854,232 @@
                     },
                     "href": {
                       "type": "string"
+                    },
+                    "rawUrl": {
+                      "type": "string"
+                    },
+                    "resolvedUrl": {
+                      "nullable": true,
+                      "type": "string"
+                    },
+                    "linkType": {
+                      "type": "string",
+                      "enum": [
+                        "plain",
+                        "google_url_redirect",
+                        "google_goto_redirect"
+                      ]
+                    },
+                    "resolutionStatus": {
+                      "type": "string",
+                      "enum": [
+                        "not_needed",
+                        "resolved",
+                        "unresolved",
+                        "rejected"
+                      ]
                     }
-                  }
+                  },
+                  "required": [
+                    "text",
+                    "href"
+                  ],
+                  "additionalProperties": false
                 }
               }
-            }
+            },
+            "required": [
+              "detected",
+              "text",
+              "citations"
+            ],
+            "additionalProperties": false
           },
           "tree": {
             "type": "array",
-            "items": {}
+            "items": {
+              "$ref": "#/components/schemas/SerpIntelligencePaaNode"
+            }
           },
           "flat": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "seed_query": {
+                  "type": "string"
+                },
+                "question_id": {
+                  "type": "string"
+                },
+                "google_link_id": {
+                  "type": "string"
+                },
+                "google_evidence_id": {
+                  "type": "string"
+                },
+                "question": {
+                  "type": "string"
+                },
+                "answer": {
+                  "type": "string"
+                },
+                "answerExpansionIncomplete": {
+                  "type": "boolean"
+                },
+                "source_title": {
+                  "type": "string"
+                },
+                "source_site": {
+                  "type": "string"
+                },
+                "source_cite": {
+                  "type": "string"
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "rawUrl": {
+                        "type": "string"
+                      },
+                      "resolvedUrl": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "linkType": {
+                        "type": "string",
+                        "enum": [
+                          "plain",
+                          "google_url_redirect",
+                          "google_goto_redirect"
+                        ]
+                      },
+                      "resolutionStatus": {
+                        "type": "string",
+                        "enum": [
+                          "not_needed",
+                          "resolved",
+                          "unresolved",
+                          "rejected"
+                        ]
+                      },
+                      "title": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "site": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "description": {
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "title",
+                      "site"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "depth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "parent_question": {
+                  "type": "string"
+                },
+                "extracted_at": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "seed_query",
+                "question_id",
+                "google_link_id",
+                "google_evidence_id",
+                "question",
+                "answer",
+                "source_title",
+                "source_site",
+                "source_cite",
+                "sources",
+                "depth",
+                "parent_question",
+                "extracted_at"
+              ],
+              "additionalProperties": false
+            }
           },
           "videos": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "video",
+                    "short_video"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "channel": {
+                  "type": "string"
+                },
+                "platform": {
+                  "type": "string"
+                },
+                "duration": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "title",
+                "channel",
+                "platform",
+                "duration",
+                "url"
+              ],
+              "additionalProperties": false
+            }
           },
           "forums": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "source",
+                "url"
+              ],
+              "additionalProperties": false
+            }
           },
           "organicResults": {
             "type": "array",
@@ -5774,7 +6089,50 @@
           },
           "localPack": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "position": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 9007199254740991
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cid": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "rating": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "reviewCount": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "metadata": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "websiteUrl": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "directionsUrl": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "position",
+                "name"
+              ],
+              "additionalProperties": false
+            }
           },
           "entityIds": {
             "type": "object",
@@ -5788,18 +6146,25 @@
                       "type": "string"
                     },
                     "kgId": {
-                      "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "type": "string"
                     },
                     "cid": {
-                      "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "type": "string"
                     },
                     "gcid": {
-                      "type": "string",
-                      "nullable": true
+                      "nullable": true,
+                      "type": "string"
                     }
-                  }
+                  },
+                  "required": [
+                    "name",
+                    "kgId",
+                    "cid",
+                    "gcid"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "kgIds": {
@@ -5820,7 +6185,14 @@
                   "type": "string"
                 }
               }
-            }
+            },
+            "required": [
+              "entities",
+              "kgIds",
+              "cids",
+              "gcids"
+            ],
+            "additionalProperties": false
           },
           "stats": {
             "type": "object",
@@ -5829,41 +6201,755 @@
                 "type": "string"
               },
               "totalQuestions": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
               },
               "maxDepthReached": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
               },
               "durationMs": {
-                "type": "number"
+                "type": "number",
+                "minimum": 0
               },
               "errorCount": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
               }
-            }
+            },
+            "required": [
+              "seed",
+              "totalQuestions",
+              "maxDepthReached",
+              "durationMs",
+              "errorCount"
+            ],
+            "additionalProperties": false
           },
           "diagnostics": {
-            "type": "object",
-            "additionalProperties": true
+            "$ref": "#/components/schemas/SerpIntelligenceHarvestDiagnostics"
           },
           "whatPeopleSaying": {
             "type": "array",
-            "items": {}
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "reddit",
+                    "facebook",
+                    "instagram",
+                    "tiktok",
+                    "youtube",
+                    "news",
+                    "unknown"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "platform": {
+                  "type": "string"
+                },
+                "popularComment": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "engagement": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "duration": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "authorNote": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "title",
+                "url",
+                "source",
+                "platform",
+                "popularComment",
+                "engagement",
+                "date",
+                "duration",
+                "authorNote"
+              ],
+              "additionalProperties": false
+            }
           }
-        }
+        },
+        "required": [
+          "seed",
+          "location",
+          "extractedAt",
+          "totalQuestions",
+          "surface",
+          "aiOverview",
+          "aiMode",
+          "tree",
+          "flat",
+          "videos",
+          "forums",
+          "organicResults",
+          "localPack",
+          "entityIds",
+          "stats",
+          "diagnostics",
+          "whatPeopleSaying"
+        ],
+        "additionalProperties": false
+      },
+      "SerpIntelligenceHarvestDiagnostics": {
+        "type": "object",
+        "properties": {
+          "completionStatus": {
+            "type": "string",
+            "enum": [
+              "paa_found",
+              "no_paa",
+              "serp_only"
+            ]
+          },
+          "problem": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              null
+            ]
+          },
+          "resultQuality": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "partial",
+              "degraded"
+            ]
+          },
+          "degradedResult": {
+            "type": "boolean"
+          },
+          "degradationReasons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "empty_primary_serp",
+                "page_two_missing"
+              ]
+            }
+          },
+          "retryRecommended": {
+            "type": "boolean"
+          },
+          "noPaaObserved": {
+            "type": "boolean"
+          },
+          "phaseTimings": {
+            "type": "object",
+            "properties": {
+              "providerConnectMs": {
+                "type": "number",
+                "minimum": 0
+              },
+              "navigationMs": {
+                "type": "number",
+                "minimum": 0
+              },
+              "serpParseMs": {
+                "type": "number",
+                "minimum": 0
+              },
+              "paaExpansionMs": {
+                "type": "number",
+                "minimum": 0
+              },
+              "linkResolutionMs": {
+                "type": "number",
+                "minimum": 0
+              },
+              "totalServerMs": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "totalServerMs"
+            ],
+            "additionalProperties": false
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "requestedPages": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "enum": [
+                      1
+                    ]
+                  },
+                  {
+                    "type": "number",
+                    "enum": [
+                      2
+                    ]
+                  }
+                ]
+              },
+              "capturedPages": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "enum": [
+                      1
+                    ]
+                  },
+                  {
+                    "type": "number",
+                    "enum": [
+                      2
+                    ]
+                  }
+                ]
+              },
+              "page2Status": {
+                "type": "string",
+                "enum": [
+                  "not_requested",
+                  "not_attempted",
+                  "captured",
+                  "unavailable",
+                  "failed"
+                ]
+              },
+              "page1OrganicCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "page2OrganicCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "failureCode": {
+                "type": "string",
+                "enum": [
+                  "missing_next",
+                  "invalid_next",
+                  "empty_page",
+                  "captcha",
+                  "timeout",
+                  "navigation_error",
+                  "unsupported_driver"
+                ]
+              }
+            },
+            "required": [
+              "requestedPages",
+              "capturedPages",
+              "page2Status",
+              "page1OrganicCount",
+              "page2OrganicCount"
+            ],
+            "additionalProperties": false
+          },
+          "completeness": {
+            "type": "object",
+            "properties": {
+              "paaWithoutAnswer": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "paaWithoutSource": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "paaIncompleteAnswers": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "paaAnswersRecovered": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "aioShareCaptured": {
+                "nullable": true,
+                "type": "boolean"
+              },
+              "paaRequested": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "paaReturned": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "paaUnique": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "paaWithoutAnswer",
+              "paaWithoutSource",
+              "paaAnswersRecovered",
+              "aioShareCaptured"
+            ],
+            "additionalProperties": false
+          },
+          "interruption": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "browser_session_interrupted",
+                  "request_aborted",
+                  "timeout"
+                ]
+              }
+            },
+            "required": [
+              "code"
+            ],
+            "additionalProperties": false
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "enum": [
+                    "short_videos_captcha_skipped",
+                    "paa_partial"
+                  ]
+                },
+                "surface": {
+                  "type": "string",
+                  "enum": [
+                    "short_videos",
+                    "paa"
+                  ]
+                },
+                "retryable": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "code",
+                "surface",
+                "retryable"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "linkCandidatesObserved": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "plainLinksObserved": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "googleUrlRedirectsObserved": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "googleGotoRedirectsObserved": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "redirectsResolved": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "redirectsUnresolved": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "redirectsRejected": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "resolverNonGoogleRequestsObserved": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "paaSourcesPreserved": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "aiOverviewLabelValidated": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "linkCandidatesObserved",
+              "plainLinksObserved",
+              "googleUrlRedirectsObserved",
+              "googleGotoRedirectsObserved",
+              "redirectsResolved",
+              "redirectsUnresolved",
+              "redirectsRejected",
+              "resolverNonGoogleRequestsObserved",
+              "paaSourcesPreserved",
+              "aiOverviewLabelValidated"
+            ],
+            "additionalProperties": false
+          },
+          "paaLifecycle": {
+            "type": "object",
+            "properties": {
+              "requestedQuestions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "questionsFound": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "targetStatus": {
+                "type": "string",
+                "enum": [
+                  "met",
+                  "not_met"
+                ]
+              },
+              "discoveryStatus": {
+                "type": "string",
+                "enum": [
+                  "in_progress",
+                  "target_reached",
+                  "frontier_exhausted",
+                  "no_paa_observed",
+                  "interrupted",
+                  "recovery_exhausted"
+                ]
+              },
+              "materialStatus": {
+                "type": "string",
+                "enum": [
+                  "complete",
+                  "partial"
+                ]
+              },
+              "automaticRetries": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "retryBreakdown": {
+                "type": "object",
+                "properties": {
+                  "controlRetries": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "browserRetries": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "providerFallbacks": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "runtimeRecoveries": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "idempotentReplays": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "controlRetries",
+                  "browserRetries",
+                  "providerFallbacks",
+                  "runtimeRecoveries",
+                  "idempotentReplays"
+                ],
+                "additionalProperties": false
+              },
+              "knownQuestions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "processedQuestions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "failedInteractions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "noGrowthConfirmations": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "visibleControls": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "eligibleControls": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "dispatchedInteractions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "confirmedInteractions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "unconfirmedInteractions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "requestedQuestions",
+              "questionsFound",
+              "targetStatus",
+              "discoveryStatus",
+              "materialStatus",
+              "automaticRetries",
+              "retryBreakdown",
+              "knownQuestions",
+              "processedQuestions",
+              "failedInteractions",
+              "noGrowthConfirmations"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "completionStatus"
+        ],
+        "additionalProperties": false
+      },
+      "SerpIntelligenceLocationEvidence": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "not_requested",
+              "matched",
+              "mismatch",
+              "unknown"
+            ]
+          },
+          "expected": {
+            "nullable": true,
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "regionCode": {
+                "nullable": true,
+                "type": "string"
+              },
+              "canonicalLocation": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city",
+              "regionCode",
+              "canonicalLocation"
+            ],
+            "additionalProperties": false
+          },
+          "candidates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "regionCode": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "examples": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "city",
+                "regionCode",
+                "count",
+                "examples"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "status",
+          "expected",
+          "candidates"
+        ],
+        "additionalProperties": false
+      },
+      "SerpIntelligenceCaptureAttempt": {
+        "type": "object",
+        "properties": {
+          "attemptNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "paa_found",
+              "paa_partial",
+              "no_paa",
+              "serp_only",
+              "degraded_result",
+              "captcha",
+              "request_aborted",
+              "timeout",
+              "location_mismatch",
+              "proxy_tunnel_failed",
+              "proxy_unavailable",
+              "browser_session_interrupted",
+              "mcp_unavailable",
+              "error",
+              "page_captured",
+              "page_failed"
+            ]
+          },
+          "startedAt": {
+            "type": "string"
+          },
+          "completedAt": {
+            "type": "string"
+          },
+          "durationMs": {
+            "type": "number",
+            "minimum": 0
+          },
+          "problemCode": {
+            "type": "string",
+            "enum": [
+              "paa_found",
+              "paa_partial",
+              "no_paa",
+              "serp_only",
+              "degraded_result",
+              "captcha",
+              "request_aborted",
+              "timeout",
+              "location_mismatch",
+              "proxy_tunnel_failed",
+              "proxy_unavailable",
+              "browser_session_interrupted",
+              "mcp_unavailable",
+              "error",
+              "captcha_exhausted",
+              "harvest_timeout",
+              "service_unavailable",
+              "vendor_unavailable",
+              "extraction_failed",
+              "invalid_url",
+              "capture_failed"
+            ]
+          },
+          "cleanupSucceeded": {
+            "nullable": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "attemptNumber",
+          "outcome"
+        ],
+        "additionalProperties": false
       },
       "SerpPageSnapshotCapture": {
         "type": "object",
         "properties": {
           "url": {
-            "type": "string"
+            "type": "string",
+            "format": "uri"
           },
           "requestedUrl": {
-            "type": "string"
+            "type": "string",
+            "format": "uri"
           },
           "finalUrl": {
+            "nullable": true,
             "type": "string",
-            "nullable": true
+            "format": "uri"
           },
           "sourceKind": {
             "type": "string",
@@ -5876,8 +6962,10 @@
             ]
           },
           "sourcePosition": {
+            "nullable": true,
             "type": "integer",
-            "nullable": true
+            "minimum": 1,
+            "maximum": 9007199254740991
           },
           "status": {
             "type": "string",
@@ -5888,105 +6976,369 @@
             ]
           },
           "fetchedVia": {
+            "nullable": true,
             "type": "string",
             "enum": [
               "fetch",
               "headless",
               "browser",
               "mcp"
-            ],
-            "nullable": true
+            ]
           },
           "httpStatus": {
+            "nullable": true,
             "type": "integer",
-            "nullable": true
+            "minimum": 100,
+            "maximum": 599
           },
           "contentType": {
-            "type": "string",
-            "nullable": true
+            "nullable": true,
+            "type": "string"
           },
           "title": {
-            "type": "string",
-            "nullable": true
+            "nullable": true,
+            "type": "string"
           },
           "canonicalUrl": {
+            "nullable": true,
             "type": "string",
-            "nullable": true
+            "format": "uri"
           },
           "metaDescription": {
-            "type": "string",
-            "nullable": true
+            "nullable": true,
+            "type": "string"
           },
           "headings": {
+            "default": [],
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "level": {
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 6
                 },
                 "text": {
                   "type": "string"
                 }
-              }
+              },
+              "required": [
+                "level",
+                "text"
+              ],
+              "additionalProperties": false
             }
           },
           "artifact": {
             "type": "object",
             "properties": {
               "htmlBlobUrl": {
+                "nullable": true,
                 "type": "string",
-                "nullable": true
+                "format": "uri"
               },
               "textBlobUrl": {
+                "nullable": true,
                 "type": "string",
-                "nullable": true
+                "format": "uri"
               },
               "markdownBlobUrl": {
+                "nullable": true,
                 "type": "string",
-                "nullable": true
+                "format": "uri"
               },
               "screenshotBlobUrl": {
+                "nullable": true,
                 "type": "string",
-                "nullable": true
+                "format": "uri"
               },
               "contentSha256": {
-                "type": "string",
-                "nullable": true
+                "nullable": true,
+                "type": "string"
               },
               "capturedAt": {
-                "type": "string",
-                "nullable": true
+                "nullable": true,
+                "type": "string"
               }
-            }
+            },
+            "required": [
+              "htmlBlobUrl",
+              "textBlobUrl",
+              "markdownBlobUrl",
+              "screenshotBlobUrl",
+              "contentSha256",
+              "capturedAt"
+            ],
+            "additionalProperties": false
           },
           "error": {
-            "type": "object",
             "nullable": true,
+            "type": "object",
             "properties": {
               "code": {
-                "type": "string"
+                "type": "string",
+                "enum": [
+                  "invalid_url",
+                  "timeout",
+                  "capture_failed"
+                ]
               },
               "message": {
                 "type": "string"
               }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          },
+          "schemaTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
+          },
+          "wordCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "linkCounts": {
+            "type": "object",
+            "properties": {
+              "wordCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "internalLinkCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "externalLinkCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "totalLinkCount": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "wordCount",
+              "internalLinkCount",
+              "externalLinkCount",
+              "totalLinkCount"
+            ],
+            "additionalProperties": false
+          },
+          "hashes": {
+            "type": "object",
+            "properties": {
+              "htmlSha256": {
+                "nullable": true,
+                "type": "string"
+              },
+              "markdownSha256": {
+                "nullable": true,
+                "type": "string"
+              },
+              "textSha256": {
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "required": [
+              "htmlSha256",
+              "markdownSha256",
+              "textSha256"
+            ],
+            "additionalProperties": false
+          },
+          "content": {
+            "type": "object",
+            "properties": {
+              "html": {
+                "nullable": true,
+                "type": "string"
+              },
+              "markdown": {
+                "nullable": true,
+                "type": "string"
+              },
+              "text": {
+                "nullable": true,
+                "type": "string"
+              }
+            },
+            "required": [
+              "html",
+              "markdown",
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          "diagnostics": {
+            "type": "object",
+            "properties": {
+              "requestedAt": {
+                "type": "string"
+              },
+              "completedAt": {
+                "type": "string"
+              },
+              "durationMs": {
+                "type": "number",
+                "minimum": 0
+              },
+              "urlValidation": {
+                "type": "object",
+                "properties": {
+                  "passed": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "passed"
+                ],
+                "additionalProperties": false
+              },
+              "browserFallback": {
+                "type": "object",
+                "properties": {
+                  "configured": {
+                    "type": "boolean"
+                  },
+                  "used": {
+                    "type": "boolean"
+                  },
+                  "boundedByTimeoutMs": {
+                    "type": "number",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "configured",
+                  "used",
+                  "boundedByTimeoutMs"
+                ],
+                "additionalProperties": false
+              },
+              "content": {
+                "type": "object",
+                "properties": {
+                  "htmlIncluded": {
+                    "type": "boolean"
+                  },
+                  "markdownIncluded": {
+                    "type": "boolean"
+                  },
+                  "textIncluded": {
+                    "type": "boolean"
+                  },
+                  "maxContentChars": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "truncated": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "htmlIncluded",
+                  "markdownIncluded",
+                  "textIncluded",
+                  "maxContentChars",
+                  "truncated"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "requestedAt",
+              "completedAt",
+              "durationMs",
+              "urlValidation",
+              "browserFallback",
+              "content"
+            ],
+            "additionalProperties": false
           }
-        }
+        },
+        "required": [
+          "url",
+          "requestedUrl",
+          "finalUrl",
+          "sourceKind",
+          "sourcePosition",
+          "status",
+          "fetchedVia",
+          "httpStatus",
+          "contentType",
+          "title",
+          "canonicalUrl",
+          "metaDescription",
+          "headings",
+          "artifact",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "SerpIntelligencePageSnapshotDiagnostics": {
+        "type": "object",
+        "properties": {
+          "requestedCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "capturedCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "failedCount": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "maxConcurrency": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "timeoutMs": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
       },
       "SerpIntelligenceCaptureResponse": {
         "type": "object",
-        "required": [
-          "billing"
-        ],
         "properties": {
           "harvestResult": {
             "$ref": "#/components/schemas/SerpIntelligenceHarvestResult"
           },
+          "attempts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SerpIntelligenceCaptureAttempt"
+            }
+          },
           "locationEvidence": {
-            "type": "object",
-            "additionalProperties": true,
-            "nullable": true
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SerpIntelligenceLocationEvidence"
+              }
+            ]
           },
           "pageSnapshotArtifacts": {
             "type": "array",
@@ -5996,18 +7348,32 @@
           },
           "billing": {
             "type": "object",
-            "required": [
-              "creditsUsed"
-            ],
             "properties": {
               "creditsUsed": {
                 "type": "number",
                 "minimum": 0
+              },
+              "requestId": {
+                "type": "string"
+              },
+              "jobId": {
+                "type": "string"
               }
             },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "required": [
+              "creditsUsed"
+            ]
           }
-        }
+        },
+        "required": [
+          "harvestResult",
+          "attempts",
+          "locationEvidence",
+          "pageSnapshotArtifacts",
+          "billing"
+        ],
+        "additionalProperties": false
       },
       "SerpIntelligencePageSnapshotsResponse": {
         "type": "object",
@@ -6017,8 +7383,148 @@
             "items": {
               "$ref": "#/components/schemas/SerpPageSnapshotCapture"
             }
+          },
+          "attempts": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SerpIntelligenceCaptureAttempt"
+            }
+          },
+          "diagnostics": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SerpIntelligencePageSnapshotDiagnostics"
+              }
+            ]
           }
-        }
+        },
+        "required": [
+          "pageSnapshotArtifacts",
+          "attempts"
+        ],
+        "additionalProperties": false
+      },
+      "SerpIntelligencePaaNode": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string"
+          },
+          "googleLinkId": {
+            "nullable": true,
+            "type": "string"
+          },
+          "googleEvidenceId": {
+            "nullable": true,
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "answer": {
+            "nullable": true,
+            "type": "string"
+          },
+          "answerExpansionIncomplete": {
+            "type": "boolean"
+          },
+          "sourceTitle": {
+            "nullable": true,
+            "type": "string"
+          },
+          "sourceSite": {
+            "nullable": true,
+            "type": "string"
+          },
+          "sourceCite": {
+            "nullable": true,
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "rawUrl": {
+                  "type": "string"
+                },
+                "resolvedUrl": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "linkType": {
+                  "type": "string",
+                  "enum": [
+                    "plain",
+                    "google_url_redirect",
+                    "google_goto_redirect"
+                  ]
+                },
+                "resolutionStatus": {
+                  "type": "string",
+                  "enum": [
+                    "not_needed",
+                    "resolved",
+                    "unresolved",
+                    "rejected"
+                  ]
+                },
+                "title": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "site": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "description": {
+                  "nullable": true,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "url",
+                "title",
+                "site"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "parentQuestion": {
+            "nullable": true,
+            "type": "string"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SerpIntelligencePaaNode"
+            }
+          }
+        },
+        "required": [
+          "questionId",
+          "googleLinkId",
+          "googleEvidenceId",
+          "question",
+          "answer",
+          "sourceTitle",
+          "sourceSite",
+          "sourceCite",
+          "sources",
+          "depth",
+          "parentQuestion",
+          "children"
+        ],
+        "additionalProperties": false
       },
       "WorkflowRun": {
         "type": "object",

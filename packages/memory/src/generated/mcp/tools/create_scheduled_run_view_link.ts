@@ -17,9 +17,6 @@ export type Output =
   | {
       ok: boolean;
       shareId?: string;
-      /**
-       * Opaque scheduled-run identifier returned by a scheduled-results tool.
-       */
       runId?: string;
       artifactId?: string;
       url?: string;

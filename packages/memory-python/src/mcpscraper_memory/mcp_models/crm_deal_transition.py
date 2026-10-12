@@ -11,7 +11,7 @@ class CrmDealTransitionInput(BaseModel):
     target_stage_id: str = Field(..., alias='targetStageId', description='Governed destination stage identifier for this deal transition.')
     base_revision: Annotated[int, Field(ge=1)] = Field(..., alias='baseRevision', description='Last revision read by the caller; supply it to reject an update if the record changed meanwhile.')
     idempotency_key: Annotated[str, Field(min_length=8, max_length=200)] = Field(..., alias='idempotencyKey', description='Caller-owned opaque key for this intended operation; reuse only when retrying the same operation.')
-    fields: Union[dict[str, Any], None] = Field(None, alias='fields', description='Ordered form-field definitions to render and validate for submissions.')
+    fields: Union[dict[str, Any], None] = Field(None, alias='fields', description='Deal field values to apply during this stage transition, including values required by the destination stage.')
 
 
 CrmDealTransitionOutputVariant1Record = TypedDict('CrmDealTransitionOutputVariant1Record', {
@@ -106,8 +106,30 @@ class CrmDealTransitionOutputVariant2(BaseModel):
     recovery: CrmDealTransitionOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmDealTransitionOutputVariant3Operation = TypedDict('CrmDealTransitionOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmDealTransitionOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmDealTransitionOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmDealTransitionOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmDealTransitionOutput).
-CrmDealTransitionOutput = Union[CrmDealTransitionOutputVariant2, CrmDealTransitionOutputVariant1]
+CrmDealTransitionOutput = Union[CrmDealTransitionOutputVariant2, CrmDealTransitionOutputVariant3, CrmDealTransitionOutputVariant1]
 
 _CrmDealTransitionInputAdapter = TypeAdapter(CrmDealTransitionInput)
 _CrmDealTransitionOutputAdapter = TypeAdapter(CrmDealTransitionOutput)

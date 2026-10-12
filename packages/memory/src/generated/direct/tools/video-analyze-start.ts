@@ -8,7 +8,7 @@ export interface Input {
    */
   sessionId?: string;
   /**
-   * A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov/.gif).
+   * A YouTube, Facebook, Instagram, TikTok, or Vimeo URL, or a direct video file URL (.mp4/.webm/.mov/.gif). Maximum duration: 60 minutes.
    */
   sourceUrl: string;
   /**
@@ -29,14 +29,74 @@ export interface Input {
   vault?: string;
 }
 
-export interface Output {
-  ok: boolean;
-  runId?: string;
-  poll?: {
-    tool: string;
-    args: {
-      runId: string;
+export type Output =
+  | {
+      ok: boolean;
+      runId?: string;
+      poll?: {
+        tool: string;
+        args: {
+          runId: string;
+        };
+      };
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
     };
-  };
-  error?: string;
-}

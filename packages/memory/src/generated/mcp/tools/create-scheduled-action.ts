@@ -76,23 +76,11 @@ export type Output =
        */
       artifactSelection?:
         | {
-            /**
-             * Governed execution mode for this operation.
-             */
             mode: "none";
           }
         | {
-            /**
-             * Governed execution mode for this operation.
-             */
             mode: "saved_template";
-            /**
-             * Opaque saved-template identifier returned by an artifact-template tool.
-             */
             templateId: string;
-            /**
-             * Immutable saved-template version selected for rendering.
-             */
             templateVersionId: string;
           };
       /**

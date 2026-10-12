@@ -6,9 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class CrmTaskUpsertInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    task_id: Union[str, None] = Field(None, alias='taskId', description='Stable CRM Task entity identifier for create or revision-checked update.')
-    entity_id: Union[str, None] = Field(None, alias='entityId', description='Existing governed entity identifier for this relation or edit.')
-    base_revision: Union[Annotated[int, Field(ge=0)], None] = Field(None, alias='baseRevision', description='Last revision read by the caller; supply it to reject an update if the record changed meanwhile.')
+    task_id: Union[str, None] = Field(None, alias='taskId', description='Task workId returned by crm-work-search; omit to create a new task.')
+    entity_id: Union[str, None] = Field(None, alias='entityId', description='Compatibility alias for taskId, not a CRM relationship ID; taskId takes precedence.')
+    base_revision: Union[Annotated[int, Field(ge=0)], None] = Field(None, alias='baseRevision', description='Use 0 to create a Task; for an edit, supply taskId or entityId and the current positive revision read from crm-work-get.')
     idempotency_key: Annotated[str, Field(min_length=8, max_length=200)] = Field(..., alias='idempotencyKey', description='Caller-owned opaque key for this intended operation; reuse only when retrying the same operation.')
     person_entity_id: Union[str, None] = Field(None, alias='personEntityId', description='Stable CRM Person entity identifier; Research identifiers are rejected.')
     communication_entity_id: Union[str, None] = Field(None, alias='communicationEntityId', description='Stable CRM Communication entity identifier returned by the activity append operation.')
@@ -17,7 +17,7 @@ class CrmTaskUpsertInput(BaseModel):
     content: Union[Annotated[str, Field(max_length=200000)], None] = Field(None, alias='content', description='Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.')
     status: Union[Literal['todo', 'in_progress', 'blocked', 'done', 'cancelled'], None] = Field(None, alias='status', description='Lifecycle status used to filter or update the selected records.')
     due_at: Union[Union[str, None], None] = Field(None, alias='dueAt', description='Optional ISO 8601 due time for the CRM Task.')
-    source: Union[dict[str, Any], None] = Field(None, alias='source', description='Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.')
+    source: Union[dict[str, Any], None] = Field(None, alias='source', description='Optional source provenance stored with the Task; this is not a record filter.')
     props: Union[dict[str, Any], None] = Field(None, alias='props', description='Complete governed note properties required by the target vault contract.')
 
 
@@ -113,8 +113,30 @@ class CrmTaskUpsertOutputVariant2(BaseModel):
     recovery: CrmTaskUpsertOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmTaskUpsertOutputVariant3Operation = TypedDict('CrmTaskUpsertOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmTaskUpsertOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmTaskUpsertOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmTaskUpsertOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmTaskUpsertOutput).
-CrmTaskUpsertOutput = Union[CrmTaskUpsertOutputVariant2, CrmTaskUpsertOutputVariant1]
+CrmTaskUpsertOutput = Union[CrmTaskUpsertOutputVariant2, CrmTaskUpsertOutputVariant3, CrmTaskUpsertOutputVariant1]
 
 _CrmTaskUpsertInputAdapter = TypeAdapter(CrmTaskUpsertInput)
 _CrmTaskUpsertOutputAdapter = TypeAdapter(CrmTaskUpsertOutput)

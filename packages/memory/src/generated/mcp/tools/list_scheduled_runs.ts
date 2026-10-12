@@ -82,9 +82,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -105,9 +102,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -126,9 +120,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -149,9 +140,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -170,9 +158,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -191,9 +176,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -214,9 +196,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -235,9 +214,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -256,9 +232,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -277,9 +250,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -300,9 +270,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -321,9 +288,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -342,9 +306,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -363,9 +324,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -384,9 +342,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -407,9 +362,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -428,9 +380,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -449,9 +398,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -470,9 +416,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -491,9 +434,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -512,9 +452,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -535,9 +472,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -556,9 +490,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -577,9 +508,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -598,9 +526,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -619,9 +544,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -640,9 +562,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -661,9 +580,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -684,9 +600,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -705,9 +618,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -726,9 +636,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -747,9 +654,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -768,9 +672,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -789,9 +690,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -810,9 +708,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -831,9 +726,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -854,9 +746,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -875,9 +764,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -896,9 +782,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -917,9 +800,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -938,9 +818,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -959,9 +836,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -980,9 +854,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1001,9 +872,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1022,9 +890,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1045,9 +910,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1066,9 +928,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1087,9 +946,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1108,9 +964,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1129,9 +982,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1150,9 +1000,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1171,9 +1018,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1192,9 +1036,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1213,9 +1054,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"
@@ -1234,9 +1072,6 @@ export type Output =
                 artifactId: string;
                 templateId: string;
                 templateVersionId: string;
-                /**
-                 * Registered preset key returned by list_artifact_templates.
-                 */
                 rendererKey:
                   | "editorial_reading_room_v1"
                   | "personal_authority_v1"

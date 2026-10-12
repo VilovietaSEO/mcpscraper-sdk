@@ -8,7 +8,7 @@ class ResearchPersonSearchInput(BaseModel):
 
     query: Union[Annotated[str, Field(max_length=500)], None] = Field(None, alias='query', description='Text filter applied to the selected result inventory.')
     topic: Union[Annotated[str, Field(max_length=200)], None] = Field(None, alias='topic', description='Research topic used to filter sourced records.')
-    role: Union[Annotated[str, Field(max_length=200)], None] = Field(None, alias='role', description='Primary conversion or supporting observation role for this enabled mapping.')
+    role: Union[Annotated[str, Field(max_length=200)], None] = Field(None, alias='role', description='Optional sourced Research role to match on knowledge subjects; this is not a CRM relationship type.')
     cursor: Union[str, None] = Field(None, alias='cursor', description='Opaque continuation cursor returned by the previous page; omit for the first page.')
     limit: Union[Annotated[int, Field(ge=1, le=100)], None] = Field(None, alias='limit', description='Maximum rows or records to return on this page; use the returned cursor for more.')
 
@@ -114,8 +114,30 @@ class ResearchPersonSearchOutputVariant2(BaseModel):
     recovery: ResearchPersonSearchOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+ResearchPersonSearchOutputVariant3Operation = TypedDict('ResearchPersonSearchOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+ResearchPersonSearchOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class ResearchPersonSearchOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[ResearchPersonSearchOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(ResearchPersonSearchOutput).
-ResearchPersonSearchOutput = Union[ResearchPersonSearchOutputVariant2, ResearchPersonSearchOutputVariant1]
+ResearchPersonSearchOutput = Union[ResearchPersonSearchOutputVariant2, ResearchPersonSearchOutputVariant3, ResearchPersonSearchOutputVariant1]
 
 _ResearchPersonSearchInputAdapter = TypeAdapter(ResearchPersonSearchInput)
 _ResearchPersonSearchOutputAdapter = TypeAdapter(ResearchPersonSearchOutput)

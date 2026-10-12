@@ -22,7 +22,7 @@ class CrmPersonUpsertInput(BaseModel):
     organization_name: str | None = Field(None, alias="organizationName", description="Bridge-compatible organization label; it never creates or resolves an organization by inference.")
     source: dict[str, Any] | None = Field(None, alias="source", description="")
     props: dict[str, Any] | None = Field(None, alias="props", description="")
-    lineage: dict[str, Any] | None = Field(None, alias="lineage", description="")
+    lineage: dict[str, Any] | None = Field(None, alias="lineage", description="Supply explicit unchanged lineage, including observedAt, for reliable idempotency replay. If both lineage and source are omitted, a timestamp is generated on every call; the same key prevents another write but a retry may report an idempotency conflict.")
 
 
 class CrmPersonUpsertOutput(BaseModel):

@@ -6,9 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class VideoFrameAnalysisInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    source_url: Annotated[str, Field(min_length=1)] = Field(..., alias='sourceUrl', description='A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov). Videos up to 30 minutes are supported.')
+    source_url: Annotated[str, Field(min_length=1)] = Field(..., alias='sourceUrl', description='A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov). Videos up to 60 minutes are supported.')
     interval_s: Union[Annotated[Union[float, int], Field(ge=1, le=30)], None] = Field(None, alias='intervalS', description='Preferred seconds between sampled frames (1-30, default 2). Automatically widened for long videos so the whole duration is covered within the frame budget.')
-    max_frames: Union[Annotated[int, Field(ge=1, le=480)], None] = Field(None, alias='maxFrames', description='Max frames analyzed (<=480, default 120). $1 per 120 frames requested — 120=$1 … 480=$4 — automatically refunded down if the video cannot use them (minimum 1s between frames). Frames are spread evenly across the whole video.')
+    max_frames: Union[Annotated[int, Field(ge=1, le=480)], None] = Field(None, alias='maxFrames', description='Max frames analyzed (<=480, default 120). Reserves the number of 120-frame tiers requested; unused tiers are refunded. Analysis-model usage is billed separately. Frames are spread evenly across the whole video, with at least 1 second between frames.')
     detail: Union[Literal['fast', 'standard', 'deep'], None] = Field(None, alias='detail', description='Analysis depth. Default standard.')
     vault: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='vault', description='Memory vault to save the finished breakdown into. Default "Library".')
 

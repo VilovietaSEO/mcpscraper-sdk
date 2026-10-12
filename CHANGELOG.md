@@ -4,6 +4,8 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.53.0] - 2026-10-12 — targets mcp-scraper 0.96.0
+
 ### Added
 
 - Send explicit client surface, installation channel and AI client/model labels from Node, Python and CLI requests for customer reporting. Keep the server request ID with each response callback and API error, including overlapping calls; observer failures cannot replace a received result.
@@ -17,10 +19,12 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ### Fixed
 
+- SERP Intelligence responses preserve typed answers, source links and page content while excluding private transport diagnostics and raw provider payloads.
+- Keep complete Research and CRM tool descriptions, correct field, cost, retry and write guidance, and remove authentication arguments from unified CRM work search across generated Node, Python and CLI catalogs.
 - Accept complete artifact delivery envelopes in Python methods and Memory convenience clients. Preserve explicit null inputs, nullable output fields and numeric values without requiring a newer Pydantic minimum.
 - Retain safe recovery identifiers and caller retry keys after uncertain outcomes so clients can inspect or resume existing paid work. Support streamed Memory responses without dropping result content, and attach request IDs to malformed-response errors without repeating the call.
 
-Verified against the updated 367-tool server contract. Package versions and published packages are unchanged. Saved client attribution requires server request capture to be enabled.
+Verified against MCP Scraper 0.96.0 with 367 unified tools and 146 direct Memory tools. Package versions are Node scraper 0.53.0, Node Memory 0.52.0, CLI 0.51.0, Python scraper 0.51.0 and Python Memory 0.48.0. Saved client attribution requires server request capture to be enabled.
 
 ## [0.52.0] - 2026-09-29 — targets mcp-scraper 0.95.2
 
@@ -768,7 +772,8 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.52.0...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.53.0...HEAD
+[0.53.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.52.0...v0.53.0
 [0.52.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.51.0...v0.52.0
 [0.51.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.50.1...v0.51.0
 [0.50.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.50.0...v0.50.1

@@ -24,7 +24,7 @@ export interface Input {
      */
     export?: boolean;
     /**
-     * Ordered zero-based or one-based position defined by the surrounding collection.
+     * Whether this scope permits indexing Memory content.
      */
     index?: boolean;
     /**

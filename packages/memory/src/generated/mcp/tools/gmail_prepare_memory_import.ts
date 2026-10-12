@@ -54,15 +54,9 @@ export type Output =
         filingPolicy: "source_archive" | "relationship_communications";
         destination:
           | {
-              /**
-               * Governed execution mode for this operation.
-               */
               mode: "auto";
             }
           | {
-              /**
-               * Governed execution mode for this operation.
-               */
               mode: "vault";
               /**
                * Exact existing Memory vault name; source archives normally use Library and relationship events use Communications.

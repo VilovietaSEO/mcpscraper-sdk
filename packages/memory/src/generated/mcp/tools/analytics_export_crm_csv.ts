@@ -4,7 +4,7 @@ export interface Input {
    */
   siteId: string;
   /**
-   * Ordered form-field definitions to render and validate for submissions.
+   * Optional allowlisted CRM export columns; advertising identifiers require the advertising_measurement purpose acknowledgement.
    *
    * @minItems 1
    * @maxItems 16

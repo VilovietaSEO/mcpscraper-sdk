@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class CrmCounterpartApplyInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    plan_id: str = Field(..., alias='planId', description='Durable CRM provisioning-plan identifier returned by the planning operation.')
+    plan_id: str = Field(..., alias='planId', description='Exact owner-scoped counterpart plan identifier returned by crm-counterpart-preview; use its matching unexpired planHandle and digest.')
     plan_handle: Annotated[str, Field(min_length=1)] = Field(..., alias='planHandle', description='Owner-scoped opaque preview handle returned with the plan.')
     digest: Annotated[str, Field(min_length=64, max_length=64)] = Field(..., alias='digest', description='Exact SHA-256 digest returned by the preview; any changed input invalidates it.')
     idempotency_key: Annotated[str, Field(min_length=8, max_length=200)] = Field(..., alias='idempotencyKey', description='Caller-owned opaque key for this intended operation; reuse only when retrying the same operation.')
@@ -102,8 +102,30 @@ class CrmCounterpartApplyOutputVariant2(BaseModel):
     recovery: CrmCounterpartApplyOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
+CrmCounterpartApplyOutputVariant3Operation = TypedDict('CrmCounterpartApplyOutputVariant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmCounterpartApplyOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmCounterpartApplyOutputVariant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmCounterpartApplyOutputVariant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
 # Union schema: validate external payloads with TypeAdapter(CrmCounterpartApplyOutput).
-CrmCounterpartApplyOutput = Union[CrmCounterpartApplyOutputVariant2, CrmCounterpartApplyOutputVariant1]
+CrmCounterpartApplyOutput = Union[CrmCounterpartApplyOutputVariant2, CrmCounterpartApplyOutputVariant3, CrmCounterpartApplyOutputVariant1]
 
 _CrmCounterpartApplyInputAdapter = TypeAdapter(CrmCounterpartApplyInput)
 _CrmCounterpartApplyOutputAdapter = TypeAdapter(CrmCounterpartApplyOutput)

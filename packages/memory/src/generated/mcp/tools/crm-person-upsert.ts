@@ -4,7 +4,7 @@ export interface Input {
    */
   entityId?: string;
   /**
-   * Last revision read by the caller; supply it to reject an update if the record changed meanwhile.
+   * Use 0 to create a CRM Person; for an edit, supply entityId and the current positive revision read from crm-person-get.
    */
   baseRevision?: number;
   /**
@@ -1183,7 +1183,7 @@ export interface Input {
    */
   organizationName?: string;
   /**
-   * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+   * Optional governed form-source receipt associated with this CRM Person; this records provenance rather than filtering records.
    */
   source?: {
     /**
@@ -1214,7 +1214,7 @@ export interface Input {
     [k: string]: unknown;
   };
   /**
-   * Field authority, sensitivity, source, observation time, and confidence recorded with this governed write.
+   * Supply explicit unchanged lineage, including observedAt, for reliable idempotency replay. If both lineage and source are omitted, a timestamp is generated on every call; the same key prevents another write but a retry may report an idempotency conflict.
    */
   lineage?: {
     /**
@@ -1226,7 +1226,7 @@ export interface Input {
      */
     sensitivity?: "public" | "internal" | "personal" | "restricted";
     /**
-     * Original source URL or opaque artifact reference preserved as image provenance.
+     * Source URL, form submission reference, retained artifact reference, or other identifier for this CRM field provenance.
      */
     sourceRef?: string | null;
     /**
@@ -1324,5 +1324,22 @@ export type Output =
           idempotencyKey: string;
           state: string;
         };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
       };
     };

@@ -21,46 +21,106 @@ export interface Input {
   tags?: string[];
 }
 
-export interface Output {
-  /**
-   * True when the listing succeeded; false on an auth/scope/lookup error.
-   */
-  ok: boolean;
-  /**
-   * The vault that was actually listed (after defaulting).
-   */
-  vault?: string;
-  /**
-   * The notes in the vault (metadata only, no content). Present when ok is true.
-   */
-  notes?: {
-    /**
-     * Vault-relative note path, e.g. projects/q3-plan.
-     */
-    path: string;
-    /**
-     * Human-readable note title.
-     */
-    title: string;
-    /**
-     * Note kind: note, library, capture, or decision.
-     */
-    kind: string;
-    /**
-     * The note's tags, if any.
-     */
-    tags: string[];
-    /**
-     * ISO-8601 timestamp of the note last update.
-     */
-    updatedAt: string;
-  }[];
-  /**
-   * All vaults the caller is entitled to, for choosing a different vault to list.
-   */
-  vaults?: string[];
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when the listing succeeded; false on an auth/scope/lookup error.
+       */
+      ok: boolean;
+      /**
+       * The vault that was actually listed (after defaulting).
+       */
+      vault?: string;
+      /**
+       * The notes in the vault (metadata only, no content). Present when ok is true.
+       */
+      notes?: {
+        /**
+         * Vault-relative note path, e.g. projects/q3-plan.
+         */
+        path: string;
+        /**
+         * Human-readable note title.
+         */
+        title: string;
+        /**
+         * Note kind: note, library, capture, or decision.
+         */
+        kind: string;
+        /**
+         * The note's tags, if any.
+         */
+        tags: string[];
+        /**
+         * ISO-8601 timestamp of the note last update.
+         */
+        updatedAt: string;
+      }[];
+      /**
+       * All vaults the caller is entitled to, for choosing a different vault to list.
+       */
+      vaults?: string[];
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
+    };

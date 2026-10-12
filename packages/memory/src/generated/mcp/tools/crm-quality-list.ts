@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Governance queue to list: classification, naming, identity, duplicates, or delivery.
+   * Governance queue to list: classification, naming, duplicates, imports, merges, or work.
    */
   queue?: "classification" | "naming" | "duplicates" | "imports" | "merges" | "work";
   /**
@@ -59,5 +59,22 @@ export type Output =
           idempotencyKey: string;
           state: string;
         };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
       };
     };

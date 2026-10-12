@@ -6,8 +6,8 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class ProvisionDefaultsInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    grantee_identity: Annotated[str, Field(min_length=1)] = Field(..., alias='granteeIdentity', description='Identity that should OWN the 16 default vaults (e.g. an email or user id).')
-    issue_key: Union[bool, None] = Field(None, alias='issueKey', description='When true, also issue a new API key for the identity entitled to all 16 vaults and return its secret once. Default false.')
+    grantee_identity: Annotated[str, Field(min_length=1)] = Field(..., alias='granteeIdentity', description='Identity that should own the current default vaults, such as an email or user id.')
+    issue_key: Union[bool, None] = Field(None, alias='issueKey', description='When true, issue a fresh API key for the default vaults and return its secret once. Default false. Repeating this call issues another key.')
     plan: Union[Literal['free', 'pro', 'team', 'enterprise'], None] = Field(None, alias='plan', description='Subscription plan carried by the issued key. Optional; defaults to free. Only used when issueKey is true.')
 
 
@@ -16,8 +16,8 @@ class ProvisionDefaultsOutputVariant1(BaseModel):
 
     ok: bool = Field(..., alias='ok', description='True when provisioning succeeded; false on auth/scope error.')
     identity: Union[str, None] = Field(None, alias='identity', description='Identity the vaults were provisioned for.')
-    created: Union[list[str], None] = Field(None, alias='created', description='Vault names newly created on this call (empty when all 16 already existed).')
-    vaults: Union[list[str], None] = Field(None, alias='vaults', description='All 16 default vault names the identity now owns.')
+    created: Union[list[str], None] = Field(None, alias='created', description='Vault names newly created on this call; empty when every default vault already existed.')
+    vaults: Union[list[str], None] = Field(None, alias='vaults', description='Current default vault names the identity now owns.')
     key_id: Union[str, None] = Field(None, alias='keyId', description='Stable id of the issued key. Present only when issueKey was true.')
     secret: Union[str, None] = Field(None, alias='secret', description='The issued key secret — RETURNED ONCE. Present only when issueKey was true.')
     plan: Union[str, None] = Field(None, alias='plan', description='Plan assigned to the issued key. Present only when issueKey was true.')

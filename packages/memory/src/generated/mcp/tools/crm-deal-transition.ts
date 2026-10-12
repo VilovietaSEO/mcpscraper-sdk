@@ -20,7 +20,7 @@ export interface Input {
    */
   idempotencyKey: string;
   /**
-   * Ordered form-field definitions to render and validate for submissions.
+   * Deal field values to apply during this stage transition, including values required by the destination stage.
    */
   fields?: {
     [k: string]: unknown;
@@ -86,5 +86,22 @@ export type Output =
           idempotencyKey: string;
           state: string;
         };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
       };
     };

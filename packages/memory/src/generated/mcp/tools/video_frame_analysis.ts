@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov). Videos up to 30 minutes are supported.
+   * A YouTube, Facebook, Instagram, TikTok, or Vimeo URL (downloaded automatically), or a direct video file URL (.mp4/.webm/.mov). Videos up to 60 minutes are supported.
    */
   sourceUrl: string;
   /**
@@ -8,7 +8,7 @@ export interface Input {
    */
   intervalS?: number;
   /**
-   * Max frames analyzed (<=480, default 120). $1 per 120 frames requested — 120=$1 … 480=$4 — automatically refunded down if the video cannot use them (minimum 1s between frames). Frames are spread evenly across the whole video.
+   * Max frames analyzed (<=480, default 120). Reserves the number of 120-frame tiers requested; unused tiers are refunded. Analysis-model usage is billed separately. Frames are spread evenly across the whole video, with at least 1 second between frames.
    */
   maxFrames?: number;
   /**

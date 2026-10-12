@@ -4,7 +4,7 @@ export interface Input {
    */
   entityId?: string;
   /**
-   * Last revision read by the caller; supply it to reject an update if the record changed meanwhile.
+   * Use 0 to create a Research Person; for an edit, supply the current positive revision read from research-person-get.
    */
   baseRevision: number;
   /**
@@ -28,7 +28,7 @@ export interface Input {
   sourceEvidence: [
     {
       /**
-       * Original source URL or opaque artifact reference preserved as image provenance.
+       * Source URL, retained artifact reference, or other source identifier supporting the Research evidence or field provenance.
        */
       sourceRef: string;
       /**
@@ -38,7 +38,7 @@ export interface Input {
     },
     ...{
       /**
-       * Original source URL or opaque artifact reference preserved as image provenance.
+       * Source URL, retained artifact reference, or other source identifier supporting the Research evidence or field provenance.
        */
       sourceRef: string;
       /**
@@ -78,7 +78,7 @@ export interface Input {
      */
     sensitivity: "public" | "internal" | "personal" | "restricted";
     /**
-     * Original source URL or opaque artifact reference preserved as image provenance.
+     * Source URL, retained artifact reference, or other source identifier supporting the Research evidence or field provenance.
      */
     sourceRef?: string | null;
     /**
@@ -176,5 +176,22 @@ export type Output =
           idempotencyKey: string;
           state: string;
         };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
       };
     };

@@ -12,7 +12,7 @@ export interface Input {
    */
   eventId: string;
   /**
-   * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+   * Required source-system name for the event being recorded; this is provenance, not a report filter.
    */
   source: string;
   /**
@@ -28,7 +28,7 @@ export interface Input {
    */
   eventKind: "browser" | "form" | "call" | "crm" | "transaction" | "custom_server" | "conversion" | "delivery";
   /**
-   * Optional normalized analytics event-name filter.
+   * Required canonical name for the event being recorded; use lowercase letters, digits, and underscores starting with a letter.
    */
   eventName: string;
   /**

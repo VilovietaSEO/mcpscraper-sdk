@@ -86,6 +86,43 @@ def render_model(class_name: str, schema: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def inline_output_schema(schema: dict) -> dict:
+    """Keep convenience model names for inline results; delivery validates separately."""
+    alternatives = schema.get("anyOf", [])
+    if not any(candidate.get("properties", {}).get("delivery", {}).get("properties", {})
+               .get("mode", {}).get("const") == "artifact" for candidate in alternatives):
+        return schema
+    inline = []
+    transport_alternatives = 0
+    for candidate in alternatives:
+        properties = candidate.get("properties", {})
+        delivery_mode = properties.get("delivery", {}).get("properties", {}).get("mode", {})
+        public_error = {"error_code", "error_type", "message", "retryable"}.issubset(
+            set(candidate.get("required", []))
+        )
+        if delivery_mode.get("const") == "artifact" or public_error:
+            transport_alternatives += 1
+        else:
+            inline.append(candidate)
+    if transport_alternatives and len(inline) == 1:
+        return inline[0]
+    return schema
+
+
+def shared_schema_renderer():
+    spec = importlib.util.spec_from_file_location("mcp_python_generator", REPO_ROOT / "scripts" / "generate-mcp-python.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def render_inline_output(class_name: str, schema: dict) -> str:
+    schema = inline_output_schema(schema)
+    if schema.get("anyOf") or schema.get("oneOf"):
+        return shared_schema_renderer().render_model(class_name, schema)
+    return render_model(class_name, schema)
+
+
 def render_artifact_delivery(unified_manifest: dict) -> str:
     """Reuse the server's common delivery alternative; never maintain a second schema."""
     tool = next((tool for tool in unified_manifest["tools"] if tool["name"] == "artifact_describe"), None)
@@ -97,10 +134,7 @@ def render_artifact_delivery(unified_manifest: dict) -> str:
                .get("mode", {}).get("const") == "artifact"]
     if len(schemas) != 1:
         raise RuntimeError("artifact_describe must declare exactly one common artifact delivery alternative")
-    spec = importlib.util.spec_from_file_location("mcp_python_generator", REPO_ROOT / "scripts" / "generate-mcp-python.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    model = module.render_model("ArtifactDelivery", schemas[0], strict=True)
+    model = shared_schema_renderer().render_model("ArtifactDelivery", schemas[0], strict=True)
     return (
         '"""Generated from artifact_describe in contracts/mcp.tools.json."""\n\n'
         "from typing import Annotated, Any, Literal, TypeVar, Union\n"
@@ -179,15 +213,20 @@ def main() -> None:
         module_name = to_snake_case(legacy)
         input_class = to_pascal_case(legacy) + "Input"
         output_class = to_pascal_case(legacy) + "Output"
+        output_schema = inline_output_schema(tool["outputSchema"])
+        union_output = output_schema.get("anyOf") or output_schema.get("oneOf")
+        imports = ["from typing import Annotated, Any, Literal, Union" if union_output else "from typing import Any, Literal"]
+        if union_output:
+            imports.append("from typing_extensions import NotRequired, Required, TypedDict")
+        imports.append("from pydantic import BaseModel, ConfigDict, Field")
 
         content = [
-            "from typing import Any, Literal",
-            "from pydantic import BaseModel, ConfigDict, Field",
+            *imports,
             "",
             "",
             render_model(input_class, tool["inputSchema"]),
             "",
-            render_model(output_class, tool["outputSchema"]),
+            render_inline_output(output_class, tool["outputSchema"]),
         ]
         (MODELS_DIR / f"{module_name}.py").write_text("\n".join(content))
 

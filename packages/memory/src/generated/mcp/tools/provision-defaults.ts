@@ -1,10 +1,10 @@
 export interface Input {
   /**
-   * Identity that should OWN the 16 default vaults (e.g. an email or user id).
+   * Identity that should own the current default vaults, such as an email or user id.
    */
   granteeIdentity: string;
   /**
-   * When true, also issue a new API key for the identity entitled to all 16 vaults and return its secret once. Default false.
+   * When true, issue a fresh API key for the default vaults and return its secret once. Default false. Repeating this call issues another key.
    */
   issueKey?: boolean;
   /**
@@ -24,11 +24,11 @@ export type Output =
        */
       identity?: string;
       /**
-       * Vault names newly created on this call (empty when all 16 already existed).
+       * Vault names newly created on this call; empty when every default vault already existed.
        */
       created?: string[];
       /**
-       * All 16 default vault names the identity now owns.
+       * Current default vault names the identity now owns.
        */
       vaults?: string[];
       /**
