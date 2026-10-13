@@ -26,7 +26,7 @@ class HarvestPaaStartInput(BaseModel):
 HarvestPaaStartOutputVariant1StatusVariant1 = TypedDict('HarvestPaaStartOutputVariant1StatusVariant1', {
     'state': Required[Literal['pending']],
     'terminal': Required[Literal[False]],
-    'pollAfterSeconds': Required[Annotated[int, Field(ge=1, le=9007199254740991)]],
+    'pollAfterSeconds': Required[Annotated[int, Field(ge=20, le=9007199254740991)]],
     'retryGuidance': Required[str],
 })
 HarvestPaaStartOutputVariant1StatusVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
@@ -35,7 +35,7 @@ HarvestPaaStartOutputVariant1StatusVariant1.__pydantic_config__ = ConfigDict(ext
 HarvestPaaStartOutputVariant1StatusVariant2 = TypedDict('HarvestPaaStartOutputVariant1StatusVariant2', {
     'state': Required[Literal['running']],
     'terminal': Required[Literal[False]],
-    'pollAfterSeconds': Required[Annotated[int, Field(ge=1, le=9007199254740991)]],
+    'pollAfterSeconds': Required[Annotated[int, Field(ge=20, le=9007199254740991)]],
     'retryGuidance': Required[str],
 })
 HarvestPaaStartOutputVariant1StatusVariant2.__pydantic_config__ = ConfigDict(extra="allow", strict=True)

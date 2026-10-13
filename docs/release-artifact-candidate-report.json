@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-12",
+  "generatedAt": "2026-10-13",
   "sourceContract": {
-    "serverVersion": "0.96.0",
-    "serverManifestSha256": "43bf4fb954c4b107b85cd75716f889f5a1b1901c6d563ad2befa3c6cfe14dbee",
-    "sourceContractSha256": "8394638ac2b4ccd0d2e34d14a9d3146086769c17529a1acbc9d0dbbe93bee109",
-    "projectedContractSha256": "b0afdb5ace48e811d4e820d4f3810edaa699e81e60a860450e1d18ecdbbd2bca",
+    "serverVersion": "0.96.1",
+    "serverManifestSha256": "99a0c157d94663e9ecac9a6a7213cca09c87c6c938b1808bfcbce87879ec6961",
+    "sourceContractSha256": "3206a590cc756746028e3b9bb0fa4c33f785a0b80250b26b88fcec782206b659",
+    "projectedContractSha256": "35329caedd14105546356f0a5bef119163722349ed3a4ed28b47254bea4bf9ca",
     "restSourceSha256": "15681bc921e79f2adfa23ba396791d76fbdd750a16750e315d959fed1f8a09db",
     "toolCount": 367,
     "directMemoryVersion": "1.23.1",
@@ -29,18 +29,21 @@
     "freshPythonPublicModuleImports": {
       "scraperPerArchive": 373,
       "memoryPerArchive": 636
-    }
+    },
+    "freshPaaPollingFloorAndOptionalPreviewLabels": "passed",
+    "offlineArchiveInstallation": "passed",
+    "sourceArchiveBytesMatch": 2052
   },
   "nativeSdistMetadata": {
     "reason": "Native Hatchling includes generic VCS ignore rules used during source builds; only these exact metadata files are permitted.",
     "files": [
       {
-        "path": "mcpscraper_sdk-0.51.0/.gitignore",
+        "path": "mcpscraper_sdk-0.51.1/.gitignore",
         "bytes": 59,
         "sha256": "977082c293c9edcac27ab4bfdcd78ab469a427c600518f3cc00efd9357627192"
       },
       {
-        "path": "mcpscraper_memory_sdk-0.48.0/.gitignore",
+        "path": "mcpscraper_memory_sdk-0.48.1/.gitignore",
         "bytes": 123,
         "sha256": "478fb278e6df79a1fe4cdcfc42fb94a7922b317288ac43deb892c12b163445c3"
       }
@@ -49,15 +52,15 @@
   "consumerReleaseMaterial": {
     "repository": "https://github.com/VilovietaSEO/mcpscraper-sdk",
     "visibility": "public",
-    "versionedChangelog": "https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.53.0/CHANGELOG.md",
+    "versionedChangelog": "https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.53.1/CHANGELOG.md",
     "releaseTagState": "prepared, publication pending"
   },
   "artifacts": [
     {
-      "file": "mcpscraper-sdk-0.53.0.tgz",
-      "sha256": "4210f74f5785e3459c373076186d33b8db5116b5ca019753f6a043b526cb35c8",
-      "compressedBytes": 69315,
-      "unpackedBytes": 474849,
+      "file": "mcpscraper-sdk-0.53.1.tgz",
+      "sha256": "4df837409f982de55681de8dcb6f9ea91766c1818055d175b013376056c39c3f",
+      "compressedBytes": 69396,
+      "unpackedBytes": 475038,
       "fileCount": 6,
       "largestPaths": [
         "package/dist/index.d.cts",
@@ -69,14 +72,14 @@
       "sourceMapCount": 0,
       "nestedNodeModulesCount": 0,
       "declaredDependencies": {
-        "mcpscraper-memory-sdk": "^0.52.0"
+        "mcpscraper-memory-sdk": "^0.52.1"
       }
     },
     {
-      "file": "mcpscraper-memory-sdk-0.52.0.tgz",
-      "sha256": "547c5ca127ab5846de6cd1d6c2d262a70835c28d85b533fa757e521545e353b6",
-      "compressedBytes": 298448,
-      "unpackedBytes": 10774638,
+      "file": "mcpscraper-memory-sdk-0.52.1.tgz",
+      "sha256": "f4e506010de86642baba6d18808953e0b32f72076ad8a80a7fd3c56ef0578701",
+      "compressedBytes": 298592,
+      "unpackedBytes": 10775051,
       "fileCount": 5,
       "largestPaths": [
         "package/dist/index.d.ts",
@@ -90,10 +93,10 @@
       "declaredDependencies": {}
     },
     {
-      "file": "mcpscraper-cli-0.51.0.tgz",
-      "sha256": "2e3824efee24fc46aff13d84141d87a9261c64b97d58c0ddcb60dc6cf4b7f72c",
-      "compressedBytes": 158927,
-      "unpackedBytes": 1116080,
+      "file": "mcpscraper-cli-0.51.1.tgz",
+      "sha256": "ea1a5eaffd9e307bc3699ab9c0bae054b087833765d1a882d29b95b30fae0d31",
+      "compressedBytes": 159072,
+      "unpackedBytes": 1116448,
       "fileCount": 3,
       "largestPaths": [
         "package/dist/bin/cli.js",
@@ -104,58 +107,58 @@
       "nestedNodeModulesCount": 0,
       "declaredDependencies": {
         "commander": "^12.0.0",
-        "mcpscraper-sdk": "^0.53.0"
+        "mcpscraper-sdk": "^0.53.1"
       }
     },
     {
-      "file": "mcpscraper_sdk-0.51.0-py3-none-any.whl",
-      "sha256": "8a3efa17cefa92bbab2e7859a4d444a52cfb64c4062e7c2987728fa6f3a25b02",
-      "compressedBytes": 720578,
-      "unpackedBytes": 3183618,
+      "file": "mcpscraper_sdk-0.51.1-py3-none-any.whl",
+      "sha256": "a82c040a8e3de77722cfece232956cf8670c9d20739d918ddc66dc1c5cc6d31f",
+      "compressedBytes": 720631,
+      "unpackedBytes": 3183920,
       "fileCount": 378,
       "largestPaths": [
         "mcpscraper/_mcp_generated_client.py",
         "mcpscraper/models.py",
         "mcpscraper/mcp_models/capture_serp_snapshot.py",
-        "mcpscraper_sdk-0.51.0.dist-info/RECORD",
+        "mcpscraper_sdk-0.51.1.dist-info/RECORD",
         "mcpscraper/mcp_models/create_artifact_template.py"
       ],
       "sourceMapCount": 0,
       "nestedNodeModulesCount": 0,
       "declaredDependencies": [
-        "pydantic>=2.0",
-        "requests>=2.31"
+        "requests>=2.31",
+        "pydantic>=2.0"
       ]
     },
     {
-      "file": "mcpscraper_sdk-0.51.0.tar.gz",
-      "sha256": "1bdf52a042b5ef7f25be6b8181f036089bfdc1376744c1091eff5a58e8796050",
-      "compressedBytes": 282063,
-      "unpackedBytes": 3155697,
+      "file": "mcpscraper_sdk-0.51.1.tar.gz",
+      "sha256": "b0c17f98a4c7510cf7f058efb57714c5ad5fe7e942bf4d5fb1151ff4e085781e",
+      "compressedBytes": 282092,
+      "unpackedBytes": 3155999,
       "fileCount": 379,
       "largestPaths": [
-        "mcpscraper_sdk-0.51.0/src/mcpscraper/_mcp_generated_client.py",
-        "mcpscraper_sdk-0.51.0/src/mcpscraper/models.py",
-        "mcpscraper_sdk-0.51.0/src/mcpscraper/mcp_models/capture_serp_snapshot.py",
-        "mcpscraper_sdk-0.51.0/src/mcpscraper/mcp_models/create_artifact_template.py",
-        "mcpscraper_sdk-0.51.0/src/mcpscraper/mcp_models/list_artifact_templates.py"
+        "mcpscraper_sdk-0.51.1/src/mcpscraper/_mcp_generated_client.py",
+        "mcpscraper_sdk-0.51.1/src/mcpscraper/models.py",
+        "mcpscraper_sdk-0.51.1/src/mcpscraper/mcp_models/capture_serp_snapshot.py",
+        "mcpscraper_sdk-0.51.1/src/mcpscraper/mcp_models/create_artifact_template.py",
+        "mcpscraper_sdk-0.51.1/src/mcpscraper/mcp_models/list_artifact_templates.py"
       ],
       "sourceMapCount": 0,
       "nestedNodeModulesCount": 0,
       "declaredDependencies": [
-        "pydantic>=2.0",
-        "requests>=2.31"
+        "requests>=2.31",
+        "pydantic>=2.0"
       ]
     },
     {
-      "file": "mcpscraper_memory_sdk-0.48.0-py3-none-any.whl",
-      "sha256": "4a7a1c6f83d7159bc36ffac796d11f5d09400ec583e38a71296dd0917a88bdb2",
-      "compressedBytes": 923774,
-      "unpackedBytes": 3598090,
+      "file": "mcpscraper_memory_sdk-0.48.1-py3-none-any.whl",
+      "sha256": "50e3af748eb5e8d6c937f1a40b3f770cbb4dea0ca40c6581c625a11d7544fff9",
+      "compressedBytes": 923825,
+      "unpackedBytes": 3598392,
       "fileCount": 645,
       "largestPaths": [
         "mcpscraper_memory/_mcp_generated_client.py",
-        "mcpscraper_memory_sdk-0.48.0.dist-info/RECORD",
+        "mcpscraper_memory_sdk-0.48.1.dist-info/RECORD",
         "mcpscraper_memory/_generated_client.py",
         "mcpscraper_memory/mcp_models/capture_serp_snapshot.py",
         "mcpscraper_memory/mcp_models/create_artifact_template.py"
@@ -163,28 +166,28 @@
       "sourceMapCount": 0,
       "nestedNodeModulesCount": 0,
       "declaredDependencies": [
-        "pydantic>=2",
-        "requests>=2.31"
+        "requests>=2.31",
+        "pydantic>=2"
       ]
     },
     {
-      "file": "mcpscraper_memory_sdk-0.48.0.tar.gz",
-      "sha256": "5eb8b47e5115b1df60299ad583835f05786f132971a9302304bb63a42ea5062a",
-      "compressedBytes": 327911,
-      "unpackedBytes": 3533234,
+      "file": "mcpscraper_memory_sdk-0.48.1.tar.gz",
+      "sha256": "9cd1f167be51ab66390cf84bdddc602f5f675489de2bcff79337f8c31ec1f769",
+      "compressedBytes": 327937,
+      "unpackedBytes": 3533536,
       "fileCount": 646,
       "largestPaths": [
-        "mcpscraper_memory_sdk-0.48.0/src/mcpscraper_memory/_mcp_generated_client.py",
-        "mcpscraper_memory_sdk-0.48.0/src/mcpscraper_memory/_generated_client.py",
-        "mcpscraper_memory_sdk-0.48.0/src/mcpscraper_memory/mcp_models/capture_serp_snapshot.py",
-        "mcpscraper_memory_sdk-0.48.0/src/mcpscraper_memory/mcp_models/create_artifact_template.py",
-        "mcpscraper_memory_sdk-0.48.0/src/mcpscraper_memory/mcp_models/list_artifact_templates.py"
+        "mcpscraper_memory_sdk-0.48.1/src/mcpscraper_memory/_mcp_generated_client.py",
+        "mcpscraper_memory_sdk-0.48.1/src/mcpscraper_memory/_generated_client.py",
+        "mcpscraper_memory_sdk-0.48.1/src/mcpscraper_memory/mcp_models/capture_serp_snapshot.py",
+        "mcpscraper_memory_sdk-0.48.1/src/mcpscraper_memory/mcp_models/create_artifact_template.py",
+        "mcpscraper_memory_sdk-0.48.1/src/mcpscraper_memory/mcp_models/list_artifact_templates.py"
       ],
       "sourceMapCount": 0,
       "nestedNodeModulesCount": 0,
       "declaredDependencies": [
-        "pydantic>=2",
-        "requests>=2.31"
+        "requests>=2.31",
+        "pydantic>=2"
       ]
     }
   ]

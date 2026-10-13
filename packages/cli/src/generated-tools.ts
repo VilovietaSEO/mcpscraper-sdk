@@ -20804,7 +20804,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa",
     "category": "search",
     "title": "Google PAA + SERP Harvest",
-    "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Optional SERP modules require include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+    "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Wait at least 20 seconds before the first durable job or Task check and each later check. Optional SERP modules require include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -20911,7 +20911,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_start",
     "category": "other",
     "title": "Start Durable Google PAA Harvest",
-    "description": "Start a durable Google People Also Ask harvest and return its job receipt. Set pages to 2 to add the second organic-results page when available; PAA is still expanded once on the preserved first page, and pagination survives checkpoint recovery. maxQuestions is the requested target count. The job automatically resumes an interrupted serverless worker under the same jobId, idempotency key, and billing hold while preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Poll jobId with harvest_paa_status. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
+    "description": "Start a durable Google People Also Ask harvest and return its job receipt. Set pages to 2 to add the second organic-results page when available; PAA is still expanded once on the preserved first page, and pagination survives checkpoint recovery. maxQuestions is the requested target count. Interrupted workers resume under the same jobId, idempotency key and billing hold, preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Wait at least 20 seconds before checking jobId with harvest_paa_status and each later check. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -21019,7 +21019,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_status",
     "category": "other",
     "title": "Check Durable Google PAA Harvest",
-    "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, correlated provider attempts, terminal rows, and billing. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
+    "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, correlated provider attempts, terminal rows, and billing. Wait at least 20 seconds before the first check and each later check. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
     "inputSchema": {
       "type": "object",
       "properties": {

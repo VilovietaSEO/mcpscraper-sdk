@@ -3435,6 +3435,7 @@ components:
           items:
             $ref: '#/components/schemas/SerpIntelligenceCaptureAttempt'
         locationEvidence:
+          type: object
           nullable: true
           allOf:
             - $ref: '#/components/schemas/SerpIntelligenceLocationEvidence'

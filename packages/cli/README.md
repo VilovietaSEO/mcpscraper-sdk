@@ -158,4 +158,6 @@ $ mcpscraper map https://example.com --json
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) · [`mcpscraper-memory-sdk`](../memory) · Python: [`mcpscraper-sdk`](../scraper-python) · [`mcpscraper-memory-sdk`](../memory-python)
 
-Release changes: [SDK 0.53.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.53.0).
+Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
+
+Release changes: [SDK 0.53.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.53.1).

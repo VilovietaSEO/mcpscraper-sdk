@@ -98,7 +98,7 @@ in [`../../examples/paa-two-page.mjs`](../../examples/paa-two-page.mjs).
 
 ### Durable acquisition
 
-Long-running agents can start SERP/PAA work once and poll the provider-owned job
+Long-running agents can start SERP work once and poll the provider-owned job
 instead of holding one synchronous request open:
 
 ```ts
@@ -192,7 +192,9 @@ npm run verify:rest-contract
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 121-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.53.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.53.0).
+Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
+
+Release changes: [SDK 0.53.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.53.1).
 
 ## Client attribution and full results
 
