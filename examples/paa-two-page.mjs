@@ -17,9 +17,11 @@ const started = await client.tools.other.harvestPaaStart({
 })
 
 let status
+let pollAfterSeconds = started.status.pollAfterSeconds
 do {
-  await new Promise(resolve => setTimeout(resolve, started.status.pollAfterSeconds * 1_000))
+  await new Promise(resolve => setTimeout(resolve, Math.max(20, pollAfterSeconds) * 1_000))
   status = await client.tools.other.harvestPaaStatus({ jobId: started.jobId })
+  pollAfterSeconds = status.status.pollAfterSeconds
   console.log(status.status.state, status.progress.pagination)
 } while (!status.status.terminal)
 

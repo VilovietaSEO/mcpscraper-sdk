@@ -7333,6 +7333,7 @@
             }
           },
           "locationEvidence": {
+            "type": "object",
             "nullable": true,
             "allOf": [
               {

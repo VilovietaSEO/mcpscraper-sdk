@@ -2,23 +2,23 @@
   "schemaVersion": 1,
   "policy": {
     "basis": "Current registry archives plus measured intended public generated-contract and client changes, required archive metadata and modest byte headroom. New files are limited to the declared public client additions; no source maps, fixtures, build scripts or private runtime code.",
-    "source": "Official npm and PyPI registry archives downloaded and integrity-verified on 2026-10-12",
+    "source": "Official npm and PyPI registry archives downloaded and integrity-verified on 2026-10-13",
     "failClosed": true
   },
   "artifacts": [
     {
       "package": "mcpscraper-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.53.0",
+      "candidateVersion": "0.53.1",
       "baseline": {
-        "version": "0.52.0",
-        "sha256": "7e9ad99a7f7cb5c37e660197edc234b5d71d699681b65582636b699a9f5dbdc6",
-        "compressedBytes": 62517,
-        "unpackedBytes": 438463,
+        "version": "0.53.0",
+        "sha256": "4210f74f5785e3459c373076186d33b8db5116b5ca019753f6a043b526cb35c8",
+        "compressedBytes": 69315,
+        "unpackedBytes": 474849,
         "fileCount": 6,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.52.0.tgz"
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.53.0.tgz"
       },
-      "intendedChange": "Existing public REST client plus explicit attribution, response IDs and canonical typed public SERP outputs; final six public files total 474,849 bytes before packing.",
+      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
       "maximum": {
         "compressedBytes": 70000,
         "unpackedBytes": 500000,
@@ -30,16 +30,16 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.52.0",
+      "candidateVersion": "0.52.1",
       "baseline": {
-        "version": "0.51.0",
-        "sha256": "413e73202d3587867805bbec26933bf1fb4378df1ca8a22a8aeedaac7a07e15e",
-        "compressedBytes": 283353,
-        "unpackedBytes": 10189786,
+        "version": "0.52.0",
+        "sha256": "547c5ca127ab5846de6cd1d6c2d262a70835c28d85b533fa757e521545e353b6",
+        "compressedBytes": 298448,
+        "unpackedBytes": 10774638,
         "fileCount": 5,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.51.0.tgz"
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.52.0.tgz"
       },
-      "intendedChange": "Complete public tool descriptions and previously unregenerated typed delivery/error alternatives; five public files retained.",
+      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
       "maximum": {
         "compressedBytes": 315000,
         "unpackedBytes": 11500000,
@@ -51,16 +51,16 @@
     {
       "package": "mcpscraper-cli",
       "format": "npm-tgz",
-      "candidateVersion": "0.51.0",
+      "candidateVersion": "0.51.1",
       "baseline": {
-        "version": "0.50.1",
-        "sha256": "b6ac5bd930292fdcb3d3528c71653f5878113b97561cc222f8303ba4bac2e4a3",
-        "compressedBytes": 155062,
-        "unpackedBytes": 1107025,
+        "version": "0.51.0",
+        "sha256": "2e3824efee24fc46aff13d84141d87a9261c64b97d58c0ddcb60dc6cf4b7f72c",
+        "compressedBytes": 158927,
+        "unpackedBytes": 1116080,
         "fileCount": 3,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.50.1.tgz"
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.51.0.tgz"
       },
-      "intendedChange": "Regenerated complete tool catalog, explicit client labels and artifact-preserving output; three public files retained.",
+      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
       "maximum": {
         "compressedBytes": 170000,
         "unpackedBytes": 1175000,
@@ -72,16 +72,16 @@
     {
       "package": "mcpscraper-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.51.0",
+      "candidateVersion": "0.51.1",
       "baseline": {
-        "version": "0.50.0",
-        "sha256": "70d21338462b1be8b024c66ddc8b1ae331a65cfb50199fb5473e4e54217a1a74",
-        "compressedBytes": 344074,
-        "unpackedBytes": 910579,
-        "fileCount": 374,
-        "archiveUrl": "https://files.pythonhosted.org/packages/21/c9/7d02eca0e65652bc3bf233ebe1192841dd7055e68166c1a7ec2983cf5382/mcpscraper_sdk-0.50.0-py3-none-any.whl"
+        "version": "0.51.0",
+        "sha256": "8a3efa17cefa92bbab2e7859a4d444a52cfb64c4062e7c2987728fa6f3a25b02",
+        "compressedBytes": 720578,
+        "unpackedBytes": 3183618,
+        "fileCount": 378,
+        "archiveUrl": "https://files.pythonhosted.org/packages/5b/ce/56b82007d5811aba2a7b8b16925c95c42c8ab3fa33df1f8d71fff501d384/mcpscraper_sdk-0.51.0-py3-none-any.whl"
       },
-      "intendedChange": "Typed inline/delivery/error alternatives, three artifact tools, attribution and canonical public SERP REST output with required-nullable fields; final source content 3,133,909 bytes in 375 files before wheel metadata.",
+      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
       "maximum": {
         "compressedBytes": 750000,
         "unpackedBytes": 3300000,
@@ -93,16 +93,16 @@
     {
       "package": "mcpscraper-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.51.0",
+      "candidateVersion": "0.51.1",
       "baseline": {
-        "version": "0.50.0",
-        "sha256": "23e2c385f6e91ac98392236335eaf8a493652ec0930514fae987bc0ccf4871c1",
-        "compressedBytes": 137589,
-        "unpackedBytes": 881952,
-        "fileCount": 375,
-        "archiveUrl": "https://files.pythonhosted.org/packages/5f/ee/52051eb3b78351c815d836d766db5ed7cfa1f98fddadb726472fbe92915b/mcpscraper_sdk-0.50.0.tar.gz"
+        "version": "0.51.0",
+        "sha256": "1bdf52a042b5ef7f25be6b8181f036089bfdc1376744c1091eff5a58e8796050",
+        "compressedBytes": 282063,
+        "unpackedBytes": 3155697,
+        "fileCount": 379,
+        "archiveUrl": "https://files.pythonhosted.org/packages/09/9f/220cc5006a5c1503fffc3bc9beb9f786966c7324a1cf3f042985e469fb99/mcpscraper_sdk-0.51.0.tar.gz"
       },
-      "intendedChange": "Same intended public Python client sources as wheel, with only required project metadata.",
+      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
       "maximum": {
         "compressedBytes": 300000,
         "unpackedBytes": 3300000,
@@ -114,16 +114,16 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.48.0",
+      "candidateVersion": "0.48.1",
       "baseline": {
-        "version": "0.47.0",
-        "sha256": "a70fa5b97eba2e1f44fc94f0b02fed4d3cb230a55657beadf18782b61aebeff5",
-        "compressedBytes": 545675,
-        "unpackedBytes": 1326444,
-        "fileCount": 637,
-        "archiveUrl": "https://files.pythonhosted.org/packages/55/23/be683e48fe9589ab3526e99dd5829ff3abc29d6e7bb85475f7498c067a84/mcpscraper_memory_sdk-0.47.0-py3-none-any.whl"
+        "version": "0.48.0",
+        "sha256": "4a7a1c6f83d7159bc36ffac796d11f5d09400ec583e38a71296dd0917a88bdb2",
+        "compressedBytes": 923774,
+        "unpackedBytes": 3598090,
+        "fileCount": 645,
+        "archiveUrl": "https://files.pythonhosted.org/packages/12/14/e5e59b560bfa1cc0c0580b09baa318179fc58a7e1991008302c94cc13dd0/mcpscraper_memory_sdk-0.48.0-py3-none-any.whl"
       },
-      "intendedChange": "Typed result alternatives, three direct artifact models, shared delivery validation, safe SERP output and attribution; final source content 3,523,376 bytes in 642 files before wheel metadata.",
+      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
       "maximum": {
         "compressedBytes": 970000,
         "unpackedBytes": 3800000,
@@ -135,16 +135,16 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.48.0",
+      "candidateVersion": "0.48.1",
       "baseline": {
-        "version": "0.47.0",
-        "sha256": "eef98d20d18023c50c48276ce47e64ba59355c2d6fe1f1ddcc558d6283401633",
-        "compressedBytes": 184296,
-        "unpackedBytes": 1261422,
-        "fileCount": 638,
-        "archiveUrl": "https://files.pythonhosted.org/packages/60/1e/42d896649eeba1f6e7e4885a6ff1b8c72ef339c115f0024fe595e33d6fe4/mcpscraper_memory_sdk-0.47.0.tar.gz"
+        "version": "0.48.0",
+        "sha256": "5eb8b47e5115b1df60299ad583835f05786f132971a9302304bb63a42ea5062a",
+        "compressedBytes": 327911,
+        "unpackedBytes": 3533234,
+        "fileCount": 646,
+        "archiveUrl": "https://files.pythonhosted.org/packages/bc/e9/e24b9ada1493216b878c0dbadf908d6ee1d649e04660000bf958c6f53f1f/mcpscraper_memory_sdk-0.48.0.tar.gz"
       },
-      "intendedChange": "Same intended public Python client sources as wheel, with only required project metadata.",
+      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
       "maximum": {
         "compressedBytes": 350000,
         "unpackedBytes": 3800000,

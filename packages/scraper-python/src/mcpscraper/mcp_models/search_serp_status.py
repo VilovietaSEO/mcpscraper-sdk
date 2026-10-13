@@ -159,6 +159,9 @@ SearchSerpStatusOutputVariant1PaaPreviewItem = TypedDict('SearchSerpStatusOutput
     'question': Required[str],
     'answer': Required[Union[str, None]],
     'url': Required[Union[str, None]],
+    'sourceTitle': NotRequired[Union[str, None]],
+    'sourceName': NotRequired[Union[str, None]],
+    'displayLink': NotRequired[Union[str, None]],
 })
 SearchSerpStatusOutputVariant1PaaPreviewItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 

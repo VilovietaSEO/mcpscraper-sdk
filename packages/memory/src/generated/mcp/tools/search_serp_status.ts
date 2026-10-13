@@ -170,6 +170,9 @@ export type Output =
         question: string;
         answer: string | null;
         url: string | null;
+        sourceTitle?: string | null;
+        sourceName?: string | null;
+        displayLink?: string | null;
       }[];
       additionalSerpFeatures: {
         name: string;
