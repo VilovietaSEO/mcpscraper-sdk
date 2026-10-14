@@ -17,7 +17,9 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 - Generate the 347-tool MCP Scraper catalog and 126-tool Memory contract. Retain manual Memory, Research, CRM, video, connections and workflow clients, complete artifact delivery, client attribution, retry keys and the 20-second minimum PAA status interval.
 - Refresh retained Memory convenience schemas from the registered server contract and prune withdrawn methods and models during generation, so client regeneration cannot restore the retired feature.
 
-Prepared for MCP Scraper 0.97.0 and Memory 2.0.0. Package versions are Node scraper 0.54.0, Node Memory 0.53.0, CLI 0.52.0, Python scraper 0.52.0 and Python Memory 0.49.0. Publication and hosted verification remain pending.
+Published and verified Node scraper 0.54.0, Node Memory 0.53.0, CLI 0.52.0, Python scraper 0.52.0 and Python Memory 0.49.0. Fresh registry installs, Node ESM/CommonJS and Python imports, NPX launch, authenticated SDK reads, and all seven registry/GitHub archive hashes and confidentiality checks passed.
+
+Verified against MCP Scraper 0.97.0 and native Memory 2.0.2, which preserves the released Memory 2.0.0 contract with 126 tools. Saved request attribution was verified for an eligible workflow read as SDK/npm/Codex; client-version persistence remains unavailable in the existing reporting schema. The [publication record](docs/releases/v0.54.0-publication.json) identifies the immutable package source; this documentation follow-up does not change published artifacts.
 
 ## [0.53.1] - 2026-10-13 — targets mcp-scraper 0.96.1
 

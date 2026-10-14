@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "state": "published and verified",
+  "tag": "v0.54.0",
+  "publishedArtifactSourceCommit": "70a60ef66e81e4c22c66d9878aa05ad1aeda0b06",
+  "documentationBoundary": "Recorded after publication; this documentation-only follow-up does not change the seven published archives or package versions.",
+  "githubRelease": "https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.54.0",
+  "packages": [
+    {
+      "registry": "npm",
+      "package": "mcpscraper-memory-sdk",
+      "version": "0.53.0",
+      "url": "https://www.npmjs.com/package/mcpscraper-memory-sdk/v/0.53.0",
+      "visibilityVerified": true
+    },
+    {
+      "registry": "pypi",
+      "package": "mcpscraper-sdk",
+      "version": "0.52.0",
+      "url": "https://pypi.org/project/mcpscraper-sdk/0.52.0/",
+      "visibilityVerified": true
+    },
+    {
+      "registry": "pypi",
+      "package": "mcpscraper-memory-sdk",
+      "version": "0.49.0",
+      "url": "https://pypi.org/project/mcpscraper-memory-sdk/0.49.0/",
+      "visibilityVerified": true
+    },
+    {
+      "registry": "npm",
+      "package": "mcpscraper-sdk",
+      "version": "0.54.0",
+      "url": "https://www.npmjs.com/package/mcpscraper-sdk/v/0.54.0",
+      "visibilityVerified": true
+    },
+    {
+      "registry": "npm",
+      "package": "mcpscraper-cli",
+      "version": "0.52.0",
+      "url": "https://www.npmjs.com/package/mcpscraper-cli/v/0.52.0",
+      "visibilityVerified": true
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "mcpscraper-sdk-0.54.0.tgz",
+      "sha256": "5aadfc16ca96e24e0ee93d9e07ffb175fd01e9e333f61f9d356e826b083dca68",
+      "registryAndGithubBytesMatch": true
+    },
+    {
+      "file": "mcpscraper-memory-sdk-0.53.0.tgz",
+      "sha256": "2b24edb1c538163a4f8af9d8152996fab1df7827de265b372171c79f0a024b5a",
+      "registryAndGithubBytesMatch": true
+    },
+    {
+      "file": "mcpscraper-cli-0.52.0.tgz",
+      "sha256": "895e3294b3d9acd9dcedec1712598e9a004bfbf55fa11a930ddc9355d80d1828",
+      "registryAndGithubBytesMatch": true
+    },
+    {
+      "file": "mcpscraper_sdk-0.52.0-py3-none-any.whl",
+      "sha256": "cf71398ad8f5bab06ef896503a4cf49079d940efb5c92ecd9828c92c6c7c4600",
+      "registryAndGithubBytesMatch": true
+    },
+    {
+      "file": "mcpscraper_sdk-0.52.0.tar.gz",
+      "sha256": "53da10eab3bdc23f677b9c80b179e4edd9e595b39fb5bda955339ddd7d087b95",
+      "registryAndGithubBytesMatch": true
+    },
+    {
+      "file": "mcpscraper_memory_sdk-0.49.0-py3-none-any.whl",
+      "sha256": "9199a67ed240f8a34f7289a94b0021745a0df13caad12d202811d61385466485",
+      "registryAndGithubBytesMatch": true
+    },
+    {
+      "file": "mcpscraper_memory_sdk-0.49.0.tar.gz",
+      "sha256": "48412895ad60d41b4b5412c6dc93629c904b9d2842192a1f05278a7e8c58e8b9",
+      "registryAndGithubBytesMatch": true
+    }
+  ],
+  "compatibleServices": {
+    "mcpScraper": {
+      "version": "0.97.0",
+      "toolCount": 347,
+      "liveVerification": "passed"
+    },
+    "nativeMemory": {
+      "runtimeVersion": "2.0.2",
+      "immutableToolContractVersion": "2.0.0",
+      "toolCount": 126,
+      "toolContractSha256": "c54392374d473191e04122672120fc308f9497165d238d62f034a62c41676c09",
+      "toolContractMatches": true,
+      "liveVerification": "passed",
+      "mainAndCompatibilityFlows": "passed"
+    }
+  },
+  "freshChecks": {
+    "node": {
+      "versions": [
+        "0.54.0",
+        "0.53.0"
+      ],
+      "toolCount": 347,
+      "esmAndCommonJs": "passed",
+      "retainedMethods": "passed",
+      "authenticatedFreeReadHttpStatus": 200
+    },
+    "python": {
+      "versions": [
+        "0.52.0",
+        "0.49.0"
+      ],
+      "toolCount": 347,
+      "importedPublicModules": {
+        "mcpscraper": 354,
+        "mcpscraper_memory": 581
+      },
+      "authenticatedFreeReadHttpStatus": 200
+    },
+    "cli": {
+      "version": "0.52.0",
+      "toolCount": 347,
+      "externalNpxLaunch": "passed"
+    },
+    "allSevenRegistryAndGithubArchiveHashes": "passed",
+    "allSevenRegistryAndGithubArchiveInventoriesAndConfidentialityChecks": "passed"
+  },
+  "persistedAttribution": {
+    "eligibleTool": "workflow_list",
+    "httpStatus": 200,
+    "surface": "sdk",
+    "installChannel": "npm",
+    "aiClient": "codex",
+    "verified": true,
+    "clientVersionPersistence": "unavailable in the existing reporting database schema",
+    "scope": "One eligible workflow request verified; the earlier credit-read requests are excluded from this persistence claim."
+  }
+}
