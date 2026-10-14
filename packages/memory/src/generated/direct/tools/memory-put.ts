@@ -8,7 +8,7 @@ export interface Input {
    */
   sessionId?: string;
   /**
-   * Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 18-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Research People/Organizations and CRM People/Organizations require their specialized tools and are always rejected here. For Deals, Projects, Tasks, or Communication records, first use prepare-memory-write then memory-capture so relationships and approval state are validated.
+   * Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. Pick the vault whose job matches the content; use prepare-memory-write for the live vault contract or list-vaults for vault inventory rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Research People/Organizations and CRM People/Organizations require their specialized tools and are always rejected here. For Deals, Projects, Tasks, or Communication records, first use prepare-memory-write then memory-capture so relationships and approval state are validated.
    */
   vault?: string;
   /**
@@ -24,7 +24,7 @@ export interface Input {
    */
   title?: string;
   /**
-   * The full note body to store and index for semantic search. Must be non-empty.
+   * The complete note body to store and index. Content is replace-all: for an edit, first read the current note, merge the requested change into its full body, and never pass only the changed fragment. Must be non-empty.
    */
   content: string;
   /**
@@ -110,7 +110,7 @@ export interface Input {
     [k: string]: unknown;
   };
   /**
-   * Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes).
+   * Revision from the current note read or prior successful write. Pass it with the complete merged body when editing: a mismatch rejects the write and returns the current note for reconciliation. Never replay the stale body unchanged. Required for edits through shareId; omission on owned notes permits last-write-wins.
    */
   baseRevision?: number;
   /**
@@ -121,67 +121,127 @@ export interface Input {
   };
 }
 
-export interface Output {
-  /**
-   * True when the note was stored; false on auth/scope error, empty content, or a revision conflict.
-   */
-  ok: boolean;
-  /**
-   * The stored note metadata. Present when ok is true.
-   */
-  note?: {
-    /**
-     * Vault-relative path the note was stored at.
-     */
-    path: string;
-    /**
-     * Stored note title.
-     */
-    title: string;
-    /**
-     * ISO-8601 timestamp of the write.
-     */
-    updatedAt: string;
-    /**
-     * New revision number after this write. Pass this as baseRevision on the next edit.
-     */
-    revision: number;
-  };
-  /**
-   * Number of search chunks indexed for the content (0 if embedding failed but the note still saved).
-   */
-  indexed?: number;
-  /**
-   * True when baseRevision did not match the current revision: someone else changed the note first. No write happened.
-   */
-  conflict?: boolean;
-  /**
-   * Present only when conflict is true: the note as it stands now, so the caller can reconcile and retry without another round trip.
-   */
-  current?: {
-    /**
-     * The note as it currently stands (so a re-read is unnecessary).
-     */
-    content: string;
-    /**
-     * Current revision. Use this as the new baseRevision after reconciling.
-     */
-    revision: number;
-    /**
-     * Identity that made the conflicting write.
-     */
-    updatedBy: string | null;
-    /**
-     * When the conflicting write happened.
-     */
-    updatedAt: string;
-  };
-  /**
-   * Machine-readable denial code when ok is false: quota_exceeded, free_cost_cap, or revision_conflict.
-   */
-  code?: string;
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when the note was stored; false on auth/scope error, empty content, or a revision conflict.
+       */
+      ok: boolean;
+      /**
+       * The stored note metadata. Present when ok is true.
+       */
+      note?: {
+        /**
+         * Vault-relative path the note was stored at.
+         */
+        path: string;
+        /**
+         * Stored note title.
+         */
+        title: string;
+        /**
+         * ISO-8601 timestamp of the write.
+         */
+        updatedAt: string;
+        /**
+         * New revision number after this write. Pass this as baseRevision on the next edit.
+         */
+        revision: number;
+      };
+      /**
+       * Number of search chunks indexed for the content (0 if embedding failed but the note still saved).
+       */
+      indexed?: number;
+      /**
+       * True when baseRevision did not match the current revision: someone else changed the note first. No write happened.
+       */
+      conflict?: boolean;
+      /**
+       * Present only when conflict is true: the note as it stands now, so the caller can reconcile and retry without another round trip.
+       */
+      current?: {
+        /**
+         * The note as it currently stands (so a re-read is unnecessary).
+         */
+        content: string;
+        /**
+         * Current revision. Use this as the new baseRevision after reconciling.
+         */
+        revision: number;
+        /**
+         * Identity that made the conflicting write.
+         */
+        updatedBy: string | null;
+        /**
+         * When the conflicting write happened.
+         */
+        updatedAt: string;
+      };
+      /**
+       * Machine-readable denial code when ok is false: quota_exceeded, free_cost_cap, or revision_conflict.
+       */
+      code?: string;
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
+    };

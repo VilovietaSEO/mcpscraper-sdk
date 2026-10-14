@@ -1,48 +1,48 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.95.2 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "30a335cadf4e7634288b870c47411111fa37ff1b7f56e68c9bf2e0f4abd756f1",
+  "generatedFrom": "mcp-scraper 0.97.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "bb250b4b4bcc6b8dea5e237ff7cb20b70a568fe1853662e6249fb7c7b9382189",
   "toolCount": 10,
   "tools": [
     {
       "name": "gmail_bulk_delete_messages",
-      "sha256": "b58cf5421dc1d84f9bd9b4ecace4a0cb1c22e75293e0c7951e9436dabb576377"
+      "sha256": "bc5deca972986d7a9bc9306ab29eb23068fe0d00d8ab9c773ee7c1f19c9866a0"
     },
     {
       "name": "gmail_bulk_manage_messages",
-      "sha256": "44c491baed445dea1618f4ff125034746e18794612eed0bcdc144247c0d062c1"
+      "sha256": "58fdbaeb7655cb347702dab1455d4dc9ad7fd946db3820f2d9dce1f05a7d4374"
     },
     {
       "name": "gmail_export_selection",
-      "sha256": "a0d577af75475399508b98b81810f58ac1e8b69c99c35ecccd68606ba75ff893"
+      "sha256": "f640c44a505abc8e0fb9591c340486b7428483ccbc71a7eeb06abb07cd66ed85"
     },
     {
       "name": "gmail_get_attachment",
-      "sha256": "e82c9b4cbb235ce08e724549b5639ae7997222589771b8fe6a3a0c3550356e31"
+      "sha256": "7501b3224265492658a1130b0b7b5ef46667ab577e037509f17446bfa434fc85"
     },
     {
       "name": "gmail_get_message",
-      "sha256": "baa3707737bb71f0d82f897eda2638a086221a7192f4343329c7c705501c6305"
+      "sha256": "2e822a599fddcc88d30b59c128052418d34383b04ad484fc69818d6761ea7ed1"
     },
     {
       "name": "gmail_import_status",
-      "sha256": "474fba2ea8205e45f5770709c072708767734edc1c848160205409a86c73f7e8"
+      "sha256": "e6bf77631cad47e34e9aca65c4ad6ece12bbda6be745d12ddea6516317fc71af"
     },
     {
       "name": "gmail_import_to_memory",
-      "sha256": "7e7a2a24edfbef3bf55c015a7f760e2f4a90dcdeb057e299ef98f85e0f064ae3"
+      "sha256": "f2473b250da9c4fab9e773fb0e16ea7fbc7c9597996f84ef1c3ad253e2f12beb"
     },
     {
       "name": "gmail_prepare_memory_import",
-      "sha256": "d7885eaccea8fc98befd7633c937c3d34d22aea9657c305dbd36209b6ea10ec1"
+      "sha256": "1f53be6b4781f7fcca7ca877effd245dd212e9e800a048e7f8e97ee2ecce3aaa"
     },
     {
       "name": "gmail_prepare_selection",
-      "sha256": "0d0a451b684e3ae6c533e6bd48b5d14c21171520748220586307fd77f171b5e3"
+      "sha256": "8665d87abd59986d053992ff1e85bf8fcaff01e3b2d9d4e0abcdb2a165a06342"
     },
     {
       "name": "gmail_search_messages",
-      "sha256": "1f021190c839f37a0eaa7ea694334645a21c508a590a42c46e8e3e77ec7c5dd1"
+      "sha256": "589ab2b173fa2fda52e7d34eabc76358e7ea13ca2dde6d8ec52320adc95943e2"
     }
   ]
 }

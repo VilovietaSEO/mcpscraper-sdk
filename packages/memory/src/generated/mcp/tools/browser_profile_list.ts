@@ -17,46 +17,89 @@ export interface Input {
   connection_id?: string;
 }
 
-export interface Output {
-  ok: boolean;
-  tool: "browser_profile_list";
-  session_id: null;
-  /**
-   * Profile these logins belong to.
-   */
-  profile: string;
-  /**
-   * All site logins saved in this profile, each with its current auth status and note.
-   */
-  connections: {
-    /**
-     * Auth connection id for this login.
-     */
-    connection_id: string | null;
-    /**
-     * Site this login is for, e.g. chatgpt.com.
-     */
-    domain: string;
-    /**
-     * Auth status, e.g. NEEDS_AUTH or AUTHENTICATED.
-     */
-    status: string;
-    /**
-     * Account email recorded for this login, when known.
-     */
-    account_email: string | null;
-    /**
-     * Free-text note describing this login.
-     */
-    note: string | null;
-    /**
-     * mcpscraper.dev sign-in link when this login still needs the user to authenticate.
-     */
-    watch_url: string | null;
-    /**
-     * When this login was last saved or refreshed.
-     */
-    last_connected_at: string | null;
-  }[];
-  count: number;
-}
+export type Output =
+  | {
+      ok: boolean;
+      tool: "browser_profile_list";
+      session_id: null;
+      /**
+       * Profile these logins belong to.
+       */
+      profile: string;
+      /**
+       * All site logins saved in this profile, each with its current auth status and note.
+       */
+      connections: {
+        /**
+         * Auth connection id for this login.
+         */
+        connection_id: string | null;
+        /**
+         * Site this login is for, e.g. chatgpt.com.
+         */
+        domain: string;
+        /**
+         * Auth status, e.g. NEEDS_AUTH or AUTHENTICATED.
+         */
+        status: string;
+        /**
+         * Account email recorded for this login, when known.
+         */
+        account_email: string | null;
+        /**
+         * Free-text note describing this login.
+         */
+        note: string | null;
+        /**
+         * mcpscraper.dev sign-in link when this login still needs the user to authenticate.
+         */
+        watch_url: string | null;
+        /**
+         * When this login was last saved or refreshed.
+         */
+        last_connected_at: string | null;
+      }[];
+      count: number;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

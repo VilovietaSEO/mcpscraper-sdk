@@ -9,39 +9,82 @@ export interface Input {
   maxPages?: number;
 }
 
-export interface Output {
-  product: string;
-  reviewUrl: string;
-  extractedAt: string;
-  requestedMaxPages: number;
-  pagesFetched: number;
-  reviewCount: number;
-  reviews: {
-    source: "trustpilot" | "g2";
-    sourceReviewId: string | null;
-    reviewUrl: string | null;
-    reviewer: {
-      name: string | null;
-      profileId: string | null;
-      title: string | null;
-      companySegment: string | null;
+export type Output =
+  | {
+      product: string;
+      reviewUrl: string;
+      extractedAt: string;
+      requestedMaxPages: number;
+      pagesFetched: number;
+      reviewCount: number;
+      reviews: {
+        source: "trustpilot" | "g2";
+        sourceReviewId: string | null;
+        reviewUrl: string | null;
+        reviewer: {
+          name: string | null;
+          profileId: string | null;
+          title: string | null;
+          companySegment: string | null;
+        };
+        rating: number | null;
+        ratingScale: number;
+        title: string | null;
+        date: string | null;
+        body: {
+          question: string | null;
+          answer: string;
+        }[];
+        truncated: boolean;
+        flags: {
+          origin: string | null;
+          incentivized: boolean | null;
+          validated: boolean | null;
+          currentUser: boolean | null;
+          companyReplied: boolean | null;
+        };
+      }[];
+      durationMs: number;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-    rating: number | null;
-    ratingScale: number;
-    title: string | null;
-    date: string | null;
-    body: {
-      question: string | null;
-      answer: string;
-    }[];
-    truncated: boolean;
-    flags: {
-      origin: string | null;
-      incentivized: boolean | null;
-      validated: boolean | null;
-      currentUser: boolean | null;
-      companyReplied: boolean | null;
-    };
-  }[];
-  durationMs: number;
-}

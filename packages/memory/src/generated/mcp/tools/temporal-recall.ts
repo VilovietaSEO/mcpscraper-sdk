@@ -21,60 +21,103 @@ export interface Input {
   to?: string;
 }
 
-export interface Output {
-  /**
-   * True when recall succeeded; false on auth/scope error.
-   */
-  ok: boolean;
-  /**
-   * The actual time window used after resolving daysAgo/from/to (default: last 7 days).
-   */
-  range?: {
-    /**
-     * Resolved window start as an ISO-8601 timestamp.
-     */
-    from: string;
-    /**
-     * Resolved window end as an ISO-8601 timestamp.
-     */
-    to: string;
-  };
-  /**
-   * Captures within the window, newest-first. Present when ok is true.
-   */
-  items?: {
-    /**
-     * Captured content text.
-     */
-    text: string;
-    /**
-     * Source attribution for the capture.
-     */
-    source: string;
-    /**
-     * ISO-8601 timestamp the item was captured.
-     */
-    capturedAt: string;
-  }[];
-  /**
-   * Blended semantic-search hits for the query. Present only when a query was supplied.
-   */
-  searchResults?: {
-    /**
-     * Matching text chunk.
-     */
-    text: string;
-    /**
-     * Source attribution for the chunk.
-     */
-    source: string;
-    /**
-     * Similarity score; higher means more relevant.
-     */
-    score: number;
-  }[];
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when recall succeeded; false on auth/scope error.
+       */
+      ok: boolean;
+      /**
+       * The actual time window used after resolving daysAgo/from/to (default: last 7 days).
+       */
+      range?: {
+        /**
+         * Resolved window start as an ISO-8601 timestamp.
+         */
+        from: string;
+        /**
+         * Resolved window end as an ISO-8601 timestamp.
+         */
+        to: string;
+      };
+      /**
+       * Captures within the window, newest-first. Present when ok is true.
+       */
+      items?: {
+        /**
+         * Captured content text.
+         */
+        text: string;
+        /**
+         * Source attribution for the capture.
+         */
+        source: string;
+        /**
+         * ISO-8601 timestamp the item was captured.
+         */
+        capturedAt: string;
+      }[];
+      /**
+       * Blended semantic-search hits for the query. Present only when a query was supplied.
+       */
+      searchResults?: {
+        /**
+         * Matching text chunk.
+         */
+        text: string;
+        /**
+         * Source attribution for the chunk.
+         */
+        source: string;
+        /**
+         * Similarity score; higher means more relevant.
+         */
+        score: number;
+      }[];
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

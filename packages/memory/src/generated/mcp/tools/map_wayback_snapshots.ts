@@ -44,81 +44,124 @@ export interface Input {
   delivery?: "auto" | "inline" | "artifact";
 }
 
-export interface Output {
-  url: string;
-  scope: "exact" | "prefix" | "host" | "domain";
-  selectedUrls: string[] | null;
-  from: string | null;
-  to: string | null;
-  successfulHtmlOnly: boolean;
-  totalCaptures: number;
-  countType: "exact" | "lower_bound";
-  complete: boolean;
-  truncated: boolean;
-  maxCaptures: number;
-  queryPages: number;
-  uniqueUrls: number;
-  uniqueDigests: number;
-  firstCapture: {
-    timestamp: string;
-    originalUrl: string;
-    digest: string | null;
-    rawReplayUrl: string;
-    replayUrl: string | null;
-    statusCode?: number | null;
-    mimeType?: string | null;
-    length?: number | null;
-  } | null;
-  lastCapture: {
-    timestamp: string;
-    originalUrl: string;
-    digest: string | null;
-    rawReplayUrl: string;
-    replayUrl: string | null;
-    statusCode?: number | null;
-    mimeType?: string | null;
-    length?: number | null;
-  } | null;
-  monthlyCounts: {
-    month: string;
-    captures: number;
-  }[];
-  yearlyCounts: {
-    year: string;
-    captures: number;
-  }[];
-  missingMonths: string[];
-  perUrl: {
-    url: string;
-    captures: number;
-    uniqueDigests: number;
-    firstTimestamp: string;
-    lastTimestamp: string;
-  }[];
-  perUrlTruncatedCount: number;
-  captures: {
-    timestamp: string;
-    originalUrl: string;
-    digest: string | null;
-    rawReplayUrl: string;
-    replayUrl: string | null;
-    statusCode?: number | null;
-    mimeType?: string | null;
-    length?: number | null;
-  }[];
-  captureRowsTruncatedCount: number;
-  durationMs: number;
-  truncatedCount?: number;
-  artifact?: {
-    artifactId: string;
-    bytes: number;
-    expiresAt: string;
-    preview: string;
-  };
-  delivery: {
-    requested: "auto" | "inline" | "artifact";
-    effective: "inline" | "artifact";
-    retained: boolean;
-    nextAction: string | null;
-  };
-}
+export type Output =
+  | {
+      url: string;
+      scope: "exact" | "prefix" | "host" | "domain";
+      selectedUrls: string[] | null;
+      from: string | null;
+      to: string | null;
+      successfulHtmlOnly: boolean;
+      totalCaptures: number;
+      countType: "exact" | "lower_bound";
+      complete: boolean;
+      truncated: boolean;
+      maxCaptures: number;
+      queryPages: number;
+      uniqueUrls: number;
+      uniqueDigests: number;
+      firstCapture: {
+        timestamp: string;
+        originalUrl: string;
+        digest: string | null;
+        rawReplayUrl: string;
+        replayUrl: string | null;
+        statusCode?: number | null;
+        mimeType?: string | null;
+        length?: number | null;
+      } | null;
+      lastCapture: {
+        timestamp: string;
+        originalUrl: string;
+        digest: string | null;
+        rawReplayUrl: string;
+        replayUrl: string | null;
+        statusCode?: number | null;
+        mimeType?: string | null;
+        length?: number | null;
+      } | null;
+      monthlyCounts: {
+        month: string;
+        captures: number;
+      }[];
+      yearlyCounts: {
+        year: string;
+        captures: number;
+      }[];
+      missingMonths: string[];
+      perUrl: {
+        url: string;
+        captures: number;
+        uniqueDigests: number;
+        firstTimestamp: string;
+        lastTimestamp: string;
+      }[];
+      perUrlTruncatedCount: number;
+      captures: {
+        timestamp: string;
+        originalUrl: string;
+        digest: string | null;
+        rawReplayUrl: string;
+        replayUrl: string | null;
+        statusCode?: number | null;
+        mimeType?: string | null;
+        length?: number | null;
+      }[];
+      captureRowsTruncatedCount: number;
+      durationMs: number;
+      truncatedCount?: number;
+      artifact?: {
+        artifactId: string;
+        bytes: number;
+        expiresAt: string;
+        preview: string;
+      };
+      delivery: {
+        requested: "auto" | "inline" | "artifact";
+        effective: "inline" | "artifact";
+        retained: boolean;
+        nextAction: string | null;
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

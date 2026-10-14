@@ -61,16 +61,90 @@ export interface Input {
   includeWhatPeopleSaying?: boolean;
 }
 
-export interface Output {
-  jobId: string;
-  operationId: string;
-  taskId: string;
-  status: {
-    state: "pending" | "running";
-    terminal: false;
-    pollAfterSeconds: number;
-    retryGuidance: string;
-  };
-  replayed: boolean;
-  statusTool: "harvest_paa_status";
-}
+export type Output =
+  | {
+      jobId: string;
+      operationId: string;
+      taskId: string;
+      status:
+        | {
+            state: "pending";
+            terminal: false;
+            pollAfterSeconds: number;
+            retryGuidance: string;
+          }
+        | {
+            state: "running";
+            terminal: false;
+            pollAfterSeconds: number;
+            retryGuidance: string;
+          }
+        | {
+            state: "done";
+            terminal: true;
+            pollAfterSeconds: null;
+            retryGuidance: string;
+          }
+        | {
+            state: "failed";
+            terminal: true;
+            pollAfterSeconds: null;
+            retryGuidance: string;
+          }
+        | {
+            state: "cancelled";
+            terminal: true;
+            pollAfterSeconds: null;
+            retryGuidance: string;
+          };
+      execution?: {
+        state: "unknown";
+        physicalOutcome: "unknown";
+        holdState: "held" | "unconfirmed";
+        retryGuidance: string;
+      };
+      replayed: boolean;
+      statusTool: "harvest_paa_status";
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

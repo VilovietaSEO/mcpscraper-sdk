@@ -17,106 +17,149 @@ export interface Input {
   tags?: string[];
 }
 
-export interface Output {
-  /**
-   * True when the listing succeeded; false on an auth/scope/lookup error.
-   */
-  ok: boolean;
-  /**
-   * Whether the result covers one logical vault or the whole entitled account.
-   */
-  scope?: "vault" | "account";
-  /**
-   * Account-wide mode only: true if one vault failed and vaultInventories contains only the completed prefix.
-   */
-  partial?: boolean;
-  /**
-   * The vault that was actually listed (after defaulting).
-   */
-  vault?: string;
-  /**
-   * The notes in the vault (metadata only, no content). Present when ok is true.
-   */
-  notes?: {
-    /**
-     * Vault-relative note path, e.g. projects/q3-plan.
-     */
-    path: string;
-    /**
-     * Human-readable note title.
-     */
-    title: string;
-    /**
-     * Note kind: note, library, capture, or decision.
-     */
-    kind: string;
-    /**
-     * The note's tags, if any.
-     */
-    tags: string[];
-    /**
-     * ISO-8601 timestamp of the note last update.
-     */
-    updatedAt: string;
-  }[];
-  /**
-   * Sorted complete folder inventory derived from note paths, including represented nested parent folders. Present when ok is true.
-   */
-  folders?: string[];
-  /**
-   * All vaults the caller is entitled to, for choosing a different vault to list.
-   */
-  vaults?: string[];
-  /**
-   * Account-wide mode only: total notes across every completed vault inventory.
-   */
-  totalNotes?: number;
-  /**
-   * Account-wide mode only: total represented folder instances across vaults.
-   */
-  totalFolders?: number;
-  /**
-   * Account-wide mode only: complete note and folder inventories grouped by vault so paths remain unambiguous.
-   */
-  vaultInventories?: {
-    /**
-     * Exact vault handle for every note and folder in this group.
-     */
-    vault: string;
-    noteCount: number;
-    folderCount: number;
-    /**
-     * Every note metadata record in this vault.
-     */
-    notes: {
+export type Output =
+  | {
       /**
-       * Vault-relative note path, e.g. projects/q3-plan.
+       * True when the listing succeeded; false on an auth/scope/lookup error.
        */
-      path: string;
+      ok: boolean;
       /**
-       * Human-readable note title.
+       * Whether the result covers one logical vault or the whole entitled account.
        */
-      title: string;
+      scope?: "vault" | "account";
       /**
-       * Note kind: note, library, capture, or decision.
+       * Account-wide mode only: true if one vault failed and vaultInventories contains only the completed prefix.
        */
-      kind: string;
+      partial?: boolean;
       /**
-       * The note's tags, if any.
+       * The vault that was actually listed (after defaulting).
        */
-      tags: string[];
+      vault?: string;
       /**
-       * ISO-8601 timestamp of the note last update.
+       * The notes in the vault (metadata only, no content). Present when ok is true.
        */
-      updatedAt: string;
-    }[];
-    /**
-     * Every represented folder and nested parent folder in this vault.
-     */
-    folders: string[];
-  }[];
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+      notes?: {
+        /**
+         * Vault-relative note path, e.g. projects/q3-plan.
+         */
+        path: string;
+        /**
+         * Human-readable note title.
+         */
+        title: string;
+        /**
+         * Note kind: note, library, capture, or decision.
+         */
+        kind: string;
+        /**
+         * The note's tags, if any.
+         */
+        tags: string[];
+        /**
+         * ISO-8601 timestamp of the note last update.
+         */
+        updatedAt: string;
+      }[];
+      /**
+       * Sorted complete folder inventory derived from note paths, including represented nested parent folders. Present when ok is true.
+       */
+      folders?: string[];
+      /**
+       * All vaults the caller is entitled to, for choosing a different vault to list.
+       */
+      vaults?: string[];
+      /**
+       * Account-wide mode only: total notes across every completed vault inventory.
+       */
+      totalNotes?: number;
+      /**
+       * Account-wide mode only: total represented folder instances across vaults.
+       */
+      totalFolders?: number;
+      /**
+       * Account-wide mode only: complete note and folder inventories grouped by vault so paths remain unambiguous.
+       */
+      vaultInventories?: {
+        /**
+         * Exact vault handle for every note and folder in this group.
+         */
+        vault: string;
+        noteCount: number;
+        folderCount: number;
+        /**
+         * Every note metadata record in this vault.
+         */
+        notes: {
+          /**
+           * Vault-relative note path, e.g. projects/q3-plan.
+           */
+          path: string;
+          /**
+           * Human-readable note title.
+           */
+          title: string;
+          /**
+           * Note kind: note, library, capture, or decision.
+           */
+          kind: string;
+          /**
+           * The note's tags, if any.
+           */
+          tags: string[];
+          /**
+           * ISO-8601 timestamp of the note last update.
+           */
+          updatedAt: string;
+        }[];
+        /**
+         * Every represented folder and nested parent folder in this vault.
+         */
+        folders: string[];
+      }[];
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

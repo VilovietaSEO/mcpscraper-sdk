@@ -15,7 +15,7 @@ class CrmDealUpsertInput(BaseModel):
     content: str | None = Field(None, alias="content", description="")
     pipeline_id: str = Field(..., alias="pipelineId", description="")
     stage_id: str = Field(..., alias="stageId", description="")
-    probability: float = Field(..., alias="probability", description="")
+    probability: float = Field(..., alias="probability", description="Deal probability from 0 through 1; must equal the selected stage probability returned by crm-pipeline-list.")
     party: str = Field(..., alias="party", description="")
     entered_at: str = Field(..., alias="enteredAt", description="")
     value: Any | None = Field(None, alias="value", description="")

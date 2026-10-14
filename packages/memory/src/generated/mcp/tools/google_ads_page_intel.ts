@@ -21,25 +21,68 @@ export interface Input {
   maxAds?: number;
 }
 
-export interface Output {
-  advertiserId: string | null;
-  advertiserName: string | null;
-  domain: string | null;
-  region: string;
-  totalCreatives: number;
-  videoCount: number;
-  imageCount: number;
-  textCount: number;
-  ads: {
-    creativeId: string | null;
-    advertiserId: string | null;
-    format: string | null;
-    lastShown: string | null;
-    detailUrl: string | null;
-    landingDomain: string | null;
-    imageUrls: string[];
-    youtubeVideoId: string | null;
-    videoUrl: string | null;
-    variations: number | null;
-  }[];
-}
+export type Output =
+  | {
+      advertiserId: string | null;
+      advertiserName: string | null;
+      domain: string | null;
+      region: string;
+      totalCreatives: number;
+      videoCount: number;
+      imageCount: number;
+      textCount: number;
+      ads: {
+        creativeId: string | null;
+        advertiserId: string | null;
+        format: string | null;
+        lastShown: string | null;
+        detailUrl: string | null;
+        landingDomain: string | null;
+        imageUrls: string[];
+        youtubeVideoId: string | null;
+        videoUrl: string | null;
+        variations: number | null;
+      }[];
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

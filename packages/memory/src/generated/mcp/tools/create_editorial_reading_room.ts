@@ -303,26 +303,69 @@ export interface Input {
   filename?: string;
 }
 
-export interface Output {
-  ok: boolean;
-  title: string;
-  filename: string;
-  delivery: "artifact" | "local_file";
-  articleCount: number;
-  wordCount: number;
-  bytes: number;
-  sha256: string;
-  generatedAt: string;
-  artifact?: {
-    artifactId: string;
-    filename: string;
-    contentType: "text/html";
-    bytes: number;
-    sha256: string;
-    expiresAt: string;
-    downloadUrl: string | null;
-    downloadUrlExpiresAt: string | null;
-  };
-  localPath?: string;
-  warnings: string[];
-}
+export type Output =
+  | {
+      ok: boolean;
+      title: string;
+      filename: string;
+      delivery: "artifact" | "local_file";
+      articleCount: number;
+      wordCount: number;
+      bytes: number;
+      sha256: string;
+      generatedAt: string;
+      artifact?: {
+        artifactId: string;
+        filename: string;
+        contentType: "text/html";
+        bytes: number;
+        sha256: string;
+        expiresAt: string;
+        downloadUrl: string | null;
+        downloadUrlExpiresAt: string | null;
+      };
+      localPath?: string;
+      warnings: string[];
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

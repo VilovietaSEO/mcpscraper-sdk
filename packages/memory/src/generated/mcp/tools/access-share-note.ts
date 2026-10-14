@@ -38,53 +38,96 @@ export interface Input {
   bundleLinks?: boolean | string[];
 }
 
-export interface Output {
-  /**
-   * True when the offer was created; false on auth/scope/lookup error.
-   */
-  ok: boolean;
-  /**
-   * Identifier the grantee will use to accept-share, then address the note on get/put/delete.
-   */
-  shareId?: string;
-  /**
-   * The identity the note was offered to.
-   */
-  grantee?: string;
-  /**
-   * The permissions in effect for this share.
-   */
-  permissions?: {
-    read: boolean;
-    edit: boolean;
-    delete: boolean;
-    reshare: boolean;
-  };
-  /**
-   * Guidance: the offer is pending until the grantee calls accept-share.
-   */
-  note?: string;
-  /**
-   * Notes this one links to (same vault) that were NOT bundled into this share. Relay these to the human and ask before calling share-note again with bundleLinks if they want them included — otherwise they render as [[private note]] to this grantee.
-   */
-  linkCandidates?: {
-    /**
-     * The link text/title as written.
-     */
-    ref: string;
-    path: string;
-    title: string;
-  }[];
-  /**
-   * Linked notes that WERE bundled into this share as their own pending offers (per bundleLinks).
-   */
-  bundled?: {
-    ref: string;
-    shareId: string;
-    title: string;
-  }[];
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when the offer was created; false on auth/scope/lookup error.
+       */
+      ok: boolean;
+      /**
+       * Identifier the grantee will use to accept-share, then address the note on get/put/delete.
+       */
+      shareId?: string;
+      /**
+       * The identity the note was offered to.
+       */
+      grantee?: string;
+      /**
+       * The permissions in effect for this share.
+       */
+      permissions?: {
+        read: boolean;
+        edit: boolean;
+        delete: boolean;
+        reshare: boolean;
+      };
+      /**
+       * Guidance: the offer is pending until the grantee calls accept-share.
+       */
+      note?: string;
+      /**
+       * Notes this one links to (same vault) that were NOT bundled into this share. Relay these to the human and ask before calling share-note again with bundleLinks if they want them included — otherwise they render as [[private note]] to this grantee.
+       */
+      linkCandidates?: {
+        /**
+         * The link text/title as written.
+         */
+        ref: string;
+        path: string;
+        title: string;
+      }[];
+      /**
+       * Linked notes that WERE bundled into this share as their own pending offers (per bundleLinks).
+       */
+      bundled?: {
+        ref: string;
+        shareId: string;
+        title: string;
+      }[];
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

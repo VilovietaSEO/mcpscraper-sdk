@@ -113,116 +113,135 @@ export interface Input {
   cursor?: string;
 }
 
-export interface Output {
-  ok: boolean;
-  exportId?: string;
-  status?: "complete" | "partial";
-  providerConfigKey?: string;
-  dataset?:
-    | "emails"
-    | "calendar_events"
-    | "zoom_recordings"
-    | "zoom_transcripts"
-    | "slack_channel_messages"
-    | "meta_ads_insights"
-    | "search_console_performance"
-    | "resend_data"
-    | "resend_emails"
-    | "resend_received_emails"
-    | "resend_logs"
-    | "resend_contacts"
-    | "resend_broadcasts"
-    | "resend_templates";
-  range?: {
-    from: string;
-    to: string;
-  };
-  scope?: {
-    slack?: {
-      channelId: string;
-      includeThreads: boolean;
-    };
-  };
-  counts?: {
-    pages: number;
-    listed: number;
-    exported: number;
-    failed: number;
-    bytes: number;
-  };
-  complete?: boolean;
-  records?: unknown[];
-  preview?: unknown[];
-  artifact?: {
-    artifactId: string;
-    filename: string;
-    contentType: "application/x-ndjson";
-    bytes: number;
-    sha256: string;
-    expiresAt: string;
-    downloadUrl: string | null;
-    downloadUrlExpiresAt: string | null;
-    readback: {
-      tool: "report_artifact_read";
-      arguments: {
+export type Output =
+  | {
+      ok: boolean;
+      exportId?: string;
+      status?: "complete" | "partial";
+      providerConfigKey?: string;
+      dataset?:
+        | "emails"
+        | "calendar_events"
+        | "zoom_recordings"
+        | "zoom_transcripts"
+        | "slack_channel_messages"
+        | "meta_ads_insights"
+        | "search_console_performance"
+        | "resend_data"
+        | "resend_emails"
+        | "resend_received_emails"
+        | "resend_logs"
+        | "resend_contacts"
+        | "resend_broadcasts"
+        | "resend_templates";
+      range?: {
+        from: string;
+        to: string;
+      };
+      scope?: {
+        slack?: {
+          channelId: string;
+          includeThreads: boolean;
+        };
+      };
+      counts?: {
+        pages: number;
+        listed: number;
+        exported: number;
+        failed: number;
+        bytes: number;
+      };
+      complete?: boolean;
+      records?: unknown[];
+      preview?: unknown[];
+      artifact?: {
         artifactId: string;
-        offset: 0;
-        maxBytes: 20000;
+        filename: string;
+        contentType: "application/x-ndjson";
+        bytes: number;
+        sha256: string;
+        expiresAt: string;
+        downloadUrl: string | null;
+        downloadUrlExpiresAt: string | null;
+        readback: {
+          tool: "report_artifact_read";
+          arguments: {
+            artifactId: string;
+            offset: 0;
+            maxBytes: 20000;
+          };
+          continuation: string;
+        };
       };
-      continuation: string;
-    };
-  };
-  continuation?: {
-    /**
-     * Opaque continuation cursor returned by the previous page; omit for the first page.
-     */
-    cursor: string;
-    /**
-     * Inclusive ISO 8601 lower time bound.
-     */
-    from: string;
-    /**
-     * Exclusive ISO 8601 upper time bound.
-     */
-    to: string;
-    /**
-     * Connected-service dataset to export in this operation.
-     */
-    dataset:
-      | "emails"
-      | "calendar_events"
-      | "zoom_recordings"
-      | "zoom_transcripts"
-      | "slack_channel_messages"
-      | "meta_ads_insights"
-      | "search_console_performance"
-      | "resend_data"
-      | "resend_emails"
-      | "resend_received_emails"
-      | "resend_logs"
-      | "resend_contacts"
-      | "resend_broadcasts"
-      | "resend_templates";
-    /**
-     * Read, write, and administrative permissions granted to this member or key.
-     */
-    scope?: {
-      /**
-       * Slack export options for the selected connected-service dataset.
-       */
-      slack?: {
-        /**
-         * Slack channel identifier returned by the connected service.
-         */
-        channelId: string;
-        /**
-         * When true, include Slack thread replies with channel history.
-         */
-        includeThreads: boolean;
+      continuation?: {
+        cursor: string;
+        from: string;
+        to: string;
+        dataset:
+          | "emails"
+          | "calendar_events"
+          | "zoom_recordings"
+          | "zoom_transcripts"
+          | "slack_channel_messages"
+          | "meta_ads_insights"
+          | "search_console_performance"
+          | "resend_data"
+          | "resend_emails"
+          | "resend_received_emails"
+          | "resend_logs"
+          | "resend_contacts"
+          | "resend_broadcasts"
+          | "resend_templates";
+        scope?: {
+          slack?: {
+            channelId: string;
+            includeThreads: boolean;
+          };
+        };
+      } | null;
+      warnings?: string[];
+      untrustedContent?: boolean;
+      error: string | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
       };
     };
-  } | null;
-  warnings?: string[];
-  untrustedContent?: boolean;
-  error: string | null;
-}

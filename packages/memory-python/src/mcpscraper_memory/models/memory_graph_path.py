@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class MemoryGraphPathInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="")
     session_id: str | None = Field(None, alias="sessionId", description="")
@@ -15,7 +15,7 @@ class MemoryGraphPathInput(BaseModel):
 
 
 class MemoryGraphPathOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="")
     nodes: list[dict[str, Any]] | None = Field(None, alias="nodes", description="")

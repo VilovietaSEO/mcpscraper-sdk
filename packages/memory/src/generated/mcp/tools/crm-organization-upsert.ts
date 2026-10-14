@@ -4,7 +4,7 @@ export interface Input {
    */
   entityId?: string;
   /**
-   * Last revision read by the caller; supply it to reject an update if the record changed meanwhile.
+   * Use 0 to create a CRM Organization; for an edit, supply entityId and the current positive revision read from crm-organization-get.
    */
   baseRevision: number;
   /**
@@ -1193,7 +1193,7 @@ export interface Input {
      */
     sensitivity?: "public" | "internal" | "personal" | "restricted";
     /**
-     * Original source URL or opaque artifact reference preserved as image provenance.
+     * Source URL, retained artifact reference, or other identifier for this CRM field provenance.
      */
     sourceRef?: string | null;
     /**
@@ -1207,46 +1207,106 @@ export interface Input {
   };
 }
 
-export interface Output {
-  ok: boolean;
-  message: string;
-  record?: {
-    entityId: string;
-    domain: "research_person" | "research_organization" | "crm_person" | "crm_organization";
-    entityKind: "person" | "organization";
-    displayName: string;
-    content: string;
-    props: {
-      [k: string]: unknown;
+export type Output =
+  | {
+      ok: boolean;
+      message: string;
+      record?: {
+        entityId: string;
+        domain: "research_person" | "research_organization" | "crm_person" | "crm_organization";
+        entityKind: "person" | "organization";
+        displayName: string;
+        content: string;
+        props: {
+          [k: string]: unknown;
+        };
+        relationshipStatus: ("active" | "inactive" | "archived" | "merged") | null;
+        relationshipTypes: (
+          | "prospect"
+          | "customer"
+          | "former_customer"
+          | "friend"
+          | "coworker"
+          | "collaborator"
+          | "vendor"
+          | "partner"
+          | "advisor"
+          | "media"
+          | "community"
+          | "other"
+        )[];
+        commercialLifecycle:
+          ("lead" | "qualified" | "opportunity" | "customer" | "retained" | "churned" | "disqualified") | null;
+        relationshipOwnerId: string | null;
+        topics: string[];
+        researchRoles: string[];
+        revision: number;
+        createdAt: string;
+        updatedAt: string;
+      };
+      receipt?: {
+        receiptId: string;
+        replayed?: boolean;
+      };
+      code?: string;
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
     };
-    relationshipStatus: ("active" | "inactive" | "archived" | "merged") | null;
-    relationshipTypes: (
-      | "prospect"
-      | "customer"
-      | "former_customer"
-      | "friend"
-      | "coworker"
-      | "collaborator"
-      | "vendor"
-      | "partner"
-      | "advisor"
-      | "media"
-      | "community"
-      | "other"
-    )[];
-    commercialLifecycle:
-      ("lead" | "qualified" | "opportunity" | "customer" | "retained" | "churned" | "disqualified") | null;
-    relationshipOwnerId: string | null;
-    topics: string[];
-    researchRoles: string[];
-    revision: number;
-    createdAt: string;
-    updatedAt: string;
-  };
-  receipt?: {
-    receiptId: string;
-    replayed?: boolean;
-  };
-  code?: string;
-  error?: string;
-}

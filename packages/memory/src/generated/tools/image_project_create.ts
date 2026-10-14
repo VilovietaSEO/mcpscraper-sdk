@@ -15,18 +15,14 @@ export interface Input {
   description?: string;
 }
 
-export type Output =
-  | {
-      ok: true;
-      project: {
-        id: string;
-        name: string;
-        description: string | null;
-        createdAt: string;
-      };
-    }
-  | {
-      ok: false;
-      code: string;
-      error: string;
-    };
+export interface Output {
+  ok: boolean;
+  project?: {
+    id: string;
+    name: string;
+    description: string | null;
+    createdAt: string;
+  };
+  code?: string;
+  error?: string;
+}

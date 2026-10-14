@@ -29,27 +29,70 @@ export interface Input {
   extension_names?: string[];
 }
 
-export interface Output {
-  ok: boolean;
-  tool: "browser_open";
-  /**
-   * Session id returned by browser_open. Use only this exact value in later browser_* calls; do not construct one yourself.
-   */
-  session_id: string;
-  /**
-   * Human watch/takeover URL for this browser session on mcpscraper.dev.
-   */
-  watch_url: string;
-  /**
-   * Deprecated; always null. Open watch_url to view the live session.
-   */
-  live_view_url: string | null;
-  /**
-   * Initial URL requested by the caller, when provided.
-   */
-  url: string | null;
-  hint: string;
-  raw?: {
-    [k: string]: unknown;
-  };
-}
+export type Output =
+  | {
+      ok: boolean;
+      tool: "browser_open";
+      /**
+       * Session id returned by browser_open. Use only this exact value in later browser_* calls; do not construct one yourself.
+       */
+      session_id: string;
+      /**
+       * Human watch/takeover URL for this browser session on mcpscraper.dev.
+       */
+      watch_url: string;
+      /**
+       * Deprecated; always null. Open watch_url to view the live session.
+       */
+      live_view_url: string | null;
+      /**
+       * Initial URL requested by the caller, when provided.
+       */
+      url: string | null;
+      hint: string;
+      raw?: {
+        [k: string]: unknown;
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

@@ -61,129 +61,181 @@ export interface Input {
   includeWhatPeopleSaying?: boolean;
 }
 
-export interface Output {
-  query: string;
-  location: string | null;
-  questionCount: number;
-  completionStatus: string | null;
-  resultQuality: string | null;
-  degradedResult: boolean | null;
-  degradationReasons: string[];
-  retryRecommended: boolean | null;
-  paaLifecycle: {
-    requestedQuestions: number;
-    questionsFound: number;
-    targetStatus: "met" | "not_met";
-    discoveryStatus:
-      | "in_progress"
-      | "target_reached"
-      | "frontier_exhausted"
-      | "no_paa_observed"
-      | "interrupted"
-      | "recovery_exhausted";
-    materialStatus: "complete" | "partial";
-    completionReason: string;
-    automaticRetries: number;
-    retryBreakdown: {
-      controlRetries: number;
-      browserRetries: number;
-      providerFallbacks: number;
-      runtimeRecoveries: number;
-      idempotentReplays: number;
+export type Output =
+  | {
+      query: string;
+      location: string | null;
+      questionCount: number;
+      paaIncompleteAnswers?: number;
+      completionStatus: string | null;
+      resultQuality: string | null;
+      degradedResult: boolean | null;
+      degradationReasons: string[];
+      retryRecommended: boolean | null;
+      paaLifecycle: {
+        requestedQuestions: number;
+        questionsFound: number;
+        targetStatus: "met" | "not_met";
+        discoveryStatus:
+          | "in_progress"
+          | "target_reached"
+          | "frontier_exhausted"
+          | "no_paa_observed"
+          | "interrupted"
+          | "recovery_exhausted";
+        materialStatus: "complete" | "partial";
+        completionReason: string;
+        automaticRetries: number;
+        retryBreakdown: {
+          controlRetries: number;
+          browserRetries: number;
+          providerFallbacks: number;
+          runtimeRecoveries: number;
+          idempotentReplays: number;
+        };
+        knownQuestions: number;
+        processedQuestions: number;
+        failedInteractions: number;
+        noGrowthConfirmations: number;
+        visibleControls: number;
+        eligibleControls: number;
+        dispatchedInteractions: number;
+        confirmedInteractions: number;
+        unconfirmedInteractions: number;
+      } | null;
+      phaseTimings: {
+        providerConnectMs?: number;
+        navigationMs?: number;
+        serpParseMs?: number;
+        paaExpansionMs?: number;
+        linkResolutionMs?: number;
+        totalServerMs: number;
+      } | null;
+      pagination: {
+        requestedPages: 1 | 2;
+        capturedPages: 1 | 2;
+        page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
+        page1OrganicCount: number;
+        page2OrganicCount: number;
+        failureCode?:
+          | "missing_next"
+          | "invalid_next"
+          | "empty_page"
+          | "captcha"
+          | "timeout"
+          | "navigation_error"
+          | "unsupported_driver";
+      } | null;
+      questions: {
+        questionId: string;
+        googleLinkId: string | null;
+        googleEvidenceId: string | null;
+        question: string;
+        answer: string | null;
+        /**
+         * True when a captured answer still has unexpanded content.
+         */
+        answerExpansionIncomplete?: boolean;
+        sources: {
+          url: string;
+          rawUrl: string;
+          resolvedUrl: string | null;
+          linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
+          resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
+          title: string | null;
+          site: string | null;
+          /**
+           * Captured source-card description from Google, when present.
+           */
+          description?: string | null;
+        }[];
+        sourceTitle: string | null;
+        sourceSite: string | null;
+        sourceUrl: string | null;
+      }[];
+      organicResults: {
+        position: number;
+        sourcePage?: 1 | 2;
+        title: string;
+        url: string;
+        rawUrl: string;
+        resolvedUrl: string | null;
+        linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
+        resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
+        domain: string;
+        snippet: string | null;
+      }[];
+      aiOverview: {
+        detected: boolean;
+        text: string | null;
+        citations: {
+          text: string;
+          href: string;
+          rawUrl: string;
+          resolvedUrl: string | null;
+          linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
+          resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
+        }[];
+        expanded: boolean;
+        fullyExpanded: boolean;
+        sections: string[];
+        shareUrl?: string | null;
+      } | null;
+      entityIds: {
+        /**
+         * Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility.
+         */
+        entities: {
+          name: string;
+          kgId: string | null;
+          cid: string | null;
+          gcid: string | null;
+        }[];
+        kgIds: string[];
+        cids: string[];
+        gcids: string[];
+      } | null;
+      durationMs: number | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-    knownQuestions: number;
-    processedQuestions: number;
-    failedInteractions: number;
-    noGrowthConfirmations: number;
-    visibleControls: number;
-    eligibleControls: number;
-    dispatchedInteractions: number;
-    confirmedInteractions: number;
-    unconfirmedInteractions: number;
-  } | null;
-  phaseTimings: {
-    providerConnectMs?: number;
-    navigationMs?: number;
-    serpParseMs?: number;
-    paaExpansionMs?: number;
-    linkResolutionMs?: number;
-    totalServerMs: number;
-  } | null;
-  pagination: {
-    requestedPages: 1 | 2;
-    capturedPages: 1 | 2;
-    page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
-    page1OrganicCount: number;
-    page2OrganicCount: number;
-    failureCode?:
-      | "missing_next"
-      | "invalid_next"
-      | "empty_page"
-      | "captcha"
-      | "timeout"
-      | "navigation_error"
-      | "unsupported_driver";
-  } | null;
-  questions: {
-    questionId: string;
-    googleLinkId: string | null;
-    googleEvidenceId: string | null;
-    question: string;
-    answer: string | null;
-    sources: {
-      url: string;
-      rawUrl: string;
-      resolvedUrl: string | null;
-      linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
-      resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
-      title: string | null;
-      site: string | null;
-    }[];
-    sourceTitle: string | null;
-    sourceSite: string | null;
-    sourceUrl: string | null;
-  }[];
-  organicResults: {
-    position: number;
-    sourcePage?: 1 | 2;
-    title: string;
-    url: string;
-    rawUrl: string;
-    resolvedUrl: string | null;
-    linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
-    resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
-    domain: string;
-    snippet: string | null;
-  }[];
-  aiOverview: {
-    detected: boolean;
-    text: string | null;
-    citations: {
-      text: string;
-      href: string;
-      rawUrl: string;
-      resolvedUrl: string | null;
-      linkType: "plain" | "google_url_redirect" | "google_goto_redirect";
-      resolutionStatus: "not_needed" | "resolved" | "unresolved" | "rejected";
-    }[];
-    expanded: boolean;
-    fullyExpanded: boolean;
-    sections: string[];
-    shareUrl?: string | null;
-  } | null;
-  entityIds: {
-    /**
-     * Entities named on the page with their kgId/cid/gcid. Flat lists below are the same IDs deduplicated, kept for backward compatibility.
-     */
-    entities: {
-      name: string;
-      kgId: string | null;
-      cid: string | null;
-      gcid: string | null;
-    }[];
-    kgIds: string[];
-    cids: string[];
-    gcids: string[];
-  } | null;
-  durationMs: number | null;
-}

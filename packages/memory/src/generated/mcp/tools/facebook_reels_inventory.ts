@@ -35,65 +35,108 @@ export interface Input {
   stableScrollLimit?: number;
 }
 
-export interface Output {
-  sourceUrl: string;
-  profileUrl: string;
-  pageUrl: string;
-  profileName: string | null;
-  browser: {
-    mode: "hosted";
-    requestedMode: "hosted";
-    profileName: string | null;
-    profileSource: "hosted";
-  };
-  requestedMaxUrls: number;
-  effectiveMaxUrls: number;
-  anonymousCap: 60;
-  anonymousCapApplied: boolean;
-  savedProfileRequested: boolean;
-  authenticationStatus: "authenticated" | "logged_out" | "unknown";
-  collectedUrlCount: number;
-  resumedUrlCount: number;
-  newlyCollectedUrlCount: number;
-  complete: boolean;
-  partial: boolean;
-  stoppedReason:
-    | "max_urls"
-    | "anonymous_cap"
-    | "deadline"
-    | "login_wall"
-    | "stable_scrolls"
-    | "max_scrolls"
-    | "no_scrolls"
-    | "navigation_error"
-    | "browser_error";
-  pagination: {
-    maxScrolls: number;
-    attemptedScrolls: number;
-    stableScrolls: number;
-    stableScrollLimit: number;
-    scrollDelayMs: number;
-    stages: {
-      stage: string;
-      itemCount: number;
-      addedCount: number;
-      scrollY: number | null;
-      scrollHeight: number | null;
-      loginWallVisible: boolean;
-      dismissibleLoginOverlayVisible: boolean;
-    }[];
-  };
-  items: {
-    url: string;
-    reelId: string;
-    viewCountText: string | null;
-    anchorText: string | null;
-    firstSeenStage: string;
-  }[];
-  limitations: string[];
-  recoverableError: {
-    stage: string;
-    message: string;
-  } | null;
-  extractedAt: string;
-}
+export type Output =
+  | {
+      sourceUrl: string;
+      profileUrl: string;
+      pageUrl: string;
+      profileName: string | null;
+      browser: {
+        mode: "hosted";
+        requestedMode: "hosted";
+        profileName: string | null;
+        profileSource: "hosted";
+      };
+      requestedMaxUrls: number;
+      effectiveMaxUrls: number;
+      anonymousCap: 60;
+      anonymousCapApplied: boolean;
+      savedProfileRequested: boolean;
+      authenticationStatus: "authenticated" | "logged_out" | "unknown";
+      collectedUrlCount: number;
+      resumedUrlCount: number;
+      newlyCollectedUrlCount: number;
+      complete: boolean;
+      partial: boolean;
+      stoppedReason:
+        | "max_urls"
+        | "anonymous_cap"
+        | "deadline"
+        | "login_wall"
+        | "stable_scrolls"
+        | "max_scrolls"
+        | "no_scrolls"
+        | "navigation_error"
+        | "browser_error";
+      pagination: {
+        maxScrolls: number;
+        attemptedScrolls: number;
+        stableScrolls: number;
+        stableScrollLimit: number;
+        scrollDelayMs: number;
+        stages: {
+          stage: string;
+          itemCount: number;
+          addedCount: number;
+          scrollY: number | null;
+          scrollHeight: number | null;
+          loginWallVisible: boolean;
+          dismissibleLoginOverlayVisible: boolean;
+        }[];
+      };
+      items: {
+        url: string;
+        reelId: string;
+        viewCountText: string | null;
+        anchorText: string | null;
+        firstSeenStage: string;
+      }[];
+      limitations: string[];
+      recoverableError: {
+        stage: string;
+        message: string;
+      } | null;
+      extractedAt: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

@@ -354,37 +354,80 @@ export interface Input {
   includeShared?: boolean;
 }
 
-export interface Output {
-  ok: boolean;
-  vault?: string;
-  vaultsSearched?: string[];
-  planner?: {
-    queryVariants: string[];
-    candidatePool: number;
-    graphSeedCount: number;
-    graphDepth: number;
-    graphNeighborsPerSeed: number;
-    rerankTopN: number;
-    seeds: string[];
-    graphCandidatesAdded: number;
-  };
-  rerank?: {
-    applied: boolean;
-    provider: string;
-    fallbackReason?: string;
-  };
-  results?: {
-    text: string;
-    source: string;
-    score: number;
-    originalScore: number;
-    rerankScore?: number;
-    vault?: string;
-    sharedBy?: string;
-    shareId?: string;
-    matchChannels: ("semantic" | "tag" | "metadata" | "graph")[];
-    matchedQueries: string[];
-    graphFrom: string[];
-  }[];
-  error?: string;
-}
+export type Output =
+  | {
+      ok: boolean;
+      vault?: string;
+      vaultsSearched?: string[];
+      planner?: {
+        queryVariants: string[];
+        candidatePool: number;
+        graphSeedCount: number;
+        graphDepth: number;
+        graphNeighborsPerSeed: number;
+        rerankTopN: number;
+        seeds: string[];
+        graphCandidatesAdded: number;
+      };
+      rerank?: {
+        applied: boolean;
+        provider: string;
+        fallbackReason?: string;
+      };
+      results?: {
+        text: string;
+        source: string;
+        score: number;
+        originalScore: number;
+        rerankScore?: number;
+        vault?: string;
+        sharedBy?: string;
+        shareId?: string;
+        matchChannels: ("semantic" | "tag" | "metadata" | "graph")[];
+        matchedQueries: string[];
+        graphFrom: string[];
+      }[];
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

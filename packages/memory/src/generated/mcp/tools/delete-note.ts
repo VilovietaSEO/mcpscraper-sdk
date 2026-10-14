@@ -17,50 +17,93 @@ export interface Input {
   baseRevision?: number;
 }
 
-export interface Output {
-  /**
-   * True when the delete request was processed; false on an auth/scope/lookup error or a revision conflict.
-   */
-  ok: boolean;
-  /**
-   * The vault the delete was applied to (after defaulting). Present when ok is true.
-   */
-  vault?: string;
-  /**
-   * True if a note was removed; false if no matching note existed (idempotent). Present when ok is true.
-   */
-  deleted?: boolean;
-  /**
-   * True when baseRevision did not match the current revision: someone else changed the note first. Nothing was deleted.
-   */
-  conflict?: boolean;
-  /**
-   * Present only when conflict is true: the note as it stands now, so the caller can re-read before deciding whether to still delete.
-   */
-  current?: {
-    /**
-     * The note as it currently stands.
-     */
-    content: string;
-    /**
-     * Current revision. Use this as the new baseRevision after reconciling.
-     */
-    revision: number;
-    /**
-     * Identity that made the conflicting write.
-     */
-    updatedBy: string | null;
-    /**
-     * When the conflicting write happened.
-     */
-    updatedAt: string;
-  };
-  /**
-   * Machine-readable denial code when ok is false: revision_conflict.
-   */
-  code?: string;
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when the delete request was processed; false on an auth/scope/lookup error or a revision conflict.
+       */
+      ok: boolean;
+      /**
+       * The vault the delete was applied to (after defaulting). Present when ok is true.
+       */
+      vault?: string;
+      /**
+       * True if a note was removed; false if no matching note existed (idempotent). Present when ok is true.
+       */
+      deleted?: boolean;
+      /**
+       * True when baseRevision did not match the current revision: someone else changed the note first. Nothing was deleted.
+       */
+      conflict?: boolean;
+      /**
+       * Present only when conflict is true: the note as it stands now, so the caller can re-read before deciding whether to still delete.
+       */
+      current?: {
+        /**
+         * The note as it currently stands.
+         */
+        content: string;
+        /**
+         * Current revision. Use this as the new baseRevision after reconciling.
+         */
+        revision: number;
+        /**
+         * Identity that made the conflicting write.
+         */
+        updatedBy: string | null;
+        /**
+         * When the conflicting write happened.
+         */
+        updatedAt: string;
+      };
+      /**
+       * Machine-readable denial code when ok is false: revision_conflict.
+       */
+      code?: string;
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

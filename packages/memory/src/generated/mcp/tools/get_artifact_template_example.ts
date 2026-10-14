@@ -10,508 +10,361 @@ export interface Input {
     | "blog_article_v1";
 }
 
-export interface Output {
-  ok: boolean;
-  example?: {
-    /**
-     * Registered preset key returned by list_artifact_templates.
-     */
-    presetKey:
-      | "editorial_reading_room_v1"
-      | "personal_authority_v1"
-      | "personal_authority_v2"
-      | "newsroom_publisher_v1"
-      | "blog_article_v1";
-    name: string;
-    description: string;
-    /**
-     * Registered preset key returned by list_artifact_templates.
-     */
-    rendererKey:
-      | "editorial_reading_room_v1"
-      | "personal_authority_v1"
-      | "personal_authority_v2"
-      | "newsroom_publisher_v1"
-      | "blog_article_v1";
-    rendererVersion: 1;
-    inputContractVersion: 1;
-    defaultConfig:
-      | {
-          /**
-           * Registered presentation theme selected for the renderer.
-           */
-          theme: "paper" | "ink" | "warm";
-          /**
-           * Validated presentation-density setting for the renderer.
-           */
-          density: "comfortable" | "compact";
-          /**
-           * Whether the renderer displays the source and provenance rail.
-           */
-          showSourceRail: boolean;
-          /**
-           * Whether the renderer displays the artifact generation time.
-           */
-          showGeneratedAt: boolean;
-          /**
-           * Public publication or collection brand name.
-           */
-          brandName?: string;
-        }
-      | {
-          /**
-           * Registered presentation theme selected for the renderer.
-           */
-          theme: "blue" | "slate" | "monochrome";
-          /**
-           * Whether the renderer displays the artifact generation time.
-           */
-          showGeneratedAt: boolean;
-          /**
-           * Public publication or collection brand name.
-           */
-          brandName?: string;
-          /**
-           * Validated renderer features enabled for this template version.
-           */
-          featureFlags: {
-            /**
-             * Validated navigation labels and destinations for the rendered site.
-             */
-            navigation: boolean;
-            /**
-             * Curated public social profile links for the publication identity.
-             */
-            socialLinks: boolean;
-            /**
-             * Source authority or ownership context supporting this content.
-             */
-            authority: boolean;
-            /**
-             * Consultation-call presentation and link settings.
-             */
-            consultation: boolean;
-            /**
-             * Learning-section configuration for the editorial renderer.
-             */
-            learning: boolean;
-            /**
-             * Source-backed services associated with the business listing.
-             */
-            services: boolean;
-            /**
-             * Proof-section content and evidence references.
-             */
-            proof: boolean;
-            /**
-             * Final call-to-action content shown after the authored collection.
-             */
-            finalCta: boolean;
-          };
-        }
-      | {
-          /**
-           * Registered presentation theme selected for the renderer.
-           */
-          theme: "blue" | "terracotta" | "slate" | "monochrome";
-          /**
-           * Whether the renderer displays the artifact generation time.
-           */
-          showGeneratedAt: boolean;
-          /**
-           * Public publication or collection brand name.
-           */
-          brandName?: string;
-          /**
-           * Optional bounded brand-color overrides validated for hexadecimal form and accessible contrast.
-           */
-          colors?: {
-            /**
-             * Optional six-digit hexadecimal accent color that must meet the renderer contrast threshold.
-             */
-            accent?: string;
-            /**
-             * Optional six-digit hexadecimal page-background color that must preserve readable contrast.
-             */
-            background?: string;
-            /**
-             * Optional six-digit hexadecimal structural-surface color that must preserve visible separation.
-             */
-            surface?: string;
-            /**
-             * Optional six-digit hexadecimal primary text color that must meet WCAG AA contrast.
-             */
-            text?: string;
-          };
-          /**
-           * Optional registered display and body font-family selections; arbitrary CSS and remote fonts are rejected.
-           */
-          typography?: {
-            /**
-             * Registered self-contained display-font family selected for prominent headings.
-             */
-            display: "editorial-serif" | "modern-sans" | "humanist-sans";
-            /**
-             * Registered self-contained display-font family selected for prominent headings.
-             */
-            body: "editorial-serif" | "modern-sans" | "humanist-sans";
-          };
-          /**
-           * Validated renderer features enabled for this template version.
-           */
-          featureFlags: {
-            /**
-             * Validated navigation labels and destinations for the rendered site.
-             */
-            navigation: boolean;
-            /**
-             * Curated public social profile links for the publication identity.
-             */
-            socialLinks: boolean;
-            /**
-             * Source authority or ownership context supporting this content.
-             */
-            authority: boolean;
-            /**
-             * Consultation-call presentation and link settings.
-             */
-            consultation: boolean;
-            /**
-             * Learning-section configuration for the editorial renderer.
-             */
-            learning: boolean;
-            /**
-             * Source-backed services associated with the business listing.
-             */
-            services: boolean;
-            /**
-             * Proof-section content and evidence references.
-             */
-            proof: boolean;
-            /**
-             * Final call-to-action content shown after the authored collection.
-             */
-            finalCta: boolean;
-          };
-        }
-      | {
-          /**
-           * Registered presentation theme selected for the renderer.
-           */
-          theme: "daily" | "journal" | "midnight";
-          /**
-           * Whether the renderer displays the artifact generation time.
-           */
-          showGeneratedAt: boolean;
-          /**
-           * Whether authored article bylines are visibly rendered.
-           */
-          showBylines: boolean;
-          /**
-           * Public publication or collection brand name.
-           */
-          brandName?: string;
-          /**
-           * Validated renderer features enabled for this template version.
-           */
-          featureFlags: {
-            /**
-             * Optional short breaking-news ticker shown by the renderer.
-             */
-            breakingTicker: boolean;
-            /**
-             * Validated navigation labels and destinations for the rendered site.
-             */
-            navigation: boolean;
-            /**
-             * Lead-story grid configuration for the editorial renderer.
-             */
-            leadGrid: boolean;
-            /**
-             * Latest-news section configuration for the editorial renderer.
-             */
-            latestNews: boolean;
-            /**
-             * Ordered category sections and their assigned article references.
-             */
-            categorySections: boolean;
-            /**
-             * Newsletter-callout presentation and subscription link settings.
-             */
-            newsletter: boolean;
-            /**
-             * Press-room section configuration for the editorial renderer.
-             */
-            pressRoom: boolean;
-            /**
-             * Trust and provenance footer configuration for the rendered site.
-             */
-            trustFooter: boolean;
-          };
-        }
-      | {
-          /**
-           * Registered presentation theme selected for the renderer.
-           */
-          theme: "navy" | "slate" | "forest";
-          /**
-           * Whether the renderer displays the artifact generation time.
-           */
-          showGeneratedAt: boolean;
-          /**
-           * Public publication or collection brand name.
-           */
-          brandName?: string;
-          /**
-           * Validated renderer features enabled for this template version.
-           */
-          featureFlags: {
-            /**
-             * Whether the article renderer shows editorial media above the desktop sidebar.
-             */
-            sidebarMedia: boolean;
-            /**
-             * Whether the article renderer includes the expandable editorial disclosure.
-             */
-            disclosure: boolean;
-            /**
-             * Whether the article renderer keeps section navigation visible and highlights the active section.
-             */
-            stickyToc: boolean;
-            /**
-             * Whether the article renderer includes accessible expandable frequently asked questions.
-             */
-            faq: boolean;
-            /**
-             * Whether the article renderer includes the citation guide and clipboard actions.
-             */
-            citation: boolean;
-            /**
-             * Whether the article renderer includes native sharing with a clipboard fallback.
-             */
-            share: boolean;
-            /**
-             * Whether the article renderer includes the complete author attribution card.
-             */
-            authorCard: boolean;
-          };
+export type Output =
+  | {
+      ok: boolean;
+      example?: {
+        presetKey:
+          | "editorial_reading_room_v1"
+          | "personal_authority_v1"
+          | "personal_authority_v2"
+          | "newsroom_publisher_v1"
+          | "blog_article_v1";
+        name: string;
+        description: string;
+        rendererKey:
+          | "editorial_reading_room_v1"
+          | "personal_authority_v1"
+          | "personal_authority_v2"
+          | "newsroom_publisher_v1"
+          | "blog_article_v1";
+        rendererVersion: 1;
+        inputContractVersion: 1;
+        defaultConfig:
+          | {
+              theme: "paper" | "ink" | "warm";
+              density: "comfortable" | "compact";
+              showSourceRail: boolean;
+              showGeneratedAt: boolean;
+              brandName?: string;
+            }
+          | {
+              theme: "blue" | "slate" | "monochrome";
+              showGeneratedAt: boolean;
+              brandName?: string;
+              featureFlags: {
+                navigation: boolean;
+                socialLinks: boolean;
+                authority: boolean;
+                consultation: boolean;
+                learning: boolean;
+                services: boolean;
+                proof: boolean;
+                finalCta: boolean;
+              };
+            }
+          | {
+              theme: "blue" | "terracotta" | "slate" | "monochrome";
+              showGeneratedAt: boolean;
+              brandName?: string;
+              colors?: {
+                accent?: string;
+                background?: string;
+                surface?: string;
+                text?: string;
+              };
+              typography?: {
+                display: "editorial-serif" | "modern-sans" | "humanist-sans";
+                body: "editorial-serif" | "modern-sans" | "humanist-sans";
+              };
+              featureFlags: {
+                navigation: boolean;
+                socialLinks: boolean;
+                authority: boolean;
+                consultation: boolean;
+                learning: boolean;
+                services: boolean;
+                proof: boolean;
+                finalCta: boolean;
+              };
+            }
+          | {
+              theme: "daily" | "journal" | "midnight";
+              showGeneratedAt: boolean;
+              showBylines: boolean;
+              brandName?: string;
+              featureFlags: {
+                breakingTicker: boolean;
+                navigation: boolean;
+                leadGrid: boolean;
+                latestNews: boolean;
+                categorySections: boolean;
+                newsletter: boolean;
+                pressRoom: boolean;
+                trustFooter: boolean;
+              };
+            }
+          | {
+              theme: "navy" | "slate" | "forest";
+              showGeneratedAt: boolean;
+              brandName?: string;
+              featureFlags: {
+                sidebarMedia: boolean;
+                disclosure: boolean;
+                stickyToc: boolean;
+                faq: boolean;
+                citation: boolean;
+                share: boolean;
+                authorCard: boolean;
+              };
+            };
+        recommendedAuthoringInstructions: string;
+        /**
+         * @minItems 1
+         * @maxItems 8
+         */
+        previewPages:
+          | [
+              {
+                label: string;
+                url: string;
+                description: string;
+              }
+            ]
+          | [
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              }
+            ]
+          | [
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              }
+            ]
+          | [
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              }
+            ]
+          | [
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              }
+            ]
+          | [
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              }
+            ]
+          | [
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              }
+            ]
+          | [
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              },
+              {
+                label: string;
+                url: string;
+                description: string;
+              }
+            ];
+        machineReadableExampleUrl: string;
+        exampleInput: {
+          [k: string]: unknown;
         };
-    recommendedAuthoringInstructions: string;
-    /**
-     * @minItems 1
-     * @maxItems 8
-     */
-    previewPages:
-      | [
-          {
-            label: string;
-            url: string;
-            description: string;
-          }
-        ]
-      | [
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          }
-        ]
-      | [
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          }
-        ]
-      | [
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          }
-        ]
-      | [
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          }
-        ]
-      | [
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          }
-        ]
-      | [
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          }
-        ]
-      | [
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          },
-          {
-            label: string;
-            url: string;
-            description: string;
-          }
-        ];
-    machineReadableExampleUrl: string;
-    exampleInput: {
-      [k: string]: unknown;
+      };
+      error?: string;
+      errorCode?:
+        | "invalid_request"
+        | "not_found"
+        | "conflict"
+        | "template_archived"
+        | "renderer_unavailable"
+        | "artifact_unavailable"
+        | "internal_error";
+      requestId?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-  };
-  error?: string;
-  errorCode?:
-    | "invalid_request"
-    | "not_found"
-    | "conflict"
-    | "template_archived"
-    | "renderer_unavailable"
-    | "artifact_unavailable"
-    | "view_link_unavailable"
-    | "internal_error";
-  requestId?: string;
-}

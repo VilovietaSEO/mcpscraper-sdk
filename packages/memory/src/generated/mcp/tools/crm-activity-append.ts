@@ -4,15 +4,15 @@ export interface Input {
    */
   idempotencyKey: string;
   /**
-   * Existing governed entity identifier for this relation or edit.
+   * Optional stable ID for this new activity work record, not a CRM person or organization ID.
    */
   entityId?: string;
   /**
-   * Stable CRM Person entity identifier; Research identifiers are rejected.
+   * CRM Person entity ID to associate with this activity.
    */
   personEntityId?: string;
   /**
-   * Stable CRM entity identifiers associated with this CRM activity, task, or deal.
+   * CRM person or organization entity IDs associated with this activity; at least one association is required.
    *
    * @maxItems 100
    */
@@ -45,7 +45,7 @@ export interface Input {
     [k: string]: unknown;
   };
   /**
-   * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+   * Optional source provenance stored with the CRM activity; this is not a record filter.
    */
   source?: {
     [k: string]: unknown;
@@ -58,21 +58,81 @@ export interface Input {
   };
 }
 
-export interface Output {
-  ok: boolean;
-  message: string;
-  record?: {
-    entityId: string;
-    revision: number;
-    noteId?: string;
-    vault?: string;
-    path?: string;
-    associationIds?: string[];
-  };
-  receipt?: {
-    receiptId: string;
-    replayed?: boolean;
-  };
-  code?: string;
-  error?: string;
-}
+export type Output =
+  | {
+      ok: boolean;
+      message: string;
+      record?: {
+        entityId: string;
+        revision: number;
+        noteId?: string;
+        vault?: string;
+        path?: string;
+        associationIds?: string[];
+      };
+      receipt?: {
+        receiptId: string;
+        replayed?: boolean;
+      };
+      code?: string;
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
+    };

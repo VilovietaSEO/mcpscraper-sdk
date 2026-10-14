@@ -20,7 +20,7 @@ export interface Input {
      */
     column: "path" | "title" | "kind" | "source" | "captured_at" | "created_at" | "updated_at" | "revision";
     /**
-     * "prefix" anchors to the start of the value only (e.g. path prefix "Mastra/opt-"); "like" matches anywhere in the value; "in" requires an array value.
+     * "prefix" anchors to the start of the value only (e.g. path prefix "Projects/archived-"); "like" matches anywhere in the value; "in" requires an array value.
      */
     op: "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "prefix" | "in";
     /**

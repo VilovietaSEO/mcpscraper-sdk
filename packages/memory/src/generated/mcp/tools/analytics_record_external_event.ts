@@ -12,7 +12,7 @@ export interface Input {
    */
   eventId: string;
   /**
-   * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+   * Required source-system name for the event being recorded; this is provenance, not a report filter.
    */
   source: string;
   /**
@@ -28,7 +28,7 @@ export interface Input {
    */
   eventKind: "browser" | "form" | "call" | "crm" | "transaction" | "custom_server" | "conversion" | "delivery";
   /**
-   * Optional normalized analytics event-name filter.
+   * Required canonical name for the event being recorded; use lowercase letters, digits, and underscores starting with a letter.
    */
   eventName: string;
   /**
@@ -148,31 +148,74 @@ export interface Input {
   idempotencyKey: string;
 }
 
-export interface Output {
-  ok: boolean;
-  id: string | null;
-  created: boolean;
-  personId: string | null;
-  identityTier: "confirmed" | "unlinked";
-  namespaceId: string | null;
-  /**
-   * @maxItems 500
-   */
-  conversionIds: string[];
-  consentEligibility: {
-    [k: string]: unknown;
-  };
-  valueProvenance: {
-    [k: string]: {
-      [k: string]: unknown;
+export type Output =
+  | {
+      ok: boolean;
+      id: string | null;
+      created: boolean;
+      personId: string | null;
+      identityTier: "confirmed" | "unlinked";
+      namespaceId: string | null;
+      /**
+       * @maxItems 500
+       */
+      conversionIds: string[];
+      consentEligibility: {
+        [k: string]: unknown;
+      };
+      valueProvenance: {
+        [k: string]: {
+          [k: string]: unknown;
+        };
+      };
+      /**
+       * @maxItems 500
+       */
+      scoreEvaluationIds: string[];
+      predictionEvidence: unknown;
+      candidatePromotion: {
+        [k: string]: unknown;
+      } | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-  };
-  /**
-   * @maxItems 500
-   */
-  scoreEvaluationIds: string[];
-  predictionEvidence: unknown;
-  candidatePromotion: {
-    [k: string]: unknown;
-  } | null;
-}

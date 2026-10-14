@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Typed Search Console tableName returned by list_service_connections after a successful connection_sync run.
+   * Existing tenant-owned Search Console tableName returned by list_service_connections; confirm its columns with table-describe.
    */
   tableName: string;
   /**
@@ -7227,31 +7227,74 @@ export interface Input {
   maxRows?: number;
 }
 
-export interface Output {
-  ok: boolean;
-  tableName?: string;
-  rowsExported?: number;
-  matchedRows?: number;
-  complete?: boolean;
-  artifact?: {
-    artifactId: string;
-    filename: string;
-    contentType: "application/x-ndjson";
-    bytes: number;
-    sha256: string;
-    expiresAt: string;
-    downloadUrl: string | null;
-    downloadUrlExpiresAt: string | null;
-    readback: {
-      tool: "report_artifact_read";
-      arguments: {
+export type Output =
+  | {
+      ok: boolean;
+      tableName?: string;
+      rowsExported?: number;
+      matchedRows?: number;
+      complete?: boolean;
+      artifact?: {
         artifactId: string;
-        offset: 0;
-        maxBytes: 20000;
+        filename: string;
+        contentType: "application/x-ndjson";
+        bytes: number;
+        sha256: string;
+        expiresAt: string;
+        downloadUrl: string | null;
+        downloadUrlExpiresAt: string | null;
+        readback: {
+          tool: "report_artifact_read";
+          arguments: {
+            artifactId: string;
+            offset: 0;
+            maxBytes: 20000;
+          };
+          continuation: string;
+        };
       };
-      continuation: string;
+      warnings?: string[];
+      error: string | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-  };
-  warnings?: string[];
-  error: string | null;
-}

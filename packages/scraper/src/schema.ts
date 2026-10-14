@@ -927,59 +927,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/workflows/schedules": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List your workflow schedules */
-        get: operations["listWorkflowSchedules"];
-        put?: never;
-        /** Create a recurring schedule for a workflow */
-        post: operations["createWorkflowSchedule"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/workflows/schedules/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete a workflow schedule */
-        delete: operations["deleteWorkflowSchedule"];
-        options?: never;
-        head?: never;
-        /** Update a workflow schedule */
-        patch: operations["patchWorkflowSchedule"];
-        trace?: never;
-    };
-    "/workflows/schedules/{id}/run": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Trigger a workflow schedule immediately, out of cadence */
-        post: operations["runWorkflowScheduleNow"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/gmail/messages/search": {
         parameters: {
             query?: never;
@@ -1876,115 +1823,396 @@ export interface components {
             debug: boolean;
         };
         SerpIntelligenceOrganicResult: {
-            position?: number;
-            title?: string;
-            url?: string;
-            domain?: string;
-            cite?: string | null;
-            snippet?: string | null;
-            isRedditStyle?: boolean;
-            inlineRating?: {
-                value?: string;
-                count?: string;
+            position: number;
+            title: string;
+            url: string;
+            rawUrl?: string;
+            resolvedUrl?: string | null;
+            /** @enum {string} */
+            linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+            /** @enum {string} */
+            resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
+            sourcePage?: 1 | 2;
+            domain: string;
+            cite: string | null;
+            snippet: string | null;
+            isRedditStyle: boolean;
+            inlineRating: {
+                value: string;
+                count: string;
             } | null;
         };
         SerpIntelligenceHarvestResult: {
-            seed?: string;
-            location?: string | null;
-            extractedAt?: string;
-            totalQuestions?: number;
+            seed: string;
+            location: string | null;
+            extractedAt: string;
+            totalQuestions: number;
             /** @enum {string} */
-            surface?: "web" | "aim" | "unknown";
-            aiOverview?: {
-                detected?: boolean;
-                text?: string | null;
-                citations?: {
-                    text?: string;
-                    href?: string;
+            surface: "web" | "aim" | "unknown";
+            aiOverview: {
+                detected: boolean;
+                text: string | null;
+                citations: {
+                    text: string;
+                    href: string;
+                    rawUrl?: string;
+                    resolvedUrl?: string | null;
+                    /** @enum {string} */
+                    linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+                    /** @enum {string} */
+                    resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
+                }[];
+                expanded?: boolean;
+                fullyExpanded?: boolean;
+                sections?: string[];
+                shareUrl?: string | null;
+            };
+            aiMode: {
+                detected: boolean;
+                text: string | null;
+                citations: {
+                    text: string;
+                    href: string;
+                    rawUrl?: string;
+                    resolvedUrl?: string | null;
+                    /** @enum {string} */
+                    linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+                    /** @enum {string} */
+                    resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
                 }[];
             };
-            aiMode?: {
-                detected?: boolean;
-                text?: string | null;
-                citations?: {
-                    text?: string;
-                    href?: string;
+            tree: components["schemas"]["SerpIntelligencePaaNode"][];
+            flat: {
+                seed_query: string;
+                question_id: string;
+                google_link_id: string;
+                google_evidence_id: string;
+                question: string;
+                answer: string;
+                answerExpansionIncomplete?: boolean;
+                source_title: string;
+                source_site: string;
+                source_cite: string;
+                sources: {
+                    url: string;
+                    rawUrl?: string;
+                    resolvedUrl?: string | null;
+                    /** @enum {string} */
+                    linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+                    /** @enum {string} */
+                    resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
+                    title: string | null;
+                    site: string | null;
+                    description?: string | null;
                 }[];
-            };
-            tree?: unknown[];
-            flat?: unknown[];
-            videos?: unknown[];
-            forums?: unknown[];
-            organicResults?: components["schemas"]["SerpIntelligenceOrganicResult"][];
-            localPack?: unknown[];
-            entityIds?: {
-                entities?: {
-                    name?: string;
-                    kgId?: string | null;
-                    cid?: string | null;
-                    gcid?: string | null;
+                depth: number;
+                parent_question: string;
+                extracted_at: string;
+            }[];
+            videos: {
+                /** @enum {string} */
+                type: "video" | "short_video";
+                title: string;
+                channel: string;
+                platform: string;
+                duration: string;
+                url: string;
+            }[];
+            forums: {
+                title: string;
+                source: string;
+                url: string;
+            }[];
+            organicResults: components["schemas"]["SerpIntelligenceOrganicResult"][];
+            localPack: {
+                position: number;
+                name: string;
+                cid?: string | null;
+                rating?: string | null;
+                reviewCount?: string | null;
+                metadata?: string[];
+                websiteUrl?: string | null;
+                directionsUrl?: string | null;
+            }[];
+            entityIds: {
+                entities: {
+                    name: string;
+                    kgId: string | null;
+                    cid: string | null;
+                    gcid: string | null;
                 }[];
-                kgIds?: string[];
-                cids?: string[];
-                gcids?: string[];
+                kgIds: string[];
+                cids: string[];
+                gcids: string[];
             };
-            stats?: {
-                seed?: string;
-                totalQuestions?: number;
-                maxDepthReached?: number;
-                durationMs?: number;
-                errorCount?: number;
+            stats: {
+                seed: string;
+                totalQuestions: number;
+                maxDepthReached: number;
+                durationMs: number;
+                errorCount: number;
             };
-            diagnostics?: {
-                [key: string]: unknown;
+            diagnostics: components["schemas"]["SerpIntelligenceHarvestDiagnostics"];
+            whatPeopleSaying: {
+                /** @enum {string} */
+                type: "reddit" | "facebook" | "instagram" | "tiktok" | "youtube" | "news" | "unknown";
+                title: string;
+                url: string;
+                source: string;
+                platform: string;
+                popularComment: string | null;
+                engagement: string;
+                date: string;
+                duration: string | null;
+                authorNote: string | null;
+            }[];
+        };
+        SerpIntelligenceHarvestDiagnostics: {
+            /** @enum {string} */
+            completionStatus: "paa_found" | "no_paa" | "serp_only";
+            /** @enum {string|null} */
+            problem?: null;
+            /** @enum {string} */
+            resultQuality?: "complete" | "partial" | "degraded";
+            degradedResult?: boolean;
+            degradationReasons?: ("empty_primary_serp" | "page_two_missing")[];
+            retryRecommended?: boolean;
+            noPaaObserved?: boolean;
+            phaseTimings?: {
+                providerConnectMs?: number;
+                navigationMs?: number;
+                serpParseMs?: number;
+                paaExpansionMs?: number;
+                linkResolutionMs?: number;
+                totalServerMs: number;
             };
-            whatPeopleSaying?: unknown[];
+            pagination?: {
+                requestedPages: 1 | 2;
+                capturedPages: 1 | 2;
+                /** @enum {string} */
+                page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
+                page1OrganicCount: number;
+                page2OrganicCount: number;
+                /** @enum {string} */
+                failureCode?: "missing_next" | "invalid_next" | "empty_page" | "captcha" | "timeout" | "navigation_error" | "unsupported_driver";
+            };
+            completeness?: {
+                paaWithoutAnswer: number;
+                paaWithoutSource: number;
+                paaIncompleteAnswers?: number;
+                paaAnswersRecovered: number;
+                aioShareCaptured: boolean | null;
+                paaRequested?: number;
+                paaReturned?: number;
+                paaUnique?: number;
+            };
+            interruption?: {
+                /** @enum {string} */
+                code: "browser_session_interrupted" | "request_aborted" | "timeout";
+            };
+            warnings?: {
+                /** @enum {string} */
+                code: "short_videos_captcha_skipped" | "paa_partial";
+                /** @enum {string} */
+                surface: "short_videos" | "paa";
+                retryable: boolean;
+            }[];
+            links?: {
+                linkCandidatesObserved: number;
+                plainLinksObserved: number;
+                googleUrlRedirectsObserved: number;
+                googleGotoRedirectsObserved: number;
+                redirectsResolved: number;
+                redirectsUnresolved: number;
+                redirectsRejected: number;
+                resolverNonGoogleRequestsObserved: number;
+                paaSourcesPreserved: number;
+                aiOverviewLabelValidated: boolean;
+            };
+            paaLifecycle?: {
+                requestedQuestions: number;
+                questionsFound: number;
+                /** @enum {string} */
+                targetStatus: "met" | "not_met";
+                /** @enum {string} */
+                discoveryStatus: "in_progress" | "target_reached" | "frontier_exhausted" | "no_paa_observed" | "interrupted" | "recovery_exhausted";
+                /** @enum {string} */
+                materialStatus: "complete" | "partial";
+                automaticRetries: number;
+                retryBreakdown: {
+                    controlRetries: number;
+                    browserRetries: number;
+                    providerFallbacks: number;
+                    runtimeRecoveries: number;
+                    idempotentReplays: number;
+                };
+                knownQuestions: number;
+                processedQuestions: number;
+                failedInteractions: number;
+                noGrowthConfirmations: number;
+                visibleControls?: number;
+                eligibleControls?: number;
+                dispatchedInteractions?: number;
+                confirmedInteractions?: number;
+                unconfirmedInteractions?: number;
+            };
+        };
+        SerpIntelligenceLocationEvidence: {
+            /** @enum {string} */
+            status: "not_requested" | "matched" | "mismatch" | "unknown";
+            expected: {
+                city: string;
+                regionCode: string | null;
+                canonicalLocation: string;
+            } | null;
+            candidates: {
+                city: string;
+                regionCode: string;
+                count: number;
+                examples: string[];
+            }[];
+        };
+        SerpIntelligenceCaptureAttempt: {
+            attemptNumber: number;
+            /** @enum {string} */
+            outcome: "paa_found" | "paa_partial" | "no_paa" | "serp_only" | "degraded_result" | "captcha" | "request_aborted" | "timeout" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "browser_session_interrupted" | "mcp_unavailable" | "error" | "page_captured" | "page_failed";
+            startedAt?: string;
+            completedAt?: string;
+            durationMs?: number;
+            /** @enum {string} */
+            problemCode?: "paa_found" | "paa_partial" | "no_paa" | "serp_only" | "degraded_result" | "captcha" | "request_aborted" | "timeout" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "browser_session_interrupted" | "mcp_unavailable" | "error" | "captcha_exhausted" | "harvest_timeout" | "service_unavailable" | "vendor_unavailable" | "extraction_failed" | "invalid_url" | "capture_failed";
+            cleanupSucceeded?: boolean | null;
         };
         SerpPageSnapshotCapture: {
-            url?: string;
-            requestedUrl?: string;
-            finalUrl?: string | null;
+            /** Format: uri */
+            url: string;
+            /** Format: uri */
+            requestedUrl: string;
+            /** Format: uri */
+            finalUrl: string | null;
             /** @enum {string} */
-            sourceKind?: "organic" | "ai_citation" | "local_pack_website" | "configured_target" | "site_subject";
-            sourcePosition?: number | null;
+            sourceKind: "organic" | "ai_citation" | "local_pack_website" | "configured_target" | "site_subject";
+            sourcePosition: number | null;
             /** @enum {string} */
-            status?: "captured" | "skipped" | "failed";
+            status: "captured" | "skipped" | "failed";
             /** @enum {string|null} */
-            fetchedVia?: "fetch" | "headless" | "browser" | "mcp" | null;
-            httpStatus?: number | null;
-            contentType?: string | null;
-            title?: string | null;
-            canonicalUrl?: string | null;
-            metaDescription?: string | null;
-            headings?: {
-                level?: number;
-                text?: string;
+            fetchedVia: "fetch" | "headless" | "browser" | "mcp" | null;
+            httpStatus: number | null;
+            contentType: string | null;
+            title: string | null;
+            /** Format: uri */
+            canonicalUrl: string | null;
+            metaDescription: string | null;
+            /** @default [] */
+            headings: {
+                level: number;
+                text: string;
             }[];
-            artifact?: {
-                htmlBlobUrl?: string | null;
-                textBlobUrl?: string | null;
-                markdownBlobUrl?: string | null;
-                screenshotBlobUrl?: string | null;
-                contentSha256?: string | null;
-                capturedAt?: string | null;
+            artifact: {
+                /** Format: uri */
+                htmlBlobUrl: string | null;
+                /** Format: uri */
+                textBlobUrl: string | null;
+                /** Format: uri */
+                markdownBlobUrl: string | null;
+                /** Format: uri */
+                screenshotBlobUrl: string | null;
+                contentSha256: string | null;
+                capturedAt: string | null;
             };
-            error?: {
-                code?: string;
-                message?: string;
+            error: {
+                /** @enum {string} */
+                code: "invalid_url" | "timeout" | "capture_failed";
+                message: string;
             } | null;
+            schemaTypes?: string[];
+            wordCount?: number;
+            linkCounts?: {
+                wordCount: number;
+                internalLinkCount: number;
+                externalLinkCount: number;
+                totalLinkCount: number;
+            };
+            hashes?: {
+                htmlSha256: string | null;
+                markdownSha256: string | null;
+                textSha256: string | null;
+            };
+            content?: {
+                html: string | null;
+                markdown: string | null;
+                text: string | null;
+            };
+            diagnostics?: {
+                requestedAt: string;
+                completedAt: string;
+                durationMs: number;
+                urlValidation: {
+                    passed: boolean;
+                };
+                browserFallback: {
+                    configured: boolean;
+                    used: boolean;
+                    boundedByTimeoutMs: number;
+                };
+                content: {
+                    htmlIncluded: boolean;
+                    markdownIncluded: boolean;
+                    textIncluded: boolean;
+                    maxContentChars: number;
+                    truncated: boolean;
+                };
+            };
+        };
+        SerpIntelligencePageSnapshotDiagnostics: {
+            requestedCount?: number;
+            capturedCount?: number;
+            failedCount?: number;
+            maxConcurrency?: number;
+            timeoutMs?: number;
         };
         SerpIntelligenceCaptureResponse: {
-            harvestResult?: components["schemas"]["SerpIntelligenceHarvestResult"];
-            locationEvidence?: {
-                [key: string]: unknown;
-            } | null;
-            pageSnapshotArtifacts?: components["schemas"]["SerpPageSnapshotCapture"][];
+            harvestResult: components["schemas"]["SerpIntelligenceHarvestResult"];
+            attempts: components["schemas"]["SerpIntelligenceCaptureAttempt"][];
+            locationEvidence: components["schemas"]["SerpIntelligenceLocationEvidence"] | null;
+            pageSnapshotArtifacts: components["schemas"]["SerpPageSnapshotCapture"][];
             billing: {
                 creditsUsed: number;
+                requestId?: string;
+                jobId?: string;
             };
         };
         SerpIntelligencePageSnapshotsResponse: {
-            pageSnapshotArtifacts?: components["schemas"]["SerpPageSnapshotCapture"][];
+            pageSnapshotArtifacts: components["schemas"]["SerpPageSnapshotCapture"][];
+            /** @default [] */
+            attempts: components["schemas"]["SerpIntelligenceCaptureAttempt"][];
+            diagnostics?: components["schemas"]["SerpIntelligencePageSnapshotDiagnostics"];
+        };
+        SerpIntelligencePaaNode: {
+            questionId: string;
+            googleLinkId: string | null;
+            googleEvidenceId: string | null;
+            question: string;
+            answer: string | null;
+            answerExpansionIncomplete?: boolean;
+            sourceTitle: string | null;
+            sourceSite: string | null;
+            sourceCite: string | null;
+            sources: {
+                url: string;
+                rawUrl?: string;
+                resolvedUrl?: string | null;
+                /** @enum {string} */
+                linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+                /** @enum {string} */
+                resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
+                title: string | null;
+                site: string | null;
+                description?: string | null;
+            }[];
+            depth: number;
+            parentQuestion: string | null;
+            children: components["schemas"]["SerpIntelligencePaaNode"][];
         };
         WorkflowRun: {
             id?: string;
@@ -2029,21 +2257,6 @@ export interface components {
                 title?: string | null;
             } | null;
             done?: boolean;
-        };
-        WorkflowSchedule: {
-            id?: string;
-            workflow_id?: string;
-            name?: string;
-            /** @enum {string} */
-            status?: "active" | "paused";
-            input?: {
-                [key: string]: unknown;
-            };
-            /** @enum {string} */
-            cadence?: "daily" | "weekly" | "monthly";
-            timezone?: string;
-            webhook_url?: string | null;
-            next_run_at?: string | null;
         };
         CallMemoryToolRequest: {
             /** @description A tool name from contracts/memory.tools.json, e.g. "memory-search". */
@@ -4204,172 +4417,6 @@ export interface operations {
                 };
                 content?: never;
             };
-        };
-    };
-    listWorkflowSchedules: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Schedule list. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schedules?: components["schemas"]["WorkflowSchedule"][];
-                    };
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-        };
-    };
-    createWorkflowSchedule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    workflowId: string;
-                    name?: string;
-                    input?: {
-                        [key: string]: unknown;
-                    };
-                    /**
-                     * @default weekly
-                     * @enum {string}
-                     */
-                    cadence?: "daily" | "weekly" | "monthly";
-                    /** @default UTC */
-                    timezone?: string;
-                    /** Format: uri */
-                    webhookUrl?: string;
-                    /** Format: date-time */
-                    nextRunAt?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Schedule created. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schedule?: components["schemas"]["WorkflowSchedule"];
-                    };
-                };
-            };
-            400: components["responses"]["BadRequest"];
-        };
-    };
-    deleteWorkflowSchedule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Deleted. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        ok?: boolean;
-                    };
-                };
-            };
-            404: components["responses"]["NotFound"];
-        };
-    };
-    patchWorkflowSchedule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    name?: string;
-                    /** @enum {string} */
-                    status?: "active" | "paused";
-                    input?: {
-                        [key: string]: unknown;
-                    };
-                    /** @enum {string} */
-                    cadence?: "daily" | "weekly" | "monthly";
-                    timezone?: string;
-                    /** Format: uri */
-                    webhookUrl?: string | null;
-                    /** Format: date-time */
-                    nextRunAt?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Updated schedule. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schedule?: components["schemas"]["WorkflowSchedule"];
-                    };
-                };
-            };
-            400: components["responses"]["BadRequest"];
-            404: components["responses"]["NotFound"];
-        };
-    };
-    runWorkflowScheduleNow: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Run started. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        run?: components["schemas"]["WorkflowRun"];
-                        summary?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            404: components["responses"]["NotFound"];
-            429: components["responses"]["ConcurrencyLimitExceeded"];
-            500: components["responses"]["ServerError"];
         };
     };
     gmailSearchMessages: {

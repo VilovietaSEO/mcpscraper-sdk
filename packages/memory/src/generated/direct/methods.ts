@@ -19,15 +19,17 @@ import * as AccessSwapVault from './tools/access-swap-vault.js'
 import * as AccessSwitchAccount from './tools/access-switch-account.js'
 import * as AccessUnlinkShare from './tools/access-unlink-share.js'
 import * as AddVault from './tools/add-vault.js'
-import * as AnswerInboxItemTool from './tools/answerInboxItemTool.js'
 import * as ArchiveArtifactTemplate from './tools/archive_artifact_template.js'
-import * as ArchiveScheduledRun from './tools/archive_scheduled_run.js'
-import * as AutoOptimizationTool from './tools/autoOptimizationTool.js'
+import * as ArtifactDescribe from './tools/artifact_describe.js'
+import * as ArtifactDownload from './tools/artifact_download.js'
+import * as ArtifactRead from './tools/artifact_read.js'
+import * as CreateArtifactTemplate from './tools/create_artifact_template.js'
+import * as GetArtifactTemplate from './tools/get_artifact_template.js'
+import * as ListArtifactTemplates from './tools/list_artifact_templates.js'
+import * as UpdateArtifactTemplate from './tools/update_artifact_template.js'
 import * as BulkDeleteNotes from './tools/bulk-delete-notes.js'
 import * as CostUsage from './tools/cost-usage.js'
-import * as CreateArtifactTemplate from './tools/create_artifact_template.js'
 import * as CreateChannel from './tools/create-channel.js'
-import * as CreateScheduledAction from './tools/create-scheduled-action.js'
 import * as CreateSecureVault from './tools/create-secure-vault.js'
 import * as CreateWebhook from './tools/create-webhook.js'
 import * as TableCreate from './tools/table-create.js'
@@ -59,7 +61,6 @@ import * as CrmPersonUpsert from './tools/crm-person-upsert.js'
 import * as CrmTaskUpsert from './tools/crm-task-upsert.js'
 import * as CrmWorkSearch from './tools/crm-work-search.js'
 import * as DeleteNote from './tools/delete-note.js'
-import * as DeleteScheduledAction from './tools/delete-scheduled-action.js'
 import * as DeleteVault from './tools/delete-vault.js'
 import * as MemoryExport from './tools/memory-export.js'
 import * as MemoryGet from './tools/memory-get.js'
@@ -76,12 +77,8 @@ import * as MemoryUpload from './tools/memory-upload.js'
 import * as FactHistory from './tools/fact-history.js'
 import * as FileAssetGet from './tools/file_asset_get.js'
 import * as FileAssetSave from './tools/file_asset_save.js'
-import * as GetArtifactTemplate from './tools/get_artifact_template.js'
-import * as GetScheduledRun from './tools/get_scheduled_run.js'
 import * as GetChatLink from './tools/get-chat-link.js'
 import * as GetMessageNote from './tools/get-message-note.js'
-import * as GetScheduleLink from './tools/get-schedule-link.js'
-import * as GetScheduleStatus from './tools/get-schedule-status.js'
 import * as GetVaultAppLink from './tools/get-vault-app-link.js'
 import * as GetVaultContract from './tools/get-vault-contract.js'
 import * as ImageAssetDelete from './tools/image_asset_delete.js'
@@ -95,25 +92,17 @@ import * as ImageFolderList from './tools/image_folder_list.js'
 import * as ImageProjectCreate from './tools/image_project_create.js'
 import * as ImageProjectList from './tools/image_project_list.js'
 import * as LibraryIngest from './tools/library-ingest.js'
-import * as ListArtifactTemplates from './tools/list_artifact_templates.js'
-import * as ListScheduledRuns from './tools/list_scheduled_runs.js'
 import * as ListChannelMembers from './tools/list-channel-members.js'
 import * as ListChannelMessages from './tools/list-channel-messages.js'
-import * as ListScheduledActions from './tools/list-scheduled-actions.js'
 import * as ListSharedWithMe from './tools/list-shared-with-me.js'
 import * as ListMemoryTags from './tools/list-memory-tags.js'
 import * as ListVaults from './tools/list-vaults.js'
 import * as ListWebhooks from './tools/list-webhooks.js'
-import * as ListScheduledActionRunsTool from './tools/listScheduledActionRunsTool.js'
-import * as MarkScheduledRunOpened from './tools/mark_scheduled_run_opened.js'
-import * as MarkScheduledRunUnopened from './tools/mark_scheduled_run_unopened.js'
 import * as MergeMemoryTags from './tools/merge-memory-tags.js'
 import * as MyMentions from './tools/my-mentions.js'
-import * as PauseScheduledAction from './tools/pause-scheduled-action.js'
 import * as PollChannel from './tools/poll-channel.js'
 import * as PostMessage from './tools/post-message.js'
 import * as PrepareMemoryWrite from './tools/prepare-memory-write.js'
-import * as ProposeScheduledAction from './tools/propose-scheduled-action.js'
 import * as ProvisionDefaults from './tools/provision-defaults.js'
 import * as ReactMessage from './tools/react-message.js'
 import * as RecordFact from './tools/record-fact.js'
@@ -126,19 +115,13 @@ import * as ResearchPersonCapture from './tools/research-person-capture.js'
 import * as ResearchPersonGet from './tools/research-person-get.js'
 import * as ResearchPersonSearch from './tools/research-person-search.js'
 import * as ResolveMemoryTags from './tools/resolve-memory-tags.js'
-import * as ResumeScheduledAction from './tools/resume-scheduled-action.js'
 import * as RevokeChatLink from './tools/revoke-chat-link.js'
-import * as RevokeScheduleLink from './tools/revoke-schedule-link.js'
 import * as RevokeVaultAppLink from './tools/revoke-vault-app-link.js'
 import * as RevokeWebhook from './tools/revoke-webhook.js'
 import * as RouteMemory from './tools/route-memory.js'
 import * as SetAgentIdentity from './tools/set-agent-identity.js'
-import * as SetScheduleDefaults from './tools/set-schedule-defaults.js'
-import * as SetScheduleEntitlement from './tools/set-schedule-entitlement.js'
 import * as StorageUsage from './tools/storage-usage.js'
 import * as TemporalRecall from './tools/temporal-recall.js'
-import * as UpdateArtifactTemplate from './tools/update_artifact_template.js'
-import * as UpdateScheduledAction from './tools/update-scheduled-action.js'
 import * as UpsertMemoryTag from './tools/upsert-memory-tag.js'
 import * as ValidateMemoryWrite from './tools/validate-memory-write.js'
 import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
@@ -228,31 +211,39 @@ export class AddNamespace {
   }
 }
 
-export class AnswerInboxItemToolNamespace {
+export class ArtifactsNamespace {
   constructor(private readonly callTool: CallToolFn) {}
 
-  async answerInboxItemTool(input: AnswerInboxItemTool.Input): Promise<AnswerInboxItemTool.Output> {
-    return this.callTool('answerInboxItemTool', input) as Promise<AnswerInboxItemTool.Output>
-  }
-}
-
-export class ArchiveNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async artifactTemplate(input: ArchiveArtifactTemplate.Input): Promise<ArchiveArtifactTemplate.Output> {
+  async archiveArtifactTemplate(input: ArchiveArtifactTemplate.Input): Promise<ArchiveArtifactTemplate.Output> {
     return this.callTool('archive_artifact_template', input) as Promise<ArchiveArtifactTemplate.Output>
   }
 
-  async scheduledRun(input: ArchiveScheduledRun.Input): Promise<ArchiveScheduledRun.Output> {
-    return this.callTool('archive_scheduled_run', input) as Promise<ArchiveScheduledRun.Output>
+  async describe(input: ArtifactDescribe.Input): Promise<ArtifactDescribe.Output> {
+    return this.callTool('artifact_describe', input) as Promise<ArtifactDescribe.Output>
   }
-}
 
-export class AutoOptimizationToolNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
+  async download(input: ArtifactDownload.Input): Promise<ArtifactDownload.Output> {
+    return this.callTool('artifact_download', input) as Promise<ArtifactDownload.Output>
+  }
 
-  async autoOptimizationTool(input: AutoOptimizationTool.Input): Promise<AutoOptimizationTool.Output> {
-    return this.callTool('autoOptimizationTool', input) as Promise<AutoOptimizationTool.Output>
+  async read(input: ArtifactRead.Input): Promise<ArtifactRead.Output> {
+    return this.callTool('artifact_read', input) as Promise<ArtifactRead.Output>
+  }
+
+  async createArtifactTemplate(input: CreateArtifactTemplate.Input): Promise<CreateArtifactTemplate.Output> {
+    return this.callTool('create_artifact_template', input) as Promise<CreateArtifactTemplate.Output>
+  }
+
+  async getArtifactTemplate(input: GetArtifactTemplate.Input): Promise<GetArtifactTemplate.Output> {
+    return this.callTool('get_artifact_template', input) as Promise<GetArtifactTemplate.Output>
+  }
+
+  async listArtifactTemplates(input: ListArtifactTemplates.Input): Promise<ListArtifactTemplates.Output> {
+    return this.callTool('list_artifact_templates', input) as Promise<ListArtifactTemplates.Output>
+  }
+
+  async updateArtifactTemplate(input: UpdateArtifactTemplate.Input): Promise<UpdateArtifactTemplate.Output> {
+    return this.callTool('update_artifact_template', input) as Promise<UpdateArtifactTemplate.Output>
   }
 }
 
@@ -275,16 +266,8 @@ export class CostNamespace {
 export class CreateNamespace {
   constructor(private readonly callTool: CallToolFn) {}
 
-  async artifactTemplate(input: CreateArtifactTemplate.Input): Promise<CreateArtifactTemplate.Output> {
-    return this.callTool('create_artifact_template', input) as Promise<CreateArtifactTemplate.Output>
-  }
-
   async channel(input: CreateChannel.Input): Promise<CreateChannel.Output> {
     return this.callTool('createChannelTool', input) as Promise<CreateChannel.Output>
-  }
-
-  async scheduledAction(input: CreateScheduledAction.Input): Promise<CreateScheduledAction.Output> {
-    return this.callTool('createScheduledActionTool', input) as Promise<CreateScheduledAction.Output>
   }
 
   async secureVault(input: CreateSecureVault.Input): Promise<CreateSecureVault.Output> {
@@ -423,10 +406,6 @@ export class DeleteNamespace {
     return this.callTool('deleteNoteTool', input) as Promise<DeleteNote.Output>
   }
 
-  async scheduledAction(input: DeleteScheduledAction.Input): Promise<DeleteScheduledAction.Output> {
-    return this.callTool('deleteScheduledActionTool', input) as Promise<DeleteScheduledAction.Output>
-  }
-
   async vault(input: DeleteVault.Input): Promise<DeleteVault.Output> {
     return this.callTool('deleteVaultTool', input) as Promise<DeleteVault.Output>
   }
@@ -507,28 +486,12 @@ export class FileNamespace {
 export class GetNamespace {
   constructor(private readonly callTool: CallToolFn) {}
 
-  async artifactTemplate(input: GetArtifactTemplate.Input): Promise<GetArtifactTemplate.Output> {
-    return this.callTool('get_artifact_template', input) as Promise<GetArtifactTemplate.Output>
-  }
-
-  async scheduledRun(input: GetScheduledRun.Input): Promise<GetScheduledRun.Output> {
-    return this.callTool('get_scheduled_run', input) as Promise<GetScheduledRun.Output>
-  }
-
   async chatLink(input: GetChatLink.Input): Promise<GetChatLink.Output> {
     return this.callTool('getChatLinkTool', input) as Promise<GetChatLink.Output>
   }
 
   async messageNote(input: GetMessageNote.Input): Promise<GetMessageNote.Output> {
     return this.callTool('getMessageNoteTool', input) as Promise<GetMessageNote.Output>
-  }
-
-  async scheduleLink(input: GetScheduleLink.Input): Promise<GetScheduleLink.Output> {
-    return this.callTool('getScheduleLinkTool', input) as Promise<GetScheduleLink.Output>
-  }
-
-  async scheduleStatus(input: GetScheduleStatus.Input): Promise<GetScheduleStatus.Output> {
-    return this.callTool('getScheduleStatusTool', input) as Promise<GetScheduleStatus.Output>
   }
 
   async vaultAppLink(input: GetVaultAppLink.Input): Promise<GetVaultAppLink.Output> {
@@ -595,24 +558,12 @@ export class LibraryNamespace {
 export class ListNamespace {
   constructor(private readonly callTool: CallToolFn) {}
 
-  async artifactTemplates(input: ListArtifactTemplates.Input): Promise<ListArtifactTemplates.Output> {
-    return this.callTool('list_artifact_templates', input) as Promise<ListArtifactTemplates.Output>
-  }
-
-  async scheduledRuns(input: ListScheduledRuns.Input): Promise<ListScheduledRuns.Output> {
-    return this.callTool('list_scheduled_runs', input) as Promise<ListScheduledRuns.Output>
-  }
-
   async channelMembers(input: ListChannelMembers.Input): Promise<ListChannelMembers.Output> {
     return this.callTool('listChannelMembersTool', input) as Promise<ListChannelMembers.Output>
   }
 
   async channelMessages(input: ListChannelMessages.Input): Promise<ListChannelMessages.Output> {
     return this.callTool('listChannelMessagesTool', input) as Promise<ListChannelMessages.Output>
-  }
-
-  async scheduledActions(input: ListScheduledActions.Input): Promise<ListScheduledActions.Output> {
-    return this.callTool('listScheduledActionsTool', input) as Promise<ListScheduledActions.Output>
   }
 
   async sharedWithMe(input: ListSharedWithMe.Input): Promise<ListSharedWithMe.Output> {
@@ -632,26 +583,6 @@ export class ListNamespace {
   }
 }
 
-export class ListScheduledActionRunsToolNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async listScheduledActionRunsTool(input: ListScheduledActionRunsTool.Input): Promise<ListScheduledActionRunsTool.Output> {
-    return this.callTool('listScheduledActionRunsTool', input) as Promise<ListScheduledActionRunsTool.Output>
-  }
-}
-
-export class MarkNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async scheduledRunOpened(input: MarkScheduledRunOpened.Input): Promise<MarkScheduledRunOpened.Output> {
-    return this.callTool('mark_scheduled_run_opened', input) as Promise<MarkScheduledRunOpened.Output>
-  }
-
-  async scheduledRunUnopened(input: MarkScheduledRunUnopened.Input): Promise<MarkScheduledRunUnopened.Output> {
-    return this.callTool('mark_scheduled_run_unopened', input) as Promise<MarkScheduledRunUnopened.Output>
-  }
-}
-
 export class MergeNamespace {
   constructor(private readonly callTool: CallToolFn) {}
 
@@ -665,14 +596,6 @@ export class MyNamespace {
 
   async mentions(input: MyMentions.Input): Promise<MyMentions.Output> {
     return this.callTool('myMentionsTool', input) as Promise<MyMentions.Output>
-  }
-}
-
-export class PauseNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async scheduledAction(input: PauseScheduledAction.Input): Promise<PauseScheduledAction.Output> {
-    return this.callTool('pauseScheduledActionTool', input) as Promise<PauseScheduledAction.Output>
   }
 }
 
@@ -697,14 +620,6 @@ export class PrepareNamespace {
 
   async memoryWrite(input: PrepareMemoryWrite.Input): Promise<PrepareMemoryWrite.Output> {
     return this.callTool('prepareMemoryWriteTool', input) as Promise<PrepareMemoryWrite.Output>
-  }
-}
-
-export class ProposeNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async scheduledAction(input: ProposeScheduledAction.Input): Promise<ProposeScheduledAction.Output> {
-    return this.callTool('proposeScheduledActionTool', input) as Promise<ProposeScheduledAction.Output>
   }
 }
 
@@ -784,23 +699,11 @@ export class ResolveNamespace {
   }
 }
 
-export class ResumeNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async scheduledAction(input: ResumeScheduledAction.Input): Promise<ResumeScheduledAction.Output> {
-    return this.callTool('resumeScheduledActionTool', input) as Promise<ResumeScheduledAction.Output>
-  }
-}
-
 export class RevokeNamespace {
   constructor(private readonly callTool: CallToolFn) {}
 
   async chatLink(input: RevokeChatLink.Input): Promise<RevokeChatLink.Output> {
     return this.callTool('revokeChatLinkTool', input) as Promise<RevokeChatLink.Output>
-  }
-
-  async scheduleLink(input: RevokeScheduleLink.Input): Promise<RevokeScheduleLink.Output> {
-    return this.callTool('revokeScheduleLinkTool', input) as Promise<RevokeScheduleLink.Output>
   }
 
   async vaultAppLink(input: RevokeVaultAppLink.Input): Promise<RevokeVaultAppLink.Output> {
@@ -826,14 +729,6 @@ export class SetNamespace {
   async agentIdentity(input: SetAgentIdentity.Input): Promise<SetAgentIdentity.Output> {
     return this.callTool('setAgentIdentityTool', input) as Promise<SetAgentIdentity.Output>
   }
-
-  async scheduleDefaults(input: SetScheduleDefaults.Input): Promise<SetScheduleDefaults.Output> {
-    return this.callTool('setScheduleDefaultsTool', input) as Promise<SetScheduleDefaults.Output>
-  }
-
-  async scheduleEntitlement(input: SetScheduleEntitlement.Input): Promise<SetScheduleEntitlement.Output> {
-    return this.callTool('setScheduleEntitlementTool', input) as Promise<SetScheduleEntitlement.Output>
-  }
 }
 
 export class StorageNamespace {
@@ -849,18 +744,6 @@ export class TemporalNamespace {
 
   async recall(input: TemporalRecall.Input): Promise<TemporalRecall.Output> {
     return this.callTool('temporalRecallTool', input) as Promise<TemporalRecall.Output>
-  }
-}
-
-export class UpdateNamespace {
-  constructor(private readonly callTool: CallToolFn) {}
-
-  async artifactTemplate(input: UpdateArtifactTemplate.Input): Promise<UpdateArtifactTemplate.Output> {
-    return this.callTool('update_artifact_template', input) as Promise<UpdateArtifactTemplate.Output>
-  }
-
-  async scheduledAction(input: UpdateScheduledAction.Input): Promise<UpdateScheduledAction.Output> {
-    return this.callTool('updateScheduledActionTool', input) as Promise<UpdateScheduledAction.Output>
   }
 }
 

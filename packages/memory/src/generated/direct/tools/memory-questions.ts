@@ -180,29 +180,89 @@ export interface Input {
       ];
 }
 
-export interface Output {
-  /**
-   * True when questions were returned or answers were ingested; false on auth/scope error.
-   */
-  ok: boolean;
-  /**
-   * The day capture questions. Present only when called with no answers.
-   *
-   * @maxItems 5
-   */
-  questions?:
-    | []
-    | [string]
-    | [string, string]
-    | [string, string, string]
-    | [string, string, string, string]
-    | [string, string, string, string, string];
-  /**
-   * Number of answers stored as captures. Present only when answers were supplied.
-   */
-  ingested?: number;
-  /**
-   * Human-readable failure reason when ok is false.
-   */
-  error?: string;
-}
+export type Output =
+  | {
+      /**
+       * True when questions were returned or answers were ingested; false on auth/scope error.
+       */
+      ok: boolean;
+      /**
+       * The day capture questions. Present only when called with no answers.
+       *
+       * @maxItems 5
+       */
+      questions?:
+        | []
+        | [string]
+        | [string, string]
+        | [string, string, string]
+        | [string, string, string, string]
+        | [string, string, string, string, string];
+      /**
+       * Number of answers stored as captures. Present only when answers were supplied.
+       */
+      ingested?: number;
+      /**
+       * Human-readable failure reason when ok is false.
+       */
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
+    };

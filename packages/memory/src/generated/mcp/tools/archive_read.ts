@@ -29,38 +29,81 @@ export interface Input {
   depositToLibrary?: boolean;
 }
 
-export interface Output {
-  mode: "list" | "read";
-  /**
-   * Public ZIP URL or private artifactId used for this read.
-   */
-  archiveUrl: string;
-  artifactId?: string;
-  compressedBytes: number;
-  entryCount: number;
-  totalUncompressedBytes: number;
-  entries?: {
-    path: string;
-    directory: boolean;
-    compressedBytes: number;
-    uncompressedBytes: number;
-    contentType: string | null;
-    readable: boolean;
-    modifiedAt: string | null;
-  }[];
-  entriesTruncated?: boolean;
-  path?: string;
-  contentType?: string;
-  fileBytes?: number;
-  offset?: number;
-  content?: string;
-  nextOffset?: number | null;
-  memory?: {
-    deposited: boolean;
-    vault?: string;
-    noteId?: string;
-    path?: string;
-    chunks?: number;
-    error?: string;
-  };
-}
+export type Output =
+  | {
+      mode: "list" | "read";
+      /**
+       * Public ZIP URL or private artifactId used for this read.
+       */
+      archiveUrl: string;
+      artifactId?: string;
+      compressedBytes: number;
+      entryCount: number;
+      totalUncompressedBytes: number;
+      entries?: {
+        path: string;
+        directory: boolean;
+        compressedBytes: number;
+        uncompressedBytes: number;
+        contentType: string | null;
+        readable: boolean;
+        modifiedAt: string | null;
+      }[];
+      entriesTruncated?: boolean;
+      path?: string;
+      contentType?: string;
+      fileBytes?: number;
+      offset?: number;
+      content?: string;
+      nextOffset?: number | null;
+      memory?: {
+        deposited: boolean;
+        vault?: string;
+        noteId?: string;
+        path?: string;
+        chunks?: number;
+        error?: string;
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

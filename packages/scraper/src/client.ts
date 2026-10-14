@@ -10,7 +10,7 @@ import {
   LibraryNamespace,
   MemoryNamespace as MemoryToolNamespace,
   RecallNamespace,
-  ScheduleNamespace,
+  ArtifactsNamespace,
   StorageNamespace,
   TablesNamespace,
   TagsNamespace,
@@ -18,6 +18,10 @@ import {
   VideoNamespace as MemoryVideoNamespace,
   WebhooksNamespace,
   McpToolsClient,
+  clientAttributionHeaders,
+  notifyResponse,
+  responseMetadata,
+  type ClientMetadataOptions,
   type CallToolFn,
 } from 'mcpscraper-memory-sdk'
 
@@ -39,7 +43,7 @@ type SuccessBodyOf<K extends OperationId> = operations[K]['responses'] extends {
     ? B
     : unknown
 
-export interface ScraperClientOptions {
+export interface ScraperClientOptions extends ClientMetadataOptions {
   apiKey: string
   baseUrl?: string
   fetch?: typeof globalThis.fetch
@@ -124,6 +128,7 @@ export interface SerpIntelligenceCaptureOptions {
 export interface SerpIntelligenceCaptureReceipt {
   data: SuccessBodyOf<'serpIntelligenceCapture'>
   idempotencyKey: string | null
+  requestId?: string
 }
 
 class Requester {
@@ -132,11 +137,22 @@ class Requester {
     private readonly baseUrl: string,
     private readonly fetchImpl: typeof globalThis.fetch,
     private readonly timeoutMs: number,
+    private readonly metadataOptions: ClientMetadataOptions = {},
   ) {}
+
+  private headers(extra: Record<string, string> = {}): Record<string, string> {
+    return { ...clientAttributionHeaders(this.metadataOptions.clientAttribution), ...extra, 'x-api-key': this.apiKey }
+  }
+
+  private received(res: Response): void {
+    notifyResponse(this.metadataOptions.onResponse, responseMetadata(res))
+  }
 
   private async request(url: string, init: RequestInit): Promise<Response> {
     try {
-      return await this.fetchImpl(url, { ...init, signal: AbortSignal.timeout(this.timeoutMs) })
+      const response = await this.fetchImpl(url, { ...init, signal: AbortSignal.timeout(this.timeoutMs) })
+      this.received(response)
+      return response
     } catch (error) {
       if (error instanceof DOMException && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
         throw new ScraperApiError(408, {
@@ -177,14 +193,14 @@ class Requester {
     try {
       res = await this.fetchImpl(`${this.baseUrl}${path}`, {
         method,
-        headers: {
-          'x-api-key': this.apiKey,
+        headers: this.headers({
           ...(body !== undefined ? { 'content-type': 'application/json' } : {}),
           ...extraHeaders,
-        },
+        }),
         body: body !== undefined ? JSON.stringify(body) : undefined,
         signal,
       })
+      this.received(res)
     } catch (error) {
       if (error instanceof DOMException && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
         if (options.signal?.aborted && !timeoutSignal.aborted) throw error
@@ -199,15 +215,15 @@ class Requester {
       throw error
     }
     const data = await res.json().catch(() => undefined)
-    if (!res.ok) throw new ScraperApiError(res.status, data)
+    if (!res.ok) throw new ScraperApiError(res.status, data, { requestId: responseMetadata(res).requestId })
     return { data: data as SuccessBodyOf<K>, headers: res.headers }
   }
 
   async callRaw(method: string, path: string): Promise<ArrayBuffer> {
-    const res = await this.request(`${this.baseUrl}${path}`, { method, headers: { 'x-api-key': this.apiKey } })
+    const res = await this.request(`${this.baseUrl}${path}`, { method, headers: this.headers() })
     if (!res.ok) {
       const data = await res.json().catch(() => undefined)
-      throw new ScraperApiError(res.status, data)
+      throw new ScraperApiError(res.status, data, { requestId: responseMetadata(res).requestId })
     }
     return res.arrayBuffer()
   }
@@ -277,8 +293,9 @@ class InstagramNamespace {
 
 class RedditNamespace {
   constructor(private readonly r: Requester) {}
-  thread(params: RequestBodyOf<'redditThread'>) {
-    return this.r.call<'redditThread'>('POST', '/reddit/thread', params)
+  thread(params: RequestBodyOf<'redditThread'>, options: ScraperRequestOptions & IdempotentRequestOptions = {}) {
+    return this.r.call<'redditThread'>('POST', '/reddit/thread', params,
+      options.idempotencyKey === undefined ? {} : { 'Idempotency-Key': options.idempotencyKey }, options)
   }
 }
 
@@ -368,6 +385,7 @@ class SerpIntelligenceNamespace {
     return {
       data: result.data,
       idempotencyKey: result.headers.get('Idempotency-Key'),
+      ...(result.headers.get('x-mcp-request-id') ? { requestId: result.headers.get('x-mcp-request-id')! } : {}),
     }
   }
   pageSnapshots(params: RequestBodyOf<'serpIntelligencePageSnapshots'>) {
@@ -397,21 +415,6 @@ class WorkflowsNamespace {
       'GET',
       `/workflows/runs/${encodeURIComponent(id)}/artifacts/${encodeURIComponent(artifactId)}`,
     )
-  }
-  createSchedule(params: RequestBodyOf<'createWorkflowSchedule'>) {
-    return this.r.call<'createWorkflowSchedule'>('POST', '/workflows/schedules', params)
-  }
-  listSchedules() {
-    return this.r.call<'listWorkflowSchedules'>('GET', '/workflows/schedules')
-  }
-  patchSchedule(id: string, params: RequestBodyOf<'patchWorkflowSchedule'>) {
-    return this.r.call<'patchWorkflowSchedule'>('PATCH', `/workflows/schedules/${encodeURIComponent(id)}`, params)
-  }
-  deleteSchedule(id: string) {
-    return this.r.call<'deleteWorkflowSchedule'>('DELETE', `/workflows/schedules/${encodeURIComponent(id)}`)
-  }
-  runScheduleNow(id: string) {
-    return this.r.call<'runWorkflowScheduleNow'>('POST', `/workflows/schedules/${encodeURIComponent(id)}/run`)
   }
 }
 
@@ -459,7 +462,7 @@ class MemoryTools {
   readonly library: LibraryNamespace
   readonly memory: MemoryToolNamespace
   readonly recall: RecallNamespace
-  readonly schedule: ScheduleNamespace
+  readonly artifacts: ArtifactsNamespace
   readonly storage: StorageNamespace
   readonly tables: TablesNamespace
   readonly tags: TagsNamespace
@@ -477,7 +480,7 @@ class MemoryTools {
     this.library = new LibraryNamespace(callTool)
     this.memory = new MemoryToolNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
-    this.schedule = new ScheduleNamespace(callTool)
+    this.artifacts = new ArtifactsNamespace(callTool)
     this.storage = new StorageNamespace(callTool)
     this.tables = new TablesNamespace(callTool)
     this.tags = new TagsNamespace(callTool)
@@ -508,7 +511,7 @@ export class ScraperClient {
   constructor(options: ScraperClientOptions) {
     const requestTimeoutMs = options.requestTimeoutMs ?? 590_000
     if (!Number.isFinite(requestTimeoutMs) || requestTimeoutMs <= 0) throw new TypeError('requestTimeoutMs must be a positive number')
-    this.r = new Requester(options.apiKey, options.baseUrl ?? 'https://mcpscraper.dev', options.fetch ?? globalThis.fetch, requestTimeoutMs)
+    this.r = new Requester(options.apiKey, options.baseUrl ?? 'https://mcpscraper.dev', options.fetch ?? globalThis.fetch, requestTimeoutMs, options)
     this.youtube = new YoutubeNamespace(this.r)
     this.screenshot = new ScreenshotNamespace(this.r)
     this.facebook = new FacebookNamespace(this.r)
@@ -527,17 +530,19 @@ export class ScraperClient {
       baseUrl: options.baseUrl ?? 'https://mcpscraper.dev',
       fetch: options.fetch,
       requestTimeoutMs,
+      clientAttribution: options.clientAttribution,
+      onResponse: options.onResponse,
     })
   }
 
   private async callMemoryTool(toolName: string, args: unknown): Promise<unknown> {
-    const result = await this.r.call<'callMemoryTool'>('POST', '/memory/mcp-call', {
+    const { data: result, headers } = await this.r.callWithReceipt<'callMemoryTool'>('POST', '/memory/mcp-call', {
       toolName,
       args: (args ?? {}) as Record<string, unknown>,
     })
     if (result && typeof result === 'object' && (result as Record<string, unknown>).ok === false) {
       const failure = result as Record<string, unknown>
-      throw new ScraperApiError(200, { message: failure.error, ...failure })
+      throw new ScraperApiError(200, { message: failure.error, ...failure }, { requestId: headers.get('x-mcp-request-id') ?? undefined })
     }
     return result
   }

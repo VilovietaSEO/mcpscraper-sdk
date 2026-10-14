@@ -16,7 +16,7 @@ export interface Input {
    */
   destinationUrl: string;
   /**
-   * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+   * Required utm_source value identifying the acquisition source, such as google or a newsletter name.
    */
   source: string;
   /**
@@ -32,7 +32,7 @@ export interface Input {
    */
   term?: string;
   /**
-   * Complete content to route, validate, or store; do not substitute a partial excerpt when full content is required.
+   * Optional utm_content label identifying the ad creative or link variant; this is not document content.
    */
   content?: string;
   /**
@@ -53,9 +53,52 @@ export interface Input {
   idempotencyKey: string;
 }
 
-export interface Output {
-  ok: boolean;
-  link: {
-    [k: string]: unknown;
-  };
-}
+export type Output =
+  | {
+      ok: boolean;
+      link: {
+        [k: string]: unknown;
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

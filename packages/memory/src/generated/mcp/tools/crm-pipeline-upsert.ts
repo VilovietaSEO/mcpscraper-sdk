@@ -115,40 +115,100 @@ export interface Input {
   ];
 }
 
-export interface Output {
-  ok: boolean;
-  message: string;
-  pipeline?: {
-    pipelineId: string;
-    version: number;
-    stages: {
-      stageId: string;
-      /**
-       * Human-readable stage label.
-       */
-      label: string;
-      /**
-       * Commercial outcome represented by the stage.
-       */
-      outcome: "open" | "won" | "lost";
-      /**
-       * Governed stage probability from 0 through 1; won must be 1 and lost must be 0.
-       */
-      probability: number;
-      /**
-       * Field names required before entering this stage.
-       *
-       * @maxItems 100
-       */
-      requiredFields?: string[];
-      /**
-       * Stage UUIDs that this stage may transition to.
-       *
-       * @maxItems 100
-       */
-      allowedNextStageIds?: string[];
-    }[];
-  };
-  code?: string;
-  error?: string;
-}
+export type Output =
+  | {
+      ok: boolean;
+      message: string;
+      pipeline?: {
+        pipelineId: string;
+        version: number;
+        stages: {
+          stageId: string;
+          /**
+           * Human-readable stage label.
+           */
+          label: string;
+          /**
+           * Commercial outcome represented by the stage.
+           */
+          outcome: "open" | "won" | "lost";
+          /**
+           * Governed stage probability from 0 through 1; won must be 1 and lost must be 0.
+           */
+          probability: number;
+          /**
+           * Field names required before entering this stage.
+           *
+           * @maxItems 100
+           */
+          requiredFields?: string[];
+          /**
+           * Stage UUIDs that this stage may transition to.
+           *
+           * @maxItems 100
+           */
+          allowedNextStageIds?: string[];
+        }[];
+      };
+      code?: string;
+      error?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    }
+  | {
+      idempotencyKey?: string;
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      error_code: string;
+      error_type: string;
+      message: string;
+      retryable: boolean;
+      retry_after_seconds?: number;
+      charge_status?: string;
+      details?: {
+        [k: string]: unknown;
+      };
+    };

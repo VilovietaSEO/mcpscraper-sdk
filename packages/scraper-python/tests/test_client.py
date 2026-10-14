@@ -8,6 +8,65 @@ from mcpscraper import ScraperClient, ScraperApiError
 from mcpscraper._mcp_generated_client import MCP_TOOL_BINDINGS, MCP_TOOL_COUNT
 
 
+def test_serp_rest_models_preserve_required_nullable_answers_and_page_content():
+    from pydantic import TypeAdapter, ValidationError
+    from mcpscraper.models import (
+        SerpIntelligenceCaptureResponse,
+        SerpIntelligenceHarvestResult,
+        SerpIntelligencePaaNode,
+        SerpPageSnapshotCapture,
+    )
+
+    question = {
+        "questionId": "question_1",
+        "googleLinkId": None,
+        "googleEvidenceId": None,
+        "question": "What was found?",
+        "answer": None,
+        "sourceTitle": None,
+        "sourceSite": None,
+        "sourceCite": None,
+        "sources": [],
+        "depth": 0,
+        "parentQuestion": None,
+        "children": [],
+    }
+    assert SerpIntelligencePaaNode.model_validate(question).answer is None
+    with pytest.raises(ValidationError):
+        SerpIntelligencePaaNode.model_validate({k: v for k, v in question.items() if k != "answer"})
+
+    snapshot = SerpPageSnapshotCapture.model_validate({
+        "url": "https://example.com/",
+        "requestedUrl": "https://example.com/",
+        "finalUrl": None,
+        "sourceKind": "configured_target",
+        "sourcePosition": None,
+        "status": "captured",
+        "fetchedVia": "fetch",
+        "httpStatus": 200,
+        "contentType": "text/html",
+        "title": None,
+        "canonicalUrl": None,
+        "metaDescription": None,
+        "headings": [],
+        "artifact": {key: None for key in (
+            "htmlBlobUrl", "textBlobUrl", "markdownBlobUrl", "screenshotBlobUrl",
+            "contentSha256", "capturedAt",
+        )},
+        "error": None,
+        "content": {"html": "<p>Full page</p>", "markdown": None, "text": "Full page"},
+    })
+    assert snapshot.content.html == "<p>Full page</p>"
+    assert snapshot.content.markdown is None
+    assert snapshot.error is None
+    for model, field in (
+        (SerpIntelligenceCaptureResponse, "locationEvidence"),
+        (SerpIntelligenceHarvestResult, "location"),
+    ):
+        assert model.model_fields[field].is_required()
+        assert TypeAdapter(model.model_fields[field].annotation).validate_python(None) is None
+
+
 @responses.activate
 def test_search_serp_sends_serp_only_true():
     responses.add(
@@ -197,44 +256,13 @@ def test_editorial_reading_room_guide_uses_exact_wire_contract():
     assert result.focus == "workflow"
 
 
-@responses.activate
-def test_scheduled_result_view_link_uses_exact_wire_contract():
-    responses.add(
-        responses.POST,
-        "https://mcpscraper.dev/mcp",
-        json={
-            "jsonrpc": "2.0",
-            "id": 1,
-            "result": {
-                "structuredContent": {
-                    "ok": True,
-                    "shareId": "00000000-0000-4000-8000-000000000001",
-                    "runId": "opaque_run_1",
-                    "artifactId": "artifact_1",
-                    "url": "https://mcpscraper.dev/view/scheduled-run/token",
-                    "expiresAt": "2026-08-06T00:00:00.000Z",
-                    "createdAt": "2026-07-30T00:00:00.000Z",
-                }
-            },
-        },
-        status=200,
-    )
-
+def test_retired_workflow_recurrence_is_absent_and_manual_workflows_remain():
     client = ScraperClient(api_key="sk_test")
-    result = client.tools.schedule.create_scheduled_run_view_link(
-        run_id="opaque_run_1",
-        artifact_id="artifact_1",
-        expires_in_days=7,
-    )
-    sent_body = json.loads(responses.calls[0].request.body)
-
-    assert sent_body["params"]["name"] == "create_scheduled_run_view_link"
-    assert sent_body["params"]["arguments"] == {
-        "runId": "opaque_run_1",
-        "artifactId": "artifact_1",
-        "expiresInDays": 7,
-    }
-    assert result.run_id == "opaque_run_1"
+    assert not hasattr(client.tools, "schedule")
+    for method in ("create_schedule", "list_schedules", "patch_schedule", "delete_schedule", "run_schedule_now"):
+        assert not hasattr(client.workflows, method)
+    assert callable(client.workflows.run)
+    assert callable(client.workflows.get_run)
 
 
 @responses.activate

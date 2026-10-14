@@ -25,12 +25,12 @@ class PublicChargeStatus(Enum):
     charged = 'charged'
 
 
-class PublicErrorDetails(RootModel[dict[str, str | float | bool]]):
+class PublicErrorDetails(RootModel[dict[str, str | float | bool | str | None]]):
     """
     Bounded, vendor-neutral recovery and account details safe for public clients.
     """
 
-    root: dict[str, str | float | bool]
+    root: dict[str, str | float | bool | str | None]
 
 
 class ErrorCode(Enum):
@@ -237,35 +237,35 @@ class Recency(Enum):
 class HarvestSyncRequest(BaseModel):
     query: str = Field(..., description='Search query.')
     location: str | None = Field(None, description='e.g. "Austin, TX".')
-    depth: int | None = Field(
+    depth: int = Field(
         4,
         description='PAA drill-down depth. Ignored when serpOnly is true.',
         ge=1,
         le=4,
     )
-    maxQuestions: int | None = Field(
+    maxQuestions: int = Field(
         30,
         description='Max PAA questions to harvest. Ignored when serpOnly is true.',
         ge=1,
     )
-    gl: str | None = Field('us', description='Google country code.')
-    hl: str | None = Field('en', description='Google language code.')
-    device: Device | None = 'desktop'
-    proxyMode: ProxyMode | None = 'none'
+    gl: str = Field('us', description='Google country code.')
+    hl: str = Field('en', description='Google language code.')
+    device: Device = 'desktop'
+    proxyMode: ProxyMode = 'none'
     proxyZip: str | None = Field(
         None, description='Optional US ZIP override.', pattern='^\\d{5}$'
     )
-    pages: int | None = Field(
+    pages: int = Field(
         1,
         description='Google result pages to fetch. Full mode alone does not request page 2.',
         ge=1,
         le=2,
     )
-    mode: Mode | None = Field(
+    mode: Mode = Field(
         'light',
         description='For serpOnly searches: light returns organic results; full adds available same-page SERP features.',
     )
-    serpOnly: bool | None = Field(
+    serpOnly: bool = Field(
         False,
         description='true = pure SERP call (search_serp); false = full PAA harvest.',
     )
@@ -273,7 +273,7 @@ class HarvestSyncRequest(BaseModel):
         None,
         description='Optional Google time filter. Ordinary search_serp accepts week or month and returns organic browser results; PAA harvest also accepts day and year. Omit for all-time results.',
     )
-    debug: bool | None = False
+    debug: bool = False
 
 
 class Status(Enum):
@@ -331,15 +331,13 @@ class MediaType(Enum):
 
 class ExtractUrlRequest(BaseModel):
     url: AnyUrl
-    screenshot: bool | None = False
-    screenshotDevice: ScreenshotDevice | None = 'desktop'
-    extractBranding: bool | None = Field(
-        False, description='Extract brand colors/fonts/logo.'
-    )
-    downloadMedia: bool | None = False
+    screenshot: bool = False
+    screenshotDevice: ScreenshotDevice = 'desktop'
+    extractBranding: bool = Field(False, description='Extract brand colors/fonts/logo.')
+    downloadMedia: bool = False
     mediaTypes: list[MediaType] | None = None
-    allowLocal: bool | None = False
-    depositToVault: bool | None = Field(
+    allowLocal: bool = False
+    depositToVault: bool = Field(
         False, description='Save the extracted content into an mcp-memory vault.'
     )
     vaultName: str | None = Field(None, max_length=120)
@@ -408,9 +406,9 @@ class VaultDepositResult(BaseModel):
 
 class MapUrlsRequest(BaseModel):
     url: AnyUrl
-    maxUrls: int | None = Field(500, ge=1, le=2000)
-    concurrency: int | None = Field(12, ge=1, le=20)
-    browserFallback: bool | None = Field(
+    maxUrls: int = Field(500, ge=1, le=2000)
+    concurrency: int = Field(12, ge=1, le=20)
+    browserFallback: bool = Field(
         False, description='Use a real browser session for JS-heavy sites.'
     )
 
@@ -434,21 +432,21 @@ class Format(Enum):
 
 class ExtractSiteRequest(BaseModel):
     url: AnyUrl
-    maxPages: int | None = Field(100, ge=1, le=10000)
-    background: bool | None = Field(
+    maxPages: int = Field(100, ge=1, le=10000)
+    background: bool = Field(
         False, description='Enqueue an async crawl instead of waiting inline.'
     )
-    downloadImages: bool | None = Field(
+    downloadImages: bool = Field(
         False,
         description="Download every discovered image as a real file into the background job's bundle.zip (under images/<page>/), not just image URLs/stats. OFF by default. Implies background regardless of the background flag — too slow to run inline. Capped at 20 images/page and 500 images/site.",
     )
-    preserveMedia: bool | None = Field(
+    preserveMedia: bool = Field(
         False,
         description='Preferred alias for downloadImages. Downloads supported images into owner-scoped artifacts and the ZIP.',
     )
-    rotateProxies: bool | None = False
-    rotateProxyEvery: int | None = Field(30, ge=1, le=100)
-    browserFallback: bool | None = False
+    rotateProxies: bool = False
+    rotateProxyEvery: int = Field(30, ge=1, le=100)
+    browserFallback: bool = False
     formats: list[Format] | None = Field(
         None,
         description='Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and\nreturns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).\n`images` performs the image audit and returns `imageAudit` — on the synchronous\npath too, not just background jobs.\n',
@@ -650,20 +648,20 @@ class Format1(Enum):
 class SiteExportReadRequest(BaseModel):
     jobId: str
     pageId: str | None = Field(None, pattern='^[a-f0-9]{64}$')
-    format: Format1 | None = 'manifest'
-    offset: int | None = Field(0, ge=0)
-    maxBytes: int | None = Field(64000, ge=1, le=1000000)
+    format: Format1 = 'manifest'
+    offset: int = Field(0, ge=0)
+    maxBytes: int = Field(64000, ge=1, le=1000000)
 
 
 class SiteExportReadResponse(BaseModel):
     jobId: str
-    pageId: str
+    pageId: str | None = Field(...)
     format: Format1
     sha256: str
     text: str
     offset: int = Field(..., ge=0)
     totalBytes: int = Field(..., ge=0)
-    nextOffset: int = Field(..., ge=0)
+    nextOffset: int | None = Field(..., ge=0)
 
 
 class SiteExportImageRequest(BaseModel):
@@ -701,18 +699,18 @@ class ArchiveReadRequest(BaseModel):
         max_length=2000,
         min_length=1,
     )
-    offset: int | None = Field(
+    offset: int = Field(
         0, description='UTF-8 byte offset for a selected text entry.', ge=0
     )
-    maxBytes: int | None = Field(50000, ge=1, le=200000)
-    maxEntries: int | None = Field(200, ge=1, le=1000)
-    maxTotalBytes: int | None = Field(
+    maxBytes: int = Field(50000, ge=1, le=200000)
+    maxEntries: int = Field(200, ge=1, le=1000)
+    maxTotalBytes: int = Field(
         5000000,
         description='Maximum expanded UTF-8 bytes returned by a pathPrefix batch.',
         ge=1,
         le=20000000,
     )
-    depositToLibrary: bool | None = Field(
+    depositToLibrary: bool = Field(
         False,
         description='Preserve the complete selected text entry in the tenant Library vault.',
     )
@@ -767,7 +765,7 @@ class YoutubeHarvestRequest(BaseModel):
     channelHandle: str | None = Field(
         None, description='Required when mode is channel — @handle or UC... channel ID.'
     )
-    maxVideos: int | None = Field(50, ge=1, le=500)
+    maxVideos: int = Field(50, ge=1, le=500)
 
 
 class Chunk(BaseModel):
@@ -802,16 +800,16 @@ class ImageScope(Enum):
 class MapsPlaceRequest(BaseModel):
     businessName: str
     location: str
-    gl: str | None = 'us'
-    hl: str | None = 'en'
-    includeReviews: bool | None = False
-    maxReviews: int | None = Field(50, ge=1, le=1000)
-    includeServices: bool | None = False
-    includeImages: bool | None = False
+    gl: str = 'us'
+    hl: str = 'en'
+    includeReviews: bool = False
+    maxReviews: int = Field(50, ge=1, le=1000)
+    includeServices: bool = False
+    includeImages: bool = False
     include: list[IncludeEnum] | None = None
-    imageScope: ImageScope | None = 'all'
-    maxImages: int | None = Field(100, ge=1, le=250)
-    maxInlineImages: int | None = Field(3, ge=0, le=5)
+    imageScope: ImageScope = 'all'
+    maxImages: int = Field(100, ge=1, le=250)
+    maxInlineImages: int = Field(3, ge=0, le=5)
 
 
 class RunStatus(Enum):
@@ -847,7 +845,7 @@ class MapsPlaceRunResponse(BaseModel):
 class MapsPlaceItemPage(BaseModel):
     runId: UUID
     items: list[dict[str, Any]]
-    nextCursor: str
+    nextCursor: str | None = Field(...)
 
 
 class SerpIntelligenceCaptureRequest(BaseModel):
@@ -856,17 +854,17 @@ class SerpIntelligenceCaptureRequest(BaseModel):
     )
     query: str = Field(..., min_length=1)
     location: str | None = None
-    gl: str | None = 'us'
-    hl: str | None = 'en'
-    device: Device | None = 'desktop'
-    proxyMode: ProxyMode | None = 'none'
+    gl: str = 'us'
+    hl: str = 'en'
+    device: Device = 'desktop'
+    proxyMode: ProxyMode = 'none'
     proxyZip: str | None = Field(None, pattern='^\\d{5}$')
-    pages: int | None = Field(1, ge=1, le=2)
-    debug: bool | None = False
-    includePageSnapshots: bool | None = Field(
+    pages: int = Field(1, ge=1, le=2)
+    debug: bool = False
+    includePageSnapshots: bool = Field(
         False, description='Also attempt ranking-page snapshots at 1 credit per URL.'
     )
-    pageSnapshotLimit: int | None = Field(
+    pageSnapshotLimit: int = Field(
         0,
         description='Maximum snapshot attempts; capacity is held up front and unused capacity is refunded.',
         ge=0,
@@ -879,9 +877,9 @@ class SerpIntelligencePageSnapshotsRequest1(BaseModel):
         extra='forbid',
     )
     urls: list[AnyUrl] = Field(..., max_length=25, min_length=1)
-    maxConcurrency: int | None = Field(2, ge=1, le=5)
-    timeoutMs: int | None = Field(15000, ge=1000, le=60000)
-    debug: bool | None = False
+    maxConcurrency: int = Field(2, ge=1, le=5)
+    timeoutMs: int = Field(15000, ge=1000, le=60000)
+    debug: bool = False
 
 
 class SourceKind(Enum):
@@ -897,7 +895,7 @@ class Target(BaseModel):
         extra='forbid',
     )
     url: AnyUrl
-    sourceKind: SourceKind | None = 'configured_target'
+    sourceKind: SourceKind = 'configured_target'
     sourcePosition: int | None = Field(None, ge=1)
 
 
@@ -906,9 +904,9 @@ class SerpIntelligencePageSnapshotsRequest2(BaseModel):
         extra='forbid',
     )
     targets: list[Target] = Field(..., max_length=25, min_length=1)
-    maxConcurrency: int | None = Field(2, ge=1, le=5)
-    timeoutMs: int | None = Field(15000, ge=1000, le=60000)
-    debug: bool | None = False
+    maxConcurrency: int = Field(2, ge=1, le=5)
+    timeoutMs: int = Field(15000, ge=1000, le=60000)
+    debug: bool = False
 
 
 class SerpIntelligencePageSnapshotsRequest(
@@ -919,20 +917,52 @@ class SerpIntelligencePageSnapshotsRequest(
     root: SerpIntelligencePageSnapshotsRequest1 | SerpIntelligencePageSnapshotsRequest2
 
 
+class LinkType(Enum):
+    plain = 'plain'
+    google_url_redirect = 'google_url_redirect'
+    google_goto_redirect = 'google_goto_redirect'
+
+
+class ResolutionStatus(Enum):
+    not_needed = 'not_needed'
+    resolved = 'resolved'
+    unresolved = 'unresolved'
+    rejected = 'rejected'
+
+
+class SourcePage(Enum):
+    number_1 = 1
+
+
+class SourcePage1(Enum):
+    number_2 = 2
+
+
 class InlineRating(BaseModel):
-    value: str | None = None
-    count: str | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    value: str
+    count: str
 
 
 class SerpIntelligenceOrganicResult(BaseModel):
-    position: int | None = Field(None, ge=1)
-    title: str | None = None
-    url: str | None = None
-    domain: str | None = None
-    cite: str | None = None
-    snippet: str | None = None
-    isRedditStyle: bool | None = None
-    inlineRating: InlineRating | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    position: int = Field(..., ge=1, le=9007199254740991)
+    title: str
+    url: str
+    rawUrl: str | None = None
+    resolvedUrl: str | None = None
+    linkType: LinkType | None = None
+    resolutionStatus: ResolutionStatus | None = None
+    sourcePage: SourcePage | SourcePage1 | None = None
+    domain: str
+    cite: str | None = Field(...)
+    snippet: str | None = Field(...)
+    isRedditStyle: bool
+    inlineRating: InlineRating | None = Field(...)
 
 
 class Surface(Enum):
@@ -942,65 +972,487 @@ class Surface(Enum):
 
 
 class Citation(BaseModel):
-    text: str | None = None
-    href: str | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    text: str
+    href: str
+    rawUrl: str | None = None
+    resolvedUrl: str | None = None
+    linkType: LinkType | None = None
+    resolutionStatus: ResolutionStatus | None = None
 
 
 class AiOverview(BaseModel):
-    detected: bool | None = None
-    text: str | None = None
-    citations: list[Citation] | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    detected: bool
+    text: str | None = Field(...)
+    citations: list[Citation]
+    expanded: bool | None = None
+    fullyExpanded: bool | None = None
+    sections: list[str] | None = None
+    shareUrl: str | None = None
+
+
+class Citation1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    text: str
+    href: str
+    rawUrl: str | None = None
+    resolvedUrl: str | None = None
+    linkType: LinkType | None = None
+    resolutionStatus: ResolutionStatus | None = None
 
 
 class AiMode(BaseModel):
-    detected: bool | None = None
-    text: str | None = None
-    citations: list[Citation] | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    detected: bool
+    text: str | None = Field(...)
+    citations: list[Citation1]
+
+
+class Source(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    url: str
+    rawUrl: str | None = None
+    resolvedUrl: str | None = None
+    linkType: LinkType | None = None
+    resolutionStatus: ResolutionStatus | None = None
+    title: str | None = Field(...)
+    site: str | None = Field(...)
+    description: str | None = None
+
+
+class FlatItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    seed_query: str
+    question_id: str
+    google_link_id: str
+    google_evidence_id: str
+    question: str
+    answer: str
+    answerExpansionIncomplete: bool | None = None
+    source_title: str
+    source_site: str
+    source_cite: str
+    sources: list[Source]
+    depth: int = Field(..., ge=0, le=9007199254740991)
+    parent_question: str
+    extracted_at: str
+
+
+class Type(Enum):
+    video = 'video'
+    short_video = 'short_video'
+
+
+class Video(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type
+    title: str
+    channel: str
+    platform: str
+    duration: str
+    url: str
+
+
+class Forum(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    title: str
+    source: str
+    url: str
+
+
+class LocalPackItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    position: int = Field(..., ge=1, le=9007199254740991)
+    name: str
+    cid: str | None = None
+    rating: str | None = None
+    reviewCount: str | None = None
+    metadata: list[str] | None = None
+    websiteUrl: str | None = None
+    directionsUrl: str | None = None
 
 
 class Entity(BaseModel):
-    name: str | None = None
-    kgId: str | None = None
-    cid: str | None = None
-    gcid: str | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: str
+    kgId: str | None = Field(...)
+    cid: str | None = Field(...)
+    gcid: str | None = Field(...)
 
 
 class EntityIds(BaseModel):
-    entities: list[Entity] | None = None
-    kgIds: list[str] | None = None
-    cids: list[str] | None = None
-    gcids: list[str] | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    entities: list[Entity]
+    kgIds: list[str]
+    cids: list[str]
+    gcids: list[str]
 
 
 class Stats(BaseModel):
-    seed: str | None = None
-    totalQuestions: int | None = None
-    maxDepthReached: int | None = None
-    durationMs: float | None = None
-    errorCount: int | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    seed: str
+    totalQuestions: int = Field(..., ge=0, le=9007199254740991)
+    maxDepthReached: int = Field(..., ge=0, le=9007199254740991)
+    durationMs: float = Field(..., ge=0.0)
+    errorCount: int = Field(..., ge=0, le=9007199254740991)
 
 
-class SerpIntelligenceHarvestResult(BaseModel):
-    seed: str | None = None
-    location: str | None = None
-    extractedAt: str | None = None
-    totalQuestions: int | None = None
-    surface: Surface | None = None
-    aiOverview: AiOverview | None = None
-    aiMode: AiMode | None = None
-    tree: list[Any] | None = None
-    flat: list[Any] | None = None
-    videos: list[Any] | None = None
-    forums: list[Any] | None = None
-    organicResults: list[SerpIntelligenceOrganicResult] | None = None
-    localPack: list[Any] | None = None
-    entityIds: EntityIds | None = None
-    stats: Stats | None = None
-    diagnostics: dict[str, Any] | None = None
-    whatPeopleSaying: list[Any] | None = None
+class Type1(Enum):
+    reddit = 'reddit'
+    facebook = 'facebook'
+    instagram = 'instagram'
+    tiktok = 'tiktok'
+    youtube = 'youtube'
+    news = 'news'
+    unknown = 'unknown'
+
+
+class WhatPeopleSayingItem(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    type: Type1
+    title: str
+    url: str
+    source: str
+    platform: str
+    popularComment: str | None = Field(...)
+    engagement: str
+    date: str
+    duration: str | None = Field(...)
+    authorNote: str | None = Field(...)
+
+
+class CompletionStatus(Enum):
+    paa_found = 'paa_found'
+    no_paa = 'no_paa'
+    serp_only = 'serp_only'
+
+
+class Problem(RootModel[None]):
+    root: None = Field(None)
+
+
+class ResultQuality(Enum):
+    complete = 'complete'
+    partial = 'partial'
+    degraded = 'degraded'
+
+
+class DegradationReason(Enum):
+    empty_primary_serp = 'empty_primary_serp'
+    page_two_missing = 'page_two_missing'
+
+
+class PhaseTimings(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    providerConnectMs: float | None = Field(None, ge=0.0)
+    navigationMs: float | None = Field(None, ge=0.0)
+    serpParseMs: float | None = Field(None, ge=0.0)
+    paaExpansionMs: float | None = Field(None, ge=0.0)
+    linkResolutionMs: float | None = Field(None, ge=0.0)
+    totalServerMs: float = Field(..., ge=0.0)
+
+
+class RequestedPages(Enum):
+    number_1 = 1
+
+
+class RequestedPages1(Enum):
+    number_2 = 2
+
+
+class CapturedPages(Enum):
+    number_1 = 1
+
+
+class CapturedPages1(Enum):
+    number_2 = 2
+
+
+class Page2Status(Enum):
+    not_requested = 'not_requested'
+    not_attempted = 'not_attempted'
+    captured = 'captured'
+    unavailable = 'unavailable'
+    failed = 'failed'
+
+
+class FailureCode(Enum):
+    missing_next = 'missing_next'
+    invalid_next = 'invalid_next'
+    empty_page = 'empty_page'
+    captcha = 'captcha'
+    timeout = 'timeout'
+    navigation_error = 'navigation_error'
+    unsupported_driver = 'unsupported_driver'
+
+
+class Pagination(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    requestedPages: RequestedPages | RequestedPages1
+    capturedPages: CapturedPages | CapturedPages1
+    page2Status: Page2Status
+    page1OrganicCount: int = Field(..., ge=0, le=9007199254740991)
+    page2OrganicCount: int = Field(..., ge=0, le=9007199254740991)
+    failureCode: FailureCode | None = None
+
+
+class Completeness(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    paaWithoutAnswer: int = Field(..., ge=0, le=9007199254740991)
+    paaWithoutSource: int = Field(..., ge=0, le=9007199254740991)
+    paaIncompleteAnswers: int | None = Field(None, ge=0, le=9007199254740991)
+    paaAnswersRecovered: int = Field(..., ge=0, le=9007199254740991)
+    aioShareCaptured: bool | None = Field(...)
+    paaRequested: int | None = Field(None, ge=0, le=9007199254740991)
+    paaReturned: int | None = Field(None, ge=0, le=9007199254740991)
+    paaUnique: int | None = Field(None, ge=0, le=9007199254740991)
+
+
+class Code1(Enum):
+    browser_session_interrupted = 'browser_session_interrupted'
+    request_aborted = 'request_aborted'
+    timeout = 'timeout'
+
+
+class Interruption(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    code: Code1
+
+
+class Code2(Enum):
+    short_videos_captcha_skipped = 'short_videos_captcha_skipped'
+    paa_partial = 'paa_partial'
+
+
+class Surface1(Enum):
+    short_videos = 'short_videos'
+    paa = 'paa'
+
+
+class Warning(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    code: Code2
+    surface: Surface1
+    retryable: bool
+
+
+class Links(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    linkCandidatesObserved: int = Field(..., ge=0, le=9007199254740991)
+    plainLinksObserved: int = Field(..., ge=0, le=9007199254740991)
+    googleUrlRedirectsObserved: int = Field(..., ge=0, le=9007199254740991)
+    googleGotoRedirectsObserved: int = Field(..., ge=0, le=9007199254740991)
+    redirectsResolved: int = Field(..., ge=0, le=9007199254740991)
+    redirectsUnresolved: int = Field(..., ge=0, le=9007199254740991)
+    redirectsRejected: int = Field(..., ge=0, le=9007199254740991)
+    resolverNonGoogleRequestsObserved: int = Field(..., ge=0, le=9007199254740991)
+    paaSourcesPreserved: int = Field(..., ge=0, le=9007199254740991)
+    aiOverviewLabelValidated: bool
+
+
+class TargetStatus(Enum):
+    met = 'met'
+    not_met = 'not_met'
+
+
+class DiscoveryStatus(Enum):
+    in_progress = 'in_progress'
+    target_reached = 'target_reached'
+    frontier_exhausted = 'frontier_exhausted'
+    no_paa_observed = 'no_paa_observed'
+    interrupted = 'interrupted'
+    recovery_exhausted = 'recovery_exhausted'
+
+
+class MaterialStatus(Enum):
+    complete = 'complete'
+    partial = 'partial'
+
+
+class RetryBreakdown(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    controlRetries: int = Field(..., ge=0, le=9007199254740991)
+    browserRetries: int = Field(..., ge=0, le=9007199254740991)
+    providerFallbacks: int = Field(..., ge=0, le=9007199254740991)
+    runtimeRecoveries: int = Field(..., ge=0, le=9007199254740991)
+    idempotentReplays: int = Field(..., ge=0, le=9007199254740991)
+
+
+class PaaLifecycle(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    requestedQuestions: int = Field(..., ge=0, le=9007199254740991)
+    questionsFound: int = Field(..., ge=0, le=9007199254740991)
+    targetStatus: TargetStatus
+    discoveryStatus: DiscoveryStatus
+    materialStatus: MaterialStatus
+    automaticRetries: int = Field(..., ge=0, le=9007199254740991)
+    retryBreakdown: RetryBreakdown
+    knownQuestions: int = Field(..., ge=0, le=9007199254740991)
+    processedQuestions: int = Field(..., ge=0, le=9007199254740991)
+    failedInteractions: int = Field(..., ge=0, le=9007199254740991)
+    noGrowthConfirmations: int = Field(..., ge=0, le=9007199254740991)
+    visibleControls: int | None = Field(None, ge=0, le=9007199254740991)
+    eligibleControls: int | None = Field(None, ge=0, le=9007199254740991)
+    dispatchedInteractions: int | None = Field(None, ge=0, le=9007199254740991)
+    confirmedInteractions: int | None = Field(None, ge=0, le=9007199254740991)
+    unconfirmedInteractions: int | None = Field(None, ge=0, le=9007199254740991)
+
+
+class SerpIntelligenceHarvestDiagnostics(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    completionStatus: CompletionStatus
+    problem: Problem | None = None
+    resultQuality: ResultQuality | None = None
+    degradedResult: bool | None = None
+    degradationReasons: list[DegradationReason] | None = None
+    retryRecommended: bool | None = None
+    noPaaObserved: bool | None = None
+    phaseTimings: PhaseTimings | None = None
+    pagination: Pagination | None = None
+    completeness: Completeness | None = None
+    interruption: Interruption | None = None
+    warnings: list[Warning] | None = None
+    links: Links | None = None
+    paaLifecycle: PaaLifecycle | None = None
 
 
 class Status4(Enum):
+    not_requested = 'not_requested'
+    matched = 'matched'
+    mismatch = 'mismatch'
+    unknown = 'unknown'
+
+
+class Expected(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    city: str
+    regionCode: str | None = Field(...)
+    canonicalLocation: str
+
+
+class Candidate(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    city: str
+    regionCode: str
+    count: int = Field(..., ge=0, le=9007199254740991)
+    examples: list[str]
+
+
+class SerpIntelligenceLocationEvidence(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    status: Status4
+    expected: Expected | None = Field(...)
+    candidates: list[Candidate]
+
+
+class Outcome(Enum):
+    paa_found = 'paa_found'
+    paa_partial = 'paa_partial'
+    no_paa = 'no_paa'
+    serp_only = 'serp_only'
+    degraded_result = 'degraded_result'
+    captcha = 'captcha'
+    request_aborted = 'request_aborted'
+    timeout = 'timeout'
+    location_mismatch = 'location_mismatch'
+    proxy_tunnel_failed = 'proxy_tunnel_failed'
+    proxy_unavailable = 'proxy_unavailable'
+    browser_session_interrupted = 'browser_session_interrupted'
+    mcp_unavailable = 'mcp_unavailable'
+    error = 'error'
+    page_captured = 'page_captured'
+    page_failed = 'page_failed'
+
+
+class ProblemCode(Enum):
+    paa_found = 'paa_found'
+    paa_partial = 'paa_partial'
+    no_paa = 'no_paa'
+    serp_only = 'serp_only'
+    degraded_result = 'degraded_result'
+    captcha = 'captcha'
+    request_aborted = 'request_aborted'
+    timeout = 'timeout'
+    location_mismatch = 'location_mismatch'
+    proxy_tunnel_failed = 'proxy_tunnel_failed'
+    proxy_unavailable = 'proxy_unavailable'
+    browser_session_interrupted = 'browser_session_interrupted'
+    mcp_unavailable = 'mcp_unavailable'
+    error = 'error'
+    captcha_exhausted = 'captcha_exhausted'
+    harvest_timeout = 'harvest_timeout'
+    service_unavailable = 'service_unavailable'
+    vendor_unavailable = 'vendor_unavailable'
+    extraction_failed = 'extraction_failed'
+    invalid_url = 'invalid_url'
+    capture_failed = 'capture_failed'
+
+
+class SerpIntelligenceCaptureAttempt(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    attemptNumber: int = Field(..., ge=1, le=9007199254740991)
+    outcome: Outcome
+    startedAt: str | None = None
+    completedAt: str | None = None
+    durationMs: float | None = Field(None, ge=0.0)
+    problemCode: ProblemCode | None = None
+    cleanupSucceeded: bool | None = None
+
+
+class Status5(Enum):
     captured = 'captured'
     skipped = 'skipped'
     failed = 'failed'
@@ -1014,40 +1466,142 @@ class FetchedVia(Enum):
 
 
 class Heading(BaseModel):
-    level: int | None = None
-    text: str | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    level: int = Field(..., ge=1, le=6)
+    text: str
 
 
 class Artifact(BaseModel):
-    htmlBlobUrl: str | None = None
-    textBlobUrl: str | None = None
-    markdownBlobUrl: str | None = None
-    screenshotBlobUrl: str | None = None
-    contentSha256: str | None = None
-    capturedAt: str | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    htmlBlobUrl: AnyUrl | None = Field(...)
+    textBlobUrl: AnyUrl | None = Field(...)
+    markdownBlobUrl: AnyUrl | None = Field(...)
+    screenshotBlobUrl: AnyUrl | None = Field(...)
+    contentSha256: str | None = Field(...)
+    capturedAt: str | None = Field(...)
+
+
+class Code3(Enum):
+    invalid_url = 'invalid_url'
+    timeout = 'timeout'
+    capture_failed = 'capture_failed'
 
 
 class Error2(BaseModel):
-    code: str | None = None
-    message: str | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    code: Code3
+    message: str
+
+
+class LinkCounts(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    wordCount: int = Field(..., ge=0, le=9007199254740991)
+    internalLinkCount: int = Field(..., ge=0, le=9007199254740991)
+    externalLinkCount: int = Field(..., ge=0, le=9007199254740991)
+    totalLinkCount: int = Field(..., ge=0, le=9007199254740991)
+
+
+class Hashes(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    htmlSha256: str | None = Field(...)
+    markdownSha256: str | None = Field(...)
+    textSha256: str | None = Field(...)
+
+
+class Content(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    html: str | None = Field(...)
+    markdown: str | None = Field(...)
+    text: str | None = Field(...)
+
+
+class UrlValidation(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    passed: bool
+
+
+class BrowserFallback(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    configured: bool
+    used: bool
+    boundedByTimeoutMs: float = Field(..., ge=0.0)
+
+
+class Content1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    htmlIncluded: bool
+    markdownIncluded: bool
+    textIncluded: bool
+    maxContentChars: int = Field(..., ge=0, le=9007199254740991)
+    truncated: bool
+
+
+class Diagnostics(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    requestedAt: str
+    completedAt: str
+    durationMs: float = Field(..., ge=0.0)
+    urlValidation: UrlValidation
+    browserFallback: BrowserFallback
+    content: Content1
 
 
 class SerpPageSnapshotCapture(BaseModel):
-    url: str | None = None
-    requestedUrl: str | None = None
-    finalUrl: str | None = None
-    sourceKind: SourceKind | None = 'configured_target'
-    sourcePosition: int | None = None
-    status: Status4 | None = None
-    fetchedVia: FetchedVia | None = None
-    httpStatus: int | None = None
-    contentType: str | None = None
-    title: str | None = None
-    canonicalUrl: str | None = None
-    metaDescription: str | None = None
-    headings: list[Heading] | None = None
-    artifact: Artifact | None = None
-    error: Error2 | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    url: AnyUrl
+    requestedUrl: AnyUrl
+    finalUrl: AnyUrl | None = Field(...)
+    sourceKind: SourceKind
+    sourcePosition: int | None = Field(..., ge=1, le=9007199254740991)
+    status: Status5
+    fetchedVia: FetchedVia | None = Field(...)
+    httpStatus: int | None = Field(..., ge=100, le=599)
+    contentType: str | None = Field(...)
+    title: str | None = Field(...)
+    canonicalUrl: AnyUrl | None = Field(...)
+    metaDescription: str | None = Field(...)
+    headings: list[Heading]
+    artifact: Artifact
+    error: Error2 | None = Field(...)
+    schemaTypes: list[str] | None = None
+    wordCount: int | None = Field(None, ge=0, le=9007199254740991)
+    linkCounts: LinkCounts | None = None
+    hashes: Hashes | None = None
+    content: Content | None = None
+    diagnostics: Diagnostics | None = None
+
+
+class SerpIntelligencePageSnapshotDiagnostics(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    requestedCount: int | None = Field(None, ge=0, le=9007199254740991)
+    capturedCount: int | None = Field(None, ge=0, le=9007199254740991)
+    failedCount: int | None = Field(None, ge=0, le=9007199254740991)
+    maxConcurrency: int | None = Field(None, ge=1, le=5)
+    timeoutMs: float | None = Field(None, ge=0.0)
 
 
 class Billing(BaseModel):
@@ -1055,20 +1609,53 @@ class Billing(BaseModel):
         extra='forbid',
     )
     creditsUsed: float = Field(..., ge=0.0)
-
-
-class SerpIntelligenceCaptureResponse(BaseModel):
-    harvestResult: SerpIntelligenceHarvestResult | None = None
-    locationEvidence: dict[str, Any] | None = None
-    pageSnapshotArtifacts: list[SerpPageSnapshotCapture] | None = None
-    billing: Billing
+    requestId: str | None = None
+    jobId: str | None = None
 
 
 class SerpIntelligencePageSnapshotsResponse(BaseModel):
-    pageSnapshotArtifacts: list[SerpPageSnapshotCapture] | None = None
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    pageSnapshotArtifacts: list[SerpPageSnapshotCapture]
+    attempts: list[SerpIntelligenceCaptureAttempt]
+    diagnostics: SerpIntelligencePageSnapshotDiagnostics | None = None
 
 
-class Status5(Enum):
+class Source1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    url: str
+    rawUrl: str | None = None
+    resolvedUrl: str | None = None
+    linkType: LinkType | None = None
+    resolutionStatus: ResolutionStatus | None = None
+    title: str | None = Field(...)
+    site: str | None = Field(...)
+    description: str | None = None
+
+
+class SerpIntelligencePaaNode(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    questionId: str
+    googleLinkId: str | None = Field(...)
+    googleEvidenceId: str | None = Field(...)
+    question: str
+    answer: str | None = Field(...)
+    answerExpansionIncomplete: bool | None = None
+    sourceTitle: str | None = Field(...)
+    sourceSite: str | None = Field(...)
+    sourceCite: str | None = Field(...)
+    sources: list[Source1]
+    depth: int = Field(..., ge=0, le=9007199254740991)
+    parentQuestion: str | None = Field(...)
+    children: list[SerpIntelligencePaaNode]
+
+
+class Status6(Enum):
     queued = 'queued'
     running = 'running'
     succeeded = 'succeeded'
@@ -1090,7 +1677,7 @@ class WorkflowRun(BaseModel):
     )
     id: str | None = None
     workflow_id: str | None = None
-    status: Status5 | None = None
+    status: Status6 | None = None
     input: dict[str, Any] | None = None
     step_index: int | None = None
     created_at: str | None = None
@@ -1124,35 +1711,12 @@ class WorkflowRunStepResponse(BaseModel):
     done: bool | None = None
 
 
-class Status6(Enum):
-    active = 'active'
-    paused = 'paused'
-
-
-class Cadence(Enum):
-    daily = 'daily'
-    weekly = 'weekly'
-    monthly = 'monthly'
-
-
-class WorkflowSchedule(BaseModel):
-    id: str | None = None
-    workflow_id: str | None = None
-    name: str | None = None
-    status: Status6 | None = None
-    input: dict[str, Any] | None = None
-    cadence: Cadence | None = None
-    timezone: str | None = None
-    webhook_url: str | None = None
-    next_run_at: str | None = None
-
-
 class CallMemoryToolRequest(BaseModel):
     toolName: str = Field(
         ...,
         description='A tool name from contracts/memory.tools.json, e.g. "memory-search".',
     )
-    args: dict[str, Any] | None = Field(
+    args: dict[str, Any] = Field(
         {},
         description="The named tool's input, matching its inputSchema in memory.tools.json.",
     )
@@ -1176,7 +1740,7 @@ class GmailSearchMessagesRequest(BaseModel):
     )
     connectionId: str = Field(..., max_length=500, min_length=1)
     query: str = Field(..., max_length=1000, min_length=1)
-    limit: int | None = Field(50, ge=1, le=500)
+    limit: int = Field(50, ge=1, le=500)
     cursor: str | None = Field(None, max_length=500, min_length=1)
 
 
@@ -1185,7 +1749,7 @@ class GmailGetMessageRequest(BaseModel):
         extra='forbid',
     )
     connectionId: str = Field(..., max_length=500, min_length=1)
-    includeRawArtifact: bool | None = True
+    includeRawArtifact: bool = True
 
 
 class GmailGetAttachmentRequest(BaseModel):
@@ -1356,9 +1920,9 @@ class GmailPrepareMemoryImportRequest(BaseModel):
     connectionId: str = Field(..., max_length=500, min_length=1)
     selectionId: str = Field(..., max_length=500, min_length=1)
     selectionSha256: str = Field(..., pattern='^[a-f0-9]{64}$')
-    filingPolicy: FilingPolicy | None = 'source_archive'
+    filingPolicy: FilingPolicy = 'source_archive'
     destination: Destination | Destination1 | None = None
-    attachmentPolicy: AttachmentPolicy | None = 'preserve_all'
+    attachmentPolicy: AttachmentPolicy = 'preserve_all'
 
 
 class GmailWorkflowResponse(BaseModel):
@@ -1366,7 +1930,7 @@ class GmailWorkflowResponse(BaseModel):
         extra='allow',
     )
     ok: bool
-    error: str
+    error: str | None = Field(...)
 
 
 class ProxyMode2(Enum):
@@ -1378,13 +1942,13 @@ class ProxyMode2(Enum):
 class MapsSearchRequest(BaseModel):
     query: str = Field(..., min_length=1)
     location: str | None = None
-    gl: str | None = Field('us', max_length=2, min_length=2)
-    hl: str | None = Field('en', max_length=2, min_length=2)
-    maxResults: int | None = Field(10, ge=1, le=50)
-    includeServices: bool | None = False
-    proxyMode: ProxyMode2 | None = 'none'
+    gl: str = Field('us', max_length=2, min_length=2)
+    hl: str = Field('en', max_length=2, min_length=2)
+    maxResults: int = Field(10, ge=1, le=50)
+    includeServices: bool = False
+    proxyMode: ProxyMode2 = 'none'
     proxyZip: str | None = Field(None, pattern='^\\d{5}$')
-    debug: bool | None = False
+    debug: bool = False
 
 
 class ProfileDetailsStatus(Enum):
@@ -1401,16 +1965,16 @@ class Result(BaseModel):
     position: int = Field(..., ge=1, le=9007199254740991)
     name: str
     placeUrl: AnyUrl
-    cid: str
-    cidDecimal: str
-    rating: str
-    reviewCount: str
-    category: str
-    address: str
-    phone: str
-    hoursStatus: str
-    websiteUrl: str
-    directionsUrl: str
+    cid: str | None = Field(...)
+    cidDecimal: str | None = Field(...)
+    rating: str | None = Field(...)
+    reviewCount: str | None = Field(...)
+    category: str | None = Field(...)
+    address: str | None = Field(...)
+    phone: str | None = Field(...)
+    hoursStatus: str | None = Field(...)
+    websiteUrl: str | None = Field(...)
+    directionsUrl: str | None = Field(...)
     metadata: list[str]
     services: list[str]
     areasServed: list[str]
@@ -1428,7 +1992,7 @@ class MapsSearchResponse(BaseModel):
     fallbackFrom: str | None = None
     acquisitionProvider: str | None = None
     query: str
-    location: str
+    location: str | None = Field(...)
     searchQuery: str
     searchUrl: AnyUrl
     extractedAt: str
@@ -1469,8 +2033,8 @@ class ProxyMode3(Enum):
 
 class DirectoryRunRequest(BaseModel):
     query: str = Field(..., min_length=1)
-    state: str | None = Field('TN', min_length=2)
-    minPopulation: int | None = Field(100000, ge=0, le=9007199254740991)
+    state: str = Field('TN', min_length=2)
+    minPopulation: int = Field(100000, ge=0, le=9007199254740991)
     populationYear: (
         PopulationYear
         | PopulationYear1
@@ -1478,19 +2042,18 @@ class DirectoryRunRequest(BaseModel):
         | PopulationYear3
         | PopulationYear4
         | PopulationYear5
-        | None
     ) = 2025
-    maxCities: int | None = Field(25, ge=1, le=100)
-    maxResultsPerCity: int | None = Field(50, ge=1, le=50)
-    concurrency: int | None = Field(5, ge=1, le=5)
-    includeZipGroups: bool | None = True
-    saveCsv: bool | None = True
-    background: bool | None = True
-    gl: str | None = Field('us', max_length=2, min_length=2)
-    hl: str | None = Field('en', max_length=2, min_length=2)
-    proxyMode: ProxyMode3 | None = 'none'
+    maxCities: int = Field(25, ge=1, le=100)
+    maxResultsPerCity: int = Field(50, ge=1, le=50)
+    concurrency: int = Field(5, ge=1, le=5)
+    includeZipGroups: bool = True
+    saveCsv: bool = True
+    background: bool = True
+    gl: str = Field('us', max_length=2, min_length=2)
+    hl: str = Field('en', max_length=2, min_length=2)
+    proxyMode: ProxyMode3 = 'none'
     proxyZip: str | None = Field(None, pattern='^\\d{5}$')
-    debug: bool | None = False
+    debug: bool = False
 
 
 class Status7(Enum):
@@ -1513,8 +2076,8 @@ class CsvArtifact(BaseModel):
     rowCount: int = Field(..., ge=0, le=9007199254740991)
     sha256: str
     expiresAt: str
-    downloadUrl: str
-    downloadUrlExpiresAt: str
+    downloadUrl: str | None = Field(...)
+    downloadUrlExpiresAt: str | None = Field(...)
 
 
 class Progress(BaseModel):
@@ -1531,8 +2094,8 @@ class Billing1(BaseModel):
         extra='forbid',
     )
     heldMc: int = Field(..., ge=0, le=9007199254740991)
-    finalMc: int = Field(..., ge=0, le=9007199254740991)
-    refundMc: int = Field(..., ge=0, le=9007199254740991)
+    finalMc: int | None = Field(..., ge=0, le=9007199254740991)
+    refundMc: int | None = Field(..., ge=0, le=9007199254740991)
 
 
 class Status8(Enum):
@@ -1548,16 +2111,16 @@ class Result1(BaseModel):
     position: int = Field(..., ge=1, le=9007199254740991)
     name: str
     placeUrl: AnyUrl
-    cid: str
-    cidDecimal: str
-    rating: str
-    reviewCount: str
-    category: str
-    address: str
-    phone: str
-    hoursStatus: str
-    websiteUrl: str
-    directionsUrl: str
+    cid: str | None = Field(...)
+    cidDecimal: str | None = Field(...)
+    rating: str | None = Field(...)
+    reviewCount: str | None = Field(...)
+    category: str | None = Field(...)
+    address: str | None = Field(...)
+    phone: str | None = Field(...)
+    hoursStatus: str | None = Field(...)
+    websiteUrl: str | None = Field(...)
+    directionsUrl: str | None = Field(...)
     metadata: list[str]
 
 
@@ -1575,7 +2138,7 @@ class City(BaseModel):
     zips: list[str]
     counties: list[str]
     status: Status8
-    error: str
+    error: str | None = Field(...)
     errorCode: str | None = None
     retryable: bool | None = None
     resultCount: int = Field(..., ge=0, le=9007199254740991)
@@ -1600,9 +2163,9 @@ class DirectoryJobResponse(BaseModel):
     __annotations__ = {
         '__pydantic_extra__': Dict[str, Any],
     }
-    jobId: str
+    jobId: str | None = Field(...)
     status: Status7
-    statusUrl: str
+    statusUrl: str | None = Field(...)
     query: str
     state: str
     minPopulation: int = Field(..., ge=0, le=9007199254740991)
@@ -1610,18 +2173,18 @@ class DirectoryJobResponse(BaseModel):
     maxResultsPerCity: int = Field(..., ge=1, le=50)
     concurrency: int = Field(..., ge=1, le=5)
     censusSourceUrl: AnyUrl
-    usZipsSourcePath: str
+    usZipsSourcePath: str | None = Field(...)
     warnings: list[str]
     extractedAt: str
     selectedCityCount: int = Field(..., ge=0, le=9007199254740991)
     totalResultCount: int = Field(..., ge=0, le=9007199254740991)
-    csvPath: str
-    csvArtifact: CsvArtifact
+    csvPath: str | None = Field(...)
+    csvArtifact: CsvArtifact | None = Field(...)
     progress: Progress
     billing: Billing1
-    errorCode: str
-    error: str
-    retryable: bool
+    errorCode: str | None = Field(...)
+    error: str | None = Field(...)
+    retryable: bool | None = Field(...)
     cities: list[City]
     durationMs: int = Field(..., ge=0, le=9007199254740991)
     truncatedCount: int | None = Field(None, ge=0, le=9007199254740991)
@@ -1693,3 +2256,40 @@ class ExtractUrlResponse(BaseModel):
     media: dict[str, Any] | None = None
     memory: VaultDepositResult | None = None
     warnings: list[PublicWarning] | None = None
+
+
+class SerpIntelligenceHarvestResult(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    seed: str
+    location: str | None = Field(...)
+    extractedAt: str
+    totalQuestions: int = Field(..., ge=0, le=9007199254740991)
+    surface: Surface
+    aiOverview: AiOverview
+    aiMode: AiMode
+    tree: list[SerpIntelligencePaaNode]
+    flat: list[FlatItem]
+    videos: list[Video]
+    forums: list[Forum]
+    organicResults: list[SerpIntelligenceOrganicResult]
+    localPack: list[LocalPackItem]
+    entityIds: EntityIds
+    stats: Stats
+    diagnostics: SerpIntelligenceHarvestDiagnostics
+    whatPeopleSaying: list[WhatPeopleSayingItem]
+
+
+class SerpIntelligenceCaptureResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    harvestResult: SerpIntelligenceHarvestResult
+    attempts: list[SerpIntelligenceCaptureAttempt]
+    locationEvidence: SerpIntelligenceLocationEvidence | None = Field(...)
+    pageSnapshotArtifacts: list[SerpPageSnapshotCapture]
+    billing: Billing
+
+
+SerpIntelligencePaaNode.model_rebuild()

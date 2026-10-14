@@ -1,4 +1,5 @@
 from typing import Any, Callable
+from ._artifact_delivery import ArtifactDelivery, validate_tool_output
 
 from .direct_models.access_accept_share import AccessAcceptShareInput, AccessAcceptShareOutput
 from .direct_models.access_approve_sender import AccessApproveSenderInput, AccessApproveSenderOutput
@@ -18,6 +19,11 @@ from .direct_models.access_share_vault import AccessShareVaultInput, AccessShare
 from .direct_models.access_swap_vault import AccessSwapVaultInput, AccessSwapVaultOutput
 from .direct_models.access_switch_account import AccessSwitchAccountInput, AccessSwitchAccountOutput
 from .direct_models.access_unlink_share import AccessUnlinkShareInput, AccessUnlinkShareOutput
+from .direct_models.archive_artifact_template import ArchiveArtifactTemplateInput, ArchiveArtifactTemplateOutput
+from .direct_models.artifact_describe import ArtifactDescribeInput, ArtifactDescribeOutput
+from .direct_models.artifact_download import ArtifactDownloadInput, ArtifactDownloadOutput
+from .direct_models.artifact_read import ArtifactReadInput, ArtifactReadOutput
+from .direct_models.create_artifact_template import CreateArtifactTemplateInput, CreateArtifactTemplateOutput
 from .direct_models.crm_activity_append import CrmActivityAppendInput, CrmActivityAppendOutput
 from .direct_models.crm_counterpart_apply import CrmCounterpartApplyInput, CrmCounterpartApplyOutput
 from .direct_models.crm_counterpart_preview import CrmCounterpartPreviewInput, CrmCounterpartPreviewOutput
@@ -39,7 +45,9 @@ from .direct_models.crm_pipeline_upsert import CrmPipelineUpsertInput, CrmPipeli
 from .direct_models.crm_quality_list import CrmQualityListInput, CrmQualityListOutput
 from .direct_models.crm_task_upsert import CrmTaskUpsertInput, CrmTaskUpsertOutput
 from .direct_models.crm_work_search import CrmWorkSearchInput, CrmWorkSearchOutput
+from .direct_models.get_artifact_template import GetArtifactTemplateInput, GetArtifactTemplateOutput
 from .direct_models.library_ingest import LibraryIngestInput, LibraryIngestOutput
+from .direct_models.list_artifact_templates import ListArtifactTemplatesInput, ListArtifactTemplatesOutput
 from .direct_models.memory_backlinks import MemoryBacklinksInput, MemoryBacklinksOutput
 from .direct_models.memory_capture import MemoryCaptureInput, MemoryCaptureOutput
 from .direct_models.memory_export import MemoryExportInput, MemoryExportOutput
@@ -59,6 +67,7 @@ from .direct_models.research_person_capture import ResearchPersonCaptureInput, R
 from .direct_models.research_person_get import ResearchPersonGetInput, ResearchPersonGetOutput
 from .direct_models.research_person_search import ResearchPersonSearchInput, ResearchPersonSearchOutput
 from .direct_models.storage_usage import StorageUsageInput, StorageUsageOutput
+from .direct_models.update_artifact_template import UpdateArtifactTemplateInput, UpdateArtifactTemplateOutput
 from .direct_models.video_analyze_start import VideoAnalyzeStartInput, VideoAnalyzeStartOutput
 from .direct_models.video_analyze_status import VideoAnalyzeStatusInput, VideoAnalyzeStatusOutput
 
@@ -67,101 +76,140 @@ class AccessNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def accept_share(self, **kwargs: Any) -> AccessAcceptShareOutput:
-        payload = AccessAcceptShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def accept_share(self, **kwargs: Any) -> AccessAcceptShareOutput | ArtifactDelivery:
+        payload = AccessAcceptShareInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("acceptShareTool", payload)
-        return AccessAcceptShareOutput.model_validate(result)
+        return validate_tool_output(result, AccessAcceptShareOutput)
 
-    def approve_sender(self, **kwargs: Any) -> AccessApproveSenderOutput:
-        payload = AccessApproveSenderInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def approve_sender(self, **kwargs: Any) -> AccessApproveSenderOutput | ArtifactDelivery:
+        payload = AccessApproveSenderInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("approveSenderTool", payload)
-        return AccessApproveSenderOutput.model_validate(result)
+        return validate_tool_output(result, AccessApproveSenderOutput)
 
-    def decline_share(self, **kwargs: Any) -> AccessDeclineShareOutput:
-        payload = AccessDeclineShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def decline_share(self, **kwargs: Any) -> AccessDeclineShareOutput | ArtifactDelivery:
+        payload = AccessDeclineShareInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("declineShareTool", payload)
-        return AccessDeclineShareOutput.model_validate(result)
+        return validate_tool_output(result, AccessDeclineShareOutput)
 
-    def inbox_settings(self, **kwargs: Any) -> AccessInboxSettingsOutput:
-        payload = AccessInboxSettingsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def inbox_settings(self, **kwargs: Any) -> AccessInboxSettingsOutput | ArtifactDelivery:
+        payload = AccessInboxSettingsInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("inboxSettingsTool", payload)
-        return AccessInboxSettingsOutput.model_validate(result)
+        return validate_tool_output(result, AccessInboxSettingsOutput)
 
-    def invite_account(self, **kwargs: Any) -> AccessInviteAccountOutput:
-        payload = AccessInviteAccountInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def invite_account(self, **kwargs: Any) -> AccessInviteAccountOutput | ArtifactDelivery:
+        payload = AccessInviteAccountInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("inviteAccountTool", payload)
-        return AccessInviteAccountOutput.model_validate(result)
+        return validate_tool_output(result, AccessInviteAccountOutput)
 
-    def issue_key(self, **kwargs: Any) -> AccessIssueKeyOutput:
-        payload = AccessIssueKeyInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def issue_key(self, **kwargs: Any) -> AccessIssueKeyOutput | ArtifactDelivery:
+        payload = AccessIssueKeyInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("issueKeyTool", payload)
-        return AccessIssueKeyOutput.model_validate(result)
+        return validate_tool_output(result, AccessIssueKeyOutput)
 
-    def list_approved_senders(self, **kwargs: Any) -> AccessListApprovedSendersOutput:
-        payload = AccessListApprovedSendersInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def list_approved_senders(self, **kwargs: Any) -> AccessListApprovedSendersOutput | ArtifactDelivery:
+        payload = AccessListApprovedSendersInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("listApprovedSendersTool", payload)
-        return AccessListApprovedSendersOutput.model_validate(result)
+        return validate_tool_output(result, AccessListApprovedSendersOutput)
 
-    def list_keys(self, **kwargs: Any) -> AccessListKeysOutput:
-        payload = AccessListKeysInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def list_keys(self, **kwargs: Any) -> AccessListKeysOutput | ArtifactDelivery:
+        payload = AccessListKeysInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("listKeysTool", payload)
-        return AccessListKeysOutput.model_validate(result)
+        return validate_tool_output(result, AccessListKeysOutput)
 
-    def note_inbox(self, **kwargs: Any) -> AccessNoteInboxOutput:
-        payload = AccessNoteInboxInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def note_inbox(self, **kwargs: Any) -> AccessNoteInboxOutput | ArtifactDelivery:
+        payload = AccessNoteInboxInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("noteInboxTool", payload)
-        return AccessNoteInboxOutput.model_validate(result)
+        return validate_tool_output(result, AccessNoteInboxOutput)
 
-    def remove_approved_sender(self, **kwargs: Any) -> AccessRemoveApprovedSenderOutput:
-        payload = AccessRemoveApprovedSenderInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def remove_approved_sender(self, **kwargs: Any) -> AccessRemoveApprovedSenderOutput | ArtifactDelivery:
+        payload = AccessRemoveApprovedSenderInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("removeApprovedSenderTool", payload)
-        return AccessRemoveApprovedSenderOutput.model_validate(result)
+        return validate_tool_output(result, AccessRemoveApprovedSenderOutput)
 
-    def revoke_key(self, **kwargs: Any) -> AccessRevokeKeyOutput:
-        payload = AccessRevokeKeyInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def revoke_key(self, **kwargs: Any) -> AccessRevokeKeyOutput | ArtifactDelivery:
+        payload = AccessRevokeKeyInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("revokeKeyTool", payload)
-        return AccessRevokeKeyOutput.model_validate(result)
+        return validate_tool_output(result, AccessRevokeKeyOutput)
 
-    def revoke_share(self, **kwargs: Any) -> AccessRevokeShareOutput:
-        payload = AccessRevokeShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def revoke_share(self, **kwargs: Any) -> AccessRevokeShareOutput | ArtifactDelivery:
+        payload = AccessRevokeShareInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("revokeShareTool", payload)
-        return AccessRevokeShareOutput.model_validate(result)
+        return validate_tool_output(result, AccessRevokeShareOutput)
 
-    def set_scope(self, **kwargs: Any) -> AccessSetScopeOutput:
-        payload = AccessSetScopeInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def set_scope(self, **kwargs: Any) -> AccessSetScopeOutput | ArtifactDelivery:
+        payload = AccessSetScopeInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("setScopeTool", payload)
-        return AccessSetScopeOutput.model_validate(result)
+        return validate_tool_output(result, AccessSetScopeOutput)
 
-    def share_note(self, **kwargs: Any) -> AccessShareNoteOutput:
-        payload = AccessShareNoteInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def share_note(self, **kwargs: Any) -> AccessShareNoteOutput | ArtifactDelivery:
+        payload = AccessShareNoteInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("shareNoteTool", payload)
-        return AccessShareNoteOutput.model_validate(result)
+        return validate_tool_output(result, AccessShareNoteOutput)
 
-    def share_vault(self, **kwargs: Any) -> AccessShareVaultOutput:
-        payload = AccessShareVaultInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def share_vault(self, **kwargs: Any) -> AccessShareVaultOutput | ArtifactDelivery:
+        payload = AccessShareVaultInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("shareVaultTool", payload)
-        return AccessShareVaultOutput.model_validate(result)
+        return validate_tool_output(result, AccessShareVaultOutput)
 
-    def swap_vault(self, **kwargs: Any) -> AccessSwapVaultOutput:
-        payload = AccessSwapVaultInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def swap_vault(self, **kwargs: Any) -> AccessSwapVaultOutput | ArtifactDelivery:
+        payload = AccessSwapVaultInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("swapVaultTool", payload)
-        return AccessSwapVaultOutput.model_validate(result)
+        return validate_tool_output(result, AccessSwapVaultOutput)
 
-    def switch_account(self, **kwargs: Any) -> AccessSwitchAccountOutput:
-        payload = AccessSwitchAccountInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def switch_account(self, **kwargs: Any) -> AccessSwitchAccountOutput | ArtifactDelivery:
+        payload = AccessSwitchAccountInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("switchAccountTool", payload)
-        return AccessSwitchAccountOutput.model_validate(result)
+        return validate_tool_output(result, AccessSwitchAccountOutput)
 
-    def unlink_share(self, **kwargs: Any) -> AccessUnlinkShareOutput:
-        payload = AccessUnlinkShareInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def unlink_share(self, **kwargs: Any) -> AccessUnlinkShareOutput | ArtifactDelivery:
+        payload = AccessUnlinkShareInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("unlinkShareTool", payload)
-        return AccessUnlinkShareOutput.model_validate(result)
+        return validate_tool_output(result, AccessUnlinkShareOutput)
 
 
-class AssistantNamespace:
+class ArtifactsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
+    def archive_artifact_template(self, **kwargs: Any) -> ArchiveArtifactTemplateOutput | ArtifactDelivery:
+        payload = ArchiveArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("archive_artifact_template", payload)
+        return validate_tool_output(result, ArchiveArtifactTemplateOutput)
+
+    def describe(self, **kwargs: Any) -> ArtifactDescribeOutput | ArtifactDelivery:
+        payload = ArtifactDescribeInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("artifact_describe", payload)
+        return validate_tool_output(result, ArtifactDescribeOutput)
+
+    def download(self, **kwargs: Any) -> ArtifactDownloadOutput | ArtifactDelivery:
+        payload = ArtifactDownloadInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("artifact_download", payload)
+        return validate_tool_output(result, ArtifactDownloadOutput)
+
+    def read(self, **kwargs: Any) -> ArtifactReadOutput | ArtifactDelivery:
+        payload = ArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("artifact_read", payload)
+        return validate_tool_output(result, ArtifactReadOutput)
+
+    def create_artifact_template(self, **kwargs: Any) -> CreateArtifactTemplateOutput | ArtifactDelivery:
+        payload = CreateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("create_artifact_template", payload)
+        return validate_tool_output(result, CreateArtifactTemplateOutput)
+
+    def get_artifact_template(self, **kwargs: Any) -> GetArtifactTemplateOutput | ArtifactDelivery:
+        payload = GetArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("get_artifact_template", payload)
+        return validate_tool_output(result, GetArtifactTemplateOutput)
+
+    def list_artifact_templates(self, **kwargs: Any) -> ListArtifactTemplatesOutput | ArtifactDelivery:
+        payload = ListArtifactTemplatesInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("list_artifact_templates", payload)
+        return validate_tool_output(result, ListArtifactTemplatesOutput)
+
+    def update_artifact_template(self, **kwargs: Any) -> UpdateArtifactTemplateOutput | ArtifactDelivery:
+        payload = UpdateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("update_artifact_template", payload)
+        return validate_tool_output(result, UpdateArtifactTemplateOutput)
 
 
 class CaptureNamespace:
@@ -180,113 +228,119 @@ class CrmNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def activity_append(self, **kwargs: Any) -> CrmActivityAppendOutput:
-        payload = CrmActivityAppendInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def activity_append(self, **kwargs: Any) -> CrmActivityAppendOutput | ArtifactDelivery:
+        payload = CrmActivityAppendInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmAppendCommunicationTool", payload)
-        return CrmActivityAppendOutput.model_validate(result)
+        return validate_tool_output(result, CrmActivityAppendOutput)
 
-    def counterpart_apply(self, **kwargs: Any) -> CrmCounterpartApplyOutput:
-        payload = CrmCounterpartApplyInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def counterpart_apply(self, **kwargs: Any) -> CrmCounterpartApplyOutput | ArtifactDelivery:
+        payload = CrmCounterpartApplyInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmCounterpartApplyTool", payload)
-        return CrmCounterpartApplyOutput.model_validate(result)
+        return validate_tool_output(result, CrmCounterpartApplyOutput)
 
-    def counterpart_preview(self, **kwargs: Any) -> CrmCounterpartPreviewOutput:
-        payload = CrmCounterpartPreviewInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def counterpart_preview(self, **kwargs: Any) -> CrmCounterpartPreviewOutput | ArtifactDelivery:
+        payload = CrmCounterpartPreviewInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmCounterpartPreviewTool", payload)
-        return CrmCounterpartPreviewOutput.model_validate(result)
+        return validate_tool_output(result, CrmCounterpartPreviewOutput)
 
-    def deal_transition(self, **kwargs: Any) -> CrmDealTransitionOutput:
-        payload = CrmDealTransitionInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def deal_transition(self, **kwargs: Any) -> CrmDealTransitionOutput | ArtifactDelivery:
+        payload = CrmDealTransitionInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmDealTransitionTool", payload)
-        return CrmDealTransitionOutput.model_validate(result)
+        return validate_tool_output(result, CrmDealTransitionOutput)
 
-    def deal_upsert(self, **kwargs: Any) -> CrmDealUpsertOutput:
-        payload = CrmDealUpsertInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def deal_upsert(self, **kwargs: Any) -> CrmDealUpsertOutput | ArtifactDelivery:
+        payload = CrmDealUpsertInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmDealUpsertTool", payload)
-        return CrmDealUpsertOutput.model_validate(result)
+        return validate_tool_output(result, CrmDealUpsertOutput)
 
-    def duplicate_search(self, **kwargs: Any) -> CrmDuplicateSearchOutput:
-        payload = CrmDuplicateSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def duplicate_search(self, **kwargs: Any) -> CrmDuplicateSearchOutput | ArtifactDelivery:
+        payload = CrmDuplicateSearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmDuplicateSearchTool", payload)
-        return CrmDuplicateSearchOutput.model_validate(result)
+        return validate_tool_output(result, CrmDuplicateSearchOutput)
 
-    def import_apply(self, **kwargs: Any) -> CrmImportApplyOutput:
-        payload = CrmImportApplyInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def import_apply(self, **kwargs: Any) -> CrmImportApplyOutput | ArtifactDelivery:
+        payload = CrmImportApplyInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmImportApplyTool", payload)
-        return CrmImportApplyOutput.model_validate(result)
+        return validate_tool_output(result, CrmImportApplyOutput)
 
-    def import_preview(self, **kwargs: Any) -> CrmImportPreviewOutput:
-        payload = CrmImportPreviewInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def import_preview(self, **kwargs: Any) -> CrmImportPreviewOutput | ArtifactDelivery:
+        payload = CrmImportPreviewInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmImportPreviewTool", payload)
-        return CrmImportPreviewOutput.model_validate(result)
+        return validate_tool_output(result, CrmImportPreviewOutput)
 
-    def merge_apply(self, **kwargs: Any) -> CrmMergeApplyOutput:
-        payload = CrmMergeApplyInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def merge_apply(self, **kwargs: Any) -> CrmMergeApplyOutput | ArtifactDelivery:
+        payload = CrmMergeApplyInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmMergeApplyTool", payload)
-        return CrmMergeApplyOutput.model_validate(result)
+        return validate_tool_output(result, CrmMergeApplyOutput)
 
-    def merge_preview(self, **kwargs: Any) -> CrmMergePreviewOutput:
-        payload = CrmMergePreviewInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def merge_preview(self, **kwargs: Any) -> CrmMergePreviewOutput | ArtifactDelivery:
+        payload = CrmMergePreviewInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmMergePreviewTool", payload)
-        return CrmMergePreviewOutput.model_validate(result)
+        return validate_tool_output(result, CrmMergePreviewOutput)
 
-    def organization_get(self, **kwargs: Any) -> CrmOrganizationGetOutput:
-        payload = CrmOrganizationGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def organization_get(self, **kwargs: Any) -> CrmOrganizationGetOutput | ArtifactDelivery:
+        payload = CrmOrganizationGetInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmOrganizationGetTool", payload)
-        return CrmOrganizationGetOutput.model_validate(result)
+        return validate_tool_output(result, CrmOrganizationGetOutput)
 
-    def organization_search(self, **kwargs: Any) -> CrmOrganizationSearchOutput:
-        payload = CrmOrganizationSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def organization_search(self, **kwargs: Any) -> CrmOrganizationSearchOutput | ArtifactDelivery:
+        payload = CrmOrganizationSearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmOrganizationSearchTool", payload)
-        return CrmOrganizationSearchOutput.model_validate(result)
+        return validate_tool_output(result, CrmOrganizationSearchOutput)
 
-    def person_get(self, **kwargs: Any) -> CrmPersonGetOutput:
-        payload = CrmPersonGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def person_get(self, **kwargs: Any) -> CrmPersonGetOutput | ArtifactDelivery:
+        payload = CrmPersonGetInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmPersonGetTool", payload)
-        return CrmPersonGetOutput.model_validate(result)
+        return validate_tool_output(result, CrmPersonGetOutput)
 
-    def person_search(self, **kwargs: Any) -> CrmPersonSearchOutput:
-        payload = CrmPersonSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def person_search(self, **kwargs: Any) -> CrmPersonSearchOutput | ArtifactDelivery:
+        payload = CrmPersonSearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmPersonSearchTool", payload)
-        return CrmPersonSearchOutput.model_validate(result)
+        return validate_tool_output(result, CrmPersonSearchOutput)
 
-    def pipeline_list(self, **kwargs: Any) -> CrmPipelineListOutput:
-        payload = CrmPipelineListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def pipeline_list(self, **kwargs: Any) -> CrmPipelineListOutput | ArtifactDelivery:
+        payload = CrmPipelineListInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmPipelineListTool", payload)
-        return CrmPipelineListOutput.model_validate(result)
+        return validate_tool_output(result, CrmPipelineListOutput)
 
-    def pipeline_upsert(self, **kwargs: Any) -> CrmPipelineUpsertOutput:
-        payload = CrmPipelineUpsertInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def pipeline_upsert(self, **kwargs: Any) -> CrmPipelineUpsertOutput | ArtifactDelivery:
+        payload = CrmPipelineUpsertInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmPipelineUpsertTool", payload)
-        return CrmPipelineUpsertOutput.model_validate(result)
+        return validate_tool_output(result, CrmPipelineUpsertOutput)
 
-    def quality_list(self, **kwargs: Any) -> CrmQualityListOutput:
-        payload = CrmQualityListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def quality_list(self, **kwargs: Any) -> CrmQualityListOutput | ArtifactDelivery:
+        payload = CrmQualityListInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmQualityListTool", payload)
-        return CrmQualityListOutput.model_validate(result)
+        return validate_tool_output(result, CrmQualityListOutput)
 
-    def organization_upsert(self, **kwargs: Any) -> CrmOrganizationUpsertOutput:
-        payload = CrmOrganizationUpsertInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def organization_upsert(self, **kwargs: Any) -> CrmOrganizationUpsertOutput | ArtifactDelivery:
+        payload = CrmOrganizationUpsertInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmUpsertOrganizationTool", payload)
-        return CrmOrganizationUpsertOutput.model_validate(result)
+        return validate_tool_output(result, CrmOrganizationUpsertOutput)
 
-    def person_upsert(self, **kwargs: Any) -> CrmPersonUpsertOutput:
-        payload = CrmPersonUpsertInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def person_upsert(self, **kwargs: Any) -> CrmPersonUpsertOutput | ArtifactDelivery:
+        payload = CrmPersonUpsertInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmUpsertPersonTool", payload)
-        return CrmPersonUpsertOutput.model_validate(result)
+        return validate_tool_output(result, CrmPersonUpsertOutput)
 
-    def task_upsert(self, **kwargs: Any) -> CrmTaskUpsertOutput:
-        payload = CrmTaskUpsertInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def task_upsert(self, **kwargs: Any) -> CrmTaskUpsertOutput | ArtifactDelivery:
+        payload = CrmTaskUpsertInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmUpsertTaskTool", payload)
-        return CrmTaskUpsertOutput.model_validate(result)
+        return validate_tool_output(result, CrmTaskUpsertOutput)
 
-    def work_search(self, **kwargs: Any) -> CrmWorkSearchOutput:
-        payload = CrmWorkSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def work_search(self, **kwargs: Any) -> CrmWorkSearchOutput | ArtifactDelivery:
+        payload = CrmWorkSearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmWorkSearchTool", payload)
-        return CrmWorkSearchOutput.model_validate(result)
+        return validate_tool_output(result, CrmWorkSearchOutput)
 
 
 class FactsNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+
+
+class FilesNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
@@ -298,79 +352,85 @@ class GraphNamespace:
 
 
 
+class ImagesNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+
+
 class LibraryNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def ingest(self, **kwargs: Any) -> LibraryIngestOutput:
-        payload = LibraryIngestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def ingest(self, **kwargs: Any) -> LibraryIngestOutput | ArtifactDelivery:
+        payload = LibraryIngestInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("libraryIngestTool", payload)
-        return LibraryIngestOutput.model_validate(result)
+        return validate_tool_output(result, LibraryIngestOutput)
 
 
 class MemoryNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def export(self, **kwargs: Any) -> MemoryExportOutput:
-        payload = MemoryExportInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def export(self, **kwargs: Any) -> MemoryExportOutput | ArtifactDelivery:
+        payload = MemoryExportInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("exportTool", payload)
-        return MemoryExportOutput.model_validate(result)
+        return validate_tool_output(result, MemoryExportOutput)
 
-    def get(self, **kwargs: Any) -> MemoryGetOutput:
-        payload = MemoryGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def get(self, **kwargs: Any) -> MemoryGetOutput | ArtifactDelivery:
+        payload = MemoryGetInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("getTool", payload)
-        return MemoryGetOutput.model_validate(result)
+        return validate_tool_output(result, MemoryGetOutput)
 
-    def graph_path(self, **kwargs: Any) -> MemoryGraphPathOutput:
-        payload = MemoryGraphPathInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def graph_path(self, **kwargs: Any) -> MemoryGraphPathOutput | ArtifactDelivery:
+        payload = MemoryGraphPathInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("graphPathTool", payload)
-        return MemoryGraphPathOutput.model_validate(result)
+        return validate_tool_output(result, MemoryGraphPathOutput)
 
-    def graph_universe(self, **kwargs: Any) -> MemoryGraphUniverseOutput:
-        payload = MemoryGraphUniverseInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def graph_universe(self, **kwargs: Any) -> MemoryGraphUniverseOutput | ArtifactDelivery:
+        payload = MemoryGraphUniverseInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("graphUniverseTool", payload)
-        return MemoryGraphUniverseOutput.model_validate(result)
+        return validate_tool_output(result, MemoryGraphUniverseOutput)
 
-    def list(self, **kwargs: Any) -> MemoryListOutput:
-        payload = MemoryListInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def list(self, **kwargs: Any) -> MemoryListOutput | ArtifactDelivery:
+        payload = MemoryListInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("listTool", payload)
-        return MemoryListOutput.model_validate(result)
+        return validate_tool_output(result, MemoryListOutput)
 
-    def capture(self, **kwargs: Any) -> MemoryCaptureOutput:
-        payload = MemoryCaptureInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def capture(self, **kwargs: Any) -> MemoryCaptureOutput | ArtifactDelivery:
+        payload = MemoryCaptureInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("memoryCaptureTool", payload)
-        return MemoryCaptureOutput.model_validate(result)
+        return validate_tool_output(result, MemoryCaptureOutput)
 
-    def questions(self, **kwargs: Any) -> MemoryQuestionsOutput:
-        payload = MemoryQuestionsInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def questions(self, **kwargs: Any) -> MemoryQuestionsOutput | ArtifactDelivery:
+        payload = MemoryQuestionsInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("memoryQuestionsTool", payload)
-        return MemoryQuestionsOutput.model_validate(result)
+        return validate_tool_output(result, MemoryQuestionsOutput)
 
-    def backlinks(self, **kwargs: Any) -> MemoryBacklinksOutput:
-        payload = MemoryBacklinksInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def backlinks(self, **kwargs: Any) -> MemoryBacklinksOutput | ArtifactDelivery:
+        payload = MemoryBacklinksInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("noteBacklinksTool", payload)
-        return MemoryBacklinksOutput.model_validate(result)
+        return validate_tool_output(result, MemoryBacklinksOutput)
 
-    def put(self, **kwargs: Any) -> MemoryPutOutput:
-        payload = MemoryPutInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def put(self, **kwargs: Any) -> MemoryPutOutput | ArtifactDelivery:
+        payload = MemoryPutInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("putTool", payload)
-        return MemoryPutOutput.model_validate(result)
+        return validate_tool_output(result, MemoryPutOutput)
 
-    def search(self, **kwargs: Any) -> MemorySearchOutput:
-        payload = MemorySearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def search(self, **kwargs: Any) -> MemorySearchOutput | ArtifactDelivery:
+        payload = MemorySearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("searchTool", payload)
-        return MemorySearchOutput.model_validate(result)
+        return validate_tool_output(result, MemorySearchOutput)
 
-    def suggest(self, **kwargs: Any) -> MemorySuggestOutput:
-        payload = MemorySuggestInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def suggest(self, **kwargs: Any) -> MemorySuggestOutput | ArtifactDelivery:
+        payload = MemorySuggestInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("suggestTool", payload)
-        return MemorySuggestOutput.model_validate(result)
+        return validate_tool_output(result, MemorySuggestOutput)
 
-    def upload(self, **kwargs: Any) -> MemoryUploadOutput:
-        payload = MemoryUploadInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def upload(self, **kwargs: Any) -> MemoryUploadOutput | ArtifactDelivery:
+        payload = MemoryUploadInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("uploadTool", payload)
-        return MemoryUploadOutput.model_validate(result)
+        return validate_tool_output(result, MemoryUploadOutput)
 
 
 class RecallNamespace:
@@ -383,51 +443,45 @@ class ResearchNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def organization_capture(self, **kwargs: Any) -> ResearchOrganizationCaptureOutput:
-        payload = ResearchOrganizationCaptureInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def organization_capture(self, **kwargs: Any) -> ResearchOrganizationCaptureOutput | ArtifactDelivery:
+        payload = ResearchOrganizationCaptureInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("researchOrganizationCaptureTool", payload)
-        return ResearchOrganizationCaptureOutput.model_validate(result)
+        return validate_tool_output(result, ResearchOrganizationCaptureOutput)
 
-    def organization_get(self, **kwargs: Any) -> ResearchOrganizationGetOutput:
-        payload = ResearchOrganizationGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def organization_get(self, **kwargs: Any) -> ResearchOrganizationGetOutput | ArtifactDelivery:
+        payload = ResearchOrganizationGetInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("researchOrganizationGetTool", payload)
-        return ResearchOrganizationGetOutput.model_validate(result)
+        return validate_tool_output(result, ResearchOrganizationGetOutput)
 
-    def organization_search(self, **kwargs: Any) -> ResearchOrganizationSearchOutput:
-        payload = ResearchOrganizationSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def organization_search(self, **kwargs: Any) -> ResearchOrganizationSearchOutput | ArtifactDelivery:
+        payload = ResearchOrganizationSearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("researchOrganizationSearchTool", payload)
-        return ResearchOrganizationSearchOutput.model_validate(result)
+        return validate_tool_output(result, ResearchOrganizationSearchOutput)
 
-    def person_capture(self, **kwargs: Any) -> ResearchPersonCaptureOutput:
-        payload = ResearchPersonCaptureInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def person_capture(self, **kwargs: Any) -> ResearchPersonCaptureOutput | ArtifactDelivery:
+        payload = ResearchPersonCaptureInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("researchPersonCaptureTool", payload)
-        return ResearchPersonCaptureOutput.model_validate(result)
+        return validate_tool_output(result, ResearchPersonCaptureOutput)
 
-    def person_get(self, **kwargs: Any) -> ResearchPersonGetOutput:
-        payload = ResearchPersonGetInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def person_get(self, **kwargs: Any) -> ResearchPersonGetOutput | ArtifactDelivery:
+        payload = ResearchPersonGetInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("researchPersonGetTool", payload)
-        return ResearchPersonGetOutput.model_validate(result)
+        return validate_tool_output(result, ResearchPersonGetOutput)
 
-    def person_search(self, **kwargs: Any) -> ResearchPersonSearchOutput:
-        payload = ResearchPersonSearchInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def person_search(self, **kwargs: Any) -> ResearchPersonSearchOutput | ArtifactDelivery:
+        payload = ResearchPersonSearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("researchPersonSearchTool", payload)
-        return ResearchPersonSearchOutput.model_validate(result)
-
-
-class ScheduleNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
+        return validate_tool_output(result, ResearchPersonSearchOutput)
 
 
 class StorageNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def usage(self, **kwargs: Any) -> StorageUsageOutput:
-        payload = StorageUsageInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def usage(self, **kwargs: Any) -> StorageUsageOutput | ArtifactDelivery:
+        payload = StorageUsageInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("storageUsageTool", payload)
-        return StorageUsageOutput.model_validate(result)
+        return validate_tool_output(result, StorageUsageOutput)
 
 
 class TablesNamespace:
@@ -452,15 +506,15 @@ class VideoNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
-    def analyze_start(self, **kwargs: Any) -> VideoAnalyzeStartOutput:
-        payload = VideoAnalyzeStartInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def analyze_start(self, **kwargs: Any) -> VideoAnalyzeStartOutput | ArtifactDelivery:
+        payload = VideoAnalyzeStartInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("videoAnalyzeStartTool", payload)
-        return VideoAnalyzeStartOutput.model_validate(result)
+        return validate_tool_output(result, VideoAnalyzeStartOutput)
 
-    def analyze_status(self, **kwargs: Any) -> VideoAnalyzeStatusOutput:
-        payload = VideoAnalyzeStatusInput(**kwargs).model_dump(by_alias=True, exclude_none=True)
+    def analyze_status(self, **kwargs: Any) -> VideoAnalyzeStatusOutput | ArtifactDelivery:
+        payload = VideoAnalyzeStatusInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("videoAnalyzeStatusTool", payload)
-        return VideoAnalyzeStatusOutput.model_validate(result)
+        return validate_tool_output(result, VideoAnalyzeStatusOutput)
 
 
 class WebhooksNamespace:

@@ -479,7 +479,7 @@ export interface Input {
        */
       url?: string;
       /**
-       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       * Source or publisher name for this citation or claim reference, preserved as attribution.
        */
       source?: string;
       /**
@@ -565,7 +565,7 @@ export interface Input {
        */
       url?: string;
       /**
-       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       * Source or publisher name for this citation or claim reference, preserved as attribution.
        */
       source?: string;
       /**
@@ -651,7 +651,7 @@ export interface Input {
        */
       url?: string;
       /**
-       * Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.
+       * Source or publisher name for this citation or claim reference, preserved as attribution.
        */
       source?: string;
       /**
@@ -797,9 +797,52 @@ export interface Input {
   reviewPolicy?: "auto_publish_if_safe" | "always_review";
 }
 
-export interface Output {
-  ok: boolean;
-  data?: unknown;
-  error?: string;
-  message?: string;
-}
+export type Output =
+  | {
+      ok: boolean;
+      data?: unknown;
+      error?: string;
+      message?: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

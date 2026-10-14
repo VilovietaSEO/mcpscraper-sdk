@@ -8,7 +8,7 @@ export interface Input {
    */
   targetDomain?: string;
   /**
-   * Primary Google Business Profile/brand name to match in Maps results. Required for Maps tracking.
+   * Primary Google Business Profile/brand name to match in Maps results. Supply it when matching one business against Maps results.
    */
   targetBusinessName?: string;
   /**
@@ -54,27 +54,11 @@ export interface Input {
    */
   database?: "postgres" | "neon" | "supabase" | "sqlite" | "mysql";
   /**
-   * Default recurring rank check cadence.
-   */
-  scheduleCadence?: "daily" | "weekly" | "monthly" | "custom";
-  /**
-   * Cron expression to use when scheduleCadence is custom.
-   */
-  customCron?: string;
-  /**
-   * IANA timezone for scheduled rank checks.
-   */
-  timezone?: string;
-  /**
-   * Include a cron/heartbeat worker plan.
-   */
-  includeCron?: boolean;
-  /**
    * Include dashboard/reporting requirements.
    */
   includeDashboard?: boolean;
   /**
-   * Include alert rules for rank movement and SERP feature changes.
+   * Include saved change findings when manually comparing rank movement and SERP features.
    */
   includeAlerts?: boolean;
   /**
@@ -83,33 +67,70 @@ export interface Input {
   notes?: string;
 }
 
-export interface Output {
-  projectName: string;
-  targetDomain: string | null;
-  targetBusinessName: string | null;
-  trackingModes: ("maps" | "organic" | "ai_overview" | "paa")[];
-  database: string;
-  recommendedTools: {
-    tool: string;
-    purpose: string;
-  }[];
-  tables: {
-    name: string;
-    purpose: string;
-    keyColumns: string[];
-  }[];
-  cron: {
-    enabled: boolean;
-    cadence: string;
-    expression: string;
-    timezone: string;
-    jobs: {
-      name: string;
-      purpose: string;
-      modes: ("maps" | "organic" | "ai_overview" | "paa")[];
-      recommendedTools: string[];
-    }[];
-  };
-  metrics: string[];
-  implementationPrompt: string;
-}
+export type Output =
+  | {
+      projectName: string;
+      targetDomain: string | null;
+      targetBusinessName: string | null;
+      trackingModes: ("maps" | "organic" | "ai_overview" | "paa")[];
+      database: string;
+      recommendedTools: {
+        tool: string;
+        purpose: string;
+      }[];
+      tables: {
+        name: string;
+        purpose: string;
+        keyColumns: string[];
+      }[];
+      steps: {
+        name: string;
+        purpose: string;
+        modes: ("maps" | "organic" | "ai_overview" | "paa")[];
+        recommendedTools: string[];
+      }[];
+      metrics: string[];
+      implementationPrompt: string;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

@@ -42,59 +42,108 @@ export interface Input {
   viewWindow?: 7 | 14 | 30 | 60 | 90 | 180 | 365 | "lifetime";
 }
 
-export interface Output {
-  ok: true;
-  impact: {
-    methodologyVersion: "xray_observed_plus_reported_equal_selected_v1";
-    baseModel:
-      "first_touch" | "last_touch" | "last_non_direct" | "linear" | "time_decay" | "position_based" | "custom_weighted";
-    weights: {
-      observedWeightMicros: number;
-      reportedWeightMicros: number;
-    };
-    observed: {
-      credits: {
-        ledger: "observed" | "reported";
-        conversionId: string;
-        creditMicros: number;
-        creditedValueMinor: string;
-        currency: string | null;
-        [k: string]: unknown;
-      }[];
-      totalsByCurrency: {
-        [k: string]: string;
+export type Output =
+  | {
+      ok: true;
+      impact: {
+        methodologyVersion: "xray_observed_plus_reported_equal_selected_v1";
+        baseModel:
+          | "first_touch"
+          | "last_touch"
+          | "last_non_direct"
+          | "linear"
+          | "time_decay"
+          | "position_based"
+          | "custom_weighted";
+        weights: {
+          observedWeightMicros: number;
+          reportedWeightMicros: number;
+        };
+        observed: {
+          credits: {
+            ledger: "observed" | "reported";
+            conversionId: string;
+            creditMicros: number;
+            creditedValueMinor: string;
+            currency: string | null;
+            [k: string]: unknown;
+          }[];
+          totalsByCurrency: {
+            [k: string]: string;
+          };
+        };
+        reported: {
+          credits: {
+            ledger: "observed" | "reported";
+            conversionId: string;
+            creditMicros: number;
+            creditedValueMinor: string;
+            currency: string | null;
+            [k: string]: unknown;
+          }[];
+          totalsByCurrency: {
+            [k: string]: string;
+          };
+        };
+        combined: {
+          credits: {
+            ledger: "observed" | "reported";
+            conversionId: string;
+            creditMicros: number;
+            creditedValueMinor: string;
+            currency: string | null;
+            [k: string]: unknown;
+          }[];
+          totalsByCurrency: {
+            [k: string]: string;
+          };
+          crossCurrencyTotal: null;
+        };
+        eligibleInvitationCount: number;
+        responseCount: number;
+        coverage: number | null;
+        missingReasons: string[];
+      };
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
       };
     };
-    reported: {
-      credits: {
-        ledger: "observed" | "reported";
-        conversionId: string;
-        creditMicros: number;
-        creditedValueMinor: string;
-        currency: string | null;
-        [k: string]: unknown;
-      }[];
-      totalsByCurrency: {
-        [k: string]: string;
-      };
-    };
-    combined: {
-      credits: {
-        ledger: "observed" | "reported";
-        conversionId: string;
-        creditMicros: number;
-        creditedValueMinor: string;
-        currency: string | null;
-        [k: string]: unknown;
-      }[];
-      totalsByCurrency: {
-        [k: string]: string;
-      };
-      crossCurrencyTotal: null;
-    };
-    eligibleInvitationCount: number;
-    responseCount: number;
-    coverage: number | null;
-    missingReasons: string[];
-  };
-}

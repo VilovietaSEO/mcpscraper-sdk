@@ -13,85 +13,128 @@ export interface Input {
   fresh?: boolean;
 }
 
-export interface Output {
-  ok: boolean;
-  tool?: {
-    name: string;
-    title: string | null;
-    description: string | null;
-    classification: "read" | "action";
-    /**
-     * Whether the tool is callable now. A gated action can be described while actions are off and return false.
-     */
-    callable?: boolean;
-    blockedReason?:
-      | (
-          | "actions_disabled"
-          | "inactive_connection"
-          | "missing_permission"
-          | "missing_app_feature"
-          | "permission_policy_missing"
-          | "permission_verification_unavailable"
-        )
-      | null;
-    /**
-     * Provider OAuth permissions required by this exact tool.
-     */
-    requiredPermissions?: string[];
-    /**
-     * Required permissions not present on this tenant-owned connection.
-     */
-    missingPermissions?: string[];
-    /**
-     * Provider app capabilities required by this exact tool in addition to OAuth permissions.
-     */
-    requiredFeatures?: string[];
-    /**
-     * Provider app capabilities not enabled for this deployment.
-     */
-    missingFeatures?: string[];
-    /**
-     * Public credential transport category. Internal routing identifiers are not exposed.
-     */
-    transport?: "managed_oauth" | "remote_mcp";
-    providerConfigKey?: string;
-    protocolVersion?: string | null;
-    schemaSource?: "live_tools_list";
-    /**
-     * JSON Schema for the exact connected-provider tool arguments.
-     */
-    inputSchema: {
-      [k: string]: unknown;
+export type Output =
+  | {
+      ok: boolean;
+      tool?: {
+        name: string;
+        title: string | null;
+        description: string | null;
+        classification: "read" | "action";
+        /**
+         * Whether the tool is callable now. A gated action can be described while actions are off and return false.
+         */
+        callable?: boolean;
+        blockedReason?:
+          | (
+              | "actions_disabled"
+              | "inactive_connection"
+              | "missing_permission"
+              | "missing_app_feature"
+              | "permission_policy_missing"
+              | "permission_verification_unavailable"
+            )
+          | null;
+        /**
+         * Provider OAuth permissions required by this exact tool.
+         */
+        requiredPermissions?: string[];
+        /**
+         * Required permissions not present on this tenant-owned connection.
+         */
+        missingPermissions?: string[];
+        /**
+         * Provider app capabilities required by this exact tool in addition to OAuth permissions.
+         */
+        requiredFeatures?: string[];
+        /**
+         * Provider app capabilities not enabled for this deployment.
+         */
+        missingFeatures?: string[];
+        /**
+         * Public credential transport category. Internal routing identifiers are not exposed.
+         */
+        transport?: "managed_oauth" | "remote_mcp";
+        providerConfigKey?: string;
+        protocolVersion?: string | null;
+        schemaSource?: "live_tools_list";
+        /**
+         * JSON Schema for the exact connected-provider tool arguments.
+         */
+        inputSchema: {
+          [k: string]: unknown;
+        };
+        /**
+         * Provider-native JSON output schema when the live MCP tool publishes one.
+         */
+        outputSchema?: {
+          [k: string]: unknown;
+        };
+        annotations?: {
+          title?: string;
+          readOnlyHint?: boolean;
+          destructiveHint?: boolean;
+          idempotentHint?: boolean;
+          openWorldHint?: boolean;
+        };
+        icons?: {
+          src: string;
+          mimeType?: string;
+          sizes?: string[];
+          theme?: "light" | "dark";
+        }[];
+        execution?: {
+          taskSupport: "forbidden" | "optional" | "required";
+        };
+        /**
+         * SHA-256 of the sanitized live Tool definition.
+         */
+        schemaHash?: string;
+        fetchedAt?: string;
+      };
+      retryable?: boolean;
+      errorCode?: string;
+      error: string | null;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
     };
-    /**
-     * Provider-native JSON output schema when the live MCP tool publishes one.
-     */
-    outputSchema?: {
-      [k: string]: unknown;
-    };
-    annotations?: {
-      title?: string;
-      readOnlyHint?: boolean;
-      destructiveHint?: boolean;
-      idempotentHint?: boolean;
-      openWorldHint?: boolean;
-    };
-    icons?: {
-      src: string;
-      mimeType?: string;
-      sizes?: string[];
-      theme?: "light" | "dark";
-    }[];
-    execution?: {
-      taskSupport: "forbidden" | "optional" | "required";
-    };
-    /**
-     * SHA-256 of the sanitized live Tool definition.
-     */
-    schemaHash?: string;
-    fetchedAt?: string;
-  };
-  retryable?: boolean;
-  errorCode?: string;
-  error: string | null;
-}

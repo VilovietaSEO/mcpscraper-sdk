@@ -1,7 +1,7 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for the unified 364-tool MCP Scraper catalog. The direct
-143-tool Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
+Official TypeScript/JavaScript clients for the unified MCP Scraper catalog. The direct
+Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
@@ -30,7 +30,7 @@ await tools.connections.exportConnectedServiceData({ connectionId: 'conn_123', l
 
 The unified connection namespace includes permission-aware provider inventory and `meta_ads_insights` bulk exports for daily account, campaign, ad-set, and ad reporting, with large results delivered as private artifacts.
 
-OAuth connect/reconnect and direct connected-service operations do not currently have an extra connection-operation debit beyond the required paid plan. Scheduled Actions use the shared MCP Scraper balance at 75 Credits per started occurrence; agent-mode runs add 1.5 times OpenRouter's actual reported model cost. Read the live contract with `await tools.schedule.getScheduleStatus()`.
+OAuth connect/reconnect and direct connected-service operations do not currently have an extra connection-operation debit beyond the required paid plan.
 
 ## Quickstart
 
@@ -59,7 +59,7 @@ try {
 `MemoryClient` preserves the established compatibility namespaces and maps them to public root tool
 IDs. Research remains sourced knowledge; CRM remains actual relationships. External CRM providers
 remain unavailable. Retired direct-key issue/scope methods fail explicitly. `McpToolsClient` contains
-all 364 unified tools.
+all unified tools.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
@@ -82,6 +82,14 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 143 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these Memory tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.51.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.51.0).
+Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
+
+Release changes: [SDK 0.53.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.53.1).
+
+## Client attribution and full results
+
+Clients accept `clientAttribution: { installChannel?, aiClient?, aiModel? }` and default to calling surface `sdk`. Set only known caller labels; unspecified labels stay unknown. `onResponse({ requestId, status })` receives per-response correlation without changing results, and errors keep their own `requestId`. These options also apply to `McpToolsClient` and `MemoryClient`; labels are reporting declarations, not authorization.
+
+Large tool outputs may be delivery envelopes instead of inline domain values. Preserve `delivery`, `scope` and `recovery`, then use `tools.artifacts.describe`, `readRetained` (follow `nextOffset` to null), or `download` with the returned artifact ID. The legacy `artifacts.read` method remains the report reader. `callToolResult` preserves native content/resource links. Download URL expiry differs from artifact retention; renew a URL through `download` without rerunning acquisition. Use the returned capability for binary files.

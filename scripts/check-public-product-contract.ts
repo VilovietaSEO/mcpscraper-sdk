@@ -52,9 +52,10 @@ async function main(): Promise<void> {
     'docs/curl-tools.md',
   ].map(async path => ({ path, text: await readFile(path, 'utf8') })))
 
-  const toolCountPattern = new RegExp(String(manifest.toolCount))
-  for (const { path, text } of docs) {
-    requireMatch(text, toolCountPattern, `${path} inventory`)
+  const catalog = docs.find(entry => entry.path === 'docs/curl-tools.md')!
+  requireMatch(catalog.text, new RegExp(String(manifest.toolCount)), `${catalog.path} inventory`)
+  for (const { path, text } of docs.filter(entry => entry.path !== 'docs/curl-tools.md')) {
+    requireMatch(text, /unified MCP|manifest-backed MCP/i, `${path} generated inventory guidance`)
   }
   for (const { path, text } of docs.filter(entry => entry.path !== 'docs/curl-tools.md')) {
     requireMatch(text, /20 Credits per delivered SERP page/, `${path} SERP rate`)
