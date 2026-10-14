@@ -96,7 +96,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
     `jq -n --arg connectionId "$CONNECTION_ID" \\\n  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \\\n  | curl https://mcpscraper.dev/mcp \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n      -H "content-type: application/json" \\\n      -H "accept: application/json, text/event-stream" \\\n      --data-binary @-`,
     '```',
     '',
-    'For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For persisted scheduled data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.',
+    'For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For previously imported connected data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.',
     '',
     'If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.',
     '',

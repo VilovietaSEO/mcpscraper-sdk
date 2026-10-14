@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Typed Search Console tableName returned by list_service_connections after a successful connection_sync run.
+   * Existing tenant-owned Search Console tableName returned by list_service_connections; confirm its columns with table-describe.
    */
   tableName: string;
   /**

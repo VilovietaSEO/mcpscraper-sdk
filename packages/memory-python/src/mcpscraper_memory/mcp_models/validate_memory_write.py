@@ -8,6 +8,7 @@ ValidateMemoryWriteInputProps = TypedDict('ValidateMemoryWriteInputProps', {
     'summary': NotRequired[str],
     'tags': NotRequired[list[str]],
     'pinned': NotRequired[bool],
+    'delete_after': NotRequired[str],
     'source_type': NotRequired[str],
     'source_ref': NotRequired[str],
     'related': NotRequired[list[str]],

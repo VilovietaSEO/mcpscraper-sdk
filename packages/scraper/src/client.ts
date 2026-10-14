@@ -10,7 +10,7 @@ import {
   LibraryNamespace,
   MemoryNamespace as MemoryToolNamespace,
   RecallNamespace,
-  ScheduleNamespace,
+  ArtifactsNamespace,
   StorageNamespace,
   TablesNamespace,
   TagsNamespace,
@@ -416,21 +416,6 @@ class WorkflowsNamespace {
       `/workflows/runs/${encodeURIComponent(id)}/artifacts/${encodeURIComponent(artifactId)}`,
     )
   }
-  createSchedule(params: RequestBodyOf<'createWorkflowSchedule'>) {
-    return this.r.call<'createWorkflowSchedule'>('POST', '/workflows/schedules', params)
-  }
-  listSchedules() {
-    return this.r.call<'listWorkflowSchedules'>('GET', '/workflows/schedules')
-  }
-  patchSchedule(id: string, params: RequestBodyOf<'patchWorkflowSchedule'>) {
-    return this.r.call<'patchWorkflowSchedule'>('PATCH', `/workflows/schedules/${encodeURIComponent(id)}`, params)
-  }
-  deleteSchedule(id: string) {
-    return this.r.call<'deleteWorkflowSchedule'>('DELETE', `/workflows/schedules/${encodeURIComponent(id)}`)
-  }
-  runScheduleNow(id: string) {
-    return this.r.call<'runWorkflowScheduleNow'>('POST', `/workflows/schedules/${encodeURIComponent(id)}/run`)
-  }
 }
 
 class GmailNamespace {
@@ -477,7 +462,7 @@ class MemoryTools {
   readonly library: LibraryNamespace
   readonly memory: MemoryToolNamespace
   readonly recall: RecallNamespace
-  readonly schedule: ScheduleNamespace
+  readonly artifacts: ArtifactsNamespace
   readonly storage: StorageNamespace
   readonly tables: TablesNamespace
   readonly tags: TagsNamespace
@@ -495,7 +480,7 @@ class MemoryTools {
     this.library = new LibraryNamespace(callTool)
     this.memory = new MemoryToolNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
-    this.schedule = new ScheduleNamespace(callTool)
+    this.artifacts = new ArtifactsNamespace(callTool)
     this.storage = new StorageNamespace(callTool)
     this.tables = new TablesNamespace(callTool)
     this.tags = new TagsNamespace(callTool)

@@ -45,7 +45,7 @@ Google Search light mode returns organic positions, URLs, titles, and descriptio
 
 ## API surface
 
-`client.tools` is the generated 367-tool MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
+`client.tools` is the generated manifest-backed MCP surface, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations, with one typed snake_case method per tool:
 
 For durable PAA acquisition, call
 `client.tools.other.harvest_paa_start(pages=2, ...)`, then poll its `job_id` with
@@ -74,8 +74,7 @@ client.tools.connections.export_connected_service_data(
     dataset="resend_data",
     last_days=7,
 )
-inbox = client.tools.schedule.list_scheduled_runs(view="inbox")
-templates = client.tools.schedule.list_artifact_templates(status="active")
+templates = client.tools.artifacts.list_artifact_templates(status="active")
 ```
 
 Lead enrichment is available through the same generated surface. Supply mapped rows directly, or call `client.tools.leads.import_(...)` first for CSV/TSV/XLSX input:
@@ -133,7 +132,7 @@ hits = client.memory_tools.call_tool("searchTool", {"query": "competitor pricing
 vaults = client.memory_tools.call_tool("listVaultsTool")
 ```
 
-This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every one of the 367 unified MCP tools.
+This generic compatibility bridge remains available, but new integrations should use `client.tools`, whose generated namespaces provide one typed method for every unified MCP tool.
 
 ## Regenerating models
 

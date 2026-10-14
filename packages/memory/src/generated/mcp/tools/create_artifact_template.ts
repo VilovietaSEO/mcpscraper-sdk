@@ -642,7 +642,6 @@ export type Output =
         | "template_archived"
         | "renderer_unavailable"
         | "artifact_unavailable"
-        | "view_link_unavailable"
         | "internal_error";
       requestId?: string;
     }

@@ -19,6 +19,11 @@ from .direct_models.access_share_vault import AccessShareVaultInput, AccessShare
 from .direct_models.access_swap_vault import AccessSwapVaultInput, AccessSwapVaultOutput
 from .direct_models.access_switch_account import AccessSwitchAccountInput, AccessSwitchAccountOutput
 from .direct_models.access_unlink_share import AccessUnlinkShareInput, AccessUnlinkShareOutput
+from .direct_models.archive_artifact_template import ArchiveArtifactTemplateInput, ArchiveArtifactTemplateOutput
+from .direct_models.artifact_describe import ArtifactDescribeInput, ArtifactDescribeOutput
+from .direct_models.artifact_download import ArtifactDownloadInput, ArtifactDownloadOutput
+from .direct_models.artifact_read import ArtifactReadInput, ArtifactReadOutput
+from .direct_models.create_artifact_template import CreateArtifactTemplateInput, CreateArtifactTemplateOutput
 from .direct_models.crm_activity_append import CrmActivityAppendInput, CrmActivityAppendOutput
 from .direct_models.crm_counterpart_apply import CrmCounterpartApplyInput, CrmCounterpartApplyOutput
 from .direct_models.crm_counterpart_preview import CrmCounterpartPreviewInput, CrmCounterpartPreviewOutput
@@ -40,7 +45,9 @@ from .direct_models.crm_pipeline_upsert import CrmPipelineUpsertInput, CrmPipeli
 from .direct_models.crm_quality_list import CrmQualityListInput, CrmQualityListOutput
 from .direct_models.crm_task_upsert import CrmTaskUpsertInput, CrmTaskUpsertOutput
 from .direct_models.crm_work_search import CrmWorkSearchInput, CrmWorkSearchOutput
+from .direct_models.get_artifact_template import GetArtifactTemplateInput, GetArtifactTemplateOutput
 from .direct_models.library_ingest import LibraryIngestInput, LibraryIngestOutput
+from .direct_models.list_artifact_templates import ListArtifactTemplatesInput, ListArtifactTemplatesOutput
 from .direct_models.memory_backlinks import MemoryBacklinksInput, MemoryBacklinksOutput
 from .direct_models.memory_capture import MemoryCaptureInput, MemoryCaptureOutput
 from .direct_models.memory_export import MemoryExportInput, MemoryExportOutput
@@ -60,6 +67,7 @@ from .direct_models.research_person_capture import ResearchPersonCaptureInput, R
 from .direct_models.research_person_get import ResearchPersonGetInput, ResearchPersonGetOutput
 from .direct_models.research_person_search import ResearchPersonSearchInput, ResearchPersonSearchOutput
 from .direct_models.storage_usage import StorageUsageInput, StorageUsageOutput
+from .direct_models.update_artifact_template import UpdateArtifactTemplateInput, UpdateArtifactTemplateOutput
 from .direct_models.video_analyze_start import VideoAnalyzeStartInput, VideoAnalyzeStartOutput
 from .direct_models.video_analyze_status import VideoAnalyzeStatusInput, VideoAnalyzeStatusOutput
 
@@ -159,10 +167,49 @@ class AccessNamespace:
         return validate_tool_output(result, AccessUnlinkShareOutput)
 
 
-class AssistantNamespace:
+class ArtifactsNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
+    def archive_artifact_template(self, **kwargs: Any) -> ArchiveArtifactTemplateOutput | ArtifactDelivery:
+        payload = ArchiveArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("archive_artifact_template", payload)
+        return validate_tool_output(result, ArchiveArtifactTemplateOutput)
+
+    def describe(self, **kwargs: Any) -> ArtifactDescribeOutput | ArtifactDelivery:
+        payload = ArtifactDescribeInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("artifact_describe", payload)
+        return validate_tool_output(result, ArtifactDescribeOutput)
+
+    def download(self, **kwargs: Any) -> ArtifactDownloadOutput | ArtifactDelivery:
+        payload = ArtifactDownloadInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("artifact_download", payload)
+        return validate_tool_output(result, ArtifactDownloadOutput)
+
+    def read(self, **kwargs: Any) -> ArtifactReadOutput | ArtifactDelivery:
+        payload = ArtifactReadInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("artifact_read", payload)
+        return validate_tool_output(result, ArtifactReadOutput)
+
+    def create_artifact_template(self, **kwargs: Any) -> CreateArtifactTemplateOutput | ArtifactDelivery:
+        payload = CreateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("create_artifact_template", payload)
+        return validate_tool_output(result, CreateArtifactTemplateOutput)
+
+    def get_artifact_template(self, **kwargs: Any) -> GetArtifactTemplateOutput | ArtifactDelivery:
+        payload = GetArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("get_artifact_template", payload)
+        return validate_tool_output(result, GetArtifactTemplateOutput)
+
+    def list_artifact_templates(self, **kwargs: Any) -> ListArtifactTemplatesOutput | ArtifactDelivery:
+        payload = ListArtifactTemplatesInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("list_artifact_templates", payload)
+        return validate_tool_output(result, ListArtifactTemplatesOutput)
+
+    def update_artifact_template(self, **kwargs: Any) -> UpdateArtifactTemplateOutput | ArtifactDelivery:
+        payload = UpdateArtifactTemplateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("update_artifact_template", payload)
+        return validate_tool_output(result, UpdateArtifactTemplateOutput)
 
 
 class CaptureNamespace:
@@ -293,7 +340,19 @@ class FactsNamespace:
 
 
 
+class FilesNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+
+
 class GraphNamespace:
+    def __init__(self, call_tool):
+        self._call_tool = call_tool
+
+
+
+class ImagesNamespace:
     def __init__(self, call_tool):
         self._call_tool = call_tool
 
@@ -413,12 +472,6 @@ class ResearchNamespace:
         payload = ResearchPersonSearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("researchPersonSearchTool", payload)
         return validate_tool_output(result, ResearchPersonSearchOutput)
-
-
-class ScheduleNamespace:
-    def __init__(self, call_tool):
-        self._call_tool = call_tool
-
 
 
 class StorageNamespace:

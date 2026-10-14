@@ -521,7 +521,7 @@ class UpdateArtifactTemplateOutputVariant1(BaseModel):
     ok: bool = Field(..., alias='ok', description='')
     template: Union[UpdateArtifactTemplateOutputVariant1Template, None] = Field(None, alias='template', description='')
     error: Union[Annotated[str, Field(min_length=1, max_length=500)], None] = Field(None, alias='error', description='')
-    error_code: Union[Literal['invalid_request', 'not_found', 'conflict', 'template_archived', 'renderer_unavailable', 'artifact_unavailable', 'view_link_unavailable', 'internal_error'], None] = Field(None, alias='errorCode', description='')
+    error_code: Union[Literal['invalid_request', 'not_found', 'conflict', 'template_archived', 'renderer_unavailable', 'artifact_unavailable', 'internal_error'], None] = Field(None, alias='errorCode', description='')
     request_id: Union[Annotated[str, Field(max_length=200)], None] = Field(None, alias='requestId', description='')
 
 

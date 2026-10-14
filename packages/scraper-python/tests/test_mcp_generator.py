@@ -82,9 +82,9 @@ def generated(tmp_path):
          "outputSchema": object_schema({"ok": {"type": "boolean"},
              "details": object_schema({"source": {"type": "string"}})}),
          "outputSchemaProvided": True},
-        {"name": "set-schedule-defaults", "category": "legacy", "methodName": "setScheduleDefaults",
-         "inputSchema": object_schema({"defaultTimezone": NULLABLE_STRING,
-             "optionalNote": NULLABLE_STRING}, required=["defaultTimezone"]),
+        {"name": "set-agent-identity", "category": "legacy", "methodName": "setAgentIdentity",
+         "inputSchema": object_schema({"displayName": NULLABLE_STRING,
+             "optionalNote": NULLABLE_STRING}, required=["displayName"]),
          "outputSchema": object_schema({"ok": {"type": "boolean"}}),
          "outputSchemaProvided": True},
         {"name": "generic_status", "category": "legacy", "methodName": "genericStatus",
@@ -254,12 +254,12 @@ def test_required_and_explicit_optional_nulls_survive_while_omitted_fields_stay_
         calls.append((name, arguments))
         return {"ok": True}
     client = client_class(call)
-    client.legacy.set_schedule_defaults(default_timezone=None, optional_note=None)
-    client.legacy.set_schedule_defaults(default_timezone=None)
+    client.legacy.set_agent_identity(display_name=None, optional_note=None)
+    client.legacy.set_agent_identity(display_name=None)
     assert calls == [
-        ("set-schedule-defaults", {"defaultTimezone": None, "optionalNote": None}),
-        ("set-schedule-defaults", {"defaultTimezone": None}),
+        ("set-agent-identity", {"displayName": None, "optionalNote": None}),
+        ("set-agent-identity", {"displayName": None}),
     ]
     with pytest.raises(ValidationError):
-        client.legacy.set_schedule_defaults()
+        client.legacy.set_agent_identity()
     assert len(calls) == 2

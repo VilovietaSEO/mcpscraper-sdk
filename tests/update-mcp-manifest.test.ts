@@ -69,6 +69,23 @@ test('complete local server manifest generates the SDK contract', async () => {
   assert.match(generated.generatedFrom, /mcp-scraper 1\.2\.3/)
 })
 
+test('generic artifact templates leave a stale scheduling category during regeneration', async () => {
+  const { directory, sourcePath } = await fixture({ type: 'object' })
+  const contractPath = join(directory, 'contracts/mcp.tools.json')
+  const prior = JSON.parse(await readFile(contractPath, 'utf8'))
+  prior.tools[0].name = 'create_artifact_template'
+  prior.tools[0].category = 'schedule'
+  await writeFile(contractPath, JSON.stringify(prior))
+  const source = JSON.parse(await readFile(sourcePath, 'utf8'))
+  source.tools[0].name = 'create_artifact_template'
+  await writeFile(sourcePath, JSON.stringify(source))
+  const result = run(directory, { MCP_TOOL_MANIFEST_PATH: sourcePath })
+  assert.equal(result.status, 0, result.stderr)
+  const generated = JSON.parse(await readFile(contractPath, 'utf8'))
+  assert.equal(generated.tools[0].category, 'artifacts')
+  assert.equal(generated.tools[0].methodName, 'createArtifactTemplate')
+})
+
 test('one missing output schema fails before overwriting a stale prior schema', async () => {
   const { directory, sourcePath, priorText } = await fixture(undefined)
   const result = run(directory, { MCP_TOOL_MANIFEST_PATH: sourcePath })

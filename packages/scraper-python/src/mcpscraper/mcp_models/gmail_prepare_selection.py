@@ -21,7 +21,7 @@ class GmailPrepareSelectionInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
     connection_id: Annotated[str, Field(min_length=1, max_length=500)] = Field(..., alias='connectionId', description='A tenant-owned Gmail connectionId returned by list_service_connections.')
-    purpose: Literal['export', 'mailbox_action', 'memory_import'] = Field(..., alias='purpose', description='The one public downstream workflow this immutable selection authorizes. Scheduled export is reserved for the signed internal Scheduler contract.')
+    purpose: Literal['export', 'mailbox_action', 'memory_import'] = Field(..., alias='purpose', description='The one downstream workflow this immutable selection authorizes. Choose export to download the frozen messages, mailbox_action to change them, or memory_import to preserve them in Memory. Native worker exports use the same export purpose through signed internal requests.')
     source: Union[GmailPrepareSelectionInputSourceVariant1, GmailPrepareSelectionInputSourceVariant2] = Field(..., alias='source', description='Choose exactly one query or explicit-message-ID source; invalid mixed modes are rejected.')
 
 

@@ -50,6 +50,7 @@ test('complete local Memory registry adds file assets without a production round
       { name: 'file_asset_get', description: 'get', inputSchema: { type: 'object' }, outputSchema: { type: 'object' } },
       { name: 'researchPersonCaptureTool', description: 'capture research', inputSchema: { type: 'object' }, outputSchema: { type: 'object' } },
       { name: 'crmUpsertPersonTool', description: 'upsert CRM person', inputSchema: { type: 'object' }, outputSchema: { type: 'object' } },
+      { name: 'create_artifact_template', description: 'template', category: 'artifacts', legacyId: 'create_artifact_template', inputSchema: { type: 'object' }, outputSchema: { type: 'object' } },
     ],
   }))
 
@@ -60,7 +61,7 @@ test('complete local Memory registry adds file assets without a production round
   })
   assert.equal(result.status, 0, result.stderr)
   const generated = JSON.parse(await readFile(join(directory, 'contracts/memory.tools.json'), 'utf8'))
-  assert.equal(generated.toolCount, 5)
+  assert.equal(generated.toolCount, 6)
   assert.match(generated.generatedFrom, /mcp-memory 2\.0\.0 complete build manifest/)
   assert.deepEqual(
     generated.tools.filter((tool: { name: string }) => tool.name.startsWith('file_asset_')).map((tool: { legacyId: string; category: string }) => [tool.legacyId, tool.category]),
@@ -70,4 +71,5 @@ test('complete local Memory registry adds file assets without a production round
     generated.tools.filter((tool: { name: string }) => /^(?:research|crm)/u.test(tool.name)).map((tool: { legacyId: string; category: string }) => [tool.legacyId, tool.category]),
     [['research-person-capture', 'research'], ['crm-person-upsert', 'crm']],
   )
+  assert.equal(generated.tools.find((tool: { name: string }) => tool.name === 'create_artifact_template').category, 'artifacts')
 })

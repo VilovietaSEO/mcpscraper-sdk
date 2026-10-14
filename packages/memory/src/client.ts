@@ -12,7 +12,7 @@ import {
   LibraryNamespace,
   MemoryNamespace,
   RecallNamespace,
-  ScheduleNamespace,
+  ArtifactsNamespace,
   StorageNamespace,
   TablesNamespace,
   TagsNamespace,
@@ -49,7 +49,7 @@ export class MemoryClient {
   readonly memory: DeliveredNamespace<MemoryNamespace>
   readonly recall: DeliveredNamespace<RecallNamespace>
   readonly research: DeliveredNamespace<ResearchNamespace>
-  readonly schedule: DeliveredNamespace<ScheduleNamespace>
+  readonly artifacts: DeliveredNamespace<ArtifactsNamespace>
   readonly storage: DeliveredNamespace<StorageNamespace>
   readonly tables: DeliveredNamespace<TablesNamespace>
   readonly tags: DeliveredNamespace<TagsNamespace>
@@ -83,7 +83,7 @@ export class MemoryClient {
     this.memory = new MemoryNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
     this.research = new ResearchNamespace(callTool)
-    this.schedule = new ScheduleNamespace(callTool)
+    this.artifacts = new ArtifactsNamespace(callTool)
     this.storage = new StorageNamespace(callTool)
     this.tables = new TablesNamespace(callTool)
     this.tags = new TagsNamespace(callTool)

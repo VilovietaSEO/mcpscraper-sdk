@@ -8,6 +8,7 @@ MemoryPutInputProps = TypedDict('MemoryPutInputProps', {
     'summary': NotRequired[str],
     'tags': NotRequired[list[str]],
     'pinned': NotRequired[bool],
+    'delete_after': NotRequired[str],
     'source_type': NotRequired[str],
     'source_ref': NotRequired[str],
     'related': NotRequired[list[str]],
@@ -33,9 +34,9 @@ class MemoryPutInput(BaseModel):
     path: Union[str, None] = Field(None, alias='path', description='Vault-relative note path to create or overwrite, e.g. projects/q3-plan. Writing an existing path replaces it. Required unless shareId is given.')
     share_id: Union[str, None] = Field(None, alias='shareId', description='Edit a note someone individually shared with you and you accepted (accept-share), by its shareId, instead of vault+path. Requires the share to grant edit permission, and baseRevision is mandatory (get the current revision first) since you are editing alongside the owner and possibly others.')
     title: Union[str, None] = Field(None, alias='title', description='Optional human-readable title; defaults are derived from the path when omitted.')
-    content: Annotated[str, Field(min_length=1)] = Field(..., alias='content', description='The complete note body to store and index. On edit this replaces the prior body, so merge the requested change into the full memory-get content before calling; never pass only the changed fragment.')
+    content: Annotated[str, Field(min_length=1)] = Field(..., alias='content', description='The complete note body to store and index. Content is replace-all: for an edit, first read the current note, merge the requested change into its full body, and never pass only the changed fragment. Must be non-empty.')
     props: Union[MemoryPutInputProps, None] = Field(None, alias='props', description='Obsidian note primitives plus vault-specific template fields. On edits, supplied fields patch the stored props instead of replacing the whole object; pass an empty array to deliberately clear a link list. Type/domain/folder also steer routing when no vault is given.')
-    base_revision: Union[Union[float, int], None] = Field(None, alias='baseRevision', description='Revision the edit is based on (from memory-get/put). Always supply it when an AI edits an existing note; a mismatch rejects the write and returns current content for reconciliation. Omit only for an intentional new note or explicit last-write-wins migration.')
+    base_revision: Union[Union[float, int], None] = Field(None, alias='baseRevision', description='Revision from the current note read or prior successful write. Pass it with the complete merged body when editing: a mismatch rejects the write and returns the current note for reconciliation. Never replay the stale body unchanged. Required for edits through shareId; omission on owned notes permits last-write-wins.')
     tag_descriptions: Union[dict[str, str], None] = Field(None, alias='tagDescriptions', description="One-line meaning for any tag in props.tags that is new to the account, keyed by tag. Tags resolve against the account's existing vocabulary; new tags require a one-line description.")
 
 

@@ -21,7 +21,7 @@ ExportSearchConsoleTableDataInputSort.__pydantic_config__ = ConfigDict(extra="al
 class ExportSearchConsoleTableDataInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    table_name: str = Field(..., alias='tableName', description='Typed Search Console tableName returned by list_service_connections after a successful connection_sync run.')
+    table_name: str = Field(..., alias='tableName', description='Existing tenant-owned Search Console tableName returned by list_service_connections; confirm its columns with table-describe.')
     filters: Union[Annotated[list[ExportSearchConsoleTableDataInputFiltersItem], Field(max_length=20)], None] = Field(None, alias='filters', description='Optional filters to AND together before download. Use table-describe or the documented typed columns.')
     sort: Union[ExportSearchConsoleTableDataInputSort, None] = Field(None, alias='sort', description='Optional row ordering for the JSONL download.')
     max_rows: Union[Annotated[int, Field(ge=1, le=50000)], None] = Field(None, alias='maxRows', description='Maximum matching persisted rows to place in this artifact. Use filters to bound large tables.')

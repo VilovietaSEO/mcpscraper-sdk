@@ -1,9 +1,9 @@
 # mcpscraper-sdk
 
 Official client libraries for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP: web intelligence,
-hosted Memory, governed Research and CRM, scheduled actions, and more through one endpoint and key.
+hosted Memory, governed Research and CRM, manual workflows, and more through one endpoint and key.
 
-These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **367 unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
+These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that back the `mcp-scraper` and `mcpscraper-memory` MCP servers. No scraping, proxy, billing, or policy logic lives in this repo; it is typed request/response plumbing only, licensed MIT. All **unified MCP tools** are available through **Node.js**, **Python**, **cURL**, and the **CLI** from one generated contract.
 
 ## Install
 
@@ -365,7 +365,6 @@ Sample output (real, captured live):
 ```json
 {
   "title": "MCP Scraper — One Brain. Every AI You Use.",
-  "bodyMarkdown": "Scraper · Memory · Scheduler — one account\n\n# One brain.\n_Every AI you use._\n\nSee what happens when you can get any data, have a brain, and schedule actions...",
   "headings": [
     { "level": 1, "text": "One brain. Every AI you use." },
     { "level": 2, "text": "It sees the whole web." },
@@ -593,42 +592,25 @@ Sample output (illustrative, matches the real, verified response schema):
 }
 ```
 
-The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all 367 unified tools in both Node and Python.
+The legacy `memoryTools`/`memory_tools.call_tool(...)` bridge remains available for compatibility. New integrations should use `client.tools`, which provides typed methods for all unified tools in both Node and Python.
 
-## Scheduled results and artifact templates
+## Artifact templates
 
-Scheduled Actions now have typed contracts for a result-first inbox and safe, versioned report presentation. `No artifact` affects only rendered HTML; it does not disable normal Memory-note output. Selecting a saved template always pins its exact immutable version.
+Generic artifact templates provide versioned report presentation for manual editorial and publishing workflows. Selecting a saved template pins its exact immutable version.
 
 ```ts
-const { templates } = await client.tools.schedule.listArtifactTemplates({ status: 'active' })
-const { items, nextCursor } = await client.tools.schedule.listScheduledRuns({
-  view: 'inbox',
-  limit: 30,
-})
-const run = await client.tools.schedule.getScheduledRun({ runId: items[0].runId })
-const link = await client.tools.schedule.createScheduledRunViewLink({
-  runId: run.run.runId,
-  artifactId: run.run.artifactOutputs[0].artifactId,
-  expiresInDays: 7,
-})
+const { templates } = await client.tools.artifacts.listArtifactTemplates({ status: 'active' })
 ```
 
 ```python
-templates = client.tools.schedule.list_artifact_templates(status="active")
-runs = client.tools.schedule.list_scheduled_runs(view="inbox", limit=30)
-run = client.tools.schedule.get_scheduled_run(run_id=runs.items[0]["runId"])
-link = client.tools.schedule.create_scheduled_run_view_link(
-    run_id=run.run["runId"],
-    artifact_id=run.run["artifactOutputs"][0]["artifactId"],
-    expires_in_days=7,
-)
+templates = client.tools.artifacts.list_artifact_templates(status="active")
 ```
 
-Run IDs and cursors are opaque: copy and return them unchanged. View-link URLs are returned only on creation and grant read-only access to one artifact until expiry or revocation.
+Read complete outputs with the returned artifact ID using `artifact_read`, or obtain a download link with `artifact_download`. Preserve opaque IDs and read cursors unchanged.
 
 ## Bulk connected-data exports
 
-Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Marketing, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. For Search Console, use `exportConnectedServiceData` for a fresh live API extract. A scheduled `connection_sync` also maintains a typed `gsc_performance_*` table; discover it through `listServiceConnections`, inspect or filter it with the table tools, and use `exportSearchConsoleTableData` for a persisted filtered JSONL download. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
+Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Marketing, or Resend range with one typed call. Provider pagination and record hydration happen server-side. Small exports return inline; large exports become private seven-day JSONL artifacts with short-lived signed download URLs. For Search Console, use `exportConnectedServiceData` for a fresh live API extract. Existing persisted Search Console data remains available in typed `gsc_performance_*` tables; discover them through `listServiceConnections`, inspect or filter them with the table tools, and use `exportSearchConsoleTableData` for a filtered JSONL download. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus `resend_emails`, `resend_received_emails`, `resend_logs`, `resend_contacts`, `resend_broadcasts`, and `resend_templates`.
 
 ### Search Console API batches
 
@@ -661,7 +643,7 @@ const deletionPlan = await client.tools.connections.callServiceConnectionAction(
 })
 ```
 
-Each batch returns per-item success or sanitized failure receipts and executes sequentially within provider quotas. Delete batches default to `dryRun: true`; actual execution additionally requires the exact confirmation token published by the live schema. Actions also require `actionsEnabled` on the connection. Scheduled agent runs can bind any exact batch tool; deterministic `connection_sync` remains the separate persisted Search Analytics workflow.
+Each batch returns per-item success or sanitized failure receipts and executes sequentially within provider quotas. Delete batches default to `dryRun: true`; actual execution additionally requires the exact confirmation token published by the live schema. Actions also require `actionsEnabled` on the connection.
 
 ```ts
 const result = await client.tools.connections.exportConnectedServiceData({
@@ -771,22 +753,15 @@ const ingest = await client.tools.connections.gmailImportToMemory({
 
 See [`examples/gmail-complete-workflow.mjs`](./examples/gmail-complete-workflow.mjs) for search → full read/attachments → preview → import → resume/status, and [`examples/gmail-bulk-manage.mjs`](./examples/gmail-bulk-manage.mjs) for a reversible label add/remove receipt. Permanent delete is deliberately excluded from the examples: it is irreversible and requires a separately reviewed disposable-only selection plus `confirmPermanentDelete:true`.
 
-## Integration and scheduled-run billing
+## Integration billing
 
 Integrations are included with an active Starter plan or higher. OAuth connect and reconnect do not spend additional Credits, and there is no separate per-connection subscription. Direct connected-service reads, approved actions, bulk exports, and Memory snapshots currently have no additional connection-operation debit; any separately metered MCP Scraper or browser tool they invoke keeps its published rate.
-
-Scheduled Actions use the shared MCP Scraper Credit balance instead of a separate scheduling subscription or monthly run quota. Every started occurrence costs 75 Credits. Deterministic `connection_sync` runs add no model charge. Agent-mode runs add 1.5 times OpenRouter's actual reported cost across all successful model steps.
-
-```ts
-const policy = await client.tools.schedule.getScheduleStatus()
-// { billingMode: 'credits', runBaseCredits: 75, llmCostMultiplier: 1.5, ... }
-```
 
 The 5/10/15/25-Credit connected-operation classes and active-connection minimum described in the product design spec are not enabled in the current release.
 
 ## Connected-service snapshots to Memory
 
-Turn one exact approved connection read into an indexed RAG document without routing through Mastra. The server validates the tenant-owned connection and ordinary Memory vault, makes one bounded read, redacts credentials and signed URLs, writes to a stable server-generated path, embeds the content, and returns a receipt instead of the provider payload.
+Turn one exact approved connection read into an indexed RAG document. The server validates the tenant-owned connection and ordinary Memory vault, makes one bounded read, redacts credentials and signed URLs, writes to a stable server-generated path, embeds the content, and returns a receipt instead of the provider payload.
 
 ```ts
 const receipt = await client.tools.connections.importServiceConnectionToMemory({
@@ -816,7 +791,7 @@ This is a one-result snapshot with a 1 MB limit—not whole-account pagination, 
 
 Every SDK throws a typed error on non-2xx responses: `ScraperApiError` (Node/Python, scraper) or `MemoryApiError` (Node/Python, memory), each carrying the HTTP status, an error code, and the safe public response body. The scraper envelope includes `error_code`, `error_type`, `message`, `retryable`, and—when known—retry timing, charge status, and bounded recovery details. `ScraperApiError` adds helpers for insufficient balance, concurrency, verification challenges, and timeouts. The CLI catches these and prints a clean one-line message instead of a stack trace.
 
-## All 367 MCP tools
+## All MCP tools
 
 Every package exposes the same generated namespace layout through `McpToolsClient`. The scraper clients also attach it as `client.tools`:
 
@@ -840,7 +815,7 @@ For a Maps place lookup, `client.tools.maps.placeIntel` returns a run ID and sav
 
 ## The CLI
 
-`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all 367 tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
+`mcpscraper-cli` keeps 7 ergonomic shortcuts (`search`, `scrape`, `crawl`, `map`, `maps-search`, `memory search`, `memory list-vaults`) and also reaches all manifest-backed tools through `mcpscraper tools list`, `mcpscraper tools describe <name>`, and `mcpscraper tools call <name> --args '<json>'`. Tools marked destructive require `--yes`. Every command reads `MCPSCRAPER_API_KEY` from the environment or `--api-key`.
 
 ## How this compares to Firecrawl
 
@@ -848,9 +823,9 @@ If you're coming from [Firecrawl](https://github.com/firecrawl/firecrawl): same 
 
 ## Contracts
 
-- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all 367 tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
+- [`contracts/mcp.tools.json`](./contracts/mcp.tools.json) — canonical release-derived contract for all manifest-backed tools. Source of truth for every Node/Python typed namespace, CLI catalog, and [cURL catalog](./docs/curl-tools.md).
 - [`contracts/scraper.openapi.generated.json`](./contracts/scraper.openapi.generated.json) — complete OpenAPI 3.0.3 projection used to generate the Node and Python REST models. [`contracts/scraper.openapi.yaml`](./contracts/scraper.openapi.yaml) is the curated base for operations not yet migrated to the server-owned REST registry. [`contracts/server-rest.v1.json`](./contracts/server-rest.v1.json) contains the checked-in server projection for Maps search and directory run/status, including its source digest.
-- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — direct runtime compatibility manifest for all 146 Memory tools. Customer SDK calls map those methods to the unified root contract.
+- [`contracts/memory.tools.json`](./contracts/memory.tools.json) — direct runtime compatibility manifest for the retained Memory tools. Customer SDK calls map those methods to the unified root contract.
 
 The contracts are checked-in public release artifacts. The unified MCP contract is generated only from the server's complete build manifest; the live runtime inventory is used for name and input-schema drift checks and is expected to advertise zero output schemas. The Memory manifest is generated from its server inventory. For REST, the server-owned operations overlay the curated OpenAPI base; `npm run generate:rest` creates the complete OpenAPI, Node types, and Python models together. `npm run verify:rest-contract` checks every generated file offline, and `npm run verify:rest-source-contract -- --source=/path/to/server/contracts/public-rest.v1.json` checks the checked-in source against a fresh server artifact. Release validation (`npm run validate-contracts`) requires `MCP_REST_CONTRACT_PATH` to point to the current server artifact and checks both source parity and generated-file drift.
 

@@ -8,7 +8,7 @@ export interface Input {
    */
   targetDomain?: string;
   /**
-   * Primary Google Business Profile/brand name to match in Maps results. Required for Maps tracking.
+   * Primary Google Business Profile/brand name to match in Maps results. Supply it when matching one business against Maps results.
    */
   targetBusinessName?: string;
   /**
@@ -54,27 +54,11 @@ export interface Input {
    */
   database?: "postgres" | "neon" | "supabase" | "sqlite" | "mysql";
   /**
-   * Default recurring rank check cadence.
-   */
-  scheduleCadence?: "daily" | "weekly" | "monthly" | "custom";
-  /**
-   * Cron expression to use when scheduleCadence is custom.
-   */
-  customCron?: string;
-  /**
-   * IANA timezone for scheduled rank checks.
-   */
-  timezone?: string;
-  /**
-   * Include a cron/heartbeat worker plan.
-   */
-  includeCron?: boolean;
-  /**
    * Include dashboard/reporting requirements.
    */
   includeDashboard?: boolean;
   /**
-   * Include alert rules for rank movement and SERP feature changes.
+   * Include saved change findings when manually comparing rank movement and SERP features.
    */
   includeAlerts?: boolean;
   /**
@@ -99,18 +83,12 @@ export type Output =
         purpose: string;
         keyColumns: string[];
       }[];
-      cron: {
-        enabled: boolean;
-        cadence: string;
-        expression: string;
-        timezone: string;
-        jobs: {
-          name: string;
-          purpose: string;
-          modes: ("maps" | "organic" | "ai_overview" | "paa")[];
-          recommendedTools: string[];
-        }[];
-      };
+      steps: {
+        name: string;
+        purpose: string;
+        modes: ("maps" | "organic" | "ai_overview" | "paa")[];
+        recommendedTools: string[];
+      }[];
       metrics: string[];
       implementationPrompt: string;
     }

@@ -1711,29 +1711,6 @@ class WorkflowRunStepResponse(BaseModel):
     done: bool | None = None
 
 
-class Status7(Enum):
-    active = 'active'
-    paused = 'paused'
-
-
-class Cadence(Enum):
-    daily = 'daily'
-    weekly = 'weekly'
-    monthly = 'monthly'
-
-
-class WorkflowSchedule(BaseModel):
-    id: str | None = None
-    workflow_id: str | None = None
-    name: str | None = None
-    status: Status7 | None = None
-    input: dict[str, Any] | None = None
-    cadence: Cadence | None = None
-    timezone: str | None = None
-    webhook_url: str | None = None
-    next_run_at: str | None = None
-
-
 class CallMemoryToolRequest(BaseModel):
     toolName: str = Field(
         ...,
@@ -2079,7 +2056,7 @@ class DirectoryRunRequest(BaseModel):
     debug: bool = False
 
 
-class Status8(Enum):
+class Status7(Enum):
     queued = 'queued'
     running = 'running'
     complete = 'complete'
@@ -2121,7 +2098,7 @@ class Billing1(BaseModel):
     refundMc: int | None = Field(..., ge=0, le=9007199254740991)
 
 
-class Status9(Enum):
+class Status8(Enum):
     ok = 'ok'
     empty = 'empty'
     failed = 'failed'
@@ -2160,7 +2137,7 @@ class City(BaseModel):
     populationYear: int = Field(..., ge=2020, le=2025)
     zips: list[str]
     counties: list[str]
-    status: Status9
+    status: Status8
     error: str | None = Field(...)
     errorCode: str | None = None
     retryable: bool | None = None
@@ -2187,7 +2164,7 @@ class DirectoryJobResponse(BaseModel):
         '__pydantic_extra__': Dict[str, Any],
     }
     jobId: str | None = Field(...)
-    status: Status8
+    status: Status7
     statusUrl: str | None = Field(...)
     query: str
     state: str

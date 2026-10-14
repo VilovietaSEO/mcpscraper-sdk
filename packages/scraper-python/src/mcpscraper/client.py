@@ -316,21 +316,6 @@ class WorkflowsNamespace:
     def get_run_artifact(self, run_id: str, artifact_id: str) -> bytes:
         return self._r.call_raw("GET", f"/workflows/runs/{quote(run_id)}/artifacts/{quote(artifact_id)}")
 
-    def create_schedule(self, params: JsonDict) -> Any:
-        return self._r.call("POST", "/workflows/schedules", params)
-
-    def list_schedules(self) -> Any:
-        return self._r.call("GET", "/workflows/schedules")
-
-    def patch_schedule(self, schedule_id: str, params: JsonDict) -> Any:
-        return self._r.call("PATCH", f"/workflows/schedules/{quote(schedule_id)}", params)
-
-    def delete_schedule(self, schedule_id: str) -> Any:
-        return self._r.call("DELETE", f"/workflows/schedules/{quote(schedule_id)}")
-
-    def run_schedule_now(self, schedule_id: str) -> Any:
-        return self._r.call("POST", f"/workflows/schedules/{quote(schedule_id)}/run")
-
 
 class GmailNamespace:
     def __init__(self, r: _Requester) -> None:

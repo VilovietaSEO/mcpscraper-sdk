@@ -24,7 +24,7 @@ export interface Input {
    */
   title?: string;
   /**
-   * The full note body to store and index for semantic search. Must be non-empty.
+   * The complete note body to store and index. Content is replace-all: for an edit, first read the current note, merge the requested change into its full body, and never pass only the changed fragment. Must be non-empty.
    */
   content: string;
   /**
@@ -110,7 +110,7 @@ export interface Input {
     [k: string]: unknown;
   };
   /**
-   * Revision the edit is based on (from a prior get/put). When provided, the write only applies if the note is still at this revision; otherwise it is rejected as a conflict instead of silently overwriting a concurrent edit. Omit for last-write-wins (fine for solo notes).
+   * Revision from the current note read or prior successful write. Pass it with the complete merged body when editing: a mismatch rejects the write and returns the current note for reconciliation. Never replay the stale body unchanged. Required for edits through shareId; omission on owned notes permits last-write-wins.
    */
   baseRevision?: number;
   /**

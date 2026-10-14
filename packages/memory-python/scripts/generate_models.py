@@ -17,8 +17,8 @@ DELIVERY_PATH = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "_artifact_delivery
 UNIFIED_MANIFEST_PATH = REPO_ROOT / "contracts" / "mcp.tools.json"
 
 CATEGORIES = [
-    "access", "assistant", "capture", "channels", "crm", "facts", "graph", "library", "memory", "recall",
-    "research", "schedule", "storage", "tables", "tags", "vaults", "video", "webhooks",
+    "access", "artifacts", "capture", "channels", "crm", "facts", "files", "graph", "images", "library", "memory", "recall",
+    "research", "storage", "tables", "tags", "vaults", "video", "webhooks",
 ]
 
 
@@ -194,11 +194,77 @@ def refresh_legacy_client(source: str) -> str:
     return source
 
 
+def retire_legacy_methods(source: str, tools: list[dict]) -> str:
+    """Keep retained convenience names while deriving allowed calls from the registry."""
+    available = {tool["name"]: tool for tool in tools}
+    tree = ast.parse(source)
+    retained_classes = []
+    model_bindings: dict[str, dict] = {}
+    for node in tree.body:
+        if not isinstance(node, ast.ClassDef):
+            continue
+        kept_methods = []
+        for method in node.body:
+            if not isinstance(method, ast.FunctionDef) or method.name == "__init__":
+                kept_methods.append(method)
+                continue
+            calls = [call for call in ast.walk(method) if isinstance(call, ast.Call)
+                     and isinstance(call.func, ast.Attribute) and call.func.attr == "_call_tool"]
+            if len(calls) != 1 or not calls[0].args or not isinstance(calls[0].args[0], ast.Constant):
+                raise RuntimeError(f"Unexpected legacy wire binding: {node.name}.{method.name}")
+            wire_name = calls[0].args[0].value
+            if wire_name not in available:
+                continue
+            kept_methods.append(method)
+            for child in ast.walk(method):
+                if isinstance(child, ast.Name) and child.id.endswith(("Input", "Output")):
+                    model_bindings[child.id] = available[wire_name]
+        if not any(isinstance(method, ast.FunctionDef) and method.name != "__init__" for method in kept_methods):
+            continue
+        node.body = kept_methods
+        if node.name == "ScheduleNamespace":
+            # The only retained methods from the former scheduling namespace are
+            # generic artifact templates, now exposed without a recurrence API.
+            node.name = "ArtifactsNamespace"
+        retained_classes.append(node)
+
+    imports = []
+    model_dir = PACKAGE_ROOT / "src" / "mcpscraper_memory" / "models"
+    for node in tree.body:
+        if not isinstance(node, ast.ImportFrom) or not (node.module or "").startswith("models."):
+            continue
+        names = [alias for alias in node.names if alias.name in model_bindings]
+        if not names:
+            continue
+        if len(names) != 2:
+            raise RuntimeError(f"Incomplete legacy model import: {node.module}")
+        input_name = next(alias.name for alias in names if alias.name.endswith("Input"))
+        output_name = next(alias.name for alias in names if alias.name.endswith("Output"))
+        tool = model_bindings[input_name]
+        if tool != model_bindings[output_name]:
+            raise RuntimeError(f"Conflicting legacy model binding: {node.module}")
+        imports.append(ast.unparse(node))
+        union_output = inline_output_schema(tool["outputSchema"]).get("anyOf") or inline_output_schema(tool["outputSchema"]).get("oneOf")
+        model_imports = ["from typing import Annotated, Any, Literal, Union" if union_output else "from typing import Any, Literal"]
+        if union_output:
+            model_imports.append("from typing_extensions import NotRequired, Required, TypedDict")
+        model_imports.append("from pydantic import BaseModel, ConfigDict, Field")
+        module_name = node.module.removeprefix("models.")
+        (model_dir / f"{module_name}.py").write_text("\n".join([
+            *model_imports, "", "", render_model(input_name, tool["inputSchema"]), "",
+            render_inline_output(output_name, tool["outputSchema"]),
+        ]))
+    for model_path in model_dir.glob("*.py"):
+        if "schedule" in model_path.stem or model_path.stem in {"answer_inbox_item", "auto_optimization"}:
+            model_path.unlink()
+    return "from ._artifact_delivery import ArtifactDelivery, validate_tool_output\nfrom typing import Any, Callable\n\n" + "\n".join(imports) + "\n\n\n" + "\n\n".join(ast.unparse(node) for node in retained_classes) + "\n"
+
+
 def main() -> None:
     manifest = json.loads(MANIFEST_PATH.read_text())
     tools = manifest["tools"]
     delivery = render_artifact_delivery(json.loads(UNIFIED_MANIFEST_PATH.read_text()))
-    legacy_client = refresh_legacy_client(LEGACY_CLIENT_PATH.read_text())
+    legacy_client = refresh_legacy_client(retire_legacy_methods(LEGACY_CLIENT_PATH.read_text(), tools))
 
     shutil.rmtree(MODELS_DIR, ignore_errors=True)
     MODELS_DIR.mkdir(parents=True, exist_ok=True)

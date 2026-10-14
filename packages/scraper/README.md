@@ -45,7 +45,7 @@ Google Search light mode returns organic positions, URLs, titles, and descriptio
 
 ## API surface
 
-`client.tools` is the generated, typed 367-tool MCP surface from `contracts/mcp.tools.json`, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
+`client.tools` is the generated, typed manifest-backed MCP surface from `contracts/mcp.tools.json`, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
@@ -62,8 +62,7 @@ await client.tools.connections.exportConnectedServiceData({
   dataset: 'resend_data',
   lastDays: 7,
 })
-const inbox = await client.tools.schedule.listScheduledRuns({ view: 'inbox' })
-const templates = await client.tools.schedule.listArtifactTemplates({ status: 'active' })
+const templates = await client.tools.artifacts.listArtifactTemplates({ status: 'active' })
 ```
 
 Lead enrichment is available through the same generated surface. Supply mapped rows directly, or call `client.tools.leads.import(...)` first for CSV/TSV/XLSX input:
@@ -81,11 +80,11 @@ const job = await client.tools.leads.enrich({
 })
 ```
 
-The connected-data export performs bounded Gmail, Calendar, Google Search Console, Zoom, Meta Marketing, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Use `exportConnectedServiceData({ dataset: 'search_console_performance' })` for a fresh Search Console API extract. A scheduled `connection_sync` maintains a typed `gsc_performance_*` table exposed as `listServiceConnections().tableName`; use `exportSearchConsoleTableData` for a server-filtered download from that persisted table. Use `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected Meta ad accounts. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renewConnectedDataDownload({ artifactId })`. Use `listServiceConnections` for verified grants and per-tool permission blockers, then `describeServiceConnectionTool` for the exact provider-native schema before calling through the generic connection bridges.
+The connected-data export performs bounded Gmail, Calendar, Google Search Console, Zoom, Meta Marketing, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Use `exportConnectedServiceData({ dataset: 'search_console_performance' })` for a fresh Search Console API extract. Existing persisted Search Console data is exposed as `listServiceConnections().tableName`; use `exportSearchConsoleTableData` for a server-filtered download from that table. Use `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected Meta ad accounts. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renewConnectedDataDownload({ artifactId })`. Use `listServiceConnections` for verified grants and per-tool permission blockers, then `describeServiceConnectionTool` for the exact provider-native schema before calling through the generic connection bridges.
 
-Search Console also provides six API-only batches through those connection bridges: reads `inspect-urls` and `query-search-analytics-batch`, and gated actions `add-sites-batch`, `submit-sitemaps-batch`, `delete-sites-batch`, and `delete-sitemaps-batch`. They require no database, return per-item receipts, and can be bound to scheduled agent runs. Delete batches default to dry-run and require the live schema's exact confirmation token for execution; all actions require the connection's action switch.
+Search Console also provides six API-only batches through those connection bridges: reads `inspect-urls` and `query-search-analytics-batch`, and gated actions `add-sites-batch`, `submit-sitemaps-batch`, `delete-sites-batch`, and `delete-sitemaps-batch`. They require no database and return per-item receipts. Delete batches default to dry-run and require the live schema's exact confirmation token for execution; all actions require the connection's action switch.
 
-Integrations are included with an active Starter plan or higher: OAuth connect/reconnect and direct connected-service reads, approved actions, exports, and snapshots do not currently have an extra connection-operation debit. Scheduled Actions use the shared Credit balance at 75 Credits per started occurrence; agent-mode runs also add 1.5 times OpenRouter's actual reported model cost. Inspect the live policy with `await client.tools.schedule.getScheduleStatus()`.
+Integrations are included with an active Starter plan or higher: OAuth connect/reconnect and direct connected-service reads, approved actions, exports, and snapshots do not currently have an extra connection-operation debit.
 
 Core operations are flat on the client: `startHarvest`, `searchSerp`, `harvestPaa`, `extractUrl`, `mapSiteUrls`, `extractSite`, `auditSite`, `getExtractSiteStatus`, `archiveRead`, `listJobs`, `getJob`, `getHistory`, `getLedger`.
 
@@ -170,7 +169,7 @@ console.log(page.memory) // { deposited: true, vault: 'competitors', noteId: '..
 
 ## Memory tools, using only this API key
 
-`client.memoryTools` exposes every tool from [`mcpscraper-memory-sdk`](../memory) — access/keys, channels, memory search/CRUD, tables, vaults, facts, schedule, webhooks, video — dispatched through `POST /memory/mcp-call` with your mcpscraper.dev API key. No separate memory key needed; a memory identity is auto-provisioned for your account on first use:
+`client.memoryTools` exposes every tool from [`mcpscraper-memory-sdk`](../memory) — access/keys, channels, memory search/CRUD, tables, vaults, facts, artifacts, webhooks, video — dispatched through `POST /memory/mcp-call` with your mcpscraper.dev API key. No separate memory key needed; a memory identity is auto-provisioned for your account on first use:
 
 ```ts
 const hits = await client.memoryTools.memory.search({ query: 'competitor pricing pages' })

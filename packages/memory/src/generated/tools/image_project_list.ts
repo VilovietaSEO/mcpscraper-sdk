@@ -10,20 +10,16 @@ export interface Input {
   vault?: string;
 }
 
-export type Output =
-  | {
-      ok: true;
-      projects: {
-        id: string;
-        name: string;
-        description: string | null;
-        status: string;
-        createdAt: string;
-        updatedAt: string;
-      }[];
-    }
-  | {
-      ok: false;
-      code: string;
-      error: string;
-    };
+export interface Output {
+  ok: boolean;
+  projects?: {
+    id: string;
+    name: string;
+    description: string | null;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+  code?: string;
+  error?: string;
+}

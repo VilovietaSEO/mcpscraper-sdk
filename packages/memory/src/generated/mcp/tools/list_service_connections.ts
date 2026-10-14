@@ -86,7 +86,7 @@ export type Output =
          */
         permissionVerification: ("verified" | "unavailable") | null;
         /**
-         * Credential, OAuth-grant, or other administrative tools permanently blocked from the MCP and scheduler.
+         * Credential, OAuth-grant, or other administrative tools permanently blocked from connected-service execution.
          */
         adminBlockedTools: string[];
         /**
@@ -111,7 +111,7 @@ export type Output =
          */
         vaultName: string | null;
         /**
-         * Tenant-owned structured table populated by this connection, if available. For scheduled Google Search Console connection_sync runs, this is a typed performance table with site_url, date, query, page, country, device, clicks, impressions, ctr, and position. Call table-describe, then filter or sort it with table-query.
+         * Tenant-owned structured table populated by this connection, if available. An existing Google Search Console performance table has typed columns with site_url, date, query, page, country, device, clicks, impressions, ctr, and position. Call table-describe, then filter or sort it with table-query.
          */
         tableName: string | null;
       }[];

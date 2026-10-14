@@ -539,7 +539,7 @@ class ListArtifactTemplatesOutputVariant1(BaseModel):
     presets: Union[list[ListArtifactTemplatesOutputVariant1PresetsItem], None] = Field(None, alias='presets', description='')
     templates: Union[list[ListArtifactTemplatesOutputVariant1TemplatesItem], None] = Field(None, alias='templates', description='')
     error: Union[Annotated[str, Field(min_length=1, max_length=500)], None] = Field(None, alias='error', description='')
-    error_code: Union[Literal['invalid_request', 'not_found', 'conflict', 'template_archived', 'renderer_unavailable', 'artifact_unavailable', 'view_link_unavailable', 'internal_error'], None] = Field(None, alias='errorCode', description='')
+    error_code: Union[Literal['invalid_request', 'not_found', 'conflict', 'template_archived', 'renderer_unavailable', 'artifact_unavailable', 'internal_error'], None] = Field(None, alias='errorCode', description='')
     request_id: Union[Annotated[str, Field(max_length=200)], None] = Field(None, alias='requestId', description='')
 
 

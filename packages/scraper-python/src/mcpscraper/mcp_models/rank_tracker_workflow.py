@@ -8,18 +8,14 @@ class RankTrackerWorkflowInput(BaseModel):
 
     project_name: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='projectName', description='Optional name for the rank tracker project, client, or campaign.')
     target_domain: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='targetDomain', description='Primary domain to track in organic results, AI Overview citations, and PAA sources.')
-    target_business_name: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='targetBusinessName', description='Primary Google Business Profile/brand name to match in Maps results. Required for Maps tracking.')
+    target_business_name: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='targetBusinessName', description='Primary Google Business Profile/brand name to match in Maps results. Supply it when matching one business against Maps results.')
     tracking_modes: Union[Annotated[list[Literal['maps', 'organic', 'ai_overview', 'paa']], Field(min_length=1, max_length=4)], None] = Field(None, alias='trackingModes', description='Rank tracker surfaces to build: maps, organic, ai_overview, paa.')
     keywords: Union[Annotated[list[Annotated[str, Field(min_length=1)]], Field(max_length=200)], None] = Field(None, alias='keywords', description='Seed keywords or service queries to track. Leave empty to derive from user input downstream.')
     locations: Union[Annotated[list[Annotated[str, Field(min_length=1)]], Field(max_length=100)], None] = Field(None, alias='locations', description='Markets, cities, ZIPs, or service areas to track, e.g. "Denver, CO".')
     competitors: Union[Annotated[list[Annotated[str, Field(min_length=1)]], Field(max_length=100)], None] = Field(None, alias='competitors', description='Optional competitor domains or business names to persist as comparison targets.')
     database: Union[Literal['postgres', 'neon', 'supabase', 'sqlite', 'mysql'], None] = Field(None, alias='database', description='Database family to target when generating migrations.')
-    schedule_cadence: Union[Literal['daily', 'weekly', 'monthly', 'custom'], None] = Field(None, alias='scheduleCadence', description='Default recurring rank check cadence.')
-    custom_cron: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='customCron', description='Cron expression to use when scheduleCadence is custom.')
-    timezone: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='timezone', description='IANA timezone for scheduled rank checks.')
-    include_cron: Union[bool, None] = Field(None, alias='includeCron', description='Include a cron/heartbeat worker plan.')
     include_dashboard: Union[bool, None] = Field(None, alias='includeDashboard', description='Include dashboard/reporting requirements.')
-    include_alerts: Union[bool, None] = Field(None, alias='includeAlerts', description='Include alert rules for rank movement and SERP feature changes.')
+    include_alerts: Union[bool, None] = Field(None, alias='includeAlerts', description='Include saved change findings when manually comparing rank movement and SERP features.')
     notes: Union[Annotated[str, Field(max_length=4000)], None] = Field(None, alias='notes', description='Extra product, client, stack, or hosting requirements.')
 
 
@@ -38,23 +34,13 @@ RankTrackerWorkflowOutputVariant1TablesItem = TypedDict('RankTrackerWorkflowOutp
 RankTrackerWorkflowOutputVariant1TablesItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-RankTrackerWorkflowOutputVariant1CronJobsItem = TypedDict('RankTrackerWorkflowOutputVariant1CronJobsItem', {
+RankTrackerWorkflowOutputVariant1StepsItem = TypedDict('RankTrackerWorkflowOutputVariant1StepsItem', {
     'name': Required[str],
     'purpose': Required[str],
     'modes': Required[list[Literal['maps', 'organic', 'ai_overview', 'paa']]],
     'recommendedTools': Required[list[str]],
 })
-RankTrackerWorkflowOutputVariant1CronJobsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
-
-
-RankTrackerWorkflowOutputVariant1Cron = TypedDict('RankTrackerWorkflowOutputVariant1Cron', {
-    'enabled': Required[bool],
-    'cadence': Required[str],
-    'expression': Required[str],
-    'timezone': Required[str],
-    'jobs': Required[list[RankTrackerWorkflowOutputVariant1CronJobsItem]],
-})
-RankTrackerWorkflowOutputVariant1Cron.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+RankTrackerWorkflowOutputVariant1StepsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 class RankTrackerWorkflowOutputVariant1(BaseModel):
@@ -67,7 +53,7 @@ class RankTrackerWorkflowOutputVariant1(BaseModel):
     database: str = Field(..., alias='database', description='')
     recommended_tools: list[RankTrackerWorkflowOutputVariant1RecommendedToolsItem] = Field(..., alias='recommendedTools', description='')
     tables: list[RankTrackerWorkflowOutputVariant1TablesItem] = Field(..., alias='tables', description='')
-    cron: RankTrackerWorkflowOutputVariant1Cron = Field(..., alias='cron', description='')
+    steps: list[RankTrackerWorkflowOutputVariant1StepsItem] = Field(..., alias='steps', description='')
     metrics: list[str] = Field(..., alias='metrics', description='')
     implementation_prompt: str = Field(..., alias='implementationPrompt', description='')
 

@@ -4,7 +4,7 @@ export interface Input {
    */
   connectionId: string;
   /**
-   * The one public downstream workflow this immutable selection authorizes. Scheduled export is reserved for the signed internal Scheduler contract.
+   * The one downstream workflow this immutable selection authorizes. Choose export to download the frozen messages, mailbox_action to change them, or memory_import to preserve them in Memory. Native worker exports use the same export purpose through signed internal requests.
    */
   purpose: "export" | "mailbox_action" | "memory_import";
   /**

@@ -32,7 +32,7 @@ export interface Input {
        */
       to: string;
       /**
-       * IANA timezone for schedule evaluation; omit to preserve the current timezone.
+       * IANA timezone for the provider event, meeting, or report, such as America/Denver.
        */
       timezone?: string;
     };

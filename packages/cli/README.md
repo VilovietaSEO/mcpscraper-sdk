@@ -4,7 +4,7 @@ Command-line interface for the unified [mcpscraper.dev](https://mcpscraper.dev) 
 
 [Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
 
-The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every one of the 367 unified MCP tools, including retained-file readers, provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
+The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every unified MCP tool, including retained-file readers, provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
 ## Install
 
@@ -51,18 +51,18 @@ mcpscraper tools call archive_read --args '{"url":"https://github.com/octocat/He
 mcpscraper tools call artifact_describe --args '{"artifactId":"artifact_123"}' --json
 mcpscraper tools call artifact_read --args '{"artifactId":"artifact_123","offset":0,"maxBytes":64000}' --json
 mcpscraper tools call artifact_download --args '{"artifactId":"artifact_123"}' --raw-result
-mcpscraper tools call list_scheduled_runs --args '{"view":"inbox","limit":30}' --json
+mcpscraper tools call list_artifact_templates --args '{"status":"active"}' --json
 mcpscraper tools call lead_list_enrich --args '{"idempotencyKey":"roofing-dallas-001","source":{"kind":"rows","rows":[{"Business":"White Rock Roofing","City":"Dallas","Website":"https://roofwhiterock.com"}]},"columnMap":{"name":"Business","city":"City","websiteUrl":"Website"},"defaultEntityType":"business","emailSearchFallback":"serp_snippets","peopleDiscovery":"owners","peopleQueryTemplates":["{business} owner of company {city}","{business} founder {city}"],"outputFormats":["csv","xlsx"]}' --json
 mcpscraper tools call gmail_search_messages --args '{"connectionId":"gmail_conn_123","query":"has:attachment newer_than:30d","limit":25}' --json
 mcpscraper tools call gmail_prepare_selection --args '{"connectionId":"gmail_conn_123","purpose":"memory_import","source":{"kind":"query","query":"has:attachment newer_than:30d"}}' --json
 mcpscraper tools call gmail_import_status --args '{"ingestId":"opaque_ingest_id"}' --json
 ```
 
-`tools list` contains exactly 367 manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
+`tools list` contains the current manifest-backed names. `tools call` accepts any one of them. Tools marked destructive require `--yes`.
 
 `tools call --json` keeps the existing output shape: parsed `structuredContent` or text for text-only results, and the MCP envelope when it includes resources or media. Use `--raw-result` to always retain the envelope, including `content`, `structuredContent`, metadata and resource links. Both modes save inline binary blocks to local files and replace their bytes with `savedPath` and byte-count metadata. Retained-file envelopes and resource links remain available in the output. For complete text, use the returned artifact ID with `artifact_read` and follow `nextOffset` until it is null. `artifact_describe` reports MIME type, size, supported readers and retention expiry; `artifact_download` returns or renews the original file's link while retention remains valid. A preview or one read window is not the whole source.
 
-Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release. Scheduled occurrences cost 75 Credits; agent-mode runs also add 1.5 times OpenRouter's actual reported cost. Inspect the live policy with `mcpscraper tools call get-schedule-status --args '{}'`.
+Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release.
 
 Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. Unfiltered light mode makes two primary attempts, then one API fallback. Unfiltered one-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page. Past-week and past-month searches use a managed browser for organic results at 35 Credits per delivered page. Request a second page explicitly. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 

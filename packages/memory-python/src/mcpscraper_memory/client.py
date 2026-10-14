@@ -17,7 +17,7 @@ from ._generated_client import (
     LibraryNamespace,
     MemoryNamespace,
     RecallNamespace,
-    ScheduleNamespace,
+    ArtifactsNamespace,
     StorageNamespace,
     TablesNamespace,
     TagsNamespace,
@@ -25,7 +25,7 @@ from ._generated_client import (
     VideoNamespace,
     WebhooksNamespace,
 )
-from ._direct_generated_client import AssistantNamespace, CrmNamespace, ResearchNamespace
+from ._direct_generated_client import CrmNamespace, ResearchNamespace
 from ._direct_tool_name_map import DIRECT_TO_UNIFIED_TOOL_NAMES
 
 DEFAULT_BASE_URL = "https://mcpscraper.dev/mcp"
@@ -50,7 +50,6 @@ class MemoryClient:
         self._rpc_id = itertools.count(1)
 
         self.access = AccessNamespace(self._call_tool)
-        self.assistant = AssistantNamespace(self._call_tool)
         self.crm = CrmNamespace(self._call_tool)
         self.capture = CaptureNamespace(self._call_tool)
         self.channels = ChannelsNamespace(self._call_tool)
@@ -61,7 +60,7 @@ class MemoryClient:
         self.memory = MemoryNamespace(self._call_tool)
         self.recall = RecallNamespace(self._call_tool)
         self.research = ResearchNamespace(self._call_tool)
-        self.schedule = ScheduleNamespace(self._call_tool)
+        self.artifacts = ArtifactsNamespace(self._call_tool)
         self.storage = StorageNamespace(self._call_tool)
         self.tables = TablesNamespace(self._call_tool)
         self.tags = TagsNamespace(self._call_tool)

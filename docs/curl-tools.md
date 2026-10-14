@@ -1,4 +1,4 @@
-# All 367 MCP tools with cURL
+# All 347 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -43,7 +43,7 @@ jq -n --arg connectionId "$CONNECTION_ID" \
       --data-binary @-
 ```
 
-For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For persisted scheduled data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.
+For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For previously imported connected data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.
 
 If a signed artifact URL expires, call `renew_connected_data_download` with the returned `artifactId`. If an export is partial, pass its complete `continuation` object unchanged on the next export call.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (367)
+## Complete catalog (347)
 
 ## access
 
@@ -221,40 +221,18 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `site_export_image` — Read Site Export Image
 - `site_export_read` — Read Site Export Page
 
-## schedule
-
-- `archive_artifact_template` — Archive Template
-- `archive_scheduled_run` — Archive Scheduled Result
-- `create_artifact_template` — Save Template
-- `create_scheduled_run_view_link` — Create Scheduled Result View Link
-- `create-scheduled-action` — Create Scheduled Action
-- `delete-scheduled-action` — Delete Scheduled Action
-- `get_artifact_template` — Get Template
-- `get_scheduled_run` — Get Scheduled Result
-- `get-schedule-link` — Get Schedule Link
-- `get-schedule-status` — Get Schedule Status
-- `list_artifact_templates` — Search Templates
-- `list_scheduled_runs` — List Scheduled Results
-- `list-scheduled-actions` — List Scheduled Actions
-- `mark_scheduled_run_opened` — Mark Scheduled Result Opened
-- `mark_scheduled_run_unopened` — Mark Scheduled Result Unopened
-- `pause-scheduled-action` — Pause Scheduled Action
-- `propose-scheduled-action` — Propose Scheduled Action
-- `resume-scheduled-action` — Resume Scheduled Action
-- `revoke_scheduled_run_view_link` — Revoke Scheduled Result View Link
-- `revoke-schedule-link` — Revoke Schedule Link
-- `set-schedule-defaults` — Set Schedule Defaults
-- `set-schedule-entitlement` — Set Schedule Entitlement
-- `update_artifact_template` — Update Template
-- `update-scheduled-action` — Update Scheduled Action
-
 ## artifacts
 
+- `archive_artifact_template` — Archive Template
 - `artifact_describe` — Describe Retained File
 - `artifact_download` — Download Retained File
 - `artifact_read` — Read Retained File
+- `create_artifact_template` — Save Template
+- `get_artifact_template` — Get Template
 - `get_artifact_template_example` — Preview Template Example
+- `list_artifact_templates` — Search Templates
 - `report_artifact_read` — Read Stored Artifact
+- `update_artifact_template` — Update Template
 
 ## browser
 
@@ -317,7 +295,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `meta_ad_creative_media` — View Meta Ad Creative Media
 - `read_service_connection` — Read Connected Service
 - `renew_connected_data_download` — Renew Connected Data Download
-- `set_scheduled_action_connections` — Set Scheduled Action Connections
 - `slack_send_message` — Send Slack Message
 - `test_service_connection` — Test Connected Service
 - `zoom_create_meeting` — Create Zoom Meeting

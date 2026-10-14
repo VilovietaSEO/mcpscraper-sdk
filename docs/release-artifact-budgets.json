@@ -2,23 +2,23 @@
   "schemaVersion": 1,
   "policy": {
     "basis": "Current registry archives plus measured intended public generated-contract and client changes, required archive metadata and modest byte headroom. New files are limited to the declared public client additions; no source maps, fixtures, build scripts or private runtime code.",
-    "source": "Official npm and PyPI registry archives downloaded and integrity-verified on 2026-10-13",
+    "source": "Official npm and PyPI registry archives downloaded and integrity-verified on 2026-10-14 UTC",
     "failClosed": true
   },
   "artifacts": [
     {
       "package": "mcpscraper-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.53.1",
+      "candidateVersion": "0.54.0",
       "baseline": {
-        "version": "0.53.0",
-        "sha256": "4210f74f5785e3459c373076186d33b8db5116b5ca019753f6a043b526cb35c8",
-        "compressedBytes": 69315,
-        "unpackedBytes": 474849,
+        "version": "0.53.1",
+        "sha256": "4df837409f982de55681de8dcb6f9ea91766c1818055d175b013376056c39c3f",
+        "compressedBytes": 69396,
+        "unpackedBytes": 475038,
         "fileCount": 6,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.53.0.tgz"
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.53.1.tgz"
       },
-      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
+      "intendedChange": "Remove user scheduling tools, workflow recurrence APIs and related generated models; preserve manual operations, client attribution and full-file delivery; move generic template methods into artifacts.",
       "maximum": {
         "compressedBytes": 70000,
         "unpackedBytes": 500000,
@@ -30,16 +30,16 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.52.1",
+      "candidateVersion": "0.53.0",
       "baseline": {
-        "version": "0.52.0",
-        "sha256": "547c5ca127ab5846de6cd1d6c2d262a70835c28d85b533fa757e521545e353b6",
-        "compressedBytes": 298448,
-        "unpackedBytes": 10774638,
+        "version": "0.52.1",
+        "sha256": "f4e506010de86642baba6d18808953e0b32f72076ad8a80a7fd3c56ef0578701",
+        "compressedBytes": 298592,
+        "unpackedBytes": 10775051,
         "fileCount": 5,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.52.0.tgz"
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.52.1.tgz"
       },
-      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
+      "intendedChange": "Remove user scheduling tools, workflow recurrence APIs and related generated models; preserve manual operations, client attribution and full-file delivery; move generic template methods into artifacts.",
       "maximum": {
         "compressedBytes": 315000,
         "unpackedBytes": 11500000,
@@ -51,16 +51,16 @@
     {
       "package": "mcpscraper-cli",
       "format": "npm-tgz",
-      "candidateVersion": "0.51.1",
+      "candidateVersion": "0.52.0",
       "baseline": {
-        "version": "0.51.0",
-        "sha256": "2e3824efee24fc46aff13d84141d87a9261c64b97d58c0ddcb60dc6cf4b7f72c",
-        "compressedBytes": 158927,
-        "unpackedBytes": 1116080,
+        "version": "0.51.1",
+        "sha256": "ea1a5eaffd9e307bc3699ab9c0bae054b087833765d1a882d29b95b30fae0d31",
+        "compressedBytes": 159072,
+        "unpackedBytes": 1116448,
         "fileCount": 3,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.51.0.tgz"
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.51.1.tgz"
       },
-      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
+      "intendedChange": "Remove user scheduling tools, workflow recurrence APIs and related generated models; preserve manual operations, client attribution and full-file delivery; move generic template methods into artifacts.",
       "maximum": {
         "compressedBytes": 170000,
         "unpackedBytes": 1175000,
@@ -72,16 +72,16 @@
     {
       "package": "mcpscraper-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.51.1",
+      "candidateVersion": "0.52.0",
       "baseline": {
-        "version": "0.51.0",
-        "sha256": "8a3efa17cefa92bbab2e7859a4d444a52cfb64c4062e7c2987728fa6f3a25b02",
-        "compressedBytes": 720578,
-        "unpackedBytes": 3183618,
+        "version": "0.51.1",
+        "sha256": "a82c040a8e3de77722cfece232956cf8670c9d20739d918ddc66dc1c5cc6d31f",
+        "compressedBytes": 720631,
+        "unpackedBytes": 3183920,
         "fileCount": 378,
-        "archiveUrl": "https://files.pythonhosted.org/packages/5b/ce/56b82007d5811aba2a7b8b16925c95c42c8ab3fa33df1f8d71fff501d384/mcpscraper_sdk-0.51.0-py3-none-any.whl"
+        "archiveUrl": "https://files.pythonhosted.org/packages/53/6a/52d1faa011232f50b9d994bd1803945fca4ab6183c2b65c019019725cadf/mcpscraper_sdk-0.51.1-py3-none-any.whl"
       },
-      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
+      "intendedChange": "Remove user scheduling tools, workflow recurrence APIs and related generated models; preserve manual operations, client attribution and full-file delivery; move generic template methods into artifacts.",
       "maximum": {
         "compressedBytes": 750000,
         "unpackedBytes": 3300000,
@@ -93,16 +93,16 @@
     {
       "package": "mcpscraper-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.51.1",
+      "candidateVersion": "0.52.0",
       "baseline": {
-        "version": "0.51.0",
-        "sha256": "1bdf52a042b5ef7f25be6b8181f036089bfdc1376744c1091eff5a58e8796050",
-        "compressedBytes": 282063,
-        "unpackedBytes": 3155697,
+        "version": "0.51.1",
+        "sha256": "b0c17f98a4c7510cf7f058efb57714c5ad5fe7e942bf4d5fb1151ff4e085781e",
+        "compressedBytes": 282092,
+        "unpackedBytes": 3155999,
         "fileCount": 379,
-        "archiveUrl": "https://files.pythonhosted.org/packages/09/9f/220cc5006a5c1503fffc3bc9beb9f786966c7324a1cf3f042985e469fb99/mcpscraper_sdk-0.51.0.tar.gz"
+        "archiveUrl": "https://files.pythonhosted.org/packages/f7/16/db99958136ec1c8a8ea1b989533619f58f10f94e33bbbc56dd78aa447629/mcpscraper_sdk-0.51.1.tar.gz"
       },
-      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
+      "intendedChange": "Remove user scheduling tools, workflow recurrence APIs and related generated models; preserve manual operations, client attribution and full-file delivery; move generic template methods into artifacts.",
       "maximum": {
         "compressedBytes": 300000,
         "unpackedBytes": 3300000,
@@ -114,16 +114,16 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.48.1",
+      "candidateVersion": "0.49.0",
       "baseline": {
-        "version": "0.48.0",
-        "sha256": "4a7a1c6f83d7159bc36ffac796d11f5d09400ec583e38a71296dd0917a88bdb2",
-        "compressedBytes": 923774,
-        "unpackedBytes": 3598090,
+        "version": "0.48.1",
+        "sha256": "50e3af748eb5e8d6c937f1a40b3f770cbb4dea0ca40c6581c625a11d7544fff9",
+        "compressedBytes": 923825,
+        "unpackedBytes": 3598392,
         "fileCount": 645,
-        "archiveUrl": "https://files.pythonhosted.org/packages/12/14/e5e59b560bfa1cc0c0580b09baa318179fc58a7e1991008302c94cc13dd0/mcpscraper_memory_sdk-0.48.0-py3-none-any.whl"
+        "archiveUrl": "https://files.pythonhosted.org/packages/66/5b/a46f8d364a9a303862cf8bf70e75be64f74c548ffba34b09c7327d4e19b9/mcpscraper_memory_sdk-0.48.1-py3-none-any.whl"
       },
-      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
+      "intendedChange": "Remove user scheduling tools, workflow recurrence APIs and related generated models; preserve manual operations, client attribution and full-file delivery; move generic template methods into artifacts.",
       "maximum": {
         "compressedBytes": 970000,
         "unpackedBytes": 3800000,
@@ -135,16 +135,16 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.48.1",
+      "candidateVersion": "0.49.0",
       "baseline": {
-        "version": "0.48.0",
-        "sha256": "5eb8b47e5115b1df60299ad583835f05786f132971a9302304bb63a42ea5062a",
-        "compressedBytes": 327911,
-        "unpackedBytes": 3533234,
+        "version": "0.48.1",
+        "sha256": "9cd1f167be51ab66390cf84bdddc602f5f675489de2bcff79337f8c31ec1f769",
+        "compressedBytes": 327937,
+        "unpackedBytes": 3533536,
         "fileCount": 646,
-        "archiveUrl": "https://files.pythonhosted.org/packages/bc/e9/e24b9ada1493216b878c0dbadf908d6ee1d649e04660000bf958c6f53f1f/mcpscraper_memory_sdk-0.48.0.tar.gz"
+        "archiveUrl": "https://files.pythonhosted.org/packages/52/fb/472516ff080af4a36c0d66fa8e8c0f5a95af2023f71375b8a954591f38da/mcpscraper_memory_sdk-0.48.1.tar.gz"
       },
-      "intendedChange": "Regenerated public PAA polling guidance and optional initial SERP source labels; existing public client files and artifact budgets retained.",
+      "intendedChange": "Remove user scheduling tools, workflow recurrence APIs and related generated models; preserve manual operations, client attribution and full-file delivery; move generic template methods into artifacts.",
       "maximum": {
         "compressedBytes": 350000,
         "unpackedBytes": 3800000,

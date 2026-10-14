@@ -16,6 +16,7 @@ ListMemoryTagsOutputVariant1TagsItem = TypedDict('ListMemoryTagsOutputVariant1Ta
     'status': Required[Literal['active', 'deprecated']],
     'usageCount': Required[Union[float, int]],
     'vaultUsage': Required[dict[str, Union[float, int]]],
+    'control': Required[bool],
 })
 ListMemoryTagsOutputVariant1TagsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 

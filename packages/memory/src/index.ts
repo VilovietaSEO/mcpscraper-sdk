@@ -15,7 +15,7 @@ export {
   LibraryNamespace,
   MemoryNamespace,
   RecallNamespace,
-  ScheduleNamespace,
+  ArtifactsNamespace,
   StorageNamespace,
   TablesNamespace,
   TagsNamespace,

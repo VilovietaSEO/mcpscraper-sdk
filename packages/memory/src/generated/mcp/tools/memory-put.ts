@@ -16,7 +16,7 @@ export interface Input {
    */
   title?: string;
   /**
-   * The complete note body to store and index. On edit this replaces the prior body, so merge the requested change into the full memory-get content before calling; never pass only the changed fragment.
+   * The complete note body to store and index. Content is replace-all: for an edit, first read the current note, merge the requested change into its full body, and never pass only the changed fragment. Must be non-empty.
    */
   content: string;
   /**
@@ -39,6 +39,10 @@ export interface Input {
      * Recall boost for important notes.
      */
     pinned?: boolean;
+    /**
+     * ISO-8601 deadline after which this note may be deleted. Set when a delete-N tag is applied; the tag alone is never the deadline.
+     */
+    delete_after?: string;
     /**
      * Attribution kind: user, person, url, file, channel, thread, or note.
      */
@@ -98,7 +102,7 @@ export interface Input {
     [k: string]: unknown;
   };
   /**
-   * Revision the edit is based on (from memory-get/put). Always supply it when an AI edits an existing note; a mismatch rejects the write and returns current content for reconciliation. Omit only for an intentional new note or explicit last-write-wins migration.
+   * Revision from the current note read or prior successful write. Pass it with the complete merged body when editing: a mismatch rejects the write and returns the current note for reconciliation. Never replay the stale body unchanged. Required for edits through shareId; omission on owned notes permits last-write-wins.
    */
   baseRevision?: number;
   /**
