@@ -5317,7 +5317,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "analytics_get_entitlement",
     "category": "analytics",
     "title": "Get X-Ray Pixel Access",
-    "description": "Check X-Ray access before analytics_list_sites. X-Ray is billed by Thorbit and uses no MCP Scraper Credits. Link only in the dashboard; never request its API key.",
+    "description": "Check X-Ray access before analytics_list_sites. Free access needs no Thorbit account and uses no MCP Scraper Credits. If Thorbit access is required, link only in the dashboard; never request its API key.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -20730,7 +20730,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_status",
     "category": "other",
     "title": "Check Durable Google PAA Harvest",
-    "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, correlated provider attempts, terminal rows, and billing. Wait at least 20 seconds before the first check and each later check. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
+    "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, attempt outcomes, terminal rows, and billing. Wait at least 20 seconds before the first check and each later check. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
     "inputSchema": {
       "type": "object",
       "properties": {

@@ -27,9 +27,6 @@ export interface Input {
 
 export type Output =
   | {
-      provider?: string;
-      fallbackFrom?: string;
-      acquisitionProvider?: string;
       query: string;
       location: string | null;
       searchQuery: string;

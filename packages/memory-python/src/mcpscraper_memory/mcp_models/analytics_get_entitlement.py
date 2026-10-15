@@ -9,8 +9,7 @@ class AnalyticsGetEntitlementInput(BaseModel):
 
 
 AnalyticsGetEntitlementOutputVariant1EntitlementBilling = TypedDict('AnalyticsGetEntitlementOutputVariant1EntitlementBilling', {
-    'standalonePriceUsdMonthly': Required[Annotated[Union[float, int], Field(ge=0)]],
-    'includedWithThorbitSubscriptionAtOrAboveUsdMonthly': Required[Annotated[Union[float, int], Field(ge=0)]],
+    'requiresActiveThorbitAccount': Required[bool],
     'consumesMcpScraperCredits': Required[Literal[False]],
 })
 AnalyticsGetEntitlementOutputVariant1EntitlementBilling.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
@@ -28,7 +27,7 @@ AnalyticsGetEntitlementOutputVariant1Entitlement = TypedDict('AnalyticsGetEntitl
     'product': Required[Literal['x_ray_pixel']],
     'productName': Required[str],
     'access': Required[bool],
-    'status': Required[Literal['trial', 'trial_expired', 'eligible', 'ineligible', 'stale', 'bridge_unavailable']],
+    'status': Required[Literal['free', 'trial', 'trial_expired', 'eligible', 'ineligible', 'stale', 'bridge_unavailable']],
     'reason': Required[str],
     'planId': Required[Union[str, None]],
     'subscriptionStatus': Required[Union[str, None]],

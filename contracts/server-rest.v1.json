@@ -73,15 +73,6 @@
         "200": {
           "type": "object",
           "properties": {
-            "provider": {
-              "type": "string"
-            },
-            "fallbackFrom": {
-              "type": "string"
-            },
-            "acquisitionProvider": {
-              "type": "string"
-            },
             "query": {
               "type": "string"
             },
@@ -1798,5 +1789,5 @@
     "billing",
     "service_unavailable"
   ],
-  "sourceContractSha256": "15681bc921e79f2adfa23ba396791d76fbdd750a16750e315d959fed1f8a09db"
+  "sourceContractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8"
 }

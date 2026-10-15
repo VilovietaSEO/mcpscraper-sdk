@@ -160,4 +160,4 @@ $ mcpscraper map https://example.com --json
 
 Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
 
-Release changes: [SDK 0.53.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.53.1).
+Release changes: [SDK 0.54.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.54.1).

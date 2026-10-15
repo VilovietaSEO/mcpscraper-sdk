@@ -45,7 +45,6 @@ AnalyticsVerifySiteSetupOutputVariant1Setup.__pydantic_config__ = ConfigDict(ext
 
 
 AnalyticsVerifySiteSetupOutputVariant1BillingReceiptProviderCostsItem = TypedDict('AnalyticsVerifySiteSetupOutputVariant1BillingReceiptProviderCostsItem', {
-    'provider': Required[Annotated[str, Field(min_length=1, max_length=120)]],
     'amountMinor': NotRequired[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'currency': NotRequired[str],
     'status': Required[Literal['none', 'estimated', 'incurred', 'unknown']],

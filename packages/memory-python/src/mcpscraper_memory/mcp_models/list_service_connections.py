@@ -24,7 +24,6 @@ ListServiceConnectionsOutputVariant1ConnectionsItemToolCapabilitiesItem.__pydant
 ListServiceConnectionsOutputVariant1ConnectionsItem = TypedDict('ListServiceConnectionsOutputVariant1ConnectionsItem', {
     'connectionId': Required[str],
     'providerConfigKey': Required[str],
-    'provider': NotRequired[Union[str, None]],
     'label': Required[str],
     'userLabel': NotRequired[Union[str, None]],
     'providerAccountId': NotRequired[Union[str, None]],
