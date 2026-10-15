@@ -387,7 +387,6 @@ export type Output =
          * @maxItems 50
          */
         providerCosts: {
-          provider: string;
           amountMinor?: number;
           currency?: string;
           status: "none" | "estimated" | "incurred" | "unknown";

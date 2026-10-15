@@ -66,9 +66,6 @@ export type Output =
       reviewsNextCursor?: string | null;
       imagesNextCursor?: string | null;
       maximumAuthorizationMc?: number;
-      provider?: string;
-      fallbackFrom?: string;
-      acquisitionProvider?: string;
       name?: string | null;
       placeUrl?: string | null;
       rating?: string | null;

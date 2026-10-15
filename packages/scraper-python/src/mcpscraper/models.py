@@ -1988,9 +1988,6 @@ class MapsSearchResponse(BaseModel):
     __annotations__ = {
         '__pydantic_extra__': Dict[str, Any],
     }
-    provider: str | None = None
-    fallbackFrom: str | None = None
-    acquisitionProvider: str | None = None
     query: str
     location: str | None = Field(...)
     searchQuery: str

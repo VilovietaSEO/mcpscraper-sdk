@@ -39,9 +39,6 @@ MapsSearchOutputVariant1ResultsItem.__pydantic_config__ = ConfigDict(extra="allo
 class MapsSearchOutputVariant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
-    provider: Union[str, None] = Field(None, alias='provider', description='')
-    fallback_from: Union[str, None] = Field(None, alias='fallbackFrom', description='')
-    acquisition_provider: Union[str, None] = Field(None, alias='acquisitionProvider', description='')
     query: str = Field(..., alias='query', description='')
     location: Union[str, None] = Field(..., alias='location', description='')
     search_query: str = Field(..., alias='searchQuery', description='')

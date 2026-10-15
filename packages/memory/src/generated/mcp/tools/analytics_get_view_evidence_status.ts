@@ -11,7 +11,6 @@ export type Output =
       status: {
         available: boolean;
         providers: {
-          provider: string;
           status: "available" | "unavailable" | "unproven";
           evidenceDate: string;
           reasonCode: string;

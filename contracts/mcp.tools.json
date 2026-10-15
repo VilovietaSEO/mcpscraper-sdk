@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.97.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "bb250b4b4bcc6b8dea5e237ff7cb20b70a568fe1853662e6249fb7c7b9382189",
+  "generatedFrom": "mcp-scraper 0.97.1 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
   "toolCount": 347,
   "tools": [
     {
@@ -5753,11 +5753,6 @@
                     "items": {
                       "type": "object",
                       "properties": {
-                        "provider": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 120
-                        },
                         "amountMinor": {
                           "type": "integer",
                           "minimum": 0,
@@ -5778,7 +5773,6 @@
                         }
                       },
                       "required": [
-                        "provider",
                         "status"
                       ],
                       "additionalProperties": false
@@ -20257,7 +20251,7 @@
     {
       "name": "analytics_get_entitlement",
       "title": "Get X-Ray Pixel Access",
-      "description": "Check X-Ray access before analytics_list_sites. X-Ray is billed by Thorbit and uses no MCP Scraper Credits. Link only in the dashboard; never request its API key.",
+      "description": "Check X-Ray access before analytics_list_sites. Free access needs no Thorbit account and uses no MCP Scraper Credits. If Thorbit access is required, link only in the dashboard; never request its API key.",
       "category": "analytics",
       "methodName": "getEntitlement",
       "inputSchema": {
@@ -20288,6 +20282,7 @@
                   "status": {
                     "type": "string",
                     "enum": [
+                      "free",
                       "trial",
                       "trial_expired",
                       "eligible",
@@ -20380,13 +20375,8 @@
                   "billing": {
                     "type": "object",
                     "properties": {
-                      "standalonePriceUsdMonthly": {
-                        "type": "number",
-                        "minimum": 0
-                      },
-                      "includedWithThorbitSubscriptionAtOrAboveUsdMonthly": {
-                        "type": "number",
-                        "minimum": 0
+                      "requiresActiveThorbitAccount": {
+                        "type": "boolean"
                       },
                       "consumesMcpScraperCredits": {
                         "type": "boolean",
@@ -20394,8 +20384,7 @@
                       }
                     },
                     "required": [
-                      "standalonePriceUsdMonthly",
-                      "includedWithThorbitSubscriptionAtOrAboveUsdMonthly",
+                      "requiresActiveThorbitAccount",
                       "consumesMcpScraperCredits"
                     ],
                     "additionalProperties": false
@@ -28172,10 +28161,6 @@
                     "items": {
                       "type": "object",
                       "properties": {
-                        "provider": {
-                          "type": "string",
-                          "minLength": 1
-                        },
                         "status": {
                           "type": "string",
                           "enum": [
@@ -28205,7 +28190,6 @@
                         }
                       },
                       "required": [
-                        "provider",
                         "status",
                         "evidenceDate",
                         "reasonCode",
@@ -36710,11 +36694,6 @@
                     "items": {
                       "type": "object",
                       "properties": {
-                        "provider": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 120
-                        },
                         "amountMinor": {
                           "type": "integer",
                           "minimum": 0,
@@ -36735,7 +36714,6 @@
                         }
                       },
                       "required": [
-                        "provider",
                         "status"
                       ],
                       "additionalProperties": false
@@ -40661,11 +40639,6 @@
                     "items": {
                       "type": "object",
                       "properties": {
-                        "provider": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 120
-                        },
                         "amountMinor": {
                           "type": "integer",
                           "minimum": 0,
@@ -40686,7 +40659,6 @@
                         }
                       },
                       "required": [
-                        "provider",
                         "status"
                       ],
                       "additionalProperties": false
@@ -43940,11 +43912,6 @@
                     "items": {
                       "type": "object",
                       "properties": {
-                        "provider": {
-                          "type": "string",
-                          "minLength": 1,
-                          "maxLength": 120
-                        },
                         "amountMinor": {
                           "type": "integer",
                           "minimum": 0,
@@ -43965,7 +43932,6 @@
                         }
                       },
                       "required": [
-                        "provider",
                         "status"
                       ],
                       "additionalProperties": false
@@ -104012,10 +103978,6 @@
                   "provenance": {
                     "type": "object",
                     "properties": {
-                      "provider": {
-                        "type": "string",
-                        "const": "gmail"
-                      },
                       "connectionId": {
                         "type": "string",
                         "minLength": 1,
@@ -104032,7 +103994,6 @@
                       }
                     },
                     "required": [
-                      "provider",
                       "connectionId",
                       "fetchedAt",
                       "format"
@@ -111237,7 +111198,7 @@
     {
       "name": "harvest_paa_status",
       "title": "Check Durable Google PAA Harvest",
-      "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, correlated provider attempts, terminal rows, and billing. Wait at least 20 seconds before the first check and each later check. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
+      "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, attempt outcomes, terminal rows, and billing. Wait at least 20 seconds before the first check and each later check. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
       "category": "other",
       "methodName": "harvestPaaStatus",
       "inputSchema": {
@@ -124428,16 +124389,6 @@
                     "providerConfigKey": {
                       "type": "string"
                     },
-                    "provider": {
-                      "anyOf": [
-                        {
-                          "type": "string"
-                        },
-                        {
-                          "type": "null"
-                        }
-                      ]
-                    },
                     "label": {
                       "type": "string",
                       "description": "Best available human-facing account label: a userLabel when set, otherwise verified provider identity, then a stable fallback."
@@ -130686,15 +130637,6 @@
                 "minimum": 0,
                 "maximum": 9007199254740991
               },
-              "provider": {
-                "type": "string"
-              },
-              "fallbackFrom": {
-                "type": "string"
-              },
-              "acquisitionProvider": {
-                "type": "string"
-              },
               "name": {
                 "anyOf": [
                   {
@@ -131681,15 +131623,6 @@
                 "type": "integer",
                 "minimum": 0,
                 "maximum": 9007199254740991
-              },
-              "provider": {
-                "type": "string"
-              },
-              "fallbackFrom": {
-                "type": "string"
-              },
-              "acquisitionProvider": {
-                "type": "string"
               },
               "name": {
                 "anyOf": [
@@ -132686,15 +132619,6 @@
                 "minimum": 0,
                 "maximum": 9007199254740991
               },
-              "provider": {
-                "type": "string"
-              },
-              "fallbackFrom": {
-                "type": "string"
-              },
-              "acquisitionProvider": {
-                "type": "string"
-              },
               "name": {
                 "anyOf": [
                   {
@@ -133615,15 +133539,6 @@
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             "type": "object",
             "properties": {
-              "provider": {
-                "type": "string"
-              },
-              "fallbackFrom": {
-                "type": "string"
-              },
-              "acquisitionProvider": {
-                "type": "string"
-              },
               "query": {
                 "type": "string"
               },
@@ -138189,16 +138104,12 @@
                   "applied": {
                     "type": "boolean"
                   },
-                  "provider": {
-                    "type": "string"
-                  },
                   "fallbackReason": {
                     "type": "string"
                   }
                 },
                 "required": [
-                  "applied",
-                  "provider"
+                  "applied"
                 ],
                 "additionalProperties": false
               },

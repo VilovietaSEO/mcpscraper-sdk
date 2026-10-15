@@ -30,7 +30,6 @@ GmailGetMessageOutputVariant1MessageAttachmentsItem.__pydantic_config__ = Config
 
 
 GmailGetMessageOutputVariant1MessageProvenance = TypedDict('GmailGetMessageOutputVariant1MessageProvenance', {
-    'provider': Required[Literal['gmail']],
     'connectionId': Required[Annotated[str, Field(min_length=1, max_length=500)]],
     'fetchedAt': Required[str],
     'format': Required[Literal['full']],

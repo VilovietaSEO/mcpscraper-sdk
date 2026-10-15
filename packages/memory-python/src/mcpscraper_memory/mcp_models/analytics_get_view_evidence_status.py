@@ -10,7 +10,6 @@ class AnalyticsGetViewEvidenceStatusInput(BaseModel):
 
 
 AnalyticsGetViewEvidenceStatusOutputVariant1StatusProvidersItem = TypedDict('AnalyticsGetViewEvidenceStatusOutputVariant1StatusProvidersItem', {
-    'provider': Required[Annotated[str, Field(min_length=1)]],
     'status': Required[Literal['available', 'unavailable', 'unproven']],
     'evidenceDate': Required[str],
     'reasonCode': Required[Annotated[str, Field(min_length=1)]],

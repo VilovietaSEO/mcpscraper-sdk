@@ -47,7 +47,6 @@ export type Output =
         }[];
         providerSizeEstimate: number | null;
         provenance: {
-          provider: "gmail";
           connectionId: string;
           fetchedAt: string;
           format: "full";

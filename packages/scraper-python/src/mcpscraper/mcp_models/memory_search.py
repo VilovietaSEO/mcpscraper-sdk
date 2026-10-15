@@ -43,7 +43,6 @@ MemorySearchOutputVariant1Planner.__pydantic_config__ = ConfigDict(extra="allow"
 
 MemorySearchOutputVariant1Rerank = TypedDict('MemorySearchOutputVariant1Rerank', {
     'applied': Required[bool],
-    'provider': Required[str],
     'fallbackReason': NotRequired[str],
 })
 MemorySearchOutputVariant1Rerank.__pydantic_config__ = ConfigDict(extra="allow", strict=True)

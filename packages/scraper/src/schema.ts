@@ -2383,9 +2383,6 @@ export interface components {
             debug: boolean;
         };
         MapsSearchResponse: {
-            provider?: string;
-            fallbackFrom?: string;
-            acquisitionProvider?: string;
             query: string;
             location: string | null;
             searchQuery: string;

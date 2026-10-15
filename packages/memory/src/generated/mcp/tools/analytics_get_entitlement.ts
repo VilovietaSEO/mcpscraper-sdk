@@ -6,7 +6,7 @@ export type Output =
         product: "x_ray_pixel";
         productName: string;
         access: boolean;
-        status: "trial" | "trial_expired" | "eligible" | "ineligible" | "stale" | "bridge_unavailable";
+        status: "free" | "trial" | "trial_expired" | "eligible" | "ineligible" | "stale" | "bridge_unavailable";
         reason: string;
         planId: string | null;
         subscriptionStatus: string | null;
@@ -20,8 +20,7 @@ export type Output =
         trialDaysRemaining: number;
         bridgeConfigured: boolean;
         billing: {
-          standalonePriceUsdMonthly: number;
-          includedWithThorbitSubscriptionAtOrAboveUsdMonthly: number;
+          requiresActiveThorbitAccount: boolean;
           consumesMcpScraperCredits: false;
         };
         owner: {

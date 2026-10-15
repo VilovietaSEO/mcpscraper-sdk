@@ -5,7 +5,6 @@ export type Output =
       connections: {
         connectionId: string;
         providerConfigKey: string;
-        provider?: string | null;
         /**
          * Best available human-facing account label: a userLabel when set, otherwise verified provider identity, then a stable fallback.
          */

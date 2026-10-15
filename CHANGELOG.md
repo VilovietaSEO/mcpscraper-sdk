@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.54.1] - 2026-10-15 — targets mcp-scraper 0.97.1
+
+### Fixed
+
+- Remove upstream identity, session and service-diagnostic fields from generated Maps and job models and CLI discovery.
+- Regenerate Node, Python and REST contracts from the current server. Existing job identifiers, status and credit-settlement fields remain available.
+
+### Package versions
+
+- Node scraper 0.54.1, Node Memory 0.53.1, CLI 0.52.1, Python scraper 0.52.1 and Python Memory 0.49.1.
+
 ## [0.54.0] - 2026-10-13 — targets mcp-scraper 0.97.0
 
 ### Removed
@@ -812,3 +823,5 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 [0.48.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.46.0...v0.47.0
 [0.43.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.42.0...v0.43.0
+
+[0.54.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.54.0...v0.54.1

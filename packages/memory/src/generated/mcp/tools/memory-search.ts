@@ -371,7 +371,6 @@ export type Output =
       };
       rerank?: {
         applied: boolean;
-        provider: string;
         fallbackReason?: string;
       };
       results?: {
