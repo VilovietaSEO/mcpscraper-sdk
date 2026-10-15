@@ -2,8 +2,8 @@
   "schemaVersion": 3,
   "product": "MCP Scraper",
   "release": "0.97.1",
-  "releaseState": "candidate_ready_for_controlled_deployment_verification",
-  "gateEvidencePhase": "candidate_readiness_not_live_release",
+  "releaseState": "published_and_live_verified_with_maps_limitation",
+  "gateEvidencePhase": "post_publication_and_production",
   "releaseTargetBranch": "codex/xray-runtime-repair",
   "releaseVersions": {
     "server": "0.97.1",
@@ -21,8 +21,9 @@
     "sdk-memory-python": "0.49.1"
   },
   "candidateSource": {
-    "serverCommit": "26afe1407bae2e1c334f8badb9bab0c6a845b2b4",
-    "note": "Exact current production baseline; new isolated worktree."
+    "serverCommit": "ed8c14d70ee98cd85701642038b158caa1c94d52",
+    "sdkCommit": "26194c35e94d2b2c6308a98b43fe6bc53e66d70a",
+    "note": "Merged commits identify immutable release tags and tested deployment bytes; this later documentation receipt does not retag artifacts."
   },
   "inventoryBaseline": "docs/releases/v0.96.3-native-runtime-release-matrix.json",
   "releaseUnits": [
@@ -305,170 +306,6 @@
       "plannedActions": []
     }
   ],
-  "artifactBudgets": {
-    "npm": {
-      "maxCompressedBytes": 2080000,
-      "maxUnpackedBytes": 10015000,
-      "maxFiles": 110,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "allowPathRegex": "^package/(?:dist/(?:[^/]+\\.(?:js|cjs|d\\.ts|d\\.cts)|bin/[^/]+\\.js|editorial-reading-room/assets/[^/]+)|package\\.json|README\\.md|CHANGELOG\\.md|THIRD_PARTY_NOTICES\\.html|public/agent-install\\.md|public/\\.well-known/xray-install\\.json)$",
-      "basis": "Unchanged docs/releases/public-artifact-policy.json. Accepted provider-neutral local-interface policy; no implementation confidentiality claim."
-    },
-    "mcpb": {
-      "maxCompressedBytes": 1857000,
-      "maxUnpackedBytes": 8550000,
-      "maxFiles": 4,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "allowPathRegex": "^(?:manifest\\.json|package\\.json|assets/icon\\.png|dist/mcp-stdio-server\\.cjs)$",
-      "basis": "Unchanged docs/releases/public-artifact-policy.json. Accepted provider-neutral local-interface policy; no implementation confidentiality claim."
-    },
-    "memoryBridgeNpm": {
-      "maxCompressedBytes": 12000,
-      "maxUnpackedBytes": 40000,
-      "maxFiles": 4,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "Inherited Memory bridge caps from v0.96.0 matrix; previous known public bridge1.23.1 was9799compressed/28684unpacked/4 files. Host implementation must remain absent from thin bridge."
-    },
-    "memoryDbNpm": {
-      "maxCompressedBytes": 160000,
-      "maxUnpackedBytes": 900000,
-      "maxFiles": 109,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "Official npm1.18.0 metadata852277unpacked/109 files; existing candidate142205compressed/798153unpacked/103 files removes framework adapters and schedule APIs. Numeric ceilings fixed at current release preflight, not claimed recorded before earlier builds."
-    },
-    "memoryToolsNpm": {
-      "maxCompressedBytes": 232000,
-      "maxUnpackedBytes": 2700000,
-      "maxFiles": 270,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "Inherited232000compressed/270-file caps retained. Previous1.19.1 was1468581unpacked/266files; plain native exported type definitions are1967376bytes of new2561603 total, including537065 template-tools.d.ts and330645 template-contracts.d.ts. Intended type metadata growth explains unpacked ceiling increase;0 maps and no vendored dependency tree. Gate established at current prepublication preflight."
-    },
-    "memoryCompatNpm": {
-      "maxCompressedBytes": 6000,
-      "maxUnpackedBytes": 20000,
-      "maxFiles": 12,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "Official npm0.1.0 metadata50816unpacked/16files; removing all source maps and replacing transport yields thin0.2.0 candidate under these bounded limits. Gate established now; no earlier planning validation claimed."
-    },
-    "mcpscraper-sdk:npm-tgz": {
-      "maxCompressedBytes": 70000,
-      "maxUnpackedBytes": 500000,
-      "maxFiles": 6,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "External SDK docs/release-artifact-budgets.json: official previous archives and intended generated-contract changes; inherited caps retained.",
-      "baseline": {
-        "version": "0.53.1",
-        "sha256": "4df837409f982de55681de8dcb6f9ea91766c1818055d175b013376056c39c3f",
-        "compressedBytes": 69396,
-        "unpackedBytes": 475038,
-        "fileCount": 6,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.53.1.tgz"
-      }
-    },
-    "mcpscraper-memory-sdk:npm-tgz": {
-      "maxCompressedBytes": 315000,
-      "maxUnpackedBytes": 11500000,
-      "maxFiles": 5,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "External SDK docs/release-artifact-budgets.json: official previous archives and intended generated-contract changes; inherited caps retained.",
-      "baseline": {
-        "version": "0.52.1",
-        "sha256": "f4e506010de86642baba6d18808953e0b32f72076ad8a80a7fd3c56ef0578701",
-        "compressedBytes": 298592,
-        "unpackedBytes": 10775051,
-        "fileCount": 5,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.52.1.tgz"
-      }
-    },
-    "mcpscraper-cli:npm-tgz": {
-      "maxCompressedBytes": 170000,
-      "maxUnpackedBytes": 1175000,
-      "maxFiles": 3,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "External SDK docs/release-artifact-budgets.json: official previous archives and intended generated-contract changes; inherited caps retained.",
-      "baseline": {
-        "version": "0.51.1",
-        "sha256": "ea1a5eaffd9e307bc3699ab9c0bae054b087833765d1a882d29b95b30fae0d31",
-        "compressedBytes": 159072,
-        "unpackedBytes": 1116448,
-        "fileCount": 3,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.51.1.tgz"
-      }
-    },
-    "mcpscraper-sdk:python-wheel": {
-      "maxCompressedBytes": 750000,
-      "maxUnpackedBytes": 3300000,
-      "maxFiles": 380,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "External SDK docs/release-artifact-budgets.json: official previous archives and intended generated-contract changes; inherited caps retained.",
-      "baseline": {
-        "version": "0.51.1",
-        "sha256": "a82c040a8e3de77722cfece232956cf8670c9d20739d918ddc66dc1c5cc6d31f",
-        "compressedBytes": 720631,
-        "unpackedBytes": 3183920,
-        "fileCount": 378,
-        "archiveUrl": "https://files.pythonhosted.org/packages/53/6a/52d1faa011232f50b9d994bd1803945fca4ab6183c2b65c019019725cadf/mcpscraper_sdk-0.51.1-py3-none-any.whl"
-      }
-    },
-    "mcpscraper-sdk:python-sdist": {
-      "maxCompressedBytes": 300000,
-      "maxUnpackedBytes": 3300000,
-      "maxFiles": 380,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "External SDK docs/release-artifact-budgets.json: official previous archives and intended generated-contract changes; inherited caps retained.",
-      "baseline": {
-        "version": "0.51.1",
-        "sha256": "b0c17f98a4c7510cf7f058efb57714c5ad5fe7e942bf4d5fb1151ff4e085781e",
-        "compressedBytes": 282092,
-        "unpackedBytes": 3155999,
-        "fileCount": 379,
-        "archiveUrl": "https://files.pythonhosted.org/packages/f7/16/db99958136ec1c8a8ea1b989533619f58f10f94e33bbbc56dd78aa447629/mcpscraper_sdk-0.51.1.tar.gz"
-      }
-    },
-    "mcpscraper-memory-sdk:python-wheel": {
-      "maxCompressedBytes": 970000,
-      "maxUnpackedBytes": 3800000,
-      "maxFiles": 650,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "External SDK docs/release-artifact-budgets.json: official previous archives and intended generated-contract changes; inherited caps retained.",
-      "baseline": {
-        "version": "0.48.1",
-        "sha256": "50e3af748eb5e8d6c937f1a40b3f770cbb4dea0ca40c6581c625a11d7544fff9",
-        "compressedBytes": 923825,
-        "unpackedBytes": 3598392,
-        "fileCount": 645,
-        "archiveUrl": "https://files.pythonhosted.org/packages/66/5b/a46f8d364a9a303862cf8bf70e75be64f74c548ffba34b09c7327d4e19b9/mcpscraper_memory_sdk-0.48.1-py3-none-any.whl"
-      }
-    },
-    "mcpscraper-memory-sdk:python-sdist": {
-      "maxCompressedBytes": 350000,
-      "maxUnpackedBytes": 3800000,
-      "maxFiles": 650,
-      "maxSourceMaps": 0,
-      "maxNestedNodeModulesEntries": 0,
-      "basis": "External SDK docs/release-artifact-budgets.json: official previous archives and intended generated-contract changes; inherited caps retained.",
-      "baseline": {
-        "version": "0.48.1",
-        "sha256": "9cd1f167be51ab66390cf84bdddc602f5f675489de2bcff79337f8c31ec1f769",
-        "compressedBytes": 327937,
-        "unpackedBytes": 3533536,
-        "fileCount": 646,
-        "archiveUrl": "https://files.pythonhosted.org/packages/52/fb/472516ff080af4a36c0d66fa8e8c0f5a95af2023f71375b8a954591f38da/mcpscraper_memory_sdk-0.48.1.tar.gz"
-      }
-    }
-  },
   "expectedSurfaceIds": [
     "runtime:server",
     "contract:mcp-tools",
@@ -567,10 +404,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "contract:mcp-tools",
@@ -578,12 +417,14 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
       "contractGroup": "public-mcp-tools",
       "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "package:npm",
@@ -591,10 +432,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "bundle:mcpb",
@@ -602,10 +445,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "client:cli",
@@ -613,10 +458,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "form:curl",
@@ -624,12 +471,14 @@
       "releaseUnit": "sdk",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
       "contractGroup": "public-mcp-tools",
       "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "message:npm-installer",
@@ -637,10 +486,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "message:claude-mcpb",
@@ -648,10 +499,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "docs:readme",
@@ -659,10 +512,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "changelog:server",
@@ -670,10 +525,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "release:github",
@@ -681,10 +538,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "deployment:production",
@@ -692,21 +551,22 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "auth:oauth",
       "kind": "oauth",
       "releaseUnit": "server",
-      "state": "verified",
+      "state": "not_applicable",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "No scheduling migration or OAuth change in this patch; prior release state is retained without reapplying."
       ],
-      "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "version": "0.97.1"
     },
     {
       "id": "runtime:scheduler",
@@ -723,10 +583,11 @@
       "releaseUnit": "web",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run build passes with physical dependency directory."
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
       ],
       "version": "0.96.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "runtime:memory",
@@ -766,12 +627,14 @@
       "releaseUnit": "sdk-scraper-node",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
       "contractGroup": "public-mcp-tools",
       "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "sdk:python",
@@ -779,12 +642,14 @@
       "releaseUnit": "sdk-scraper-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.52.1",
       "contractGroup": "public-mcp-tools",
       "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "docs:product",
@@ -822,10 +687,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "sdk:node-memory",
@@ -833,12 +700,14 @@
       "releaseUnit": "sdk-memory-node",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.53.1",
       "contractGroup": "public-mcp-tools",
       "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "sdk:cli",
@@ -846,12 +715,14 @@
       "releaseUnit": "sdk-cli",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.52.1",
       "contractGroup": "public-mcp-tools",
       "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "changelog:sdk",
@@ -859,10 +730,12 @@
       "releaseUnit": "sdk",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "changelog:web",
@@ -870,10 +743,11 @@
       "releaseUnit": "web",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run build passes with physical dependency directory."
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
       ],
       "version": "0.96.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "contract:sdk-tools",
@@ -881,12 +755,14 @@
       "releaseUnit": "sdk",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
       "contractGroup": "public-mcp-tools",
       "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "sdk:python-memory",
@@ -894,12 +770,14 @@
       "releaseUnit": "sdk-memory-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.49.1",
       "contractGroup": "public-mcp-tools",
       "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "release:sdk-github",
@@ -907,10 +785,12 @@
       "releaseUnit": "sdk",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "deployment:web",
@@ -918,10 +798,11 @@
       "releaseUnit": "web",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run build passes with physical dependency directory."
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
       ],
       "version": "0.96.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "registry:npm-sdk-scraper",
@@ -929,10 +810,12 @@
       "releaseUnit": "sdk-scraper-node",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "registry:npm-sdk-memory",
@@ -940,10 +823,12 @@
       "releaseUnit": "sdk-memory-node",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.53.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "registry:npm-sdk-cli",
@@ -951,10 +836,12 @@
       "releaseUnit": "sdk-cli",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.52.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "registry:pypi-sdk-scraper",
@@ -962,10 +849,12 @@
       "releaseUnit": "sdk-scraper-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.52.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "registry:pypi-sdk-memory",
@@ -973,10 +862,12 @@
       "releaseUnit": "sdk-memory-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.49.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "contract:rest-server",
@@ -984,12 +875,14 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
       "contractGroup": "public-rest-v1",
       "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "contract:rest-web",
@@ -997,12 +890,13 @@
       "releaseUnit": "web",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run build passes with physical dependency directory."
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
       ],
       "version": "0.96.1",
       "contractGroup": "public-rest-v1",
       "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "contract:rest-sdk-source",
@@ -1010,12 +904,14 @@
       "releaseUnit": "sdk",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
       "contractGroup": "public-rest-v1",
       "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "contract:rest-openapi",
@@ -1023,12 +919,14 @@
       "releaseUnit": "sdk",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
       "contractGroup": "public-rest-v1",
       "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "form:rest-node",
@@ -1036,12 +934,14 @@
       "releaseUnit": "sdk-scraper-node",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
       "contractGroup": "public-rest-v1",
       "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "form:rest-python",
@@ -1049,12 +949,14 @@
       "releaseUnit": "sdk-scraper-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.52.1",
       "contractGroup": "public-rest-v1",
       "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "contract:memory-tools",
@@ -1102,10 +1004,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "client:installed-codex",
@@ -1172,10 +1076,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "auth:scheduler-jobs",
@@ -1282,10 +1188,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "form:chatgpt",
@@ -1293,10 +1201,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "form:claude",
@@ -1304,10 +1214,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "docs:rest-viewer",
@@ -1315,10 +1227,11 @@
       "releaseUnit": "web",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run build passes with physical dependency directory."
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
       ],
       "version": "0.96.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "docs:integrations-setup",
@@ -1346,21 +1259,22 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "migration:user-scheduling",
       "kind": "data_migration",
       "releaseUnit": "server",
-      "state": "verified",
+      "state": "not_applicable",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "No scheduling migration or OAuth change in this patch; prior release state is retained without reapplying."
       ],
-      "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "version": "0.97.1"
     },
     {
       "id": "retired:user-schedules",
@@ -1440,10 +1354,12 @@
       "releaseUnit": "server",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: npm run package:public passes full native verification and exact archive confidentiality scan."
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
       ],
       "version": "0.97.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "archive:npm-tgz:mcpscraper-sdk",
@@ -1451,10 +1367,12 @@
       "releaseUnit": "sdk-scraper-node",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.54.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "archive:npm-tgz:mcpscraper-memory-sdk",
@@ -1462,10 +1380,12 @@
       "releaseUnit": "sdk-memory-node",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.53.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "archive:npm-tgz:mcpscraper-cli",
@@ -1473,10 +1393,12 @@
       "releaseUnit": "sdk-cli",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.52.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "archive:python-wheel:mcpscraper-sdk",
@@ -1484,10 +1406,12 @@
       "releaseUnit": "sdk-scraper-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.52.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "archive:python-sdist:mcpscraper-sdk",
@@ -1495,10 +1419,12 @@
       "releaseUnit": "sdk-scraper-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.52.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "archive:python-wheel:mcpscraper-memory-sdk",
@@ -1506,10 +1432,12 @@
       "releaseUnit": "sdk-memory-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.49.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     },
     {
       "id": "archive:python-sdist:mcpscraper-memory-sdk",
@@ -1517,549 +1445,27 @@
       "releaseUnit": "sdk-memory-python",
       "state": "verified",
       "evidence": [
-        "Candidate readiness: Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass."
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
       ],
       "version": "0.49.1",
-      "proofPhase": "candidate_readiness"
+      "proofPhase": "post_publication"
     }
   ],
   "candidateProof": {
-    "server": "npm run package:public passed:639 test files,5601 passing tests,18 skipped;typecheck/build,entrypoints,contract/privacy scans pass.",
-    "web": "npm run build passes with physical dependency directory.",
-    "sdk": "Node builds/typechecks/workspace tests; 21 projection tests; 66 scraper and42 Memory Python tests; REST and347-tool source parity pass.",
-    "recovery": "88 focused tests include explicit rejection, ambiguous timeout, admin auth/dry run, historical sync/direct original-hold recovery and replay.",
-    "maps": "Matching hosted-browser run returned10/81 with unavailable status; local Chromium, historical collector and isolated context controls also returned10. Full collection is not claimed."
+    "server": "Final npm run package:public:639 test files,5602 passing tests,18 skipped; typecheck/build, entrypoints and contract/confidentiality scans pass.",
+    "web": "Physical dependency build passed; Vercel READY at merged server commit; live API/SDK reference renders.",
+    "sdk": "Node builds/typechecks/workspace tests;21 projection tests;66 scraper and42 Memory Python tests; REST and347-tool parity. Fresh registry installs and imports pass.",
+    "recovery": "Supported canonical API settles original holds once; terminal jobs and settlement receipts read back; repeated apply replays without additional refund. Account has no remaining held jobs.",
+    "maps": "Matched hosted session10/81; US residential10/81; UI tab5/81; historical isolated context10/81. Full-review solution unresolved. Public status now partial.",
+    "liveControls": "Own-account PAA returned1 complete answer in19254ms; SERP9 results, attempt13328ms. Authorized public status reads omit provider identity."
   },
-  "candidateArtifacts": [
-    {
-      "releaseUnit": "server",
-      "format": "npm",
-      "path": "build/public-artifacts/mcp-scraper-0.97.0.tgz",
-      "version": "0.97.0",
-      "sha256": "a423870165efb4d1891076f01e0fafd578a4a18ed93a8dda4ef8641b4cea6367",
-      "compressedBytes": 1799783,
-      "unpackedBytes": 7813154,
-      "fileCount": 96,
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budget": "npm",
-      "budgetPassed": true,
-      "largestPaths": [
-        {
-          "path": "package/dist/server-6HUBN3OR.js",
-          "bytes": 2428719
-        },
-        {
-          "path": "package/dist/chunk-4P3LZNVA.js",
-          "bytes": 1198154
-        },
-        {
-          "path": "package/dist/index.cjs",
-          "bytes": 1006657
-        }
-      ],
-      "publicationState": "pending",
-      "declaredDependencies": {
-        "@anthropic-ai/sdk": "^0.96.0",
-        "@fal-ai/client": "^1.10.1",
-        "@hono/node-server": "^2.0.2",
-        "@libsql/client": "^0.17.3",
-        "@modelcontextprotocol/client": "^2.0.0",
-        "@modelcontextprotocol/node": "^2.0.0",
-        "@modelcontextprotocol/server": "^2.0.0",
-        "@neondatabase/serverless": "^1.1.0",
-        "@resvg/resvg-js": "^2.6.2",
-        "@vercel/blob": "^2.4.1",
-        "@vercel/functions": "^3.9.5",
-        "cheerio": "1.2.0",
-        "commander": "^12.0.0",
-        "diff": "^9.0.0",
-        "exceljs": "4.4.0",
-        "hono": "4.13.0",
-        "https-proxy-agent": "^7.0.6",
-        "ipaddr.js": "^1.9.1",
-        "jose": "^6.2.3",
-        "marked": "^18.0.7",
-        "mcpscraper-memory-tools": "2.0.0",
-        "p-limit": "^7.3.0",
-        "papaparse": "^5.4.0",
-        "pg": "^8.23.0",
-        "playwright": "^1.44.0",
-        "playwright-extra": "^4.3.6",
-        "puppeteer-extra-plugin-stealth": "^2.11.2",
-        "resend": "^6.12.3",
-        "satori": "^0.26.0",
-        "stripe": "^22.1.1",
-        "turndown": "^7.2.4",
-        "twilio": "^5.13.1",
-        "yauzl": "^3.4.0",
-        "yazl": "^3.3.1",
-        "youtube-transcript": "^1.3.1",
-        "zod": "4.4.3"
-      },
-      "handshakeRef": "candidateProof.archiveHandshakes",
-      "exactArchivePolicyScan": "passed repository-native verifyPublicArchive on rebuilt archive"
-    },
-    {
-      "releaseUnit": "server",
-      "format": "mcpb",
-      "path": "build/mcpb/mcp-scraper-0.97.0.mcpb",
-      "version": "0.97.0",
-      "sha256": "96b701920f66a0ee1a19dc52c6f39bf017e41c33983368d1dc09bbdc999bd110",
-      "compressedBytes": 1604461,
-      "unpackedBytes": 5535527,
-      "fileCount": 4,
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budget": "mcpb",
-      "budgetPassed": true,
-      "largestPaths": [
-        {
-          "path": "dist/mcp-stdio-server.cjs",
-          "bytes": 5394386
-        },
-        {
-          "path": "manifest.json",
-          "bytes": 127628
-        },
-        {
-          "path": "assets/icon.png",
-          "bytes": 13295
-        }
-      ],
-      "publicationState": "pending",
-      "handshakeRef": "candidateProof.archiveHandshakes",
-      "exactArchivePolicyScan": "passed repository-native verifyPublicArchive on rebuilt archive"
-    },
-    {
-      "releaseUnit": "memory-db",
-      "format": "npm",
-      "path": "build/candidates/mcpscraper-memory-db-2.0.0.tgz",
-      "version": "2.0.0",
-      "sha256": "19fc8ff726a052bba9585e19554d625a41c7c3792970837d361a077bd97ef31c",
-      "compressedBytes": 142205,
-      "unpackedBytes": 798153,
-      "fileCount": 103,
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budget": "memoryDbNpm",
-      "budgetPassed": true,
-      "largestPaths": [
-        {
-          "path": "package/dist/db/artifact-templates.d.ts",
-          "bytes": 157478
-        },
-        {
-          "path": "package/dist/db/relationships.js",
-          "bytes": 76678
-        },
-        {
-          "path": "package/dist/db/schema.d.ts",
-          "bytes": 53808
-        }
-      ],
-      "publicationState": "pending",
-      "declaredDependencies": {
-        "@ai-sdk/provider": "2.0.3",
-        "@aws-sdk/client-s3": "^3.1102.0",
-        "@aws-sdk/s3-request-presigner": "^3.1102.0",
-        "@vercel/blob": "^2.6.1",
-        "ai": "latest",
-        "jose": "^6.2.3",
-        "pg": "latest",
-        "zod": "3.25.76"
-      }
-    },
-    {
-      "releaseUnit": "memory-tools",
-      "format": "npm",
-      "path": "build/candidates/mcpscraper-memory-tools-2.0.0.tgz",
-      "version": "2.0.0",
-      "sha256": "7b49787fbd11b4c03f7238d79ff2748cb210e61ca3b12b39ac2171cab9579bf4",
-      "compressedBytes": 206063,
-      "unpackedBytes": 2561603,
-      "fileCount": 238,
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budget": "memoryToolsNpm",
-      "budgetPassed": true,
-      "largestPaths": [
-        {
-          "path": "package/dist/tools/artifacts/artifact-template-tools.d.ts",
-          "bytes": 537065
-        },
-        {
-          "path": "package/dist/tools/relationships/registry.d.ts",
-          "bytes": 469391
-        },
-        {
-          "path": "package/dist/lib/artifact-template-contracts.d.ts",
-          "bytes": 330645
-        }
-      ],
-      "publicationState": "pending",
-      "declaredDependencies": {
-        "mcpscraper-memory-db": "2.0.0",
-        "sharp": "0.35.3",
-        "zod": "^3.25.76",
-        "zod-to-json-schema": "^3.25.2"
-      }
-    },
-    {
-      "releaseUnit": "memory-compat",
-      "format": "npm",
-      "path": "build/candidates/vilovieta-mcp-memory-0.2.0.tgz",
-      "version": "0.2.0",
-      "sha256": "4e5c186ebca70133c428e30f50e30a4be2a7fee7bdc55c9916162e56519943da",
-      "compressedBytes": 3790,
-      "unpackedBytes": 14633,
-      "fileCount": 12,
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budget": "memoryCompatNpm",
-      "budgetPassed": true,
-      "largestPaths": [
-        {
-          "path": "package/dist/bin/mcp-stdio-server.cjs",
-          "bytes": 3727
-        },
-        {
-          "path": "package/dist/index.cjs",
-          "bytes": 3117
-        },
-        {
-          "path": "package/dist/chunk-RFQBQJLP.js",
-          "bytes": 2113
-        }
-      ],
-      "publicationState": "pending",
-      "declaredDependencies": {
-        "@modelcontextprotocol/sdk": "^1.29.0"
-      }
-    },
-    {
-      "package": "mcpscraper-sdk",
-      "version": "0.54.0",
-      "format": "npm-tgz",
-      "file": "mcpscraper-sdk-0.54.0.tgz",
-      "sha256": "5aadfc16ca96e24e0ee93d9e07ffb175fd01e9e333f61f9d356e826b083dca68",
-      "compressedBytes": 67909,
-      "unpackedBytes": 458480,
-      "fileCount": 6,
-      "budget": "mcpscraper-sdk:npm-tgz",
-      "source": "External SDK docs/release-artifact-candidate-report.json; independently extracted exact temporary candidate archive",
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budgetPassed": true,
-      "publicationState": "pending",
-      "declaredDependencies": {
-        "mcpscraper-memory-sdk": "^0.53.0"
-      },
-      "largestPaths": [
-        {
-          "path": "package/dist/index.d.cts",
-          "bytes": 196983
-        },
-        {
-          "path": "package/dist/index.d.ts",
-          "bytes": 196983
-        },
-        {
-          "path": "package/dist/index.cjs",
-          "bytes": 25840
-        }
-      ]
-    },
-    {
-      "package": "mcpscraper-memory-sdk",
-      "version": "0.53.0",
-      "format": "npm-tgz",
-      "file": "mcpscraper-memory-sdk-0.53.0.tgz",
-      "sha256": "2b24edb1c538163a4f8af9d8152996fab1df7827de265b372171c79f0a024b5a",
-      "compressedBytes": 282088,
-      "unpackedBytes": 10268812,
-      "fileCount": 5,
-      "budget": "mcpscraper-memory-sdk:npm-tgz",
-      "source": "External SDK docs/release-artifact-candidate-report.json; independently extracted exact temporary candidate archive",
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budgetPassed": true,
-      "publicationState": "pending",
-      "declaredDependencies": {},
-      "largestPaths": [
-        {
-          "path": "package/dist/index.d.ts",
-          "bytes": 10043625
-        },
-        {
-          "path": "package/dist/index.cjs",
-          "bytes": 110355
-        },
-        {
-          "path": "package/dist/index.js",
-          "bytes": 108485
-        }
-      ]
-    },
-    {
-      "package": "mcpscraper-cli",
-      "version": "0.52.0",
-      "format": "npm-tgz",
-      "file": "mcpscraper-cli-0.52.0.tgz",
-      "sha256": "895e3294b3d9acd9dcedec1712598e9a004bfbf55fa11a930ddc9355d80d1828",
-      "compressedBytes": 153869,
-      "unpackedBytes": 1085226,
-      "fileCount": 3,
-      "budget": "mcpscraper-cli:npm-tgz",
-      "source": "External SDK docs/release-artifact-candidate-report.json; independently extracted exact temporary candidate archive",
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budgetPassed": true,
-      "publicationState": "pending",
-      "declaredDependencies": {
-        "commander": "^12.0.0",
-        "mcpscraper-sdk": "^0.54.0"
-      },
-      "largestPaths": [
-        {
-          "path": "package/dist/bin/cli.js",
-          "bytes": 1074727
-        },
-        {
-          "path": "package/README.md",
-          "bytes": 9678
-        },
-        {
-          "path": "package/package.json",
-          "bytes": 821
-        }
-      ]
-    },
-    {
-      "package": "mcpscraper-sdk",
-      "version": "0.52.0",
-      "format": "python-wheel",
-      "file": "mcpscraper_sdk-0.52.0-py3-none-any.whl",
-      "sha256": "cf71398ad8f5bab06ef896503a4cf49079d940efb5c92ecd9828c92c6c7c4600",
-      "compressedBytes": 686837,
-      "unpackedBytes": 3039328,
-      "fileCount": 358,
-      "budget": "mcpscraper-sdk:python-wheel",
-      "source": "External SDK docs/release-artifact-candidate-report.json; independently extracted exact temporary candidate archive",
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budgetPassed": true,
-      "publicationState": "pending",
-      "declaredDependencies": [
-        "pydantic>=2.0",
-        "requests>=2.31"
-      ],
-      "largestPaths": [
-        {
-          "path": "mcpscraper/_mcp_generated_client.py",
-          "bytes": 214257
-        },
-        {
-          "path": "mcpscraper/models.py",
-          "bytes": 62786
-        },
-        {
-          "path": "mcpscraper/mcp_models/capture_serp_snapshot.py",
-          "bytes": 42868
-        }
-      ]
-    },
-    {
-      "package": "mcpscraper-sdk",
-      "version": "0.52.0",
-      "format": "python-sdist",
-      "file": "mcpscraper_sdk-0.52.0.tar.gz",
-      "sha256": "53da10eab3bdc23f677b9c80b179e4edd9e595b39fb5bda955339ddd7d087b95",
-      "compressedBytes": 270189,
-      "unpackedBytes": 3013438,
-      "fileCount": 359,
-      "budget": "mcpscraper-sdk:python-sdist",
-      "source": "External SDK docs/release-artifact-candidate-report.json; independently extracted exact temporary candidate archive",
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budgetPassed": true,
-      "publicationState": "pending",
-      "largestPaths": [
-        {
-          "path": "mcpscraper_sdk-0.52.0/src/mcpscraper/_mcp_generated_client.py",
-          "bytes": 214257
-        },
-        {
-          "path": "mcpscraper_sdk-0.52.0/src/mcpscraper/models.py",
-          "bytes": 62786
-        },
-        {
-          "path": "mcpscraper_sdk-0.52.0/src/mcpscraper/mcp_models/capture_serp_snapshot.py",
-          "bytes": 42868
-        }
-      ]
-    },
-    {
-      "package": "mcpscraper-memory-sdk",
-      "version": "0.49.0",
-      "format": "python-wheel",
-      "file": "mcpscraper_memory_sdk-0.49.0-py3-none-any.whl",
-      "sha256": "9199a67ed240f8a34f7289a94b0021745a0df13caad12d202811d61385466485",
-      "compressedBytes": 861186,
-      "unpackedBytes": 3395530,
-      "fileCount": 585,
-      "budget": "mcpscraper-memory-sdk:python-wheel",
-      "source": "External SDK docs/release-artifact-candidate-report.json; independently extracted exact temporary candidate archive",
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budgetPassed": true,
-      "publicationState": "pending",
-      "declaredDependencies": [
-        "pydantic>=2",
-        "requests>=2.31"
-      ],
-      "largestPaths": [
-        {
-          "path": "mcpscraper_memory/_mcp_generated_client.py",
-          "bytes": 214257
-        },
-        {
-          "path": "mcpscraper_memory_sdk-0.49.0.dist-info/RECORD",
-          "bytes": 63272
-        },
-        {
-          "path": "mcpscraper_memory/mcp_models/capture_serp_snapshot.py",
-          "bytes": 42868
-        }
-      ]
-    },
-    {
-      "package": "mcpscraper-memory-sdk",
-      "version": "0.49.0",
-      "format": "python-sdist",
-      "file": "mcpscraper_memory_sdk-0.49.0.tar.gz",
-      "sha256": "48412895ad60d41b4b5412c6dc93629c904b9d2842192a1f05278a7e8c58e8b9",
-      "compressedBytes": 307267,
-      "unpackedBytes": 3337295,
-      "fileCount": 586,
-      "budget": "mcpscraper-memory-sdk:python-sdist",
-      "source": "External SDK docs/release-artifact-candidate-report.json; independently extracted exact temporary candidate archive",
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budgetPassed": true,
-      "publicationState": "pending",
-      "largestPaths": [
-        {
-          "path": "mcpscraper_memory_sdk-0.49.0/src/mcpscraper_memory/_mcp_generated_client.py",
-          "bytes": 214257
-        },
-        {
-          "path": "mcpscraper_memory_sdk-0.49.0/src/mcpscraper_memory/mcp_models/capture_serp_snapshot.py",
-          "bytes": 42868
-        },
-        {
-          "path": "mcpscraper_memory_sdk-0.49.0/src/mcpscraper_memory/mcp_models/create_artifact_template.py",
-          "bytes": 38255
-        }
-      ]
-    },
-    {
-      "releaseUnit": "memory",
-      "format": "npm",
-      "path": "build/candidates/mcpscraper-memory-2.0.0.tgz",
-      "version": "2.0.0",
-      "sha256": "26392fe49d93f74b3f4c2660b33d5825de4708a63812e9ab7ac50fb99cd747e9",
-      "compressedBytes": 9718,
-      "unpackedBytes": 28905,
-      "fileCount": 4,
-      "sourceMaps": 0,
-      "nestedNodeModules": 0,
-      "budget": "memoryBridgeNpm",
-      "largestPaths": [
-        {
-          "path": "package/CHANGELOG.md",
-          "bytes": 17479
-        },
-        {
-          "path": "package/dist/bin/mcp-stdio-server.js",
-          "bytes": 4962
-        },
-        {
-          "path": "package/README.md",
-          "bytes": 4262
-        }
-      ],
-      "declaredDependencies": {
-        "@modelcontextprotocol/sdk": "^1.29.0",
-        "mcpscraper-memory-db": "2.0.0",
-        "mcpscraper-memory-tools": "2.0.0",
-        "zod": "^3.25.0",
-        "hono": "4.13.0",
-        "@hono/node-server": "^1.19.17",
-        "zod-to-json-schema": "^3.25.2"
-      },
-      "publicationState": "pending",
-      "budgetPassed": true,
-      "handshakeRef": "candidateProof.archiveHandshakes"
-    }
-  ],
-  "publicationReadiness": {
-    "state": "verified",
-    "artifactPolicy": "docs/releases/public-artifact-policy.json",
-    "policyException": "Explicit accepted docs/decisions/2026-09-04-provider-neutral-distributions.md preserves compiled local API/library/CLI and public backend libraries. Provider-neutral encoding is not secrecy; no implementation confidentiality claim.",
-    "credentialPreflight": "Existing npm whoami succeeds; PyPI Keychain credential preflight passes. Secret values and keys are not stored in this matrix.",
-    "remaining": [],
-    "evidence": [
-      "All89 expected surfaces are candidate-verified or explicitly retired/not-applicable; all13 archives meet their declared inventories/budgets and native/public policies.",
-      "Final source checkpoint, merge/tag identity and ordered publication/deployment are the next authorized delivery actions. Candidate readiness is not completed live release; sourceFreezeState and postPublicationProofRequired retain the remaining boundary."
-    ]
-  },
-  "postPublicationProofRequired": [
-    "Record merged source and annotated tags, then exact npm/PyPI metadata, fresh downloads, digests/inventories and fresh installs for every published artifact.",
-    "Publish Memory DB/Tools before consumer dependency lockfile hydration and deployments; keep source-only local candidates separate from registry release proof.",
-    "Deploy existing four projects from exact merged source: root, apps/worker, apps/memory, apps/web. Preserve project identities and all credentials.",
-    "Disable every live user recurrence admission/resume/drain path before applying retirement; recheck live claims and financial unknown outcomes, then soft retire eligible definitions without purging historical tables or keys.",
-    "Verify OAuth and hosted catalogs347/126, manual operation/delivery/billing/auth behavior, retired APIs/UI absence, ordinary connections, independent templates and assistant takeovers.",
-    "Verify official SDK 5 packages / 7 archives, hosted MCPB/website REST/docs/guide/Xray projections and fresh configured CodexNPX process.",
-    "Update progressive candidate states with exact live receipts and rerun existing matrix validator in publish phase; no final completion claim while live proof is pending."
-  ],
   "notes": [
-    "Every prior known surface is retained; old scheduler rows are evidenced migrations rather than omitted.",
-    "All four hosted units, three public Memory packages, legacy compatibility CLI and five SDK packages are directly changed or in the proven contract closure. Nango/Modal functions are verify_only; no unaffected provider is rebuilt or republished.",
-    "Internal maintenance/recovery, manual jobs, pagination/retries, credentials, historical financial records and unrelated products are retained. PAA checks remain 20 seconds; this release does not prove new live PAA acquisition quality or a completion-time promise.",
-    "No framework added, key rotation, historical data purge, source-map secrecy claim or new custom verification machinery."
+    "Release fixes public provider disclosure and original-hold terminal recovery; full Maps review loading is still unresolved.",
+    "Customer financial proof remains private; public receipts contain no customer identifiers.",
+    "Unaffected release units were not republished or deployed."
   ],
-  "migration": {
-    "retiredToolNames": [
-      "archive_scheduled_run",
-      "create-scheduled-action",
-      "create_scheduled_run_view_link",
-      "delete-scheduled-action",
-      "get-schedule-link",
-      "get-schedule-status",
-      "get_scheduled_run",
-      "list-scheduled-actions",
-      "list_scheduled_runs",
-      "mark_scheduled_run_opened",
-      "mark_scheduled_run_unopened",
-      "pause-scheduled-action",
-      "propose-scheduled-action",
-      "resume-scheduled-action",
-      "revoke-schedule-link",
-      "revoke_scheduled_run_view_link",
-      "set-schedule-defaults",
-      "set-schedule-entitlement",
-      "set_scheduled_action_connections",
-      "update-scheduled-action"
-    ],
-    "retainedHistoricalData": "Soft-retire eligible definitions after admission cutoff; no DROP, credential rotation, historical billing rewrite or replay.",
-    "canonicalWorkerRoot": "apps/worker",
-    "formerWorkerRoot": "apps/scheduler",
-    "preservedDeploymentProject": "mcp-scraper-scheduler",
-    "migrationImplementation": "scripts/retire-user-scheduling.ts and src/platform/database/retire-user-scheduling.ts",
-    "admissionPrerequisite": "All live user recurrence admission/resume/drain paths disabled before --apply --admission-disabled.",
-    "productionApplyState": "pending"
-  },
   "formerRepositoryMigrations": [
     {
       "repository": "https://github.com/VilovietaSEO/mcp-scraper-scheduler.git",
@@ -2089,19 +1495,107 @@
   ],
   "contractFingerprints": {
     "public-mcp-tools": {
-      "sha256": "bb250b4b4bcc6b8dea5e237ff7cb20b70a568fe1853662e6249fb7c7b9382189",
-      "owner": "SDK scripts/check-mcp-source-contract.ts projectedDigest/canonicalJson plus stripInternalTelemetry",
-      "meaning": "Canonical server-produced tool projection: names,title,descriptions,input/output schemas and annotations. Exact source-to-SDK check passes; raw JSON file hashes and separately projected telemetry digest are not conflated."
-    },
-    "public-memory-tools": {
-      "sha256": "c54392374d473191e04122672120fc308f9497165d238d62f034a62c41676c09",
-      "meaning": "Canonical JSON projection of126 direct Memory tools: name,description,inputSchema,outputSchema,annotations; tools/key names use localeCompare ordering. Producer and SDK source projections match exactly."
+      "sha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "meaning": "Final server-produced contract shared by verified consumer projections."
     },
     "public-rest-v1": {
-      "sha256": "15681bc921e79f2adfa23ba396791d76fbdd750a16750e315d959fed1f8a09db",
-      "owner": "Server src/api/public-rest-contract.ts and SDK scripts/project-public-rest-contract.mjs",
-      "meaning": "Server-owned registry content digest; unchanged in this release. SDK curated OpenAPI base separately removes five recurrence operations; root/web/SDK source-to-projection checks pass."
+      "sha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
+      "meaning": "Final server-produced contract shared by verified consumer projections."
     }
   },
-  "baselineMatrix": "v0.97.0-scheduling-retirement-release-matrix.json"
+  "baselineMatrix": "v0.97.0-scheduling-retirement-release-matrix.json",
+  "publicationProof": {
+    "npm": {
+      "mcp-scraper": {
+        "version": "0.97.1",
+        "sha256": "c875d92d7862cc45f31ee141b97b446caacfa2eaf94336224137225b42f388c0",
+        "tarball": "https://registry.npmjs.org/mcp-scraper/-/mcp-scraper-0.97.1.tgz"
+      },
+      "mcpscraper-sdk": {
+        "version": "0.54.1",
+        "sha256": "3e690aa5c012cdbebc65bb5ee150392c04b4c27401fa0b73630d9ab218a949cc",
+        "tarball": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.54.1.tgz"
+      },
+      "mcpscraper-memory-sdk": {
+        "version": "0.53.1",
+        "sha256": "d987b0c6d855ff77da1ac496de10ca3f7526af8ad6c07ea3aa628b7c0352faf8",
+        "tarball": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.53.1.tgz"
+      },
+      "mcpscraper-cli": {
+        "version": "0.52.1",
+        "sha256": "d24b05fc21a4c458923c630054a6474147445cd69b0494d7c052369d8c615e5c",
+        "tarball": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.52.1.tgz"
+      }
+    },
+    "pypi": {
+      "mcpscraper-sdk": {
+        "version": "0.52.1",
+        "files": [
+          {
+            "filename": "mcpscraper_sdk-0.52.1-py3-none-any.whl",
+            "sha256": "eed9b5476b8639d6ca6bc0994073221c0beac6529712f7e25869e9e12387e791"
+          },
+          {
+            "filename": "mcpscraper_sdk-0.52.1.tar.gz",
+            "sha256": "5c10e1139440063bfe54037e346c7b3409322492e87fef931428a3fdc7890e30"
+          }
+        ]
+      },
+      "mcpscraper-memory-sdk": {
+        "version": "0.49.1",
+        "files": [
+          {
+            "filename": "mcpscraper_memory_sdk-0.49.1-py3-none-any.whl",
+            "sha256": "06cd8d867c284db8a988d95907e54f6e1eeb390cbc05cb95da67ffccfdc2372a"
+          },
+          {
+            "filename": "mcpscraper_memory_sdk-0.49.1.tar.gz",
+            "sha256": "6c10eda9fabc9a0e2679388ab5065037aa671d59824153b6281d5fe9d4e1c6e1"
+          }
+        ]
+      }
+    },
+    "deployments": {
+      "server": {
+        "id": "dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ",
+        "url": "paa-crawler-gfa8cyo3k-andrew-contentsprous-projects.vercel.app",
+        "projectId": "prj_Iji1haqOEHX3xN1pmF6l6ozcXHfm",
+        "commit": "ed8c14d70ee98cd85701642038b158caa1c94d52",
+        "state": "READY",
+        "aliases": []
+      },
+      "web": {
+        "id": "dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM",
+        "url": "mcpscraper-3h6ffuqcn-andrew-contentsprous-projects.vercel.app",
+        "projectId": "prj_kihMsAA3C3QcREPxS2JP0V8RRynw",
+        "commit": "ed8c14d70ee98cd85701642038b158caa1c94d52",
+        "state": "READY",
+        "aliases": [
+          "mcpscraper-web.vercel.app",
+          "mcpscraper-web-andrew-contentsprous-projects.vercel.app"
+        ]
+      }
+    },
+    "freshRegistryInstall": {
+      "node": "Exact four versions installed from npm; both SDK modules imported (7 and28 exports).",
+      "python": "Exact two versions installed from PyPI with fresh index; mcpscraper and mcpscraper_memory imported."
+    },
+    "liveChecks": {
+      "jobs": "Terminal failed with settled original holds; recovery replay makes no additional refund.",
+      "maps": "Public partial, ten reviews, requested reviews/services/areasServed unavailable; provider identity absent.",
+      "mcp": "server/discover advertises0.97.1.",
+      "docs": "API & SDK Reference renders347-tool reference at https://mcpscraper.dev/docs.",
+      "xray": "Live entitlement access:true,status:free,reason:temporary_free_access; no active Thorbit requirement or MCP Scraper credit charge.",
+      "mcpbSha256": "2c98f521dd1cb860f08a6344febd9f7a4607606d9767085f899a0f834b5d88b1"
+    },
+    "source": {
+      "server": "ed8c14d70ee98cd85701642038b158caa1c94d52",
+      "sdk": "26194c35e94d2b2c6308a98b43fe6bc53e66d70a"
+    },
+    "releaseUrls": [
+      "https://github.com/VilovietaSEO/mcp-scraper/releases/tag/v0.97.1",
+      "https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.54.1"
+    ],
+    "knownLimitation": "Full Maps review extraction remains unresolved when Google serves a limited view. No verified full-review solution or ETA."
+  }
 }
