@@ -4,6 +4,19 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.55.1] - 2026-10-17 — targets mcp-scraper 0.99.1
+
+### Fixed
+
+- Correct generated Node, Python and CLI site-mapping guidance: start `extract_site` directly when page content is needed. Use `map_site_urls` when the URL inventory itself is the requested result, so extraction does not require a separate preliminary crawl.
+- Add a direct site-export example with a stable retry key and the existing status and page readers.
+- Exclude repository metadata from Python source distributions while keeping the complete public clients and models.
+
+### Changed
+
+- Node Memory 0.54.1, CLI 0.53.1, Python scraper 0.53.1 and Python Memory 0.50.1. Tool names, inputs and method bindings remain compatible.
+- Node scraper remains 0.55.0 and accepts Node Memory 0.54.1 through its existing dependency range. Existing lockfiles must update `mcpscraper-memory-sdk` to receive the corrected generated guidance.
+
 ## [0.55.0] - 2026-10-16 — targets mcp-scraper 0.99.0
 
 ### Added
@@ -824,7 +837,8 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.55.0...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.55.1...HEAD
+[0.55.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.55.0...v0.55.1
 [0.54.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.53.1...v0.54.0
 [0.53.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.53.0...v0.53.1
 [0.53.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.52.0...v0.53.0

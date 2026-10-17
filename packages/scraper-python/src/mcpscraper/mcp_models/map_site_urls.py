@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class MapSiteUrlsInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    url: Annotated[str, Field(min_length=1)] = Field(..., alias='url', description='Public website URL or domain to crawl for internal URLs. Bare domains default to https://. Use before extract_site when the user asks to audit/map/crawl a site.')
+    url: Annotated[str, Field(min_length=1)] = Field(..., alias='url', description='Public website URL or domain to inventory internal URLs. Bare domains default to https://. Use extract_site directly when page content is needed; it discovers URLs during the crawl.')
     max_urls: Union[Annotated[int, Field(ge=1, le=10000)], None] = Field(None, alias='maxUrls', description='Maximum URLs to discover. Use 100 for normal maps, up to 10000 for a full inventory. Large maps (over 500 URLs) write the complete inventory to a local file and return only a summary plus the file path instead of the full list inline.')
     delivery: Union[Literal['auto', 'inline', 'artifact'], None] = Field(None, alias='delivery', description='auto returns a bounded inline map and offloads large inventories; inline requests bounded inline delivery but still offloads above the hard context limit; artifact always creates an owner-scoped report artifact.')
 

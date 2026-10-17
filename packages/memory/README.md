@@ -86,7 +86,7 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 
 Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
 
-Release changes: [SDK 0.55.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.55.0).
+Release changes: [SDK 0.55.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.55.1).
 
 ## Client attribution and full results
 
@@ -99,3 +99,5 @@ export artifact ID with `artifact_download`, `artifact_read` or `artifact_descri
 to generate Markdown from retained JSON without repeating acquisition. The
 [on-demand export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.0/examples/serp-on-demand-export.mjs)
 shows the complete flow and preserves a retry key for uncertain search responses.
+
+For page content, start `extract_site` directly; it discovers pages during extraction. Use `map_site_urls` when you need the URL inventory itself. See the [direct site-export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.1/examples/site-export-direct.mjs) for retry keys, status and complete page reads.

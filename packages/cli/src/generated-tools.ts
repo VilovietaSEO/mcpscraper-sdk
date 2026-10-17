@@ -22644,7 +22644,7 @@ export const MCP_TOOL_CATALOG = [
       "type": "object",
       "properties": {
         "url": {
-          "description": "Public website URL or domain to crawl for internal URLs. Bare domains default to https://. Use before extract_site when the user asks to audit/map/crawl a site.",
+          "description": "Public website URL or domain to inventory internal URLs. Bare domains default to https://. Use extract_site directly when page content is needed; it discovers URLs during the crawl.",
           "type": "string",
           "minLength": 1
         },

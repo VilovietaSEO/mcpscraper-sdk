@@ -1,6 +1,6 @@
 [project]
 name = "mcpscraper-memory-sdk"
-version = "0.50.0"
+version = "0.50.1"
 description = "Official Python clients for the unified 347-tool MCP Scraper catalog, including Memory, Research, and CRM"
 readme = "README.md"
 license = "MIT"
@@ -28,3 +28,4 @@ packages = ["src/mcpscraper_memory"]
 
 [tool.hatch.build.targets.sdist]
 include = ["src/mcpscraper_memory", "README.md", "pyproject.toml"]
+exclude = [".gitignore"]
