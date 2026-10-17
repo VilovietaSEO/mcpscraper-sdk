@@ -56,6 +56,16 @@ BulkDeleteNotesOutputVariant2DeliveryArtifactsItem = TypedDict('BulkDeleteNotesO
 BulkDeleteNotesOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+BulkDeleteNotesOutputVariant2DeliveryAvailableExportsItem = TypedDict('BulkDeleteNotesOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+BulkDeleteNotesOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 BulkDeleteNotesOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('BulkDeleteNotesOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -69,6 +79,7 @@ BulkDeleteNotesOutputVariant2Delivery = TypedDict('BulkDeleteNotesOutputVariant2
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[BulkDeleteNotesOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[BulkDeleteNotesOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[BulkDeleteNotesOutputVariant2DeliveryStorageFailureVariant1, None]],

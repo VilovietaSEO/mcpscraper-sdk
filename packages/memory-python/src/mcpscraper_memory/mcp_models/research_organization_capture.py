@@ -35,7 +35,7 @@ class ResearchOrganizationCaptureInput(BaseModel):
     lineage: ResearchOrganizationCaptureInputLineage = Field(..., alias='lineage', description='Field authority, sensitivity, source, observation time, and confidence recorded with this governed write.')
 
 
-ResearchOrganizationCaptureOutputVariant1Record = TypedDict('ResearchOrganizationCaptureOutputVariant1Record', {
+ResearchOrganizationCaptureOutputVariant1Variant1Record = TypedDict('ResearchOrganizationCaptureOutputVariant1Variant1Record', {
     'entityId': Required[str],
     'domain': Required[Literal['research_person', 'research_organization', 'crm_person', 'crm_organization']],
     'entityKind': Required[Literal['person', 'organization']],
@@ -52,25 +52,114 @@ ResearchOrganizationCaptureOutputVariant1Record = TypedDict('ResearchOrganizatio
     'createdAt': Required[str],
     'updatedAt': Required[str],
 })
-ResearchOrganizationCaptureOutputVariant1Record.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+ResearchOrganizationCaptureOutputVariant1Variant1Record.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-ResearchOrganizationCaptureOutputVariant1Receipt = TypedDict('ResearchOrganizationCaptureOutputVariant1Receipt', {
+ResearchOrganizationCaptureOutputVariant1Variant1Receipt = TypedDict('ResearchOrganizationCaptureOutputVariant1Variant1Receipt', {
     'receiptId': Required[str],
     'replayed': NotRequired[bool],
 })
-ResearchOrganizationCaptureOutputVariant1Receipt.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+ResearchOrganizationCaptureOutputVariant1Variant1Receipt.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-class ResearchOrganizationCaptureOutputVariant1(BaseModel):
+class ResearchOrganizationCaptureOutputVariant1Variant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
     ok: bool = Field(..., alias='ok', description='')
     message: str = Field(..., alias='message', description='')
-    record: Union[ResearchOrganizationCaptureOutputVariant1Record, None] = Field(None, alias='record', description='')
-    receipt: Union[ResearchOrganizationCaptureOutputVariant1Receipt, None] = Field(None, alias='receipt', description='')
+    record: Union[ResearchOrganizationCaptureOutputVariant1Variant1Record, None] = Field(None, alias='record', description='')
+    receipt: Union[ResearchOrganizationCaptureOutputVariant1Variant1Receipt, None] = Field(None, alias='receipt', description='')
     code: Union[str, None] = Field(None, alias='code', description='')
     error: Union[str, None] = Field(None, alias='error', description='')
+
+
+ResearchOrganizationCaptureOutputVariant1Variant2DeliveryArtifactsItem = TypedDict('ResearchOrganizationCaptureOutputVariant1Variant2DeliveryArtifactsItem', {
+    'artifactId': Required[str],
+    'filename': Required[str],
+    'contentType': Required[str],
+    'bytes': Required[Union[float, int]],
+    'sha256': Required[str],
+    'expiresAt': Required[str],
+    'capabilities': Required[list[str]],
+    'downloadUrl': Required[Union[str, None]],
+    'downloadUrlExpiresAt': Required[Union[str, None]],
+    'downloadState': Required[Literal['available', 'local', 'unavailable']],
+})
+ResearchOrganizationCaptureOutputVariant1Variant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ResearchOrganizationCaptureOutputVariant1Variant2DeliveryStorageFailureVariant1 = TypedDict('ResearchOrganizationCaptureOutputVariant1Variant2DeliveryStorageFailureVariant1', {
+    'artifactId': Required[Union[str, None]],
+    'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
+})
+ResearchOrganizationCaptureOutputVariant1Variant2DeliveryStorageFailureVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ResearchOrganizationCaptureOutputVariant1Variant2Delivery = TypedDict('ResearchOrganizationCaptureOutputVariant1Variant2Delivery', {
+    'mode': Required[Literal['artifact']],
+    'status': Required[Literal['complete', 'partial', 'unavailable']],
+    'retainedRepresentation': Required[Literal['formatted-tool-result']],
+    'sourceIsError': Required[bool],
+    'artifacts': Required[list[ResearchOrganizationCaptureOutputVariant1Variant2DeliveryArtifactsItem]],
+    'downloadLinksOmitted': Required[bool],
+    'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'storageFailure': Required[Union[ResearchOrganizationCaptureOutputVariant1Variant2DeliveryStorageFailureVariant1, None]],
+    'nextAction': Required[str],
+})
+ResearchOrganizationCaptureOutputVariant1Variant2Delivery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ResearchOrganizationCaptureOutputVariant1Variant2RecoveryOperation = TypedDict('ResearchOrganizationCaptureOutputVariant1Variant2RecoveryOperation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+ResearchOrganizationCaptureOutputVariant1Variant2RecoveryOperation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ResearchOrganizationCaptureOutputVariant1Variant2Recovery = TypedDict('ResearchOrganizationCaptureOutputVariant1Variant2Recovery', {
+    'idempotencyKey': NotRequired[Annotated[str, Field(max_length=512)]],
+    'operationId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'runId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'jobId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'operation': NotRequired[ResearchOrganizationCaptureOutputVariant1Variant2RecoveryOperation],
+})
+ResearchOrganizationCaptureOutputVariant1Variant2Recovery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class ResearchOrganizationCaptureOutputVariant1Variant2(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    delivery: ResearchOrganizationCaptureOutputVariant1Variant2Delivery = Field(..., alias='delivery', description='')
+    preview: str = Field(..., alias='preview', description='')
+    scope: dict[str, Union[str, Union[float, int], bool, None]] = Field(..., alias='scope', description='')
+    recovery: ResearchOrganizationCaptureOutputVariant1Variant2Recovery = Field(..., alias='recovery', description='')
+
+
+ResearchOrganizationCaptureOutputVariant1Variant3Operation = TypedDict('ResearchOrganizationCaptureOutputVariant1Variant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+ResearchOrganizationCaptureOutputVariant1Variant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class ResearchOrganizationCaptureOutputVariant1Variant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[ResearchOrganizationCaptureOutputVariant1Variant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
+# Union schema: validate external payloads with TypeAdapter(ResearchOrganizationCaptureOutputVariant1).
+ResearchOrganizationCaptureOutputVariant1 = Union[ResearchOrganizationCaptureOutputVariant1Variant2, ResearchOrganizationCaptureOutputVariant1Variant3, ResearchOrganizationCaptureOutputVariant1Variant1]
 
 
 ResearchOrganizationCaptureOutputVariant2DeliveryArtifactsItem = TypedDict('ResearchOrganizationCaptureOutputVariant2DeliveryArtifactsItem', {
@@ -88,6 +177,16 @@ ResearchOrganizationCaptureOutputVariant2DeliveryArtifactsItem = TypedDict('Rese
 ResearchOrganizationCaptureOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ResearchOrganizationCaptureOutputVariant2DeliveryAvailableExportsItem = TypedDict('ResearchOrganizationCaptureOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ResearchOrganizationCaptureOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ResearchOrganizationCaptureOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ResearchOrganizationCaptureOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -101,6 +200,7 @@ ResearchOrganizationCaptureOutputVariant2Delivery = TypedDict('ResearchOrganizat
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ResearchOrganizationCaptureOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ResearchOrganizationCaptureOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ResearchOrganizationCaptureOutputVariant2DeliveryStorageFailureVariant1, None]],
@@ -136,30 +236,8 @@ class ResearchOrganizationCaptureOutputVariant2(BaseModel):
     recovery: ResearchOrganizationCaptureOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
-ResearchOrganizationCaptureOutputVariant3Operation = TypedDict('ResearchOrganizationCaptureOutputVariant3Operation', {
-    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
-    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
-    'state': Required[Annotated[str, Field(max_length=100)]],
-})
-ResearchOrganizationCaptureOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
-
-
-class ResearchOrganizationCaptureOutputVariant3(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
-
-    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
-    operation: Union[ResearchOrganizationCaptureOutputVariant3Operation, None] = Field(None, alias='operation', description='')
-    error_code: str = Field(..., alias='error_code', description='')
-    error_type: str = Field(..., alias='error_type', description='')
-    message: str = Field(..., alias='message', description='')
-    retryable: bool = Field(..., alias='retryable', description='')
-    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
-    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
-    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
-
-
 # Union schema: validate external payloads with TypeAdapter(ResearchOrganizationCaptureOutput).
-ResearchOrganizationCaptureOutput = Union[ResearchOrganizationCaptureOutputVariant2, ResearchOrganizationCaptureOutputVariant3, ResearchOrganizationCaptureOutputVariant1]
+ResearchOrganizationCaptureOutput = Union[ResearchOrganizationCaptureOutputVariant2, ResearchOrganizationCaptureOutputVariant1]
 
 _ResearchOrganizationCaptureInputAdapter = TypeAdapter(ResearchOrganizationCaptureInput)
 _ResearchOrganizationCaptureOutputAdapter = TypeAdapter(ResearchOrganizationCaptureOutput)

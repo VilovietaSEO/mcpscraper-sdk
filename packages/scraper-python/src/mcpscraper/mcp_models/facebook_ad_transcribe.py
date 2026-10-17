@@ -64,6 +64,16 @@ FacebookAdTranscribeOutputVariant2DeliveryArtifactsItem = TypedDict('FacebookAdT
 FacebookAdTranscribeOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+FacebookAdTranscribeOutputVariant2DeliveryAvailableExportsItem = TypedDict('FacebookAdTranscribeOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+FacebookAdTranscribeOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 FacebookAdTranscribeOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('FacebookAdTranscribeOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -77,6 +87,7 @@ FacebookAdTranscribeOutputVariant2Delivery = TypedDict('FacebookAdTranscribeOutp
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[FacebookAdTranscribeOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[FacebookAdTranscribeOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[FacebookAdTranscribeOutputVariant2DeliveryStorageFailureVariant1, None]],

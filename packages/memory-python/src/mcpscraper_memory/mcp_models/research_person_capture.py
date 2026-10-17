@@ -35,7 +35,7 @@ class ResearchPersonCaptureInput(BaseModel):
     lineage: ResearchPersonCaptureInputLineage = Field(..., alias='lineage', description='Field authority, sensitivity, source, observation time, and confidence recorded with this governed write.')
 
 
-ResearchPersonCaptureOutputVariant1Record = TypedDict('ResearchPersonCaptureOutputVariant1Record', {
+ResearchPersonCaptureOutputVariant1Variant1Record = TypedDict('ResearchPersonCaptureOutputVariant1Variant1Record', {
     'entityId': Required[str],
     'domain': Required[Literal['research_person', 'research_organization', 'crm_person', 'crm_organization']],
     'entityKind': Required[Literal['person', 'organization']],
@@ -52,25 +52,114 @@ ResearchPersonCaptureOutputVariant1Record = TypedDict('ResearchPersonCaptureOutp
     'createdAt': Required[str],
     'updatedAt': Required[str],
 })
-ResearchPersonCaptureOutputVariant1Record.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+ResearchPersonCaptureOutputVariant1Variant1Record.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-ResearchPersonCaptureOutputVariant1Receipt = TypedDict('ResearchPersonCaptureOutputVariant1Receipt', {
+ResearchPersonCaptureOutputVariant1Variant1Receipt = TypedDict('ResearchPersonCaptureOutputVariant1Variant1Receipt', {
     'receiptId': Required[str],
     'replayed': NotRequired[bool],
 })
-ResearchPersonCaptureOutputVariant1Receipt.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+ResearchPersonCaptureOutputVariant1Variant1Receipt.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-class ResearchPersonCaptureOutputVariant1(BaseModel):
+class ResearchPersonCaptureOutputVariant1Variant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
     ok: bool = Field(..., alias='ok', description='')
     message: str = Field(..., alias='message', description='')
-    record: Union[ResearchPersonCaptureOutputVariant1Record, None] = Field(None, alias='record', description='')
-    receipt: Union[ResearchPersonCaptureOutputVariant1Receipt, None] = Field(None, alias='receipt', description='')
+    record: Union[ResearchPersonCaptureOutputVariant1Variant1Record, None] = Field(None, alias='record', description='')
+    receipt: Union[ResearchPersonCaptureOutputVariant1Variant1Receipt, None] = Field(None, alias='receipt', description='')
     code: Union[str, None] = Field(None, alias='code', description='')
     error: Union[str, None] = Field(None, alias='error', description='')
+
+
+ResearchPersonCaptureOutputVariant1Variant2DeliveryArtifactsItem = TypedDict('ResearchPersonCaptureOutputVariant1Variant2DeliveryArtifactsItem', {
+    'artifactId': Required[str],
+    'filename': Required[str],
+    'contentType': Required[str],
+    'bytes': Required[Union[float, int]],
+    'sha256': Required[str],
+    'expiresAt': Required[str],
+    'capabilities': Required[list[str]],
+    'downloadUrl': Required[Union[str, None]],
+    'downloadUrlExpiresAt': Required[Union[str, None]],
+    'downloadState': Required[Literal['available', 'local', 'unavailable']],
+})
+ResearchPersonCaptureOutputVariant1Variant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ResearchPersonCaptureOutputVariant1Variant2DeliveryStorageFailureVariant1 = TypedDict('ResearchPersonCaptureOutputVariant1Variant2DeliveryStorageFailureVariant1', {
+    'artifactId': Required[Union[str, None]],
+    'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
+})
+ResearchPersonCaptureOutputVariant1Variant2DeliveryStorageFailureVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ResearchPersonCaptureOutputVariant1Variant2Delivery = TypedDict('ResearchPersonCaptureOutputVariant1Variant2Delivery', {
+    'mode': Required[Literal['artifact']],
+    'status': Required[Literal['complete', 'partial', 'unavailable']],
+    'retainedRepresentation': Required[Literal['formatted-tool-result']],
+    'sourceIsError': Required[bool],
+    'artifacts': Required[list[ResearchPersonCaptureOutputVariant1Variant2DeliveryArtifactsItem]],
+    'downloadLinksOmitted': Required[bool],
+    'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'storageFailure': Required[Union[ResearchPersonCaptureOutputVariant1Variant2DeliveryStorageFailureVariant1, None]],
+    'nextAction': Required[str],
+})
+ResearchPersonCaptureOutputVariant1Variant2Delivery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ResearchPersonCaptureOutputVariant1Variant2RecoveryOperation = TypedDict('ResearchPersonCaptureOutputVariant1Variant2RecoveryOperation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+ResearchPersonCaptureOutputVariant1Variant2RecoveryOperation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ResearchPersonCaptureOutputVariant1Variant2Recovery = TypedDict('ResearchPersonCaptureOutputVariant1Variant2Recovery', {
+    'idempotencyKey': NotRequired[Annotated[str, Field(max_length=512)]],
+    'operationId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'runId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'jobId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'operation': NotRequired[ResearchPersonCaptureOutputVariant1Variant2RecoveryOperation],
+})
+ResearchPersonCaptureOutputVariant1Variant2Recovery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class ResearchPersonCaptureOutputVariant1Variant2(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    delivery: ResearchPersonCaptureOutputVariant1Variant2Delivery = Field(..., alias='delivery', description='')
+    preview: str = Field(..., alias='preview', description='')
+    scope: dict[str, Union[str, Union[float, int], bool, None]] = Field(..., alias='scope', description='')
+    recovery: ResearchPersonCaptureOutputVariant1Variant2Recovery = Field(..., alias='recovery', description='')
+
+
+ResearchPersonCaptureOutputVariant1Variant3Operation = TypedDict('ResearchPersonCaptureOutputVariant1Variant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+ResearchPersonCaptureOutputVariant1Variant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class ResearchPersonCaptureOutputVariant1Variant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[ResearchPersonCaptureOutputVariant1Variant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
+# Union schema: validate external payloads with TypeAdapter(ResearchPersonCaptureOutputVariant1).
+ResearchPersonCaptureOutputVariant1 = Union[ResearchPersonCaptureOutputVariant1Variant2, ResearchPersonCaptureOutputVariant1Variant3, ResearchPersonCaptureOutputVariant1Variant1]
 
 
 ResearchPersonCaptureOutputVariant2DeliveryArtifactsItem = TypedDict('ResearchPersonCaptureOutputVariant2DeliveryArtifactsItem', {
@@ -88,6 +177,16 @@ ResearchPersonCaptureOutputVariant2DeliveryArtifactsItem = TypedDict('ResearchPe
 ResearchPersonCaptureOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ResearchPersonCaptureOutputVariant2DeliveryAvailableExportsItem = TypedDict('ResearchPersonCaptureOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ResearchPersonCaptureOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ResearchPersonCaptureOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ResearchPersonCaptureOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -101,6 +200,7 @@ ResearchPersonCaptureOutputVariant2Delivery = TypedDict('ResearchPersonCaptureOu
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ResearchPersonCaptureOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ResearchPersonCaptureOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ResearchPersonCaptureOutputVariant2DeliveryStorageFailureVariant1, None]],
@@ -136,30 +236,8 @@ class ResearchPersonCaptureOutputVariant2(BaseModel):
     recovery: ResearchPersonCaptureOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
-ResearchPersonCaptureOutputVariant3Operation = TypedDict('ResearchPersonCaptureOutputVariant3Operation', {
-    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
-    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
-    'state': Required[Annotated[str, Field(max_length=100)]],
-})
-ResearchPersonCaptureOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
-
-
-class ResearchPersonCaptureOutputVariant3(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
-
-    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
-    operation: Union[ResearchPersonCaptureOutputVariant3Operation, None] = Field(None, alias='operation', description='')
-    error_code: str = Field(..., alias='error_code', description='')
-    error_type: str = Field(..., alias='error_type', description='')
-    message: str = Field(..., alias='message', description='')
-    retryable: bool = Field(..., alias='retryable', description='')
-    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
-    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
-    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
-
-
 # Union schema: validate external payloads with TypeAdapter(ResearchPersonCaptureOutput).
-ResearchPersonCaptureOutput = Union[ResearchPersonCaptureOutputVariant2, ResearchPersonCaptureOutputVariant3, ResearchPersonCaptureOutputVariant1]
+ResearchPersonCaptureOutput = Union[ResearchPersonCaptureOutputVariant2, ResearchPersonCaptureOutputVariant1]
 
 _ResearchPersonCaptureInputAdapter = TypeAdapter(ResearchPersonCaptureInput)
 _ResearchPersonCaptureOutputAdapter = TypeAdapter(ResearchPersonCaptureOutput)

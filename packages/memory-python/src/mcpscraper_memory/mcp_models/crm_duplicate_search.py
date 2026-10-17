@@ -14,7 +14,7 @@ class CrmDuplicateSearchInput(BaseModel):
     limit: Union[Annotated[int, Field(ge=1, le=100)], None] = Field(None, alias='limit', description='Maximum rows or records to return on this page; use the returned cursor for more.')
 
 
-class CrmDuplicateSearchOutputVariant1(BaseModel):
+class CrmDuplicateSearchOutputVariant1Variant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
     ok: bool = Field(..., alias='ok', description='')
@@ -22,6 +22,95 @@ class CrmDuplicateSearchOutputVariant1(BaseModel):
     candidates: Union[list[dict[str, Any]], None] = Field(None, alias='candidates', description='')
     code: Union[str, None] = Field(None, alias='code', description='')
     error: Union[str, None] = Field(None, alias='error', description='')
+
+
+CrmDuplicateSearchOutputVariant1Variant2DeliveryArtifactsItem = TypedDict('CrmDuplicateSearchOutputVariant1Variant2DeliveryArtifactsItem', {
+    'artifactId': Required[str],
+    'filename': Required[str],
+    'contentType': Required[str],
+    'bytes': Required[Union[float, int]],
+    'sha256': Required[str],
+    'expiresAt': Required[str],
+    'capabilities': Required[list[str]],
+    'downloadUrl': Required[Union[str, None]],
+    'downloadUrlExpiresAt': Required[Union[str, None]],
+    'downloadState': Required[Literal['available', 'local', 'unavailable']],
+})
+CrmDuplicateSearchOutputVariant1Variant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmDuplicateSearchOutputVariant1Variant2DeliveryStorageFailureVariant1 = TypedDict('CrmDuplicateSearchOutputVariant1Variant2DeliveryStorageFailureVariant1', {
+    'artifactId': Required[Union[str, None]],
+    'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
+})
+CrmDuplicateSearchOutputVariant1Variant2DeliveryStorageFailureVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmDuplicateSearchOutputVariant1Variant2Delivery = TypedDict('CrmDuplicateSearchOutputVariant1Variant2Delivery', {
+    'mode': Required[Literal['artifact']],
+    'status': Required[Literal['complete', 'partial', 'unavailable']],
+    'retainedRepresentation': Required[Literal['formatted-tool-result']],
+    'sourceIsError': Required[bool],
+    'artifacts': Required[list[CrmDuplicateSearchOutputVariant1Variant2DeliveryArtifactsItem]],
+    'downloadLinksOmitted': Required[bool],
+    'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'storageFailure': Required[Union[CrmDuplicateSearchOutputVariant1Variant2DeliveryStorageFailureVariant1, None]],
+    'nextAction': Required[str],
+})
+CrmDuplicateSearchOutputVariant1Variant2Delivery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmDuplicateSearchOutputVariant1Variant2RecoveryOperation = TypedDict('CrmDuplicateSearchOutputVariant1Variant2RecoveryOperation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmDuplicateSearchOutputVariant1Variant2RecoveryOperation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmDuplicateSearchOutputVariant1Variant2Recovery = TypedDict('CrmDuplicateSearchOutputVariant1Variant2Recovery', {
+    'idempotencyKey': NotRequired[Annotated[str, Field(max_length=512)]],
+    'operationId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'runId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'jobId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'operation': NotRequired[CrmDuplicateSearchOutputVariant1Variant2RecoveryOperation],
+})
+CrmDuplicateSearchOutputVariant1Variant2Recovery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmDuplicateSearchOutputVariant1Variant2(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    delivery: CrmDuplicateSearchOutputVariant1Variant2Delivery = Field(..., alias='delivery', description='')
+    preview: str = Field(..., alias='preview', description='')
+    scope: dict[str, Union[str, Union[float, int], bool, None]] = Field(..., alias='scope', description='')
+    recovery: CrmDuplicateSearchOutputVariant1Variant2Recovery = Field(..., alias='recovery', description='')
+
+
+CrmDuplicateSearchOutputVariant1Variant3Operation = TypedDict('CrmDuplicateSearchOutputVariant1Variant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmDuplicateSearchOutputVariant1Variant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmDuplicateSearchOutputVariant1Variant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmDuplicateSearchOutputVariant1Variant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
+# Union schema: validate external payloads with TypeAdapter(CrmDuplicateSearchOutputVariant1).
+CrmDuplicateSearchOutputVariant1 = Union[CrmDuplicateSearchOutputVariant1Variant2, CrmDuplicateSearchOutputVariant1Variant3, CrmDuplicateSearchOutputVariant1Variant1]
 
 
 CrmDuplicateSearchOutputVariant2DeliveryArtifactsItem = TypedDict('CrmDuplicateSearchOutputVariant2DeliveryArtifactsItem', {
@@ -39,6 +128,16 @@ CrmDuplicateSearchOutputVariant2DeliveryArtifactsItem = TypedDict('CrmDuplicateS
 CrmDuplicateSearchOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+CrmDuplicateSearchOutputVariant2DeliveryAvailableExportsItem = TypedDict('CrmDuplicateSearchOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+CrmDuplicateSearchOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 CrmDuplicateSearchOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('CrmDuplicateSearchOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -52,6 +151,7 @@ CrmDuplicateSearchOutputVariant2Delivery = TypedDict('CrmDuplicateSearchOutputVa
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[CrmDuplicateSearchOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[CrmDuplicateSearchOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[CrmDuplicateSearchOutputVariant2DeliveryStorageFailureVariant1, None]],
@@ -87,30 +187,8 @@ class CrmDuplicateSearchOutputVariant2(BaseModel):
     recovery: CrmDuplicateSearchOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
-CrmDuplicateSearchOutputVariant3Operation = TypedDict('CrmDuplicateSearchOutputVariant3Operation', {
-    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
-    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
-    'state': Required[Annotated[str, Field(max_length=100)]],
-})
-CrmDuplicateSearchOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
-
-
-class CrmDuplicateSearchOutputVariant3(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
-
-    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
-    operation: Union[CrmDuplicateSearchOutputVariant3Operation, None] = Field(None, alias='operation', description='')
-    error_code: str = Field(..., alias='error_code', description='')
-    error_type: str = Field(..., alias='error_type', description='')
-    message: str = Field(..., alias='message', description='')
-    retryable: bool = Field(..., alias='retryable', description='')
-    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
-    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
-    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
-
-
 # Union schema: validate external payloads with TypeAdapter(CrmDuplicateSearchOutput).
-CrmDuplicateSearchOutput = Union[CrmDuplicateSearchOutputVariant2, CrmDuplicateSearchOutputVariant3, CrmDuplicateSearchOutputVariant1]
+CrmDuplicateSearchOutput = Union[CrmDuplicateSearchOutputVariant2, CrmDuplicateSearchOutputVariant1]
 
 _CrmDuplicateSearchInputAdapter = TypeAdapter(CrmDuplicateSearchInput)
 _CrmDuplicateSearchOutputAdapter = TypeAdapter(CrmDuplicateSearchOutput)

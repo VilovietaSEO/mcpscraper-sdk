@@ -32,11 +32,11 @@ export interface Input {
    */
   serpIdentity?: string;
   /**
-   * One page by default. Set 2 only when the user explicitly requests two pages; two-page results include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.
+   * One page by default. Set 2 only when the user explicitly requests two pages; two-page searches have no backup provider, cannot combine recency or serpIdentity, and include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.
    */
   pages?: number;
   /**
-   * Limit Google results to the past week or past month. A date-filtered search uses the managed browser and returns organic listings only. It costs 35 Credits for one page or 70 Credits when two requested pages are delivered. Omit for unfiltered results.
+   * Limit Google results to the past week or past month. Date filters require one page, use the managed browser, and return organic listings only at 35 Credits. Omit for unfiltered results.
    */
   recency?: "week" | "month";
 }
@@ -286,6 +286,13 @@ export type Output =
           downloadUrl: string | null;
           downloadUrlExpiresAt: string | null;
           downloadState: "available" | "local" | "unavailable";
+        }[];
+        availableExports?: {
+          artifactId: string;
+          sourceArtifactId: string;
+          filename: "result.md";
+          contentType: "text/markdown; charset=utf-8";
+          state: "on-demand";
         }[];
         downloadLinksOmitted: boolean;
         scopeOmittedFields: number;

@@ -198,6 +198,16 @@ HarvestPaaOutputVariant2DeliveryArtifactsItem = TypedDict('HarvestPaaOutputVaria
 HarvestPaaOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+HarvestPaaOutputVariant2DeliveryAvailableExportsItem = TypedDict('HarvestPaaOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+HarvestPaaOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 HarvestPaaOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('HarvestPaaOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -211,6 +221,7 @@ HarvestPaaOutputVariant2Delivery = TypedDict('HarvestPaaOutputVariant2Delivery',
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[HarvestPaaOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[HarvestPaaOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[HarvestPaaOutputVariant2DeliveryStorageFailureVariant1, None]],

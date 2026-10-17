@@ -1,120 +1,337 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-14T03:08:50.114905+00:00",
-  "sourceContract": {
-    "serverVersion": "0.97.0",
-    "serverManifestSha256": "86cad991846e3609117740d89e4241aa939e06ff1f94898faee75504b423c076",
-    "sourceContractSha256": "bb250b4b4bcc6b8dea5e237ff7cb20b70a568fe1853662e6249fb7c7b9382189",
-    "projectedContractSha256": "2d42886f84e0f9c2700f6f2794bb9bb695fe09b6bbb71ae36367ecf3fba051e8",
-    "restSourceSha256": "15681bc921e79f2adfa23ba396791d76fbdd750a16750e315d959fed1f8a09db",
-    "toolCount": 347,
-    "directMemoryVersion": "2.0.0",
-    "directMemoryToolCount": 126
-  },
-  "verification": {
-    "artifactAllowlist": "passed",
-    "artifactBudgets": "passed",
-    "freshNodeInstall": "passed",
-    "freshPython312Install": "passed",
-    "generatedContractReproducible": true,
-    "sourceContractParity": "passed",
-    "sourceArchiveBytesMatch": 1888,
-    "tests": {
-      "node": 86,
-      "contractProjection": 20,
-      "pythonScraper": 66,
-      "pythonMemory": 42
-    },
-    "freshPythonPublicModuleImports": {
-      "scraperWheel": 354,
-      "memoryWheel": 581
-    },
-    "freshCliToolCount": 347,
-    "openApiLintWarnings": 3
-  },
-  "consumerReleaseMaterial": {
-    "repository": "https://github.com/VilovietaSEO/mcpscraper-sdk",
-    "visibility": "public",
-    "versionedChangelog": "https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.54.0/CHANGELOG.md",
-    "releaseTagState": "prepared, publication pending"
-  },
+  "state": "final candidate archives inspected; not published",
+  "baselineReport": "Official npm and PyPI 2026-10-17 archive inventory",
+  "budgetFile": "docs/release-artifact-budgets.json",
   "artifacts": [
     {
       "package": "mcpscraper-sdk",
-      "version": "0.54.0",
+      "version": "0.55.0",
       "format": "npm-tgz",
-      "file": "mcpscraper-sdk-0.54.0.tgz",
-      "sha256": "5aadfc16ca96e24e0ee93d9e07ffb175fd01e9e333f61f9d356e826b083dca68",
-      "compressedBytes": 67909,
-      "unpackedBytes": 458480,
+      "filename": "mcpscraper-sdk-0.55.0.tgz",
+      "sha256": "237a19478f458c4047de118e6d5c8d3aab617fa5bdcd202fc1f5774fa94f8c7f",
+      "compressedBytes": 68276,
+      "unpackedBytes": 459568,
       "fileCount": 6,
-      "budget": "passed"
+      "largestPaths": [
+        {
+          "path": "package/dist/index.d.cts",
+          "bytes": 197186
+        },
+        {
+          "path": "package/dist/index.d.ts",
+          "bytes": 197186
+        },
+        {
+          "path": "package/dist/index.cjs",
+          "bytes": 25840
+        },
+        {
+          "path": "package/dist/index.js",
+          "bytes": 24260
+        },
+        {
+          "path": "package/README.md",
+          "bytes": 13913
+        },
+        {
+          "path": "package/package.json",
+          "bytes": 1183
+        }
+      ],
+      "sourceMaps": 0,
+      "nestedNodeModulesEntries": 0,
+      "bundledDependencyCount": 0,
+      "dependencies": {
+        "mcpscraper-memory-sdk": "^0.54.0"
+      },
+      "exactBaselinePathAllowlist": true,
+      "budgetPassed": true,
+      "confidentialityPassed": true,
+      "confidentialityViolations": []
     },
     {
       "package": "mcpscraper-memory-sdk",
-      "version": "0.53.0",
+      "version": "0.54.0",
       "format": "npm-tgz",
-      "file": "mcpscraper-memory-sdk-0.53.0.tgz",
-      "sha256": "2b24edb1c538163a4f8af9d8152996fab1df7827de265b372171c79f0a024b5a",
-      "compressedBytes": 282088,
-      "unpackedBytes": 10268812,
+      "filename": "mcpscraper-memory-sdk-0.54.0.tgz",
+      "sha256": "7eafa70ecd651f286bf7fd6688ddbd9c3e2b839aedd202d24ebe06a5ac952f84",
+      "compressedBytes": 284610,
+      "unpackedBytes": 10390130,
       "fileCount": 5,
-      "budget": "passed"
+      "largestPaths": [
+        {
+          "path": "package/dist/index.d.ts",
+          "bytes": 10164494
+        },
+        {
+          "path": "package/dist/index.cjs",
+          "bytes": 110355
+        },
+        {
+          "path": "package/dist/index.js",
+          "bytes": 108485
+        },
+        {
+          "path": "package/README.md",
+          "bytes": 5670
+        },
+        {
+          "path": "package/package.json",
+          "bytes": 1126
+        }
+      ],
+      "sourceMaps": 0,
+      "nestedNodeModulesEntries": 0,
+      "bundledDependencyCount": 0,
+      "dependencies": {},
+      "exactBaselinePathAllowlist": true,
+      "budgetPassed": true,
+      "confidentialityPassed": true,
+      "confidentialityViolations": []
     },
     {
       "package": "mcpscraper-cli",
-      "version": "0.52.0",
+      "version": "0.53.0",
       "format": "npm-tgz",
-      "file": "mcpscraper-cli-0.52.0.tgz",
-      "sha256": "895e3294b3d9acd9dcedec1712598e9a004bfbf55fa11a930ddc9355d80d1828",
-      "compressedBytes": 153869,
-      "unpackedBytes": 1085226,
+      "filename": "mcpscraper-cli-0.53.0.tgz",
+      "sha256": "5a92a7c793e035cd57f493e4380b34bdc833fff632f7d6779dfdbda0da676e29",
+      "compressedBytes": 154070,
+      "unpackedBytes": 1085695,
       "fileCount": 3,
-      "budget": "passed"
+      "largestPaths": [
+        {
+          "path": "package/dist/bin/cli.js",
+          "bytes": 1074484
+        },
+        {
+          "path": "package/README.md",
+          "bytes": 10390
+        },
+        {
+          "path": "package/package.json",
+          "bytes": 821
+        }
+      ],
+      "sourceMaps": 0,
+      "nestedNodeModulesEntries": 0,
+      "bundledDependencyCount": 0,
+      "dependencies": {
+        "commander": "^12.0.0",
+        "mcpscraper-sdk": "^0.55.0"
+      },
+      "exactBaselinePathAllowlist": true,
+      "budgetPassed": true,
+      "confidentialityPassed": true,
+      "confidentialityViolations": []
     },
     {
       "package": "mcpscraper-sdk",
-      "version": "0.52.0",
+      "version": "0.53.0",
       "format": "python-wheel",
-      "file": "mcpscraper_sdk-0.52.0-py3-none-any.whl",
-      "sha256": "cf71398ad8f5bab06ef896503a4cf49079d940efb5c92ecd9828c92c6c7c4600",
-      "compressedBytes": 686837,
-      "unpackedBytes": 3039328,
+      "filename": "mcpscraper_sdk-0.53.0-py3-none-any.whl",
+      "sha256": "a65241122366173eaaa8cef8433f9e8d9386d647fdc8b2d67bb5cef345d17281",
+      "compressedBytes": 719449,
+      "unpackedBytes": 3354811,
       "fileCount": 358,
-      "budget": "passed"
+      "largestPaths": [
+        {
+          "path": "mcpscraper/_mcp_generated_client.py",
+          "bytes": 214257
+        },
+        {
+          "path": "mcpscraper/models.py",
+          "bytes": 62911
+        },
+        {
+          "path": "mcpscraper/mcp_models/capture_serp_snapshot.py",
+          "bytes": 43478
+        },
+        {
+          "path": "mcpscraper/mcp_models/create_artifact_template.py",
+          "bytes": 38877
+        },
+        {
+          "path": "mcpscraper/mcp_models/list_artifact_templates.py",
+          "bytes": 37072
+        },
+        {
+          "path": "mcpscraper_sdk-0.53.0.dist-info/RECORD",
+          "bytes": 36849
+        },
+        {
+          "path": "mcpscraper/mcp_models/update_artifact_template.py",
+          "bytes": 34413
+        },
+        {
+          "path": "mcpscraper/mcp_models/archive_artifact_template.py",
+          "bytes": 28297
+        }
+      ],
+      "sourceMaps": 0,
+      "nestedNodeModulesEntries": 0,
+      "bundledDependencyCount": 0,
+      "dependencies": {},
+      "exactBaselinePathAllowlist": true,
+      "budgetPassed": true,
+      "confidentialityPassed": true,
+      "confidentialityViolations": []
     },
     {
       "package": "mcpscraper-sdk",
-      "version": "0.52.0",
+      "version": "0.53.0",
       "format": "python-sdist",
-      "file": "mcpscraper_sdk-0.52.0.tar.gz",
-      "sha256": "53da10eab3bdc23f677b9c80b179e4edd9e595b39fb5bda955339ddd7d087b95",
-      "compressedBytes": 270189,
-      "unpackedBytes": 3013438,
+      "filename": "mcpscraper_sdk-0.53.0.tar.gz",
+      "sha256": "241d4a21baaeeb80e1ba82022809e44863b0be3fd8fc03285f98b1267a4e3235",
+      "compressedBytes": 283753,
+      "unpackedBytes": 3329573,
       "fileCount": 359,
-      "budget": "passed"
+      "largestPaths": [
+        {
+          "path": "mcpscraper_sdk-0.53.0/src/mcpscraper/_mcp_generated_client.py",
+          "bytes": 214257
+        },
+        {
+          "path": "mcpscraper_sdk-0.53.0/src/mcpscraper/models.py",
+          "bytes": 62911
+        },
+        {
+          "path": "mcpscraper_sdk-0.53.0/src/mcpscraper/mcp_models/capture_serp_snapshot.py",
+          "bytes": 43478
+        },
+        {
+          "path": "mcpscraper_sdk-0.53.0/src/mcpscraper/mcp_models/create_artifact_template.py",
+          "bytes": 38877
+        },
+        {
+          "path": "mcpscraper_sdk-0.53.0/src/mcpscraper/mcp_models/list_artifact_templates.py",
+          "bytes": 37072
+        },
+        {
+          "path": "mcpscraper_sdk-0.53.0/src/mcpscraper/mcp_models/update_artifact_template.py",
+          "bytes": 34413
+        },
+        {
+          "path": "mcpscraper_sdk-0.53.0/src/mcpscraper/mcp_models/archive_artifact_template.py",
+          "bytes": 28297
+        },
+        {
+          "path": "mcpscraper_sdk-0.53.0/src/mcpscraper/mcp_models/get_artifact_template.py",
+          "bytes": 27509
+        }
+      ],
+      "sourceMaps": 0,
+      "nestedNodeModulesEntries": 0,
+      "bundledDependencyCount": 0,
+      "dependencies": {},
+      "exactBaselinePathAllowlist": true,
+      "budgetPassed": true,
+      "confidentialityPassed": true,
+      "confidentialityViolations": []
     },
     {
       "package": "mcpscraper-memory-sdk",
-      "version": "0.49.0",
+      "version": "0.50.0",
       "format": "python-wheel",
-      "file": "mcpscraper_memory_sdk-0.49.0-py3-none-any.whl",
-      "sha256": "9199a67ed240f8a34f7289a94b0021745a0df13caad12d202811d61385466485",
-      "compressedBytes": 861186,
-      "unpackedBytes": 3395530,
+      "filename": "mcpscraper_memory_sdk-0.50.0-py3-none-any.whl",
+      "sha256": "97ba1e87ca63619ffbef406c577f479a9562636af9483036471e32e74e6fdd21",
+      "compressedBytes": 893802,
+      "unpackedBytes": 3711197,
       "fileCount": 585,
-      "budget": "passed"
+      "largestPaths": [
+        {
+          "path": "mcpscraper_memory/_mcp_generated_client.py",
+          "bytes": 214257
+        },
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0.dist-info/RECORD",
+          "bytes": 63302
+        },
+        {
+          "path": "mcpscraper_memory/mcp_models/capture_serp_snapshot.py",
+          "bytes": 43478
+        },
+        {
+          "path": "mcpscraper_memory/mcp_models/create_artifact_template.py",
+          "bytes": 38877
+        },
+        {
+          "path": "mcpscraper_memory/mcp_models/list_artifact_templates.py",
+          "bytes": 37072
+        },
+        {
+          "path": "mcpscraper_memory/_generated_client.py",
+          "bytes": 35513
+        },
+        {
+          "path": "mcpscraper_memory/mcp_models/update_artifact_template.py",
+          "bytes": 34413
+        },
+        {
+          "path": "mcpscraper_memory/_direct_generated_client.py",
+          "bytes": 30476
+        }
+      ],
+      "sourceMaps": 0,
+      "nestedNodeModulesEntries": 0,
+      "bundledDependencyCount": 0,
+      "dependencies": {},
+      "exactBaselinePathAllowlist": true,
+      "budgetPassed": true,
+      "confidentialityPassed": true,
+      "confidentialityViolations": []
     },
     {
       "package": "mcpscraper-memory-sdk",
-      "version": "0.49.0",
+      "version": "0.50.0",
       "format": "python-sdist",
-      "file": "mcpscraper_memory_sdk-0.49.0.tar.gz",
-      "sha256": "48412895ad60d41b4b5412c6dc93629c904b9d2842192a1f05278a7e8c58e8b9",
-      "compressedBytes": 307267,
-      "unpackedBytes": 3337295,
+      "filename": "mcpscraper_memory_sdk-0.50.0.tar.gz",
+      "sha256": "26a433ec48d709b0bfeaf4c1b92e8ef95b9a1310b50068573a37332d77e90203",
+      "compressedBytes": 321102,
+      "unpackedBytes": 3653381,
       "fileCount": 586,
-      "budget": "passed"
+      "largestPaths": [
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0/src/mcpscraper_memory/_mcp_generated_client.py",
+          "bytes": 214257
+        },
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0/src/mcpscraper_memory/mcp_models/capture_serp_snapshot.py",
+          "bytes": 43478
+        },
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0/src/mcpscraper_memory/mcp_models/create_artifact_template.py",
+          "bytes": 38877
+        },
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0/src/mcpscraper_memory/mcp_models/list_artifact_templates.py",
+          "bytes": 37072
+        },
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0/src/mcpscraper_memory/_generated_client.py",
+          "bytes": 35513
+        },
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0/src/mcpscraper_memory/mcp_models/update_artifact_template.py",
+          "bytes": 34413
+        },
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0/src/mcpscraper_memory/_direct_generated_client.py",
+          "bytes": 30476
+        },
+        {
+          "path": "mcpscraper_memory_sdk-0.50.0/src/mcpscraper_memory/mcp_models/archive_artifact_template.py",
+          "bytes": 28297
+        }
+      ],
+      "sourceMaps": 0,
+      "nestedNodeModulesEntries": 0,
+      "bundledDependencyCount": 0,
+      "dependencies": {},
+      "exactBaselinePathAllowlist": true,
+      "budgetPassed": true,
+      "confidentialityPassed": true,
+      "confidentialityViolations": []
     }
   ]
 }

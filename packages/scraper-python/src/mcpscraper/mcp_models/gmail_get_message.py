@@ -123,6 +123,16 @@ GmailGetMessageOutputVariant2DeliveryArtifactsItem = TypedDict('GmailGetMessageO
 GmailGetMessageOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GmailGetMessageOutputVariant2DeliveryAvailableExportsItem = TypedDict('GmailGetMessageOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+GmailGetMessageOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GmailGetMessageOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('GmailGetMessageOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -136,6 +146,7 @@ GmailGetMessageOutputVariant2Delivery = TypedDict('GmailGetMessageOutputVariant2
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[GmailGetMessageOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[GmailGetMessageOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[GmailGetMessageOutputVariant2DeliveryStorageFailureVariant1, None]],

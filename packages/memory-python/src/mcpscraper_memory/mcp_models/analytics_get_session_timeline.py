@@ -185,6 +185,16 @@ AnalyticsGetSessionTimelineOutputVariant2DeliveryArtifactsItem = TypedDict('Anal
 AnalyticsGetSessionTimelineOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsGetSessionTimelineOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsGetSessionTimelineOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsGetSessionTimelineOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsGetSessionTimelineOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsGetSessionTimelineOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -198,6 +208,7 @@ AnalyticsGetSessionTimelineOutputVariant2Delivery = TypedDict('AnalyticsGetSessi
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsGetSessionTimelineOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsGetSessionTimelineOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsGetSessionTimelineOutputVariant2DeliveryStorageFailureVariant1, None]],

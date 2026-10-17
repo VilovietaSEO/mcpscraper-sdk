@@ -59,6 +59,16 @@ AnalyticsCreateFormOutputVariant2DeliveryArtifactsItem = TypedDict('AnalyticsCre
 AnalyticsCreateFormOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsCreateFormOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsCreateFormOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsCreateFormOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsCreateFormOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsCreateFormOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -72,6 +82,7 @@ AnalyticsCreateFormOutputVariant2Delivery = TypedDict('AnalyticsCreateFormOutput
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsCreateFormOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsCreateFormOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsCreateFormOutputVariant2DeliveryStorageFailureVariant1, None]],

@@ -114,6 +114,16 @@ AnalyticsGetImpactReportOutputVariant2DeliveryArtifactsItem = TypedDict('Analyti
 AnalyticsGetImpactReportOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsGetImpactReportOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsGetImpactReportOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsGetImpactReportOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsGetImpactReportOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsGetImpactReportOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -127,6 +137,7 @@ AnalyticsGetImpactReportOutputVariant2Delivery = TypedDict('AnalyticsGetImpactRe
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsGetImpactReportOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsGetImpactReportOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsGetImpactReportOutputVariant2DeliveryStorageFailureVariant1, None]],

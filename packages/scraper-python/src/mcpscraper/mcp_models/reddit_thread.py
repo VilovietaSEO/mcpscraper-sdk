@@ -60,6 +60,16 @@ RedditThreadOutputVariant2DeliveryArtifactsItem = TypedDict('RedditThreadOutputV
 RedditThreadOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+RedditThreadOutputVariant2DeliveryAvailableExportsItem = TypedDict('RedditThreadOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+RedditThreadOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 RedditThreadOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('RedditThreadOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -73,6 +83,7 @@ RedditThreadOutputVariant2Delivery = TypedDict('RedditThreadOutputVariant2Delive
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[RedditThreadOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[RedditThreadOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[RedditThreadOutputVariant2DeliveryStorageFailureVariant1, None]],

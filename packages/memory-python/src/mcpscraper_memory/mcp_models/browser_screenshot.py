@@ -44,6 +44,16 @@ BrowserScreenshotOutputVariant2DeliveryArtifactsItem = TypedDict('BrowserScreens
 BrowserScreenshotOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+BrowserScreenshotOutputVariant2DeliveryAvailableExportsItem = TypedDict('BrowserScreenshotOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+BrowserScreenshotOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 BrowserScreenshotOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('BrowserScreenshotOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -57,6 +67,7 @@ BrowserScreenshotOutputVariant2Delivery = TypedDict('BrowserScreenshotOutputVari
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[BrowserScreenshotOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[BrowserScreenshotOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[BrowserScreenshotOutputVariant2DeliveryStorageFailureVariant1, None]],

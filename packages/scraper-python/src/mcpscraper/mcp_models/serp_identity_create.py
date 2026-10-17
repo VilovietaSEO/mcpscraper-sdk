@@ -50,6 +50,16 @@ SerpIdentityCreateOutputVariant2DeliveryArtifactsItem = TypedDict('SerpIdentityC
 SerpIdentityCreateOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+SerpIdentityCreateOutputVariant2DeliveryAvailableExportsItem = TypedDict('SerpIdentityCreateOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+SerpIdentityCreateOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 SerpIdentityCreateOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('SerpIdentityCreateOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -63,6 +73,7 @@ SerpIdentityCreateOutputVariant2Delivery = TypedDict('SerpIdentityCreateOutputVa
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[SerpIdentityCreateOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[SerpIdentityCreateOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[SerpIdentityCreateOutputVariant2DeliveryStorageFailureVariant1, None]],

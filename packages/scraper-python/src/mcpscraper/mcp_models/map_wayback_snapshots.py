@@ -146,6 +146,16 @@ MapWaybackSnapshotsOutputVariant2DeliveryArtifactsItem = TypedDict('MapWaybackSn
 MapWaybackSnapshotsOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+MapWaybackSnapshotsOutputVariant2DeliveryAvailableExportsItem = TypedDict('MapWaybackSnapshotsOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+MapWaybackSnapshotsOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 MapWaybackSnapshotsOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('MapWaybackSnapshotsOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -159,6 +169,7 @@ MapWaybackSnapshotsOutputVariant2Delivery = TypedDict('MapWaybackSnapshotsOutput
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[MapWaybackSnapshotsOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[MapWaybackSnapshotsOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[MapWaybackSnapshotsOutputVariant2DeliveryStorageFailureVariant1, None]],

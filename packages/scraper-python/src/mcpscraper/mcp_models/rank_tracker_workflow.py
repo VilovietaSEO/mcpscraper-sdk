@@ -73,6 +73,16 @@ RankTrackerWorkflowOutputVariant2DeliveryArtifactsItem = TypedDict('RankTrackerW
 RankTrackerWorkflowOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+RankTrackerWorkflowOutputVariant2DeliveryAvailableExportsItem = TypedDict('RankTrackerWorkflowOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+RankTrackerWorkflowOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 RankTrackerWorkflowOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('RankTrackerWorkflowOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -86,6 +96,7 @@ RankTrackerWorkflowOutputVariant2Delivery = TypedDict('RankTrackerWorkflowOutput
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[RankTrackerWorkflowOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[RankTrackerWorkflowOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[RankTrackerWorkflowOutputVariant2DeliveryStorageFailureVariant1, None]],

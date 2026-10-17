@@ -20,7 +20,7 @@ class CrmImportPreviewInput(BaseModel):
     rows: Annotated[list[CrmImportPreviewInputRowsItem], Field(min_length=1, max_length=50000)] = Field(..., alias='rows', description='Bounded normalized import rows; every row must target crm_person or crm_organization.')
 
 
-CrmImportPreviewOutputVariant1Plan = TypedDict('CrmImportPreviewOutputVariant1Plan', {
+CrmImportPreviewOutputVariant1Variant1Plan = TypedDict('CrmImportPreviewOutputVariant1Variant1Plan', {
     'importId': Required[str],
     'planHandle': Required[str],
     'digest': Required[str],
@@ -33,17 +33,106 @@ CrmImportPreviewOutputVariant1Plan = TypedDict('CrmImportPreviewOutputVariant1Pl
     'totalDuplicateCandidates': Required[int],
     'resultTruncated': Required[bool],
 })
-CrmImportPreviewOutputVariant1Plan.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+CrmImportPreviewOutputVariant1Variant1Plan.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-class CrmImportPreviewOutputVariant1(BaseModel):
+class CrmImportPreviewOutputVariant1Variant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
     ok: bool = Field(..., alias='ok', description='')
     message: str = Field(..., alias='message', description='')
-    plan: Union[CrmImportPreviewOutputVariant1Plan, None] = Field(None, alias='plan', description='')
+    plan: Union[CrmImportPreviewOutputVariant1Variant1Plan, None] = Field(None, alias='plan', description='')
     code: Union[str, None] = Field(None, alias='code', description='')
     error: Union[str, None] = Field(None, alias='error', description='')
+
+
+CrmImportPreviewOutputVariant1Variant2DeliveryArtifactsItem = TypedDict('CrmImportPreviewOutputVariant1Variant2DeliveryArtifactsItem', {
+    'artifactId': Required[str],
+    'filename': Required[str],
+    'contentType': Required[str],
+    'bytes': Required[Union[float, int]],
+    'sha256': Required[str],
+    'expiresAt': Required[str],
+    'capabilities': Required[list[str]],
+    'downloadUrl': Required[Union[str, None]],
+    'downloadUrlExpiresAt': Required[Union[str, None]],
+    'downloadState': Required[Literal['available', 'local', 'unavailable']],
+})
+CrmImportPreviewOutputVariant1Variant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmImportPreviewOutputVariant1Variant2DeliveryStorageFailureVariant1 = TypedDict('CrmImportPreviewOutputVariant1Variant2DeliveryStorageFailureVariant1', {
+    'artifactId': Required[Union[str, None]],
+    'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
+})
+CrmImportPreviewOutputVariant1Variant2DeliveryStorageFailureVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmImportPreviewOutputVariant1Variant2Delivery = TypedDict('CrmImportPreviewOutputVariant1Variant2Delivery', {
+    'mode': Required[Literal['artifact']],
+    'status': Required[Literal['complete', 'partial', 'unavailable']],
+    'retainedRepresentation': Required[Literal['formatted-tool-result']],
+    'sourceIsError': Required[bool],
+    'artifacts': Required[list[CrmImportPreviewOutputVariant1Variant2DeliveryArtifactsItem]],
+    'downloadLinksOmitted': Required[bool],
+    'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'storageFailure': Required[Union[CrmImportPreviewOutputVariant1Variant2DeliveryStorageFailureVariant1, None]],
+    'nextAction': Required[str],
+})
+CrmImportPreviewOutputVariant1Variant2Delivery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmImportPreviewOutputVariant1Variant2RecoveryOperation = TypedDict('CrmImportPreviewOutputVariant1Variant2RecoveryOperation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmImportPreviewOutputVariant1Variant2RecoveryOperation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmImportPreviewOutputVariant1Variant2Recovery = TypedDict('CrmImportPreviewOutputVariant1Variant2Recovery', {
+    'idempotencyKey': NotRequired[Annotated[str, Field(max_length=512)]],
+    'operationId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'runId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'jobId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'operation': NotRequired[CrmImportPreviewOutputVariant1Variant2RecoveryOperation],
+})
+CrmImportPreviewOutputVariant1Variant2Recovery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmImportPreviewOutputVariant1Variant2(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    delivery: CrmImportPreviewOutputVariant1Variant2Delivery = Field(..., alias='delivery', description='')
+    preview: str = Field(..., alias='preview', description='')
+    scope: dict[str, Union[str, Union[float, int], bool, None]] = Field(..., alias='scope', description='')
+    recovery: CrmImportPreviewOutputVariant1Variant2Recovery = Field(..., alias='recovery', description='')
+
+
+CrmImportPreviewOutputVariant1Variant3Operation = TypedDict('CrmImportPreviewOutputVariant1Variant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmImportPreviewOutputVariant1Variant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmImportPreviewOutputVariant1Variant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmImportPreviewOutputVariant1Variant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
+# Union schema: validate external payloads with TypeAdapter(CrmImportPreviewOutputVariant1).
+CrmImportPreviewOutputVariant1 = Union[CrmImportPreviewOutputVariant1Variant2, CrmImportPreviewOutputVariant1Variant3, CrmImportPreviewOutputVariant1Variant1]
 
 
 CrmImportPreviewOutputVariant2DeliveryArtifactsItem = TypedDict('CrmImportPreviewOutputVariant2DeliveryArtifactsItem', {
@@ -61,6 +150,16 @@ CrmImportPreviewOutputVariant2DeliveryArtifactsItem = TypedDict('CrmImportPrevie
 CrmImportPreviewOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+CrmImportPreviewOutputVariant2DeliveryAvailableExportsItem = TypedDict('CrmImportPreviewOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+CrmImportPreviewOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 CrmImportPreviewOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('CrmImportPreviewOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -74,6 +173,7 @@ CrmImportPreviewOutputVariant2Delivery = TypedDict('CrmImportPreviewOutputVarian
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[CrmImportPreviewOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[CrmImportPreviewOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[CrmImportPreviewOutputVariant2DeliveryStorageFailureVariant1, None]],
@@ -109,30 +209,8 @@ class CrmImportPreviewOutputVariant2(BaseModel):
     recovery: CrmImportPreviewOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
-CrmImportPreviewOutputVariant3Operation = TypedDict('CrmImportPreviewOutputVariant3Operation', {
-    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
-    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
-    'state': Required[Annotated[str, Field(max_length=100)]],
-})
-CrmImportPreviewOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
-
-
-class CrmImportPreviewOutputVariant3(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
-
-    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
-    operation: Union[CrmImportPreviewOutputVariant3Operation, None] = Field(None, alias='operation', description='')
-    error_code: str = Field(..., alias='error_code', description='')
-    error_type: str = Field(..., alias='error_type', description='')
-    message: str = Field(..., alias='message', description='')
-    retryable: bool = Field(..., alias='retryable', description='')
-    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
-    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
-    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
-
-
 # Union schema: validate external payloads with TypeAdapter(CrmImportPreviewOutput).
-CrmImportPreviewOutput = Union[CrmImportPreviewOutputVariant2, CrmImportPreviewOutputVariant3, CrmImportPreviewOutputVariant1]
+CrmImportPreviewOutput = Union[CrmImportPreviewOutputVariant2, CrmImportPreviewOutputVariant1]
 
 _CrmImportPreviewInputAdapter = TypeAdapter(CrmImportPreviewInput)
 _CrmImportPreviewOutputAdapter = TypeAdapter(CrmImportPreviewOutput)

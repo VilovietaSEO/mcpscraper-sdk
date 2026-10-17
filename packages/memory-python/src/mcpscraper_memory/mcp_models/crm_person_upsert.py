@@ -52,7 +52,7 @@ class CrmPersonUpsertInput(BaseModel):
     lineage: Union[CrmPersonUpsertInputLineage, None] = Field(None, alias='lineage', description='Supply explicit unchanged lineage, including observedAt, for reliable idempotency replay. If both lineage and source are omitted, a timestamp is generated on every call; the same key prevents another write but a retry may report an idempotency conflict.')
 
 
-CrmPersonUpsertOutputVariant1Record = TypedDict('CrmPersonUpsertOutputVariant1Record', {
+CrmPersonUpsertOutputVariant1Variant1Record = TypedDict('CrmPersonUpsertOutputVariant1Variant1Record', {
     'entityId': Required[str],
     'domain': Required[Literal['research_person', 'research_organization', 'crm_person', 'crm_organization']],
     'entityKind': Required[Literal['person', 'organization']],
@@ -69,25 +69,114 @@ CrmPersonUpsertOutputVariant1Record = TypedDict('CrmPersonUpsertOutputVariant1Re
     'createdAt': Required[str],
     'updatedAt': Required[str],
 })
-CrmPersonUpsertOutputVariant1Record.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+CrmPersonUpsertOutputVariant1Variant1Record.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-CrmPersonUpsertOutputVariant1Receipt = TypedDict('CrmPersonUpsertOutputVariant1Receipt', {
+CrmPersonUpsertOutputVariant1Variant1Receipt = TypedDict('CrmPersonUpsertOutputVariant1Variant1Receipt', {
     'receiptId': Required[str],
     'replayed': NotRequired[bool],
 })
-CrmPersonUpsertOutputVariant1Receipt.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+CrmPersonUpsertOutputVariant1Variant1Receipt.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-class CrmPersonUpsertOutputVariant1(BaseModel):
+class CrmPersonUpsertOutputVariant1Variant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
     ok: bool = Field(..., alias='ok', description='')
     message: str = Field(..., alias='message', description='')
-    record: Union[CrmPersonUpsertOutputVariant1Record, None] = Field(None, alias='record', description='')
-    receipt: Union[CrmPersonUpsertOutputVariant1Receipt, None] = Field(None, alias='receipt', description='')
+    record: Union[CrmPersonUpsertOutputVariant1Variant1Record, None] = Field(None, alias='record', description='')
+    receipt: Union[CrmPersonUpsertOutputVariant1Variant1Receipt, None] = Field(None, alias='receipt', description='')
     code: Union[str, None] = Field(None, alias='code', description='')
     error: Union[str, None] = Field(None, alias='error', description='')
+
+
+CrmPersonUpsertOutputVariant1Variant2DeliveryArtifactsItem = TypedDict('CrmPersonUpsertOutputVariant1Variant2DeliveryArtifactsItem', {
+    'artifactId': Required[str],
+    'filename': Required[str],
+    'contentType': Required[str],
+    'bytes': Required[Union[float, int]],
+    'sha256': Required[str],
+    'expiresAt': Required[str],
+    'capabilities': Required[list[str]],
+    'downloadUrl': Required[Union[str, None]],
+    'downloadUrlExpiresAt': Required[Union[str, None]],
+    'downloadState': Required[Literal['available', 'local', 'unavailable']],
+})
+CrmPersonUpsertOutputVariant1Variant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmPersonUpsertOutputVariant1Variant2DeliveryStorageFailureVariant1 = TypedDict('CrmPersonUpsertOutputVariant1Variant2DeliveryStorageFailureVariant1', {
+    'artifactId': Required[Union[str, None]],
+    'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
+})
+CrmPersonUpsertOutputVariant1Variant2DeliveryStorageFailureVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmPersonUpsertOutputVariant1Variant2Delivery = TypedDict('CrmPersonUpsertOutputVariant1Variant2Delivery', {
+    'mode': Required[Literal['artifact']],
+    'status': Required[Literal['complete', 'partial', 'unavailable']],
+    'retainedRepresentation': Required[Literal['formatted-tool-result']],
+    'sourceIsError': Required[bool],
+    'artifacts': Required[list[CrmPersonUpsertOutputVariant1Variant2DeliveryArtifactsItem]],
+    'downloadLinksOmitted': Required[bool],
+    'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'storageFailure': Required[Union[CrmPersonUpsertOutputVariant1Variant2DeliveryStorageFailureVariant1, None]],
+    'nextAction': Required[str],
+})
+CrmPersonUpsertOutputVariant1Variant2Delivery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmPersonUpsertOutputVariant1Variant2RecoveryOperation = TypedDict('CrmPersonUpsertOutputVariant1Variant2RecoveryOperation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmPersonUpsertOutputVariant1Variant2RecoveryOperation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmPersonUpsertOutputVariant1Variant2Recovery = TypedDict('CrmPersonUpsertOutputVariant1Variant2Recovery', {
+    'idempotencyKey': NotRequired[Annotated[str, Field(max_length=512)]],
+    'operationId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'runId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'jobId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'operation': NotRequired[CrmPersonUpsertOutputVariant1Variant2RecoveryOperation],
+})
+CrmPersonUpsertOutputVariant1Variant2Recovery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmPersonUpsertOutputVariant1Variant2(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    delivery: CrmPersonUpsertOutputVariant1Variant2Delivery = Field(..., alias='delivery', description='')
+    preview: str = Field(..., alias='preview', description='')
+    scope: dict[str, Union[str, Union[float, int], bool, None]] = Field(..., alias='scope', description='')
+    recovery: CrmPersonUpsertOutputVariant1Variant2Recovery = Field(..., alias='recovery', description='')
+
+
+CrmPersonUpsertOutputVariant1Variant3Operation = TypedDict('CrmPersonUpsertOutputVariant1Variant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmPersonUpsertOutputVariant1Variant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmPersonUpsertOutputVariant1Variant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmPersonUpsertOutputVariant1Variant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
+# Union schema: validate external payloads with TypeAdapter(CrmPersonUpsertOutputVariant1).
+CrmPersonUpsertOutputVariant1 = Union[CrmPersonUpsertOutputVariant1Variant2, CrmPersonUpsertOutputVariant1Variant3, CrmPersonUpsertOutputVariant1Variant1]
 
 
 CrmPersonUpsertOutputVariant2DeliveryArtifactsItem = TypedDict('CrmPersonUpsertOutputVariant2DeliveryArtifactsItem', {
@@ -105,6 +194,16 @@ CrmPersonUpsertOutputVariant2DeliveryArtifactsItem = TypedDict('CrmPersonUpsertO
 CrmPersonUpsertOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+CrmPersonUpsertOutputVariant2DeliveryAvailableExportsItem = TypedDict('CrmPersonUpsertOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+CrmPersonUpsertOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 CrmPersonUpsertOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('CrmPersonUpsertOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -118,6 +217,7 @@ CrmPersonUpsertOutputVariant2Delivery = TypedDict('CrmPersonUpsertOutputVariant2
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[CrmPersonUpsertOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[CrmPersonUpsertOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[CrmPersonUpsertOutputVariant2DeliveryStorageFailureVariant1, None]],
@@ -153,30 +253,8 @@ class CrmPersonUpsertOutputVariant2(BaseModel):
     recovery: CrmPersonUpsertOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
-CrmPersonUpsertOutputVariant3Operation = TypedDict('CrmPersonUpsertOutputVariant3Operation', {
-    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
-    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
-    'state': Required[Annotated[str, Field(max_length=100)]],
-})
-CrmPersonUpsertOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
-
-
-class CrmPersonUpsertOutputVariant3(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
-
-    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
-    operation: Union[CrmPersonUpsertOutputVariant3Operation, None] = Field(None, alias='operation', description='')
-    error_code: str = Field(..., alias='error_code', description='')
-    error_type: str = Field(..., alias='error_type', description='')
-    message: str = Field(..., alias='message', description='')
-    retryable: bool = Field(..., alias='retryable', description='')
-    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
-    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
-    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
-
-
 # Union schema: validate external payloads with TypeAdapter(CrmPersonUpsertOutput).
-CrmPersonUpsertOutput = Union[CrmPersonUpsertOutputVariant2, CrmPersonUpsertOutputVariant3, CrmPersonUpsertOutputVariant1]
+CrmPersonUpsertOutput = Union[CrmPersonUpsertOutputVariant2, CrmPersonUpsertOutputVariant1]
 
 _CrmPersonUpsertInputAdapter = TypeAdapter(CrmPersonUpsertInput)
 _CrmPersonUpsertOutputAdapter = TypeAdapter(CrmPersonUpsertOutput)

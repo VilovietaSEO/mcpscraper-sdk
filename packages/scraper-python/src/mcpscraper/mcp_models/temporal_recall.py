@@ -61,6 +61,16 @@ TemporalRecallOutputVariant2DeliveryArtifactsItem = TypedDict('TemporalRecallOut
 TemporalRecallOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+TemporalRecallOutputVariant2DeliveryAvailableExportsItem = TypedDict('TemporalRecallOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+TemporalRecallOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 TemporalRecallOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('TemporalRecallOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -74,6 +84,7 @@ TemporalRecallOutputVariant2Delivery = TypedDict('TemporalRecallOutputVariant2De
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[TemporalRecallOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[TemporalRecallOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[TemporalRecallOutputVariant2DeliveryStorageFailureVariant1, None]],

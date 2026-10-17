@@ -14,8 +14,8 @@ class SearchSerpInput(BaseModel):
     device: Union[Literal['desktop', 'mobile'], None] = Field(None, alias='device', description='Compatibility field. Ordinary search uses desktop results.')
     idempotency_key: Union[Annotated[str, Field(min_length=8, max_length=200)], None] = Field(None, alias='idempotencyKey', description='Retry key: reuse after a timeout to avoid re-billing. New key per search.')
     serp_identity: Union[str, None] = Field(None, alias='serpIdentity', description='Optional persistent SERP identity created with serp_identity_create. Reuses the same saved browser state and fixed network address across calls.')
-    pages: Union[Annotated[int, Field(ge=1, le=2)], None] = Field(None, alias='pages', description='One page by default. Set 2 only when the user explicitly requests two pages; two-page results include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.')
-    recency: Union[Literal['week', 'month'], None] = Field(None, alias='recency', description='Limit Google results to the past week or past month. A date-filtered search uses the managed browser and returns organic listings only. It costs 35 Credits for one page or 70 Credits when two requested pages are delivered. Omit for unfiltered results.')
+    pages: Union[Annotated[int, Field(ge=1, le=2)], None] = Field(None, alias='pages', description='One page by default. Set 2 only when the user explicitly requests two pages; two-page searches have no backup provider, cannot combine recency or serpIdentity, and include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.')
+    recency: Union[Literal['week', 'month'], None] = Field(None, alias='recency', description='Limit Google results to the past week or past month. Date filters require one page, use the managed browser, and return organic listings only at 35 Credits. Omit for unfiltered results.')
 
 
 SearchSerpOutputVariant1PaginationVariant1 = TypedDict('SearchSerpOutputVariant1PaginationVariant1', {
@@ -269,6 +269,16 @@ SearchSerpOutputVariant2DeliveryArtifactsItem = TypedDict('SearchSerpOutputVaria
 SearchSerpOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+SearchSerpOutputVariant2DeliveryAvailableExportsItem = TypedDict('SearchSerpOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+SearchSerpOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 SearchSerpOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('SearchSerpOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -282,6 +292,7 @@ SearchSerpOutputVariant2Delivery = TypedDict('SearchSerpOutputVariant2Delivery',
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[SearchSerpOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[SearchSerpOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[SearchSerpOutputVariant2DeliveryStorageFailureVariant1, None]],

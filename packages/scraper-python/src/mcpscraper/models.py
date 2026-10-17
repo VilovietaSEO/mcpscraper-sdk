@@ -225,7 +225,7 @@ class Mode(Enum):
 
 class Recency(Enum):
     """
-    Optional Google time filter. Ordinary search_serp accepts week or month and returns organic browser results; PAA harvest also accepts day and year. Omit for all-time results.
+    Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 35 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results.
     """
 
     day = 'day'
@@ -257,7 +257,7 @@ class HarvestSyncRequest(BaseModel):
     )
     pages: int = Field(
         1,
-        description='Google result pages to fetch. Full mode alone does not request page 2.',
+        description='Google result pages to fetch. Full mode alone does not request page 2. For serpOnly searches, two pages require an omitted recency filter.',
         ge=1,
         le=2,
     )
@@ -271,7 +271,7 @@ class HarvestSyncRequest(BaseModel):
     )
     recency: Recency | None = Field(
         None,
-        description='Optional Google time filter. Ordinary search_serp accepts week or month and returns organic browser results; PAA harvest also accepts day and year. Omit for all-time results.',
+        description='Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 35 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results.',
     )
     debug: bool = False
 

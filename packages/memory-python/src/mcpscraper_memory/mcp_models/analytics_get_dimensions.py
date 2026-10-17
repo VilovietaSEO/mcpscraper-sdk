@@ -55,6 +55,16 @@ AnalyticsGetDimensionsOutputVariant2DeliveryArtifactsItem = TypedDict('Analytics
 AnalyticsGetDimensionsOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsGetDimensionsOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsGetDimensionsOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsGetDimensionsOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsGetDimensionsOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsGetDimensionsOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -68,6 +78,7 @@ AnalyticsGetDimensionsOutputVariant2Delivery = TypedDict('AnalyticsGetDimensions
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsGetDimensionsOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsGetDimensionsOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsGetDimensionsOutputVariant2DeliveryStorageFailureVariant1, None]],

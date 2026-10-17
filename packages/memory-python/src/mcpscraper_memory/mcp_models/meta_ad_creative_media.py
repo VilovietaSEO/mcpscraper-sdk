@@ -69,6 +69,16 @@ MetaAdCreativeMediaOutputVariant2DeliveryArtifactsItem = TypedDict('MetaAdCreati
 MetaAdCreativeMediaOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+MetaAdCreativeMediaOutputVariant2DeliveryAvailableExportsItem = TypedDict('MetaAdCreativeMediaOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+MetaAdCreativeMediaOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 MetaAdCreativeMediaOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('MetaAdCreativeMediaOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -82,6 +92,7 @@ MetaAdCreativeMediaOutputVariant2Delivery = TypedDict('MetaAdCreativeMediaOutput
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[MetaAdCreativeMediaOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[MetaAdCreativeMediaOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[MetaAdCreativeMediaOutputVariant2DeliveryStorageFailureVariant1, None]],

@@ -46,6 +46,16 @@ ExtractUrlOutputVariant2DeliveryArtifactsItem = TypedDict('ExtractUrlOutputVaria
 ExtractUrlOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ExtractUrlOutputVariant2DeliveryAvailableExportsItem = TypedDict('ExtractUrlOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ExtractUrlOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ExtractUrlOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ExtractUrlOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -59,6 +69,7 @@ ExtractUrlOutputVariant2Delivery = TypedDict('ExtractUrlOutputVariant2Delivery',
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ExtractUrlOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ExtractUrlOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ExtractUrlOutputVariant2DeliveryStorageFailureVariant1, None]],

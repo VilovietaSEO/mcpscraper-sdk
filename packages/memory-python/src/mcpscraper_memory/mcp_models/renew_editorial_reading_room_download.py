@@ -34,6 +34,16 @@ RenewEditorialReadingRoomDownloadOutputVariant2DeliveryArtifactsItem = TypedDict
 RenewEditorialReadingRoomDownloadOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+RenewEditorialReadingRoomDownloadOutputVariant2DeliveryAvailableExportsItem = TypedDict('RenewEditorialReadingRoomDownloadOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+RenewEditorialReadingRoomDownloadOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 RenewEditorialReadingRoomDownloadOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('RenewEditorialReadingRoomDownloadOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -47,6 +57,7 @@ RenewEditorialReadingRoomDownloadOutputVariant2Delivery = TypedDict('RenewEditor
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[RenewEditorialReadingRoomDownloadOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[RenewEditorialReadingRoomDownloadOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[RenewEditorialReadingRoomDownloadOutputVariant2DeliveryStorageFailureVariant1, None]],

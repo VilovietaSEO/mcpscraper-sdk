@@ -21,7 +21,7 @@ class CrmTaskUpsertInput(BaseModel):
     props: Union[dict[str, Any], None] = Field(None, alias='props', description='Complete governed note properties required by the target vault contract.')
 
 
-CrmTaskUpsertOutputVariant1Record = TypedDict('CrmTaskUpsertOutputVariant1Record', {
+CrmTaskUpsertOutputVariant1Variant1Record = TypedDict('CrmTaskUpsertOutputVariant1Variant1Record', {
     'entityId': Required[str],
     'revision': Required[int],
     'noteId': NotRequired[str],
@@ -29,25 +29,114 @@ CrmTaskUpsertOutputVariant1Record = TypedDict('CrmTaskUpsertOutputVariant1Record
     'path': NotRequired[str],
     'associationIds': NotRequired[list[str]],
 })
-CrmTaskUpsertOutputVariant1Record.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+CrmTaskUpsertOutputVariant1Variant1Record.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-CrmTaskUpsertOutputVariant1Receipt = TypedDict('CrmTaskUpsertOutputVariant1Receipt', {
+CrmTaskUpsertOutputVariant1Variant1Receipt = TypedDict('CrmTaskUpsertOutputVariant1Variant1Receipt', {
     'receiptId': Required[str],
     'replayed': NotRequired[bool],
 })
-CrmTaskUpsertOutputVariant1Receipt.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+CrmTaskUpsertOutputVariant1Variant1Receipt.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-class CrmTaskUpsertOutputVariant1(BaseModel):
+class CrmTaskUpsertOutputVariant1Variant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
     ok: bool = Field(..., alias='ok', description='')
     message: str = Field(..., alias='message', description='')
-    record: Union[CrmTaskUpsertOutputVariant1Record, None] = Field(None, alias='record', description='')
-    receipt: Union[CrmTaskUpsertOutputVariant1Receipt, None] = Field(None, alias='receipt', description='')
+    record: Union[CrmTaskUpsertOutputVariant1Variant1Record, None] = Field(None, alias='record', description='')
+    receipt: Union[CrmTaskUpsertOutputVariant1Variant1Receipt, None] = Field(None, alias='receipt', description='')
     code: Union[str, None] = Field(None, alias='code', description='')
     error: Union[str, None] = Field(None, alias='error', description='')
+
+
+CrmTaskUpsertOutputVariant1Variant2DeliveryArtifactsItem = TypedDict('CrmTaskUpsertOutputVariant1Variant2DeliveryArtifactsItem', {
+    'artifactId': Required[str],
+    'filename': Required[str],
+    'contentType': Required[str],
+    'bytes': Required[Union[float, int]],
+    'sha256': Required[str],
+    'expiresAt': Required[str],
+    'capabilities': Required[list[str]],
+    'downloadUrl': Required[Union[str, None]],
+    'downloadUrlExpiresAt': Required[Union[str, None]],
+    'downloadState': Required[Literal['available', 'local', 'unavailable']],
+})
+CrmTaskUpsertOutputVariant1Variant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmTaskUpsertOutputVariant1Variant2DeliveryStorageFailureVariant1 = TypedDict('CrmTaskUpsertOutputVariant1Variant2DeliveryStorageFailureVariant1', {
+    'artifactId': Required[Union[str, None]],
+    'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
+})
+CrmTaskUpsertOutputVariant1Variant2DeliveryStorageFailureVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmTaskUpsertOutputVariant1Variant2Delivery = TypedDict('CrmTaskUpsertOutputVariant1Variant2Delivery', {
+    'mode': Required[Literal['artifact']],
+    'status': Required[Literal['complete', 'partial', 'unavailable']],
+    'retainedRepresentation': Required[Literal['formatted-tool-result']],
+    'sourceIsError': Required[bool],
+    'artifacts': Required[list[CrmTaskUpsertOutputVariant1Variant2DeliveryArtifactsItem]],
+    'downloadLinksOmitted': Required[bool],
+    'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'storageFailure': Required[Union[CrmTaskUpsertOutputVariant1Variant2DeliveryStorageFailureVariant1, None]],
+    'nextAction': Required[str],
+})
+CrmTaskUpsertOutputVariant1Variant2Delivery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmTaskUpsertOutputVariant1Variant2RecoveryOperation = TypedDict('CrmTaskUpsertOutputVariant1Variant2RecoveryOperation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmTaskUpsertOutputVariant1Variant2RecoveryOperation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CrmTaskUpsertOutputVariant1Variant2Recovery = TypedDict('CrmTaskUpsertOutputVariant1Variant2Recovery', {
+    'idempotencyKey': NotRequired[Annotated[str, Field(max_length=512)]],
+    'operationId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'runId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'jobId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'operation': NotRequired[CrmTaskUpsertOutputVariant1Variant2RecoveryOperation],
+})
+CrmTaskUpsertOutputVariant1Variant2Recovery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmTaskUpsertOutputVariant1Variant2(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    delivery: CrmTaskUpsertOutputVariant1Variant2Delivery = Field(..., alias='delivery', description='')
+    preview: str = Field(..., alias='preview', description='')
+    scope: dict[str, Union[str, Union[float, int], bool, None]] = Field(..., alias='scope', description='')
+    recovery: CrmTaskUpsertOutputVariant1Variant2Recovery = Field(..., alias='recovery', description='')
+
+
+CrmTaskUpsertOutputVariant1Variant3Operation = TypedDict('CrmTaskUpsertOutputVariant1Variant3Operation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+CrmTaskUpsertOutputVariant1Variant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class CrmTaskUpsertOutputVariant1Variant3(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
+    operation: Union[CrmTaskUpsertOutputVariant1Variant3Operation, None] = Field(None, alias='operation', description='')
+    error_code: str = Field(..., alias='error_code', description='')
+    error_type: str = Field(..., alias='error_type', description='')
+    message: str = Field(..., alias='message', description='')
+    retryable: bool = Field(..., alias='retryable', description='')
+    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
+    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
+    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
+
+
+# Union schema: validate external payloads with TypeAdapter(CrmTaskUpsertOutputVariant1).
+CrmTaskUpsertOutputVariant1 = Union[CrmTaskUpsertOutputVariant1Variant2, CrmTaskUpsertOutputVariant1Variant3, CrmTaskUpsertOutputVariant1Variant1]
 
 
 CrmTaskUpsertOutputVariant2DeliveryArtifactsItem = TypedDict('CrmTaskUpsertOutputVariant2DeliveryArtifactsItem', {
@@ -65,6 +154,16 @@ CrmTaskUpsertOutputVariant2DeliveryArtifactsItem = TypedDict('CrmTaskUpsertOutpu
 CrmTaskUpsertOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+CrmTaskUpsertOutputVariant2DeliveryAvailableExportsItem = TypedDict('CrmTaskUpsertOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+CrmTaskUpsertOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 CrmTaskUpsertOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('CrmTaskUpsertOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -78,6 +177,7 @@ CrmTaskUpsertOutputVariant2Delivery = TypedDict('CrmTaskUpsertOutputVariant2Deli
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[CrmTaskUpsertOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[CrmTaskUpsertOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[CrmTaskUpsertOutputVariant2DeliveryStorageFailureVariant1, None]],
@@ -113,30 +213,8 @@ class CrmTaskUpsertOutputVariant2(BaseModel):
     recovery: CrmTaskUpsertOutputVariant2Recovery = Field(..., alias='recovery', description='')
 
 
-CrmTaskUpsertOutputVariant3Operation = TypedDict('CrmTaskUpsertOutputVariant3Operation', {
-    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
-    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
-    'state': Required[Annotated[str, Field(max_length=100)]],
-})
-CrmTaskUpsertOutputVariant3Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
-
-
-class CrmTaskUpsertOutputVariant3(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
-
-    idempotency_key: Union[Annotated[str, Field(max_length=512)], None] = Field(None, alias='idempotencyKey', description='')
-    operation: Union[CrmTaskUpsertOutputVariant3Operation, None] = Field(None, alias='operation', description='')
-    error_code: str = Field(..., alias='error_code', description='')
-    error_type: str = Field(..., alias='error_type', description='')
-    message: str = Field(..., alias='message', description='')
-    retryable: bool = Field(..., alias='retryable', description='')
-    retry_after_seconds: Union[Union[float, int], None] = Field(None, alias='retry_after_seconds', description='')
-    charge_status: Union[str, None] = Field(None, alias='charge_status', description='')
-    details: Union[dict[str, Any], None] = Field(None, alias='details', description='')
-
-
 # Union schema: validate external payloads with TypeAdapter(CrmTaskUpsertOutput).
-CrmTaskUpsertOutput = Union[CrmTaskUpsertOutputVariant2, CrmTaskUpsertOutputVariant3, CrmTaskUpsertOutputVariant1]
+CrmTaskUpsertOutput = Union[CrmTaskUpsertOutputVariant2, CrmTaskUpsertOutputVariant1]
 
 _CrmTaskUpsertInputAdapter = TypeAdapter(CrmTaskUpsertInput)
 _CrmTaskUpsertOutputAdapter = TypeAdapter(CrmTaskUpsertOutput)

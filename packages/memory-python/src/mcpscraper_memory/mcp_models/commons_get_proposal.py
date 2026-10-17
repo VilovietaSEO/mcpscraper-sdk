@@ -33,6 +33,16 @@ CommonsGetProposalOutputVariant2DeliveryArtifactsItem = TypedDict('CommonsGetPro
 CommonsGetProposalOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+CommonsGetProposalOutputVariant2DeliveryAvailableExportsItem = TypedDict('CommonsGetProposalOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+CommonsGetProposalOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 CommonsGetProposalOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('CommonsGetProposalOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -46,6 +56,7 @@ CommonsGetProposalOutputVariant2Delivery = TypedDict('CommonsGetProposalOutputVa
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[CommonsGetProposalOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[CommonsGetProposalOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[CommonsGetProposalOutputVariant2DeliveryStorageFailureVariant1, None]],

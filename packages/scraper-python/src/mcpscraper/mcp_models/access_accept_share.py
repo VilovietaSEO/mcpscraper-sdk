@@ -33,6 +33,16 @@ AccessAcceptShareOutputVariant2DeliveryArtifactsItem = TypedDict('AccessAcceptSh
 AccessAcceptShareOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AccessAcceptShareOutputVariant2DeliveryAvailableExportsItem = TypedDict('AccessAcceptShareOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AccessAcceptShareOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AccessAcceptShareOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AccessAcceptShareOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -46,6 +56,7 @@ AccessAcceptShareOutputVariant2Delivery = TypedDict('AccessAcceptShareOutputVari
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AccessAcceptShareOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AccessAcceptShareOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AccessAcceptShareOutputVariant2DeliveryStorageFailureVariant1, None]],

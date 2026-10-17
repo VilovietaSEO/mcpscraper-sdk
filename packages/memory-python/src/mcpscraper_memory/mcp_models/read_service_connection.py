@@ -34,6 +34,16 @@ ReadServiceConnectionOutputVariant2DeliveryArtifactsItem = TypedDict('ReadServic
 ReadServiceConnectionOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ReadServiceConnectionOutputVariant2DeliveryAvailableExportsItem = TypedDict('ReadServiceConnectionOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ReadServiceConnectionOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ReadServiceConnectionOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ReadServiceConnectionOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -47,6 +57,7 @@ ReadServiceConnectionOutputVariant2Delivery = TypedDict('ReadServiceConnectionOu
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ReadServiceConnectionOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ReadServiceConnectionOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ReadServiceConnectionOutputVariant2DeliveryStorageFailureVariant1, None]],

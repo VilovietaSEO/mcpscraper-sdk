@@ -85,6 +85,16 @@ MemoryPutOutputVariant2DeliveryArtifactsItem = TypedDict('MemoryPutOutputVariant
 MemoryPutOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+MemoryPutOutputVariant2DeliveryAvailableExportsItem = TypedDict('MemoryPutOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+MemoryPutOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 MemoryPutOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('MemoryPutOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -98,6 +108,7 @@ MemoryPutOutputVariant2Delivery = TypedDict('MemoryPutOutputVariant2Delivery', {
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[MemoryPutOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[MemoryPutOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[MemoryPutOutputVariant2DeliveryStorageFailureVariant1, None]],

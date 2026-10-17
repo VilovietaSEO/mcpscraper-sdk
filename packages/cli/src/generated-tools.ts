@@ -25683,7 +25683,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Search Google. Light mode returns organic listings. Set mode:full on an unfiltered one-page search to request available same-page local-pack, forum, video, AI, entity, and PAA-preview features; includeLocalPack alone does not enable local-pack extraction. Feature status shows presence and completeness. One page is the default. Set pages:2 only when the user asks for two pages. Set recency:week or recency:month for Google's past-week or past-month filter. Filtered searches use a managed browser and return organic results only at 35 Credits per delivered page (70 for two). Unfiltered light tries twice, then an API fallback. Browser/two-page results mark rich features unsupported. If page 2 fails, available page 1 is marked partial and billed for one page. Unfiltered light costs 20 Credits per delivered page, or 35 if a backup supplies it; one-page full costs 35; unfiltered two-page full costs 40 for organic results. Full does not open result sites, expand PAA, or open Maps profiles. Reuse the same idempotencyKey after an uncertain response. A saved serpIdentity keeps its 60-Credit search rate and cannot be combined with full mode. Call credits_info for current pricing and balance.",
+    "description": "Search Google. Default light mode returns one organic-results page. Use mode:full on an unfiltered one-page search for available local-pack, forum, video, AI, entity and PAA-preview features; check featureStatus for coverage. Full does not open result sites, expand PAA or open Maps profiles. Set pages:2 only when two pages are requested: organic results only, no backup provider. Date filters (recency:week/month) and saved serpIdentity require one page; identities cannot use full mode. One-page light tries twice before its API fallback. Light costs 20 Credits per delivered page (35 with fallback); one-page full or date-filtered search costs 35; two-page full costs 40; saved identities cost 60. Unavailable page 2 means partial coverage billed for page 1. Browser/two-page results mark rich features unsupported. Reuse the same idempotencyKey after an uncertain response. Call credits_info for pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25739,13 +25739,13 @@ export const MCP_TOOL_CATALOG = [
         },
         "pages": {
           "default": 1,
-          "description": "One page by default. Set 2 only when the user explicitly requests two pages; two-page results include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.",
+          "description": "One page by default. Set 2 only when the user explicitly requests two pages; two-page searches have no backup provider, cannot combine recency or serpIdentity, and include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.",
           "type": "integer",
           "minimum": 1,
           "maximum": 2
         },
         "recency": {
-          "description": "Limit Google results to the past week or past month. A date-filtered search uses the managed browser and returns organic listings only. It costs 35 Credits for one page or 70 Credits when two requested pages are delivered. Omit for unfiltered results.",
+          "description": "Limit Google results to the past week or past month. Date filters require one page, use the managed browser, and return organic listings only at 35 Credits. Omit for unfiltered results.",
           "type": "string",
           "enum": [
             "week",

@@ -51,6 +51,16 @@ ListSharedWithMeOutputVariant2DeliveryArtifactsItem = TypedDict('ListSharedWithM
 ListSharedWithMeOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ListSharedWithMeOutputVariant2DeliveryAvailableExportsItem = TypedDict('ListSharedWithMeOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ListSharedWithMeOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ListSharedWithMeOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ListSharedWithMeOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -64,6 +74,7 @@ ListSharedWithMeOutputVariant2Delivery = TypedDict('ListSharedWithMeOutputVarian
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ListSharedWithMeOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ListSharedWithMeOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ListSharedWithMeOutputVariant2DeliveryStorageFailureVariant1, None]],

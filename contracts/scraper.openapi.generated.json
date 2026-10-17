@@ -126,7 +126,7 @@
         ],
         "operationId": "harvestSync",
         "summary": "Run a Google SERP search, or a full People-Also-Ask harvest",
-        "description": "Set `serpOnly: true` for a Google search. Light mode returns organic\npositions, URLs, titles, and descriptions for 20 Credits per delivered\npage, or 35 Credits when the backup supplies the result. Full mode adds\navailable same-page SERP features for 35 Credits per delivered page.\nBoth modes default to one page; set `pages: 2` explicitly for two.\nA 35-Credit-per-requested-page hold is settled after delivery.\nOmit or set `false` for a full People-Also-Ask harvest, which also returns SERP data\n(400 Credit base + 10 Credits per question actually returned; unused estimate is\nrefunded). Runs synchronously and returns the result inline.\n",
+        "description": "Set `serpOnly: true` for a Google search. Light mode returns organic\npositions, URLs, titles, and descriptions for 20 Credits per delivered\npage, or 35 Credits when the backup supplies the result. Full mode adds\navailable same-page SERP features for 35 Credits per delivered page.\nBoth modes default to one page; set `pages: 2` explicitly for two unfiltered\norganic pages without a backup provider. With `serpOnly: true`, `recency: week` or `month` returns\none page for 35 Credits. Combining recency with two pages is rejected\nbefore acquisition or billing.\nA 35-Credit-per-requested-page hold is settled after delivery.\nOmit or set `false` for a full People-Also-Ask harvest, which also returns SERP data\n(400 Credit base + 10 Credits per question actually returned; unused estimate is\nrefunded). Runs synchronously and returns the result inline.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -3897,7 +3897,7 @@
             "minimum": 1,
             "maximum": 2,
             "default": 1,
-            "description": "Google result pages to fetch. Full mode alone does not request page 2."
+            "description": "Google result pages to fetch. Full mode alone does not request page 2. For serpOnly searches, two pages require an omitted recency filter."
           },
           "mode": {
             "type": "string",
@@ -3921,7 +3921,7 @@
               "month",
               "year"
             ],
-            "description": "Optional Google time filter. Ordinary search_serp accepts week or month and returns organic browser results; PAA harvest also accepts day and year. Omit for all-time results."
+            "description": "Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 35 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results."
           },
           "debug": {
             "type": "boolean",

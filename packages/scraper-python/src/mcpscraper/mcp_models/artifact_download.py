@@ -43,6 +43,16 @@ ArtifactDownloadOutputVariant2DeliveryArtifactsItem = TypedDict('ArtifactDownloa
 ArtifactDownloadOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ArtifactDownloadOutputVariant2DeliveryAvailableExportsItem = TypedDict('ArtifactDownloadOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ArtifactDownloadOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ArtifactDownloadOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ArtifactDownloadOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -56,6 +66,7 @@ ArtifactDownloadOutputVariant2Delivery = TypedDict('ArtifactDownloadOutputVarian
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ArtifactDownloadOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ArtifactDownloadOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ArtifactDownloadOutputVariant2DeliveryStorageFailureVariant1, None]],
