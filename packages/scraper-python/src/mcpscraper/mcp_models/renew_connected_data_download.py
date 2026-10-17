@@ -34,6 +34,16 @@ RenewConnectedDataDownloadOutputVariant2DeliveryArtifactsItem = TypedDict('Renew
 RenewConnectedDataDownloadOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+RenewConnectedDataDownloadOutputVariant2DeliveryAvailableExportsItem = TypedDict('RenewConnectedDataDownloadOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+RenewConnectedDataDownloadOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 RenewConnectedDataDownloadOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('RenewConnectedDataDownloadOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -47,6 +57,7 @@ RenewConnectedDataDownloadOutputVariant2Delivery = TypedDict('RenewConnectedData
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[RenewConnectedDataDownloadOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[RenewConnectedDataDownloadOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[RenewConnectedDataDownloadOutputVariant2DeliveryStorageFailureVariant1, None]],

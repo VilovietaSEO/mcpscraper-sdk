@@ -60,10 +60,16 @@ python scripts/generate_models.py
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk` on npm](../memory) (Node) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) (also reaches these Memory tools via a scraper key) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.54.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.54.1).
+Release changes: [SDK 0.55.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.55.0).
 
 ## Client attribution and full results
 
 Clients accept `client_attribution={"install_channel": ..., "ai_client": ..., "ai_model": ...}` and default to calling surface `sdk`. Set only known caller labels; unspecified labels stay unknown. `on_response` receives a metadata dictionary with `request_id` and `status` per response, and errors keep their own `request_id`. These options also apply to `McpToolsClient` and `MemoryClient`; labels are reporting declarations, not authorization.
 
 Generated output unions return the matching model directly, preserving attributes such as `transcript_text`. Use `pydantic.TypeAdapter(Output)` when independently validating an output union. Large outputs may have `delivery`, `scope` and `recovery` instead of inline data. Preserve them, then use `tools.artifacts.describe`, `read_retained` (follow `next_offset` to None), or `download` with the artifact ID. The legacy `artifacts.read` method remains the report reader. `call_tool_result` preserves native content/resource links. Download URL expiry differs from retention; renew through `download` without rerunning acquisition. Use the returned capability for binary files.
+
+Artifact delivery may include optional `delivery.availableExports` handles. Use the
+export artifact ID with `artifact_download`, `artifact_read` or `artifact_describe`
+to generate Markdown from retained JSON without repeating acquisition. The
+[on-demand export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.0/examples/serp-on-demand-export.mjs)
+shows the complete flow and preserves a retry key for uncertain search responses.

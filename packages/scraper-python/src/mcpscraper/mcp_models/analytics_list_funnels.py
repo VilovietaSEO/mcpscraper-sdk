@@ -33,6 +33,16 @@ AnalyticsListFunnelsOutputVariant2DeliveryArtifactsItem = TypedDict('AnalyticsLi
 AnalyticsListFunnelsOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsListFunnelsOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsListFunnelsOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsListFunnelsOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsListFunnelsOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsListFunnelsOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -46,6 +56,7 @@ AnalyticsListFunnelsOutputVariant2Delivery = TypedDict('AnalyticsListFunnelsOutp
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsListFunnelsOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsListFunnelsOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsListFunnelsOutputVariant2DeliveryStorageFailureVariant1, None]],

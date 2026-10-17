@@ -415,6 +415,13 @@ export type Output =
           downloadUrlExpiresAt: string | null;
           downloadState: "available" | "local" | "unavailable";
         }[];
+        availableExports?: {
+          artifactId: string;
+          sourceArtifactId: string;
+          filename: "result.md";
+          contentType: "text/markdown; charset=utf-8";
+          state: "on-demand";
+        }[];
         downloadLinksOmitted: boolean;
         scopeOmittedFields: number;
         storageFailure: {

@@ -37,6 +37,16 @@ ReactMessageOutputVariant2DeliveryArtifactsItem = TypedDict('ReactMessageOutputV
 ReactMessageOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ReactMessageOutputVariant2DeliveryAvailableExportsItem = TypedDict('ReactMessageOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ReactMessageOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ReactMessageOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ReactMessageOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -50,6 +60,7 @@ ReactMessageOutputVariant2Delivery = TypedDict('ReactMessageOutputVariant2Delive
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ReactMessageOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ReactMessageOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ReactMessageOutputVariant2DeliveryStorageFailureVariant1, None]],

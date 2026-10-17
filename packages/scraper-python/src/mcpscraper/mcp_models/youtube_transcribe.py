@@ -54,6 +54,16 @@ YoutubeTranscribeOutputVariant2DeliveryArtifactsItem = TypedDict('YoutubeTranscr
 YoutubeTranscribeOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+YoutubeTranscribeOutputVariant2DeliveryAvailableExportsItem = TypedDict('YoutubeTranscribeOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+YoutubeTranscribeOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 YoutubeTranscribeOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('YoutubeTranscribeOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -67,6 +77,7 @@ YoutubeTranscribeOutputVariant2Delivery = TypedDict('YoutubeTranscribeOutputVari
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[YoutubeTranscribeOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[YoutubeTranscribeOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[YoutubeTranscribeOutputVariant2DeliveryStorageFailureVariant1, None]],

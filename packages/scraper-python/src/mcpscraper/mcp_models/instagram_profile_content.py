@@ -106,6 +106,16 @@ InstagramProfileContentOutputVariant2DeliveryArtifactsItem = TypedDict('Instagra
 InstagramProfileContentOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+InstagramProfileContentOutputVariant2DeliveryAvailableExportsItem = TypedDict('InstagramProfileContentOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+InstagramProfileContentOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 InstagramProfileContentOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('InstagramProfileContentOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -119,6 +129,7 @@ InstagramProfileContentOutputVariant2Delivery = TypedDict('InstagramProfileConte
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[InstagramProfileContentOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[InstagramProfileContentOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[InstagramProfileContentOutputVariant2DeliveryStorageFailureVariant1, None]],

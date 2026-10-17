@@ -52,6 +52,16 @@ ImportServiceConnectionToMemoryOutputVariant2DeliveryArtifactsItem = TypedDict('
 ImportServiceConnectionToMemoryOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ImportServiceConnectionToMemoryOutputVariant2DeliveryAvailableExportsItem = TypedDict('ImportServiceConnectionToMemoryOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ImportServiceConnectionToMemoryOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ImportServiceConnectionToMemoryOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ImportServiceConnectionToMemoryOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -65,6 +75,7 @@ ImportServiceConnectionToMemoryOutputVariant2Delivery = TypedDict('ImportService
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ImportServiceConnectionToMemoryOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ImportServiceConnectionToMemoryOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ImportServiceConnectionToMemoryOutputVariant2DeliveryStorageFailureVariant1, None]],

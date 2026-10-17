@@ -56,6 +56,16 @@ FactHistoryOutputVariant2DeliveryArtifactsItem = TypedDict('FactHistoryOutputVar
 FactHistoryOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+FactHistoryOutputVariant2DeliveryAvailableExportsItem = TypedDict('FactHistoryOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+FactHistoryOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 FactHistoryOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('FactHistoryOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -69,6 +79,7 @@ FactHistoryOutputVariant2Delivery = TypedDict('FactHistoryOutputVariant2Delivery
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[FactHistoryOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[FactHistoryOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[FactHistoryOutputVariant2DeliveryStorageFailureVariant1, None]],

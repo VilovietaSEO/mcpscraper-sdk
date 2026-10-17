@@ -55,6 +55,16 @@ GmailBulkDeleteMessagesOutputVariant2DeliveryArtifactsItem = TypedDict('GmailBul
 GmailBulkDeleteMessagesOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GmailBulkDeleteMessagesOutputVariant2DeliveryAvailableExportsItem = TypedDict('GmailBulkDeleteMessagesOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+GmailBulkDeleteMessagesOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GmailBulkDeleteMessagesOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('GmailBulkDeleteMessagesOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -68,6 +78,7 @@ GmailBulkDeleteMessagesOutputVariant2Delivery = TypedDict('GmailBulkDeleteMessag
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[GmailBulkDeleteMessagesOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[GmailBulkDeleteMessagesOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[GmailBulkDeleteMessagesOutputVariant2DeliveryStorageFailureVariant1, None]],

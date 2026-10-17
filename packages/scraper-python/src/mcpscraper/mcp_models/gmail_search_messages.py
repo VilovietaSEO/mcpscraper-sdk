@@ -54,6 +54,16 @@ GmailSearchMessagesOutputVariant2DeliveryArtifactsItem = TypedDict('GmailSearchM
 GmailSearchMessagesOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GmailSearchMessagesOutputVariant2DeliveryAvailableExportsItem = TypedDict('GmailSearchMessagesOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+GmailSearchMessagesOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GmailSearchMessagesOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('GmailSearchMessagesOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -67,6 +77,7 @@ GmailSearchMessagesOutputVariant2Delivery = TypedDict('GmailSearchMessagesOutput
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[GmailSearchMessagesOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[GmailSearchMessagesOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[GmailSearchMessagesOutputVariant2DeliveryStorageFailureVariant1, None]],

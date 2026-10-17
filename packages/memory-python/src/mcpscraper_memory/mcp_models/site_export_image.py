@@ -37,6 +37,16 @@ SiteExportImageOutputVariant2DeliveryArtifactsItem = TypedDict('SiteExportImageO
 SiteExportImageOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+SiteExportImageOutputVariant2DeliveryAvailableExportsItem = TypedDict('SiteExportImageOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+SiteExportImageOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 SiteExportImageOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('SiteExportImageOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -50,6 +60,7 @@ SiteExportImageOutputVariant2Delivery = TypedDict('SiteExportImageOutputVariant2
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[SiteExportImageOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[SiteExportImageOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[SiteExportImageOutputVariant2DeliveryStorageFailureVariant1, None]],

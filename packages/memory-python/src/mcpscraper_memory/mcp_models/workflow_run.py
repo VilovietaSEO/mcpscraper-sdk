@@ -39,6 +39,16 @@ WorkflowRunOutputVariant2DeliveryArtifactsItem = TypedDict('WorkflowRunOutputVar
 WorkflowRunOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+WorkflowRunOutputVariant2DeliveryAvailableExportsItem = TypedDict('WorkflowRunOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+WorkflowRunOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 WorkflowRunOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('WorkflowRunOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -52,6 +62,7 @@ WorkflowRunOutputVariant2Delivery = TypedDict('WorkflowRunOutputVariant2Delivery
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[WorkflowRunOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[WorkflowRunOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[WorkflowRunOutputVariant2DeliveryStorageFailureVariant1, None]],

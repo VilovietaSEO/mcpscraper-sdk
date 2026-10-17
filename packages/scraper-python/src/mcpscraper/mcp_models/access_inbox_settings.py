@@ -32,6 +32,16 @@ AccessInboxSettingsOutputVariant2DeliveryArtifactsItem = TypedDict('AccessInboxS
 AccessInboxSettingsOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AccessInboxSettingsOutputVariant2DeliveryAvailableExportsItem = TypedDict('AccessInboxSettingsOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AccessInboxSettingsOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AccessInboxSettingsOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AccessInboxSettingsOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -45,6 +55,7 @@ AccessInboxSettingsOutputVariant2Delivery = TypedDict('AccessInboxSettingsOutput
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AccessInboxSettingsOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AccessInboxSettingsOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AccessInboxSettingsOutputVariant2DeliveryStorageFailureVariant1, None]],

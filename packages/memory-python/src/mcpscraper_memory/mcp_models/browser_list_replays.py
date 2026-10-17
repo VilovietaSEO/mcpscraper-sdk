@@ -34,6 +34,16 @@ BrowserListReplaysOutputVariant2DeliveryArtifactsItem = TypedDict('BrowserListRe
 BrowserListReplaysOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+BrowserListReplaysOutputVariant2DeliveryAvailableExportsItem = TypedDict('BrowserListReplaysOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+BrowserListReplaysOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 BrowserListReplaysOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('BrowserListReplaysOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -47,6 +57,7 @@ BrowserListReplaysOutputVariant2Delivery = TypedDict('BrowserListReplaysOutputVa
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[BrowserListReplaysOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[BrowserListReplaysOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[BrowserListReplaysOutputVariant2DeliveryStorageFailureVariant1, None]],

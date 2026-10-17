@@ -64,7 +64,7 @@ mcpscraper tools call gmail_import_status --args '{"ingestId":"opaque_ingest_id"
 
 Integration connections are included with an active Starter plan or higher and have no extra connection-operation debit in this release.
 
-Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. Unfiltered light mode makes two primary attempts, then one API fallback. Unfiltered one-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page. Past-week and past-month searches use a managed browser for organic results at 35 Credits per delivered page. Request a second page explicitly. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
+Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. Unfiltered one-page light mode makes two primary attempts, then one API fallback. Two-page searches return organic results without a backup provider. Unfiltered one-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page. Past-week and past-month searches return one page of organic results at 35 Credits; omit the date filter when requesting two pages. Request a second page explicitly only for an unfiltered search. Date filters and saved search identities require one page. Combining either with two pages is rejected before acquisition or billing. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
 Use `mcpscraper tools call harvest_paa_start --args '{"query":"...","pages":2,"idempotencyKey":"..."}' --json`
 to request a second organic-results page, then poll the returned `jobId` with
@@ -160,4 +160,10 @@ $ mcpscraper map https://example.com --json
 
 Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
 
-Release changes: [SDK 0.54.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.54.1).
+Release changes: [SDK 0.55.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.55.0).
+
+Artifact delivery may include optional `delivery.availableExports` handles. Use the
+export artifact ID with `artifact_download`, `artifact_read` or `artifact_describe`
+to generate Markdown from retained JSON without repeating acquisition. The
+[on-demand export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.0/examples/serp-on-demand-export.mjs)
+shows the complete flow and preserves a retry key for uncertain search responses.

@@ -34,6 +34,16 @@ BrowserCloseOutputVariant2DeliveryArtifactsItem = TypedDict('BrowserCloseOutputV
 BrowserCloseOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+BrowserCloseOutputVariant2DeliveryAvailableExportsItem = TypedDict('BrowserCloseOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+BrowserCloseOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 BrowserCloseOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('BrowserCloseOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -47,6 +57,7 @@ BrowserCloseOutputVariant2Delivery = TypedDict('BrowserCloseOutputVariant2Delive
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[BrowserCloseOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[BrowserCloseOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[BrowserCloseOutputVariant2DeliveryStorageFailureVariant1, None]],

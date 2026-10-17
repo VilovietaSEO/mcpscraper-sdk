@@ -38,6 +38,16 @@ AnalyticsCommitCrmImportOutputVariant2DeliveryArtifactsItem = TypedDict('Analyti
 AnalyticsCommitCrmImportOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsCommitCrmImportOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsCommitCrmImportOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsCommitCrmImportOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsCommitCrmImportOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsCommitCrmImportOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -51,6 +61,7 @@ AnalyticsCommitCrmImportOutputVariant2Delivery = TypedDict('AnalyticsCommitCrmIm
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsCommitCrmImportOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsCommitCrmImportOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsCommitCrmImportOutputVariant2DeliveryStorageFailureVariant1, None]],

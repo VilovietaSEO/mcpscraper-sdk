@@ -78,7 +78,7 @@ Use Node `callToolResult(...)` or Python `call_tool_result(...)` to retain nativ
 
 Every example below runs the *same* operation four ways.
 
-Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches use a managed browser for organic results at 35 Credits per delivered page. Unfiltered light searches try the primary path twice, then one API fallback; an unfiltered one-page full search uses the feature-capable API directly. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
+Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches return one page of organic results at 35 Credits; omit the date filter when requesting two pages. Unfiltered one-page light searches try the primary path twice, then one API fallback; an unfiltered one-page full search uses the feature-capable API directly. Two-page searches return organic results without a backup provider. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
 ### Lead-list enrichment
 
@@ -248,10 +248,17 @@ curl https://mcpscraper.dev/mcp \
 
 `search_serp` defaults to light mode and one page. Use `mode: 'full'` for
 available features on an unfiltered first page. Set `recency: 'week'` or
-`recency: 'month'` for date-filtered organic results at 35 Credits per page. Set `pages: 2` only when a second
-Google results page is wanted. Two-page requests return organic results only;
+`recency: 'month'` for one page of date-filtered organic results at 35 Credits.
+Set `pages: 2` only for an unfiltered search when a second Google results page is wanted.
+Date filters and saved search identities require one page. Combining either with
+two pages is rejected before acquisition or billing. Two-page requests return organic results only;
 if page 2 fails, an available page 1 is returned as partial and billed for
 one page. Full mode does not expand PAA, open Maps profiles, or scrape ranking URLs.
+
+Artifact delivery can include `delivery.availableExports` for optional Markdown.
+Pass that export handle to `client.tools.artifacts.download` (or the artifact
+reader) to generate it from retained JSON without another search. See the runnable
+[`examples/serp-on-demand-export.mjs`](./examples/serp-on-demand-export.mjs).
 
 PAA harvests capture one organic page by default. Pass `pages: 2` to add the
 second organic-results page when Google offers it; the service preserves page
@@ -267,7 +274,7 @@ import { ScraperClient } from 'mcpscraper-sdk'
 const client = new ScraperClient({ apiKey: process.env.MCPSCRAPER_API_KEY! })
 const result = await client.searchSerp({ query: 'best roofing companies denver' })
 const full = await client.searchSerp({ query: 'best roofing companies denver', mode: 'full' })
-const recent = await client.tools.search.searchSerp({ query: 'best roofing companies denver', recency: 'week', pages: 2 })
+const recent = await client.tools.search.searchSerp({ query: 'best roofing companies denver', recency: 'week', pages: 1 })
 ```
 </details>
 
@@ -279,7 +286,7 @@ from mcpscraper import ScraperClient
 client = ScraperClient(api_key=os.environ["MCPSCRAPER_API_KEY"])
 result = client.search_serp("best roofing companies denver")
 full = client.tools.search.search_serp(query="best roofing companies denver", mode="full")
-recent = client.tools.search.search_serp(query="best roofing companies denver", recency="month", pages=2)
+recent = client.tools.search.search_serp(query="best roofing companies denver", recency="month", pages=1)
 ```
 </details>
 

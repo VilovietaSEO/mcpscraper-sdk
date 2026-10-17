@@ -46,6 +46,16 @@ ImageFolderListOutputVariant2DeliveryArtifactsItem = TypedDict('ImageFolderListO
 ImageFolderListOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ImageFolderListOutputVariant2DeliveryAvailableExportsItem = TypedDict('ImageFolderListOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+ImageFolderListOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ImageFolderListOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('ImageFolderListOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -59,6 +69,7 @@ ImageFolderListOutputVariant2Delivery = TypedDict('ImageFolderListOutputVariant2
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[ImageFolderListOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[ImageFolderListOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[ImageFolderListOutputVariant2DeliveryStorageFailureVariant1, None]],

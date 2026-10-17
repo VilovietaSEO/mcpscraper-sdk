@@ -33,6 +33,16 @@ GetVaultContractOutputVariant2DeliveryArtifactsItem = TypedDict('GetVaultContrac
 GetVaultContractOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GetVaultContractOutputVariant2DeliveryAvailableExportsItem = TypedDict('GetVaultContractOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+GetVaultContractOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GetVaultContractOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('GetVaultContractOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -46,6 +56,7 @@ GetVaultContractOutputVariant2Delivery = TypedDict('GetVaultContractOutputVarian
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[GetVaultContractOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[GetVaultContractOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[GetVaultContractOutputVariant2DeliveryStorageFailureVariant1, None]],

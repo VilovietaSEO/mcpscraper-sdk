@@ -49,6 +49,16 @@ CommonsSearchEntitiesOutputVariant2DeliveryArtifactsItem = TypedDict('CommonsSea
 CommonsSearchEntitiesOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+CommonsSearchEntitiesOutputVariant2DeliveryAvailableExportsItem = TypedDict('CommonsSearchEntitiesOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+CommonsSearchEntitiesOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 CommonsSearchEntitiesOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('CommonsSearchEntitiesOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -62,6 +72,7 @@ CommonsSearchEntitiesOutputVariant2Delivery = TypedDict('CommonsSearchEntitiesOu
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[CommonsSearchEntitiesOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[CommonsSearchEntitiesOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[CommonsSearchEntitiesOutputVariant2DeliveryStorageFailureVariant1, None]],

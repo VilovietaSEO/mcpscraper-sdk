@@ -44,7 +44,10 @@ export interface paths {
          *     positions, URLs, titles, and descriptions for 20 Credits per delivered
          *     page, or 35 Credits when the backup supplies the result. Full mode adds
          *     available same-page SERP features for 35 Credits per delivered page.
-         *     Both modes default to one page; set `pages: 2` explicitly for two.
+         *     Both modes default to one page; set `pages: 2` explicitly for two unfiltered
+         *     organic pages without a backup provider. With `serpOnly: true`, `recency: week` or `month` returns
+         *     one page for 35 Credits. Combining recency with two pages is rejected
+         *     before acquisition or billing.
          *     A 35-Credit-per-requested-page hold is settled after delivery.
          *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
          *     (400 Credit base + 10 Credits per question actually returned; unused estimate is
@@ -1256,7 +1259,7 @@ export interface components {
             /** @description Optional US ZIP override. */
             proxyZip?: string;
             /**
-             * @description Google result pages to fetch. Full mode alone does not request page 2.
+             * @description Google result pages to fetch. Full mode alone does not request page 2. For serpOnly searches, two pages require an omitted recency filter.
              * @default 1
              */
             pages: number;
@@ -1272,7 +1275,7 @@ export interface components {
              */
             serpOnly: boolean;
             /**
-             * @description Optional Google time filter. Ordinary search_serp accepts week or month and returns organic browser results; PAA harvest also accepts day and year. Omit for all-time results.
+             * @description Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 35 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results.
              * @enum {string}
              */
             recency?: "day" | "week" | "month" | "year";

@@ -185,6 +185,16 @@ AnalyticsGetVisitorJourneyOutputVariant2DeliveryArtifactsItem = TypedDict('Analy
 AnalyticsGetVisitorJourneyOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsGetVisitorJourneyOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsGetVisitorJourneyOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsGetVisitorJourneyOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsGetVisitorJourneyOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsGetVisitorJourneyOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -198,6 +208,7 @@ AnalyticsGetVisitorJourneyOutputVariant2Delivery = TypedDict('AnalyticsGetVisito
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsGetVisitorJourneyOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsGetVisitorJourneyOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsGetVisitorJourneyOutputVariant2DeliveryStorageFailureVariant1, None]],

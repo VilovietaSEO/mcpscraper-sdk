@@ -55,6 +55,16 @@ GoogleAdsSearchOutputVariant2DeliveryArtifactsItem = TypedDict('GoogleAdsSearchO
 GoogleAdsSearchOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GoogleAdsSearchOutputVariant2DeliveryAvailableExportsItem = TypedDict('GoogleAdsSearchOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+GoogleAdsSearchOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GoogleAdsSearchOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('GoogleAdsSearchOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -68,6 +78,7 @@ GoogleAdsSearchOutputVariant2Delivery = TypedDict('GoogleAdsSearchOutputVariant2
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[GoogleAdsSearchOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[GoogleAdsSearchOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[GoogleAdsSearchOutputVariant2DeliveryStorageFailureVariant1, None]],

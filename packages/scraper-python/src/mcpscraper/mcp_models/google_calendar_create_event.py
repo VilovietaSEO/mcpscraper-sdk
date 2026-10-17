@@ -49,6 +49,16 @@ GoogleCalendarCreateEventOutputVariant2DeliveryArtifactsItem = TypedDict('Google
 GoogleCalendarCreateEventOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GoogleCalendarCreateEventOutputVariant2DeliveryAvailableExportsItem = TypedDict('GoogleCalendarCreateEventOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+GoogleCalendarCreateEventOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GoogleCalendarCreateEventOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('GoogleCalendarCreateEventOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -62,6 +72,7 @@ GoogleCalendarCreateEventOutputVariant2Delivery = TypedDict('GoogleCalendarCreat
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[GoogleCalendarCreateEventOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[GoogleCalendarCreateEventOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[GoogleCalendarCreateEventOutputVariant2DeliveryStorageFailureVariant1, None]],

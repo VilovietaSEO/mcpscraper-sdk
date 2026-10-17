@@ -33,6 +33,16 @@ AccessRevokeKeyOutputVariant2DeliveryArtifactsItem = TypedDict('AccessRevokeKeyO
 AccessRevokeKeyOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AccessRevokeKeyOutputVariant2DeliveryAvailableExportsItem = TypedDict('AccessRevokeKeyOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AccessRevokeKeyOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AccessRevokeKeyOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AccessRevokeKeyOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -46,6 +56,7 @@ AccessRevokeKeyOutputVariant2Delivery = TypedDict('AccessRevokeKeyOutputVariant2
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AccessRevokeKeyOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AccessRevokeKeyOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AccessRevokeKeyOutputVariant2DeliveryStorageFailureVariant1, None]],

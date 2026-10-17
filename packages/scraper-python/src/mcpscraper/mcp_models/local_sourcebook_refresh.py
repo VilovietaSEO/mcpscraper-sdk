@@ -29,6 +29,16 @@ LocalSourcebookRefreshOutputVariant2DeliveryArtifactsItem = TypedDict('LocalSour
 LocalSourcebookRefreshOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+LocalSourcebookRefreshOutputVariant2DeliveryAvailableExportsItem = TypedDict('LocalSourcebookRefreshOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+LocalSourcebookRefreshOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 LocalSourcebookRefreshOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('LocalSourcebookRefreshOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -42,6 +52,7 @@ LocalSourcebookRefreshOutputVariant2Delivery = TypedDict('LocalSourcebookRefresh
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[LocalSourcebookRefreshOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[LocalSourcebookRefreshOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[LocalSourcebookRefreshOutputVariant2DeliveryStorageFailureVariant1, None]],

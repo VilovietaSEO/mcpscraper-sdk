@@ -48,6 +48,16 @@ AnalyticsExportCrmCsvOutputVariant2DeliveryArtifactsItem = TypedDict('AnalyticsE
 AnalyticsExportCrmCsvOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsExportCrmCsvOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsExportCrmCsvOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsExportCrmCsvOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsExportCrmCsvOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsExportCrmCsvOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -61,6 +71,7 @@ AnalyticsExportCrmCsvOutputVariant2Delivery = TypedDict('AnalyticsExportCrmCsvOu
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsExportCrmCsvOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsExportCrmCsvOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsExportCrmCsvOutputVariant2DeliveryStorageFailureVariant1, None]],

@@ -33,6 +33,16 @@ AnalyticsGetConsentCoverageOutputVariant2DeliveryArtifactsItem = TypedDict('Anal
 AnalyticsGetConsentCoverageOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+AnalyticsGetConsentCoverageOutputVariant2DeliveryAvailableExportsItem = TypedDict('AnalyticsGetConsentCoverageOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AnalyticsGetConsentCoverageOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 AnalyticsGetConsentCoverageOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AnalyticsGetConsentCoverageOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -46,6 +56,7 @@ AnalyticsGetConsentCoverageOutputVariant2Delivery = TypedDict('AnalyticsGetConse
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[AnalyticsGetConsentCoverageOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AnalyticsGetConsentCoverageOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[AnalyticsGetConsentCoverageOutputVariant2DeliveryStorageFailureVariant1, None]],

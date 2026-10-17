@@ -67,6 +67,16 @@ MapSiteUrlsOutputVariant2DeliveryArtifactsItem = TypedDict('MapSiteUrlsOutputVar
 MapSiteUrlsOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+MapSiteUrlsOutputVariant2DeliveryAvailableExportsItem = TypedDict('MapSiteUrlsOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+MapSiteUrlsOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 MapSiteUrlsOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('MapSiteUrlsOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -80,6 +90,7 @@ MapSiteUrlsOutputVariant2Delivery = TypedDict('MapSiteUrlsOutputVariant2Delivery
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[MapSiteUrlsOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[MapSiteUrlsOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[MapSiteUrlsOutputVariant2DeliveryStorageFailureVariant1, None]],

@@ -36,6 +36,16 @@ CommonsClaimPublicationOutputVariant2DeliveryArtifactsItem = TypedDict('CommonsC
 CommonsClaimPublicationOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+CommonsClaimPublicationOutputVariant2DeliveryAvailableExportsItem = TypedDict('CommonsClaimPublicationOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+CommonsClaimPublicationOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 CommonsClaimPublicationOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('CommonsClaimPublicationOutputVariant2DeliveryStorageFailureVariant1', {
     'artifactId': Required[Union[str, None]],
     'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
@@ -49,6 +59,7 @@ CommonsClaimPublicationOutputVariant2Delivery = TypedDict('CommonsClaimPublicati
     'retainedRepresentation': Required[Literal['formatted-tool-result']],
     'sourceIsError': Required[bool],
     'artifacts': Required[list[CommonsClaimPublicationOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[CommonsClaimPublicationOutputVariant2DeliveryAvailableExportsItem]],
     'downloadLinksOmitted': Required[bool],
     'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'storageFailure': Required[Union[CommonsClaimPublicationOutputVariant2DeliveryStorageFailureVariant1, None]],
