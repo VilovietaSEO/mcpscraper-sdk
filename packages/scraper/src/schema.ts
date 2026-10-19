@@ -560,7 +560,7 @@ export interface paths {
         put?: never;
         /**
          * Capture a Reddit post and its comment tree
-         * @description Costs 30 credits for the thread plus 2 credits per comment actually returned. Refunded automatically if Reddit blocks the request after retries.
+         * @description Opens a known Reddit thread directly without a discovery search. Costs 30 credits for the thread plus 2 credits per comment actually returned. Refunded automatically if Reddit blocks the request after retries.
          */
         post: operations["redditThread"];
         delete?: never;
@@ -580,13 +580,14 @@ export interface paths {
         put?: never;
         /**
          * Discover and rank the top recent Reddit threads for a topic
-         * @description Finds relevant recent Reddit threads via a Google site:reddit.com search over a week/month window,
-         *     then (by default) scrapes them all in parallel for real upvotes, comments, and the questions people
-         *     asked, and ranks by engagement (upvotes + 2x comments). Billing: one discovery debit plus, when
-         *     includeComments is true, 30 credits per scraped thread and 2 credits per captured comment, each
-         *     refunded on failure. Set includeComments:false for a cheap discovery-only sweep (thread list, no
-         *     engagement stats, no per-thread billing). Scraping respects a soft deadline and returns partial:true
-         *     if it stops early rather than exceeding the request limit.
+         * @description Discovers Reddit threads through a Google site:reddit.com search and selects relevant candidates
+         *     before scraping. Supports week, month, year and all-time windows. Scraped post dates are checked
+         *     against the requested publication window; discovery-only candidate dates remain unverified.
+         *     With includeComments:true, collects selected threads and ranks by engagement (upvotes + 2x
+         *     reported comments). Billing: one discovery debit plus 30 credits per scraped thread and 2 credits
+         *     per captured comment, each refunded on failure. Set includeComments:false for a candidate list
+         *     without per-thread billing. Comment coverage distinguishes the requested limit, returned text
+         *     comments and reported comment count. A bounded capture can return partial:true.
          */
         post: operations["redditTrending"];
         delete?: never;
@@ -2365,6 +2366,108 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
+        RedditThreadRequest: {
+            /** @description A known Reddit thread URL to open directly without searching; legacy Reddit hostnames are normalized to the current page. */
+            url: string;
+            maxComments?: number;
+        };
+        RedditThreadResponse: {
+            title?: string;
+            author?: string | null;
+            score?: string | null;
+            postBody?: string;
+            /**
+             * Format: date-time
+             * @description Observed publication timestamp when available.
+             */
+            publishedAt?: string | null;
+            numComments?: number;
+            comments?: {
+                author?: string | null;
+                score?: string;
+                depth?: number;
+                body?: string;
+            }[];
+            sourceUrl?: string;
+        };
+        RedditTrendingRequest: {
+            /** @description Topic in plain words, e.g. "crm for small business". Not a URL. */
+            topic: string;
+            /** @description Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit. */
+            subreddit?: string;
+            /**
+             * @description Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.
+             * @default month
+             * @enum {string}
+             */
+            window: "week" | "month" | "year" | "all";
+            /**
+             * @description Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.
+             * @default 20
+             */
+            maxThreads: number;
+            /**
+             * @description Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.
+             * @default true
+             */
+            includeComments: boolean;
+            /**
+             * @description Comments captured (and billed) per scraped thread when includeComments is true.
+             * @default 50
+             */
+            maxCommentsPerThread: number;
+        };
+        RedditTrendingResponse: {
+            topic?: string;
+            subreddit?: string | null;
+            /** @description Resolved publication window: "7d", "30d", "365d" or "all". */
+            window?: string;
+            totals?: {
+                threads?: number;
+                upvotes?: number;
+                comments?: number;
+            };
+            rankedThreads?: {
+                title?: string;
+                url?: string;
+                subreddit?: string;
+                score?: number;
+                commentCount?: number;
+                engagementScore?: number;
+                ageText?: string;
+                /**
+                 * Format: date-time
+                 * @description Observed publication timestamp when available.
+                 */
+                publishedAt?: string | null;
+                /** @description Text comments actually returned for this thread. */
+                capturedCommentCount?: number;
+                /** @description Requested per-thread comment cap. */
+                requestedCommentLimit?: number;
+                commentCoverage?: {
+                    requestedLimit: number;
+                    returnedCount: number;
+                    declaredCount: number;
+                    status: components["schemas"]["RedditCommentCoverageStatus"];
+                    reason: components["schemas"]["RedditCommentCoverageReason"];
+                };
+                topQuestions?: string[];
+            }[];
+            questions?: {
+                question?: string;
+                threadUrl?: string;
+            }[];
+            threadsScraped?: number;
+            candidatesFound?: number;
+            /** @description true if scraping stopped early at the time limit. */
+            partial?: boolean;
+            /** @description The Google site:reddit.com query used for discovery. */
+            searchQuery?: string;
+        };
+        /** @enum {string} */
+        RedditCommentCoverageStatus: "complete" | "partial";
+        /** @enum {string} */
+        RedditCommentCoverageReason: "requested_limit_reached" | "declared_count_reached" | "stable_visible_shortfall" | "capture_shortfall" | "funding_limited";
         MapsSearchRequest: {
             query: string;
             location?: string;
@@ -3591,11 +3694,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": {
-                    /** @description A reddit.com or redd.it thread URL. */
-                    url: string;
-                    maxComments?: number;
-                };
+                "application/json": components["schemas"]["RedditThreadRequest"];
             };
         };
         responses: {
@@ -3605,20 +3704,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        title?: string;
-                        author?: string | null;
-                        score?: string | null;
-                        postBody?: string;
-                        numComments?: number;
-                        comments?: {
-                            author?: string | null;
-                            score?: string;
-                            depth?: number;
-                            body?: string;
-                        }[];
-                        sourceUrl?: string;
-                    };
+                    "application/json": components["schemas"]["RedditThreadResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
@@ -3643,33 +3729,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": {
-                    /** @description Topic in plain words, e.g. "crm for small business". Not a URL. */
-                    topic: string;
-                    /** @description Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit. */
-                    subreddit?: string;
-                    /**
-                     * @description How recent the threads must be.
-                     * @default month
-                     * @enum {string}
-                     */
-                    window?: "week" | "month";
-                    /**
-                     * @description How many discovered threads to scrape and rank (scrape-all default). Lower to cap cost.
-                     * @default 20
-                     */
-                    maxThreads?: number;
-                    /**
-                     * @description true = scrape each thread for engagement + questions and rank; false = cheap discovery-only list.
-                     * @default true
-                     */
-                    includeComments?: boolean;
-                    /**
-                     * @description Comments captured (and billed) per scraped thread when includeComments is true.
-                     * @default 50
-                     */
-                    maxCommentsPerThread?: number;
-                };
+                "application/json": components["schemas"]["RedditTrendingRequest"];
             };
         };
         responses: {
@@ -3679,37 +3739,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        topic?: string;
-                        subreddit?: string | null;
-                        /** @description Resolved window, e.g. "7d" or "30d". */
-                        window?: string;
-                        totals?: {
-                            threads?: number;
-                            upvotes?: number;
-                            comments?: number;
-                        };
-                        rankedThreads?: {
-                            title?: string;
-                            url?: string;
-                            subreddit?: string;
-                            score?: number;
-                            commentCount?: number;
-                            engagementScore?: number;
-                            ageText?: string;
-                            topQuestions?: string[];
-                        }[];
-                        questions?: {
-                            question?: string;
-                            threadUrl?: string;
-                        }[];
-                        threadsScraped?: number;
-                        candidatesFound?: number;
-                        /** @description true if scraping stopped early at the time limit. */
-                        partial?: boolean;
-                        /** @description The Google site:reddit.com query used for discovery. */
-                        searchQuery?: string;
-                    };
+                    "application/json": components["schemas"]["RedditTrendingResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];

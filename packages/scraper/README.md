@@ -193,7 +193,7 @@ npm run verify:rest-contract
 
 Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
 
-Release changes: [SDK 0.55.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.55.0).
+Release changes: [SDK 0.56.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.56.0).
 
 ## Client attribution and full results
 
@@ -206,3 +206,19 @@ export artifact ID with `artifact_download`, `artifact_read` or `artifact_descri
 to generate Markdown from retained JSON without repeating acquisition. The
 [on-demand export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.0/examples/serp-on-demand-export.mjs)
 shows the complete flow and preserves a retry key for uncertain search responses.
+
+## Reddit discovery and known threads
+
+Use `reddit_trending` with `window:"year"` to discover past-year search candidates and
+select relevant threads before collecting comments. Set `maxThreads` to bound the
+number selected and `maxCommentsPerThread:20` for a per-thread capture limit.
+Twenty is a request limit; inspect returned coverage because fewer accessible text
+comments can produce a partial result. Publication dates are optional when unknown.
+
+Pass a known Reddit thread URL directly to `reddit_thread` with `maxComments:20`;
+it does not require a discovery call first. Trending returns ranked summaries and
+questions; the thread tool returns full comment bodies. Preserve each operation's
+retry key and exact inputs after an uncertain response.
+
+The [past-year and direct-thread example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.56.0/examples/reddit-past-year.mjs)
+shows both paths.

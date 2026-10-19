@@ -169,3 +169,21 @@ to generate Markdown from retained JSON without repeating acquisition. The
 shows the complete flow and preserves a retry key for uncertain search responses.
 
 For page content, start `extract_site` directly; it discovers pages during extraction. Use `map_site_urls` when you need the URL inventory itself. See the [direct site-export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.1/examples/site-export-direct.mjs) for retry keys, status and complete page reads.
+
+Release changes: [SDK 0.56.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.56.0).
+
+## Reddit discovery and known threads
+
+Use `reddit_trending` with `window:"year"` to discover past-year search candidates and
+select relevant threads before collecting comments. Set `maxThreads` to bound the
+number selected and `maxCommentsPerThread:20` for a per-thread capture limit.
+Twenty is a request limit; inspect returned coverage because fewer accessible text
+comments can produce a partial result. Publication dates are optional when unknown.
+
+Pass a known Reddit thread URL directly to `reddit_thread` with `maxComments:20`;
+it does not require a discovery call first. Trending returns ranked summaries and
+questions; the thread tool returns full comment bodies. Preserve each operation's
+retry key and exact inputs after an uncertain response.
+
+The [past-year and direct-thread example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.56.0/examples/reddit-past-year.mjs)
+shows both paths.

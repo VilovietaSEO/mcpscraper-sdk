@@ -1,169 +1,212 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "basis": "Official baseline archives plus five percent byte headroom for npm. Python permits a bounded generated public-type delta: 347 unified output models at up to 1,024 unpacked bytes each; Memory also permits 126 direct/convenience output models at up to 2,048 unpacked bytes each. Compressed Python deltas permit up to 128 bytes per declared output model. Public file counts remain unchanged; no source maps or bundled dependency trees.",
-    "source": "Official npm and PyPI registry archives downloaded and integrity-verified on 2026-10-17 UTC",
+    "basis": "Exact current official npm and PyPI baseline archives verified on 2026-10-19. Five percent compressed/unpacked headroom for additive generated Reddit contracts and public guidance. Public file counts remain unchanged; no source maps or bundled dependency trees. Only the Node scraper Memory dependency floor and CLI scraper dependency floor advance.",
     "failClosed": true
   },
   "artifacts": [
     {
-      "package": "mcpscraper-sdk",
-      "format": "npm-tgz",
-      "candidateVersion": "0.55.0",
-      "baseline": {
-        "version": "0.54.1",
-        "sha256": "3e690aa5c012cdbebc65bb5ee150392c04b4c27401fa0b73630d9ab218a949cc",
-        "compressedBytes": 67811,
-        "unpackedBytes": 458072,
-        "fileCount": 6,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.54.1.tgz"
-      },
-      "intendedChange": "Add optional typed on-demand Markdown export descriptors to artifact delivery in all 347 unified tool outputs; update Search single-page filter and identity restrictions, curated REST guidance and valid examples. No tool names, input types or public file paths are added.",
-      "maximum": {
-        "compressedBytes": 71202,
-        "unpackedBytes": 480976,
-        "fileCount": 6,
-        "sourceMaps": 0,
-        "nestedNodeModulesEntries": 0
-      }
-    },
-    {
-      "package": "mcpscraper-memory-sdk",
+      "package": "mcpscraper-cli",
       "format": "npm-tgz",
       "candidateVersion": "0.54.0",
       "baseline": {
         "version": "0.53.1",
-        "sha256": "d987b0c6d855ff77da1ac496de10ca3f7526af8ad6c07ea3aa628b7c0352faf8",
-        "compressedBytes": 282009,
-        "unpackedBytes": 10268176,
-        "fileCount": 5,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.53.1.tgz"
+        "sha256": "f169d4951d432f617aa9c37fea5216dd52e9da5371a07e188df409df8382169d",
+        "compressedBytes": 154189,
+        "unpackedBytes": 1086042,
+        "fileCount": 3,
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.53.1.tgz"
       },
-      "intendedChange": "Add optional typed on-demand Markdown export descriptors to artifact delivery in all 347 unified tool outputs; update Search single-page filter and identity restrictions, curated REST guidance and valid examples. No tool names, input types or public file paths are added.",
+      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
       "maximum": {
-        "compressedBytes": 296110,
-        "unpackedBytes": 10781585,
-        "fileCount": 5,
+        "compressedBytes": 161899,
+        "unpackedBytes": 1140345,
+        "fileCount": 3,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
+      },
+      "expectedDependencyDeclarations": {
+        "npm": {
+          "name": "mcpscraper-cli",
+          "version": "0.54.0",
+          "dependencies": {
+            "commander": "^12.0.0",
+            "mcpscraper-sdk": "^0.56.0"
+          }
+        },
+        "pythonRequiresDist": []
       }
     },
     {
-      "package": "mcpscraper-cli",
+      "package": "mcpscraper-memory-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.53.0",
+      "candidateVersion": "0.55.0",
       "baseline": {
-        "version": "0.52.1",
-        "sha256": "d24b05fc21a4c458923c630054a6474147445cd69b0494d7c052369d8c615e5c",
-        "compressedBytes": 153877,
-        "unpackedBytes": 1085255,
-        "fileCount": 3,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.52.1.tgz"
+        "version": "0.54.1",
+        "sha256": "9fe706a4b72e36f3d1dd01885f4ddf517e0023a15de047c6c6e306294fc1d1d8",
+        "compressedBytes": 284682,
+        "unpackedBytes": 10390477,
+        "fileCount": 5,
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.54.1.tgz"
       },
-      "intendedChange": "Add optional typed on-demand Markdown export descriptors to artifact delivery in all 347 unified tool outputs; update Search single-page filter and identity restrictions, curated REST guidance and valid examples. No tool names, input types or public file paths are added.",
+      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
       "maximum": {
-        "compressedBytes": 161571,
-        "unpackedBytes": 1139518,
-        "fileCount": 3,
+        "compressedBytes": 298917,
+        "unpackedBytes": 10910001,
+        "fileCount": 5,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
+      },
+      "expectedDependencyDeclarations": {
+        "npm": {
+          "name": "mcpscraper-memory-sdk",
+          "version": "0.55.0"
+        },
+        "pythonRequiresDist": []
+      }
+    },
+    {
+      "package": "mcpscraper-sdk",
+      "format": "npm-tgz",
+      "candidateVersion": "0.56.0",
+      "baseline": {
+        "version": "0.55.0",
+        "sha256": "237a19478f458c4047de118e6d5c8d3aab617fa5bdcd202fc1f5774fa94f8c7f",
+        "compressedBytes": 68276,
+        "unpackedBytes": 459568,
+        "fileCount": 6,
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.55.0.tgz"
+      },
+      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
+      "maximum": {
+        "compressedBytes": 71690,
+        "unpackedBytes": 482547,
+        "fileCount": 6,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
+      },
+      "expectedDependencyDeclarations": {
+        "npm": {
+          "name": "mcpscraper-sdk",
+          "version": "0.56.0",
+          "dependencies": {
+            "mcpscraper-memory-sdk": "^0.55.0"
+          }
+        },
+        "pythonRequiresDist": []
+      }
+    },
+    {
+      "package": "mcpscraper-memory-sdk",
+      "format": "python-wheel",
+      "candidateVersion": "0.51.0",
+      "baseline": {
+        "version": "0.50.1",
+        "sha256": "e1509097cf3a5b1d13efbdd6dc60bdbd7cb7f4e2b8abd5d649db6523631fa87d",
+        "compressedBytes": 893927,
+        "unpackedBytes": 3711544,
+        "fileCount": 585,
+        "archiveUrl": "https://files.pythonhosted.org/packages/0c/4c/4d4ff64a92c214dfb5992fee645d05ea5872bf4d52ae9154a83d8bcd20c9/mcpscraper_memory_sdk-0.50.1-py3-none-any.whl"
+      },
+      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
+      "maximum": {
+        "compressedBytes": 938624,
+        "unpackedBytes": 3897122,
+        "fileCount": 585,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
+      },
+      "expectedDependencyDeclarations": {
+        "npm": {},
+        "pythonRequiresDist": [
+          "pydantic>=2",
+          "requests>=2.31"
+        ]
+      }
+    },
+    {
+      "package": "mcpscraper-memory-sdk",
+      "format": "python-sdist",
+      "candidateVersion": "0.51.0",
+      "baseline": {
+        "version": "0.50.1",
+        "sha256": "06a9c2baf02c941bb712691bdc3981f5b76c10d03422bc99a95f405038a3d3de",
+        "compressedBytes": 321109,
+        "unpackedBytes": 3653956,
+        "fileCount": 585,
+        "archiveUrl": "https://files.pythonhosted.org/packages/88/91/19d125f0ae4ca92a51ee337de6cb4c3a706c8ea75687c341d0e74ee7bd34/mcpscraper_memory_sdk-0.50.1.tar.gz"
+      },
+      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
+      "maximum": {
+        "compressedBytes": 337165,
+        "unpackedBytes": 3836654,
+        "fileCount": 585,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
+      },
+      "expectedDependencyDeclarations": {
+        "npm": {},
+        "pythonRequiresDist": [
+          "pydantic>=2",
+          "requests>=2.31"
+        ]
       }
     },
     {
       "package": "mcpscraper-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.53.0",
+      "candidateVersion": "0.54.0",
       "baseline": {
-        "version": "0.52.1",
-        "sha256": "eed9b5476b8639d6ca6bc0994073221c0beac6529712f7e25869e9e12387e791",
-        "compressedBytes": 686518,
-        "unpackedBytes": 3037503,
+        "version": "0.53.1",
+        "sha256": "b215cf2c40bc5c0b639be06b1c1e62c7eb94d6de7b48a24be9ea8cb6c3f96699",
+        "compressedBytes": 719558,
+        "unpackedBytes": 3355158,
         "fileCount": 358,
-        "archiveUrl": "https://files.pythonhosted.org/packages/1e/a2/74b0af4f0578787a0b09c49b9b21777f682315f13917e28015ded596579b/mcpscraper_sdk-0.52.1-py3-none-any.whl"
+        "archiveUrl": "https://files.pythonhosted.org/packages/96/c7/eab9647ce84ac0346de6a5c69fd3dd1850b8ee694be76f49b566c2a39da2/mcpscraper_sdk-0.53.1-py3-none-any.whl"
       },
-      "intendedChange": "Add optional typed on-demand Markdown export descriptors to artifact delivery in all 347 unified tool outputs; update Search single-page filter and identity restrictions, curated REST guidance and valid examples. No tool names, input types or public file paths are added.",
+      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
       "maximum": {
-        "compressedBytes": 730934,
-        "unpackedBytes": 3392831,
+        "compressedBytes": 755536,
+        "unpackedBytes": 3522916,
         "fileCount": 358,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       },
-      "intendedUnpackedDeltaBudget": 355328,
-      "deltaRationale": "Optional on-demand export descriptor models and schema literals; existing CRM/Research union branches are preserved inside the new artifact envelope.",
-      "intendedCompressedDeltaBudget": 44416
+      "expectedDependencyDeclarations": {
+        "npm": {},
+        "pythonRequiresDist": [
+          "pydantic>=2.0",
+          "requests>=2.31"
+        ]
+      }
     },
     {
       "package": "mcpscraper-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.53.0",
+      "candidateVersion": "0.54.0",
       "baseline": {
-        "version": "0.52.1",
-        "sha256": "5c10e1139440063bfe54037e346c7b3409322492e87fef931428a3fdc7890e30",
-        "compressedBytes": 269954,
-        "unpackedBytes": 3011613,
-        "fileCount": 359,
-        "archiveUrl": "https://files.pythonhosted.org/packages/6c/04/2b912826297b17fe48739f40f84552fb95dc938858c19179d7907f1930de/mcpscraper_sdk-0.52.1.tar.gz"
+        "version": "0.53.1",
+        "sha256": "6f6a42d11972d137fa799fde69ae912fd070da7f106a328d352dfb2d21aa4e0e",
+        "compressedBytes": 283796,
+        "unpackedBytes": 3330212,
+        "fileCount": 358,
+        "archiveUrl": "https://files.pythonhosted.org/packages/e7/82/46e873d9ed5db3da9be2712f06ff1d0622a12353877359e08922b7ca0024/mcpscraper_sdk-0.53.1.tar.gz"
       },
-      "intendedChange": "Add optional typed on-demand Markdown export descriptors to artifact delivery in all 347 unified tool outputs; update Search single-page filter and identity restrictions, curated REST guidance and valid examples. No tool names, input types or public file paths are added.",
+      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
       "maximum": {
-        "compressedBytes": 314370,
-        "unpackedBytes": 3366941,
-        "fileCount": 359,
+        "compressedBytes": 297986,
+        "unpackedBytes": 3496723,
+        "fileCount": 358,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       },
-      "intendedUnpackedDeltaBudget": 355328,
-      "deltaRationale": "Optional on-demand export descriptor models and schema literals; existing CRM/Research union branches are preserved inside the new artifact envelope.",
-      "intendedCompressedDeltaBudget": 44416
-    },
-    {
-      "package": "mcpscraper-memory-sdk",
-      "format": "python-wheel",
-      "candidateVersion": "0.50.0",
-      "baseline": {
-        "version": "0.49.1",
-        "sha256": "06cd8d867c284db8a988d95907e54f6e1eeb390cbc05cb95da67ffccfdc2372a",
-        "compressedBytes": 860895,
-        "unpackedBytes": 3393816,
-        "fileCount": 585,
-        "archiveUrl": "https://files.pythonhosted.org/packages/7f/ec/ca9f4445507bd52f6931df5874c67f84cb0ac76195d24d3095732f0fbb9a/mcpscraper_memory_sdk-0.49.1-py3-none-any.whl"
-      },
-      "intendedChange": "Add optional typed on-demand Markdown export descriptors to artifact delivery in all 347 unified tool outputs; update Search single-page filter and identity restrictions, curated REST guidance and valid examples. No tool names, input types or public file paths are added.",
-      "maximum": {
-        "compressedBytes": 921439,
-        "unpackedBytes": 4007192,
-        "fileCount": 585,
-        "sourceMaps": 0,
-        "nestedNodeModulesEntries": 0
-      },
-      "intendedUnpackedDeltaBudget": 613376,
-      "deltaRationale": "Optional on-demand export descriptor models and schema literals; existing CRM/Research union branches are preserved inside the new artifact envelope.",
-      "intendedCompressedDeltaBudget": 60544
-    },
-    {
-      "package": "mcpscraper-memory-sdk",
-      "format": "python-sdist",
-      "candidateVersion": "0.50.0",
-      "baseline": {
-        "version": "0.49.1",
-        "sha256": "6c10eda9fabc9a0e2679388ab5065037aa671d59824153b6281d5fe9d4e1c6e1",
-        "compressedBytes": 307122,
-        "unpackedBytes": 3335581,
-        "fileCount": 586,
-        "archiveUrl": "https://files.pythonhosted.org/packages/86/e2/a3def9605ffa90beea6a30c03f0dfbf84860252df639953617a6b40cbbc2/mcpscraper_memory_sdk-0.49.1.tar.gz"
-      },
-      "intendedChange": "Add optional typed on-demand Markdown export descriptors to artifact delivery in all 347 unified tool outputs; update Search single-page filter and identity restrictions, curated REST guidance and valid examples. No tool names, input types or public file paths are added.",
-      "maximum": {
-        "compressedBytes": 367666,
-        "unpackedBytes": 3948957,
-        "fileCount": 586,
-        "sourceMaps": 0,
-        "nestedNodeModulesEntries": 0
-      },
-      "intendedUnpackedDeltaBudget": 613376,
-      "deltaRationale": "Optional on-demand export descriptor models and schema literals; existing CRM/Research union branches are preserved inside the new artifact envelope.",
-      "intendedCompressedDeltaBudget": 60544
+      "expectedDependencyDeclarations": {
+        "npm": {},
+        "pythonRequiresDist": [
+          "pydantic>=2.0",
+          "requests>=2.31"
+        ]
+      }
     }
   ]
 }
