@@ -4,7 +4,7 @@ export interface Input {
    */
   idempotencyKey?: string;
   /**
-   * A reddit.com thread/post URL. Legacy reddit.com hostnames are normalized, but retrieval uses the current Reddit page only.
+   * A known Reddit thread URL to open directly without searching; legacy Reddit hostnames are normalized to the current page.
    */
   url: string;
   /**
@@ -31,6 +31,7 @@ export type Output =
       author: string | null;
       score: string | null;
       postBody: string | null;
+      publishedAt?: string | null;
       numComments: number;
       comments: {
         author: string | null;

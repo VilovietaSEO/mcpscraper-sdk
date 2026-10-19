@@ -1933,6 +1933,100 @@ class GmailWorkflowResponse(BaseModel):
     error: str | None = Field(...)
 
 
+class RedditThreadRequest(BaseModel):
+    url: str = Field(
+        ...,
+        description='A known Reddit thread URL to open directly without searching; legacy Reddit hostnames are normalized to the current page.',
+    )
+    maxComments: int | None = Field(None, ge=1, le=2000)
+
+
+class Comment(BaseModel):
+    author: str | None = None
+    score: str | None = None
+    depth: int | None = None
+    body: str | None = None
+
+
+class RedditThreadResponse(BaseModel):
+    title: str | None = None
+    author: str | None = None
+    score: str | None = None
+    postBody: str | None = None
+    publishedAt: AwareDatetime | None = Field(
+        None, description='Observed publication timestamp when available.'
+    )
+    numComments: int | None = None
+    comments: list[Comment] | None = None
+    sourceUrl: str | None = None
+
+
+class Window(Enum):
+    """
+    Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.
+    """
+
+    week = 'week'
+    month = 'month'
+    year = 'year'
+    all = 'all'
+
+
+class RedditTrendingRequest(BaseModel):
+    topic: str = Field(
+        ...,
+        description='Topic in plain words, e.g. "crm for small business". Not a URL.',
+    )
+    subreddit: str | None = Field(
+        None,
+        description='Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit.',
+    )
+    window: Window = Field(
+        'month',
+        description='Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.',
+    )
+    maxThreads: int = Field(
+        20,
+        description='Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.',
+        ge=1,
+        le=40,
+    )
+    includeComments: bool = Field(
+        True,
+        description='Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.',
+    )
+    maxCommentsPerThread: int = Field(
+        50,
+        description='Comments captured (and billed) per scraped thread when includeComments is true.',
+        ge=1,
+        le=200,
+    )
+
+
+class Totals(BaseModel):
+    threads: int | None = None
+    upvotes: int | None = None
+    comments: int | None = None
+
+
+class Question(BaseModel):
+    question: str | None = None
+    threadUrl: str | None = None
+
+
+class RedditCommentCoverageStatus(Enum):
+    complete = 'complete'
+    partial = 'partial'
+
+
+class RedditCommentCoverageReason(Enum):
+    requested_limit_reached = 'requested_limit_reached'
+    declared_count_reached = 'declared_count_reached'
+    stable_visible_shortfall = 'stable_visible_shortfall'
+    capture_shortfall = 'capture_shortfall'
+    funding_limited = 'funding_limited'
+
+
 class ProxyMode2(Enum):
     location = 'location'
     configured = 'configured'
@@ -2287,6 +2381,54 @@ class SerpIntelligenceCaptureResponse(BaseModel):
     locationEvidence: SerpIntelligenceLocationEvidence | None = Field(...)
     pageSnapshotArtifacts: list[SerpPageSnapshotCapture]
     billing: Billing
+
+
+class CommentCoverage(BaseModel):
+    requestedLimit: int = Field(..., ge=0)
+    returnedCount: int = Field(..., ge=0)
+    declaredCount: int = Field(..., ge=0)
+    status: RedditCommentCoverageStatus
+    reason: RedditCommentCoverageReason
+
+
+class RankedThread(BaseModel):
+    title: str | None = None
+    url: str | None = None
+    subreddit: str | None = None
+    score: int | None = None
+    commentCount: int | None = None
+    engagementScore: int | None = None
+    ageText: str | None = None
+    publishedAt: AwareDatetime | None = Field(
+        None, description='Observed publication timestamp when available.'
+    )
+    capturedCommentCount: int | None = Field(
+        None, description='Text comments actually returned for this thread.', ge=0
+    )
+    requestedCommentLimit: int | None = Field(
+        None, description='Requested per-thread comment cap.', ge=1
+    )
+    commentCoverage: CommentCoverage | None = None
+    topQuestions: list[str] | None = None
+
+
+class RedditTrendingResponse(BaseModel):
+    topic: str | None = None
+    subreddit: str | None = None
+    window: str | None = Field(
+        None, description='Resolved publication window: "7d", "30d", "365d" or "all".'
+    )
+    totals: Totals | None = None
+    rankedThreads: list[RankedThread] | None = None
+    questions: list[Question] | None = None
+    threadsScraped: int | None = None
+    candidatesFound: int | None = None
+    partial: bool | None = Field(
+        None, description='true if scraping stopped early at the time limit.'
+    )
+    searchQuery: str | None = Field(
+        None, description='The Google site:reddit.com query used for discovery.'
+    )
 
 
 SerpIntelligencePaaNode.model_rebuild()

@@ -7,7 +7,7 @@ class RedditThreadInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
     idempotency_key: Union[Annotated[str, Field(min_length=1, max_length=512)], None] = Field(None, alias='idempotencyKey', description='One logical request identity. Retry identical inputs with the same key to replay or recover without repeating provider work. Omit for a fresh intent; use the key returned with the result or transport error for retries.')
-    url: Annotated[str, Field(min_length=1)] = Field(..., alias='url', description='A reddit.com thread/post URL. Legacy reddit.com hostnames are normalized, but retrieval uses the current Reddit page only.')
+    url: Annotated[str, Field(min_length=1)] = Field(..., alias='url', description='A known Reddit thread URL to open directly without searching; legacy Reddit hostnames are normalized to the current page.')
     max_comments: Union[Annotated[int, Field(ge=1, le=2000)], None] = Field(None, alias='maxComments', description='Optional cap on comments returned. Omit to return the largest set captured within the bounded expansion window, up to 2,000.')
 
 
@@ -41,6 +41,7 @@ class RedditThreadOutputVariant1(BaseModel):
     author: Union[str, None] = Field(..., alias='author', description='')
     score: Union[str, None] = Field(..., alias='score', description='')
     post_body: Union[str, None] = Field(..., alias='postBody', description='')
+    published_at: Union[Union[str, None], None] = Field(None, alias='publishedAt', description='')
     num_comments: Annotated[int, Field(ge=0, le=9007199254740991)] = Field(..., alias='numComments', description='')
     comments: list[RedditThreadOutputVariant1CommentsItem] = Field(..., alias='comments', description='')
 

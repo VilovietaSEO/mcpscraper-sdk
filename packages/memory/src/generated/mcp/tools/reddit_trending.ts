@@ -12,15 +12,15 @@ export interface Input {
    */
   subreddit?: string;
   /**
-   * Web-discovery time range: "week", "month" (default), or "all" (no date filter).
+   * Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.
    */
-  window?: "week" | "month" | "all";
+  window?: "week" | "month" | "year" | "all";
   /**
-   * How many discovered threads to scrape and rank. Default 20 (scrape-all). Each scraped thread is billed like reddit_thread + its comments, so lower this to cap cost; raise toward 40 for a wider sweep. Scraping runs in parallel and stops early if it nears the request time limit (partial:true in the response).
+   * Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.
    */
   maxThreads?: number;
   /**
-   * Scrape each discovered thread for real upvotes, comments, and the questions people asked, then rank by engagement. Set false for a fast, cheap discovery-only sweep — returns the discovered threads (title + url) in relevance order with NO engagement stats and NO per-thread billing, so you can then call reddit_thread on the ones you want.
+   * Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.
    */
   includeComments?: boolean;
   /**
@@ -52,6 +52,21 @@ export type Output =
         commentCount: number;
         engagementScore: number;
         ageText: string;
+        publishedAt?: string | null;
+        capturedCommentCount?: number;
+        requestedCommentLimit?: number;
+        commentCoverage?: {
+          requestedLimit: number;
+          returnedCount: number;
+          declaredCount: number;
+          status: "complete" | "partial";
+          reason:
+            | "requested_limit_reached"
+            | "declared_count_reached"
+            | "stable_visible_shortfall"
+            | "capture_shortfall"
+            | "funding_limited";
+        };
         topQuestions: string[];
       }[];
       questions: {

@@ -24675,7 +24675,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_thread",
     "category": "reddit",
     "title": "Reddit Thread + Comments",
-    "description": "Read one known reddit.com post and its rendered comment tree on current Reddit. Each of up to two primary attempts finds and clicks the exact URL through a site-restricted web search before landing with a managed residential browser; up to two managed-browser backup attempts can then recover the post and 25 comments. It stops on the first accepted result. Use reddit_trending when no thread URL is known. Costs one Reddit base lookup plus the per-comment rate for comments returned; pass maxComments to bound both output and cost.",
+    "description": "Read one known Reddit post and its rendered comments by opening the URL directly, without a search lookup. Use reddit_trending to discover threads when no URL is known. Bounded browser recovery stops on the first accepted result; available subsets remain explicit partial results. Costs one Reddit base lookup plus the per-comment rate for comments returned.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24688,7 +24688,7 @@ export const MCP_TOOL_CATALOG = [
         "url": {
           "type": "string",
           "minLength": 1,
-          "description": "A reddit.com thread/post URL. Legacy reddit.com hostnames are normalized, but retrieval uses the current Reddit page only."
+          "description": "A known Reddit thread URL to open directly without searching; legacy Reddit hostnames are normalized to the current page."
         },
         "maxComments": {
           "description": "Optional cap on comments returned. Omit to return the largest set captured within the bounded expansion window, up to 2,000.",
@@ -24714,7 +24714,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_trending",
     "category": "reddit",
     "title": "Reddit Trending",
-    "description": "Discover Reddit conversations through a site-restricted web search for the last week, month, or all time. With includeComments:true, each candidate is hydrated with up to two fresh managed residential browser attempts followed by up to two managed-browser backup attempts capped at 25 comments, stopping on the first accepted result, and ranked from rendered engagement; discovery, each hydrated thread, and returned comments are billed separately. Set includeComments:false for the faster discovery-only result, and inspect resultQuality and discoverySource before treating an empty result as meaningful.",
+    "description": "Find Reddit discussions through Google, filter and select relevant candidates before opening them, then rank scraped threads by observed engagement. Use reddit_thread for a known URL. Comment retrieval verifies actual post dates against the requested window and reports captured counts separately from reported totals. Discovery, scraped threads and returned comments are billed separately. Discovery-only results leave post dates unverified; inspect partial, resultQuality and comment coverage before treating a shortfall as complete.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24736,24 +24736,25 @@ export const MCP_TOOL_CATALOG = [
         },
         "window": {
           "default": "month",
-          "description": "Web-discovery time range: \"week\", \"month\" (default), or \"all\" (no date filter).",
+          "description": "Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.",
           "type": "string",
           "enum": [
             "week",
             "month",
+            "year",
             "all"
           ]
         },
         "maxThreads": {
           "default": 20,
-          "description": "How many discovered threads to scrape and rank. Default 20 (scrape-all). Each scraped thread is billed like reddit_thread + its comments, so lower this to cap cost; raise toward 40 for a wider sweep. Scraping runs in parallel and stops early if it nears the request time limit (partial:true in the response).",
+          "description": "Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.",
           "type": "integer",
           "minimum": 1,
           "maximum": 40
         },
         "includeComments": {
           "default": true,
-          "description": "Scrape each discovered thread for real upvotes, comments, and the questions people asked, then rank by engagement. Set false for a fast, cheap discovery-only sweep — returns the discovered threads (title + url) in relevance order with NO engagement stats and NO per-thread billing, so you can then call reddit_thread on the ones you want.",
+          "description": "Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.",
           "type": "boolean"
         },
         "maxCommentsPerThread": {
