@@ -26,7 +26,7 @@ for (const name of ['scraper-python', 'memory-python']) {
       recursive: true,
       filter: path => !['__pycache__', '.gitignore'].includes(basename(path)) && !path.endsWith('.pyc'),
     })
-    const result = spawnSync('uv', ['build', '--project', stage, '--out-dir', output], {
+    const result = spawnSync('uv', ['build', '--project', stage, '--out-dir', output, '--no-create-gitignore'], {
       cwd: stage,
       stdio: 'inherit',
     })
