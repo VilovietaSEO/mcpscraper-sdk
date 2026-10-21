@@ -18,7 +18,7 @@
         "fileCount": 6,
         "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.55.0.tgz"
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.1; retain the existing public paths and tool set.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 71690,
         "unpackedBytes": 482547,
@@ -39,7 +39,7 @@
         "fileCount": 5,
         "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.54.1.tgz"
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.1; retain the existing public paths and tool set.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 298917,
         "unpackedBytes": 10910001,
@@ -60,7 +60,7 @@
         "fileCount": 3,
         "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.53.1.tgz"
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.1; retain the existing public paths and tool set.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 161899,
         "unpackedBytes": 1140345,
@@ -81,7 +81,7 @@
         "fileCount": 358,
         "archiveUrl": "https://files.pythonhosted.org/packages/96/c7/eab9647ce84ac0346de6a5c69fd3dd1850b8ee694be76f49b566c2a39da2/mcpscraper_sdk-0.53.1-py3-none-any.whl"
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.1; retain the existing public paths and tool set.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 755536,
         "unpackedBytes": 3522916,
@@ -102,7 +102,7 @@
         "fileCount": 358,
         "archiveUrl": "https://files.pythonhosted.org/packages/e7/82/46e873d9ed5db3da9be2712f06ff1d0622a12353877359e08922b7ca0024/mcpscraper_sdk-0.53.1.tar.gz"
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.1; retain the existing public paths and tool set.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 297986,
         "unpackedBytes": 3496723,
@@ -123,7 +123,7 @@
         "fileCount": 585,
         "archiveUrl": "https://files.pythonhosted.org/packages/0c/4c/4d4ff64a92c214dfb5992fee645d05ea5872bf4d52ae9154a83d8bcd20c9/mcpscraper_memory_sdk-0.50.1-py3-none-any.whl"
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.1; retain the existing public paths and tool set.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 938624,
         "unpackedBytes": 3897122,
@@ -144,7 +144,7 @@
         "fileCount": 585,
         "archiveUrl": "https://files.pythonhosted.org/packages/88/91/19d125f0ae4ca92a51ee337de6cb4c3a706c8ea75687c341d0e74ee7bd34/mcpscraper_memory_sdk-0.50.1.tar.gz"
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.1; retain the existing public paths and tool set.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 337165,
         "unpackedBytes": 3836654,

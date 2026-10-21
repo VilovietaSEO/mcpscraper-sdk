@@ -1,5 +1,5 @@
 {
-  "scope": "Exact candidate archives for the server 0.100.1 SDK release; not registry publication receipts.",
+  "scope": "Exact candidate archives for the server 0.100.2 SDK release; not registry publication receipts.",
   "artifacts": [
     {
       "package": "mcpscraper-sdk",

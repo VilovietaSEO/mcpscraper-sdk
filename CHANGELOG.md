@@ -4,7 +4,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
-## [0.56.0] - 2026-10-21 — targets mcp-scraper 0.100.1
+## [0.56.0] - 2026-10-21 — targets mcp-scraper 0.100.2
 
 ### Added
 
@@ -17,7 +17,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ### Fixed
 
-- Refresh all 347 public tool contracts and generated Node, Python and CLI bindings against server 0.100.1, including connected-export arguments and optional result metadata.
+- Refresh all 347 public tool contracts and generated Node, Python and CLI bindings against server 0.100.2, including connected-export arguments and optional result metadata.
 - Keep Maps discovery, saved review pagination and explicit partial-run recovery available through the existing client interfaces. The hosted server verifies the selected location and handles review-list expansion and infinite scrolling.
 
 ## [0.55.1] - 2026-10-17 — targets mcp-scraper 0.99.1
