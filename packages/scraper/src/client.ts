@@ -557,8 +557,18 @@ export class ScraperClient {
     )
   }
 
-  bugReporting(params: RequestBodyOf<'bugReporting'>, options: ScraperRequestOptions = {}) {
-    return this.r.call<'bugReporting'>('POST', '/bugs/report', params, {}, options)
+  async bugReporting(params: RequestBodyOf<'bugReporting'>, options: ScraperRequestOptions = {}) {
+    try {
+      return await this.r.call<'bugReporting'>('POST', '/bugs/report', params, {}, options)
+    } catch (error) {
+      if (error instanceof ScraperApiError && error.code === 'mcp_request_timeout') {
+        const message = params.action === 'prepare' || params.action === undefined
+          ? 'Draft preparation was not confirmed. An unreturned draft expires after one day; prepare never submits a report.'
+          : 'Submission was not confirmed. Read status with the same reportId, then retry submit with the same reportId and reviewToken if needed. Bug Reporting is free.'
+        throw new ScraperApiError(408, { error_code: 'mcp_request_timeout', error_type: 'timeout', message, retryable: true, charge_status: 'not_charged' }, { requestId: error.requestId })
+      }
+      throw error
+    }
   }
 
   searchSerp(

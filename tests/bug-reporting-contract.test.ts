@@ -19,3 +19,10 @@ test('REST shortcut preserves the exact prepared receipt and never adds an idemp
  await client.bugReporting(receipt)
  assert.ok(calls[0].url.endsWith('/bugs/report'));assert.deepEqual(calls[0].body,receipt);assert.equal(calls.length,1)
 })
+
+test('uncertain REST submissions use the report receipt and preserve the free charge status',async()=>{
+ const client=new ScraperClient({apiKey:'fixture',fetch:async()=>{throw new DOMException('fixture timeout','TimeoutError')}})
+ await assert.rejects(client.bugReporting({action:'submit',reportId:'f1dc3168-98b7-4e46-9fb5-7042186e495f',reviewToken:'a'.repeat(64),userApproved:true}), (error:any)=>{
+  assert.match(error.message,/same reportId and reviewToken/);assert.equal(error.body.charge_status,'not_charged');assert.doesNotMatch(error.message,/paid run|Idempotency-Key/);return true
+ })
+})
