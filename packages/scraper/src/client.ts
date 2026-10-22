@@ -557,6 +557,10 @@ export class ScraperClient {
     )
   }
 
+  bugReporting(params: RequestBodyOf<'bugReporting'>, options: ScraperRequestOptions = {}) {
+    return this.r.call<'bugReporting'>('POST', '/bugs/report', params, {}, options)
+  }
+
   searchSerp(
     params: SearchSerpParams,
     options: ScraperRequestOptions = {},

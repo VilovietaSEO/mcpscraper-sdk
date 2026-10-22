@@ -2027,6 +2027,417 @@ class RedditCommentCoverageReason(Enum):
     funding_limited = 'funding_limited'
 
 
+class Action(Enum):
+    """
+    prepare saves a private one-day draft for review; submit sends that exact draft to support; status reads your report receipt.
+    """
+
+    prepare = 'prepare'
+    submit = 'submit'
+    status = 'status'
+
+
+class Step1(RootModel[str]):
+    root: str = Field(..., max_length=1000, min_length=1)
+
+
+class Attempt(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    tool: str = Field(
+        ...,
+        description='Exact tool name or REST method and path.',
+        max_length=120,
+        min_length=1,
+    )
+    submittedAt: AwareDatetime | None = Field(
+        None,
+        description='Observed call time with timezone; omit if unknown.',
+        pattern='^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$',
+    )
+    arguments: str = Field(
+        ...,
+        description='Exact submitted arguments as JSON or text. Remove credentials, cookies and unrelated private content first. Do not reconstruct unknown arguments.',
+        max_length=8000,
+        min_length=1,
+    )
+    result: str = Field(
+        ...,
+        description='Observed response or error text, including error codes and retry outcome. Remove secrets.',
+        max_length=8000,
+        min_length=1,
+    )
+    requestId: str | None = Field(
+        None,
+        description='Returned request ID, when available.',
+        max_length=200,
+        min_length=1,
+    )
+    jobId: str | None = Field(
+        None,
+        description='Returned job or run ID, when available.',
+        max_length=200,
+        min_length=1,
+    )
+
+
+class Transport(Enum):
+    """
+    Connection or install route used for the failed calls.
+    """
+
+    oauth = 'oauth'
+    api_key = 'api-key'
+    npx = 'npx'
+    npm = 'npm'
+    sdk = 'sdk'
+    mcpb = 'mcpb'
+    rest = 'rest'
+    unknown = 'unknown'
+
+
+class Client(BaseModel):
+    """
+    Observed client environment; use unknown rather than guessing.
+    """
+
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: str = Field(
+        ...,
+        description='Observed application or SDK name.',
+        max_length=120,
+        min_length=1,
+    )
+    version: str | None = Field(
+        None,
+        description='Observed application or package version; omit if unknown.',
+        max_length=120,
+        min_length=1,
+    )
+    transport: Transport = Field(
+        ..., description='Connection or install route used for the failed calls.'
+    )
+    operatingSystem: str | None = Field(
+        None,
+        description='Observed operating system; omit if unknown.',
+        max_length=120,
+        min_length=1,
+    )
+    model: str | None = Field(
+        None,
+        description='Observed AI model; omit if unknown.',
+        max_length=120,
+        min_length=1,
+    )
+
+
+class MissingItem(RootModel[str]):
+    root: str = Field(..., max_length=500, min_length=1)
+
+
+class Report(BaseModel):
+    """
+    Required for prepare. Collect known evidence from the conversation before asking the user for missing details.
+    """
+
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    title: str = Field(
+        ...,
+        description='Short description of the problem in plain language.',
+        max_length=160,
+        min_length=1,
+    )
+    goal: str = Field(
+        ...,
+        description='What the user was trying to accomplish, using their words.',
+        max_length=2000,
+        min_length=1,
+    )
+    expected: str = Field(
+        ..., description='What should have happened.', max_length=2000, min_length=1
+    )
+    actual: str = Field(
+        ...,
+        description='What actually happened. Separate observations from suspected causes.',
+        max_length=4000,
+        min_length=1,
+    )
+    steps: list[Step1] = Field(
+        ...,
+        description='Ordered reproduction steps, including retries and what changed.',
+        max_length=30,
+        min_length=1,
+    )
+    attempts: list[Attempt] = Field(
+        ...,
+        description='Calls in the order made. Include successful calls that explain the failure.',
+        max_length=20,
+        min_length=1,
+    )
+    client: Client = Field(
+        ...,
+        description='Observed client environment; use unknown rather than guessing.',
+    )
+    context: str | None = Field(
+        None,
+        description='Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump.',
+        max_length=4000,
+        min_length=1,
+    )
+    missing: list[MissingItem] = Field(
+        [],
+        description='Evidence that is unknown or unavailable; do not invent it.',
+        max_length=20,
+        validate_default=True,
+    )
+
+
+class BugReportingRequest(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    action: Action = Field(
+        'prepare',
+        description='prepare saves a private one-day draft for review; submit sends that exact draft to support; status reads your report receipt.',
+    )
+    report: Report | None = Field(
+        None,
+        description='Required for prepare. Collect known evidence from the conversation before asking the user for missing details.',
+    )
+    reportId: UUID | None = Field(
+        None,
+        description='ID returned by prepare; required for submit or status.',
+        pattern='^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+    )
+    reviewToken: str | None = Field(
+        None,
+        description='Exact token returned by prepare; required for submit. A changed report requires a new prepare.',
+        max_length=128,
+        min_length=1,
+    )
+    userApproved: bool | None = Field(
+        None,
+        description='Set true only when the user has asked to submit this bug or approved the reviewed draft. Repeated errors alone do not authorize submission.',
+    )
+
+
+class Ok(Enum):
+    boolean_True = True
+
+
+class Status7(Enum):
+    draft = 'draft'
+    submitted = 'submitted'
+
+
+class Client1(BaseModel):
+    """
+    Observed client environment; use unknown rather than guessing.
+    """
+
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    name: str = Field(
+        ...,
+        description='Observed application or SDK name.',
+        max_length=120,
+        min_length=1,
+    )
+    version: str | None = Field(
+        None,
+        description='Observed application or package version; omit if unknown.',
+        max_length=120,
+        min_length=1,
+    )
+    transport: Transport = Field(
+        ..., description='Connection or install route used for the failed calls.'
+    )
+    operatingSystem: str | None = Field(
+        None,
+        description='Observed operating system; omit if unknown.',
+        max_length=120,
+        min_length=1,
+    )
+    model: str | None = Field(
+        None,
+        description='Observed AI model; omit if unknown.',
+        max_length=120,
+        min_length=1,
+    )
+
+
+class Report1(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    title: str = Field(
+        ...,
+        description='Short description of the problem in plain language.',
+        max_length=160,
+        min_length=1,
+    )
+    goal: str = Field(
+        ...,
+        description='What the user was trying to accomplish, using their words.',
+        max_length=2000,
+        min_length=1,
+    )
+    expected: str = Field(
+        ..., description='What should have happened.', max_length=2000, min_length=1
+    )
+    actual: str = Field(
+        ...,
+        description='What actually happened. Separate observations from suspected causes.',
+        max_length=4000,
+        min_length=1,
+    )
+    steps: list[Step1] = Field(
+        ...,
+        description='Ordered reproduction steps, including retries and what changed.',
+        max_length=30,
+        min_length=1,
+    )
+    attempts: list[Attempt] = Field(
+        ...,
+        description='Calls in the order made. Include successful calls that explain the failure.',
+        max_length=20,
+        min_length=1,
+    )
+    client: Client1 = Field(
+        ...,
+        description='Observed client environment; use unknown rather than guessing.',
+    )
+    context: str | None = Field(
+        None,
+        description='Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump.',
+        max_length=4000,
+        min_length=1,
+    )
+    missing: list[MissingItem] = Field(
+        ...,
+        description='Evidence that is unknown or unavailable; do not invent it.',
+        max_length=20,
+    )
+
+
+class BugReportingResponse(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    ok: Ok
+    accountEmail: str
+    reportId: UUID = Field(
+        ...,
+        pattern='^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$',
+    )
+    status: Status7
+    receivedAt: str
+    submittedAt: str | None = Field(...)
+    expiresAt: str
+    report: Report1
+    reviewToken: str | None = None
+    redacted: bool
+    message: str
+
+
+class ErrorCode3(Enum):
+    request_aborted = 'request_aborted'
+    captcha_exhausted = 'captcha_exhausted'
+    captcha_or_blocked = 'captcha_or_blocked'
+    location_mismatch = 'location_mismatch'
+    proxy_tunnel_failed = 'proxy_tunnel_failed'
+    proxy_unavailable = 'proxy_unavailable'
+    harvest_timeout = 'harvest_timeout'
+    mcp_request_timeout = 'mcp_request_timeout'
+    mcp_http_error = 'mcp_http_error'
+    extraction_failed = 'extraction_failed'
+    concurrency_limit_exceeded = 'concurrency_limit_exceeded'
+    unauthorized = 'unauthorized'
+    forbidden = 'forbidden'
+    invalid_request = 'invalid_request'
+    rate_limited = 'rate_limited'
+    upstream_rate_limited = 'upstream_rate_limited'
+    insufficient_balance = 'insufficient_balance'
+    service_unavailable = 'service_unavailable'
+    response_lost = 'response_lost'
+    vendor_unavailable = 'vendor_unavailable'
+    page_not_found = 'page_not_found'
+    page_forbidden = 'page_forbidden'
+    page_rate_limited = 'page_rate_limited'
+    page_server_error = 'page_server_error'
+    page_http_error = 'page_http_error'
+    bot_check_unresolved = 'bot_check_unresolved'
+    page_too_large = 'page_too_large'
+    page_unreachable = 'page_unreachable'
+    browser_session_interrupted = 'browser_session_interrupted'
+    site_export_not_found = 'site_export_not_found'
+    directory_job_not_found = 'directory_job_not_found'
+    site_export_format_unavailable = 'site_export_format_unavailable'
+    site_export_read_failed = 'site_export_read_failed'
+    site_export_image_not_found = 'site_export_image_not_found'
+    image_url_invalid = 'image_url_invalid'
+    image_url_not_https = 'image_url_not_https'
+    image_host_unresolvable = 'image_host_unresolvable'
+    image_host_blocked = 'image_host_blocked'
+    image_redirect_invalid = 'image_redirect_invalid'
+    image_source_unavailable = 'image_source_unavailable'
+    image_too_large = 'image_too_large'
+    image_redirect_limit = 'image_redirect_limit'
+    image_base64_invalid = 'image_base64_invalid'
+    image_source_missing = 'image_source_missing'
+    image_source_ambiguous = 'image_source_ambiguous'
+    image_source_type_invalid = 'image_source_type_invalid'
+    image_artifact_not_found = 'image_artifact_not_found'
+    image_page_too_large = 'image_page_too_large'
+    page_image_not_found = 'page_image_not_found'
+    page_image_candidates_unusable = 'page_image_candidates_unusable'
+    image_format_unsupported = 'image_format_unsupported'
+    image_storage_unconfigured = 'image_storage_unconfigured'
+    featured_image_unhostable = 'featured_image_unhostable'
+
+
+class ErrorType2(Enum):
+    request_aborted = 'request_aborted'
+    captcha = 'captcha'
+    location_mismatch = 'location_mismatch'
+    connection = 'connection'
+    timeout = 'timeout'
+    extraction = 'extraction'
+    concurrency_limit = 'concurrency_limit'
+    unauthorized = 'unauthorized'
+    forbidden = 'forbidden'
+    invalid_request = 'invalid_request'
+    not_found = 'not_found'
+    rate_limit = 'rate_limit'
+    billing = 'billing'
+    service_unavailable = 'service_unavailable'
+
+
+class ChargeStatus(Enum):
+    not_charged = 'not_charged'
+
+
+class BugReportingError(BaseModel):
+    model_config = ConfigDict(
+        extra='allow',
+    )
+    __annotations__ = {
+        '__pydantic_extra__': Dict[str, Any],
+    }
+    error: str | None = None
+    error_code: ErrorCode3
+    error_type: ErrorType2
+    message: str
+    retryable: bool
+    charge_status: ChargeStatus
+
+
 class ProxyMode2(Enum):
     location = 'location'
     configured = 'configured'
@@ -2147,7 +2558,7 @@ class DirectoryRunRequest(BaseModel):
     debug: bool = False
 
 
-class Status7(Enum):
+class Status8(Enum):
     queued = 'queued'
     running = 'running'
     complete = 'complete'
@@ -2189,7 +2600,7 @@ class Billing1(BaseModel):
     refundMc: int | None = Field(..., ge=0, le=9007199254740991)
 
 
-class Status8(Enum):
+class Status9(Enum):
     ok = 'ok'
     empty = 'empty'
     failed = 'failed'
@@ -2228,7 +2639,7 @@ class City(BaseModel):
     populationYear: int = Field(..., ge=2020, le=2025)
     zips: list[str]
     counties: list[str]
-    status: Status8
+    status: Status9
     error: str | None = Field(...)
     errorCode: str | None = None
     retryable: bool | None = None
@@ -2255,7 +2666,7 @@ class DirectoryJobResponse(BaseModel):
         '__pydantic_extra__': Dict[str, Any],
     }
     jobId: str | None = Field(...)
-    status: Status7
+    status: Status8
     statusUrl: str | None = Field(...)
     query: str
     state: str
@@ -2286,7 +2697,7 @@ class Error3(Enum):
     Directory_workflow_job_not_found_ = 'Directory workflow job not found.'
 
 
-class ErrorCode3(Enum):
+class ErrorCode4(Enum):
     directory_job_not_found = 'directory_job_not_found'
 
 
@@ -2299,7 +2710,7 @@ class DirectoryJobNotFound(BaseModel):
         extra='forbid',
     )
     error: Error3
-    error_code: ErrorCode3
+    error_code: ErrorCode4
     retryable: Retryable
 
 

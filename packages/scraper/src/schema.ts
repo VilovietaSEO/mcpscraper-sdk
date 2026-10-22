@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+    "/bugs/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Prepare, submit or read a private bug report
+         * @description Prepare a redacted one-day draft from observed evidence. Submit its exact reportId and reviewToken only at the user’s request. Submitted reports and verified account email are shared with private support for 365 days. Free; status and repeated submit are safe.
+         */
+        post: operations["bugReporting"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/harvest": {
         parameters: {
             query?: never;
@@ -2468,6 +2488,158 @@ export interface components {
         RedditCommentCoverageStatus: "complete" | "partial";
         /** @enum {string} */
         RedditCommentCoverageReason: "requested_limit_reached" | "declared_count_reached" | "stable_visible_shortfall" | "capture_shortfall" | "funding_limited";
+        BugReportingRequest: {
+            /**
+             * @description prepare saves a private one-day draft for review; submit sends that exact draft to support; status reads your report receipt.
+             * @default prepare
+             * @enum {string}
+             */
+            action: "prepare" | "submit" | "status";
+            /** @description Required for prepare. Collect known evidence from the conversation before asking the user for missing details. */
+            report?: {
+                /** @description Short description of the problem in plain language. */
+                title: string;
+                /** @description What the user was trying to accomplish, using their words. */
+                goal: string;
+                /** @description What should have happened. */
+                expected: string;
+                /** @description What actually happened. Separate observations from suspected causes. */
+                actual: string;
+                /** @description Ordered reproduction steps, including retries and what changed. */
+                steps: string[];
+                /** @description Calls in the order made. Include successful calls that explain the failure. */
+                attempts: {
+                    /** @description Exact tool name or REST method and path. */
+                    tool: string;
+                    /**
+                     * Format: date-time
+                     * @description Observed call time with timezone; omit if unknown.
+                     */
+                    submittedAt?: string;
+                    /** @description Exact submitted arguments as JSON or text. Remove credentials, cookies and unrelated private content first. Do not reconstruct unknown arguments. */
+                    arguments: string;
+                    /** @description Observed response or error text, including error codes and retry outcome. Remove secrets. */
+                    result: string;
+                    /** @description Returned request ID, when available. */
+                    requestId?: string;
+                    /** @description Returned job or run ID, when available. */
+                    jobId?: string;
+                }[];
+                /** @description Observed client environment; use unknown rather than guessing. */
+                client: {
+                    /** @description Observed application or SDK name. */
+                    name: string;
+                    /** @description Observed application or package version; omit if unknown. */
+                    version?: string;
+                    /**
+                     * @description Connection or install route used for the failed calls.
+                     * @enum {string}
+                     */
+                    transport: "oauth" | "api-key" | "npx" | "npm" | "sdk" | "mcpb" | "rest" | "unknown";
+                    /** @description Observed operating system; omit if unknown. */
+                    operatingSystem?: string;
+                    /** @description Observed AI model; omit if unknown. */
+                    model?: string;
+                };
+                /** @description Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump. */
+                context?: string;
+                /**
+                 * @description Evidence that is unknown or unavailable; do not invent it.
+                 * @default []
+                 */
+                missing: string[];
+            };
+            /**
+             * Format: uuid
+             * @description ID returned by prepare; required for submit or status.
+             */
+            reportId?: string;
+            /** @description Exact token returned by prepare; required for submit. A changed report requires a new prepare. */
+            reviewToken?: string;
+            /** @description Set true only when the user has asked to submit this bug or approved the reviewed draft. Repeated errors alone do not authorize submission. */
+            userApproved?: boolean;
+        };
+        BugReportingResponse: {
+            /** @enum {boolean} */
+            ok: true;
+            accountEmail: string;
+            /** Format: uuid */
+            reportId: string;
+            /** @enum {string} */
+            status: "draft" | "submitted";
+            receivedAt: string;
+            submittedAt: string | null;
+            expiresAt: string;
+            report: {
+                /** @description Short description of the problem in plain language. */
+                title: string;
+                /** @description What the user was trying to accomplish, using their words. */
+                goal: string;
+                /** @description What should have happened. */
+                expected: string;
+                /** @description What actually happened. Separate observations from suspected causes. */
+                actual: string;
+                /** @description Ordered reproduction steps, including retries and what changed. */
+                steps: string[];
+                /** @description Calls in the order made. Include successful calls that explain the failure. */
+                attempts: {
+                    /** @description Exact tool name or REST method and path. */
+                    tool: string;
+                    /**
+                     * Format: date-time
+                     * @description Observed call time with timezone; omit if unknown.
+                     */
+                    submittedAt?: string;
+                    /** @description Exact submitted arguments as JSON or text. Remove credentials, cookies and unrelated private content first. Do not reconstruct unknown arguments. */
+                    arguments: string;
+                    /** @description Observed response or error text, including error codes and retry outcome. Remove secrets. */
+                    result: string;
+                    /** @description Returned request ID, when available. */
+                    requestId?: string;
+                    /** @description Returned job or run ID, when available. */
+                    jobId?: string;
+                }[];
+                /** @description Observed client environment; use unknown rather than guessing. */
+                client: {
+                    /** @description Observed application or SDK name. */
+                    name: string;
+                    /** @description Observed application or package version; omit if unknown. */
+                    version?: string;
+                    /**
+                     * @description Connection or install route used for the failed calls.
+                     * @enum {string}
+                     */
+                    transport: "oauth" | "api-key" | "npx" | "npm" | "sdk" | "mcpb" | "rest" | "unknown";
+                    /** @description Observed operating system; omit if unknown. */
+                    operatingSystem?: string;
+                    /** @description Observed AI model; omit if unknown. */
+                    model?: string;
+                };
+                /** @description Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump. */
+                context?: string;
+                /**
+                 * @description Evidence that is unknown or unavailable; do not invent it.
+                 * @default []
+                 */
+                missing: string[];
+            };
+            reviewToken?: string;
+            redacted: boolean;
+            message: string;
+        };
+        BugReportingError: {
+            error?: string;
+            /** @enum {string} */
+            error_code: "request_aborted" | "captcha_exhausted" | "captcha_or_blocked" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "harvest_timeout" | "mcp_request_timeout" | "mcp_http_error" | "extraction_failed" | "concurrency_limit_exceeded" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limited" | "upstream_rate_limited" | "insufficient_balance" | "service_unavailable" | "response_lost" | "vendor_unavailable" | "page_not_found" | "page_forbidden" | "page_rate_limited" | "page_server_error" | "page_http_error" | "bot_check_unresolved" | "page_too_large" | "page_unreachable" | "browser_session_interrupted" | "site_export_not_found" | "directory_job_not_found" | "site_export_format_unavailable" | "site_export_read_failed" | "site_export_image_not_found" | "image_url_invalid" | "image_url_not_https" | "image_host_unresolvable" | "image_host_blocked" | "image_redirect_invalid" | "image_source_unavailable" | "image_too_large" | "image_redirect_limit" | "image_base64_invalid" | "image_source_missing" | "image_source_ambiguous" | "image_source_type_invalid" | "image_artifact_not_found" | "image_page_too_large" | "page_image_not_found" | "page_image_candidates_unusable" | "image_format_unsupported" | "image_storage_unconfigured" | "featured_image_unhostable";
+            /** @enum {string} */
+            error_type: "request_aborted" | "captcha" | "location_mismatch" | "connection" | "timeout" | "extraction" | "concurrency_limit" | "unauthorized" | "forbidden" | "invalid_request" | "not_found" | "rate_limit" | "billing" | "service_unavailable";
+            message: string;
+            retryable: boolean;
+            /** @enum {string} */
+            charge_status: "not_charged";
+        } & {
+            [key: string]: unknown;
+        };
         MapsSearchRequest: {
             query: string;
             location?: string;
@@ -2748,6 +2920,102 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    bugReporting: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BugReportingRequest"];
+            };
+        };
+        responses: {
+            /** @description Prepare, submit or read a private bug report */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingResponse"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+        };
+    };
     startHarvest: {
         parameters: {
             query?: never;

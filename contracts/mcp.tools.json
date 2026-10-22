@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.100.2 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "084624d37b8bc615086bd1cc2dc3d3b8f6a90e477d4f5a50d12961add8b7252e",
-  "toolCount": 347,
+  "generatedFrom": "mcp-scraper 0.101.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "4d14bc0958ea71970af5d10b99f97ec23cb076930d9f2ec0faab2e83b6cfcc5b",
+  "toolCount": 348,
   "tools": [
     {
       "name": "access-accept-share",
@@ -61439,6 +61439,686 @@
         "destructiveHint": false,
         "idempotentHint": false,
         "openWorldHint": true
+      }
+    },
+    {
+      "name": "bug_reporting",
+      "title": "Bug Reporting",
+      "description": "Capture repeated errors or a user-requested MCP Scraper bug report. First prepare a plain-language draft from observed calls: goal, exact arguments, call order, errors, retries, request/job IDs and client version. Mark unknowns; never invent evidence or include credentials or unrelated conversation. Review the returned redacted draft, then submit its reportId and reviewToken only when the user requests or approves submission. status reads your receipt. Free; drafts expire after one day, submitted reports after 365 days. Submission shares the report and verified account email with private MCP Scraper support; it does not post a public issue or promise a fix.",
+      "category": "support",
+      "methodName": "bugReporting",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "default": "prepare",
+            "description": "prepare saves a private one-day draft for review; submit sends that exact draft to support; status reads your report receipt.",
+            "type": "string",
+            "enum": [
+              "prepare",
+              "submit",
+              "status"
+            ]
+          },
+          "report": {
+            "description": "Required for prepare. Collect known evidence from the conversation before asking the user for missing details.",
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "Short description of the problem in plain language."
+              },
+              "goal": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000,
+                "description": "What the user was trying to accomplish, using their words."
+              },
+              "expected": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000,
+                "description": "What should have happened."
+              },
+              "actual": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4000,
+                "description": "What actually happened. Separate observations from suspected causes."
+              },
+              "steps": {
+                "minItems": 1,
+                "maxItems": 30,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "description": "Ordered reproduction steps, including retries and what changed."
+              },
+              "attempts": {
+                "minItems": 1,
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "tool": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120,
+                      "description": "Exact tool name or REST method and path."
+                    },
+                    "submittedAt": {
+                      "description": "Observed call time with timezone; omit if unknown.",
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                    },
+                    "arguments": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 8000,
+                      "description": "Exact submitted arguments as JSON or text. Remove credentials, cookies and unrelated private content first. Do not reconstruct unknown arguments."
+                    },
+                    "result": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 8000,
+                      "description": "Observed response or error text, including error codes and retry outcome. Remove secrets."
+                    },
+                    "requestId": {
+                      "description": "Returned request ID, when available.",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "jobId": {
+                      "description": "Returned job or run ID, when available.",
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    }
+                  },
+                  "required": [
+                    "tool",
+                    "arguments",
+                    "result"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "Calls in the order made. Include successful calls that explain the failure."
+              },
+              "client": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "description": "Observed application or SDK name."
+                  },
+                  "version": {
+                    "description": "Observed application or package version; omit if unknown.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "transport": {
+                    "type": "string",
+                    "enum": [
+                      "oauth",
+                      "api-key",
+                      "npx",
+                      "npm",
+                      "sdk",
+                      "mcpb",
+                      "rest",
+                      "unknown"
+                    ],
+                    "description": "Connection or install route used for the failed calls."
+                  },
+                  "operatingSystem": {
+                    "description": "Observed operating system; omit if unknown.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "model": {
+                    "description": "Observed AI model; omit if unknown.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  }
+                },
+                "required": [
+                  "name",
+                  "transport"
+                ],
+                "additionalProperties": false,
+                "description": "Observed client environment; use unknown rather than guessing."
+              },
+              "context": {
+                "description": "Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump.",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4000
+              },
+              "missing": {
+                "default": [],
+                "description": "Evidence that is unknown or unavailable; do not invent it.",
+                "maxItems": 20,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              }
+            },
+            "required": [
+              "title",
+              "goal",
+              "expected",
+              "actual",
+              "steps",
+              "attempts",
+              "client"
+            ],
+            "additionalProperties": false
+          },
+          "reportId": {
+            "description": "ID returned by prepare; required for submit or status.",
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "reviewToken": {
+            "description": "Exact token returned by prepare; required for submit. A changed report requires a new prepare.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "userApproved": {
+            "description": "Set true only when the user has asked to submit this bug or approved the reviewed draft. Repeated errors alone do not authorize submission.",
+            "type": "boolean"
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean",
+                "const": true
+              },
+              "accountEmail": {
+                "type": "string"
+              },
+              "reportId": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "draft",
+                  "submitted"
+                ]
+              },
+              "receivedAt": {
+                "type": "string"
+              },
+              "submittedAt": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "expiresAt": {
+                "type": "string"
+              },
+              "report": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "description": "Short description of the problem in plain language."
+                  },
+                  "goal": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000,
+                    "description": "What the user was trying to accomplish, using their words."
+                  },
+                  "expected": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000,
+                    "description": "What should have happened."
+                  },
+                  "actual": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4000,
+                    "description": "What actually happened. Separate observations from suspected causes."
+                  },
+                  "steps": {
+                    "minItems": 1,
+                    "maxItems": 30,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    },
+                    "description": "Ordered reproduction steps, including retries and what changed."
+                  },
+                  "client": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120,
+                        "description": "Observed application or SDK name."
+                      },
+                      "version": {
+                        "description": "Observed application or package version; omit if unknown.",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "transport": {
+                        "type": "string",
+                        "enum": [
+                          "oauth",
+                          "api-key",
+                          "npx",
+                          "npm",
+                          "sdk",
+                          "mcpb",
+                          "rest",
+                          "unknown"
+                        ],
+                        "description": "Connection or install route used for the failed calls."
+                      },
+                      "operatingSystem": {
+                        "description": "Observed operating system; omit if unknown.",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "model": {
+                        "description": "Observed AI model; omit if unknown.",
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "transport"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Observed client environment; use unknown rather than guessing."
+                  },
+                  "context": {
+                    "description": "Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 4000
+                  },
+                  "missing": {
+                    "default": [],
+                    "description": "Evidence that is unknown or unavailable; do not invent it.",
+                    "maxItems": 20,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 500
+                    }
+                  }
+                },
+                "required": [
+                  "title",
+                  "goal",
+                  "expected",
+                  "actual",
+                  "steps",
+                  "client",
+                  "missing"
+                ],
+                "additionalProperties": false
+              },
+              "reviewToken": {
+                "type": "string"
+              },
+              "redacted": {
+                "type": "boolean"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok",
+              "accountEmail",
+              "reportId",
+              "status",
+              "receivedAt",
+              "submittedAt",
+              "expiresAt",
+              "report",
+              "redacted",
+              "message"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Bug Reporting",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": false
       }
     },
     {

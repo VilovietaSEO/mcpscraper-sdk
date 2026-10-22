@@ -399,6 +399,10 @@ class ScraperClient:
         self.gmail = GmailNamespace(self._r)
         self.memory_tools = MemoryTools(self._r)
 
+    def bug_reporting(self, **payload: Any) -> Any:
+        """Prepare a reviewed draft, submit its exact receipt, or read report status."""
+        return self._r.call("POST", "/bugs/report", payload)
+
     def search_serp(self, query: str, **kwargs: Any) -> Any:
         return self._r.call("POST", "/harvest/sync", {"query": query, "serpOnly": True, **kwargs})
 

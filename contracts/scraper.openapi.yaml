@@ -57,6 +57,12 @@ tags:
     description: Complete owner-scoped Gmail reads, immutable selections, bulk actions, exports, and resumable Memory imports.
 
 paths:
+  /bugs/report:
+    post:
+      operationId: bugReporting
+      tags: [Support]
+      summary: Prepare, submit or read a private bug report
+      responses: {}
   /harvest:
     post:
       tags: [Core]

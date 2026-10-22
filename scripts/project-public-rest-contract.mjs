@@ -31,6 +31,7 @@ if (sourceArg && check) {
 
 const spec = yaml.load(await readFile('contracts/scraper.openapi.yaml', 'utf8'))
 const componentNames = {
+  bugReporting: { request: 'BugReportingRequest', responses: { 200: 'BugReportingResponse', 400: 'BugReportingError', 401: 'BugReportingError', 403: 'BugReportingError', 404: 'BugReportingError', 409: 'BugReportingError', 413: 'BugReportingError', 429: 'BugReportingError', 503: 'BugReportingError' } },
   mapsSearch: { request: 'MapsSearchRequest', responses: { 200: 'MapsSearchResponse' } },
   directoryWorkflow: { request: 'DirectoryRunRequest', responses: { 200: 'DirectoryJobResponse', 202: 'DirectoryJobResponse' } },
   directoryJobStatus: { responses: { 200: 'DirectoryJobResponse', 404: 'DirectoryJobNotFound' } },
