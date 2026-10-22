@@ -3,7 +3,7 @@
 Official Python clients for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP catalog.
 The direct Memory manifest remains checked for runtime compatibility.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0)
 
 This is a thin JSON-RPC client generated against [`../../contracts/memory.tools.json`](../../contracts/memory.tools.json), the public contract for the hosted API. It contains no product source — only typed request/response plumbing.
 
@@ -97,3 +97,7 @@ shows both paths.
 ## Saved Maps reviews
 
 Server 0.100.1 improves Maps discovery, review text and list collection through the existing interfaces. Use the exact name and location returned by discovery. Read the saved run and its review pages before considering a new acquisition. An explicit resume uses a fresh browser and reopens the profile and reviews; it retains saved review IDs. A new resume key authorizes a separately billed attempt, while repeating that key reads the same run.
+
+## Bug Reporting
+
+Use `bug_reporting` to prepare a redacted draft from observed calls and errors. Review the returned report, then submit its exact `reportId` and `reviewToken` only when the user requests submission. Status returns the private receipt. The support team receives the report and verified account email. Drafts expire after one day; submitted reports after 365 days. See [the complete workflow](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.57.0/examples/bug-reporting.mjs) and [release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0).

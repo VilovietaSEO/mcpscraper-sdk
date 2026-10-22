@@ -2,7 +2,7 @@
 
 Official TypeScript/JavaScript client for the [mcpscraper.dev](https://mcpscraper.dev) REST API — SERP search, People-Also-Ask harvesting, single-page and whole-site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0)
 
 This is a thin HTTP client generated against [`../../contracts/scraper.openapi.generated.json`](../../contracts/scraper.openapi.generated.json), the complete public REST contract for the hosted API. It contains no scraping, proxy, or billing logic — only typed request/response plumbing.
 
@@ -226,3 +226,7 @@ shows both paths.
 ## Saved Maps reviews
 
 Server 0.100.1 improves Maps discovery, review text and list collection through the existing interfaces. Use the exact name and location returned by discovery. Read the saved run and its review pages before considering a new acquisition. An explicit resume uses a fresh browser and reopens the profile and reviews; it retains saved review IDs. A new resume key authorizes a separately billed attempt, while repeating that key reads the same run.
+
+## Bug Reporting
+
+Use `bug_reporting` to prepare a redacted draft from observed calls and errors. Review the returned report, then submit its exact `reportId` and `reviewToken` only when the user requests submission. Status returns the private receipt. The support team receives the report and verified account email. Drafts expire after one day; submitted reports after 365 days. See [the complete workflow](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.57.0/examples/bug-reporting.mjs) and [release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0).

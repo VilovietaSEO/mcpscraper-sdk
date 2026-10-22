@@ -11583,6 +11583,221 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "bug_reporting",
+    "category": "support",
+    "title": "Bug Reporting",
+    "description": "Capture repeated errors or a user-requested MCP Scraper bug report. First prepare a plain-language draft from observed calls: goal, exact arguments, call order, errors, retries, request/job IDs and client version. Mark unknowns; never invent evidence or include credentials or unrelated conversation. Review the returned redacted draft, then submit its reportId and reviewToken only when the user requests or approves submission. status reads your receipt. Free; drafts expire after one day, submitted reports after 365 days. Submission shares the report and verified account email with private MCP Scraper support; it does not post a public issue or promise a fix.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "default": "prepare",
+          "description": "prepare saves a private one-day draft for review; submit sends that exact draft to support; status reads your report receipt.",
+          "type": "string",
+          "enum": [
+            "prepare",
+            "submit",
+            "status"
+          ]
+        },
+        "report": {
+          "description": "Required for prepare. Collect known evidence from the conversation before asking the user for missing details.",
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "description": "Short description of the problem in plain language."
+            },
+            "goal": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000,
+              "description": "What the user was trying to accomplish, using their words."
+            },
+            "expected": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000,
+              "description": "What should have happened."
+            },
+            "actual": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000,
+              "description": "What actually happened. Separate observations from suspected causes."
+            },
+            "steps": {
+              "minItems": 1,
+              "maxItems": 30,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "description": "Ordered reproduction steps, including retries and what changed."
+            },
+            "attempts": {
+              "minItems": 1,
+              "maxItems": 20,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "tool": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120,
+                    "description": "Exact tool name or REST method and path."
+                  },
+                  "submittedAt": {
+                    "description": "Observed call time with timezone; omit if unknown.",
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  },
+                  "arguments": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 8000,
+                    "description": "Exact submitted arguments as JSON or text. Remove credentials, cookies and unrelated private content first. Do not reconstruct unknown arguments."
+                  },
+                  "result": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 8000,
+                    "description": "Observed response or error text, including error codes and retry outcome. Remove secrets."
+                  },
+                  "requestId": {
+                    "description": "Returned request ID, when available.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "description": "Returned job or run ID, when available.",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "tool",
+                  "arguments",
+                  "result"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Calls in the order made. Include successful calls that explain the failure."
+            },
+            "client": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120,
+                  "description": "Observed application or SDK name."
+                },
+                "version": {
+                  "description": "Observed application or package version; omit if unknown.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "transport": {
+                  "type": "string",
+                  "enum": [
+                    "oauth",
+                    "api-key",
+                    "npx",
+                    "npm",
+                    "sdk",
+                    "mcpb",
+                    "rest",
+                    "unknown"
+                  ],
+                  "description": "Connection or install route used for the failed calls."
+                },
+                "operatingSystem": {
+                  "description": "Observed operating system; omit if unknown.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                },
+                "model": {
+                  "description": "Observed AI model; omit if unknown.",
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 120
+                }
+              },
+              "required": [
+                "name",
+                "transport"
+              ],
+              "additionalProperties": false,
+              "description": "Observed client environment; use unknown rather than guessing."
+            },
+            "context": {
+              "description": "Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            },
+            "missing": {
+              "default": [],
+              "description": "Evidence that is unknown or unavailable; do not invent it.",
+              "maxItems": 20,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              }
+            }
+          },
+          "required": [
+            "title",
+            "goal",
+            "expected",
+            "actual",
+            "steps",
+            "attempts",
+            "client"
+          ],
+          "additionalProperties": false
+        },
+        "reportId": {
+          "description": "ID returned by prepare; required for submit or status.",
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "reviewToken": {
+          "description": "Exact token returned by prepare; required for submit. A changed report requires a new prepare.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "userApproved": {
+          "description": "Set true only when the user has asked to submit this bug or approved the reviewed draft. Repeated errors alone do not authorize submission.",
+          "type": "boolean"
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Bug Reporting",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "bulk-delete-notes",
     "category": "memory",
     "title": "Bulk Delete Notes",

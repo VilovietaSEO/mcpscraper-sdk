@@ -158,6 +158,7 @@ import * as BrowserReplayStop from './tools/browser_replay_stop.js'
 import * as BrowserScreenshot from './tools/browser_screenshot.js'
 import * as BrowserScroll from './tools/browser_scroll.js'
 import * as BrowserType from './tools/browser_type.js'
+import * as SupportBugReporting from './tools/bug_reporting.js'
 import * as MemoryBulkDeleteNotes from './tools/bulk-delete-notes.js'
 import * as MemoryDeleteNote from './tools/delete-note.js'
 import * as MemoryExport from './tools/memory-export.js'
@@ -1008,6 +1009,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "browser_type",
     "category": "browser",
     "methodName": "type"
+  },
+  {
+    "name": "bug_reporting",
+    "category": "support",
+    "methodName": "bugReporting"
   },
   {
     "name": "bulk-delete-notes",
@@ -2743,6 +2749,14 @@ export class BrowserNamespace {
   }
 }
 
+export class SupportNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async bugReporting(input: SupportBugReporting.Input = {} as SupportBugReporting.Input): Promise<SupportBugReporting.Output> {
+    return this.callTool('bug_reporting', input) as Promise<SupportBugReporting.Output>
+  }
+}
+
 export class MemoryNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3634,6 +3648,7 @@ export class GeneratedMcpToolsClient {
   readonly web: WebNamespace
   readonly artifacts: ArtifactsNamespace
   readonly browser: BrowserNamespace
+  readonly support: SupportNamespace
   readonly memory: MemoryNamespace
   readonly connections: ConnectionsNamespace
   readonly serpIntelligence: SerpIntelligenceNamespace
@@ -3674,6 +3689,7 @@ export class GeneratedMcpToolsClient {
     this.web = new WebNamespace(callTool)
     this.artifacts = new ArtifactsNamespace(callTool)
     this.browser = new BrowserNamespace(callTool)
+    this.support = new SupportNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)
     this.connections = new ConnectionsNamespace(callTool)
     this.serpIntelligence = new SerpIntelligenceNamespace(callTool)

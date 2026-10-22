@@ -86,6 +86,7 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   create_editorial_reading_room: 'editorial',
   renew_editorial_reading_room_download: 'editorial',
   credits_info: 'billing',
+  bug_reporting: 'support',
   list_service_connections: 'connections',
   test_service_connection: 'connections',
   describe_service_connection_tool: 'connections',
@@ -163,6 +164,7 @@ const EXPLICIT_METHOD_NAMES: Record<string, string> = {
   trustpilot_reviews: 'trustpilotReviews',
   g2_reviews: 'g2Reviews',
   credits_info: 'creditsInfo',
+  bug_reporting: 'bugReporting',
   capture_serp_snapshot: 'snapshot',
   capture_serp_page_snapshots: 'pageSnapshots',
 }
