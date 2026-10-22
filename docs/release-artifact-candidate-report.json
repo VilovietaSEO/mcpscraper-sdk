@@ -44,9 +44,9 @@
       "version": "0.57.0",
       "format": "npm-tgz",
       "filename": "mcpscraper-sdk-0.57.0.tgz",
-      "sha256": "bcc415053b7230d78801c8a7ef42bcb2896aac86cfa51dc0f475db8277a4d598",
-      "compressedBytes": 73836,
-      "unpackedBytes": 494027,
+      "sha256": "edff25416df5b8ec99ed43b1eab0b3e0d9fca796a2bce6460b3bf7ec4ae5c6be",
+      "compressedBytes": 74210,
+      "unpackedBytes": 495453,
       "fileCount": 6,
       "sourceMaps": 0,
       "nestedNodeModulesEntries": 0,
@@ -61,11 +61,11 @@
         ],
         [
           "package/dist/index.cjs",
-          25952
+          26665
         ],
         [
           "package/dist/index.js",
-          24372
+          25085
         ],
         [
           "package/README.md",
@@ -250,7 +250,7 @@
   ],
   "verification": [
     "Typecheck and all Node workspace tests passed",
-    "27 contract-projection tests passed",
+    "28 contract-projection tests passed",
     "75 scraper Python and 50 unified Python tests passed",
     "348/348 parity across six generated surfaces",
     "Exact server REST source digest and generated Node/Python models match",
