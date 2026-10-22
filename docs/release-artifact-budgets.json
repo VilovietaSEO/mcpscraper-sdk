@@ -72,19 +72,18 @@
     {
       "package": "mcpscraper-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.54.0",
+      "candidateVersion": "0.54.1",
       "baseline": {
-        "version": "0.53.1",
-        "sha256": "b215cf2c40bc5c0b639be06b1c1e62c7eb94d6de7b48a24be9ea8cb6c3f96699",
-        "compressedBytes": 719558,
-        "unpackedBytes": 3355158,
-        "fileCount": 358,
-        "archiveUrl": "https://files.pythonhosted.org/packages/96/c7/eab9647ce84ac0346de6a5c69fd3dd1850b8ee694be76f49b566c2a39da2/mcpscraper_sdk-0.53.1-py3-none-any.whl"
+        "version": "0.54.0",
+        "sha256": "944c58fa4641fd6e3f204904be8c9acbe2d76aea9fa3dc60ce63745093188337",
+        "compressedBytes": 721595,
+        "unpackedBytes": 3365821,
+        "fileCount": 358
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
+      "intendedChange": "UTF-8-safe MCP SSE parsing and versioned release-note links; public file paths and dependencies unchanged.",
       "maximum": {
-        "compressedBytes": 755536,
-        "unpackedBytes": 3522916,
+        "compressedBytes": 757675,
+        "unpackedBytes": 3534113,
         "fileCount": 358,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
@@ -93,19 +92,18 @@
     {
       "package": "mcpscraper-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.54.0",
+      "candidateVersion": "0.54.1",
       "baseline": {
-        "version": "0.53.1",
-        "sha256": "6f6a42d11972d137fa799fde69ae912fd070da7f106a328d352dfb2d21aa4e0e",
-        "compressedBytes": 283796,
-        "unpackedBytes": 3330212,
-        "fileCount": 358,
-        "archiveUrl": "https://files.pythonhosted.org/packages/e7/82/46e873d9ed5db3da9be2712f06ff1d0622a12353877359e08922b7ca0024/mcpscraper_sdk-0.53.1.tar.gz"
+        "version": "0.54.0",
+        "sha256": "a199b542871f0de5b74ddc2b7a7303a037d14567617fd5f5f7138db8fc5edd6f",
+        "compressedBytes": 285807,
+        "unpackedBytes": 3342368,
+        "fileCount": 358
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
+      "intendedChange": "UTF-8-safe MCP SSE parsing and versioned release-note links; public file paths and dependencies unchanged.",
       "maximum": {
-        "compressedBytes": 297986,
-        "unpackedBytes": 3496723,
+        "compressedBytes": 300098,
+        "unpackedBytes": 3509487,
         "fileCount": 358,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
@@ -114,19 +112,18 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.51.0",
+      "candidateVersion": "0.51.1",
       "baseline": {
-        "version": "0.50.1",
-        "sha256": "e1509097cf3a5b1d13efbdd6dc60bdbd7cb7f4e2b8abd5d649db6523631fa87d",
-        "compressedBytes": 893927,
-        "unpackedBytes": 3711544,
-        "fileCount": 585,
-        "archiveUrl": "https://files.pythonhosted.org/packages/0c/4c/4d4ff64a92c214dfb5992fee645d05ea5872bf4d52ae9154a83d8bcd20c9/mcpscraper_memory_sdk-0.50.1-py3-none-any.whl"
+        "version": "0.51.0",
+        "sha256": "deeb49eebd0c8a421e16128c839cd91784ad25f05517e2bcefd9e9b3f5102d19",
+        "compressedBytes": 894862,
+        "unpackedBytes": 3717645,
+        "fileCount": 585
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
+      "intendedChange": "UTF-8-safe MCP SSE parsing and versioned release-note links; public file paths and dependencies unchanged.",
       "maximum": {
-        "compressedBytes": 938624,
-        "unpackedBytes": 3897122,
+        "compressedBytes": 939606,
+        "unpackedBytes": 3903528,
         "fileCount": 585,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
@@ -135,19 +132,18 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.51.0",
+      "candidateVersion": "0.51.1",
       "baseline": {
-        "version": "0.50.1",
-        "sha256": "06a9c2baf02c941bb712691bdc3981f5b76c10d03422bc99a95f405038a3d3de",
-        "compressedBytes": 321109,
-        "unpackedBytes": 3653956,
-        "fileCount": 585,
-        "archiveUrl": "https://files.pythonhosted.org/packages/88/91/19d125f0ae4ca92a51ee337de6cb4c3a706c8ea75687c341d0e74ee7bd34/mcpscraper_memory_sdk-0.50.1.tar.gz"
+        "version": "0.51.0",
+        "sha256": "c1ad9880a37a4019d76203c2b122cc6b8c6c3006ffb030f75016bd6bbe0bb58b",
+        "compressedBytes": 321990,
+        "unpackedBytes": 3661550,
+        "fileCount": 585
       },
-      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
+      "intendedChange": "UTF-8-safe MCP SSE parsing and versioned release-note links; public file paths and dependencies unchanged.",
       "maximum": {
-        "compressedBytes": 337165,
-        "unpackedBytes": 3836654,
+        "compressedBytes": 338090,
+        "unpackedBytes": 3844628,
         "fileCount": 585,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0

@@ -31,19 +31,31 @@ class McpToolError(RuntimeError):
 
 
 def _parse_json_rpc_response(response: requests.Response) -> dict[str, Any]:
-    raw = response.text.strip()
+    # JSON-RPC and SSE are UTF-8; requests otherwise assumes Latin-1 for
+    # text/event-stream without a charset, corrupting non-ASCII review text.
+    raw = response.content.decode("utf-8-sig").strip()
     if not raw:
         raise McpToolError("MCP endpoint returned an empty response")
-    if not raw.startswith(("event:", "data:")):
+    is_sse = response.headers.get("content-type", "").split(";")[0].strip().lower() == "text/event-stream"
+    if not is_sse and not raw.startswith(("event:", "data:", ":")):
         return json.loads(raw)
-    data_payloads = [
-        line.removeprefix("data:").strip()
-        for line in raw.splitlines()
-        if line.startswith("data:") and line.removeprefix("data:").strip() not in ("", "[DONE]")
-    ]
-    if not data_payloads:
+    payloads: list[dict[str, Any]] = []
+    data: list[str] = []
+    # Only protocol CR/LF characters delimit lines. str.splitlines also splits
+    # valid Unicode characters inside JSON strings (for example U+2028).
+    for line in raw.replace("\r\n", "\n").replace("\r", "\n").split("\n") + [""]:
+        if not line:
+            payload = "\n".join(data)
+            data.clear()
+            if payload and payload != "[DONE]":
+                payloads.append(json.loads(payload))
+        elif line.startswith("data:"):
+            value = line[5:]
+            data.append(value[1:] if value.startswith(" ") else value)
+    if not payloads:
         raise McpToolError("MCP SSE response contained no JSON-RPC data event")
-    return json.loads(data_payloads[-1])
+    responses = [item for item in payloads if "id" in item and ("result" in item or "error" in item)]
+    return responses[-1] if responses else payloads[-1]
 
 
 class McpToolsClient(GeneratedMcpToolsClient):
