@@ -4,7 +4,7 @@ export interface Input {
    */
   connectionId: string;
   /**
-   * Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
+   * Dataset to export. Choose google_analytics_reports for GA4 aggregate export across selected or discovered properties. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
    */
   dataset?:
     | "auto"
@@ -15,6 +15,7 @@ export interface Input {
     | "slack_channel_messages"
     | "meta_ads_insights"
     | "search_console_performance"
+    | "google_analytics_reports"
     | "resend_data"
     | "resend_emails"
     | "resend_received_emails"
@@ -22,6 +23,63 @@ export interface Input {
     | "resend_contacts"
     | "resend_broadcasts"
     | "resend_templates";
+  /**
+   * GA4 report query for dataset google_analytics_reports. Produces aggregate rows with quality metadata, signed resumable pagination and explicit property failure records; not raw event export.
+   */
+  googleAnalytics?: {
+    /**
+     * Explicit GA4 properties. Omit to discover accessible properties, capped at 100; larger accounts must select a subset.
+     *
+     * @minItems 1
+     * @maxItems 100
+     */
+    propertyIds?: [string, ...string[]];
+    /**
+     * GA4 dimension API names; rows are ordered by these dimensions. Empty requests an aggregate report.
+     *
+     * @maxItems 9
+     */
+    dimensions?:
+      | []
+      | [string]
+      | [string, string]
+      | [string, string, string]
+      | [string, string, string, string]
+      | [string, string, string, string, string]
+      | [string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string];
+    /**
+     * GA4 metric API names to export.
+     *
+     * @minItems 1
+     * @maxItems 10
+     */
+    metrics?:
+      | [string]
+      | [string, string]
+      | [string, string, string]
+      | [string, string, string, string]
+      | [string, string, string, string, string]
+      | [string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string]
+      | [string, string, string, string, string, string, string, string, string, string];
+    /**
+     * Provider-native GA4 dimension FilterExpression; metrics cannot appear here.
+     */
+    dimensionFilter?: {
+      [k: string]: unknown;
+    };
+    /**
+     * Provider-native GA4 metric FilterExpression applied after aggregation.
+     */
+    metricFilter?: {
+      [k: string]: unknown;
+    };
+  };
   /**
    * Slack conversation ID to export. Required for a new slack_channel_messages export; preserved inside continuation on resume. The export never joins a channel.
    */
@@ -81,6 +139,7 @@ export interface Input {
       | "slack_channel_messages"
       | "meta_ads_insights"
       | "search_console_performance"
+      | "google_analytics_reports"
       | "resend_data"
       | "resend_emails"
       | "resend_received_emails"
@@ -92,6 +151,63 @@ export interface Input {
      * Read, write, and administrative permissions granted to this member or key.
      */
     scope?: {
+      /**
+       * Exact GA4 property selection, dimensions, metrics and filters preserved from the original export.
+       */
+      googleAnalytics?: {
+        /**
+         * Explicit GA4 properties. Omit to discover accessible properties, capped at 100; larger accounts must select a subset.
+         *
+         * @minItems 1
+         * @maxItems 100
+         */
+        propertyIds?: [string, ...string[]];
+        /**
+         * GA4 dimension API names; rows are ordered by these dimensions. Empty requests an aggregate report.
+         *
+         * @maxItems 9
+         */
+        dimensions?:
+          | []
+          | [string]
+          | [string, string]
+          | [string, string, string]
+          | [string, string, string, string]
+          | [string, string, string, string, string]
+          | [string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string, string, string];
+        /**
+         * GA4 metric API names to export.
+         *
+         * @minItems 1
+         * @maxItems 10
+         */
+        metrics?:
+          | [string]
+          | [string, string]
+          | [string, string, string]
+          | [string, string, string, string]
+          | [string, string, string, string, string]
+          | [string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string, string, string]
+          | [string, string, string, string, string, string, string, string, string, string];
+        /**
+         * Provider-native GA4 dimension FilterExpression; metrics cannot appear here.
+         */
+        dimensionFilter?: {
+          [k: string]: unknown;
+        };
+        /**
+         * Provider-native GA4 metric FilterExpression applied after aggregation.
+         */
+        metricFilter?: {
+          [k: string]: unknown;
+        };
+      };
       /**
        * Slack export options for the selected connected-service dataset.
        */
@@ -127,6 +243,7 @@ export type Output =
         | "slack_channel_messages"
         | "meta_ads_insights"
         | "search_console_performance"
+        | "google_analytics_reports"
         | "resend_data"
         | "resend_emails"
         | "resend_received_emails"
@@ -139,6 +256,63 @@ export type Output =
         to: string;
       };
       scope?: {
+        /**
+         * Exact GA4 property selection, dimensions, metrics and filters preserved from the original export.
+         */
+        googleAnalytics?: {
+          /**
+           * Explicit GA4 properties. Omit to discover accessible properties, capped at 100; larger accounts must select a subset.
+           *
+           * @minItems 1
+           * @maxItems 100
+           */
+          propertyIds?: [string, ...string[]];
+          /**
+           * GA4 dimension API names; rows are ordered by these dimensions. Empty requests an aggregate report.
+           *
+           * @maxItems 9
+           */
+          dimensions:
+            | []
+            | [string]
+            | [string, string]
+            | [string, string, string]
+            | [string, string, string, string]
+            | [string, string, string, string, string]
+            | [string, string, string, string, string, string]
+            | [string, string, string, string, string, string, string]
+            | [string, string, string, string, string, string, string, string]
+            | [string, string, string, string, string, string, string, string, string];
+          /**
+           * GA4 metric API names to export.
+           *
+           * @minItems 1
+           * @maxItems 10
+           */
+          metrics:
+            | [string]
+            | [string, string]
+            | [string, string, string]
+            | [string, string, string, string]
+            | [string, string, string, string, string]
+            | [string, string, string, string, string, string]
+            | [string, string, string, string, string, string, string]
+            | [string, string, string, string, string, string, string, string]
+            | [string, string, string, string, string, string, string, string, string]
+            | [string, string, string, string, string, string, string, string, string, string];
+          /**
+           * Provider-native GA4 dimension FilterExpression; metrics cannot appear here.
+           */
+          dimensionFilter?: {
+            [k: string]: unknown;
+          };
+          /**
+           * Provider-native GA4 metric FilterExpression applied after aggregation.
+           */
+          metricFilter?: {
+            [k: string]: unknown;
+          };
+        };
         slack?: {
           channelId: string;
           includeThreads: boolean;
@@ -185,6 +359,7 @@ export type Output =
           | "slack_channel_messages"
           | "meta_ads_insights"
           | "search_console_performance"
+          | "google_analytics_reports"
           | "resend_data"
           | "resend_emails"
           | "resend_received_emails"
@@ -193,6 +368,63 @@ export type Output =
           | "resend_broadcasts"
           | "resend_templates";
         scope?: {
+          /**
+           * Exact GA4 property selection, dimensions, metrics and filters preserved from the original export.
+           */
+          googleAnalytics?: {
+            /**
+             * Explicit GA4 properties. Omit to discover accessible properties, capped at 100; larger accounts must select a subset.
+             *
+             * @minItems 1
+             * @maxItems 100
+             */
+            propertyIds?: [string, ...string[]];
+            /**
+             * GA4 dimension API names; rows are ordered by these dimensions. Empty requests an aggregate report.
+             *
+             * @maxItems 9
+             */
+            dimensions:
+              | []
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string];
+            /**
+             * GA4 metric API names to export.
+             *
+             * @minItems 1
+             * @maxItems 10
+             */
+            metrics:
+              | [string]
+              | [string, string]
+              | [string, string, string]
+              | [string, string, string, string]
+              | [string, string, string, string, string]
+              | [string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string]
+              | [string, string, string, string, string, string, string, string, string, string];
+            /**
+             * Provider-native GA4 dimension FilterExpression; metrics cannot appear here.
+             */
+            dimensionFilter?: {
+              [k: string]: unknown;
+            };
+            /**
+             * Provider-native GA4 metric FilterExpression applied after aggregation.
+             */
+            metricFilter?: {
+              [k: string]: unknown;
+            };
+          };
           slack?: {
             channelId: string;
             includeThreads: boolean;

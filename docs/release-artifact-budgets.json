@@ -1,40 +1,30 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "basis": "Exact current official npm and PyPI baseline archives verified on 2026-10-19. Five percent compressed/unpacked headroom for additive generated Reddit contracts and public guidance. Public file counts remain unchanged; no source maps or bundled dependency trees. Only the Node scraper Memory dependency floor and CLI scraper dependency floor advance.",
+    "basis": "Latest official registry archives plus five percent compressed/unpacked byte headroom for regenerated schemas; unchanged 347-tool set and file paths. No source maps or bundled dependency trees.",
+    "source": "Official npm and PyPI archives fetched and SHA-256 recorded on 2026-10-21 UTC",
     "failClosed": true
   },
   "artifacts": [
     {
-      "package": "mcpscraper-cli",
+      "package": "mcpscraper-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.54.0",
+      "candidateVersion": "0.56.0",
       "baseline": {
-        "version": "0.53.1",
-        "sha256": "f169d4951d432f617aa9c37fea5216dd52e9da5371a07e188df409df8382169d",
-        "compressedBytes": 154189,
-        "unpackedBytes": 1086042,
-        "fileCount": 3,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.53.1.tgz"
+        "version": "0.55.0",
+        "sha256": "237a19478f458c4047de118e6d5c8d3aab617fa5bdcd202fc1f5774fa94f8c7f",
+        "compressedBytes": 68276,
+        "unpackedBytes": 459568,
+        "fileCount": 6,
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.55.0.tgz"
       },
-      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
-        "compressedBytes": 161899,
-        "unpackedBytes": 1140345,
-        "fileCount": 3,
+        "compressedBytes": 71690,
+        "unpackedBytes": 482547,
+        "fileCount": 6,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
-      },
-      "expectedDependencyDeclarations": {
-        "npm": {
-          "name": "mcpscraper-cli",
-          "version": "0.54.0",
-          "dependencies": {
-            "commander": "^12.0.0",
-            "mcpscraper-sdk": "^0.56.0"
-          }
-        },
-        "pythonRequiresDist": []
       }
     },
     {
@@ -49,107 +39,34 @@
         "fileCount": 5,
         "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.54.1.tgz"
       },
-      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 298917,
         "unpackedBytes": 10910001,
         "fileCount": 5,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
-      },
-      "expectedDependencyDeclarations": {
-        "npm": {
-          "name": "mcpscraper-memory-sdk",
-          "version": "0.55.0"
-        },
-        "pythonRequiresDist": []
       }
     },
     {
-      "package": "mcpscraper-sdk",
+      "package": "mcpscraper-cli",
       "format": "npm-tgz",
-      "candidateVersion": "0.56.0",
+      "candidateVersion": "0.54.0",
       "baseline": {
-        "version": "0.55.0",
-        "sha256": "237a19478f458c4047de118e6d5c8d3aab617fa5bdcd202fc1f5774fa94f8c7f",
-        "compressedBytes": 68276,
-        "unpackedBytes": 459568,
-        "fileCount": 6,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.55.0.tgz"
+        "version": "0.53.1",
+        "sha256": "f169d4951d432f617aa9c37fea5216dd52e9da5371a07e188df409df8382169d",
+        "compressedBytes": 154189,
+        "unpackedBytes": 1086042,
+        "fileCount": 3,
+        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.53.1.tgz"
       },
-      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
-        "compressedBytes": 71690,
-        "unpackedBytes": 482547,
-        "fileCount": 6,
+        "compressedBytes": 161899,
+        "unpackedBytes": 1140345,
+        "fileCount": 3,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
-      },
-      "expectedDependencyDeclarations": {
-        "npm": {
-          "name": "mcpscraper-sdk",
-          "version": "0.56.0",
-          "dependencies": {
-            "mcpscraper-memory-sdk": "^0.55.0"
-          }
-        },
-        "pythonRequiresDist": []
-      }
-    },
-    {
-      "package": "mcpscraper-memory-sdk",
-      "format": "python-wheel",
-      "candidateVersion": "0.51.0",
-      "baseline": {
-        "version": "0.50.1",
-        "sha256": "e1509097cf3a5b1d13efbdd6dc60bdbd7cb7f4e2b8abd5d649db6523631fa87d",
-        "compressedBytes": 893927,
-        "unpackedBytes": 3711544,
-        "fileCount": 585,
-        "archiveUrl": "https://files.pythonhosted.org/packages/0c/4c/4d4ff64a92c214dfb5992fee645d05ea5872bf4d52ae9154a83d8bcd20c9/mcpscraper_memory_sdk-0.50.1-py3-none-any.whl"
-      },
-      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
-      "maximum": {
-        "compressedBytes": 938624,
-        "unpackedBytes": 3897122,
-        "fileCount": 585,
-        "sourceMaps": 0,
-        "nestedNodeModulesEntries": 0
-      },
-      "expectedDependencyDeclarations": {
-        "npm": {},
-        "pythonRequiresDist": [
-          "pydantic>=2",
-          "requests>=2.31"
-        ]
-      }
-    },
-    {
-      "package": "mcpscraper-memory-sdk",
-      "format": "python-sdist",
-      "candidateVersion": "0.51.0",
-      "baseline": {
-        "version": "0.50.1",
-        "sha256": "06a9c2baf02c941bb712691bdc3981f5b76c10d03422bc99a95f405038a3d3de",
-        "compressedBytes": 321109,
-        "unpackedBytes": 3653956,
-        "fileCount": 585,
-        "archiveUrl": "https://files.pythonhosted.org/packages/88/91/19d125f0ae4ca92a51ee337de6cb4c3a706c8ea75687c341d0e74ee7bd34/mcpscraper_memory_sdk-0.50.1.tar.gz"
-      },
-      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
-      "maximum": {
-        "compressedBytes": 337165,
-        "unpackedBytes": 3836654,
-        "fileCount": 585,
-        "sourceMaps": 0,
-        "nestedNodeModulesEntries": 0
-      },
-      "expectedDependencyDeclarations": {
-        "npm": {},
-        "pythonRequiresDist": [
-          "pydantic>=2",
-          "requests>=2.31"
-        ]
       }
     },
     {
@@ -164,20 +81,13 @@
         "fileCount": 358,
         "archiveUrl": "https://files.pythonhosted.org/packages/96/c7/eab9647ce84ac0346de6a5c69fd3dd1850b8ee694be76f49b566c2a39da2/mcpscraper_sdk-0.53.1-py3-none-any.whl"
       },
-      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 755536,
         "unpackedBytes": 3522916,
         "fileCount": 358,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
-      },
-      "expectedDependencyDeclarations": {
-        "npm": {},
-        "pythonRequiresDist": [
-          "pydantic>=2.0",
-          "requests>=2.31"
-        ]
       }
     },
     {
@@ -192,20 +102,55 @@
         "fileCount": 358,
         "archiveUrl": "https://files.pythonhosted.org/packages/e7/82/46e873d9ed5db3da9be2712f06ff1d0622a12353877359e08922b7ca0024/mcpscraper_sdk-0.53.1.tar.gz"
       },
-      "intendedChange": "Add the year window and optional Reddit date/comment-coverage fields in generated public contracts; update compatible package versions and consumer guidance. No new public modules or dependency names.",
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
       "maximum": {
         "compressedBytes": 297986,
         "unpackedBytes": 3496723,
         "fileCount": 358,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
+      }
+    },
+    {
+      "package": "mcpscraper-memory-sdk",
+      "format": "python-wheel",
+      "candidateVersion": "0.51.0",
+      "baseline": {
+        "version": "0.50.1",
+        "sha256": "e1509097cf3a5b1d13efbdd6dc60bdbd7cb7f4e2b8abd5d649db6523631fa87d",
+        "compressedBytes": 893927,
+        "unpackedBytes": 3711544,
+        "fileCount": 585,
+        "archiveUrl": "https://files.pythonhosted.org/packages/0c/4c/4d4ff64a92c214dfb5992fee645d05ea5872bf4d52ae9154a83d8bcd20c9/mcpscraper_memory_sdk-0.50.1-py3-none-any.whl"
       },
-      "expectedDependencyDeclarations": {
-        "npm": {},
-        "pythonRequiresDist": [
-          "pydantic>=2.0",
-          "requests>=2.31"
-        ]
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
+      "maximum": {
+        "compressedBytes": 938624,
+        "unpackedBytes": 3897122,
+        "fileCount": 585,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
+      }
+    },
+    {
+      "package": "mcpscraper-memory-sdk",
+      "format": "python-sdist",
+      "candidateVersion": "0.51.0",
+      "baseline": {
+        "version": "0.50.1",
+        "sha256": "06a9c2baf02c941bb712691bdc3981f5b76c10d03422bc99a95f405038a3d3de",
+        "compressedBytes": 321109,
+        "unpackedBytes": 3653956,
+        "fileCount": 585,
+        "archiveUrl": "https://files.pythonhosted.org/packages/88/91/19d125f0ae4ca92a51ee337de6cb4c3a706c8ea75687c341d0e74ee7bd34/mcpscraper_memory_sdk-0.50.1.tar.gz"
+      },
+      "intendedChange": "Regenerate the existing 347-tool public clients and optional output types against server 0.100.2; retain the existing public paths and tool set.",
+      "maximum": {
+        "compressedBytes": 337165,
+        "unpackedBytes": 3836654,
+        "fileCount": 585,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
       }
     }
   ]

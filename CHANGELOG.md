@@ -4,7 +4,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
-## [0.56.0] - 2026-10-19 — targets mcp-scraper 0.100.0
+## [0.56.0] - 2026-10-21 — targets mcp-scraper 0.100.2
 
 ### Added
 
@@ -14,6 +14,11 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 - Align Reddit guidance across generated clients: known thread links open directly, while topic discovery selects relevant search candidates before collecting their comments.
 - Node scraper 0.56.0, Node Memory 0.55.0, CLI 0.54.0, Python scraper 0.54.0 and Python Memory 0.51.0. Update the Node dependencies together to receive the new Reddit contract.
+
+### Fixed
+
+- Refresh all 347 public tool contracts and generated Node, Python and CLI bindings against server 0.100.2, including connected-export arguments and optional result metadata.
+- Keep Maps discovery, saved review pagination and explicit partial-run recovery available through the existing client interfaces. The hosted server verifies the selected location and handles review-list expansion and infinite scrolling.
 
 ## [0.55.1] - 2026-10-17 — targets mcp-scraper 0.99.1
 
