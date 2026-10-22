@@ -76,7 +76,7 @@ shows the complete flow and preserves a retry key for uncertain search responses
 
 For page content, start `extract_site` directly; it discovers pages during extraction. Use `map_site_urls` when you need the URL inventory itself. See the [direct site-export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.1/examples/site-export-direct.mjs) for retry keys, status and complete page reads.
 
-Release changes: [SDK 0.56.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.56.0).
+Release changes: [SDK 0.56.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.56.1).
 
 ## Reddit discovery and known threads
 
