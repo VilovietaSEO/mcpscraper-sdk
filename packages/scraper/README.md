@@ -2,7 +2,7 @@
 
 Official TypeScript/JavaScript client for the [mcpscraper.dev](https://mcpscraper.dev) REST API — SERP search, People-Also-Ask harvesting, single-page and whole-site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.0)
 
 This is a thin HTTP client generated against [`../../contracts/scraper.openapi.generated.json`](../../contracts/scraper.openapi.generated.json), the complete public REST contract for the hosted API. It contains no scraping, proxy, or billing logic — only typed request/response plumbing.
 
@@ -230,3 +230,7 @@ Server 0.100.1 improves Maps discovery, review text and list collection through 
 ## Bug Reporting
 
 Use `bug_reporting` to prepare a redacted draft from observed calls and errors. Review the returned report, then submit its exact `reportId` and `reviewToken` only when the user requests submission. Status returns the private receipt. The support team receives the report and verified account email. Drafts expire after one day; submitted reports after 365 days. See [the complete workflow](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.57.0/examples/bug-reporting.mjs) and [release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0).
+
+## Consistent hosted MCP protocol
+
+This release targets MCP Scraper 0.102.0 with 349 tools. Calls use protocol `2026-07-28` with matching routing headers and request metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.

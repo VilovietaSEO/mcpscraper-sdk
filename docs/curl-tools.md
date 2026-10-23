@@ -1,4 +1,4 @@
-# All 348 MCP tools with cURL
+# All 349 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -6,10 +6,12 @@ This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is 
 
 ```bash
 curl --retry 3 --retry-all-errors --retry-delay 1 https://mcpscraper.dev/mcp \
+  -H "mcp-protocol-version: 2026-07-28" \
+  -H "mcp-method: tools/list" \
   -H "x-api-key: $MCP_SCRAPER_API_KEY" \
   -H "content-type: application/json" \
   -H "accept: application/json, text/event-stream" \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}'
 ```
 
 ## Call any tool
@@ -21,8 +23,11 @@ TOOL_NAME="memory-search"
 TOOL_ARGS='{"query":"vault routing"}'
 
 jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
-  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args}}' \
+  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}' \
   | curl https://mcpscraper.dev/mcp \
+      -H "mcp-protocol-version: 2026-07-28" \
+      -H "mcp-method: tools/call" \
+      -H "mcp-name: $TOOL_NAME" \
       -H "x-api-key: $MCP_SCRAPER_API_KEY" \
       -H "content-type: application/json" \
       -H "accept: application/json, text/event-stream" \
@@ -35,8 +40,11 @@ Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Market
 
 ```bash
 jq -n --arg connectionId "$CONNECTION_ID" \
-  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \
+  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"},name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \
   | curl https://mcpscraper.dev/mcp \
+      -H "mcp-protocol-version: 2026-07-28" \
+      -H "mcp-method: tools/call" \
+      -H "mcp-name: export_connected_service_data" \
       -H "x-api-key: $MCP_SCRAPER_API_KEY" \
       -H "content-type: application/json" \
       -H "accept: application/json, text/event-stream" \
@@ -57,8 +65,11 @@ QUERY='has:attachment newer_than:30d'
 
 call_tool() {
   jq -n --arg name "$1" --argjson args "$2" \
-    '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args}}' \
+    '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}' \
   | curl -sS https://mcpscraper.dev/mcp \
+      -H "mcp-protocol-version: 2026-07-28" \
+      -H "mcp-method: tools/call" \
+      -H "mcp-name: $1" \
       -H "x-api-key: $MCP_SCRAPER_API_KEY" \
       -H "content-type: application/json" \
       -H "accept: application/json, text/event-stream" \
@@ -81,7 +92,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (348)
+## Complete catalog (349)
 
 ## access
 
@@ -465,6 +476,10 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `lead_list_enrich_status` — Lead List Enrichment Status
 - `lead_list_import` — Import a Lead List
 - `lead_list_upload_start` — Upload a Lead List
+
+## leadLists
+
+- `lead_list_enrich_cancel` — Cancel Lead List Enrichment
 
 ## library
 

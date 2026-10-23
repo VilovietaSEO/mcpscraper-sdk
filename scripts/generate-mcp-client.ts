@@ -77,7 +77,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
     '## List all tools',
     '',
     '```bash',
-    `curl --retry 3 --retry-all-errors --retry-delay 1 https://mcpscraper.dev/mcp \\\n  -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n  -H "content-type: application/json" \\\n  -H "accept: application/json, text/event-stream" \\\n  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'`,
+    `curl --retry 3 --retry-all-errors --retry-delay 1 https://mcpscraper.dev/mcp \\\n  -H "mcp-protocol-version: 2026-07-28" \\\n  -H "mcp-method: tools/list" \\\n  -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n  -H "content-type: application/json" \\\n  -H "accept: application/json, text/event-stream" \\\n  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}'`,
     '```',
     '',
     '## Call any tool',
@@ -85,7 +85,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
     'Set `TOOL_NAME` and `TOOL_ARGS` to any entry below:',
     '',
     '```bash',
-    `TOOL_NAME="memory-search"\nTOOL_ARGS='{"query":"vault routing"}'\n\njq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \\\n  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args}}' \\\n  | curl https://mcpscraper.dev/mcp \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n      -H "content-type: application/json" \\\n      -H "accept: application/json, text/event-stream" \\\n      --data-binary @-`,
+    `TOOL_NAME="memory-search"\nTOOL_ARGS='{"query":"vault routing"}'\n\njq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \\\n  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}' \\\n  | curl https://mcpscraper.dev/mcp \\\n      -H "mcp-protocol-version: 2026-07-28" \\\n      -H "mcp-method: tools/call" \\\n      -H "mcp-name: $TOOL_NAME" \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n      -H "content-type: application/json" \\\n      -H "accept: application/json, text/event-stream" \\\n      --data-binary @-`,
     '```',
     '',
     '## Bulk connected-data export',
@@ -93,7 +93,7 @@ function renderCurlDocs(tools: ToolEntry[]): string {
     'Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Marketing, or Resend range in one call. Provider pagination happens server-side; large results become private downloadable artifacts. Search Console supports `search_console_performance` across every accessible property. Meta supports `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected ad accounts. Resend supports the aggregate `resend_data` dataset plus sent mail, received mail, logs, contacts, broadcasts, and templates individually.',
     '',
     '```bash',
-    `jq -n --arg connectionId "$CONNECTION_ID" \\\n  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \\\n  | curl https://mcpscraper.dev/mcp \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n      -H "content-type: application/json" \\\n      -H "accept: application/json, text/event-stream" \\\n      --data-binary @-`,
+    `jq -n --arg connectionId "$CONNECTION_ID" \\\n  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"},name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \\\n  | curl https://mcpscraper.dev/mcp \\\n      -H "mcp-protocol-version: 2026-07-28" \\\n      -H "mcp-method: tools/call" \\\n      -H "mcp-name: export_connected_service_data" \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\\n      -H "content-type: application/json" \\\n      -H "accept: application/json, text/event-stream" \\\n      --data-binary @-`,
     '```',
     '',
     'For a fresh Search Console API extract, set `dataset` to `search_console_performance` and choose the requested range with `lastDays` or `from`/`to`. For previously imported connected data, get the connection `tableName` from `list_service_connections`, inspect/filter it with `table-describe` and `table-query`, or call `export_search_console_table_data` for a private filtered JSONL artifact.',
@@ -110,9 +110,9 @@ QUERY='has:attachment newer_than:30d'
 
 call_tool() {
   jq -n --arg name "$1" --argjson args "$2" \\
-    '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args}}' \\
+    '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}' \\
   | curl -sS https://mcpscraper.dev/mcp \\
-      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\
+      -H "mcp-protocol-version: 2026-07-28" \\\n      -H "mcp-method: tools/call" \\\n      -H "mcp-name: $1" \\\n      -H "x-api-key: $MCP_SCRAPER_API_KEY" \\
       -H "content-type: application/json" \\
       -H "accept: application/json, text/event-stream" \\
       --data-binary @-

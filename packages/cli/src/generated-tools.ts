@@ -10372,8 +10372,8 @@ export const MCP_TOOL_CATALOG = [
         "templateId",
         "archived"
       ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "additionalProperties": false
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
       "title": "Archive Template",
@@ -15511,7 +15511,6 @@ export const MCP_TOOL_CATALOG = [
     "description": "Save a user-owned template version 1 from a registered preset after inspecting search results and, when useful, get_artifact_template_example. Customize supported flags and presentation guidance; arbitrary HTML, CSS, JavaScript, executable code, and tool-selecting prompts are not accepted.",
     "inputSchema": {
       "type": "object",
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
       "oneOf": [
         {
           "type": "object",
@@ -16104,7 +16103,8 @@ export const MCP_TOOL_CATALOG = [
           ],
           "additionalProperties": false
         }
-      ]
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
       "title": "Save Template",
@@ -19690,8 +19690,8 @@ export const MCP_TOOL_CATALOG = [
       "required": [
         "templateId"
       ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "additionalProperties": false
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
       "title": "Get Template",
@@ -19724,8 +19724,8 @@ export const MCP_TOOL_CATALOG = [
       "required": [
         "presetKey"
       ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "additionalProperties": false
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
       "title": "Preview Template Example",
@@ -20860,7 +20860,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa",
     "category": "search",
     "title": "Google PAA + SERP Harvest",
-    "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Wait at least 20 seconds before the first durable job or Task check and each later check. Optional SERP modules require include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+    "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Wait at least 20 seconds before the first durable job check and each later check. Optional SERP modules require include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -21880,7 +21880,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "lead_list_enrich",
     "category": "leads",
     "title": "Enrich a Lead List",
-    "description": "Enrich 1–250 mapped business or person rows, supplied inline or by leadListId, with matched public website, phone, email, social, contact-form, and optional associated-person evidence. Use when the list already exists; to inspect a file first use lead_list_import, to discover businesses from a niche plus city use workflow_run with get-leads, and for candidate-only Maps discovery use maps_search. Starts an owner-scoped durable Task, bills underlying Maps/page/SERP attempts with unused hold refunded, and retains requested CSV/XLSX results seven days. Opt-in email snippet recovery costs at most one SERP search per unresolved row. For peopleDiscovery, author one-to-three focused peopleQueryTemplates with one role intent per query; each role query reads AI Overview plus organic results, then at most maxPeoplePerLead company-matched LinkedIn result searches run without opening LinkedIn pages. Public email occurrence is not deliverability or consent verification and is not permission to contact. A public role or LinkedIn occurrence is not verified current employment. Reuse idempotencyKey only to retry the same intended job.",
+    "description": "Enrich 1–250 mapped business or person rows, supplied inline or by leadListId, with matched public website, phone, email, social, contact-form, and optional associated-person evidence. Use when the list already exists; to inspect a file first use lead_list_import, to discover businesses from a niche plus city use workflow_run with get-leads, and for candidate-only Maps discovery use maps_search. Starts an owner-scoped durable job. Poll lead_list_enrich_status with its jobId. Underlying Maps/page/SERP attempts are billed with unused hold refunded; requested CSV/XLSX results are retained seven days. Opt-in email snippet recovery costs at most one SERP search per unresolved row. For peopleDiscovery, author one-to-three focused peopleQueryTemplates with one role intent per query; each role query reads AI Overview plus organic results, then at most maxPeoplePerLead company-matched LinkedIn result searches run without opening LinkedIn pages. Public email occurrence is not deliverability or consent verification and is not permission to contact. A public role or LinkedIn occurrence is not verified current employment. Reuse idempotencyKey only to retry the same intended job.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22125,6 +22125,33 @@ export const MCP_TOOL_CATALOG = [
       "destructiveHint": false,
       "idempotentHint": true,
       "openWorldHint": true
+    }
+  },
+  {
+    "name": "lead_list_enrich_cancel",
+    "category": "leadLists",
+    "title": "Cancel Lead List Enrichment",
+    "description": "Request cancellation of the original jobId returned by lead_list_enrich. Stops rows that have not started; an in-flight acquisition may finish and retain its cost. Returns current progress and billing; use lead_list_enrich_status to confirm the terminal state. Repeating cancellation does not start or bill another enrichment.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The jobId returned by lead_list_enrich. Poll until status is complete, partial, empty, failed, or cancelled."
+        }
+      },
+      "required": [
+        "jobId"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Cancel Lead List Enrichment",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
     }
   },
   {
@@ -22440,8 +22467,8 @@ export const MCP_TOOL_CATALOG = [
           ]
         }
       },
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "additionalProperties": false
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
       "title": "Search Templates",
@@ -27436,8 +27463,8 @@ export const MCP_TOOL_CATALOG = [
       "required": [
         "templateId"
       ],
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "additionalProperties": false
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
       "title": "Update Template",

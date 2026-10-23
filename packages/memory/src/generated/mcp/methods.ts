@@ -302,6 +302,7 @@ import * as LeadsEnrich from './tools/lead_list_enrich.js'
 import * as LeadsEnrichStatus from './tools/lead_list_enrich_status.js'
 import * as LeadsImport from './tools/lead_list_import.js'
 import * as LeadsUploadStart from './tools/lead_list_upload_start.js'
+import * as LeadListsLeadListEnrichCancel from './tools/lead_list_enrich_cancel.js'
 import * as LibraryIngest from './tools/library-ingest.js'
 import * as TagsListMemoryTags from './tools/list-memory-tags.js'
 import * as TagsMergeMemoryTags from './tools/merge-memory-tags.js'
@@ -1564,6 +1565,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "lead_list_enrich",
     "category": "leads",
     "methodName": "enrich"
+  },
+  {
+    "name": "lead_list_enrich_cancel",
+    "category": "leadLists",
+    "methodName": "leadListEnrichCancel"
   },
   {
     "name": "lead_list_enrich_status",
@@ -3409,6 +3415,14 @@ export class LeadsNamespace {
   }
 }
 
+export class LeadListsNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async leadListEnrichCancel(input: LeadListsLeadListEnrichCancel.Input): Promise<LeadListsLeadListEnrichCancel.Output> {
+    return this.callTool('lead_list_enrich_cancel', input) as Promise<LeadListsLeadListEnrichCancel.Output>
+  }
+}
+
 export class LibraryNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3669,6 +3683,7 @@ export class GeneratedMcpToolsClient {
   readonly images: ImagesNamespace
   readonly instagram: InstagramNamespace
   readonly leads: LeadsNamespace
+  readonly leadLists: LeadListsNamespace
   readonly library: LibraryNamespace
   readonly tags: TagsNamespace
   readonly maps: MapsNamespace
@@ -3710,6 +3725,7 @@ export class GeneratedMcpToolsClient {
     this.images = new ImagesNamespace(callTool)
     this.instagram = new InstagramNamespace(callTool)
     this.leads = new LeadsNamespace(callTool)
+    this.leadLists = new LeadListsNamespace(callTool)
     this.library = new LibraryNamespace(callTool)
     this.tags = new TagsNamespace(callTool)
     this.maps = new MapsNamespace(callTool)

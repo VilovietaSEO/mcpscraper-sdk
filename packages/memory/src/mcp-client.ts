@@ -126,12 +126,15 @@ class McpJsonRpcTransport {
             'x-api-key': this.apiKey,
             'content-type': 'application/json',
             accept: 'application/json, text/event-stream',
+            'mcp-protocol-version': '2026-07-28',
+            'mcp-method': method,
+            ...(typeof params?.name === 'string' ? { 'mcp-name': /^[\x20-\x7e]+$/.test(params.name) && params.name === params.name.trim() && !params.name.startsWith('=?base64?') ? params.name : `=?base64?${Buffer.from(params.name, 'utf8').toString('base64')}?=` } : {}),
           },
           body: JSON.stringify({
             jsonrpc: '2.0',
             id: ++this.rpcId,
             method,
-            ...(params ? { params } : {}),
+            params: { ...params, _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28' } },
           }),
           signal: AbortSignal.timeout(this.requestTimeoutMs),
         })

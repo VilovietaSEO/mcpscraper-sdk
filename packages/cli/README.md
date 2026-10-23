@@ -2,7 +2,7 @@
 
 Command-line interface for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP and REST APIs.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.0)
 
 The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every unified MCP tool, including retained-file readers, provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
@@ -191,3 +191,7 @@ shows both paths.
 ## Saved Maps reviews
 
 Server 0.100.1 improves Maps discovery, review text and list collection through the existing interfaces. Use the exact name and location returned by discovery. Read the saved run and its review pages before considering a new acquisition. An explicit resume uses a fresh browser and reopens the profile and reviews; it retains saved review IDs. A new resume key authorizes a separately billed attempt, while repeating that key reads the same run.
+
+## Consistent hosted MCP protocol
+
+This release targets MCP Scraper 0.102.0 with 349 tools. Calls use protocol `2026-07-28` with matching routing headers and request metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import itertools
 import json
 import time
@@ -95,8 +96,12 @@ class McpToolsClient(GeneratedMcpToolsClient):
             "id": next(self._rpc_id),
             "method": method,
         }
-        if params is not None:
-            payload["params"] = params
+        payload["params"] = {**(params or {}), "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28"}}
+        name = (params or {}).get("name")
+        routing_headers = {"mcp-protocol-version": "2026-07-28", "mcp-method": method}
+        if isinstance(name, str):
+            plain = bool(name) and name == name.strip() and all(32 <= ord(c) <= 126 for c in name) and not name.startswith("=?base64?")
+            routing_headers["mcp-name"] = name if plain else "=?base64?" + base64.b64encode(name.encode("utf-8")).decode("ascii") + "?="
         attempts = self._list_retries + 1 if method == "tools/list" else 1
         response = None
         for attempt in range(attempts):
@@ -105,6 +110,7 @@ class McpToolsClient(GeneratedMcpToolsClient):
                     f"{self._base_url}/mcp",
                     headers={
                         **self._client_headers,
+                        **routing_headers,
                         "x-api-key": self._api_key,
                         "content-type": "application/json",
                         "accept": "application/json, text/event-stream",
