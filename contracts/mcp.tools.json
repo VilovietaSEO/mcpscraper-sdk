@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.101.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "4d14bc0958ea71970af5d10b99f97ec23cb076930d9f2ec0faab2e83b6cfcc5b",
-  "toolCount": 348,
+  "generatedFrom": "mcp-scraper 0.102.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "9edd4f03cd5abb59c292def883ac02422f67105a4680d9581e72e4eb924f2c20",
+  "toolCount": 349,
   "tools": [
     {
       "name": "access-accept-share",
@@ -48593,8 +48593,8 @@
           "templateId",
           "archived"
         ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
       "outputSchema": {
         "type": "object",
@@ -77050,7 +77050,6 @@
       "methodName": "createArtifactTemplate",
       "inputSchema": {
         "type": "object",
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
         "oneOf": [
           {
             "type": "object",
@@ -77643,7 +77642,8 @@
             ],
             "additionalProperties": false
           }
-        ]
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
       "outputSchema": {
         "type": "object",
@@ -110944,8 +110944,8 @@
         "required": [
           "templateId"
         ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
       "outputSchema": {
         "type": "object",
@@ -112600,8 +112600,8 @@
         "required": [
           "presetKey"
         ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
       "outputSchema": {
         "type": "object",
@@ -123290,7 +123290,7 @@
     {
       "name": "harvest_paa",
       "title": "Google PAA + SERP Harvest",
-      "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Wait at least 20 seconds before the first durable job or Task check and each later check. Optional SERP modules require include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+      "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Wait at least 20 seconds before the first durable job check and each later check. Optional SERP modules require include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
       "category": "search",
       "methodName": "harvestPaa",
       "inputSchema": {
@@ -133430,7 +133430,7 @@
     {
       "name": "lead_list_enrich",
       "title": "Enrich a Lead List",
-      "description": "Enrich 1–250 mapped business or person rows, supplied inline or by leadListId, with matched public website, phone, email, social, contact-form, and optional associated-person evidence. Use when the list already exists; to inspect a file first use lead_list_import, to discover businesses from a niche plus city use workflow_run with get-leads, and for candidate-only Maps discovery use maps_search. Starts an owner-scoped durable Task, bills underlying Maps/page/SERP attempts with unused hold refunded, and retains requested CSV/XLSX results seven days. Opt-in email snippet recovery costs at most one SERP search per unresolved row. For peopleDiscovery, author one-to-three focused peopleQueryTemplates with one role intent per query; each role query reads AI Overview plus organic results, then at most maxPeoplePerLead company-matched LinkedIn result searches run without opening LinkedIn pages. Public email occurrence is not deliverability or consent verification and is not permission to contact. A public role or LinkedIn occurrence is not verified current employment. Reuse idempotencyKey only to retry the same intended job.",
+      "description": "Enrich 1–250 mapped business or person rows, supplied inline or by leadListId, with matched public website, phone, email, social, contact-form, and optional associated-person evidence. Use when the list already exists; to inspect a file first use lead_list_import, to discover businesses from a niche plus city use workflow_run with get-leads, and for candidate-only Maps discovery use maps_search. Starts an owner-scoped durable job. Poll lead_list_enrich_status with its jobId. Underlying Maps/page/SERP attempts are billed with unused hold refunded; requested CSV/XLSX results are retained seven days. Opt-in email snippet recovery costs at most one SERP search per unresolved row. For peopleDiscovery, author one-to-three focused peopleQueryTemplates with one role intent per query; each role query reads AI Overview plus organic results, then at most maxPeoplePerLead company-matched LinkedIn result searches run without opening LinkedIn pages. Public email occurrence is not deliverability or consent verification and is not permission to contact. A public role or LinkedIn occurrence is not verified current employment. Reuse idempotencyKey only to retry the same intended job.",
       "category": "leads",
       "methodName": "enrich",
       "inputSchema": {
@@ -134411,6 +134411,768 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": true
+      }
+    },
+    {
+      "name": "lead_list_enrich_cancel",
+      "title": "Cancel Lead List Enrichment",
+      "description": "Request cancellation of the original jobId returned by lead_list_enrich. Stops rows that have not started; an in-flight acquisition may finish and retain its cost. Returns current progress and billing; use lead_list_enrich_status to confirm the terminal state. Repeating cancellation does not start or bill another enrichment.",
+      "category": "leadLists",
+      "methodName": "leadListEnrichCancel",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The jobId returned by lead_list_enrich. Poll until status is complete, partial, empty, failed, or cancelled."
+          }
+        },
+        "required": [
+          "jobId"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "jobId": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "queued",
+                  "running",
+                  "complete",
+                  "partial",
+                  "empty",
+                  "failed",
+                  "cancelled"
+                ]
+              },
+              "progress": {
+                "type": "object",
+                "properties": {
+                  "totalRows": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "completedRows": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "failedRows": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "cancelledRows": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "rowsWithContact": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "rowsWithPeople": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "totalRows",
+                  "completedRows",
+                  "failedRows",
+                  "cancelledRows"
+                ],
+                "additionalProperties": false
+              },
+              "billing": {
+                "type": "object",
+                "properties": {
+                  "heldMc": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "finalMc": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "refundMc": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "mapsSearches": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "pageAttempts": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "serpSearches": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "mapsMc": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "pageMc": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "serpMc": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "heldMc",
+                  "finalMc",
+                  "refundMc"
+                ],
+                "additionalProperties": false
+              },
+              "sampleRows": {
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "people": {
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "role": {
+                            "type": "string"
+                          },
+                          "relationship": {
+                            "type": "string",
+                            "enum": [
+                              "owner",
+                              "founder",
+                              "executive",
+                              "manager",
+                              "team_member"
+                            ]
+                          },
+                          "linkedinUrl": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "confidence": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "reasons": {
+                            "maxItems": 10,
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "sources": {
+                            "maxItems": 3,
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "sourceType": {
+                                  "type": "string",
+                                  "enum": [
+                                    "serp_snippet",
+                                    "ai_overview"
+                                  ]
+                                },
+                                "purpose": {
+                                  "type": "string",
+                                  "enum": [
+                                    "role",
+                                    "linkedin"
+                                  ]
+                                },
+                                "sourceUrl": {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                "sourceTitle": {
+                                  "type": "string"
+                                },
+                                "sourcePosition": {
+                                  "type": "integer",
+                                  "minimum": 0,
+                                  "maximum": 9007199254740991
+                                },
+                                "context": {
+                                  "type": "string"
+                                },
+                                "citationUrls": {
+                                  "maxItems": 5,
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "sourceType",
+                                "purpose",
+                                "sourceUrl",
+                                "sourceTitle",
+                                "sourcePosition",
+                                "context"
+                              ],
+                              "additionalProperties": false
+                            }
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "role",
+                          "relationship",
+                          "linkedinUrl",
+                          "confidence",
+                          "reasons",
+                          "sources"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "additionalProperties": {}
+                }
+              },
+              "ambiguousRows": {
+                "maxItems": 10,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "ordinal": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "candidates": {
+                      "maxItems": 3,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "websiteUrl": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "mapsUrl": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "confidence": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                          },
+                          "evidence": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "additionalProperties": {}
+                      }
+                    }
+                  },
+                  "required": [
+                    "ordinal",
+                    "candidates"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "artifacts": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "artifactId": {
+                      "type": "string"
+                    },
+                    "filename": {
+                      "type": "string"
+                    },
+                    "contentType": {
+                      "type": "string"
+                    },
+                    "bytes": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "rowCount": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    "sha256": {
+                      "type": "string"
+                    },
+                    "expiresAt": {
+                      "type": "string"
+                    },
+                    "downloadUrl": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "downloadUrlExpiresAt": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "artifactId",
+                    "filename",
+                    "contentType",
+                    "bytes",
+                    "sha256",
+                    "expiresAt",
+                    "downloadUrl",
+                    "downloadUrlExpiresAt"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "warnings": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              },
+              "completedAt": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "errorCode": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "retryable": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "jobId",
+              "status",
+              "progress",
+              "billing",
+              "sampleRows",
+              "artifacts",
+              "warnings"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Cancel Lead List Enrichment",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
       }
     },
     {
@@ -136898,8 +137660,8 @@
             ]
           }
         },
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
       "outputSchema": {
         "type": "object",
@@ -182131,8 +182893,8 @@
         "required": [
           "templateId"
         ],
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "additionalProperties": false
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
       "outputSchema": {
         "type": "object",

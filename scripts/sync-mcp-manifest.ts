@@ -39,8 +39,10 @@ async function fetchLiveTools(apiKey: string): Promise<ToolSchema[]> {
       'x-api-key': apiKey,
       'content-type': 'application/json',
       accept: 'application/json, text/event-stream',
+      'mcp-protocol-version': '2026-07-28',
+      'mcp-method': 'tools/list',
     },
-    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
+    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: { _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28' } } }),
     signal: AbortSignal.timeout(30_000),
   })
   if (!response.ok) throw new Error(`tools/list failed: ${response.status} ${await response.text()}`)
