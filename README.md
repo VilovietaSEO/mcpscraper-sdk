@@ -170,7 +170,7 @@ curl https://mcpscraper.dev/mcp \
   -H "x-api-key: $MCPSCRAPER_API_KEY" \
   -H "content-type: application/json" \
   -H "accept: application/json, text/event-stream" \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28"},"name":"lead_list_enrich","arguments":{"idempotencyKey":"roofing-dallas-001","source":{"kind":"rows","rows":[{"Business":"White Rock Roofing","City":"Dallas","State":"TX","Website":"https://roofwhiterock.com"}]},"columnMap":{"name":"Business","city":"City","region":"State","websiteUrl":"Website"},"defaultEntityType":"business","emailSearchFallback":"serp_snippets","peopleDiscovery":"owners","peopleQueryTemplates":["{business} owner of company {city} {region}","{business} founder {city} {region}"],"outputFormats":["csv","xlsx"]}}}'
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"curl","version":"1"}},"name":"lead_list_enrich","arguments":{"idempotencyKey":"roofing-dallas-001","source":{"kind":"rows","rows":[{"Business":"White Rock Roofing","City":"Dallas","State":"TX","Website":"https://roofwhiterock.com"}]},"columnMap":{"name":"Business","city":"City","region":"State","websiteUrl":"Website"},"defaultEntityType":"business","emailSearchFallback":"serp_snippets","peopleDiscovery":"owners","peopleQueryTemplates":["{business} owner of company {city} {region}","{business} founder {city} {region}"],"outputFormats":["csv","xlsx"]}}}'
 ```
 </details>
 
@@ -246,7 +246,7 @@ curl https://mcpscraper.dev/mcp \
   -H "x-api-key: $MCPSCRAPER_API_KEY" \
   -H "content-type: application/json" \
   -H "accept: application/json, text/event-stream" \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28"},"name":"archive_read","arguments":{"url":"https://github.com/octocat/Hello-World/archive/refs/heads/master.zip","path":"Hello-World-master/README","depositToLibrary":true}}}'
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"curl","version":"1"}},"name":"archive_read","arguments":{"url":"https://github.com/octocat/Hello-World/archive/refs/heads/master.zip","path":"Hello-World-master/README","depositToLibrary":true}}}'
 ```
 </details>
 

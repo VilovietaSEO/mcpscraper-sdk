@@ -267,7 +267,7 @@ def test_artifact_templates_keep_exact_unified_wire_name_without_scheduling():
     responses.add_callback(responses.POST, BASE_URL, callback=handler, content_type="application/json")
     client = McpToolsClient(api_key="sk_test")
     templates = client.artifacts.list_artifact_templates(status="all")
-    assert captured[0]["params"] == {"name": "list_artifact_templates", "arguments": {"status": "all"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28"}}
+    assert captured[0]["params"] == {"name": "list_artifact_templates", "arguments": {"status": "all"}, "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientCapabilities": {}, "io.modelcontextprotocol/clientInfo": {"name": "mcpscraper-python", "version": "1"}}}
     assert templates.templates == []
     assert not hasattr(client, "schedule")
     assert not hasattr(MemoryClient(api_key="sk_test"), "schedule")

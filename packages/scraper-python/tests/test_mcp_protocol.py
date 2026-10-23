@@ -9,6 +9,8 @@ def test_modern_routing_matches_body_metadata():
     class Session:
         def post(self, url, *, headers, json, timeout):
             assert headers["mcp-protocol-version"] == "2026-07-28"
+            assert json["params"]["_meta"]["io.modelcontextprotocol/clientCapabilities"] == {}
+            assert json["params"]["_meta"]["io.modelcontextprotocol/clientInfo"] == {"name": "mcpscraper-python", "version": "1"}
             assert headers["mcp-method"] == json["method"]
             assert json["params"]["_meta"]["io.modelcontextprotocol/protocolVersion"] == "2026-07-28"
             assert headers.get("mcp-name") == json["params"].get("name")

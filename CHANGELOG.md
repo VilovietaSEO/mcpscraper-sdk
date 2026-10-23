@@ -4,6 +4,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.58.1] - 2026-10-23 — targets mcp-scraper 0.102.1
+
+### Fixed
+
+- Include the required client capabilities and identity alongside the protocol revision in Node, Python, CLI and cURL requests. The 0.58.0 SDK release sent an incomplete envelope and must be upgraded.
+- Release Node scraper 0.58.1, unified Node client 0.57.1, CLI 0.56.1, Python scraper 0.56.1 and unified Python client 0.53.1.
+
+
 ## [0.58.0] - 2026-10-23 — targets mcp-scraper 0.102.0
 
 ### Changed
@@ -886,7 +894,7 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.58.0...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.58.1...HEAD
 [0.56.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.55.1...v0.56.0
 [0.55.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.55.0...v0.55.1
 [0.54.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.53.1...v0.54.0
@@ -912,3 +920,5 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 [0.57.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.56.1...v0.57.0
 
 [0.58.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.57.0...v0.58.0
+
+[0.58.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.58.0...v0.58.1

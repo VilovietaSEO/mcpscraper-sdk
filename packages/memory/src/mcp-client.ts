@@ -134,7 +134,7 @@ class McpJsonRpcTransport {
             jsonrpc: '2.0',
             id: ++this.rpcId,
             method,
-            params: { ...params, _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28' } },
+            params: { ...params, _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientCapabilities': {}, 'io.modelcontextprotocol/clientInfo': { name: 'mcpscraper-sdk', version: '1' } } },
           }),
           signal: AbortSignal.timeout(this.requestTimeoutMs),
         })

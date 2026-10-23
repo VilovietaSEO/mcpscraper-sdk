@@ -3,7 +3,7 @@
 Official TypeScript/JavaScript clients for the unified MCP Scraper catalog. The direct
 Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.0)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.1)
 
 Both `MemoryClient` and `McpToolsClient` call `https://mcpscraper.dev/mcp` with the same MCP Scraper
 API key. No product logic lives in this package.
@@ -130,4 +130,4 @@ Use `bug_reporting` to prepare a redacted draft from observed calls and errors. 
 
 ## Consistent hosted MCP protocol
 
-This release targets MCP Scraper 0.102.0 with 349 tools. Calls use protocol `2026-07-28` with matching routing headers and request metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+This release targets MCP Scraper 0.102.1 with 349 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
