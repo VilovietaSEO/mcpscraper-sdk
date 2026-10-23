@@ -17,3 +17,22 @@ test('unified SDK discovery and calls use matching modern routing and metadata',
   assert.deepEqual(await client.callTool('maps_place_status', { runId: 'existing' }), { ok: true })
   assert.deepEqual(requests.map(r => r.method), ['tools/list', 'tools/call'])
 })
+
+test('the real strict MCP handler accepts SDK discovery and execution', async () => {
+  const { createMcpHandler, McpServer } = await import('@modelcontextprotocol/server')
+  let calls = 0
+  const handler = createMcpHandler(() => {
+    const server = new McpServer({ name: 'strict-protocol-fixture', version: '1' })
+    server.registerTool('receipt_probe', { inputSchema: {} }, async () => {
+      calls++
+      return { content: [{ type: 'text', text: 'accepted' }], structuredContent: { accepted: true } }
+    })
+    return server
+  }, { legacy: 'reject' })
+  try {
+    const client = new McpToolsClient({ apiKey: 'fixture', fetch: (async (url, init) => handler.fetch(new Request(String(url), init))) as typeof fetch })
+    assert.deepEqual((await client.listTools()).map(t => t.name), ['receipt_probe'])
+    assert.deepEqual(await client.callTool('receipt_probe', {}), { accepted: true })
+    assert.equal(calls, 1)
+  } finally { await handler.close() }
+})

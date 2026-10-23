@@ -3,7 +3,7 @@
 Official Python clients for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP catalog.
 The direct Memory manifest remains checked for runtime compatibility.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.0)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.1)
 
 This is a thin JSON-RPC client generated against [`../../contracts/memory.tools.json`](../../contracts/memory.tools.json), the public contract for the hosted API. It contains no product source — only typed request/response plumbing.
 

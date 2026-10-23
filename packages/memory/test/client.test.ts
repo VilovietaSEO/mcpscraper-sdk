@@ -221,10 +221,10 @@ test('durable PAA sends two-page acquisition through one generated job workflow'
   assert.deepEqual(calls, [
     {
       name: 'harvest_paa_start',
-      _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28' },
+      _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientCapabilities': {}, 'io.modelcontextprotocol/clientInfo': { name: 'mcpscraper-sdk', version: '1' } },
       arguments: { query: 'roof repair', pages: 2, maxQuestions: 10, idempotencyKey: 'paa-two-page:test:1' },
     },
-    { name: 'harvest_paa_status', arguments: { jobId: 'paa_job_1' }, _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28' } },
+    { name: 'harvest_paa_status', arguments: { jobId: 'paa_job_1' }, _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientCapabilities': {}, 'io.modelcontextprotocol/clientInfo': { name: 'mcpscraper-sdk', version: '1' } } },
   ])
 })
 

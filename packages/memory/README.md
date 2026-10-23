@@ -3,7 +3,7 @@
 Official TypeScript/JavaScript clients for the unified MCP Scraper catalog. The direct
 Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.0)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.1)
 
 Both `MemoryClient` and `McpToolsClient` call `https://mcpscraper.dev/mcp` with the same MCP Scraper
 API key. No product logic lives in this package.

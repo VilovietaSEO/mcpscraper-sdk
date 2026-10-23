@@ -96,7 +96,7 @@ class McpToolsClient(GeneratedMcpToolsClient):
             "id": next(self._rpc_id),
             "method": method,
         }
-        payload["params"] = {**(params or {}), "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28"}}
+        payload["params"] = {**(params or {}), "_meta": {"io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientCapabilities": {}, "io.modelcontextprotocol/clientInfo": {"name": "mcpscraper-python", "version": "1"}}}
         name = (params or {}).get("name")
         routing_headers = {"mcp-protocol-version": "2026-07-28", "mcp-method": method}
         if isinstance(name, str):

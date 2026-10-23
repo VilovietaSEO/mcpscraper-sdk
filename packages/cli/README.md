@@ -2,7 +2,7 @@
 
 Command-line interface for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP and REST APIs.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.0)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.1)
 
 The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every unified MCP tool, including retained-file readers, provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 

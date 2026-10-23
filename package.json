@@ -38,10 +38,11 @@
     "example:research-crm": "npm run build --workspace=mcpscraper-memory-sdk && node examples/research-crm-governed-workflow.mjs"
   },
   "devDependencies": {
-    "typescript": "^5.6.0",
-    "tsx": "^4.19.0",
+    "@modelcontextprotocol/server": "^2.0.0",
+    "json-schema-to-typescript": "^15.0.4",
     "tsup": "^8.3.0",
-    "json-schema-to-typescript": "^15.0.4"
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
   },
   "overrides": {
     "esbuild": "^0.28.1"

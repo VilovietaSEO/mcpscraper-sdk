@@ -42,7 +42,7 @@ async function fetchLiveTools(apiKey: string): Promise<ToolSchema[]> {
       'mcp-protocol-version': '2026-07-28',
       'mcp-method': 'tools/list',
     },
-    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: { _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28' } } }),
+    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list', params: { _meta: { 'io.modelcontextprotocol/protocolVersion': '2026-07-28', 'io.modelcontextprotocol/clientCapabilities': {}, 'io.modelcontextprotocol/clientInfo': { name: 'sdk-contract-check', version: '1' } } } }),
     signal: AbortSignal.timeout(30_000),
   })
   if (!response.ok) throw new Error(`tools/list failed: ${response.status} ${await response.text()}`)

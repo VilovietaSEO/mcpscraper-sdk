@@ -11,7 +11,7 @@ curl --retry 3 --retry-all-errors --retry-delay 1 https://mcpscraper.dev/mcp \
   -H "x-api-key: $MCP_SCRAPER_API_KEY" \
   -H "content-type: application/json" \
   -H "accept: application/json, text/event-stream" \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}'
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"curl","version":"1"}}}}'
 ```
 
 ## Call any tool
@@ -23,7 +23,7 @@ TOOL_NAME="memory-search"
 TOOL_ARGS='{"query":"vault routing"}'
 
 jq -n --arg name "$TOOL_NAME" --argjson args "$TOOL_ARGS" \
-  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}' \
+  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"curl","version":"1"}}}}' \
   | curl https://mcpscraper.dev/mcp \
       -H "mcp-protocol-version: 2026-07-28" \
       -H "mcp-method: tools/call" \
@@ -40,7 +40,7 @@ Fetch a bounded Gmail, Google Calendar, Google Search Console, Zoom, Meta Market
 
 ```bash
 jq -n --arg connectionId "$CONNECTION_ID" \
-  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"},name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \
+  '{jsonrpc:"2.0",id:1,method:"tools/call",params:{_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"curl","version":"1"}},name:"export_connected_service_data",arguments:{connectionId:$connectionId,dataset:"emails",lastDays:7}}}' \
   | curl https://mcpscraper.dev/mcp \
       -H "mcp-protocol-version: 2026-07-28" \
       -H "mcp-method: tools/call" \
@@ -65,7 +65,7 @@ QUERY='has:attachment newer_than:30d'
 
 call_tool() {
   jq -n --arg name "$1" --argjson args "$2" \
-    '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28"}}}' \
+    '{jsonrpc:"2.0",id:1,method:"tools/call",params:{name:$name,arguments:$args,_meta:{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"curl","version":"1"}}}}' \
   | curl -sS https://mcpscraper.dev/mcp \
       -H "mcp-protocol-version: 2026-07-28" \
       -H "mcp-method: tools/call" \
