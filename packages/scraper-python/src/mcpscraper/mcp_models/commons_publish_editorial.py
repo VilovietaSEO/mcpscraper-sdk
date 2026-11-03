@@ -72,6 +72,7 @@ CommonsPublishEditorialInputArticlesItem.__pydantic_config__ = ConfigDict(extra=
 class CommonsPublishEditorialInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
+    mode: Union[Literal['merge', 'replace'], None] = Field(None, alias='mode', description='Merge preserves articles omitted from the payload; replace removes omitted articles from the current edition.')
     publication_subdomain: Annotated[str, Field(min_length=3, max_length=50)] = Field(..., alias='publicationSubdomain', description='Publication owned by the authenticated account.')
     edition_slug: Union[Annotated[str, Field(max_length=80)], None] = Field(None, alias='editionSlug', description='Stable public edition slug. Defaults to site.slug.')
     idempotency_key: Annotated[str, Field(min_length=8, max_length=200)] = Field(..., alias='idempotencyKey', description='Unique key for this intended publish. Reuse it only when retrying the same revision.')

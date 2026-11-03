@@ -1,4 +1,4 @@
-# All 349 MCP tools with cURL
+# All 352 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -92,7 +92,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (349)
+## Complete catalog (352)
 
 ## access
 
@@ -322,6 +322,8 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 ## commons
 
 - `commons_claim_publication` — Claim Transparent Commons Publication
+- `commons_delete_editorial_article` — Delete One Transparent Commons Article
+- `commons_delete_publication` — Delete Transparent Commons Publication
 - `commons_get_entity` — Transparent Commons Entity Lookup
 - `commons_get_entity_ledger` — Transparent Commons Contribution Ledger
 - `commons_get_entity_linkset` — Transparent Commons RFC 9264 Linkset
@@ -330,6 +332,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `commons_host_image` — Host a Transparent Commons Image
 - `commons_list_filters` — Transparent Commons List Saved Filters
 - `commons_list_needs_links` — Transparent Commons Needs-Link Backlog
+- `commons_list_publications` — List Transparent Commons Publications
 - `commons_prepare_entity` — Transparent Commons Prepare Entity
 - `commons_prepare_publication` — Prepare Transparent Commons Publication
 - `commons_publish_editorial` — Publish Transparent Commons Editorial Edition

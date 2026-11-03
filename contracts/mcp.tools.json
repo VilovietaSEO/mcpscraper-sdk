@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.102.1 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "9edd4f03cd5abb59c292def883ac02422f67105a4680d9581e72e4eb924f2c20",
-  "toolCount": 349,
+  "generatedFrom": "mcp-scraper 0.103.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "108fc27219c64f0630a91c4727ec07dfea4317fab7be9a5b0d79e370da46fe2d",
+  "toolCount": 352,
   "tools": [
     {
       "name": "access-accept-share",
@@ -67541,7 +67541,7 @@
     {
       "name": "commons_claim_publication",
       "title": "Claim Transparent Commons Publication",
-      "description": "Permanently claim one globally unique publication subdomain for the authenticated MCP Scraper account. Call commons_prepare_publication and commons_validate_publication first. This creates public identity state but does not publish an edition. Requires an idempotencyKey; retries with the same intended claim are safe.",
+      "description": "Claim another globally unique publication subdomain for the authenticated MCP Scraper account. Call commons_prepare_publication and commons_validate_publication first. This creates public identity state but does not publish an edition. Requires an idempotencyKey; retries with the same intended claim are safe.",
       "category": "commons",
       "methodName": "claimPublication",
       "inputSchema": {
@@ -67551,7 +67551,7 @@
             "type": "string",
             "minLength": 3,
             "maxLength": 50,
-            "description": "Requested publication name under transparent-commons.cc. The server normalizes spaces to hyphens, rejects reserved names, and enforces one globally unique name per account."
+            "description": "Requested publication name under transparent-commons.cc. The server normalizes spaces to hyphens, rejects reserved names, and keeps names globally unique; accounts may own multiple names."
           },
           "title": {
             "description": "Reader-facing publication title. Omit to derive it from the chosen subdomain.",
@@ -67886,6 +67886,746 @@
         "title": "Claim Transparent Commons Publication",
         "readOnlyHint": false,
         "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "commons_delete_editorial_article",
+      "title": "Delete One Transparent Commons Article",
+      "description": "Remove one article from the current edition while preserving every other article and edition metadata. Publishes a new revision; older stored revisions remain private. Deleting the last article withdraws that edition and deletes its stored history while preserving other editions. Use commons_delete_publication to remove all publication content. Requires current edition baseRevision and an idempotencyKey reused only for exact retries.",
+      "category": "commons",
+      "methodName": "deleteEditorialArticle",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "publicationSubdomain": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 50,
+            "description": "Caller-owned publication containing the article."
+          },
+          "editionSlug": {
+            "description": "Edition holding the article. Defaults to the publication’s latest edition.",
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "articleSlug": {
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "description": "Slug of the article to delete; other articles are preserved."
+          },
+          "baseRevision": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Current edition revision from commons_get_publication; stale deletes are rejected."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200,
+            "description": "Unique key for this deletion; reuse only for an exact retry."
+          }
+        },
+        "required": [
+          "publicationSubdomain",
+          "articleSlug",
+          "baseRevision",
+          "idempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              },
+              "data": {},
+              "error": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Delete One Transparent Commons Article",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "commons_delete_publication",
+      "title": "Delete Transparent Commons Publication",
+      "description": "Permanently delete all stored editions and rendered content of a caller-owned publication and remove it from public serving. The subdomain stays reserved to its owner and is not reusable. A minimal ownership and operation receipt is retained indefinitely. Requires the publication baseRevision and an idempotencyKey reused only for exact retries. For one article use commons_delete_editorial_article.",
+      "category": "commons",
+      "methodName": "deletePublication",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "publicationSubdomain": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 50,
+            "description": "Caller-owned publication whose stored editions will all be deleted."
+          },
+          "baseRevision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "description": "Publication revision from commons_get_publication, not an edition revision."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200,
+            "description": "Unique key for this deletion; reuse only for an exact retry."
+          }
+        },
+        "required": [
+          "publicationSubdomain",
+          "baseRevision",
+          "idempotencyKey"
+        ],
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "deleted": {
+                    "type": "boolean",
+                    "const": true
+                  },
+                  "subdomain": {
+                    "type": "string"
+                  },
+                  "nameReserved": {
+                    "type": "boolean",
+                    "const": true
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "idempotentReplay": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "deleted",
+                  "subdomain",
+                  "nameReserved",
+                  "revision",
+                  "idempotentReplay"
+                ],
+                "additionalProperties": false
+              },
+              "error": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Delete Transparent Commons Publication",
+        "readOnlyHint": false,
+        "destructiveHint": true,
         "idempotentHint": true,
         "openWorldHint": true
       }
@@ -69234,21 +69974,33 @@
     {
       "name": "commons_get_publication",
       "title": "Get Transparent Commons Publication",
-      "description": "Read a Transparent Commons publication and its latest edition revisions. Omit subdomain to inspect the caller-owned publication; pass a name to inspect a public publication. Returns the permanent public and archive URLs needed for sharing or later edits. Set includeArticles to also return every stored article’s Markdown source and slug, which is what commons_update_editorial_article edits — the payload is large, so request it only when you intend to edit.",
+      "description": "Read a Transparent Commons publication and its latest edition revisions. Select a subdomain; omission works only for accounts with exactly one publication. Named public reads omit sources; authenticated owners may include them. Returns the permanent public and archive URLs needed for sharing or later edits. Set includeArticles to also return every stored article’s Markdown source and slug, which is what commons_update_editorial_article edits — the payload is large, so request it only when you intend to edit.",
       "category": "commons",
       "methodName": "getPublication",
       "inputSchema": {
         "type": "object",
         "properties": {
           "includeArticles": {
-            "description": "Return every stored article’s Markdown source alongside each edition. Large payload; request it only when you intend to edit an article. Owner-only: a publication read by name never returns sources.",
+            "description": "Return every stored article’s Markdown source alongside each edition. Large payload; request it only when you intend to edit an article. Sources require an authenticated owner read, including when selecting by subdomain.",
             "type": "boolean"
           },
           "subdomain": {
-            "description": "Public publication name to inspect. Omit to return the publication owned by the authenticated account.",
+            "description": "Public publication name to inspect. Omit only when the account owns exactly one publication; otherwise list and select a subdomain.",
             "type": "string",
             "minLength": 3,
             "maxLength": 50
+          },
+          "editionSlug": {
+            "description": "Restrict edition results to this slug.",
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "articleSlug": {
+            "description": "Restrict article source results to this slug; requires includeArticles.",
+            "type": "string",
+            "maxLength": 80,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           },
           "includeEditions": {
             "default": true,
@@ -70735,6 +71487,431 @@
       }
     },
     {
+      "name": "commons_list_publications",
+      "title": "List Transparent Commons Publications",
+      "description": "List the authenticated account’s publication subdomains and revision numbers without fetching article bodies. Follow nextCursor using after for more results. Deleted publications are excluded; use commons_get_publication to read a selected publication.",
+      "category": "commons",
+      "methodName": "listPublications",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "default": 25,
+            "description": "Maximum number of owned publications to return.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "after": {
+            "description": "nextCursor from the preceding page; omit for the first page.",
+            "type": "string",
+            "maxLength": 50
+          }
+        },
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              },
+              "data": {
+                "type": "object",
+                "properties": {
+                  "publications": {
+                    "maxItems": 100,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "ownerUserId": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "subdomain": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "revision": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "latestEditionId": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        },
+                        "publicUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "archiveUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "ownerUserId",
+                        "subdomain",
+                        "title",
+                        "description",
+                        "revision",
+                        "latestEditionId",
+                        "createdAt",
+                        "updatedAt",
+                        "publicUrl",
+                        "archiveUrl"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "nextCursor": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "publications",
+                  "nextCursor"
+                ],
+                "additionalProperties": false
+              },
+              "error": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ok"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "List Transparent Commons Publications",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
       "name": "commons_prepare_entity",
       "title": "Transparent Commons Prepare Entity",
       "description": "Memory-style planning pass for a Transparent Commons public wiki entity. Returns the live entity profile contract, recommended and optional sections, duplicate candidates, tag/keyword reuse guidance, heading diagnostics, and instructions. This is read-only and should be called before composing or submitting normal Commons writes.",
@@ -71274,7 +72451,7 @@
     {
       "name": "commons_prepare_publication",
       "title": "Prepare Transparent Commons Publication",
-      "description": "Check and normalize a subscriber-chosen Transparent Commons publication name before any write. Returns name availability, the caller's existing publication, permanent URL shape, ownership rules, and the required validate/claim/publish workflow. This is for a user-owned editorial publication, not a neutral /wiki/ entity.",
+      "description": "Check and normalize a subscriber-chosen Transparent Commons publication name before any write. Returns name availability, the requested publication ownership, permanent URL shape, ownership rules, and the required validate/claim/publish workflow. This is for a user-owned editorial publication, not a neutral /wiki/ entity.",
       "category": "commons",
       "methodName": "preparePublication",
       "inputSchema": {
@@ -71284,7 +72461,7 @@
             "type": "string",
             "minLength": 3,
             "maxLength": 50,
-            "description": "Requested publication name under transparent-commons.cc. The server normalizes spaces to hyphens, rejects reserved names, and enforces one globally unique name per account."
+            "description": "Requested publication name under transparent-commons.cc. The server normalizes spaces to hyphens, rejects reserved names, and keeps names globally unique; accounts may own multiple names."
           },
           "title": {
             "description": "Reader-facing publication title. Omit to derive it from the chosen subdomain.",
@@ -71619,12 +72796,21 @@
     {
       "name": "commons_publish_editorial",
       "title": "Publish Transparent Commons Editorial Edition",
-      "description": "Publish up to 100 fully authored editorial pieces, including optional article/card images, Markdown body images, and collection/article Open Graph images, to the caller-owned Transparent Commons subdomain. The calling AI must research and author the source-grounded edition first; image URLs need alt text and preserved provenance/rights context. The tool validates, renders, persists, and returns permanent root, archive, and edition URLs. Existing editions require current baseRevision. Requires idempotencyKey; this is not the neutral wiki write tool.",
+      "description": "Publish up to 100 fully authored editorial pieces, including optional article/card images, Markdown body images, and collection/article Open Graph images, to the caller-owned Transparent Commons subdomain. The calling AI must research and author the source-grounded edition first; image URLs need alt text and preserved provenance/rights context. Merge mode preserves omitted articles. Explicit replace mode removes omitted articles from the current edition. Earlier revisions remain stored privately. The tool returns public and archive URLs. Existing editions require current baseRevision. Requires idempotencyKey; this is not the neutral wiki write tool.",
       "category": "commons",
       "methodName": "publishEditorial",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "mode": {
+            "default": "merge",
+            "description": "Merge preserves articles omitted from the payload; replace removes omitted articles from the current edition.",
+            "type": "string",
+            "enum": [
+              "merge",
+              "replace"
+            ]
+          },
           "publicationSubdomain": {
             "type": "string",
             "minLength": 3,
@@ -72271,7 +73457,7 @@
       "annotations": {
         "title": "Publish Transparent Commons Editorial Edition",
         "readOnlyHint": false,
-        "destructiveHint": false,
+        "destructiveHint": true,
         "idempotentHint": true,
         "openWorldHint": true
       }
@@ -74295,12 +75481,169 @@
     {
       "name": "commons_update_editorial_article",
       "title": "Edit One Transparent Commons Article",
-      "description": "Replace the Markdown of one article in a published edition without resupplying the others: it reads the stored sources, swaps the article you name, and publishes the next revision with the rest byte-identical. Read commons_get_publication with includeArticles first for the current source and revision. commons_publish_editorial is the full-replace path. Requires baseRevision and idempotencyKey.",
+      "description": "Replace the Markdown of one article in a published edition without resupplying the others: it reads the stored sources, swaps the article you name, and publishes the next revision with the rest byte-identical. Read commons_get_publication with includeArticles first for the current source and revision. Use commons_publish_editorial with mode:replace for an intentional full-edition replacement. Omitted fields stay unchanged; null clears optional fields. Requires baseRevision and idempotencyKey.",
       "category": "commons",
       "methodName": "updateEditorialArticle",
       "inputSchema": {
         "type": "object",
         "properties": {
+          "sourceLabel": {
+            "description": "Replacement provenance label; omitted fields are preserved.",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "sourceType": {
+            "description": "Replacement source class; null clears it.",
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revision": {
+            "description": "Replacement article revision label; null clears it.",
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "updatedAt": {
+            "description": "Replacement source update label; null clears it.",
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "image": {
+            "description": "Replacement card and article image; null clears it.",
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Public HTTP(S) image URL."
+                  },
+                  "alt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Required accessible description of the image."
+                  },
+                  "caption": {
+                    "description": "Optional visible caption.",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "credit": {
+                    "description": "Optional visible creator, publisher, or rights credit.",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "sourceUrl": {
+                    "description": "Optional public HTTP(S) source page for provenance or rights context.",
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "width": {
+                    "description": "Optional intrinsic width in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "height": {
+                    "description": "Optional intrinsic height in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "url",
+                  "alt"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ogImage": {
+            "description": "Replacement social image; null clears it.",
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Public HTTP(S) image URL."
+                  },
+                  "alt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "description": "Required accessible description of the image."
+                  },
+                  "caption": {
+                    "description": "Optional visible caption.",
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "credit": {
+                    "description": "Optional visible creator, publisher, or rights credit.",
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "sourceUrl": {
+                    "description": "Optional public HTTP(S) source page for provenance or rights context.",
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "width": {
+                    "description": "Optional intrinsic width in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "height": {
+                    "description": "Optional intrinsic height in pixels.",
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "url",
+                  "alt"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "publicationSubdomain": {
             "type": "string",
             "minLength": 3,
@@ -75948,6 +77291,15 @@
       "inputSchema": {
         "type": "object",
         "properties": {
+          "mode": {
+            "default": "merge",
+            "description": "Merge preserves articles omitted from the payload; replace removes omitted articles from the current edition.",
+            "type": "string",
+            "enum": [
+              "merge",
+              "replace"
+            ]
+          },
           "operation": {
             "type": "string",
             "enum": [

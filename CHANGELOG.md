@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.59.0] - 2026-11-03 — targets mcp-scraper 0.103.0
+
+### Added
+
+- Typed publication listing and article/publication deletion in Node, Python, CLI, and cURL, generated from the complete 352-tool server contract.
+
+### Changed
+
+- Support multiple publication subdomains, authenticated owner source reads, content-preserving edits, and explicit full replacement. Use edition revisions for article changes and publication revisions for full deletion; preserve retry keys for exact retries.
+- Release Node scraper 0.59.0, unified Node client 0.58.0, CLI 0.57.0, Python scraper 0.57.0, and unified Python client 0.54.0. Both unified clients embed the full publication contract.
+
 ## [0.58.1] - 2026-10-23 — targets mcp-scraper 0.102.1
 
 ### Fixed

@@ -6,8 +6,10 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class CommonsGetPublicationInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    include_articles: Union[bool, None] = Field(None, alias='includeArticles', description='Return every stored article’s Markdown source alongside each edition. Large payload; request it only when you intend to edit an article. Owner-only: a publication read by name never returns sources.')
-    subdomain: Union[Annotated[str, Field(min_length=3, max_length=50)], None] = Field(None, alias='subdomain', description='Public publication name to inspect. Omit to return the publication owned by the authenticated account.')
+    include_articles: Union[bool, None] = Field(None, alias='includeArticles', description='Return every stored article’s Markdown source alongside each edition. Large payload; request it only when you intend to edit an article. Sources require an authenticated owner read, including when selecting by subdomain.')
+    subdomain: Union[Annotated[str, Field(min_length=3, max_length=50)], None] = Field(None, alias='subdomain', description='Public publication name to inspect. Omit only when the account owns exactly one publication; otherwise list and select a subdomain.')
+    edition_slug: Union[Annotated[str, Field(max_length=80)], None] = Field(None, alias='editionSlug', description='Restrict edition results to this slug.')
+    article_slug: Union[Annotated[str, Field(max_length=80)], None] = Field(None, alias='articleSlug', description='Restrict article source results to this slug; requires includeArticles.')
     include_editions: Union[bool, None] = Field(None, alias='includeEditions', description='Include the latest revision of every published edition.')
 
 

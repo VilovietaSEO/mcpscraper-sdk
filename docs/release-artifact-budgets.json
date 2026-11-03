@@ -1,49 +1,41 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "basis": "Previous official registry artifacts plus bounded headroom for one additional governed Bug Reporting tool and REST models. Public source models add one tool file per Python package; maps and bundled dependencies remain prohibited.",
-    "source": "Official npm and PyPI archives fetched and SHA-256 recorded on 2026-10-21 UTC",
+    "basis": "Exact latest public registry artifacts, with 15 percent plus small metadata allowance for three new tools and refreshed schemas; Python permits three new tool model files.",
+    "source": "Official registry archives downloaded 2026-11-03",
     "failClosed": true
   },
   "artifacts": [
     {
-      "package": "mcpscraper-sdk",
+      "package": "mcp-scraper",
       "format": "npm-tgz",
-      "candidateVersion": "0.57.0",
-      "baseline": {
-        "version": "0.55.0",
-        "sha256": "237a19478f458c4047de118e6d5c8d3aab617fa5bdcd202fc1f5774fa94f8c7f",
-        "compressedBytes": 68276,
-        "unpackedBytes": 459568,
-        "fileCount": 6,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.55.0.tgz"
-      },
-      "intendedChange": "Add one Bug Reporting tool with reviewed draft, receipt and free support workflow; regenerate complete MCP and REST projections.",
+      "baselineVersion": "0.102.6",
+      "candidateVersion": "0.103.0",
+      "sha256": "4f1e63b8cb0565e3f8bbc33b71dcf28468b570dff0a634429fbcb1e4781bdf64",
+      "compressedBytes": 30908,
+      "unpackedBytes": 101077,
+      "fileCount": 14,
       "maximum": {
-        "compressedBytes": 82443,
-        "unpackedBytes": 554929,
-        "fileCount": 6,
+        "compressedBytes": 40544,
+        "unpackedBytes": 126238,
+        "fileCount": 14,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
     },
     {
-      "package": "mcpscraper-memory-sdk",
+      "package": "mcpscraper-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.56.0",
-      "baseline": {
-        "version": "0.54.1",
-        "sha256": "9fe706a4b72e36f3d1dd01885f4ddf517e0023a15de047c6c6e306294fc1d1d8",
-        "compressedBytes": 284682,
-        "unpackedBytes": 10390477,
-        "fileCount": 5,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.54.1.tgz"
-      },
-      "intendedChange": "Add one Bug Reporting tool with reviewed draft, receipt and free support workflow; regenerate complete MCP and REST projections.",
+      "baselineVersion": "0.58.1",
+      "candidateVersion": "0.59.0",
+      "sha256": "5772064005d169445fecb2bc1e123643d489a5b177c5eb472a94594fac35ce2e",
+      "compressedBytes": 74385,
+      "unpackedBytes": 495895,
+      "fileCount": 6,
       "maximum": {
-        "compressedBytes": 343754,
-        "unpackedBytes": 12546501,
-        "fileCount": 5,
+        "compressedBytes": 90542,
+        "unpackedBytes": 580279,
+        "fileCount": 6,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -51,19 +43,15 @@
     {
       "package": "mcpscraper-cli",
       "format": "npm-tgz",
-      "candidateVersion": "0.55.0",
-      "baseline": {
-        "version": "0.53.1",
-        "sha256": "f169d4951d432f617aa9c37fea5216dd52e9da5371a07e188df409df8382169d",
-        "compressedBytes": 154189,
-        "unpackedBytes": 1086042,
-        "fileCount": 3,
-        "archiveUrl": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.53.1.tgz"
-      },
-      "intendedChange": "Add one Bug Reporting tool with reviewed draft, receipt and free support workflow; regenerate complete MCP and REST projections.",
+      "baselineVersion": "0.56.1",
+      "candidateVersion": "0.57.0",
+      "sha256": "4485e534264ed1807668c66ac626cc67db869d904c7ee141bd06222c9bac85db",
+      "compressedBytes": 157130,
+      "unpackedBytes": 1102760,
+      "fileCount": 3,
       "maximum": {
-        "compressedBytes": 186183,
-        "unpackedBytes": 1311396,
+        "compressedBytes": 185699,
+        "unpackedBytes": 1278174,
         "fileCount": 3,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
@@ -72,19 +60,16 @@
     {
       "package": "mcpscraper-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.55.0",
-      "baseline": {
-        "version": "0.54.0",
-        "sha256": "944c58fa4641fd6e3f204904be8c9acbe2d76aea9fa3dc60ce63745093188337",
-        "compressedBytes": 721595,
-        "unpackedBytes": 3365821,
-        "fileCount": 358
-      },
-      "intendedChange": "Add one Bug Reporting tool with reviewed draft, receipt and free support workflow; regenerate complete MCP and REST projections.",
+      "baselineVersion": "0.56.1",
+      "candidateVersion": "0.57.0",
+      "sha256": "2c8a7315de9ac8a342819d2f1be0d79b727db783e957f474ed1028cd1076840c",
+      "compressedBytes": 729402,
+      "unpackedBytes": 3404779,
+      "fileCount": 360,
       "maximum": {
-        "compressedBytes": 871326,
-        "unpackedBytes": 4064229,
-        "fileCount": 359,
+        "compressedBytes": 843812,
+        "unpackedBytes": 3925495,
+        "fileCount": 363,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -92,19 +77,33 @@
     {
       "package": "mcpscraper-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.55.0",
-      "baseline": {
-        "version": "0.54.0",
-        "sha256": "a199b542871f0de5b74ddc2b7a7303a037d14567617fd5f5f7138db8fc5edd6f",
-        "compressedBytes": 285807,
-        "unpackedBytes": 3342368,
-        "fileCount": 358
-      },
-      "intendedChange": "Add one Bug Reporting tool with reviewed draft, receipt and free support workflow; regenerate complete MCP and REST projections.",
+      "baselineVersion": "0.56.1",
+      "candidateVersion": "0.57.0",
+      "sha256": "ffc29d020289000cb048e947d4611a602b4d3ed672792baf8967eb0ff27bb57b",
+      "compressedBytes": 291048,
+      "unpackedBytes": 3382154,
+      "fileCount": 360,
       "maximum": {
-        "compressedBytes": 345112,
-        "unpackedBytes": 4035910,
-        "fileCount": 359,
+        "compressedBytes": 339705,
+        "unpackedBytes": 3899477,
+        "fileCount": 363,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
+      }
+    },
+    {
+      "package": "mcpscraper-memory-sdk",
+      "format": "npm-tgz",
+      "baselineVersion": "0.57.1",
+      "candidateVersion": "0.58.0",
+      "sha256": "2e11282053762644fc378c8f8e7b317387600b6f3947ed1e92bae58fd749e91d",
+      "compressedBytes": 303095,
+      "unpackedBytes": 12415092,
+      "fileCount": 5,
+      "maximum": {
+        "compressedBytes": 353559,
+        "unpackedBytes": 14287355,
+        "fileCount": 5,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -112,19 +111,16 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.52.0",
-      "baseline": {
-        "version": "0.51.0",
-        "sha256": "deeb49eebd0c8a421e16128c839cd91784ad25f05517e2bcefd9e9b3f5102d19",
-        "compressedBytes": 894862,
-        "unpackedBytes": 3717645,
-        "fileCount": 585
-      },
-      "intendedChange": "Add one Bug Reporting tool with reviewed draft, receipt and free support workflow; regenerate complete MCP and REST projections.",
+      "baselineVersion": "0.53.1",
+      "candidateVersion": "0.54.0",
+      "sha256": "7bc4c7023a8018fee1bfc5df0c53601f987557ce896553315d00b1778af3a9d0",
+      "compressedBytes": 900309,
+      "unpackedBytes": 3743480,
+      "fileCount": 587,
       "maximum": {
-        "compressedBytes": 1080546,
-        "unpackedBytes": 4489057,
-        "fileCount": 586,
+        "compressedBytes": 1040355,
+        "unpackedBytes": 4315002,
+        "fileCount": 590,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -132,19 +128,16 @@
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.52.0",
-      "baseline": {
-        "version": "0.51.0",
-        "sha256": "c1ad9880a37a4019d76203c2b122cc6b8c6c3006ffb030f75016bd6bbe0bb58b",
-        "compressedBytes": 321990,
-        "unpackedBytes": 3661550,
-        "fileCount": 585
-      },
-      "intendedChange": "Add one Bug Reporting tool with reviewed draft, receipt and free support workflow; regenerate complete MCP and REST projections.",
+      "baselineVersion": "0.53.1",
+      "candidateVersion": "0.54.0",
+      "sha256": "d885c1842a15e9a28b49bba35c9f76650efc0ae05b53c875de231796cc663711",
+      "compressedBytes": 324767,
+      "unpackedBytes": 3688199,
+      "fileCount": 587,
       "maximum": {
-        "compressedBytes": 388803,
-        "unpackedBytes": 4421322,
-        "fileCount": 586,
+        "compressedBytes": 378482,
+        "unpackedBytes": 4251428,
+        "fileCount": 590,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }

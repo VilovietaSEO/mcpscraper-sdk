@@ -860,3 +860,5 @@ Maintainer publishing credentials and registry checks: [`docs/release-publishing
 ### Facebook Reel inventory
 
 Run `MCP_SCRAPER_API_KEY=... FACEBOOK_PROFILE_URL=https://www.facebook.com/your-page node examples/facebook-reels.mjs` after the corresponding server release. The new `client.tools.facebook.reelsInventory` method returns public Reel URLs and explicit partial-result status; select a returned URL for `client.tools.facebook.videoTranscribe`. Anonymous scans return at most 60 URLs and may return fewer.
+
+Publication management: list owned subdomains with `commons_list_publications`, select a name with `commons_get_publication`, and edit one article with `commons_update_editorial_article`. Publishing merges omitted articles by default; use `mode:replace` for a full replacement. Use the dedicated article or publication delete tool with its current revision and a stable retry key. See the [release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0).

@@ -1,5 +1,9 @@
 export interface Input {
   /**
+   * Merge preserves articles omitted from the payload; replace removes omitted articles from the current edition.
+   */
+  mode?: "merge" | "replace";
+  /**
    * Publication owned by the authenticated account.
    */
   publicationSubdomain: string;

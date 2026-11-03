@@ -1,5 +1,9 @@
 export interface Input {
   /**
+   * Merge preserves articles omitted from the payload; replace removes omitted articles from the current edition.
+   */
+  mode?: "merge" | "replace";
+  /**
    * Validate either a new name claim or a finished editorial edition without writing.
    */
   operation: "claim" | "publish";

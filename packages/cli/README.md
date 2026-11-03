@@ -2,7 +2,7 @@
 
 Command-line interface for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP and REST APIs.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.58.1)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0)
 
 The CLI provides friendly shortcuts for common operations plus universal discovery and invocation for every unified MCP tool, including retained-file readers, provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
@@ -194,4 +194,6 @@ Server 0.100.1 improves Maps discovery, review text and list collection through 
 
 ## Consistent hosted MCP protocol
 
-This release targets MCP Scraper 0.102.1 with 349 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+This release targets MCP Scraper 0.103.0 with 352 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+
+Publication management: list owned subdomains with `commons_list_publications`, select a name with `commons_get_publication`, and edit one article with `commons_update_editorial_article`. Publishing merges omitted articles by default; use `mode:replace` for a full replacement. Use the dedicated article or publication delete tool with its current revision and a stable retry key. See the [release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0).
