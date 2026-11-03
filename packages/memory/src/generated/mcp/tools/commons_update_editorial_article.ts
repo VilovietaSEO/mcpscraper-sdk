@@ -1,5 +1,87 @@
 export interface Input {
   /**
+   * Replacement provenance label; omitted fields are preserved.
+   */
+  sourceLabel?: string;
+  /**
+   * Replacement source class; null clears it.
+   */
+  sourceType?: string | null;
+  /**
+   * Replacement article revision label; null clears it.
+   */
+  revision?: string | null;
+  /**
+   * Replacement source update label; null clears it.
+   */
+  updatedAt?: string | null;
+  /**
+   * Replacement card and article image; null clears it.
+   */
+  image?: {
+    /**
+     * Public HTTP(S) image URL.
+     */
+    url: string;
+    /**
+     * Required accessible description of the image.
+     */
+    alt: string;
+    /**
+     * Optional visible caption.
+     */
+    caption?: string;
+    /**
+     * Optional visible creator, publisher, or rights credit.
+     */
+    credit?: string;
+    /**
+     * Optional public HTTP(S) source page for provenance or rights context.
+     */
+    sourceUrl?: string;
+    /**
+     * Optional intrinsic width in pixels.
+     */
+    width?: number;
+    /**
+     * Optional intrinsic height in pixels.
+     */
+    height?: number;
+  } | null;
+  /**
+   * Replacement social image; null clears it.
+   */
+  ogImage?: {
+    /**
+     * Public HTTP(S) image URL.
+     */
+    url: string;
+    /**
+     * Required accessible description of the image.
+     */
+    alt: string;
+    /**
+     * Optional visible caption.
+     */
+    caption?: string;
+    /**
+     * Optional visible creator, publisher, or rights credit.
+     */
+    credit?: string;
+    /**
+     * Optional public HTTP(S) source page for provenance or rights context.
+     */
+    sourceUrl?: string;
+    /**
+     * Optional intrinsic width in pixels.
+     */
+    width?: number;
+    /**
+     * Optional intrinsic height in pixels.
+     */
+    height?: number;
+  } | null;
+  /**
    * Publication owned by the authenticated account.
    */
   publicationSubdomain: string;

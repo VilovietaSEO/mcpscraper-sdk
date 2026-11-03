@@ -81,6 +81,7 @@ CommonsValidatePublicationInputEdition.__pydantic_config__ = ConfigDict(extra="a
 class CommonsValidatePublicationInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
+    mode: Union[Literal['merge', 'replace'], None] = Field(None, alias='mode', description='Merge preserves articles omitted from the payload; replace removes omitted articles from the current edition.')
     operation: Literal['claim', 'publish'] = Field(..., alias='operation', description='Validate either a new name claim or a finished editorial edition without writing.')
     requested_subdomain: Union[Annotated[str, Field(min_length=3, max_length=50)], None] = Field(None, alias='requestedSubdomain', description='Publication name to validate when operation is claim.')
     publication_subdomain: Union[Annotated[str, Field(min_length=3, max_length=50)], None] = Field(None, alias='publicationSubdomain', description='Already claimed publication name to validate when operation is publish.')

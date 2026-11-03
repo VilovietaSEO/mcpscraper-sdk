@@ -196,6 +196,8 @@ import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as CommonsClaimPublication from './tools/commons_claim_publication.js'
+import * as CommonsDeleteEditorialArticle from './tools/commons_delete_editorial_article.js'
+import * as CommonsDeletePublication from './tools/commons_delete_publication.js'
 import * as CommonsGetEntity from './tools/commons_get_entity.js'
 import * as CommonsGetEntityLedger from './tools/commons_get_entity_ledger.js'
 import * as CommonsGetEntityLinkset from './tools/commons_get_entity_linkset.js'
@@ -204,6 +206,7 @@ import * as CommonsGetPublication from './tools/commons_get_publication.js'
 import * as CommonsHostImage from './tools/commons_host_image.js'
 import * as CommonsListFilters from './tools/commons_list_filters.js'
 import * as CommonsListNeedsLinks from './tools/commons_list_needs_links.js'
+import * as CommonsListPublications from './tools/commons_list_publications.js'
 import * as CommonsPrepareEntity from './tools/commons_prepare_entity.js'
 import * as CommonsPreparePublication from './tools/commons_prepare_publication.js'
 import * as CommonsPublishEditorial from './tools/commons_publish_editorial.js'
@@ -1047,6 +1050,16 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "claimPublication"
   },
   {
+    "name": "commons_delete_editorial_article",
+    "category": "commons",
+    "methodName": "deleteEditorialArticle"
+  },
+  {
+    "name": "commons_delete_publication",
+    "category": "commons",
+    "methodName": "deletePublication"
+  },
+  {
     "name": "commons_get_entity",
     "category": "commons",
     "methodName": "getEntity"
@@ -1085,6 +1098,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "commons_list_needs_links",
     "category": "commons",
     "methodName": "listNeedsLinks"
+  },
+  {
+    "name": "commons_list_publications",
+    "category": "commons",
+    "methodName": "listPublications"
   },
   {
     "name": "commons_prepare_entity",
@@ -2926,6 +2944,14 @@ export class CommonsNamespace {
     return this.callTool('commons_claim_publication', input) as Promise<CommonsClaimPublication.Output>
   }
 
+  async deleteEditorialArticle(input: CommonsDeleteEditorialArticle.Input): Promise<CommonsDeleteEditorialArticle.Output> {
+    return this.callTool('commons_delete_editorial_article', input) as Promise<CommonsDeleteEditorialArticle.Output>
+  }
+
+  async deletePublication(input: CommonsDeletePublication.Input): Promise<CommonsDeletePublication.Output> {
+    return this.callTool('commons_delete_publication', input) as Promise<CommonsDeletePublication.Output>
+  }
+
   async getEntity(input: CommonsGetEntity.Input): Promise<CommonsGetEntity.Output> {
     return this.callTool('commons_get_entity', input) as Promise<CommonsGetEntity.Output>
   }
@@ -2956,6 +2982,10 @@ export class CommonsNamespace {
 
   async listNeedsLinks(input: CommonsListNeedsLinks.Input = {} as CommonsListNeedsLinks.Input): Promise<CommonsListNeedsLinks.Output> {
     return this.callTool('commons_list_needs_links', input) as Promise<CommonsListNeedsLinks.Output>
+  }
+
+  async listPublications(input: CommonsListPublications.Input = {} as CommonsListPublications.Input): Promise<CommonsListPublications.Output> {
+    return this.callTool('commons_list_publications', input) as Promise<CommonsListPublications.Output>
   }
 
   async prepareEntity(input: CommonsPrepareEntity.Input): Promise<CommonsPrepareEntity.Output> {

@@ -3,9 +3,39 @@ from typing_extensions import NotRequired, Required, TypedDict
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 
+CommonsUpdateEditorialArticleInputImageVariant1 = TypedDict('CommonsUpdateEditorialArticleInputImageVariant1', {
+    'url': Required[str],
+    'alt': Required[Annotated[str, Field(min_length=1, max_length=500)]],
+    'caption': NotRequired[Annotated[str, Field(max_length=1000)]],
+    'credit': NotRequired[Annotated[str, Field(max_length=500)]],
+    'sourceUrl': NotRequired[str],
+    'width': NotRequired[Annotated[int, Field(le=9007199254740991, gt=0)]],
+    'height': NotRequired[Annotated[int, Field(le=9007199254740991, gt=0)]],
+})
+CommonsUpdateEditorialArticleInputImageVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=False)
+
+
+CommonsUpdateEditorialArticleInputOgImageVariant1 = TypedDict('CommonsUpdateEditorialArticleInputOgImageVariant1', {
+    'url': Required[str],
+    'alt': Required[Annotated[str, Field(min_length=1, max_length=500)]],
+    'caption': NotRequired[Annotated[str, Field(max_length=1000)]],
+    'credit': NotRequired[Annotated[str, Field(max_length=500)]],
+    'sourceUrl': NotRequired[str],
+    'width': NotRequired[Annotated[int, Field(le=9007199254740991, gt=0)]],
+    'height': NotRequired[Annotated[int, Field(le=9007199254740991, gt=0)]],
+})
+CommonsUpdateEditorialArticleInputOgImageVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=False)
+
+
 class CommonsUpdateEditorialArticleInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
+    source_label: Union[Annotated[str, Field(min_length=1, max_length=500)], None] = Field(None, alias='sourceLabel', description='Replacement provenance label; omitted fields are preserved.')
+    source_type: Union[Union[Annotated[str, Field(min_length=1, max_length=80)], None], None] = Field(None, alias='sourceType', description='Replacement source class; null clears it.')
+    revision: Union[Union[Annotated[str, Field(min_length=1, max_length=80)], None], None] = Field(None, alias='revision', description='Replacement article revision label; null clears it.')
+    updated_at: Union[Union[Annotated[str, Field(min_length=1, max_length=80)], None], None] = Field(None, alias='updatedAt', description='Replacement source update label; null clears it.')
+    image: Union[Union[CommonsUpdateEditorialArticleInputImageVariant1, None], None] = Field(None, alias='image', description='Replacement card and article image; null clears it.')
+    og_image: Union[Union[CommonsUpdateEditorialArticleInputOgImageVariant1, None], None] = Field(None, alias='ogImage', description='Replacement social image; null clears it.')
     publication_subdomain: Annotated[str, Field(min_length=3, max_length=50)] = Field(..., alias='publicationSubdomain', description='Publication owned by the authenticated account.')
     edition_slug: Union[Annotated[str, Field(max_length=80)], None] = Field(None, alias='editionSlug', description='Edition holding the article. Defaults to the publication’s latest edition.')
     article_slug: Annotated[str, Field(max_length=80)] = Field(..., alias='articleSlug', description='Slug of the one article to replace, from commons_get_publication with includeArticles.')

@@ -1,6 +1,6 @@
 export interface Input {
   /**
-   * Requested publication name under transparent-commons.cc. The server normalizes spaces to hyphens, rejects reserved names, and enforces one globally unique name per account.
+   * Requested publication name under transparent-commons.cc. The server normalizes spaces to hyphens, rejects reserved names, and keeps names globally unique; accounts may own multiple names.
    */
   requestedSubdomain: string;
   /**

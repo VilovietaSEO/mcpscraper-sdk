@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class CommonsClaimPublicationInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    requested_subdomain: Annotated[str, Field(min_length=3, max_length=50)] = Field(..., alias='requestedSubdomain', description='Requested publication name under transparent-commons.cc. The server normalizes spaces to hyphens, rejects reserved names, and enforces one globally unique name per account.')
+    requested_subdomain: Annotated[str, Field(min_length=3, max_length=50)] = Field(..., alias='requestedSubdomain', description='Requested publication name under transparent-commons.cc. The server normalizes spaces to hyphens, rejects reserved names, and keeps names globally unique; accounts may own multiple names.')
     title: Union[Annotated[str, Field(min_length=1, max_length=140)], None] = Field(None, alias='title', description='Reader-facing publication title. Omit to derive it from the chosen subdomain.')
     description: Union[Annotated[str, Field(max_length=500)], None] = Field(None, alias='description', description='Short description used on the publication archive and discovery surfaces.')
     idempotency_key: Annotated[str, Field(min_length=8, max_length=200)] = Field(..., alias='idempotencyKey', description='Unique key for this intended claim. Reuse it only when retrying the same claim.')
