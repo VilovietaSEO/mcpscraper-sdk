@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.103.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "108fc27219c64f0630a91c4727ec07dfea4317fab7be9a5b0d79e370da46fe2d",
+  "generatedFrom": "mcp-scraper 0.103.1 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "bbde327dfd2d42686835df81833c84cb559dd60a526ea83ae58393226c4ce77e",
   "toolCount": 352,
   "tools": [
     {
@@ -126674,6 +126674,28 @@
               "progress": {
                 "type": "object",
                 "properties": {
+                  "phase": {
+                    "description": "Latest observed extraction phase; null when legacy evidence is unavailable. Lease renewal does not update it.",
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "observedAt": {
+                    "description": "Time of the latest observed extraction phase, distinct from checkpoint persistence and worker lease renewal.",
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
                   "pagination": {
                     "anyOf": [
                       {

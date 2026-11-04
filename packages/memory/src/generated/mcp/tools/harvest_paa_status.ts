@@ -49,6 +49,14 @@ export type Output =
       };
       replayed: boolean;
       progress: {
+        /**
+         * Latest observed extraction phase; null when legacy evidence is unavailable. Lease renewal does not update it.
+         */
+        phase?: string | null;
+        /**
+         * Time of the latest observed extraction phase, distinct from checkpoint persistence and worker lease renewal.
+         */
+        observedAt?: string | null;
         pagination: {
           requestedPages: 1 | 2;
           capturedPages: 1 | 2;

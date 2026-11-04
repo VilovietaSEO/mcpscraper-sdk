@@ -151,6 +151,8 @@ HarvestPaaStatusOutputVariant1ProgressRecentInteractionsItem.__pydantic_config__
 
 
 HarvestPaaStatusOutputVariant1Progress = TypedDict('HarvestPaaStatusOutputVariant1Progress', {
+    'phase': NotRequired[Union[str, None]],
+    'observedAt': NotRequired[Union[str, None]],
     'pagination': Required[Union[HarvestPaaStatusOutputVariant1ProgressPaginationVariant1, None]],
     'requestedQuestions': Required[Union[Annotated[int, Field(ge=0, le=9007199254740991)], None]],
     'capturedQuestions': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
