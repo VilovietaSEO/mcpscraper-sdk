@@ -3,7 +3,7 @@
 Official Python clients for the unified [mcpscraper.dev](https://mcpscraper.dev) MCP catalog.
 The direct Memory manifest remains checked for runtime compatibility.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1)
 
 This is a thin JSON-RPC client generated against [`../../contracts/memory.tools.json`](../../contracts/memory.tools.json), the public contract for the hosted API. It contains no product source — only typed request/response plumbing.
 
@@ -104,6 +104,8 @@ Use `bug_reporting` to prepare a redacted draft from observed calls and errors. 
 
 ## Consistent hosted MCP protocol
 
-This release targets MCP Scraper 0.103.0 with 352 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+This release targets MCP Scraper 0.103.1 with 352 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
 
 This unified client includes the Commons publication list and deletion tools and content-preserving article edits. See the [0.59.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0) for subdomain selection, revisions, and merge/replacement behavior.
+
+PAA job progress can include the optional `phase` and `observedAt` fields. They identify observed extraction work separately from worker renewal. Existing polling and request arguments remain compatible. See [the release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
