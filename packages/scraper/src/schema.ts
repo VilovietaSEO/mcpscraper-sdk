@@ -600,14 +600,11 @@ export interface paths {
         put?: never;
         /**
          * Discover and rank the top recent Reddit threads for a topic
-         * @description Discovers Reddit threads through a Google site:reddit.com search and selects relevant candidates
-         *     before scraping. Supports week, month, year and all-time windows. Scraped post dates are checked
-         *     against the requested publication window; discovery-only candidate dates remain unverified.
-         *     With includeComments:true, collects selected threads and ranks by engagement (upvotes + 2x
-         *     reported comments). Billing: one discovery debit plus 30 credits per scraped thread and 2 credits
-         *     per captured comment, each refunded on failure. Set includeComments:false for a candidate list
-         *     without per-thread billing. Comment coverage distinguishes the requested limit, returned text
-         *     comments and reported comment count. A bounded capture can return partial:true.
+         * @description Finds Reddit discussions for a topic or subreddit. With comments enabled, opens candidate posts
+         *     to verify publication dates, collects comment text, and ranks delivered threads by engagement.
+         *     The 14-day window replaces candidates with no usable comments when more candidates are available.
+         *     Discovery-only results have unverified publication dates. Discovery, delivered threads, and
+         *     captured comments are billed separately. An empty delivery refunds the discovery charge.
          */
         post: operations["redditTrending"];
         delete?: never;
@@ -2420,9 +2417,9 @@ export interface components {
              * @default month
              * @enum {string}
              */
-            window: "week" | "month" | "year" | "all";
+            window: "week" | "14d" | "month" | "year" | "all";
             /**
-             * @description Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.
+             * @description Maximum number of relevant threads to deliver. Each scraped thread and its returned comments are billed separately.
              * @default 20
              */
             maxThreads: number;
@@ -2440,7 +2437,7 @@ export interface components {
         RedditTrendingResponse: {
             topic?: string;
             subreddit?: string | null;
-            /** @description Resolved publication window: "7d", "30d", "365d" or "all". */
+            /** @description Resolved publication window: "7d", "14d", "30d", "365d" or "all". */
             window?: string;
             totals?: {
                 threads?: number;
@@ -2460,6 +2457,12 @@ export interface components {
                  * @description Observed publication timestamp when available.
                  */
                 publishedAt?: string | null;
+                comments?: {
+                    author: string;
+                    score: string;
+                    depth: number;
+                    body: string;
+                }[];
                 /** @description Text comments actually returned for this thread. */
                 capturedCommentCount?: number;
                 /** @description Requested per-thread comment cap. */
@@ -2479,10 +2482,18 @@ export interface components {
             }[];
             threadsScraped?: number;
             candidatesFound?: number;
-            /** @description true if scraping stopped early at the time limit. */
+            /** @description True when coverage is partial or the requested delivery target was missed. */
             partial?: boolean;
             /** @description The Google site:reddit.com query used for discovery. */
             searchQuery?: string;
+            /** @enum {string} */
+            discoverySource?: "google_serp" | "reddit_search_fallback" | "none";
+            /** @enum {string} */
+            resultQuality?: "complete" | "partial" | "degraded";
+            degradedResult?: boolean;
+            degradationReasons?: string[];
+            retryRecommended?: boolean;
+            billingRefunded?: boolean;
         };
         /** @enum {string} */
         RedditCommentCoverageStatus: "complete" | "partial";
@@ -4012,13 +4023,6 @@ export interface operations {
             };
             400: components["responses"]["BadRequest"];
             402: components["responses"]["InsufficientBalance"];
-            /** @description No Reddit threads found for that topic and window — billed amount was refunded. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
         };

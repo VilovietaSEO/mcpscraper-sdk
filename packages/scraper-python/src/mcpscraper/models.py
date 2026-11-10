@@ -1967,6 +1967,7 @@ class Window(Enum):
     """
 
     week = 'week'
+    field_14d = '14d'
     month = 'month'
     year = 'year'
     all = 'all'
@@ -1987,7 +1988,7 @@ class RedditTrendingRequest(BaseModel):
     )
     maxThreads: int = Field(
         20,
-        description='Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.',
+        description='Maximum number of relevant threads to deliver. Each scraped thread and its returned comments are billed separately.',
         ge=1,
         le=40,
     )
@@ -2009,9 +2010,22 @@ class Totals(BaseModel):
     comments: int | None = None
 
 
+class Comment1(BaseModel):
+    author: str
+    score: str
+    depth: int = Field(..., ge=0)
+    body: str
+
+
 class Question(BaseModel):
     question: str | None = None
     threadUrl: str | None = None
+
+
+class DiscoverySource(Enum):
+    google_serp = 'google_serp'
+    reddit_search_fallback = 'reddit_search_fallback'
+    none = 'none'
 
 
 class RedditCommentCoverageStatus(Enum):
@@ -2813,6 +2827,7 @@ class RankedThread(BaseModel):
     publishedAt: AwareDatetime | None = Field(
         None, description='Observed publication timestamp when available.'
     )
+    comments: list[Comment1] | None = None
     capturedCommentCount: int | None = Field(
         None, description='Text comments actually returned for this thread.', ge=0
     )
@@ -2827,7 +2842,8 @@ class RedditTrendingResponse(BaseModel):
     topic: str | None = None
     subreddit: str | None = None
     window: str | None = Field(
-        None, description='Resolved publication window: "7d", "30d", "365d" or "all".'
+        None,
+        description='Resolved publication window: "7d", "14d", "30d", "365d" or "all".',
     )
     totals: Totals | None = None
     rankedThreads: list[RankedThread] | None = None
@@ -2835,11 +2851,18 @@ class RedditTrendingResponse(BaseModel):
     threadsScraped: int | None = None
     candidatesFound: int | None = None
     partial: bool | None = Field(
-        None, description='true if scraping stopped early at the time limit.'
+        None,
+        description='True when coverage is partial or the requested delivery target was missed.',
     )
     searchQuery: str | None = Field(
         None, description='The Google site:reddit.com query used for discovery.'
     )
+    discoverySource: DiscoverySource | None = None
+    resultQuality: ResultQuality | None = None
+    degradedResult: bool | None = None
+    degradationReasons: list[str] | None = None
+    retryRecommended: bool | None = None
+    billingRefunded: bool | None = None
 
 
 SerpIntelligencePaaNode.model_rebuild()

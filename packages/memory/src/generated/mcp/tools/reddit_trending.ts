@@ -14,9 +14,9 @@ export interface Input {
   /**
    * Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.
    */
-  window?: "week" | "month" | "year" | "all";
+  window?: "week" | "14d" | "month" | "year" | "all";
   /**
-   * Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.
+   * Maximum number of threads returned. If a candidate cannot be delivered, other relevant candidates can take its place. Each delivered thread and its comments are billed separately.
    */
   maxThreads?: number;
   /**
@@ -53,6 +53,12 @@ export type Output =
         engagementScore: number;
         ageText: string;
         publishedAt?: string | null;
+        comments?: {
+          author: string;
+          score: string;
+          depth: number;
+          body: string;
+        }[];
         capturedCommentCount?: number;
         requestedCommentLimit?: number;
         commentCoverage?: {

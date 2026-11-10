@@ -9,8 +9,8 @@ class RedditTrendingInput(BaseModel):
     idempotency_key: Union[Annotated[str, Field(min_length=1, max_length=512)], None] = Field(None, alias='idempotencyKey', description='One logical request identity. Retry identical inputs with the same key to replay or recover without repeating provider work. Omit for a fresh intent; use the key returned with the result or transport error for retries.')
     topic: Annotated[str, Field(min_length=1)] = Field(..., alias='topic', description='Topic to scan (e.g. "crm for small business"). Include quotation marks inside the value for an exact-phrase site search. Not a URL — pass a known thread URL to reddit_thread instead.')
     subreddit: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='subreddit', description='Bare subreddit name to scope the scan to one community, e.g. "SEO" (no r/ prefix, no URL). Omit to scan all of Reddit.')
-    window: Union[Literal['week', 'month', 'year', 'all'], None] = Field(None, alias='window', description='Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.')
-    max_threads: Union[Annotated[int, Field(ge=1, le=40)], None] = Field(None, alias='maxThreads', description='Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.')
+    window: Union[Literal['week', '14d', 'month', 'year', 'all'], None] = Field(None, alias='window', description='Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.')
+    max_threads: Union[Annotated[int, Field(ge=1, le=40)], None] = Field(None, alias='maxThreads', description='Maximum number of threads returned. If a candidate cannot be delivered, other relevant candidates can take its place. Each delivered thread and its comments are billed separately.')
     include_comments: Union[bool, None] = Field(None, alias='includeComments', description='Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.')
     max_comments_per_thread: Union[Annotated[int, Field(ge=1, le=200)], None] = Field(None, alias='maxCommentsPerThread', description='Comments captured per scraped thread when includeComments is true. Default 50. Billed per captured comment.')
 
@@ -29,6 +29,15 @@ RedditTrendingOutputVariant1Totals = TypedDict('RedditTrendingOutputVariant1Tota
     'comments': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
 })
 RedditTrendingOutputVariant1Totals.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+RedditTrendingOutputVariant1RankedThreadsItemCommentsItem = TypedDict('RedditTrendingOutputVariant1RankedThreadsItemCommentsItem', {
+    'author': Required[str],
+    'score': Required[str],
+    'depth': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'body': Required[str],
+})
+RedditTrendingOutputVariant1RankedThreadsItemCommentsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 RedditTrendingOutputVariant1RankedThreadsItemCommentCoverage = TypedDict('RedditTrendingOutputVariant1RankedThreadsItemCommentCoverage', {
@@ -50,6 +59,7 @@ RedditTrendingOutputVariant1RankedThreadsItem = TypedDict('RedditTrendingOutputV
     'engagementScore': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'ageText': Required[str],
     'publishedAt': NotRequired[Union[str, None]],
+    'comments': NotRequired[list[RedditTrendingOutputVariant1RankedThreadsItemCommentsItem]],
     'capturedCommentCount': NotRequired[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'requestedCommentLimit': NotRequired[Annotated[int, Field(ge=1, le=9007199254740991)]],
     'commentCoverage': NotRequired[RedditTrendingOutputVariant1RankedThreadsItemCommentCoverage],

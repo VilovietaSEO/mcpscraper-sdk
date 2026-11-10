@@ -7,7 +7,7 @@ class SearchSerpInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
     mode: Union[Literal['light', 'full'], None] = Field(None, alias='mode', description='Light returns organic results. Full adds available same-page features for an unfiltered one-page search. Date-filtered, two-page, and browser-backup results contain organic listings only and mark rich features unsupported.')
-    query: Annotated[str, Field(min_length=1)] = Field(..., alias='query', description='The search topic, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.')
+    query: Annotated[str, Field(min_length=1)] = Field(..., alias='query', description='Search terms, including any desired location. The first query is sent unchanged. A one-page light search that returns only off-domain rows for a Reddit site scope can retry with a narrower Reddit thread scope.')
     location: Union[str, None] = Field(None, alias='location', description='Compatibility field. Ordinary search ignores this. Include a place in query when needed.')
     gl: Union[Annotated[str, Field(min_length=2, max_length=2)], None] = Field(None, alias='gl', description='Compatibility field. Ordinary search uses its fixed default market.')
     hl: Union[str, None] = Field(None, alias='hl', description='Compatibility field. Ordinary search uses its fixed default language.')

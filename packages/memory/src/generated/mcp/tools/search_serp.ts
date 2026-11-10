@@ -4,7 +4,7 @@ export interface Input {
    */
   mode?: "light" | "full";
   /**
-   * The search topic, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location.
+   * Search terms, including any desired location. The first query is sent unchanged. A one-page light search that returns only off-domain rows for a Reddit site scope can retry with a narrower Reddit thread scope.
    */
   query: string;
   /**

@@ -4,6 +4,10 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+### Added
+
+- Request a 14-day window for Reddit trending and read publication dates and captured comment text in the same response. The generated Node, Python and CLI contracts also expose whether delivery fell short and whether discovery was refunded.
+
 ## [0.59.1] - 2026-11-04 — targets mcp-scraper 0.103.1
 
 ### Fixed
