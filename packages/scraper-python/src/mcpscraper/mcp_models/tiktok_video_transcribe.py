@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class TiktokVideoTranscribeInput(BaseModel):
@@ -12,16 +12,29 @@ class TiktokVideoTranscribeInput(BaseModel):
 class TiktokVideoTranscribeOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    source_url: str = Field(..., alias="sourceUrl", description="")
-    page_url: str = Field(..., alias="pageUrl", description="")
-    video_id: str = Field(..., alias="videoId", description="")
-    owner_name: Any = Field(..., alias="ownerName", description="")
-    title: Any = Field(..., alias="title", description="")
-    video_duration_sec: Any = Field(..., alias="videoDurationSec", description="")
-    video_url: Any = Field(..., alias="videoUrl", description="")
-    transcript_source: Literal['speech_model', 'captions'] = Field(..., alias="transcriptSource", description="")
-    word_count: int = Field(..., alias="wordCount", description="")
-    chunk_count: int = Field(..., alias="chunkCount", description="")
-    transcript_text: str = Field(..., alias="transcriptText", description="")
-    chunks: list[dict[str, Any]] = Field(..., alias="chunks", description="")
-    transcript_signal: dict[str, Any] = Field(..., alias="transcriptSignal", description="")
+    source_url: str | None = Field(None, alias="sourceUrl", description="")
+    page_url: str | None = Field(None, alias="pageUrl", description="")
+    video_id: str | None = Field(None, alias="videoId", description="")
+    owner_name: Any | None = Field(None, alias="ownerName", description="")
+    title: Any | None = Field(None, alias="title", description="")
+    video_duration_sec: Any | None = Field(None, alias="videoDurationSec", description="")
+    video_url: Any | None = Field(None, alias="videoUrl", description="")
+    transcript_source: Literal['speech_model', 'captions'] | None = Field(None, alias="transcriptSource", description="")
+    word_count: int | None = Field(None, alias="wordCount", description="")
+    chunk_count: int | None = Field(None, alias="chunkCount", description="")
+    transcript_text: str | None = Field(None, alias="transcriptText", description="")
+    chunks: list[dict[str, Any]] | None = Field(None, alias="chunks", description="")
+    transcript_signal: dict[str, Any] | None = Field(None, alias="transcriptSignal", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

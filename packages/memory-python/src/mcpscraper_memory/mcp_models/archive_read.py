@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class ArchiveReadInput(BaseModel):
@@ -17,12 +17,12 @@ class ArchiveReadInput(BaseModel):
 class ArchiveReadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    mode: Literal['list', 'read'] = Field(..., alias="mode", description="")
-    archive_url: str = Field(..., alias="archiveUrl", description="Public ZIP URL or private artifactId used for this read.")
+    mode: Literal['list', 'read'] | None = Field(None, alias="mode", description="")
+    archive_url: str | None = Field(None, alias="archiveUrl", description="Public ZIP URL or private artifactId used for this read.")
     artifact_id: str | None = Field(None, alias="artifactId", description="")
-    compressed_bytes: int = Field(..., alias="compressedBytes", description="")
-    entry_count: int = Field(..., alias="entryCount", description="")
-    total_uncompressed_bytes: int = Field(..., alias="totalUncompressedBytes", description="")
+    compressed_bytes: int | None = Field(None, alias="compressedBytes", description="")
+    entry_count: int | None = Field(None, alias="entryCount", description="")
+    total_uncompressed_bytes: int | None = Field(None, alias="totalUncompressedBytes", description="")
     entries: list[dict[str, Any]] | None = Field(None, alias="entries", description="")
     entries_truncated: bool | None = Field(None, alias="entriesTruncated", description="")
     path: str | None = Field(None, alias="path", description="")
@@ -32,3 +32,16 @@ class ArchiveReadOutput(BaseModel):
     content: str | None = Field(None, alias="content", description="")
     next_offset: Any | None = Field(None, alias="nextOffset", description="")
     memory: dict[str, Any] | None = Field(None, alias="memory", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class YoutubeTranscribeInput(BaseModel):
@@ -13,11 +13,24 @@ class YoutubeTranscribeInput(BaseModel):
 class YoutubeTranscribeOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    video_id: Any = Field(..., alias="videoId", description="")
-    url: Any = Field(..., alias="url", description="")
-    word_count: int = Field(..., alias="wordCount", description="")
-    chunk_count: int = Field(..., alias="chunkCount", description="")
-    duration_ms: Any = Field(..., alias="durationMs", description="")
-    transcript_text: str = Field(..., alias="transcriptText", description="")
-    chunks: list[dict[str, Any]] = Field(..., alias="chunks", description="")
-    resolved_inputs: dict[str, Any] = Field(..., alias="resolvedInputs", description="")
+    video_id: Any | None = Field(None, alias="videoId", description="")
+    url: Any | None = Field(None, alias="url", description="")
+    word_count: int | None = Field(None, alias="wordCount", description="")
+    chunk_count: int | None = Field(None, alias="chunkCount", description="")
+    duration_ms: Any | None = Field(None, alias="durationMs", description="")
+    transcript_text: str | None = Field(None, alias="transcriptText", description="")
+    chunks: list[dict[str, Any]] | None = Field(None, alias="chunks", description="")
+    resolved_inputs: dict[str, Any] | None = Field(None, alias="resolvedInputs", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class BrowserOpenInput(BaseModel):
@@ -17,11 +17,24 @@ class BrowserOpenInput(BaseModel):
 class BrowserOpenOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="")
-    tool: str = Field(..., alias="tool", description="")
-    session_id: str = Field(..., alias="session_id", description="Session id returned by browser_open. Use only this exact value in later browser_* calls; do not construct one yourself.")
-    watch_url: str = Field(..., alias="watch_url", description="Human watch/takeover URL for this browser session on mcpscraper.dev.")
-    live_view_url: Any = Field(..., alias="live_view_url", description="Deprecated; always null. Open watch_url to view the live session.")
-    url: Any = Field(..., alias="url", description="Initial URL requested by the caller, when provided.")
-    hint: str = Field(..., alias="hint", description="")
+    ok: bool | None = Field(None, alias="ok", description="")
+    tool: str | None = Field(None, alias="tool", description="")
+    session_id: str | None = Field(None, alias="session_id", description="Session id returned by browser_open. Use only this exact value in later browser_* calls; do not construct one yourself.")
+    watch_url: str | None = Field(None, alias="watch_url", description="Human watch/takeover URL for this browser session on mcpscraper.dev.")
+    live_view_url: Any | None = Field(None, alias="live_view_url", description="Deprecated; always null. Open watch_url to view the live session.")
+    url: Any | None = Field(None, alias="url", description="Initial URL requested by the caller, when provided.")
+    hint: str | None = Field(None, alias="hint", description="")
     raw: dict[str, Any] | None = Field(None, alias="raw", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

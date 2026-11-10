@@ -577,13 +577,11 @@ export interface paths {
         put?: never;
         /**
          * Discover and rank the top recent Reddit threads for a topic
-         * @description Finds relevant recent Reddit threads via a Google site:reddit.com search over a week/month window,
-         *     then (by default) scrapes them all in parallel for real upvotes, comments, and the questions people
-         *     asked, and ranks by engagement (upvotes + 2x comments). Billing: one discovery debit plus, when
-         *     includeComments is true, 30 credits per scraped thread and 2 credits per captured comment, each
-         *     refunded on failure. Set includeComments:false for a cheap discovery-only sweep (thread list, no
-         *     engagement stats, no per-thread billing). Scraping respects a soft deadline and returns partial:true
-         *     if it stops early rather than exceeding the request limit.
+         * @description Finds Reddit discussions for a topic or subreddit. When comments are requested, opens candidate
+         *     posts to verify publication dates, collects comment text, and ranks delivered threads by engagement.
+         *     The 14-day window replaces candidates with no usable comments when more candidates are available.
+         *     Discovery-only results do not verify publication dates. Discovery, delivered threads, and captured
+         *     comments are billed separately. An empty delivery refunds the discovery charge.
          */
         post: operations["redditTrending"];
         delete?: never;
@@ -3440,14 +3438,14 @@ export interface operations {
                      * @default month
                      * @enum {string}
                      */
-                    window?: "week" | "month";
+                    window?: "week" | "14d" | "month" | "year" | "all";
                     /**
-                     * @description How many discovered threads to scrape and rank (scrape-all default). Lower to cap cost.
+                     * @description Maximum number of threads returned.
                      * @default 20
                      */
                     maxThreads?: number;
                     /**
-                     * @description true = scrape each thread for engagement + questions and rank; false = cheap discovery-only list.
+                     * @description Open posts to verify dates and capture comments. False returns unverified discovery candidates.
                      * @default true
                      */
                     includeComments?: boolean;
@@ -3469,7 +3467,7 @@ export interface operations {
                     "application/json": {
                         topic?: string;
                         subreddit?: string | null;
-                        /** @description Resolved window, e.g. "7d" or "30d". */
+                        /** @description Resolved window, e.g. "7d", "14d", or "30d". */
                         window?: string;
                         totals?: {
                             threads?: number;
@@ -3484,6 +3482,16 @@ export interface operations {
                             commentCount?: number;
                             engagementScore?: number;
                             ageText?: string;
+                            /** Format: date-time */
+                            publishedAt?: string | null;
+                            capturedCommentCount?: number;
+                            requestedCommentLimit?: number;
+                            comments?: {
+                                author: string;
+                                score: string;
+                                depth: number;
+                                body: string;
+                            }[];
                             topQuestions?: string[];
                         }[];
                         questions?: {
@@ -3492,22 +3500,19 @@ export interface operations {
                         }[];
                         threadsScraped?: number;
                         candidatesFound?: number;
-                        /** @description true if scraping stopped early at the time limit. */
+                        /** @description True when coverage is partial or a requested delivery target was not reached. */
                         partial?: boolean;
                         /** @description The Google site:reddit.com query used for discovery. */
                         searchQuery?: string;
+                        /** @enum {string} */
+                        resultQuality?: "complete" | "partial" | "degraded";
+                        degradationReasons?: string[];
+                        billingRefunded?: boolean;
                     };
                 };
             };
             400: components["responses"]["BadRequest"];
             402: components["responses"]["InsufficientBalance"];
-            /** @description No Reddit threads found for that topic and window — billed amount was refunded. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
         };

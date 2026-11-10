@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class CaptureSerpSnapshotInput(BaseModel):
@@ -18,19 +18,33 @@ class CaptureSerpSnapshotInput(BaseModel):
 class CaptureSerpSnapshotOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    schema_version: str = Field(..., alias="schemaVersion", description="")
-    status: str = Field(..., alias="status", description="")
-    query: Any = Field(..., alias="query", description="")
-    location: Any = Field(..., alias="location", description="")
-    captured_at: Any = Field(..., alias="capturedAt", description="")
-    result_count: Any = Field(..., alias="resultCount", description="")
-    organic_result_count: int = Field(..., alias="organicResultCount", description="")
-    local_pack_result_count: int = Field(..., alias="localPackResultCount", description="")
-    page_snapshot_count: int = Field(..., alias="pageSnapshotCount", description="")
-    page_snapshot_failed_count: int = Field(..., alias="pageSnapshotFailedCount", description="")
-    snapshot_id: Any = Field(..., alias="snapshotId", description="")
-    resolved_inputs: dict[str, Any] = Field(..., alias="resolvedInputs", description="")
-    artifacts: list[dict[str, Any]] = Field(..., alias="artifacts", description="")
-    billing: Any = Field(..., alias="billing", description="")
-    diagnostics: Any = Field(..., alias="diagnostics", description="")
-    provider_payload: dict[str, Any] = Field(..., alias="providerPayload", description="")
+    schema_version: str | None = Field(None, alias="schemaVersion", description="")
+    status: str | None = Field(None, alias="status", description="")
+    query: Any | None = Field(None, alias="query", description="")
+    location: Any | None = Field(None, alias="location", description="")
+    captured_at: Any | None = Field(None, alias="capturedAt", description="")
+    result_count: Any | None = Field(None, alias="resultCount", description="")
+    organic_result_count: int | None = Field(None, alias="organicResultCount", description="")
+    local_pack_result_count: int | None = Field(None, alias="localPackResultCount", description="")
+    page_snapshot_count: int | None = Field(None, alias="pageSnapshotCount", description="")
+    page_snapshot_failed_count: int | None = Field(None, alias="pageSnapshotFailedCount", description="")
+    snapshot_id: Any | None = Field(None, alias="snapshotId", description="")
+    resolved_inputs: dict[str, Any] | None = Field(None, alias="resolvedInputs", description="")
+    artifacts: list[dict[str, Any]] | None = Field(None, alias="artifacts", description="")
+    billing: Any | None = Field(None, alias="billing", description="")
+    diagnostics: Any | None = Field(None, alias="diagnostics", description="")
+    harvest_result: dict[str, Any] | None = Field(None, alias="harvestResult", description="")
+    location_evidence: Any | None = Field(None, alias="locationEvidence", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

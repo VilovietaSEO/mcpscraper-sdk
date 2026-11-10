@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class FacebookPageIntelInput(BaseModel):
@@ -15,14 +15,27 @@ class FacebookPageIntelInput(BaseModel):
 class FacebookPageIntelOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    advertiser_name: Any = Field(..., alias="advertiserName", description="")
-    input_mode: Literal['pageId', 'libraryId', 'query'] = Field(..., alias="inputMode", description="")
-    match_confidence: Literal['high', 'medium', 'low'] = Field(..., alias="matchConfidence", description="")
-    match_reason: str = Field(..., alias="matchReason", description="")
-    warnings: list[str] = Field(..., alias="warnings", description="")
-    matched_advertisers: list[dict[str, Any]] = Field(..., alias="matchedAdvertisers", description="")
-    total_ads: int = Field(..., alias="totalAds", description="")
-    active_count: int = Field(..., alias="activeCount", description="")
-    video_count: int = Field(..., alias="videoCount", description="")
-    image_count: int = Field(..., alias="imageCount", description="")
-    ads: list[dict[str, Any]] = Field(..., alias="ads", description="")
+    advertiser_name: Any | None = Field(None, alias="advertiserName", description="")
+    input_mode: Literal['pageId', 'libraryId', 'query'] | None = Field(None, alias="inputMode", description="")
+    match_confidence: Literal['high', 'medium', 'low'] | None = Field(None, alias="matchConfidence", description="")
+    match_reason: str | None = Field(None, alias="matchReason", description="")
+    warnings: list[str] | None = Field(None, alias="warnings", description="")
+    matched_advertisers: list[dict[str, Any]] | None = Field(None, alias="matchedAdvertisers", description="")
+    total_ads: int | None = Field(None, alias="totalAds", description="")
+    active_count: int | None = Field(None, alias="activeCount", description="")
+    video_count: int | None = Field(None, alias="videoCount", description="")
+    image_count: int | None = Field(None, alias="imageCount", description="")
+    ads: list[dict[str, Any]] | None = Field(None, alias="ads", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

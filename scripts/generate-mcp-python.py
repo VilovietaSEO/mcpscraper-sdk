@@ -52,9 +52,25 @@ def field_definition(name: str, schema: dict, required: bool) -> str:
     return f'    {to_snake_case(name)}: {py_type} = Field({default}, alias="{name}", description="{description}")'
 
 
-def render_model(class_name: str, schema: dict) -> str:
+def render_model(class_name: str, schema: dict, *, output: bool = False) -> str:
     properties = schema.get("properties", {}) or {}
     required = set(schema.get("required", []) or [])
+    alternatives = schema.get("anyOf", [])
+    # Preserve the existing attribute-based client API for object responses
+    # that can arrive inline or as an artifact receipt.
+    object_alternatives = output and not properties and alternatives and all(
+        isinstance(branch, dict) and branch.get("properties") for branch in alternatives
+    )
+    if object_alternatives:
+        properties = {}
+        required = set(alternatives[0].get("required", []))
+        for branch in alternatives:
+            required.intersection_update(branch.get("required", []))
+            for name, prop in branch["properties"].items():
+                if name in properties and properties[name] != prop:
+                    properties[name] = {}
+                else:
+                    properties[name] = prop
     if not properties:
         return f'class {class_name}(BaseModel):\n    model_config = ConfigDict(populate_by_name=True, extra="allow")\n'
     lines = [
@@ -64,6 +80,18 @@ def render_model(class_name: str, schema: dict) -> str:
     ]
     for prop_name, prop_schema in properties.items():
         lines.append(field_definition(prop_name, prop_schema, prop_name in required))
+    if object_alternatives:
+        lines.extend([
+            "",
+            '    @model_serializer(mode="wrap")',
+            "    def _serialize_response(self, handler, info):",
+            "        data = handler(self)",
+            "        for name, field in type(self).model_fields.items():",
+            "            if name not in self.model_fields_set:",
+            "                key = field.alias if info.by_alias and field.alias else name",
+            "                data.pop(key, None)",
+            "        return data",
+        ])
     return "\n".join(lines) + "\n"
 
 
@@ -82,14 +110,18 @@ def generate_target(package_root: Path, package_name: str, tools: list[dict]) ->
         model_prefix = to_pascal_case(tool["name"])
         input_class = model_prefix + "Input"
         output_class = model_prefix + "Output"
+        output_model = render_model(output_class, tool["outputSchema"], output=True)
+        pydantic_import = "from pydantic import BaseModel, ConfigDict, Field"
+        if "@model_serializer" in output_model:
+            pydantic_import += ", model_serializer"
         content = "\n".join([
             "from typing import Any, Literal",
-            "from pydantic import BaseModel, ConfigDict, Field",
+            pydantic_import,
             "",
             "",
             render_model(input_class, tool["inputSchema"]),
             "",
-            render_model(output_class, tool["outputSchema"]),
+            output_model,
         ])
         (models_dir / f"{module_name}.py").write_text(content)
         import_lines.append(

@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class FactHistoryInput(BaseModel):
@@ -12,7 +12,20 @@ class FactHistoryInput(BaseModel):
 class FactHistoryOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="True when the history was read; false on an auth/scope error.")
+    ok: bool | None = Field(None, alias="ok", description="True when the history was read; false on an auth/scope error.")
     current: Any | None = Field(None, alias="current", description="The current active fact for the subject, or null if none exists. Present when ok is true.")
     history: list[dict[str, Any]] | None = Field(None, alias="history", description="The superseded chain newest → oldest — the audit trail. Empty when nothing has been superseded. Present when ok is true.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

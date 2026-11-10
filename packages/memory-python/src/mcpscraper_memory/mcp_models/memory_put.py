@@ -1,27 +1,40 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class MemoryPutInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    vault: str | None = Field(None, alias="vault", description="Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. On a default-provisioned account, pick the vault whose job matches the content (see the server instructions for the full 16-vault guide) rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Do not use this low-level tool to create ordinary People, Organizations, Deals, Projects, Tasks, or Communication records: first use prepare-memory-write then memory-capture so relationships and approval state are validated.")
+    vault: str | None = Field(None, alias="vault", description="Vault to write to. Optional; defaults to the session active vault, then the first vault the caller is entitled to. Pick the vault whose job matches the content; use prepare-memory-write for the live vault contract or list-vaults for vault inventory rather than defaulting blindly — e.g. a lesson learned goes in Knowledge, the raw source it came from goes in Library, a broken feature goes in Issues, a named real-world initiative goes in Projects. Research People/Organizations and CRM People/Organizations require their specialized tools and are always rejected here. For Deals, Projects, Tasks, or Communication records, first use prepare-memory-write then memory-capture so relationships and approval state are validated.")
     path: str | None = Field(None, alias="path", description="Vault-relative note path to create or overwrite, e.g. projects/q3-plan. Writing an existing path replaces it. Required unless shareId is given.")
     share_id: str | None = Field(None, alias="shareId", description="Edit a note someone individually shared with you and you accepted (accept-share), by its shareId, instead of vault+path. Requires the share to grant edit permission, and baseRevision is mandatory (get the current revision first) since you are editing alongside the owner and possibly others.")
     title: str | None = Field(None, alias="title", description="Optional human-readable title; defaults are derived from the path when omitted.")
-    content: str = Field(..., alias="content", description="The complete note body to store and index. On edit this replaces the prior body, so merge the requested change into the full memory-get content before calling; never pass only the changed fragment.")
+    content: str = Field(..., alias="content", description="The complete note body to store and index. Content is replace-all: for an edit, first read the current note, merge the requested change into its full body, and never pass only the changed fragment. Must be non-empty.")
     props: dict[str, Any] | None = Field(None, alias="props", description="Obsidian note primitives plus vault-specific template fields. On edits, supplied fields patch the stored props instead of replacing the whole object; pass an empty array to deliberately clear a link list. Type/domain/folder also steer routing when no vault is given.")
-    base_revision: float | None = Field(None, alias="baseRevision", description="Revision the edit is based on (from memory-get/put). Always supply it when an AI edits an existing note; a mismatch rejects the write and returns current content for reconciliation. Omit only for an intentional new note or explicit last-write-wins migration.")
+    base_revision: float | None = Field(None, alias="baseRevision", description="Revision from the current note read or prior successful write. Pass it with the complete merged body when editing: a mismatch rejects the write and returns the current note for reconciliation. Never replay the stale body unchanged. Required for edits through shareId; omission on owned notes permits last-write-wins.")
     tag_descriptions: dict[str, Any] | None = Field(None, alias="tagDescriptions", description="One-line meaning for any tag in props.tags that is new to the account, keyed by tag. Tags resolve against the account's existing vocabulary; new tags require a one-line description.")
 
 
 class MemoryPutOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="True when the note was stored; false on auth/scope error, empty content, or a revision conflict.")
+    ok: bool | None = Field(None, alias="ok", description="True when the note was stored; false on auth/scope error, empty content, or a revision conflict.")
     note: dict[str, Any] | None = Field(None, alias="note", description="The stored note metadata. Present when ok is true.")
     indexed: float | None = Field(None, alias="indexed", description="Number of search chunks indexed for the content (0 if embedding failed but the note still saved).")
     conflict: bool | None = Field(None, alias="conflict", description="True when baseRevision did not match the current revision: someone else changed the note first. No write happened.")
     current: dict[str, Any] | None = Field(None, alias="current", description="Present only when conflict is true: the note as it stands now, so the caller can reconcile and retry without another round trip.")
     code: str | None = Field(None, alias="code", description="Machine-readable denial code when ok is false: quota_exceeded, free_cost_cap, or revision_conflict.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

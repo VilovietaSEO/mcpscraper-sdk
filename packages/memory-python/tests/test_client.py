@@ -9,9 +9,6 @@ from mcpscraper_memory.models.create_scheduled_action import (
     CreateScheduledActionInput,
     CreateScheduledActionOutput,
 )
-from mcpscraper_memory.mcp_models.update_scheduled_action import (
-    UpdateScheduledActionInput as UnifiedUpdateScheduledActionInput,
-)
 from mcpscraper_memory.models.get_schedule_link import GetScheduleLinkOutput
 from mcpscraper_memory.models.get_schedule_status import GetScheduleStatusOutput
 from mcpscraper_memory.models.resume_scheduled_action import ResumeScheduledActionOutput
@@ -262,10 +259,9 @@ def test_unified_bindings_contain_every_contract_tool():
         "describe_service_connection_tool",
         "import_service_connection_to_memory",
         "archive_read",
-        "list_scheduled_runs",
         "create_artifact_template",
-        "create_scheduled_run_view_link",
     } <= names
+    assert {"list_scheduled_runs", "create_scheduled_run_view_link", "update-scheduled-action"}.isdisjoint(names)
 
 
 def test_direct_scheduling_models_match_the_credit_metered_contract():
@@ -297,28 +293,14 @@ def test_direct_scheduling_models_match_the_credit_metered_contract():
     entitlement = SetScheduleEntitlementInput(granteeIdentity="owner@example.com")
     assert entitlement.enabled is None
 
-    pinned_update = UnifiedUpdateScheduledActionInput(
-        id="schedule_1",
-        artifactSelection={
-            "mode": "saved_template",
-            "templateId": "00000000-0000-4000-8000-000000000001",
-            "templateVersionId": "00000000-0000-4000-8000-000000000002",
-        },
-    )
-    assert pinned_update.artifact_selection["mode"] == "saved_template"
-
-
 @responses.activate
-def test_scheduled_results_and_templates_use_exact_unified_wire_names():
+def test_artifact_templates_use_exact_unified_wire_name():
     captured = []
 
     def handler(request):
         body = json.loads(request.body)
         captured.append(body)
-        if body["params"]["name"] == "list_scheduled_runs":
-            result = {"ok": True, "items": [], "nextCursor": None}
-        else:
-            result = {"ok": True, "presets": [], "templates": []}
+        result = {"ok": True, "presets": [], "templates": []}
         return (
             200,
             {},
@@ -339,18 +321,12 @@ def test_scheduled_results_and_templates_use_exact_unified_wire_names():
     )
 
     client = McpToolsClient(api_key="sk_test")
-    runs = client.schedule.list_scheduled_runs(view="inbox", limit=30)
     templates = client.schedule.list_artifact_templates(status="all")
 
     assert captured[0]["params"] == {
-        "name": "list_scheduled_runs",
-        "arguments": {"view": "inbox", "limit": 30},
-    }
-    assert captured[1]["params"] == {
         "name": "list_artifact_templates",
         "arguments": {"status": "all"},
     }
-    assert runs.next_cursor is None
     assert templates.templates == []
 
 

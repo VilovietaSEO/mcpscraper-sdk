@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class YoutubeHarvestInput(BaseModel):
@@ -14,7 +14,20 @@ class YoutubeHarvestInput(BaseModel):
 class YoutubeHarvestOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    mode: str = Field(..., alias="mode", description="")
-    video_count: int = Field(..., alias="videoCount", description="")
-    channel: Any = Field(..., alias="channel", description="")
-    videos: list[dict[str, Any]] = Field(..., alias="videos", description="")
+    mode: str | None = Field(None, alias="mode", description="")
+    video_count: int | None = Field(None, alias="videoCount", description="")
+    channel: Any | None = Field(None, alias="channel", description="")
+    videos: list[dict[str, Any]] | None = Field(None, alias="videos", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

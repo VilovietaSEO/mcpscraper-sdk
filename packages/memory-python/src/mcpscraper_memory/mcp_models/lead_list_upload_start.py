@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class LeadListUploadStartInput(BaseModel):
@@ -12,12 +12,25 @@ class LeadListUploadStartInput(BaseModel):
 class LeadListUploadStartOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    upload_id: str = Field(..., alias="uploadId", description="")
+    upload_id: str | None = Field(None, alias="uploadId", description="")
     status: Literal['awaiting_upload', 'ready'] | None = Field(None, alias="status", description="")
-    upload_url: str = Field(..., alias="uploadUrl", description="")
-    upload_page_url: str = Field(..., alias="uploadPageUrl", description="")
-    accepted_formats: list[Literal['csv', 'tsv', 'xlsx']] = Field(..., alias="acceptedFormats", description="")
-    accepted_content_types: list[str] = Field(..., alias="acceptedContentTypes", description="")
-    max_bytes: int = Field(..., alias="maxBytes", description="")
-    upload_url_expires_at: str = Field(..., alias="uploadUrlExpiresAt", description="")
-    source_expires_at: str = Field(..., alias="sourceExpiresAt", description="")
+    upload_url: str | None = Field(None, alias="uploadUrl", description="")
+    upload_page_url: str | None = Field(None, alias="uploadPageUrl", description="")
+    accepted_formats: list[Literal['csv', 'tsv', 'xlsx']] | None = Field(None, alias="acceptedFormats", description="")
+    accepted_content_types: list[str] | None = Field(None, alias="acceptedContentTypes", description="")
+    max_bytes: int | None = Field(None, alias="maxBytes", description="")
+    upload_url_expires_at: str | None = Field(None, alias="uploadUrlExpiresAt", description="")
+    source_expires_at: str | None = Field(None, alias="sourceExpiresAt", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

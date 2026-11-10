@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class HarvestPaaInput(BaseModel):
@@ -25,19 +25,33 @@ class HarvestPaaInput(BaseModel):
 class HarvestPaaOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    query: str = Field(..., alias="query", description="")
-    location: Any = Field(..., alias="location", description="")
-    question_count: int = Field(..., alias="questionCount", description="")
-    completion_status: Any = Field(..., alias="completionStatus", description="")
-    result_quality: Any = Field(..., alias="resultQuality", description="")
-    degraded_result: Any = Field(..., alias="degradedResult", description="")
-    degradation_reasons: list[str] = Field(..., alias="degradationReasons", description="")
-    retry_recommended: Any = Field(..., alias="retryRecommended", description="")
-    paa_lifecycle: Any = Field(..., alias="paaLifecycle", description="")
-    phase_timings: Any = Field(..., alias="phaseTimings", description="")
-    pagination: Any = Field(..., alias="pagination", description="")
-    questions: list[dict[str, Any]] = Field(..., alias="questions", description="")
-    organic_results: list[dict[str, Any]] = Field(..., alias="organicResults", description="")
-    ai_overview: Any = Field(..., alias="aiOverview", description="")
-    entity_ids: Any = Field(..., alias="entityIds", description="")
-    duration_ms: Any = Field(..., alias="durationMs", description="")
+    query: str | None = Field(None, alias="query", description="")
+    location: Any | None = Field(None, alias="location", description="")
+    question_count: int | None = Field(None, alias="questionCount", description="")
+    paa_incomplete_answers: int | None = Field(None, alias="paaIncompleteAnswers", description="")
+    completion_status: Any | None = Field(None, alias="completionStatus", description="")
+    result_quality: Any | None = Field(None, alias="resultQuality", description="")
+    degraded_result: Any | None = Field(None, alias="degradedResult", description="")
+    degradation_reasons: list[str] | None = Field(None, alias="degradationReasons", description="")
+    retry_recommended: Any | None = Field(None, alias="retryRecommended", description="")
+    paa_lifecycle: Any | None = Field(None, alias="paaLifecycle", description="")
+    phase_timings: Any | None = Field(None, alias="phaseTimings", description="")
+    pagination: Any | None = Field(None, alias="pagination", description="")
+    questions: list[dict[str, Any]] | None = Field(None, alias="questions", description="")
+    organic_results: list[dict[str, Any]] | None = Field(None, alias="organicResults", description="")
+    ai_overview: Any | None = Field(None, alias="aiOverview", description="")
+    entity_ids: Any | None = Field(None, alias="entityIds", description="")
+    duration_ms: Any | None = Field(None, alias="durationMs", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

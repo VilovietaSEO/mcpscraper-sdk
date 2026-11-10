@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class AnalyticsRecordExternalEventInput(BaseModel):
@@ -8,11 +8,11 @@ class AnalyticsRecordExternalEventInput(BaseModel):
     site_id: str = Field(..., alias="siteId", description="Analytics Site id returned by analytics_list_sites.")
     schema_version: float | None = Field(None, alias="schemaVersion", description="Canonical X-Ray event schema version; use version 1.")
     event_id: str = Field(..., alias="eventId", description="Caller-owned canonical event identifier used for end-to-end deduplication.")
-    source: str = Field(..., alias="source", description="Optional source or provenance constraint appropriate to this tool; omit when no source restriction is intended.")
+    source: str = Field(..., alias="source", description="Required source-system name for the event being recorded; this is provenance, not a report filter.")
     source_account_ref: str = Field(..., alias="sourceAccountRef", description="Stable non-secret account identifier at the phone, CRM, or event source.")
     source_event_id: str = Field(..., alias="sourceEventId", description="Stable identifier assigned by the source system for idempotent ingestion.")
     event_kind: Literal['browser', 'form', 'call', 'crm', 'transaction', 'custom_server', 'conversion', 'delivery'] = Field(..., alias="eventKind", description="Canonical event family used for journey storage and conversion-rule evaluation.")
-    event_name: str = Field(..., alias="eventName", description="Optional normalized analytics event-name filter.")
+    event_name: str = Field(..., alias="eventName", description="Required canonical name for the event being recorded; use lowercase letters, digits, and underscores starting with a letter.")
     occurred_at: str = Field(..., alias="occurredAt", description="ISO 8601 timestamp when the source event actually occurred.")
     visitor_id: str | None = Field(None, alias="visitorId", description="Consented first-party visitor identifier used for deterministic journey linking.")
     session_id: str | None = Field(None, alias="sessionId", description="First-party session identifier used for deterministic journey linking.")
@@ -35,15 +35,28 @@ class AnalyticsRecordExternalEventInput(BaseModel):
 class AnalyticsRecordExternalEventOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="")
-    id: Any = Field(..., alias="id", description="")
-    created: bool = Field(..., alias="created", description="")
-    person_id: Any = Field(..., alias="personId", description="")
-    identity_tier: Literal['confirmed', 'unlinked'] = Field(..., alias="identityTier", description="")
-    namespace_id: Any = Field(..., alias="namespaceId", description="")
-    conversion_ids: list[str] = Field(..., alias="conversionIds", description="")
-    consent_eligibility: dict[str, Any] = Field(..., alias="consentEligibility", description="")
-    value_provenance: dict[str, Any] = Field(..., alias="valueProvenance", description="")
-    score_evaluation_ids: list[str] = Field(..., alias="scoreEvaluationIds", description="")
-    prediction_evidence: Any = Field(..., alias="predictionEvidence", description="")
-    candidate_promotion: Any = Field(..., alias="candidatePromotion", description="")
+    ok: bool | None = Field(None, alias="ok", description="")
+    id: Any | None = Field(None, alias="id", description="")
+    created: bool | None = Field(None, alias="created", description="")
+    person_id: Any | None = Field(None, alias="personId", description="")
+    identity_tier: Literal['confirmed', 'unlinked'] | None = Field(None, alias="identityTier", description="")
+    namespace_id: Any | None = Field(None, alias="namespaceId", description="")
+    conversion_ids: list[str] | None = Field(None, alias="conversionIds", description="")
+    consent_eligibility: dict[str, Any] | None = Field(None, alias="consentEligibility", description="")
+    value_provenance: dict[str, Any] | None = Field(None, alias="valueProvenance", description="")
+    score_evaluation_ids: list[str] | None = Field(None, alias="scoreEvaluationIds", description="")
+    prediction_evidence: Any | None = Field(None, alias="predictionEvidence", description="")
+    candidate_promotion: Any | None = Field(None, alias="candidatePromotion", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

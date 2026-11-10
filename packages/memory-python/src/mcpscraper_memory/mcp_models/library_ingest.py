@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class LibraryIngestInput(BaseModel):
@@ -9,7 +9,7 @@ class LibraryIngestInput(BaseModel):
     title: str = Field(..., alias="title", description="Short human-readable title for the item; used to build the stored path. Must be non-empty.")
     content: str = Field(..., alias="content", description="The full captured text (scrape/transcript/output) to store and index. Must be non-empty.")
     source: str = Field(..., alias="source", description="Provenance of the content, e.g. a URL or tool name. Must be non-empty.")
-    captured_at: str | None = Field(None, alias="capturedAt", description="ISO-8601 capture timestamp. Optional; defaults to now. Also seeds the deterministic storage path.")
+    captured_at: str | None = Field(None, alias="capturedAt", description="ISO-8601 capture timestamp. Defaults to now and seeds the storage path with title. Preserve this timestamp and title on retries; omitting it can create another note.")
     summary: str | None = Field(None, alias="summary", description="Retrieval-ready source summary. Optional; a provenance summary is generated when omitted.")
     tags: list[str] | None = Field(None, alias="tags", description="Reviewed canonical tags. Tags resolve against the account's existing vocabulary; new tags require a one-line description. When omitted, only deterministic source-provenance tags are recorded.")
     tag_descriptions: dict[str, Any] | None = Field(None, alias="tagDescriptions", description="One-line meaning for any supplied tag that is new to the account, keyed by tag.")
@@ -20,7 +20,7 @@ class LibraryIngestInput(BaseModel):
 class LibraryIngestOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="True when the item was stored; false on auth/scope error.")
+    ok: bool | None = Field(None, alias="ok", description="True when the item was stored; false on auth/scope error.")
     vault: str | None = Field(None, alias="vault", description="The vault the item was stored in (after defaulting).")
     note_id: str | None = Field(None, alias="noteId", description="Internal id of the created note.")
     path: str | None = Field(None, alias="path", description="Vault-relative path the item was stored at (under library/...).")
@@ -28,3 +28,16 @@ class LibraryIngestOutput(BaseModel):
     next_step: str | None = Field(None, alias="nextStep", description="Recommended extraction action after the raw Library source is safe.")
     code: str | None = Field(None, alias="code", description="Machine-readable denial code when ok is false: quota_exceeded or free_cost_cap.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class CaptureSerpPageSnapshotsInput(BaseModel):
@@ -14,13 +14,25 @@ class CaptureSerpPageSnapshotsInput(BaseModel):
 class CaptureSerpPageSnapshotsOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    schema_version: str = Field(..., alias="schemaVersion", description="")
-    status: str = Field(..., alias="status", description="")
-    count: int = Field(..., alias="count", description="")
-    captured_count: int = Field(..., alias="capturedCount", description="")
-    failed_count: int = Field(..., alias="failedCount", description="")
-    skipped_count: int = Field(..., alias="skippedCount", description="")
-    captures: list[dict[str, Any]] = Field(..., alias="captures", description="")
-    resolved_inputs: dict[str, Any] = Field(..., alias="resolvedInputs", description="")
-    diagnostics: Any = Field(..., alias="diagnostics", description="")
-    provider_payload: dict[str, Any] = Field(..., alias="providerPayload", description="")
+    schema_version: str | None = Field(None, alias="schemaVersion", description="")
+    status: str | None = Field(None, alias="status", description="")
+    count: int | None = Field(None, alias="count", description="")
+    captured_count: int | None = Field(None, alias="capturedCount", description="")
+    failed_count: int | None = Field(None, alias="failedCount", description="")
+    skipped_count: int | None = Field(None, alias="skippedCount", description="")
+    captures: list[dict[str, Any]] | None = Field(None, alias="captures", description="")
+    resolved_inputs: dict[str, Any] | None = Field(None, alias="resolvedInputs", description="")
+    diagnostics: Any | None = Field(None, alias="diagnostics", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

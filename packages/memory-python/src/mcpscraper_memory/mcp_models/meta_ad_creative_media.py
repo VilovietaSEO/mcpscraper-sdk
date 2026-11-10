@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class MetaAdCreativeMediaInput(BaseModel):
@@ -14,23 +14,36 @@ class MetaAdCreativeMediaInput(BaseModel):
 class MetaAdCreativeMediaOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="")
-    ad_id: str = Field(..., alias="adId", description="")
-    ad_name: Any = Field(..., alias="adName", description="")
-    ad_account_id: Any = Field(..., alias="adAccountId", description="")
-    creative_id: str = Field(..., alias="creativeId", description="")
-    creative_name: Any = Field(..., alias="creativeName", description="")
-    effective_object_story_id: Any = Field(..., alias="effectiveObjectStoryId", description="")
-    source_facebook_post_id: Any = Field(..., alias="sourceFacebookPostId", description="")
-    object_story_id: Any = Field(..., alias="objectStoryId", description="")
-    page_id: Any = Field(..., alias="pageId", description="")
-    post_id: Any = Field(..., alias="postId", description="")
-    public_post_candidate_url: Any = Field(..., alias="publicPostCandidateUrl", description="")
-    public_post_status: str = Field(..., alias="publicPostStatus", description="")
-    media_type: Literal['image', 'video', 'carousel', 'mixed', 'unknown'] = Field(..., alias="mediaType", description="")
-    images: list[dict[str, Any]] = Field(..., alias="images", description="")
-    videos: list[dict[str, Any]] = Field(..., alias="videos", description="")
-    inline_images: list[dict[str, Any]] = Field(..., alias="inlineImages", description="")
-    next_actions: list[dict[str, Any]] = Field(..., alias="nextActions", description="")
-    warnings: list[str] = Field(..., alias="warnings", description="")
-    limitations: list[str] = Field(..., alias="limitations", description="")
+    ok: bool | None = Field(None, alias="ok", description="")
+    ad_id: str | None = Field(None, alias="adId", description="")
+    ad_name: Any | None = Field(None, alias="adName", description="")
+    ad_account_id: Any | None = Field(None, alias="adAccountId", description="")
+    creative_id: str | None = Field(None, alias="creativeId", description="")
+    creative_name: Any | None = Field(None, alias="creativeName", description="")
+    effective_object_story_id: Any | None = Field(None, alias="effectiveObjectStoryId", description="")
+    source_facebook_post_id: Any | None = Field(None, alias="sourceFacebookPostId", description="")
+    object_story_id: Any | None = Field(None, alias="objectStoryId", description="")
+    page_id: Any | None = Field(None, alias="pageId", description="")
+    post_id: Any | None = Field(None, alias="postId", description="")
+    public_post_candidate_url: Any | None = Field(None, alias="publicPostCandidateUrl", description="")
+    public_post_status: str | None = Field(None, alias="publicPostStatus", description="")
+    media_type: Literal['image', 'video', 'carousel', 'mixed', 'unknown'] | None = Field(None, alias="mediaType", description="")
+    images: list[dict[str, Any]] | None = Field(None, alias="images", description="")
+    videos: list[dict[str, Any]] | None = Field(None, alias="videos", description="")
+    inline_images: list[dict[str, Any]] | None = Field(None, alias="inlineImages", description="")
+    next_actions: list[dict[str, Any]] | None = Field(None, alias="nextActions", description="")
+    warnings: list[str] | None = Field(None, alias="warnings", description="")
+    limitations: list[str] | None = Field(None, alias="limitations", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

@@ -197,44 +197,9 @@ def test_editorial_reading_room_guide_uses_exact_wire_contract():
     assert result.focus == "workflow"
 
 
-@responses.activate
-def test_scheduled_result_view_link_uses_exact_wire_contract():
-    responses.add(
-        responses.POST,
-        "https://mcpscraper.dev/mcp",
-        json={
-            "jsonrpc": "2.0",
-            "id": 1,
-            "result": {
-                "structuredContent": {
-                    "ok": True,
-                    "shareId": "00000000-0000-4000-8000-000000000001",
-                    "runId": "opaque_run_1",
-                    "artifactId": "artifact_1",
-                    "url": "https://mcpscraper.dev/view/scheduled-run/token",
-                    "expiresAt": "2026-08-06T00:00:00.000Z",
-                    "createdAt": "2026-07-30T00:00:00.000Z",
-                }
-            },
-        },
-        status=200,
-    )
-
+def test_unified_client_excludes_retired_scheduled_result_view_links():
     client = ScraperClient(api_key="sk_test")
-    result = client.tools.schedule.create_scheduled_run_view_link(
-        run_id="opaque_run_1",
-        artifact_id="artifact_1",
-        expires_in_days=7,
-    )
-    sent_body = json.loads(responses.calls[0].request.body)
-
-    assert sent_body["params"]["name"] == "create_scheduled_run_view_link"
-    assert sent_body["params"]["arguments"] == {
-        "runId": "opaque_run_1",
-        "artifactId": "artifact_1",
-        "expiresInDays": 7,
-    }
-    assert result.run_id == "opaque_run_1"
+    assert not hasattr(client.tools.schedule, "create_scheduled_run_view_link")
 
 
 @responses.activate

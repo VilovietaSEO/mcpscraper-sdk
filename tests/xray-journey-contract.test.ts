@@ -22,13 +22,15 @@ test('analytics_list_journeys projects its selector, evidence tier, null branche
   const manifest = JSON.parse(files.contract) as { toolCount: number; tools: Array<Record<string, any>> }
   const tool = manifest.tools.find(candidate => candidate.name === 'analytics_list_journeys')
   assert.ok(tool)
-  assert.equal(manifest.toolCount, 364)
+  assert.equal(manifest.toolCount, new Set(manifest.tools.map(tool => tool.name)).size)
   assert.deepEqual(tool.inputSchema.properties.journeyTier.enum, ['confirmed', 'best_guess', 'all'])
   assert.equal(tool.inputSchema.properties.journeyTier.default, 'confirmed')
-  assert.equal(tool.outputSchema.properties.bestGuess.anyOf[0].properties.journeyTier.const, 'candidate_assisted')
-  assert.ok(tool.outputSchema.required.includes('confirmed'))
-  assert.ok(tool.outputSchema.required.includes('bestGuess'))
-  assert.deepEqual(tool.outputSchema.properties.confirmed.anyOf[0].properties.pageInfo.required, ['nextCursor', 'hasNextPage'])
+  const inline = tool.outputSchema.anyOf.find((branch: any) => branch.properties?.bestGuess)
+  assert.ok(inline)
+  assert.equal(inline.properties.bestGuess.anyOf[0].properties.journeyTier.const, 'candidate_assisted')
+  assert.ok(inline.required.includes('confirmed'))
+  assert.ok(inline.required.includes('bestGuess'))
+  assert.deepEqual(inline.properties.confirmed.anyOf[0].properties.pageInfo.required, ['nextCursor', 'hasNextPage'])
 
   assert.match(files.node, /journeyTier\?: "confirmed" \| "best_guess" \| "all"/)
   assert.match(files.node, /journeyTier: "candidate_assisted"/)
@@ -57,11 +59,13 @@ test('enhanced journey windows and complete confirmed output project into every 
     assert.match(tool.inputSchema.properties.from.description, /90 days/)
     assert.equal(tool.inputSchema.properties.to.format, 'date-time')
     assert.match(tool.inputSchema.properties.to.description, /366 days/)
-    assert.deepEqual(tool.outputSchema.required, ['ok', 'data'])
-    assert.equal(tool.outputSchema.properties.data.properties.journeyTier.const, 'confirmed')
-    assert.equal(tool.outputSchema.properties.data.properties.candidateAssisted.type, 'null')
+    const inline = tool.outputSchema.anyOf.find((branch: any) => branch.properties?.data)
+    assert.ok(inline)
+    assert.deepEqual(inline.required, ['ok', 'data'])
+    assert.equal(inline.properties.data.properties.journeyTier.const, 'confirmed')
+    assert.equal(inline.properties.data.properties.candidateAssisted.type, 'null')
     for (const field of ['subject', 'range', 'summary', 'commonPages', 'acquisition', 'eventBreakdown', 'sessions', 'items', 'pageInfo']) {
-      assert.ok(tool.outputSchema.properties.data.required.includes(field), `${name}.${field}`)
+      assert.ok(inline.properties.data.required.includes(field), `${name}.${field}`)
     }
   }
 

@@ -1,12 +1,13 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class ExportConnectedServiceDataInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
     connection_id: str = Field(..., alias="connectionId", description="A tenant-owned connectionId from list_service_connections.")
-    dataset: Literal['auto', 'emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'] | None = Field(None, alias="dataset", description="Dataset to export. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.")
+    dataset: Literal['auto', 'emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'] | None = Field(None, alias="dataset", description="Dataset to export. Choose google_analytics_reports for GA4 aggregate export across selected or discovered properties. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.")
+    google_analytics: dict[str, Any] | None = Field(None, alias="googleAnalytics", description="GA4 report query for dataset google_analytics_reports. Produces aggregate rows with quality metadata, signed resumable pagination and explicit property failure records; not raw event export.")
     channel_id: str | None = Field(None, alias="channelId", description="Slack conversation ID to export. Required for a new slack_channel_messages export; preserved inside continuation on resume. The export never joins a channel.")
     include_threads: bool | None = Field(None, alias="includeThreads", description="For Slack exports, automatically fetch every threaded reply. Defaults to true.")
     all_time: bool | None = Field(None, alias="allTime", description="For Slack exports only, read all accessible channel history instead of the default seven-day range. Do not combine with from, lastDays, or continuation.")
@@ -22,19 +23,30 @@ class ExportConnectedServiceDataInput(BaseModel):
 class ExportConnectedServiceDataOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="")
+    ok: bool | None = Field(None, alias="ok", description="")
     export_id: str | None = Field(None, alias="exportId", description="")
     status: Literal['complete', 'partial'] | None = Field(None, alias="status", description="")
     provider_config_key: str | None = Field(None, alias="providerConfigKey", description="")
-    dataset: Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'] | None = Field(None, alias="dataset", description="")
+    dataset: Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'] | None = Field(None, alias="dataset", description="")
     range: dict[str, Any] | None = Field(None, alias="range", description="")
-    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    scope: Any | None = Field(None, alias="scope", description="")
     counts: dict[str, Any] | None = Field(None, alias="counts", description="")
     complete: bool | None = Field(None, alias="complete", description="")
     records: list[Any] | None = Field(None, alias="records", description="")
-    preview: list[Any] | None = Field(None, alias="preview", description="")
+    preview: Any | None = Field(None, alias="preview", description="")
     artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")
     continuation: Any | None = Field(None, alias="continuation", description="")
     warnings: list[str] | None = Field(None, alias="warnings", description="")
     untrusted_content: bool | None = Field(None, alias="untrustedContent", description="")
-    error: Any = Field(..., alias="error", description="")
+    error: Any | None = Field(None, alias="error", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

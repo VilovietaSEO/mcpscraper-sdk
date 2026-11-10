@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class DeleteNoteInput(BaseModel):
@@ -14,10 +14,23 @@ class DeleteNoteInput(BaseModel):
 class DeleteNoteOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="True when the delete request was processed; false on an auth/scope/lookup error or a revision conflict.")
+    ok: bool | None = Field(None, alias="ok", description="True when the delete request was processed; false on an auth/scope/lookup error or a revision conflict.")
     vault: str | None = Field(None, alias="vault", description="The vault the delete was applied to (after defaulting). Present when ok is true.")
     deleted: bool | None = Field(None, alias="deleted", description="True if a note was removed; false if no matching note existed (idempotent). Present when ok is true.")
     conflict: bool | None = Field(None, alias="conflict", description="True when baseRevision did not match the current revision: someone else changed the note first. Nothing was deleted.")
     current: dict[str, Any] | None = Field(None, alias="current", description="Present only when conflict is true: the note as it stands now, so the caller can re-read before deciding whether to still delete.")
     code: str | None = Field(None, alias="code", description="Machine-readable denial code when ok is false: revision_conflict.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

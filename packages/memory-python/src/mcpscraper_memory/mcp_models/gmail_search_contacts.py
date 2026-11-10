@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class GmailSearchContactsInput(BaseModel):
@@ -14,11 +14,24 @@ class GmailSearchContactsInput(BaseModel):
 class GmailSearchContactsOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="")
+    ok: bool | None = Field(None, alias="ok", description="")
     total_matches: float | None = Field(None, alias="totalMatches", description="Gmail's estimated total matches for the query, independent of how many were fetched this call.")
     messages_fetched: float | None = Field(None, alias="messagesFetched", description="")
     truncated: bool | None = Field(None, alias="truncated", description="True when totalMatches exceeds messagesFetched — more results exist, use nextPageToken.")
-    next_page_token: Any = Field(..., alias="nextPageToken", description="")
+    next_page_token: Any | None = Field(None, alias="nextPageToken", description="")
     messages: list[dict[str, Any]] | None = Field(None, alias="messages", description="")
     contacts: list[dict[str, Any]] | None = Field(None, alias="contacts", description="Messages deduped by sender email address, newest-to-oldest within this fetch only — not the full query result set when truncated.")
-    error: Any = Field(..., alias="error", description="")
+    error: Any | None = Field(None, alias="error", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

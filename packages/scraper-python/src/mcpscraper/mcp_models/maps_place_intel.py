@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class MapsPlaceIntelInput(BaseModel):
@@ -10,7 +10,7 @@ class MapsPlaceIntelInput(BaseModel):
     gl: str | None = Field(None, alias="gl", description="Google country code inferred from location.")
     hl: str | None = Field(None, alias="hl", description="Language inferred from user request.")
     include_reviews: bool | None = Field(None, alias="includeReviews", description="Fetch individual review cards — for reviews, customer pain, complaints, or praise themes.")
-    max_reviews: int | None = Field(None, alias="maxReviews", description="Max review cards when includeReviews is true. Default 50, maximum 1,000. Collection is resumable; actual availability depends on the profile.")
+    max_reviews: int | None = Field(None, alias="maxReviews", description="Max review cards when includeReviews is true. Default 50, maximum 1,000. Availability depends on the profile. Partial or interrupted runs can resume.")
     include_services: bool | None = Field(None, alias="includeServices", description="Collect the exact business's configured services and areas served when available. These fields are absent on some profiles.")
     include_images: bool | None = Field(None, alias="includeImages", description="Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.")
     include: list[Literal['core', 'hours', 'services', 'areasServed', 'reviews', 'images', 'all']] | None = Field(None, alias="include", description="Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.")
@@ -37,9 +37,6 @@ class MapsPlaceIntelOutput(BaseModel):
     reviews_next_cursor: Any | None = Field(None, alias="reviewsNextCursor", description="")
     images_next_cursor: Any | None = Field(None, alias="imagesNextCursor", description="")
     maximum_authorization_mc: int | None = Field(None, alias="maximumAuthorizationMc", description="")
-    provider: str | None = Field(None, alias="provider", description="")
-    fallback_from: str | None = Field(None, alias="fallbackFrom", description="")
-    acquisition_provider: str | None = Field(None, alias="acquisitionProvider", description="")
     name: Any | None = Field(None, alias="name", description="")
     place_url: Any | None = Field(None, alias="placeUrl", description="")
     rating: Any | None = Field(None, alias="rating", description="")
@@ -67,3 +64,16 @@ class MapsPlaceIntelOutput(BaseModel):
     services_status: str | None = Field(None, alias="servicesStatus", description="")
     about_attributes: list[dict[str, Any]] | None = Field(None, alias="aboutAttributes", description="")
     media: dict[str, Any] | None = Field(None, alias="media", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

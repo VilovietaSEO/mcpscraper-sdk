@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class GoogleAdsPageIntelInput(BaseModel):
@@ -15,12 +15,25 @@ class GoogleAdsPageIntelInput(BaseModel):
 class GoogleAdsPageIntelOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    advertiser_id: Any = Field(..., alias="advertiserId", description="")
-    advertiser_name: Any = Field(..., alias="advertiserName", description="")
-    domain: Any = Field(..., alias="domain", description="")
-    region: str = Field(..., alias="region", description="")
-    total_creatives: int = Field(..., alias="totalCreatives", description="")
-    video_count: int = Field(..., alias="videoCount", description="")
-    image_count: int = Field(..., alias="imageCount", description="")
-    text_count: int = Field(..., alias="textCount", description="")
-    ads: list[dict[str, Any]] = Field(..., alias="ads", description="")
+    advertiser_id: Any | None = Field(None, alias="advertiserId", description="")
+    advertiser_name: Any | None = Field(None, alias="advertiserName", description="")
+    domain: Any | None = Field(None, alias="domain", description="")
+    region: str | None = Field(None, alias="region", description="")
+    total_creatives: int | None = Field(None, alias="totalCreatives", description="")
+    video_count: int | None = Field(None, alias="videoCount", description="")
+    image_count: int | None = Field(None, alias="imageCount", description="")
+    text_count: int | None = Field(None, alias="textCount", description="")
+    ads: list[dict[str, Any]] | None = Field(None, alias="ads", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data
