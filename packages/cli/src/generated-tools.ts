@@ -25401,7 +25401,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_trending",
     "category": "reddit",
     "title": "Reddit Trending",
-    "description": "Find Reddit discussions through Google, filter and select relevant candidates before opening them, then rank scraped threads by observed engagement. Use reddit_thread for a known URL. Comment retrieval verifies actual post dates against the requested window and reports captured counts separately from reported totals. Discovery, scraped threads and returned comments are billed separately. Discovery-only results leave post dates unverified; inspect partial, resultQuality and comment coverage before treating a shortfall as complete.",
+    "description": "Find Reddit discussions through Google, filter and select relevant candidates before opening them, then rank scraped threads by observed engagement. Use reddit_thread for a known URL. Comment retrieval verifies actual post dates against the requested window and returns captured comment bodies and coverage. Discovery, scraped threads and returned comments are billed separately. Discovery-only results leave post dates unverified; inspect partial, resultQuality and comment coverage before treating a shortfall as complete.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25427,6 +25427,7 @@ export const MCP_TOOL_CATALOG = [
           "type": "string",
           "enum": [
             "week",
+            "14d",
             "month",
             "year",
             "all"
@@ -25434,7 +25435,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "maxThreads": {
           "default": 20,
-          "description": "Cap on relevant threads selected before scraping; one search page can yield fewer. Each scraped thread and its returned comments are billed separately.",
+          "description": "Maximum number of threads returned. If a candidate cannot be delivered, other relevant candidates can take its place. Each delivered thread and its comments are billed separately.",
           "type": "integer",
           "minimum": 1,
           "maximum": 40
@@ -26387,7 +26388,7 @@ export const MCP_TOOL_CATALOG = [
         "query": {
           "type": "string",
           "minLength": 1,
-          "description": "The search topic, exactly as it should be searched. Include the place here when you want it in the search terms — the server sends your query to Google unchanged and never adds or removes a location."
+          "description": "Search terms, including any desired location. The first query is sent unchanged. A one-page light search that returns only off-domain rows for a Reddit site scope can retry with a narrower Reddit thread scope."
         },
         "location": {
           "description": "Compatibility field. Ordinary search ignores this. Include a place in query when needed.",

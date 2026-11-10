@@ -49,3 +49,21 @@ def test_rest_models_accept_year_and_preserve_nullable_publication_date():
     assert RedditThreadResponse.model_validate({"publishedAt": None}).publishedAt is None
     with pytest.raises(ValidationError):
         RedditTrendingRequest.model_validate({"topic": "roofer", "window": "day"})
+
+
+def test_fourteen_day_request_and_ranked_comment_text():
+    from mcpscraper.models import RedditTrendingRequest, RedditTrendingResponse
+
+    assert RedditTrendingInput.model_validate({"topic": "roofer", "window": "14d"}).window == "14d"
+    assert RedditTrendingRequest.model_validate({"topic": "roofer", "window": "14d"}).window.value == "14d"
+    result = RedditTrendingResponse.model_validate({
+        "window": "14d", "resultQuality": "partial", "billingRefunded": False,
+        "rankedThreads": [{
+            "publishedAt": "2026-11-08T12:00:00Z",
+            "comments": [{"author": "example", "score": "12", "depth": 0, "body": "Compare written estimates."}],
+        }],
+    })
+    assert result.rankedThreads[0].publishedAt.isoformat() == "2026-11-08T12:00:00+00:00"
+    assert result.rankedThreads[0].comments[0].body == "Compare written estimates."
+    assert result.resultQuality.value == "partial"
+    assert result.billingRefunded is False
