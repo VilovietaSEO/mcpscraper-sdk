@@ -784,13 +784,11 @@ paths:
       operationId: redditTrending
       summary: Discover and rank the top recent Reddit threads for a topic
       description: |
-        Finds relevant recent Reddit threads via a Google site:reddit.com search over a week/month window,
-        then (by default) scrapes them all in parallel for real upvotes, comments, and the questions people
-        asked, and ranks by engagement (upvotes + 2x comments). Billing: one discovery debit plus, when
-        includeComments is true, 30 credits per scraped thread and 2 credits per captured comment, each
-        refunded on failure. Set includeComments:false for a cheap discovery-only sweep (thread list, no
-        engagement stats, no per-thread billing). Scraping respects a soft deadline and returns partial:true
-        if it stops early rather than exceeding the request limit.
+        Finds Reddit discussions for a topic or subreddit. When comments are requested, opens candidate
+        posts to verify publication dates, collects comment text, and ranks delivered threads by engagement.
+        The 14-day window replaces candidates with no usable comments when more candidates are available.
+        Discovery-only results do not verify publication dates. Discovery, delivered threads, and captured
+        comments are billed separately. An empty delivery refunds the discovery charge.
       requestBody:
         required: true
         content:
@@ -801,9 +799,9 @@ paths:
               properties:
                 topic: { type: string, description: 'Topic in plain words, e.g. "crm for small business". Not a URL.' }
                 subreddit: { type: string, description: 'Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit.' }
-                window: { type: string, enum: [week, month], default: month, description: 'How recent the threads must be.' }
-                maxThreads: { type: integer, minimum: 1, maximum: 40, default: 20, description: 'How many discovered threads to scrape and rank (scrape-all default). Lower to cap cost.' }
-                includeComments: { type: boolean, default: true, description: 'true = scrape each thread for engagement + questions and rank; false = cheap discovery-only list.' }
+                window: { type: string, enum: [week, '14d', month, year, all], default: month, description: 'How recent the threads must be.' }
+                maxThreads: { type: integer, minimum: 1, maximum: 40, default: 20, description: 'Maximum number of threads returned.' }
+                includeComments: { type: boolean, default: true, description: 'Open posts to verify dates and capture comments. False returns unverified discovery candidates.' }
                 maxCommentsPerThread: { type: integer, minimum: 1, maximum: 200, default: 50, description: 'Comments captured (and billed) per scraped thread when includeComments is true.' }
       responses:
         '200':
@@ -815,7 +813,7 @@ paths:
                 properties:
                   topic: { type: string }
                   subreddit: { type: string, nullable: true }
-                  window: { type: string, description: 'Resolved window, e.g. "7d" or "30d".' }
+                  window: { type: string, description: 'Resolved window, e.g. "7d", "14d", or "30d".' }
                   totals:
                     type: object
                     properties:
@@ -834,6 +832,19 @@ paths:
                         commentCount: { type: integer }
                         engagementScore: { type: integer }
                         ageText: { type: string }
+                        publishedAt: { type: string, format: date-time, nullable: true }
+                        capturedCommentCount: { type: integer, minimum: 0 }
+                        requestedCommentLimit: { type: integer, minimum: 1 }
+                        comments:
+                          type: array
+                          items:
+                            type: object
+                            required: [author, score, depth, body]
+                            properties:
+                              author: { type: string }
+                              score: { type: string }
+                              depth: { type: integer, minimum: 0 }
+                              body: { type: string }
                         topQuestions: { type: array, items: { type: string } }
                   questions:
                     type: array
@@ -844,11 +855,13 @@ paths:
                         threadUrl: { type: string }
                   threadsScraped: { type: integer }
                   candidatesFound: { type: integer }
-                  partial: { type: boolean, description: 'true if scraping stopped early at the time limit.' }
+                  partial: { type: boolean, description: 'True when coverage is partial or a requested delivery target was not reached.' }
                   searchQuery: { type: string, description: 'The Google site:reddit.com query used for discovery.' }
+                  resultQuality: { type: string, enum: [complete, partial, degraded] }
+                  degradationReasons: { type: array, items: { type: string } }
+                  billingRefunded: { type: boolean }
         '400': { $ref: '#/components/responses/BadRequest' }
         '402': { $ref: '#/components/responses/InsufficientBalance' }
-        '404': { description: No Reddit threads found for that topic and window — billed amount was refunded. }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
 

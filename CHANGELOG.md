@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking:** Remove unified scheduling methods that were already retired from the runtime. Use retained tools and manual workflows for new work. This SDK update does not delete historical results.
+- Refresh the unified tool catalog from the current runtime and align Node, Python, CLI, and cURL bindings.
+
+### Fixed
+
+- Accept the 14-day Reddit publication window and expose captured comment text and publication timestamps in Reddit trend results.
+- Preserve named fields and wire aliases in Python when tool results can arrive inline or as a file receipt.
+
+
 ## [0.52.0] - 2026-09-29 — targets mcp-scraper 0.95.2
 
 ### Added

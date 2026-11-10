@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class MapsPlaceStatusInput(BaseModel):
@@ -29,9 +29,6 @@ class MapsPlaceStatusOutput(BaseModel):
     reviews_next_cursor: Any | None = Field(None, alias="reviewsNextCursor", description="")
     images_next_cursor: Any | None = Field(None, alias="imagesNextCursor", description="")
     maximum_authorization_mc: int | None = Field(None, alias="maximumAuthorizationMc", description="")
-    provider: str | None = Field(None, alias="provider", description="")
-    fallback_from: str | None = Field(None, alias="fallbackFrom", description="")
-    acquisition_provider: str | None = Field(None, alias="acquisitionProvider", description="")
     name: Any | None = Field(None, alias="name", description="")
     place_url: Any | None = Field(None, alias="placeUrl", description="")
     rating: Any | None = Field(None, alias="rating", description="")
@@ -59,3 +56,16 @@ class MapsPlaceStatusOutput(BaseModel):
     services_status: str | None = Field(None, alias="servicesStatus", description="")
     about_attributes: list[dict[str, Any]] | None = Field(None, alias="aboutAttributes", description="")
     media: dict[str, Any] | None = Field(None, alias="media", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

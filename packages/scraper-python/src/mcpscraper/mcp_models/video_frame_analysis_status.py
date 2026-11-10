@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class VideoFrameAnalysisStatusInput(BaseModel):
@@ -11,12 +11,25 @@ class VideoFrameAnalysisStatusInput(BaseModel):
 class VideoFrameAnalysisStatusOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="")
-    run_id: Any = Field(..., alias="runId", description="")
-    status: Any = Field(..., alias="status", description="")
+    ok: bool | None = Field(None, alias="ok", description="")
+    run_id: Any | None = Field(None, alias="runId", description="")
+    status: Any | None = Field(None, alias="status", description="")
     progress: Any | None = Field(None, alias="progress", description="")
     frame_count: Any | None = Field(None, alias="frameCount", description="")
-    artifact_path: Any = Field(..., alias="artifactPath", description="")
-    report: Any = Field(..., alias="report", description="")
-    error: Any = Field(..., alias="error", description="")
+    artifact_path: Any | None = Field(None, alias="artifactPath", description="")
+    report: Any | None = Field(None, alias="report", description="")
+    error: Any | None = Field(None, alias="error", description="")
     reconciliation: Any | None = Field(None, alias="reconciliation", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

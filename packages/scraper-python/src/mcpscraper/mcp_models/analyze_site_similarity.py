@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class AnalyzeSiteSimilarityInput(BaseModel):
@@ -15,7 +15,7 @@ class AnalyzeSiteSimilarityInput(BaseModel):
 class AnalyzeSiteSimilarityOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    url: str = Field(..., alias="url", description="")
+    url: str | None = Field(None, alias="url", description="")
     stopped_early: Any | None = Field(None, alias="stoppedEarly", description="Present when the crawl stopped before finishing. The returned pages are everything that was captured, and billing covers only those pages - treat the result as partial, not as the whole site.")
     page_count: int | None = Field(None, alias="pageCount", description="Absent when background is true — the crawl has not finished yet.")
     pages: list[dict[str, Any]] | None = Field(None, alias="pages", description="Absent when background is true — the crawl has not finished yet.")
@@ -29,4 +29,16 @@ class AnalyzeSiteSimilarityOutput(BaseModel):
     effective_max_pages: int | None = Field(None, alias="effectiveMaxPages", description="")
     credit_limited: bool | None = Field(None, alias="creditLimited", description="")
     credit_truncated: bool | None = Field(None, alias="creditTruncated", description="")
-    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    delivery: Any | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class BrowserReplayMarkInput(BaseModel):
@@ -19,12 +19,25 @@ class BrowserReplayMarkInput(BaseModel):
 class BrowserReplayMarkOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="Whether the browser-agent action succeeded.")
-    tool: str = Field(..., alias="tool", description="")
-    session_id: Any = Field(..., alias="session_id", description="Browser session id when the response is scoped to a session.")
-    replay_id: Any = Field(..., alias="replay_id", description="Replay id when the response is scoped to a replay.")
-    annotation: dict[str, Any] = Field(..., alias="annotation", description="")
-    source_width: Any = Field(..., alias="source_width", description="")
-    source_height: Any = Field(..., alias="source_height", description="")
-    target: Any = Field(..., alias="target", description="")
-    hint: str = Field(..., alias="hint", description="")
+    ok: bool | None = Field(None, alias="ok", description="Whether the browser-agent action succeeded.")
+    tool: str | None = Field(None, alias="tool", description="")
+    session_id: Any | None = Field(None, alias="session_id", description="Browser session id when the response is scoped to a session.")
+    replay_id: Any | None = Field(None, alias="replay_id", description="Replay id when the response is scoped to a replay.")
+    annotation: dict[str, Any] | None = Field(None, alias="annotation", description="")
+    source_width: Any | None = Field(None, alias="source_width", description="")
+    source_height: Any | None = Field(None, alias="source_height", description="")
+    target: Any | None = Field(None, alias="target", description="")
+    hint: str | None = Field(None, alias="hint", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

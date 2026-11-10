@@ -1,4 +1,4 @@
-# All 364 MCP tools with cURL
+# All 352 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -81,7 +81,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (364)
+## Complete catalog (352)
 
 ## access
 
@@ -224,29 +224,22 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 ## schedule
 
 - `archive_artifact_template` — Archive Template
-- `archive_scheduled_run` — Archive Scheduled Result
 - `create_artifact_template` — Save Template
-- `create_scheduled_run_view_link` — Create Scheduled Result View Link
-- `create-scheduled-action` — Create Scheduled Action
-- `delete-scheduled-action` — Delete Scheduled Action
 - `get_artifact_template` — Get Template
-- `get_scheduled_run` — Get Scheduled Result
-- `get-schedule-link` — Get Schedule Link
-- `get-schedule-status` — Get Schedule Status
 - `list_artifact_templates` — Search Templates
-- `list_scheduled_runs` — List Scheduled Results
-- `list-scheduled-actions` — List Scheduled Actions
-- `mark_scheduled_run_opened` — Mark Scheduled Result Opened
-- `mark_scheduled_run_unopened` — Mark Scheduled Result Unopened
-- `pause-scheduled-action` — Pause Scheduled Action
-- `propose-scheduled-action` — Propose Scheduled Action
-- `resume-scheduled-action` — Resume Scheduled Action
-- `revoke_scheduled_run_view_link` — Revoke Scheduled Result View Link
-- `revoke-schedule-link` — Revoke Schedule Link
-- `set-schedule-defaults` — Set Schedule Defaults
-- `set-schedule-entitlement` — Set Schedule Entitlement
 - `update_artifact_template` — Update Template
-- `update-scheduled-action` — Update Scheduled Action
+
+## other
+
+- `artifact_describe` — Describe Retained File
+- `artifact_download` — Download Retained File
+- `artifact_read` — Read Retained File
+- `bug_reporting` — Bug Reporting
+- `extract_url_status` — Check Durable Single URL Extract
+- `harvest_paa_start` — Start Durable Google PAA Harvest
+- `harvest_paa_status` — Check Durable Google PAA Harvest
+- `search_serp_status` — Check Durable Google SERP Lookup
+- `tiktok_video_transcribe` — TikTok Video Transcription
 
 ## browser
 
@@ -309,7 +302,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `meta_ad_creative_media` — View Meta Ad Creative Media
 - `read_service_connection` — Read Connected Service
 - `renew_connected_data_download` — Renew Connected Data Download
-- `set_scheduled_action_connections` — Set Scheduled Action Connections
 - `slack_send_message` — Send Slack Message
 - `test_service_connection` — Test Connected Service
 - `zoom_create_meeting` — Create Zoom Meeting
@@ -322,6 +314,8 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 ## commons
 
 - `commons_claim_publication` — Claim Transparent Commons Publication
+- `commons_delete_editorial_article` — Delete One Transparent Commons Article
+- `commons_delete_publication` — Delete Transparent Commons Publication
 - `commons_get_entity` — Transparent Commons Entity Lookup
 - `commons_get_entity_ledger` — Transparent Commons Contribution Ledger
 - `commons_get_entity_linkset` — Transparent Commons RFC 9264 Linkset
@@ -330,6 +324,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `commons_host_image` — Host a Transparent Commons Image
 - `commons_list_filters` — Transparent Commons List Saved Filters
 - `commons_list_needs_links` — Transparent Commons Needs-Link Backlog
+- `commons_list_publications` — List Transparent Commons Publications
 - `commons_prepare_entity` — Transparent Commons Prepare Entity
 - `commons_prepare_publication` — Prepare Transparent Commons Publication
 - `commons_publish_editorial` — Publish Transparent Commons Editorial Edition
@@ -412,14 +407,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `resolve-local-sourcebook-tags` — Resolve Local Sourcebook Tags
 - `validate-local-sourcebook-write` — Validate Local Sourcebook Write
 
-## other
-
-- `extract_url_status` — Check Durable Single URL Extract
-- `harvest_paa_start` — Start Durable Google PAA Harvest
-- `harvest_paa_status` — Check Durable Google PAA Harvest
-- `search_serp_status` — Check Durable Google SERP Lookup
-- `tiktok_video_transcribe` — TikTok Video Transcription
-
 ## facebook
 
 - `facebook_ad_search` — Facebook Ad Library Search
@@ -481,6 +468,10 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `lead_list_enrich_status` — Lead List Enrichment Status
 - `lead_list_import` — Import a Lead List
 - `lead_list_upload_start` — Upload a Lead List
+
+## leadLists
+
+- `lead_list_enrich_cancel` — Cancel Lead List Enrichment
 
 ## library
 

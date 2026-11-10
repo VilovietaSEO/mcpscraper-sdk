@@ -20,18 +20,18 @@ test('PAA tools expose bounded organic pagination and one page-one PAA graph', a
       minimum: 1,
       maximum: 2,
     })
-    assert.match(tool.description, /PAA is still expanded once on the preserved first page/)
+    assert.match(tool.description, /PAA (?:is still expanded|expands) once on (?:the preserved first page|page one)/)
   }
 
-  const syncPagination = sync.outputSchema.properties.pagination
+  const syncPagination = sync.outputSchema.anyOf.find((branch: any) => branch.properties?.pagination).properties.pagination
   assert.deepEqual(syncPagination.anyOf[0].properties.page2Status.enum, [
     'not_requested', 'not_attempted', 'captured', 'unavailable', 'failed',
   ])
   assert.equal(syncPagination.anyOf[1].type, 'null')
 
-  const progressPagination = status.outputSchema.properties.progress.properties.pagination
+  const progressPagination = status.outputSchema.anyOf.find((branch: any) => branch.properties?.progress).properties.progress.properties.pagination
   assert.deepEqual(progressPagination, syncPagination)
-  assert.match(status.description, /PAA graph always comes from the preserved first page/)
+  assert.match(status.description, /PAA comes from page one/)
 })
 
 test('the runnable example defaults safely, requests two pages explicitly, and polls one durable job', async () => {

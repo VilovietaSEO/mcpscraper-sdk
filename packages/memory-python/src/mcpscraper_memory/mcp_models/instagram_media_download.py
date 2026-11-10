@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class InstagramMediaDownloadInput(BaseModel):
@@ -18,19 +18,32 @@ class InstagramMediaDownloadInput(BaseModel):
 class InstagramMediaDownloadOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    source_url: str = Field(..., alias="sourceUrl", description="")
-    page_url: str = Field(..., alias="pageUrl", description="")
-    browser: dict[str, Any] = Field(..., alias="browser", description="")
-    type: Any = Field(..., alias="type", description="")
-    shortcode: Any = Field(..., alias="shortcode", description="")
-    owner_name: Any = Field(..., alias="ownerName", description="")
-    caption: Any = Field(..., alias="caption", description="")
-    image_url: Any = Field(..., alias="imageUrl", description="")
-    track_count: int = Field(..., alias="trackCount", description="")
-    selected_video_track: Any = Field(..., alias="selectedVideoTrack", description="")
-    selected_audio_track: Any = Field(..., alias="selectedAudioTrack", description="")
-    downloads: list[dict[str, Any]] = Field(..., alias="downloads", description="")
-    output_dir: Any = Field(..., alias="outputDir", description="")
-    warnings: list[str] = Field(..., alias="warnings", description="")
-    limitations: list[str] = Field(..., alias="limitations", description="")
-    transcript: Any = Field(..., alias="transcript", description="")
+    source_url: str | None = Field(None, alias="sourceUrl", description="")
+    page_url: str | None = Field(None, alias="pageUrl", description="")
+    browser: dict[str, Any] | None = Field(None, alias="browser", description="")
+    type: Any | None = Field(None, alias="type", description="")
+    shortcode: Any | None = Field(None, alias="shortcode", description="")
+    owner_name: Any | None = Field(None, alias="ownerName", description="")
+    caption: Any | None = Field(None, alias="caption", description="")
+    image_url: Any | None = Field(None, alias="imageUrl", description="")
+    track_count: int | None = Field(None, alias="trackCount", description="")
+    selected_video_track: Any | None = Field(None, alias="selectedVideoTrack", description="")
+    selected_audio_track: Any | None = Field(None, alias="selectedAudioTrack", description="")
+    downloads: list[dict[str, Any]] | None = Field(None, alias="downloads", description="")
+    output_dir: Any | None = Field(None, alias="outputDir", description="")
+    warnings: list[str] | None = Field(None, alias="warnings", description="")
+    limitations: list[str] | None = Field(None, alias="limitations", description="")
+    transcript: Any | None = Field(None, alias="transcript", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

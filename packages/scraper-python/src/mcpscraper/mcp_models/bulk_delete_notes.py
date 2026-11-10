@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class BulkDeleteNotesInput(BaseModel):
@@ -14,7 +14,7 @@ class BulkDeleteNotesInput(BaseModel):
 class BulkDeleteNotesOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="True on success; false on auth/scope/validation error.")
+    ok: bool | None = Field(None, alias="ok", description="True on success; false on auth/scope/validation error.")
     vault: str | None = Field(None, alias="vault", description="The vault operated on (after defaulting). Present when ok is true.")
     dry_run: bool | None = Field(None, alias="dryRun", description="Echoes whether this call was a preview or a real delete.")
     match_count: float | None = Field(None, alias="matchCount", description="Number of notes matching the filters. Present on a dry run.")
@@ -22,3 +22,16 @@ class BulkDeleteNotesOutput(BaseModel):
     deleted: float | None = Field(None, alias="deleted", description="Number of notes actually deleted. Present when dryRun is false.")
     deleted_paths: list[str] | None = Field(None, alias="deletedPaths", description="Paths of the deleted notes. Present when dryRun is false.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

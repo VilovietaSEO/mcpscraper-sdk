@@ -14,10 +14,3 @@ class CrmImportApplyInput(BaseModel):
 
 class CrmImportApplyOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    ok: bool = Field(..., alias="ok", description="")
-    message: str = Field(..., alias="message", description="")
-    result: dict[str, Any] | None = Field(None, alias="result", description="")
-    receipt: dict[str, Any] | None = Field(None, alias="receipt", description="")
-    code: str | None = Field(None, alias="code", description="")
-    error: str | None = Field(None, alias="error", description="")

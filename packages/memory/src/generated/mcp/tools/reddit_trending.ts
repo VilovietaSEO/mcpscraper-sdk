@@ -1,5 +1,9 @@
 export interface Input {
   /**
+   * One logical request identity. Retry identical inputs with the same key to replay or recover without repeating provider work. Omit for a fresh intent; use the key returned with the result or transport error for retries.
+   */
+  idempotencyKey?: string;
+  /**
    * Topic to scan (e.g. "crm for small business"). Include quotation marks inside the value for an exact-phrase site search. Not a URL — pass a known thread URL to reddit_thread instead.
    */
   topic: string;
@@ -8,15 +12,15 @@ export interface Input {
    */
   subreddit?: string;
   /**
-   * Web-discovery time range: "week", "month" (default), or "all" (no date filter).
+   * Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.
    */
-  window?: "week" | "month" | "all";
+  window?: "week" | "14d" | "month" | "year" | "all";
   /**
-   * How many discovered threads to scrape and rank. Default 20 (scrape-all). Each scraped thread is billed like reddit_thread + its comments, so lower this to cap cost; raise toward 40 for a wider sweep. Scraping runs in parallel and stops early if it nears the request time limit (partial:true in the response).
+   * Maximum number of threads returned. If a candidate cannot be delivered, other relevant candidates can take its place. Each delivered thread and its comments are billed separately.
    */
   maxThreads?: number;
   /**
-   * Scrape each discovered thread for real upvotes, comments, and the questions people asked, then rank by engagement. Set false for a fast, cheap discovery-only sweep — returns the discovered threads (title + url) in relevance order with NO engagement stats and NO per-thread billing, so you can then call reddit_thread on the ones you want.
+   * Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.
    */
   includeComments?: boolean;
   /**
@@ -25,37 +29,113 @@ export interface Input {
   maxCommentsPerThread?: number;
 }
 
-export interface Output {
-  topic: string;
-  subreddit: string | null;
-  window: string;
-  totals: {
-    threads: number;
-    upvotes: number;
-    comments: number;
-  };
-  rankedThreads: {
-    title: string;
-    url: string;
-    subreddit: string;
-    score: number;
-    commentCount: number;
-    engagementScore: number;
-    ageText: string;
-    topQuestions: string[];
-  }[];
-  questions: {
-    question: string;
-    threadUrl: string;
-  }[];
-  threadsScraped: number;
-  candidatesFound: number;
-  partial: boolean;
-  searchQuery: string;
-  discoverySource: "web_search" | "google_serp" | "reddit_search_fallback" | "none";
-  resultQuality: "complete" | "partial" | "degraded";
-  degradedResult: boolean;
-  degradationReasons: string[];
-  retryRecommended: boolean;
-  billingRefunded: boolean;
-}
+export type Output =
+  | {
+      operation?: {
+        runId: string | null;
+        idempotencyKey: string;
+        state: string;
+      };
+      topic: string;
+      subreddit: string | null;
+      window: string;
+      totals: {
+        threads: number;
+        upvotes: number;
+        comments: number;
+      };
+      rankedThreads: {
+        title: string;
+        url: string;
+        subreddit: string;
+        score: number;
+        commentCount: number;
+        engagementScore: number;
+        ageText: string;
+        publishedAt?: string | null;
+        comments?: {
+          author: string;
+          score: string;
+          depth: number;
+          body: string;
+        }[];
+        capturedCommentCount?: number;
+        requestedCommentLimit?: number;
+        commentCoverage?: {
+          requestedLimit: number;
+          returnedCount: number;
+          declaredCount: number;
+          status: "complete" | "partial";
+          reason:
+            | "requested_limit_reached"
+            | "declared_count_reached"
+            | "stable_visible_shortfall"
+            | "capture_shortfall"
+            | "funding_limited";
+        };
+        topQuestions: string[];
+      }[];
+      questions: {
+        question: string;
+        threadUrl: string;
+      }[];
+      threadsScraped: number;
+      candidatesFound: number;
+      partial: boolean;
+      searchQuery: string;
+      discoverySource: "web_search" | "google_serp" | "reddit_search_fallback" | "none";
+      resultQuality: "complete" | "partial" | "degraded";
+      degradedResult: boolean;
+      degradationReasons: string[];
+      retryRecommended: boolean;
+      billingRefunded: boolean;
+    }
+  | {
+      delivery: {
+        mode: "artifact";
+        status: "complete" | "partial" | "unavailable";
+        retainedRepresentation: "formatted-tool-result";
+        sourceIsError: boolean;
+        artifacts: {
+          artifactId: string;
+          filename: string;
+          contentType: string;
+          bytes: number;
+          sha256: string;
+          expiresAt: string;
+          capabilities: string[];
+          downloadUrl: string | null;
+          downloadUrlExpiresAt: string | null;
+          downloadState: "available" | "local" | "unavailable";
+        }[];
+        availableExports?: {
+          artifactId: string;
+          sourceArtifactId: string;
+          filename: "result.md";
+          contentType: "text/markdown; charset=utf-8";
+          state: "on-demand";
+        }[];
+        downloadLinksOmitted: boolean;
+        scopeOmittedFields: number;
+        storageFailure: {
+          artifactId: string | null;
+          outcome: "unknown" | "bytes-stored-metadata-pending" | "failed";
+        } | null;
+        nextAction: string;
+      };
+      preview: string;
+      scope: {
+        [k: string]: string | number | boolean | null;
+      };
+      recovery: {
+        idempotencyKey?: string;
+        operationId?: string;
+        runId?: string;
+        jobId?: string;
+        operation?: {
+          runId: string | null;
+          idempotencyKey: string;
+          state: string;
+        };
+      };
+    };

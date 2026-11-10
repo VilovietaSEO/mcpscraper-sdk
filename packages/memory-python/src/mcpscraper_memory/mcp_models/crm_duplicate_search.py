@@ -15,9 +15,3 @@ class CrmDuplicateSearchInput(BaseModel):
 
 class CrmDuplicateSearchOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
-
-    ok: bool = Field(..., alias="ok", description="")
-    message: str = Field(..., alias="message", description="")
-    candidates: list[dict[str, Any]] | None = Field(None, alias="candidates", description="")
-    code: str | None = Field(None, alias="code", description="")
-    error: str | None = Field(None, alias="error", description="")

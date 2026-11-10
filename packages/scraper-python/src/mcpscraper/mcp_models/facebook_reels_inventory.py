@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class FacebookReelsInventoryInput(BaseModel):
@@ -18,25 +18,38 @@ class FacebookReelsInventoryInput(BaseModel):
 class FacebookReelsInventoryOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    source_url: str = Field(..., alias="sourceUrl", description="")
-    profile_url: str = Field(..., alias="profileUrl", description="")
-    page_url: str = Field(..., alias="pageUrl", description="")
-    profile_name: Any = Field(..., alias="profileName", description="")
-    browser: dict[str, Any] = Field(..., alias="browser", description="")
-    requested_max_urls: int = Field(..., alias="requestedMaxUrls", description="")
-    effective_max_urls: int = Field(..., alias="effectiveMaxUrls", description="")
-    anonymous_cap: float = Field(..., alias="anonymousCap", description="")
-    anonymous_cap_applied: bool = Field(..., alias="anonymousCapApplied", description="")
-    saved_profile_requested: bool = Field(..., alias="savedProfileRequested", description="")
-    authentication_status: Literal['authenticated', 'logged_out', 'unknown'] = Field(..., alias="authenticationStatus", description="")
-    collected_url_count: int = Field(..., alias="collectedUrlCount", description="")
-    resumed_url_count: int = Field(..., alias="resumedUrlCount", description="")
-    newly_collected_url_count: int = Field(..., alias="newlyCollectedUrlCount", description="")
-    complete: bool = Field(..., alias="complete", description="")
-    partial: bool = Field(..., alias="partial", description="")
-    stopped_reason: Literal['max_urls', 'anonymous_cap', 'deadline', 'login_wall', 'stable_scrolls', 'max_scrolls', 'no_scrolls', 'navigation_error', 'browser_error'] = Field(..., alias="stoppedReason", description="")
-    pagination: dict[str, Any] = Field(..., alias="pagination", description="")
-    items: list[dict[str, Any]] = Field(..., alias="items", description="")
-    limitations: list[str] = Field(..., alias="limitations", description="")
-    recoverable_error: Any = Field(..., alias="recoverableError", description="")
-    extracted_at: str = Field(..., alias="extractedAt", description="")
+    source_url: str | None = Field(None, alias="sourceUrl", description="")
+    profile_url: str | None = Field(None, alias="profileUrl", description="")
+    page_url: str | None = Field(None, alias="pageUrl", description="")
+    profile_name: Any | None = Field(None, alias="profileName", description="")
+    browser: dict[str, Any] | None = Field(None, alias="browser", description="")
+    requested_max_urls: int | None = Field(None, alias="requestedMaxUrls", description="")
+    effective_max_urls: int | None = Field(None, alias="effectiveMaxUrls", description="")
+    anonymous_cap: float | None = Field(None, alias="anonymousCap", description="")
+    anonymous_cap_applied: bool | None = Field(None, alias="anonymousCapApplied", description="")
+    saved_profile_requested: bool | None = Field(None, alias="savedProfileRequested", description="")
+    authentication_status: Literal['authenticated', 'logged_out', 'unknown'] | None = Field(None, alias="authenticationStatus", description="")
+    collected_url_count: int | None = Field(None, alias="collectedUrlCount", description="")
+    resumed_url_count: int | None = Field(None, alias="resumedUrlCount", description="")
+    newly_collected_url_count: int | None = Field(None, alias="newlyCollectedUrlCount", description="")
+    complete: bool | None = Field(None, alias="complete", description="")
+    partial: bool | None = Field(None, alias="partial", description="")
+    stopped_reason: Literal['max_urls', 'anonymous_cap', 'deadline', 'login_wall', 'stable_scrolls', 'max_scrolls', 'no_scrolls', 'navigation_error', 'browser_error'] | None = Field(None, alias="stoppedReason", description="")
+    pagination: dict[str, Any] | None = Field(None, alias="pagination", description="")
+    items: list[dict[str, Any]] | None = Field(None, alias="items", description="")
+    limitations: list[str] | None = Field(None, alias="limitations", description="")
+    recoverable_error: Any | None = Field(None, alias="recoverableError", description="")
+    extracted_at: str | None = Field(None, alias="extractedAt", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

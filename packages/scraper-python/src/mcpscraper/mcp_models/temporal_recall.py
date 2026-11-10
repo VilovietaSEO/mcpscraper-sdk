@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class TemporalRecallInput(BaseModel):
@@ -15,8 +15,21 @@ class TemporalRecallInput(BaseModel):
 class TemporalRecallOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="True when recall succeeded; false on auth/scope error.")
+    ok: bool | None = Field(None, alias="ok", description="True when recall succeeded; false on auth/scope error.")
     range: dict[str, Any] | None = Field(None, alias="range", description="The actual time window used after resolving daysAgo/from/to (default: last 7 days).")
     items: list[dict[str, Any]] | None = Field(None, alias="items", description="Captures within the window, newest-first. Present when ok is true.")
     search_results: list[dict[str, Any]] | None = Field(None, alias="searchResults", description="Blended semantic-search hits for the query. Present only when a query was supplied.")
     error: str | None = Field(None, alias="error", description="Human-readable failure reason when ok is false.")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

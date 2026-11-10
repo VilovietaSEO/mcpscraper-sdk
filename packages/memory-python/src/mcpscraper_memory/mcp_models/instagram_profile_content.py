@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class InstagramProfileContentInput(BaseModel):
@@ -18,18 +18,31 @@ class InstagramProfileContentInput(BaseModel):
 class InstagramProfileContentOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    handle: str = Field(..., alias="handle", description="")
-    profile_url: str = Field(..., alias="profileUrl", description="")
-    page_url: str = Field(..., alias="pageUrl", description="")
-    browser: dict[str, Any] = Field(..., alias="browser", description="")
-    profile_name: Any = Field(..., alias="profileName", description="")
-    reported_post_count: Any = Field(..., alias="reportedPostCount", description="")
-    reported_post_count_text: Any = Field(..., alias="reportedPostCountText", description="")
-    follower_count_text: Any = Field(..., alias="followerCountText", description="")
-    following_count_text: Any = Field(..., alias="followingCountText", description="")
-    collected_content_count: int = Field(..., alias="collectedContentCount", description="")
-    type_counts: dict[str, Any] = Field(..., alias="typeCounts", description="")
-    pagination: dict[str, Any] = Field(..., alias="pagination", description="")
-    limited: bool = Field(..., alias="limited", description="")
-    limitations: list[str] = Field(..., alias="limitations", description="")
-    items: list[dict[str, Any]] = Field(..., alias="items", description="")
+    handle: str | None = Field(None, alias="handle", description="")
+    profile_url: str | None = Field(None, alias="profileUrl", description="")
+    page_url: str | None = Field(None, alias="pageUrl", description="")
+    browser: dict[str, Any] | None = Field(None, alias="browser", description="")
+    profile_name: Any | None = Field(None, alias="profileName", description="")
+    reported_post_count: Any | None = Field(None, alias="reportedPostCount", description="")
+    reported_post_count_text: Any | None = Field(None, alias="reportedPostCountText", description="")
+    follower_count_text: Any | None = Field(None, alias="followerCountText", description="")
+    following_count_text: Any | None = Field(None, alias="followingCountText", description="")
+    collected_content_count: int | None = Field(None, alias="collectedContentCount", description="")
+    type_counts: dict[str, Any] | None = Field(None, alias="typeCounts", description="")
+    pagination: dict[str, Any] | None = Field(None, alias="pagination", description="")
+    limited: bool | None = Field(None, alias="limited", description="")
+    limitations: list[str] | None = Field(None, alias="limitations", description="")
+    items: list[dict[str, Any]] | None = Field(None, alias="items", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

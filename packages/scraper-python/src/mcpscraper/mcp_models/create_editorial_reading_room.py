@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class CreateEditorialReadingRoomInput(BaseModel):
@@ -14,15 +14,27 @@ class CreateEditorialReadingRoomInput(BaseModel):
 class CreateEditorialReadingRoomOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    ok: bool = Field(..., alias="ok", description="")
-    title: str = Field(..., alias="title", description="")
-    filename: str = Field(..., alias="filename", description="")
-    delivery: Literal['artifact', 'local_file'] = Field(..., alias="delivery", description="")
-    article_count: int = Field(..., alias="articleCount", description="")
-    word_count: int = Field(..., alias="wordCount", description="")
-    bytes: int = Field(..., alias="bytes", description="")
-    sha256: str = Field(..., alias="sha256", description="")
-    generated_at: str = Field(..., alias="generatedAt", description="")
+    ok: bool | None = Field(None, alias="ok", description="")
+    title: str | None = Field(None, alias="title", description="")
+    filename: str | None = Field(None, alias="filename", description="")
+    delivery: Any = Field(..., alias="delivery", description="")
+    article_count: int | None = Field(None, alias="articleCount", description="")
+    word_count: int | None = Field(None, alias="wordCount", description="")
+    bytes: int | None = Field(None, alias="bytes", description="")
+    sha256: str | None = Field(None, alias="sha256", description="")
+    generated_at: str | None = Field(None, alias="generatedAt", description="")
     artifact: dict[str, Any] | None = Field(None, alias="artifact", description="")
     local_path: str | None = Field(None, alias="localPath", description="")
-    warnings: list[str] = Field(..., alias="warnings", description="")
+    warnings: list[str] | None = Field(None, alias="warnings", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data

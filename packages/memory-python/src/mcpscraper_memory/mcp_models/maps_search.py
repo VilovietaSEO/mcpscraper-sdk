@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 
 class MapsSearchInput(BaseModel):
@@ -16,15 +16,25 @@ class MapsSearchInput(BaseModel):
 class MapsSearchOutput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    provider: str | None = Field(None, alias="provider", description="")
-    fallback_from: str | None = Field(None, alias="fallbackFrom", description="")
-    acquisition_provider: str | None = Field(None, alias="acquisitionProvider", description="")
-    query: str = Field(..., alias="query", description="")
-    location: Any = Field(..., alias="location", description="")
-    search_query: str = Field(..., alias="searchQuery", description="")
-    search_url: str = Field(..., alias="searchUrl", description="")
-    extracted_at: str = Field(..., alias="extractedAt", description="")
-    requested_max_results: int = Field(..., alias="requestedMaxResults", description="")
-    result_count: int = Field(..., alias="resultCount", description="")
-    results: list[dict[str, Any]] = Field(..., alias="results", description="")
-    duration_ms: int = Field(..., alias="durationMs", description="")
+    query: str | None = Field(None, alias="query", description="")
+    location: Any | None = Field(None, alias="location", description="")
+    search_query: str | None = Field(None, alias="searchQuery", description="")
+    search_url: str | None = Field(None, alias="searchUrl", description="")
+    extracted_at: str | None = Field(None, alias="extractedAt", description="")
+    requested_max_results: int | None = Field(None, alias="requestedMaxResults", description="")
+    result_count: int | None = Field(None, alias="resultCount", description="")
+    results: list[dict[str, Any]] | None = Field(None, alias="results", description="")
+    duration_ms: int | None = Field(None, alias="durationMs", description="")
+    delivery: dict[str, Any] | None = Field(None, alias="delivery", description="")
+    preview: str | None = Field(None, alias="preview", description="")
+    scope: dict[str, Any] | None = Field(None, alias="scope", description="")
+    recovery: dict[str, Any] | None = Field(None, alias="recovery", description="")
+
+    @model_serializer(mode="wrap")
+    def _serialize_response(self, handler, info):
+        data = handler(self)
+        for name, field in type(self).model_fields.items():
+            if name not in self.model_fields_set:
+                key = field.alias if info.by_alias and field.alias else name
+                data.pop(key, None)
+        return data
