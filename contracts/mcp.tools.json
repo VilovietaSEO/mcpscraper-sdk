@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.103.11 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "a13d612b805e4d653b57730718380a1dd9e7eb09f2b6485d64774f63ba5a1299",
+  "generatedFrom": "mcp-scraper 0.103.12 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "bb0c2f8a123c7dee80e41232bf727cd8d7f40d3c036f150d68bb8b9f4f2b48c6",
   "toolCount": 352,
   "tools": [
     {
@@ -163411,7 +163411,7 @@
     {
       "name": "reddit_trending",
       "title": "Reddit Trending",
-      "description": "Find Reddit discussions through Google with DuckDuckGo fallback, then rank verified threads by observed engagement. Use reddit_thread for a known URL. Omit the window for a topic search across all time. For a dated search, a recent post or a recent captured comment can qualify a thread. Returns captured comments, observed dates and coverage. Discovery, scraped threads and returned comments are billed separately. Undated link-only results leave post dates unverified; inspect partial, resultQuality and comment coverage before treating a shortfall as complete.",
+      "description": "Find Reddit discussions or fetch them in a batch. Review mode lists URLs without opening threads. Show those URLs and wait for the user to choose, then call approve mode with the review ID and selected URLs. Reviews can be approved for one hour. If the user says auto-approve, use auto mode to search and fetch immediately. Discovery, fetched threads and returned comments are billed separately. Use reddit_thread for one known URL.",
       "category": "reddit",
       "methodName": "trending",
       "inputSchema": {
@@ -163424,9 +163424,35 @@
             "maxLength": 512
           },
           "topic": {
+            "description": "Topic to search. Required for discovery. Approve mode uses the original review topic and options.",
             "type": "string",
-            "minLength": 1,
-            "description": "Topic to scan (e.g. \"crm for small business\"). Include quotation marks inside the value for an exact-phrase site search. Not a URL — pass a known thread URL to reddit_thread instead."
+            "minLength": 1
+          },
+          "approvalMode": {
+            "description": "Use review to preview links, approve after the user selects links, or auto when the user wants immediate fetching.",
+            "type": "string",
+            "enum": [
+              "review",
+              "approve",
+              "auto"
+            ]
+          },
+          "reviewId": {
+            "description": "ID returned by review mode. Required in approve mode.",
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "approvedUrls": {
+            "description": "Only the URLs the user approved from this review. Required in approve mode.",
+            "minItems": 1,
+            "maxItems": 40,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            }
           },
           "subreddit": {
             "description": "Bare subreddit name to scope the scan to one community, e.g. \"SEO\" (no r/ prefix, no URL). Omit to scan all of Reddit.",
@@ -163435,7 +163461,7 @@
           },
           "window": {
             "default": "all",
-            "description": "Activity window. A post or captured comment must fall within the selected period. Omit for an undated topic search.",
+            "description": "Activity window. Review uses it as a search hint. Fetching verifies that a post or captured comment falls in the window.",
             "type": "string",
             "enum": [
               "week",
@@ -163447,14 +163473,14 @@
           },
           "maxThreads": {
             "default": 20,
-            "description": "Maximum number of threads returned. If a candidate cannot be delivered, other relevant candidates can take its place. Each delivered thread and its comments are billed separately.",
+            "description": "Maximum links shown in review mode, or threads returned when fetching.",
             "type": "integer",
             "minimum": 1,
             "maximum": 40
           },
           "includeComments": {
             "default": true,
-            "description": "Return captured comments. Dated searches open and bill for verified threads even when comments are omitted. Undated searches with comments omitted return search links without per-thread charges.",
+            "description": "Return captured comments when fetching. Review only lists links. In the default mode, undated searches with comments omitted return links without opening threads.",
             "type": "boolean"
           },
           "maxCommentsPerThread": {
@@ -163465,9 +163491,6 @@
             "maximum": 200
           }
         },
-        "required": [
-          "topic"
-        ],
         "$schema": "https://json-schema.org/draft/2020-12/schema"
       },
       "outputSchema": {
@@ -163506,6 +163529,26 @@
               },
               "topic": {
                 "type": "string"
+              },
+              "review": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "expiresAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
+                },
+                "required": [
+                  "id",
+                  "expiresAt"
+                ],
+                "additionalProperties": false
               },
               "subreddit": {
                 "anyOf": [
@@ -163576,6 +163619,9 @@
                       "maximum": 9007199254740991
                     },
                     "ageText": {
+                      "type": "string"
+                    },
+                    "postBody": {
                       "type": "string"
                     },
                     "publishedAt": {

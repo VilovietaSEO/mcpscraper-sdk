@@ -601,7 +601,8 @@ export interface paths {
         /**
          * Discover and rank Reddit discussions for a topic
          * @description Finds Reddit discussions for a topic or subreddit. Omit the window for an all-time search.
-         *     Dated searches verify the post or a captured comment timestamp, including for link-only results.
+         *     Review mode previews links. Approve mode fetches only selected URLs from the review.
+         *     Auto mode discovers and fetches threads immediately. Dated fetches verify post or comment timestamps.
          *     Discovery, verified threads, and returned comment text are billed separately. Undated link-only
          *     searches bill discovery only. An empty delivery refunds the discovery charge.
          */
@@ -2409,8 +2410,17 @@ export interface components {
             sourceUrl?: string;
         };
         RedditTrendingRequest: {
-            /** @description Topic in plain words, e.g. "crm for small business". Not a URL. */
-            topic: string;
+            /** @description Topic to search. Required for discovery. */
+            topic?: string;
+            /** @enum {string} */
+            approvalMode?: "review" | "approve" | "auto";
+            /**
+             * Format: uuid
+             * @description Required in approve mode.
+             */
+            reviewId?: string;
+            /** @description Required in approve mode. Pass only URLs selected from the review. */
+            approvedUrls?: string[];
             /** @description Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit. */
             subreddit?: string;
             /**
@@ -2437,6 +2447,16 @@ export interface components {
         };
         RedditTrendingResponse: {
             topic?: string;
+            review?: {
+                /** Format: uuid */
+                id: string;
+                /** Format: date-time */
+                expiresAt: string;
+                /** @enum {string} */
+                window?: "week" | "14d" | "month" | "year" | "all";
+                includeComments?: boolean;
+                maxCommentsPerThread?: number;
+            };
             subreddit?: string | null;
             /** @description Resolved publication window: "7d", "14d", "30d", "365d" or "all". */
             window?: string;
@@ -2453,6 +2473,7 @@ export interface components {
                 commentCount?: number;
                 engagementScore?: number;
                 ageText?: string;
+                postBody?: string;
                 /**
                  * Format: date-time
                  * @description Observed publication timestamp when available.
@@ -4031,6 +4052,13 @@ export interface operations {
             };
             400: components["responses"]["BadRequest"];
             402: components["responses"]["InsufficientBalance"];
+            /** @description Review is unavailable or expired. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             429: components["responses"]["ConcurrencyLimitExceeded"];
             500: components["responses"]["ServerError"];
         };

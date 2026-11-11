@@ -772,7 +772,8 @@ paths:
       summary: Discover and rank Reddit discussions for a topic
       description: |
         Finds Reddit discussions for a topic or subreddit. Omit the window for an all-time search.
-        Dated searches verify the post or a captured comment timestamp, including for link-only results.
+        Review mode previews links. Approve mode fetches only selected URLs from the review.
+        Auto mode discovers and fetches threads immediately. Dated fetches verify post or comment timestamps.
         Discovery, verified threads, and returned comment text are billed separately. Undated link-only
         searches bill discovery only. An empty delivery refunds the discovery charge.
       requestBody:
@@ -788,6 +789,7 @@ paths:
               schema: { $ref: '#/components/schemas/RedditTrendingResponse' }
         '400': { $ref: '#/components/responses/BadRequest' }
         '402': { $ref: '#/components/responses/InsufficientBalance' }
+        '404': { description: Review is unavailable or expired. }
         '429': { $ref: '#/components/responses/ConcurrencyLimitExceeded' }
         '500': { $ref: '#/components/responses/ServerError' }
 
@@ -3630,9 +3632,16 @@ components:
         sourceUrl: { type: string }
     RedditTrendingRequest:
       type: object
-      required: [topic]
       properties:
-        topic: { type: string, description: 'Topic in plain words, e.g. "crm for small business". Not a URL.' }
+        topic: { type: string, description: 'Topic to search. Required for discovery.' }
+        approvalMode: { type: string, enum: [review, approve, auto] }
+        reviewId: { type: string, format: uuid, description: 'Required in approve mode.' }
+        approvedUrls:
+          type: array
+          minItems: 1
+          maxItems: 40
+          items: { type: string }
+          description: 'Required in approve mode. Pass only URLs selected from the review.'
         subreddit: { type: string, description: 'Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit.' }
         window: { type: string, enum: [week, '14d', month, year, all], default: all, description: 'Activity window. A verified post or comment timestamp can qualify a thread.' }
         maxThreads: { type: integer, minimum: 1, maximum: 40, default: 20, description: 'Maximum number of relevant threads to deliver. Each scraped thread and its returned comments are billed separately.' }
@@ -3642,6 +3651,15 @@ components:
       type: object
       properties:
         topic: { type: string }
+        review:
+          type: object
+          required: [id, expiresAt]
+          properties:
+            id: { type: string, format: uuid }
+            expiresAt: { type: string, format: date-time }
+            window: { type: string, enum: [week, '14d', month, year, all] }
+            includeComments: { type: boolean }
+            maxCommentsPerThread: { type: integer }
         subreddit: { type: string, nullable: true }
         window: { type: string, description: 'Resolved publication window: "7d", "14d", "30d", "365d" or "all".' }
         totals:
@@ -3662,6 +3680,7 @@ components:
               commentCount: { type: integer }
               engagementScore: { type: integer }
               ageText: { type: string }
+              postBody: { type: string }
               publishedAt: { type: string, format: date-time, nullable: true, description: 'Observed publication timestamp when available.' }
               latestCommentPublishedAt: { type: string, format: date-time, nullable: true, description: 'Latest verified captured comment timestamp when comment text is omitted.' }
               comments:

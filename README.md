@@ -865,4 +865,4 @@ Publication management: list owned subdomains with `commons_list_publications`, 
 
 PAA job progress can include optional `phase` and `observedAt` fields describing observed extraction work independently of worker renewal. The updated Node and Python output models preserve legacy responses without these fields. See [the progress-types release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
 
-Omit the Reddit trending window for an all-time search. Dated searches verify post or comment activity, including when comment text is omitted. See the [0.59.3 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.3) for the compatible package versions.
+Use Reddit Trends review mode to preview links, approve mode to fetch selected threads, or auto mode to search and fetch in one call. See the [0.59.4 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.4) for the compatible package versions.

@@ -4,23 +4,38 @@ export interface Input {
    */
   idempotencyKey?: string;
   /**
-   * Topic to scan (e.g. "crm for small business"). Include quotation marks inside the value for an exact-phrase site search. Not a URL — pass a known thread URL to reddit_thread instead.
+   * Topic to search. Required for discovery. Approve mode uses the original review topic and options.
    */
-  topic: string;
+  topic?: string;
+  /**
+   * Use review to preview links, approve after the user selects links, or auto when the user wants immediate fetching.
+   */
+  approvalMode?: "review" | "approve" | "auto";
+  /**
+   * ID returned by review mode. Required in approve mode.
+   */
+  reviewId?: string;
+  /**
+   * Only the URLs the user approved from this review. Required in approve mode.
+   *
+   * @minItems 1
+   * @maxItems 40
+   */
+  approvedUrls?: [string, ...string[]];
   /**
    * Bare subreddit name to scope the scan to one community, e.g. "SEO" (no r/ prefix, no URL). Omit to scan all of Reddit.
    */
   subreddit?: string;
   /**
-   * Activity window. A post or captured comment must fall within the selected period. Omit for an undated topic search.
+   * Activity window. Review uses it as a search hint. Fetching verifies that a post or captured comment falls in the window.
    */
   window?: "week" | "14d" | "month" | "year" | "all";
   /**
-   * Maximum number of threads returned. If a candidate cannot be delivered, other relevant candidates can take its place. Each delivered thread and its comments are billed separately.
+   * Maximum links shown in review mode, or threads returned when fetching.
    */
   maxThreads?: number;
   /**
-   * Return captured comments. Dated searches open and bill for verified threads even when comments are omitted. Undated searches with comments omitted return search links without per-thread charges.
+   * Return captured comments when fetching. Review only lists links. In the default mode, undated searches with comments omitted return links without opening threads.
    */
   includeComments?: boolean;
   /**
@@ -37,6 +52,10 @@ export type Output =
         state: string;
       };
       topic: string;
+      review?: {
+        id: string;
+        expiresAt: string;
+      };
       subreddit: string | null;
       window: string;
       totals: {
@@ -52,6 +71,7 @@ export type Output =
         commentCount: number;
         engagementScore: number;
         ageText: string;
+        postBody?: string;
         publishedAt?: string | null;
         latestCommentPublishedAt?: string | null;
         comments?: {
