@@ -1962,6 +1962,12 @@ class RedditThreadResponse(BaseModel):
     sourceUrl: str | None = None
 
 
+class ApprovalMode(Enum):
+    review = 'review'
+    approve = 'approve'
+    auto = 'auto'
+
+
 class Window(Enum):
     """
     Activity window. A verified post or comment timestamp can qualify a thread.
@@ -1975,9 +1981,16 @@ class Window(Enum):
 
 
 class RedditTrendingRequest(BaseModel):
-    topic: str = Field(
-        ...,
-        description='Topic in plain words, e.g. "crm for small business". Not a URL.',
+    topic: str | None = Field(
+        None, description='Topic to search. Required for discovery.'
+    )
+    approvalMode: ApprovalMode | None = None
+    reviewId: UUID | None = Field(None, description='Required in approve mode.')
+    approvedUrls: list[str] | None = Field(
+        None,
+        description='Required in approve mode. Pass only URLs selected from the review.',
+        max_length=40,
+        min_length=1,
     )
     subreddit: str | None = Field(
         None,
@@ -2003,6 +2016,22 @@ class RedditTrendingRequest(BaseModel):
         ge=1,
         le=200,
     )
+
+
+class Window1(Enum):
+    week = 'week'
+    field_14d = '14d'
+    month = 'month'
+    year = 'year'
+    all = 'all'
+
+
+class Review(BaseModel):
+    id: UUID
+    expiresAt: AwareDatetime
+    window: Window1 | None = None
+    includeComments: bool | None = None
+    maxCommentsPerThread: int | None = None
 
 
 class Totals(BaseModel):
@@ -2826,6 +2855,7 @@ class RankedThread(BaseModel):
     commentCount: int | None = None
     engagementScore: int | None = None
     ageText: str | None = None
+    postBody: str | None = None
     publishedAt: AwareDatetime | None = Field(
         None, description='Observed publication timestamp when available.'
     )
@@ -2846,6 +2876,7 @@ class RankedThread(BaseModel):
 
 class RedditTrendingResponse(BaseModel):
     topic: str | None = None
+    review: Review | None = None
     subreddit: str | None = None
     window: str | None = Field(
         None,

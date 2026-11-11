@@ -3580,7 +3580,7 @@ export class RedditNamespace {
     return this.callTool('reddit_thread', input) as Promise<RedditThread.Output>
   }
 
-  async trending(input: RedditTrending.Input): Promise<RedditTrending.Output> {
+  async trending(input: RedditTrending.Input = {} as RedditTrending.Input): Promise<RedditTrending.Output> {
     return this.callTool('reddit_trending', input) as Promise<RedditTrending.Output>
   }
 }

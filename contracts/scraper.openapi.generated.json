@@ -1685,7 +1685,7 @@
         ],
         "operationId": "redditTrending",
         "summary": "Discover and rank Reddit discussions for a topic",
-        "description": "Finds Reddit discussions for a topic or subreddit. Omit the window for an all-time search.\nDated searches verify the post or a captured comment timestamp, including for link-only results.\nDiscovery, verified threads, and returned comment text are billed separately. Undated link-only\nsearches bill discovery only. An empty delivery refunds the discovery charge.\n",
+        "description": "Finds Reddit discussions for a topic or subreddit. Omit the window for an all-time search.\nReview mode previews links. Approve mode fetches only selected URLs from the review.\nAuto mode discovers and fetches threads immediately. Dated fetches verify post or comment timestamps.\nDiscovery, verified threads, and returned comment text are billed separately. Undated link-only\nsearches bill discovery only. An empty delivery refunds the discovery charge.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -1712,6 +1712,9 @@
           },
           "402": {
             "$ref": "#/components/responses/InsufficientBalance"
+          },
+          "404": {
+            "description": "Review is unavailable or expired."
           },
           "429": {
             "$ref": "#/components/responses/ConcurrencyLimitExceeded"
@@ -7779,13 +7782,32 @@
       },
       "RedditTrendingRequest": {
         "type": "object",
-        "required": [
-          "topic"
-        ],
         "properties": {
           "topic": {
             "type": "string",
-            "description": "Topic in plain words, e.g. \"crm for small business\". Not a URL."
+            "description": "Topic to search. Required for discovery."
+          },
+          "approvalMode": {
+            "type": "string",
+            "enum": [
+              "review",
+              "approve",
+              "auto"
+            ]
+          },
+          "reviewId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Required in approve mode."
+          },
+          "approvedUrls": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 40,
+            "items": {
+              "type": "string"
+            },
+            "description": "Required in approve mode. Pass only URLs selected from the review."
           },
           "subreddit": {
             "type": "string",
@@ -7829,6 +7851,39 @@
         "properties": {
           "topic": {
             "type": "string"
+          },
+          "review": {
+            "type": "object",
+            "required": [
+              "id",
+              "expiresAt"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "expiresAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "window": {
+                "type": "string",
+                "enum": [
+                  "week",
+                  "14d",
+                  "month",
+                  "year",
+                  "all"
+                ]
+              },
+              "includeComments": {
+                "type": "boolean"
+              },
+              "maxCommentsPerThread": {
+                "type": "integer"
+              }
+            }
           },
           "subreddit": {
             "type": "string",
@@ -7876,6 +7931,9 @@
                   "type": "integer"
                 },
                 "ageText": {
+                  "type": "string"
+                },
+                "postBody": {
                   "type": "string"
                 },
                 "publishedAt": {

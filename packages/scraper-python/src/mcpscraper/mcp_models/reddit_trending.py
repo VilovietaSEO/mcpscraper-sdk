@@ -7,11 +7,14 @@ class RedditTrendingInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
     idempotency_key: Union[Annotated[str, Field(min_length=1, max_length=512)], None] = Field(None, alias='idempotencyKey', description='One logical request identity. Retry identical inputs with the same key to replay or recover without repeating provider work. Omit for a fresh intent; use the key returned with the result or transport error for retries.')
-    topic: Annotated[str, Field(min_length=1)] = Field(..., alias='topic', description='Topic to scan (e.g. "crm for small business"). Include quotation marks inside the value for an exact-phrase site search. Not a URL — pass a known thread URL to reddit_thread instead.')
+    topic: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='topic', description='Topic to search. Required for discovery. Approve mode uses the original review topic and options.')
+    approval_mode: Union[Literal['review', 'approve', 'auto'], None] = Field(None, alias='approvalMode', description='Use review to preview links, approve after the user selects links, or auto when the user wants immediate fetching.')
+    review_id: Union[str, None] = Field(None, alias='reviewId', description='ID returned by review mode. Required in approve mode.')
+    approved_urls: Union[Annotated[list[Annotated[str, Field(min_length=1, max_length=2048)]], Field(min_length=1, max_length=40)], None] = Field(None, alias='approvedUrls', description='Only the URLs the user approved from this review. Required in approve mode.')
     subreddit: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='subreddit', description='Bare subreddit name to scope the scan to one community, e.g. "SEO" (no r/ prefix, no URL). Omit to scan all of Reddit.')
-    window: Union[Literal['week', '14d', 'month', 'year', 'all'], None] = Field(None, alias='window', description='Activity window. A post or captured comment must fall within the selected period. Omit for an undated topic search.')
-    max_threads: Union[Annotated[int, Field(ge=1, le=40)], None] = Field(None, alias='maxThreads', description='Maximum number of threads returned. If a candidate cannot be delivered, other relevant candidates can take its place. Each delivered thread and its comments are billed separately.')
-    include_comments: Union[bool, None] = Field(None, alias='includeComments', description='Return captured comments. Dated searches open and bill for verified threads even when comments are omitted. Undated searches with comments omitted return search links without per-thread charges.')
+    window: Union[Literal['week', '14d', 'month', 'year', 'all'], None] = Field(None, alias='window', description='Activity window. Review uses it as a search hint. Fetching verifies that a post or captured comment falls in the window.')
+    max_threads: Union[Annotated[int, Field(ge=1, le=40)], None] = Field(None, alias='maxThreads', description='Maximum links shown in review mode, or threads returned when fetching.')
+    include_comments: Union[bool, None] = Field(None, alias='includeComments', description='Return captured comments when fetching. Review only lists links. In the default mode, undated searches with comments omitted return links without opening threads.')
     max_comments_per_thread: Union[Annotated[int, Field(ge=1, le=200)], None] = Field(None, alias='maxCommentsPerThread', description='Comments captured per scraped thread when includeComments is true. Default 50. Billed per captured comment.')
 
 
@@ -21,6 +24,13 @@ RedditTrendingOutputVariant1Operation = TypedDict('RedditTrendingOutputVariant1O
     'state': Required[str],
 })
 RedditTrendingOutputVariant1Operation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+RedditTrendingOutputVariant1Review = TypedDict('RedditTrendingOutputVariant1Review', {
+    'id': Required[str],
+    'expiresAt': Required[str],
+})
+RedditTrendingOutputVariant1Review.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 RedditTrendingOutputVariant1Totals = TypedDict('RedditTrendingOutputVariant1Totals', {
@@ -59,6 +69,7 @@ RedditTrendingOutputVariant1RankedThreadsItem = TypedDict('RedditTrendingOutputV
     'commentCount': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'engagementScore': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'ageText': Required[str],
+    'postBody': NotRequired[str],
     'publishedAt': NotRequired[Union[str, None]],
     'latestCommentPublishedAt': NotRequired[Union[str, None]],
     'comments': NotRequired[list[RedditTrendingOutputVariant1RankedThreadsItemCommentsItem]],
@@ -82,6 +93,7 @@ class RedditTrendingOutputVariant1(BaseModel):
 
     operation: Union[RedditTrendingOutputVariant1Operation, None] = Field(None, alias='operation', description='')
     topic: str = Field(..., alias='topic', description='')
+    review: Union[RedditTrendingOutputVariant1Review, None] = Field(None, alias='review', description='')
     subreddit: Union[str, None] = Field(..., alias='subreddit', description='')
     window: str = Field(..., alias='window', description='')
     totals: RedditTrendingOutputVariant1Totals = Field(..., alias='totals', description='')
