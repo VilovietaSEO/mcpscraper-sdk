@@ -599,12 +599,11 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Discover and rank the top recent Reddit threads for a topic
-         * @description Finds Reddit discussions for a topic or subreddit. With comments enabled, opens candidate posts
-         *     to verify publication dates, collects comment text, and ranks delivered threads by engagement.
-         *     The 14-day window replaces candidates with no usable comments when more candidates are available.
-         *     Discovery-only results have unverified publication dates. Discovery, delivered threads, and
-         *     captured comments are billed separately. An empty delivery refunds the discovery charge.
+         * Discover and rank Reddit discussions for a topic
+         * @description Finds Reddit discussions for a topic or subreddit. Omit the window for an all-time search.
+         *     Dated searches verify the post or a captured comment timestamp, including for link-only results.
+         *     Discovery, verified threads, and returned comment text are billed separately. Undated link-only
+         *     searches bill discovery only. An empty delivery refunds the discovery charge.
          */
         post: operations["redditTrending"];
         delete?: never;
@@ -2404,6 +2403,8 @@ export interface components {
                 score?: string;
                 depth?: number;
                 body?: string;
+                /** Format: date-time */
+                publishedAt?: string;
             }[];
             sourceUrl?: string;
         };
@@ -2413,8 +2414,8 @@ export interface components {
             /** @description Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit. */
             subreddit?: string;
             /**
-             * @description Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.
-             * @default month
+             * @description Activity window. A verified post or comment timestamp can qualify a thread.
+             * @default all
              * @enum {string}
              */
             window: "week" | "14d" | "month" | "year" | "all";
@@ -2424,7 +2425,7 @@ export interface components {
              */
             maxThreads: number;
             /**
-             * @description Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.
+             * @description Return captured comment text. Dated results still open and bill for verified threads when false.
              * @default true
              */
             includeComments: boolean;
@@ -2457,11 +2458,18 @@ export interface components {
                  * @description Observed publication timestamp when available.
                  */
                 publishedAt?: string | null;
+                /**
+                 * Format: date-time
+                 * @description Latest verified captured comment timestamp when comment text is omitted.
+                 */
+                latestCommentPublishedAt?: string | null;
                 comments?: {
                     author: string;
                     score: string;
                     depth: number;
                     body: string;
+                    /** Format: date-time */
+                    publishedAt?: string;
                 }[];
                 /** @description Text comments actually returned for this thread. */
                 capturedCommentCount?: number;
@@ -2484,7 +2492,7 @@ export interface components {
             candidatesFound?: number;
             /** @description True when coverage is partial or the requested delivery target was missed. */
             partial?: boolean;
-            /** @description The Google site:reddit.com query used for discovery. */
+            /** @description The site-scoped query used by the discovery provider. */
             searchQuery?: string;
             /** @enum {string} */
             discoverySource?: "google_serp" | "reddit_search_fallback" | "none";

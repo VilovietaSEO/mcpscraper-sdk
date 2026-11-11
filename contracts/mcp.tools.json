@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.103.10 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "8a9cc895fae1d322882544061ff356edfeeb63c1d90dfb0a7500e5a2192bac82",
+  "generatedFrom": "mcp-scraper 0.103.11 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "a13d612b805e4d653b57730718380a1dd9e7eb09f2b6485d64774f63ba5a1299",
   "toolCount": 352,
   "tools": [
     {
@@ -163087,6 +163087,11 @@
                     },
                     "body": {
                       "type": "string"
+                    },
+                    "publishedAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                     }
                   },
                   "required": [
@@ -163406,7 +163411,7 @@
     {
       "name": "reddit_trending",
       "title": "Reddit Trending",
-      "description": "Find Reddit discussions through Google, filter and select relevant candidates before opening them, then rank scraped threads by observed engagement. Use reddit_thread for a known URL. Comment retrieval verifies actual post dates against the requested window and returns captured comment bodies and coverage. Discovery, scraped threads and returned comments are billed separately. Discovery-only results leave post dates unverified; inspect partial, resultQuality and comment coverage before treating a shortfall as complete.",
+      "description": "Find Reddit discussions through Google with DuckDuckGo fallback, then rank verified threads by observed engagement. Use reddit_thread for a known URL. Omit the window for a topic search across all time. For a dated search, a recent post or a recent captured comment can qualify a thread. Returns captured comments, observed dates and coverage. Discovery, scraped threads and returned comments are billed separately. Undated link-only results leave post dates unverified; inspect partial, resultQuality and comment coverage before treating a shortfall as complete.",
       "category": "reddit",
       "methodName": "trending",
       "inputSchema": {
@@ -163429,8 +163434,8 @@
             "minLength": 1
           },
           "window": {
-            "default": "month",
-            "description": "Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.",
+            "default": "all",
+            "description": "Activity window. A post or captured comment must fall within the selected period. Omit for an undated topic search.",
             "type": "string",
             "enum": [
               "week",
@@ -163449,7 +163454,7 @@
           },
           "includeComments": {
             "default": true,
-            "description": "Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.",
+            "description": "Return captured comments. Dated searches open and bill for verified threads even when comments are omitted. Undated searches with comments omitted return search links without per-thread charges.",
             "type": "boolean"
           },
           "maxCommentsPerThread": {
@@ -163585,6 +163590,18 @@
                         }
                       ]
                     },
+                    "latestCommentPublishedAt": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "format": "date-time",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
                     "comments": {
                       "type": "array",
                       "items": {
@@ -163603,6 +163620,11 @@
                           },
                           "body": {
                             "type": "string"
+                          },
+                          "publishedAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
                           }
                         },
                         "required": [
@@ -163656,7 +163678,8 @@
                             "declared_count_reached",
                             "stable_visible_shortfall",
                             "capture_shortfall",
-                            "funding_limited"
+                            "funding_limited",
+                            "date_window_filtered"
                           ]
                         }
                       },

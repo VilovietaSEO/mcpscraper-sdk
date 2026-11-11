@@ -1684,8 +1684,8 @@
           "Reddit"
         ],
         "operationId": "redditTrending",
-        "summary": "Discover and rank the top recent Reddit threads for a topic",
-        "description": "Finds Reddit discussions for a topic or subreddit. With comments enabled, opens candidate posts\nto verify publication dates, collects comment text, and ranks delivered threads by engagement.\nThe 14-day window replaces candidates with no usable comments when more candidates are available.\nDiscovery-only results have unverified publication dates. Discovery, delivered threads, and\ncaptured comments are billed separately. An empty delivery refunds the discovery charge.\n",
+        "summary": "Discover and rank Reddit discussions for a topic",
+        "description": "Finds Reddit discussions for a topic or subreddit. Omit the window for an all-time search.\nDated searches verify the post or a captured comment timestamp, including for link-only results.\nDiscovery, verified threads, and returned comment text are billed separately. Undated link-only\nsearches bill discovery only. An empty delivery refunds the discovery charge.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -7764,6 +7764,10 @@
                 },
                 "body": {
                   "type": "string"
+                },
+                "publishedAt": {
+                  "type": "string",
+                  "format": "date-time"
                 }
               }
             }
@@ -7796,8 +7800,8 @@
               "year",
               "all"
             ],
-            "default": "month",
-            "description": "Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified."
+            "default": "all",
+            "description": "Activity window. A verified post or comment timestamp can qualify a thread."
           },
           "maxThreads": {
             "type": "integer",
@@ -7809,7 +7813,7 @@
           "includeComments": {
             "type": "boolean",
             "default": true,
-            "description": "Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates."
+            "description": "Return captured comment text. Dated results still open and bill for verified threads when false."
           },
           "maxCommentsPerThread": {
             "type": "integer",
@@ -7880,6 +7884,12 @@
                   "nullable": true,
                   "description": "Observed publication timestamp when available."
                 },
+                "latestCommentPublishedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true,
+                  "description": "Latest verified captured comment timestamp when comment text is omitted."
+                },
                 "comments": {
                   "type": "array",
                   "items": {
@@ -7903,6 +7913,10 @@
                       },
                       "body": {
                         "type": "string"
+                      },
+                      "publishedAt": {
+                        "type": "string",
+                        "format": "date-time"
                       }
                     }
                   }
@@ -7982,7 +7996,7 @@
           },
           "searchQuery": {
             "type": "string",
-            "description": "The Google site:reddit.com query used for discovery."
+            "description": "The site-scoped query used by the discovery provider."
           },
           "discoverySource": {
             "type": "string",
