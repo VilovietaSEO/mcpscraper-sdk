@@ -198,4 +198,4 @@ This release targets MCP Scraper 0.103.0 with 352 tools. Calls use protocol `202
 
 Publication management: list owned subdomains with `commons_list_publications`, select a name with `commons_get_publication`, and edit one article with `commons_update_editorial_article`. Publishing merges omitted articles by default; use `mode:replace` for a full replacement. Use the dedicated article or publication delete tool with its current revision and a stable retry key. See the [release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0).
 
-Reddit trending supports `window: "14d"`, verified publication dates, captured comment text and delivery quality fields. See the [0.59.2 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.2) for the compatible package versions.
+Omit the Reddit trending window for an all-time search. Dated searches verify post or comment activity, including when comment text is omitted. See the [0.59.3 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.3) for the compatible package versions.

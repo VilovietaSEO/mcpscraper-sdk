@@ -38,6 +38,7 @@ export type Output =
         score: string | null;
         depth: number;
         body: string;
+        publishedAt?: string;
       }[];
     }
   | {

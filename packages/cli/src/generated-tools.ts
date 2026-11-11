@@ -25401,7 +25401,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "reddit_trending",
     "category": "reddit",
     "title": "Reddit Trending",
-    "description": "Find Reddit discussions through Google, filter and select relevant candidates before opening them, then rank scraped threads by observed engagement. Use reddit_thread for a known URL. Comment retrieval verifies actual post dates against the requested window and returns captured comment bodies and coverage. Discovery, scraped threads and returned comments are billed separately. Discovery-only results leave post dates unverified; inspect partial, resultQuality and comment coverage before treating a shortfall as complete.",
+    "description": "Find Reddit discussions through Google with DuckDuckGo fallback, then rank verified threads by observed engagement. Use reddit_thread for a known URL. Omit the window for a topic search across all time. For a dated search, a recent post or a recent captured comment can qualify a thread. Returns captured comments, observed dates and coverage. Discovery, scraped threads and returned comments are billed separately. Undated link-only results leave post dates unverified; inspect partial, resultQuality and comment coverage before treating a shortfall as complete.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25422,8 +25422,8 @@ export const MCP_TOOL_CATALOG = [
           "minLength": 1
         },
         "window": {
-          "default": "month",
-          "description": "Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.",
+          "default": "all",
+          "description": "Activity window. A post or captured comment must fall within the selected period. Omit for an undated topic search.",
           "type": "string",
           "enum": [
             "week",
@@ -25442,7 +25442,7 @@ export const MCP_TOOL_CATALOG = [
         },
         "includeComments": {
           "default": true,
-          "description": "Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.",
+          "description": "Return captured comments. Dated searches open and bill for verified threads even when comments are omitted. Undated searches with comments omitted return search links without per-thread charges.",
           "type": "boolean"
         },
         "maxCommentsPerThread": {

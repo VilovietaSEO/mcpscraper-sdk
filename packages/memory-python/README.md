@@ -110,4 +110,4 @@ This unified client includes the Commons publication list and deletion tools and
 
 PAA job progress can include the optional `phase` and `observedAt` fields. They identify observed extraction work separately from worker renewal. Existing polling and request arguments remain compatible. See [the release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
 
-Reddit trending supports `window: "14d"`, verified publication dates, captured comment text and delivery quality fields. See the [0.59.2 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.2) for the compatible package versions.
+Omit the Reddit trending window for an all-time search. Dated searches verify post or comment activity, including when comment text is omitted. See the [0.59.3 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.3) for the compatible package versions.

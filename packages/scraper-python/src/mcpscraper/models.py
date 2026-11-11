@@ -1946,6 +1946,7 @@ class Comment(BaseModel):
     score: str | None = None
     depth: int | None = None
     body: str | None = None
+    publishedAt: AwareDatetime | None = None
 
 
 class RedditThreadResponse(BaseModel):
@@ -1963,7 +1964,7 @@ class RedditThreadResponse(BaseModel):
 
 class Window(Enum):
     """
-    Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.
+    Activity window. A verified post or comment timestamp can qualify a thread.
     """
 
     week = 'week'
@@ -1983,8 +1984,8 @@ class RedditTrendingRequest(BaseModel):
         description='Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit.',
     )
     window: Window = Field(
-        'month',
-        description='Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.',
+        'all',
+        description='Activity window. A verified post or comment timestamp can qualify a thread.',
     )
     maxThreads: int = Field(
         20,
@@ -1994,7 +1995,7 @@ class RedditTrendingRequest(BaseModel):
     )
     includeComments: bool = Field(
         True,
-        description='Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.',
+        description='Return captured comment text. Dated results still open and bill for verified threads when false.',
     )
     maxCommentsPerThread: int = Field(
         50,
@@ -2015,6 +2016,7 @@ class Comment1(BaseModel):
     score: str
     depth: int = Field(..., ge=0)
     body: str
+    publishedAt: AwareDatetime | None = None
 
 
 class Question(BaseModel):
@@ -2827,6 +2829,10 @@ class RankedThread(BaseModel):
     publishedAt: AwareDatetime | None = Field(
         None, description='Observed publication timestamp when available.'
     )
+    latestCommentPublishedAt: AwareDatetime | None = Field(
+        None,
+        description='Latest verified captured comment timestamp when comment text is omitted.',
+    )
     comments: list[Comment1] | None = None
     capturedCommentCount: int | None = Field(
         None, description='Text comments actually returned for this thread.', ge=0
@@ -2855,7 +2861,7 @@ class RedditTrendingResponse(BaseModel):
         description='True when coverage is partial or the requested delivery target was missed.',
     )
     searchQuery: str | None = Field(
-        None, description='The Google site:reddit.com query used for discovery.'
+        None, description='The site-scoped query used by the discovery provider.'
     )
     discoverySource: DiscoverySource | None = None
     resultQuality: ResultQuality | None = None

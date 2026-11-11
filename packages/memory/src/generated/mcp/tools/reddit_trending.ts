@@ -12,7 +12,7 @@ export interface Input {
    */
   subreddit?: string;
   /**
-   * Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.
+   * Activity window. A post or captured comment must fall within the selected period. Omit for an undated topic search.
    */
   window?: "week" | "14d" | "month" | "year" | "all";
   /**
@@ -20,7 +20,7 @@ export interface Input {
    */
   maxThreads?: number;
   /**
-   * Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.
+   * Return captured comments. Dated searches open and bill for verified threads even when comments are omitted. Undated searches with comments omitted return search links without per-thread charges.
    */
   includeComments?: boolean;
   /**
@@ -53,11 +53,13 @@ export type Output =
         engagementScore: number;
         ageText: string;
         publishedAt?: string | null;
+        latestCommentPublishedAt?: string | null;
         comments?: {
           author: string;
           score: string;
           depth: number;
           body: string;
+          publishedAt?: string;
         }[];
         capturedCommentCount?: number;
         requestedCommentLimit?: number;
@@ -71,7 +73,8 @@ export type Output =
             | "declared_count_reached"
             | "stable_visible_shortfall"
             | "capture_shortfall"
-            | "funding_limited";
+            | "funding_limited"
+            | "date_window_filtered";
         };
         topQuestions: string[];
       }[];

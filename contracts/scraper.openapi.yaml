@@ -769,13 +769,12 @@ paths:
     post:
       tags: [Reddit]
       operationId: redditTrending
-      summary: Discover and rank the top recent Reddit threads for a topic
+      summary: Discover and rank Reddit discussions for a topic
       description: |
-        Finds Reddit discussions for a topic or subreddit. With comments enabled, opens candidate posts
-        to verify publication dates, collects comment text, and ranks delivered threads by engagement.
-        The 14-day window replaces candidates with no usable comments when more candidates are available.
-        Discovery-only results have unverified publication dates. Discovery, delivered threads, and
-        captured comments are billed separately. An empty delivery refunds the discovery charge.
+        Finds Reddit discussions for a topic or subreddit. Omit the window for an all-time search.
+        Dated searches verify the post or a captured comment timestamp, including for link-only results.
+        Discovery, verified threads, and returned comment text are billed separately. Undated link-only
+        searches bill discovery only. An empty delivery refunds the discovery charge.
       requestBody:
         required: true
         content:
@@ -3627,6 +3626,7 @@ components:
               score: { type: string }
               depth: { type: integer }
               body: { type: string }
+              publishedAt: { type: string, format: date-time }
         sourceUrl: { type: string }
     RedditTrendingRequest:
       type: object
@@ -3634,9 +3634,9 @@ components:
       properties:
         topic: { type: string, description: 'Topic in plain words, e.g. "crm for small business". Not a URL.' }
         subreddit: { type: string, description: 'Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit.' }
-        window: { type: string, enum: [week, '14d', month, year, all], default: month, description: 'Publication window; scraped threads are checked against their actual post dates, while discovery-only dates remain unverified.' }
+        window: { type: string, enum: [week, '14d', month, year, all], default: all, description: 'Activity window. A verified post or comment timestamp can qualify a thread.' }
         maxThreads: { type: integer, minimum: 1, maximum: 40, default: 20, description: 'Maximum number of relevant threads to deliver. Each scraped thread and its returned comments are billed separately.' }
-        includeComments: { type: boolean, default: true, description: 'Open selected threads to verify post dates and collect comments; false returns search candidates for your own selection, without per-thread charges or verified post dates.' }
+        includeComments: { type: boolean, default: true, description: 'Return captured comment text. Dated results still open and bill for verified threads when false.' }
         maxCommentsPerThread: { type: integer, minimum: 1, maximum: 200, default: 50, description: 'Comments captured (and billed) per scraped thread when includeComments is true.' }
     RedditTrendingResponse:
       type: object
@@ -3663,6 +3663,7 @@ components:
               engagementScore: { type: integer }
               ageText: { type: string }
               publishedAt: { type: string, format: date-time, nullable: true, description: 'Observed publication timestamp when available.' }
+              latestCommentPublishedAt: { type: string, format: date-time, nullable: true, description: 'Latest verified captured comment timestamp when comment text is omitted.' }
               comments:
                 type: array
                 items:
@@ -3673,6 +3674,7 @@ components:
                     score: { type: string }
                     depth: { type: integer, minimum: 0 }
                     body: { type: string }
+                    publishedAt: { type: string, format: date-time }
               capturedCommentCount: { type: integer, minimum: 0, description: 'Text comments actually returned for this thread.' }
               requestedCommentLimit: { type: integer, minimum: 1, description: 'Requested per-thread comment cap.' }
               commentCoverage:
@@ -3695,7 +3697,7 @@ components:
         threadsScraped: { type: integer }
         candidatesFound: { type: integer }
         partial: { type: boolean, description: 'True when coverage is partial or the requested delivery target was missed.' }
-        searchQuery: { type: string, description: 'The Google site:reddit.com query used for discovery.' }
+        searchQuery: { type: string, description: 'The site-scoped query used by the discovery provider.' }
         discoverySource: { type: string, enum: [google_serp, reddit_search_fallback, none] }
         resultQuality: { type: string, enum: [complete, partial, degraded] }
         degradedResult: { type: boolean }

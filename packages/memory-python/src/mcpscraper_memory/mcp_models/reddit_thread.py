@@ -24,6 +24,7 @@ RedditThreadOutputVariant1CommentsItem = TypedDict('RedditThreadOutputVariant1Co
     'score': Required[Union[str, None]],
     'depth': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'body': Required[str],
+    'publishedAt': NotRequired[str],
 })
 RedditThreadOutputVariant1CommentsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
