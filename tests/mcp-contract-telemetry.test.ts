@@ -43,3 +43,7 @@ test('removes internal attempt telemetry from properties and required recursivel
     required: ['results', 'nested'],
   })
 })
+test('removes provider identities and session details from public client contracts',()=>{
+ const schema=stripInternalTelemetry({type:'object',properties:{provider:{type:'string'},providerSessionId:{type:'string'},fallbackFrom:{type:'string'},status:{type:'string'}},required:['provider','status']})
+ assert.deepEqual(schema,{type:'object',properties:{status:{type:'string'}},required:['status']})
+})

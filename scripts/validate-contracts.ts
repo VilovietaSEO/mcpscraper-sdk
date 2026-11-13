@@ -7,10 +7,10 @@ function run(label: string, command: string, args: string[]): boolean {
 }
 
 function main(): void {
-  const scheduledResultsOk = run(
-    'Scheduled results contract source check',
+  const artifactTemplatesOk = run(
+    'Artifact template contract source check',
     'node',
-    ['--import', 'tsx', 'scripts/check-scheduled-results-contract.ts'],
+    ['--import', 'tsx', 'scripts/check-artifact-template-contract.ts'],
   )
   const restProjectionOk = run('REST source and generated-model drift', 'npm', ['run', 'verify:rest-contract'])
   const serverRestSource = process.env.MCP_REST_CONTRACT_PATH
@@ -23,7 +23,7 @@ function main(): void {
   const unifiedManifestOk = run('Unified manifest drift check', 'npx', ['tsx', 'scripts/sync-mcp-manifest.ts'])
   const parityOk = run('All SDK/CLI/cURL parity', 'npm', ['run', 'verify:parity'])
 
-  console.log(`\nScheduled results contract: ${scheduledResultsOk ? 'PASS' : 'FAIL'}`)
+  console.log(`\nArtifact template contract: ${artifactTemplatesOk ? 'PASS' : 'FAIL'}`)
   console.log(`\nREST source and generated-model drift: ${restProjectionOk ? 'PASS' : 'FAIL'}`)
   console.log(`Server-to-SDK REST source parity: ${restSourceOk ? 'PASS' : 'FAIL'}`)
   console.log(`Generated REST OpenAPI lint: ${openapiOk ? 'PASS' : 'FAIL'}`)
@@ -31,7 +31,7 @@ function main(): void {
   console.log(`Unified manifest drift: ${unifiedManifestOk ? 'PASS' : 'FAIL'}`)
   console.log(`All-surface parity: ${parityOk ? 'PASS' : 'FAIL'}`)
 
-  process.exitCode = scheduledResultsOk && restProjectionOk && restSourceOk && openapiOk
+  process.exitCode = artifactTemplatesOk && restProjectionOk && restSourceOk && openapiOk
     && manifestOk && unifiedManifestOk && parityOk ? 0 : 1
 }
 

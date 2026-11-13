@@ -1,9 +1,9 @@
 # mcpscraper-memory-sdk
 
-Official TypeScript/JavaScript clients for the unified 364-tool MCP Scraper catalog. The direct
-143-tool Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
+Official TypeScript/JavaScript clients for the unified MCP Scraper catalog. The direct
+Memory manifest remains checked for runtime compatibility, but customer calls use the root MCP.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1)
 
 Both `MemoryClient` and `McpToolsClient` call `https://mcpscraper.dev/mcp` with the same MCP Scraper
 API key. No product logic lives in this package.
@@ -30,7 +30,7 @@ await tools.connections.exportConnectedServiceData({ connectionId: 'conn_123', l
 
 The unified connection namespace includes permission-aware provider inventory and `meta_ads_insights` bulk exports for daily account, campaign, ad-set, and ad reporting, with large results delivered as private artifacts.
 
-OAuth connect/reconnect and direct connected-service operations do not currently have an extra connection-operation debit beyond the required paid plan. Scheduled Actions use the shared MCP Scraper balance at 75 Credits per started occurrence; agent-mode runs add 1.5 times OpenRouter's actual reported model cost. Read the live contract with `await tools.schedule.getScheduleStatus()`.
+OAuth connect/reconnect and direct connected-service operations do not currently have an extra connection-operation debit beyond the required paid plan.
 
 ## Quickstart
 
@@ -59,7 +59,7 @@ try {
 `MemoryClient` preserves the established compatibility namespaces and maps them to public root tool
 IDs. Research remains sourced knowledge; CRM remains actual relationships. External CRM providers
 remain unavailable. Retired direct-key issue/scope methods fail explicitly. `McpToolsClient` contains
-all 364 unified tools.
+all unified tools.
 
 Use `client.callToolResult(name, args)` when a tool can return native MCP image, audio, or resource content. It preserves the complete `content`, `structuredContent`, and `isError` result. The existing `callTool` method remains the convenient parsed JSON/text path.
 
@@ -82,6 +82,58 @@ All failures — HTTP-level, JSON-RPC-level, and MCP tool-level (`isError: true`
 
 ## See also
 
-[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these 143 tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
+[Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-sdk`](../scraper) (Node, also reaches these Memory tools via `client.memoryTools` using only a scraper key) · [`mcpscraper-memory-sdk` on PyPI](https://pypi.org/project/mcpscraper-memory-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.51.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.51.0).
+Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
+
+Release changes: [SDK 0.55.1 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.55.1).
+
+## Client attribution and full results
+
+Clients accept `clientAttribution: { installChannel?, aiClient?, aiModel? }` and default to calling surface `sdk`. Set only known caller labels; unspecified labels stay unknown. `onResponse({ requestId, status })` receives per-response correlation without changing results, and errors keep their own `requestId`. These options also apply to `McpToolsClient` and `MemoryClient`; labels are reporting declarations, not authorization.
+
+Large tool outputs may be delivery envelopes instead of inline domain values. Preserve `delivery`, `scope` and `recovery`, then use `tools.artifacts.describe`, `readRetained` (follow `nextOffset` to null), or `download` with the returned artifact ID. The legacy `artifacts.read` method remains the report reader. `callToolResult` preserves native content/resource links. Download URL expiry differs from artifact retention; renew a URL through `download` without rerunning acquisition. Use the returned capability for binary files.
+
+Artifact delivery may include optional `delivery.availableExports` handles. Use the
+export artifact ID with `artifact_download`, `artifact_read` or `artifact_describe`
+to generate Markdown from retained JSON without repeating acquisition. The
+[on-demand export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.0/examples/serp-on-demand-export.mjs)
+shows the complete flow and preserves a retry key for uncertain search responses.
+
+For page content, start `extract_site` directly; it discovers pages during extraction. Use `map_site_urls` when you need the URL inventory itself. See the [direct site-export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.1/examples/site-export-direct.mjs) for retry keys, status and complete page reads.
+
+Release changes: [SDK 0.56.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.56.0).
+
+## Reddit discovery and known threads
+
+Use `reddit_trending` with `window:"year"` to discover past-year search candidates and
+select relevant threads before collecting comments. Set `maxThreads` to bound the
+number selected and `maxCommentsPerThread:20` for a per-thread capture limit.
+Twenty is a request limit; inspect returned coverage because fewer accessible text
+comments can produce a partial result. Publication dates are optional when unknown.
+
+Pass a known Reddit thread URL directly to `reddit_thread` with `maxComments:20`;
+it does not require a discovery call first. Trending returns ranked summaries and
+questions; the thread tool returns full comment bodies. Preserve each operation's
+retry key and exact inputs after an uncertain response.
+
+The [past-year and direct-thread example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.56.0/examples/reddit-past-year.mjs)
+shows both paths.
+
+## Saved Maps reviews
+
+Server 0.100.1 improves Maps discovery, review text and list collection through the existing interfaces. Use the exact name and location returned by discovery. Read the saved run and its review pages before considering a new acquisition. An explicit resume uses a fresh browser and reopens the profile and reviews; it retains saved review IDs. A new resume key authorizes a separately billed attempt, while repeating that key reads the same run.
+
+## Bug Reporting
+
+Use `bug_reporting` to prepare a redacted draft from observed calls and errors. Review the returned report, then submit its exact `reportId` and `reviewToken` only when the user requests submission. Status returns the private receipt. The support team receives the report and verified account email. Drafts expire after one day; submitted reports after 365 days. See [the complete workflow](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.57.0/examples/bug-reporting.mjs) and [release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0).
+
+## Consistent hosted MCP protocol
+
+This release targets MCP Scraper 0.103.10 with 352 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+
+This unified client includes the Commons publication list and deletion tools and content-preserving article edits. See the [0.59.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0) for subdomain selection, revisions, and merge/replacement behavior.
+
+PAA job progress can include the optional `phase` and `observedAt` fields. They identify observed extraction work separately from worker renewal. Existing polling and request arguments remain compatible. See [the release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
+
+Use Reddit Trends review mode to preview links, approve mode to fetch selected threads, or auto mode to search and fetch in one call. See the [0.59.4 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.4) for the compatible package versions.

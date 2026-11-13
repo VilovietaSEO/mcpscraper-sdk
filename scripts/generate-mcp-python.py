@@ -24,47 +24,131 @@ def to_pascal_case(value: str) -> str:
     return "".join(part[0].upper() + part[1:] for part in re.split(r"[-_\s]+", value) if part)
 
 
-def json_type_to_python(schema: dict) -> str:
-    if "enum" in schema:
-        return "Literal[" + ", ".join(repr(value) for value in schema["enum"]) + "]"
-    json_type = schema.get("type")
-    if json_type == "string":
-        return "str"
-    if json_type == "integer":
-        return "int"
-    if json_type == "number":
-        return "float"
-    if json_type == "boolean":
-        return "bool"
-    if json_type == "array":
-        return f"list[{json_type_to_python(schema.get('items', {}))}]"
-    if json_type == "object" or "properties" in schema:
-        return "dict[str, Any]"
-    return "Any"
+class SchemaRenderer:
+    """Render JSON Schema alternatives without wrapping method results in RootModel."""
+
+    def __init__(self, *, strict: bool = False) -> None:
+        self.strict = strict
+        self.definitions: list[str] = []
+        self.names: set[str] = set()
+
+    def unique_name(self, name: str) -> str:
+        candidate = name
+        index = 2
+        while candidate in self.names:
+            candidate = f"{name}{index}"
+            index += 1
+        self.names.add(candidate)
+        return candidate
+
+    def python_type(self, schema: dict, name: str) -> str:
+        if not isinstance(schema, dict):
+            return "Any"
+        if "const" in schema:
+            return f"Literal[{schema['const']!r}]"
+        if schema.get("enum"):
+            return "Literal[" + ", ".join(repr(value) for value in schema["enum"]) + "]"
+        alternatives = schema.get("anyOf") or schema.get("oneOf")
+        if alternatives:
+            types = [self.python_type(branch, f"{name}Variant{index}")
+                     for index, branch in enumerate(alternatives, 1)]
+            return self.union(types)
+        json_type = schema.get("type")
+        if isinstance(json_type, list):
+            return self.union([self.python_type({**schema, "type": item}, name)
+                               for item in json_type])
+        if json_type == "null":
+            return "None"
+        if json_type == "array":
+            py_type = f"list[{self.python_type(schema.get('items', {}), name + 'Item')}]"
+        elif json_type == "object" or "properties" in schema:
+            properties = schema.get("properties") or {}
+            if not properties:
+                additional = schema.get("additionalProperties", {})
+                value_type = self.python_type(additional, name + "Value")
+                return f"dict[str, {value_type}]"
+            return self.render_typed_dict(name, schema)
+        else:
+            py_type = {"string": "str", "integer": "int", "number": "Union[float, int]",
+                       "boolean": "bool"}.get(json_type, "Any")
+        constraints = []
+        mapping = {"minimum": "ge", "maximum": "le", "exclusiveMinimum": "gt",
+                   "exclusiveMaximum": "lt", "minLength": "min_length",
+                   "maxLength": "max_length", "minItems": "min_length", "maxItems": "max_length"}
+        for json_name, python_name in mapping.items():
+            if json_name in schema:
+                constraints.append(f"{python_name}={schema[json_name]!r}")
+        # JSON Schema patterns use ECMAScript semantics; leave those checks to
+        # the server rather than rejecting valid schemas in Pydantic's regex engine.
+        if constraints:
+            return f"Annotated[{py_type}, Field({', '.join(constraints)})]"
+        return py_type
+
+    @staticmethod
+    def union(types: list[str]) -> str:
+        unique = list(dict.fromkeys(types))
+        return unique[0] if len(unique) == 1 else "Union[" + ", ".join(unique) + "]"
+
+    def render_typed_dict(self, name: str, schema: dict) -> str:
+        # Nested values have always been dictionaries. TypedDict validates their
+        # branches and required keys while preserving that public return shape.
+        name = self.unique_name(name)
+        required = set(schema.get("required") or [])
+        fields = []
+        for prop_name, prop_schema in (schema.get("properties") or {}).items():
+            py_type = self.python_type(prop_schema, name + to_pascal_case(prop_name))
+            wrapper = "Required" if prop_name in required else "NotRequired"
+            fields.append(f"    {prop_name!r}: {wrapper}[{py_type}],")
+        self.definitions.append(
+            f"{name} = TypedDict({name!r}, {{\n" + "\n".join(fields) + "\n})\n"
+            + f'{name}.__pydantic_config__ = ConfigDict(extra="allow", strict={self.strict!r})\n'
+        )
+        return name
+
+    def render_model(self, class_name: str, schema: dict) -> str:
+        alternatives = schema.get("anyOf") or schema.get("oneOf")
+        if alternatives:
+            branches = []
+            for index, branch in enumerate(alternatives, 1):
+                branch_name = f"{class_name}Variant{index}"
+                # JSON Schema keywords beside anyOf/oneOf also constrain every
+                # branch; retain common properties and requirements when present.
+                common = {key: value for key, value in schema.items()
+                          if key not in ("anyOf", "oneOf")}
+                merged = {**common, **branch}
+                merged["properties"] = {**common.get("properties", {}), **branch.get("properties", {})}
+                merged["required"] = list(dict.fromkeys(
+                    (common.get("required") or []) + (branch.get("required") or [])))
+                self.render_model(branch_name, merged)
+                branches.append((len(merged["required"]), branch_name))
+            # Older Pydantic 2 versions select the first valid model. Put
+            # constrained branches before permissive ones so an artifact is
+            # not mistaken for a domain result with no required properties.
+            branches = [name for _, name in sorted(branches, key=lambda item: -item[0])]
+            self.definitions.append(
+                "# Union schema: validate external payloads with TypeAdapter(" + class_name + ").\n"
+                + f"{class_name} = {self.union(branches)}\n"
+            )
+            return class_name
+        lines = [f"class {class_name}(BaseModel):",
+                 f'    model_config = ConfigDict(populate_by_name=True, extra="allow", strict={self.strict!r})', ""]
+        required = set(schema.get("required") or [])
+        for name, prop_schema in (schema.get("properties") or {}).items():
+            py_type = self.python_type(prop_schema, class_name + to_pascal_case(name))
+            is_required = name in required
+            if not is_required:
+                py_type = self.union([py_type, "None"])
+            default = "..." if is_required else "None"
+            lines.append(f"    {to_snake_case(name)}: {py_type} = Field({default}, "
+                         f"alias={name!r}, description={prop_schema.get('description', '')!r})")
+        self.definitions.append("\n".join(lines) + "\n")
+        return class_name
 
 
-def field_definition(name: str, schema: dict, required: bool) -> str:
-    py_type = json_type_to_python(schema)
-    if not required:
-        py_type = f"{py_type} | None"
-    description = schema.get("description", "").replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
-    default = "..." if required else "None"
-    return f'    {to_snake_case(name)}: {py_type} = Field({default}, alias="{name}", description="{description}")'
-
-
-def render_model(class_name: str, schema: dict) -> str:
-    properties = schema.get("properties", {}) or {}
-    required = set(schema.get("required", []) or [])
-    if not properties:
-        return f'class {class_name}(BaseModel):\n    model_config = ConfigDict(populate_by_name=True, extra="allow")\n'
-    lines = [
-        f"class {class_name}(BaseModel):",
-        '    model_config = ConfigDict(populate_by_name=True, extra="allow")',
-        "",
-    ]
-    for prop_name, prop_schema in properties.items():
-        lines.append(field_definition(prop_name, prop_schema, prop_name in required))
-    return "\n".join(lines) + "\n"
+def render_model(class_name: str, schema: dict, *, strict: bool = False) -> str:
+    renderer = SchemaRenderer(strict=strict)
+    renderer.render_model(class_name, schema)
+    return "\n\n".join(renderer.definitions)
 
 
 def generate_target(package_root: Path, package_name: str, tools: list[dict]) -> None:
@@ -83,17 +167,20 @@ def generate_target(package_root: Path, package_name: str, tools: list[dict]) ->
         input_class = model_prefix + "Input"
         output_class = model_prefix + "Output"
         content = "\n".join([
-            "from typing import Any, Literal",
-            "from pydantic import BaseModel, ConfigDict, Field",
+            "from typing import Annotated, Any, Literal, Union",
+            "from typing_extensions import NotRequired, Required, TypedDict",
+            "from pydantic import BaseModel, ConfigDict, Field, TypeAdapter",
             "",
             "",
             render_model(input_class, tool["inputSchema"]),
             "",
-            render_model(output_class, tool["outputSchema"]),
+            render_model(output_class, tool["outputSchema"], strict=True),
+            f"_{input_class}Adapter = TypeAdapter({input_class})",
+            f"_{output_class}Adapter = TypeAdapter({output_class})",
         ])
         (models_dir / f"{module_name}.py").write_text(content)
         import_lines.append(
-            f"from .mcp_models.{module_name} import {input_class}, {output_class}"
+            f"from .mcp_models.{module_name} import {input_class}, {output_class}, _{input_class}Adapter, _{output_class}Adapter"
         )
 
     namespace_blocks: list[str] = []
@@ -112,14 +199,14 @@ def generate_target(package_root: Path, package_name: str, tools: list[dict]) ->
             if tool.get("outputSchemaProvided"):
                 method_blocks.append(
                     f'    def {method_name}(self, **kwargs: Any) -> {output_class}:\n'
-                    f'        payload = {input_class}(**kwargs).model_dump(by_alias=True, exclude_none=True)\n'
+                    f'        payload = _{input_class}Adapter.validate_python(kwargs).model_dump(by_alias=True, exclude_unset=True)\n'
                     f'        result = self._call_tool("{tool["name"]}", payload)\n'
-                    f'        return {output_class}.model_validate(result)\n'
+                    f'        return _{output_class}Adapter.validate_python(result)\n'
                 )
             else:
                 method_blocks.append(
                     f'    def {method_name}(self, **kwargs: Any) -> Any:\n'
-                    f'        payload = {input_class}(**kwargs).model_dump(by_alias=True, exclude_none=True)\n'
+                    f'        payload = _{input_class}Adapter.validate_python(kwargs).model_dump(by_alias=True, exclude_unset=True)\n'
                     f'        return self._call_tool("{tool["name"]}", payload)\n'
                 )
         namespace_blocks.append(

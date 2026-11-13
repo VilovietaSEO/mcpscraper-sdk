@@ -15,4 +15,6 @@ UV_PUBLISH_TOKEN="$(security find-generic-password -s org.pypi.publishing -a __t
 
 Do not print, commit, or put the credential in a command argument. Verify the exact new version and both archive digests at PyPI after publication. The Memory and Scraper Python packages have independent versions; publish only packages changed by the release.
 
+Build the public Python archives with `npm run build:python -- --out-dir dist`. This runs the native Python build from explicit public package sources so ancestor repository ignore files are not force-included in source distributions. Inspect all resulting wheels and source distributions before publication.
+
 For npm, check `npm whoami` before publishing the inspected tarball. Registry upload success is provisional until the new version is visible and its downloaded archive matches the inspected build. Keep GitHub tag, npm, PyPI, and production deployment verification as separate receipts.

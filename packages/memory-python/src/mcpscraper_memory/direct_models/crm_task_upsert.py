@@ -7,8 +7,8 @@ class CrmTaskUpsertInput(BaseModel):
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key. Omit when the MCP transport already authenticated this request.")
     session_id: str | None = Field(None, alias="sessionId", description="Optional MCP session identifier used for active account context.")
-    task_id: str | None = Field(None, alias="taskId", description="")
-    entity_id: str | None = Field(None, alias="entityId", description="")
+    task_id: str | None = Field(None, alias="taskId", description="Task workId returned by crm-work-search; omit to create a new task.")
+    entity_id: str | None = Field(None, alias="entityId", description="Compatibility alias for taskId, not a CRM relationship ID; taskId takes precedence.")
     base_revision: int | None = Field(None, alias="baseRevision", description="")
     idempotency_key: str = Field(..., alias="idempotencyKey", description="")
     person_entity_id: str | None = Field(None, alias="personEntityId", description="")

@@ -3,17 +3,17 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class MemoryListInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key (Bearer secret). Optional when the MCP session is already authenticated; the server resolves auth from the session.")
     session_id: str | None = Field(None, alias="sessionId", description="Session identifier used to resolve the active vault and per-session state. Optional; defaults to the current MCP session.")
     vault: str | None = Field(None, alias="vault", description="Vault to list. Optional; defaults to the session active vault, then the first vault the caller is entitled to.")
-    kind: Literal["note", "library", "capture", "decision"] | None = Field(None, alias="kind", description="Filter to a single note kind. Optional; omit to list every kind in the vault.")
+    kind: Literal['note', 'library', 'capture', 'decision'] | None = Field(None, alias="kind", description="Filter to a single note kind. Optional; omit to list every kind in the vault.")
     tags: list[str] | None = Field(None, alias="tags", description="Filter to notes tagged with any of these tags (matches the note's tags primitive). Optional; omit to not filter by tag.")
 
 
 class MemoryListOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="True when the listing succeeded; false on an auth/scope/lookup error.")
     vault: str | None = Field(None, alias="vault", description="The vault that was actually listed (after defaulting).")

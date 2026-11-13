@@ -9,9 +9,11 @@ class MemoryApiError(Exception):
         rpc_code: int | None = None,
         data: Any = None,
         tool_error: Any = None,
+        request_id: str | None = None,
     ) -> None:
         super().__init__(message)
         self.http_status = http_status
         self.rpc_code = rpc_code
         self.data = data
         self.tool_error = tool_error
+        self.request_id = request_id

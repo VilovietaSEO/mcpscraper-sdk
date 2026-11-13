@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class GetArtifactTemplateInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="")
     session_id: str | None = Field(None, alias="sessionId", description="")
@@ -11,4 +11,10 @@ class GetArtifactTemplateInput(BaseModel):
 
 
 class GetArtifactTemplateOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+
+    ok: bool = Field(..., alias="ok", description="")
+    template: dict[str, Any] | None = Field(None, alias="template", description="")
+    error: str | None = Field(None, alias="error", description="")
+    error_code: Literal['invalid_request', 'not_found', 'conflict', 'template_archived', 'renderer_unavailable', 'artifact_unavailable', 'internal_error'] | None = Field(None, alias="errorCode", description="")
+    request_id: str | None = Field(None, alias="requestId", description="")

@@ -126,30 +126,16 @@ import * as WebMapSiteUrls from './tools/map_site_urls.js'
 import * as WebMapWaybackSnapshots from './tools/map_wayback_snapshots.js'
 import * as WebSiteExportImage from './tools/site_export_image.js'
 import * as WebSiteExportRead from './tools/site_export_read.js'
-import * as ScheduleArchiveArtifactTemplate from './tools/archive_artifact_template.js'
-import * as ScheduleArchiveScheduledRun from './tools/archive_scheduled_run.js'
-import * as ScheduleCreateArtifactTemplate from './tools/create_artifact_template.js'
-import * as ScheduleCreateScheduledRunViewLink from './tools/create_scheduled_run_view_link.js'
-import * as ScheduleCreateScheduledAction from './tools/create-scheduled-action.js'
-import * as ScheduleDeleteScheduledAction from './tools/delete-scheduled-action.js'
-import * as ScheduleGetArtifactTemplate from './tools/get_artifact_template.js'
-import * as ScheduleGetScheduledRun from './tools/get_scheduled_run.js'
-import * as ScheduleGetScheduleLink from './tools/get-schedule-link.js'
-import * as ScheduleGetScheduleStatus from './tools/get-schedule-status.js'
-import * as ScheduleListArtifactTemplates from './tools/list_artifact_templates.js'
-import * as ScheduleListScheduledRuns from './tools/list_scheduled_runs.js'
-import * as ScheduleListScheduledActions from './tools/list-scheduled-actions.js'
-import * as ScheduleMarkScheduledRunOpened from './tools/mark_scheduled_run_opened.js'
-import * as ScheduleMarkScheduledRunUnopened from './tools/mark_scheduled_run_unopened.js'
-import * as SchedulePauseScheduledAction from './tools/pause-scheduled-action.js'
-import * as ScheduleProposeScheduledAction from './tools/propose-scheduled-action.js'
-import * as ScheduleResumeScheduledAction from './tools/resume-scheduled-action.js'
-import * as ScheduleRevokeScheduledRunViewLink from './tools/revoke_scheduled_run_view_link.js'
-import * as ScheduleRevokeScheduleLink from './tools/revoke-schedule-link.js'
-import * as ScheduleSetScheduleDefaults from './tools/set-schedule-defaults.js'
-import * as ScheduleSetScheduleEntitlement from './tools/set-schedule-entitlement.js'
-import * as ScheduleUpdateArtifactTemplate from './tools/update_artifact_template.js'
-import * as ScheduleUpdateScheduledAction from './tools/update-scheduled-action.js'
+import * as ArtifactsArchiveArtifactTemplate from './tools/archive_artifact_template.js'
+import * as ArtifactsDescribe from './tools/artifact_describe.js'
+import * as ArtifactsDownload from './tools/artifact_download.js'
+import * as ArtifactsReadRetained from './tools/artifact_read.js'
+import * as ArtifactsCreateArtifactTemplate from './tools/create_artifact_template.js'
+import * as ArtifactsGetArtifactTemplate from './tools/get_artifact_template.js'
+import * as ArtifactsGetArtifactTemplateExample from './tools/get_artifact_template_example.js'
+import * as ArtifactsListArtifactTemplates from './tools/list_artifact_templates.js'
+import * as ArtifactsRead from './tools/report_artifact_read.js'
+import * as ArtifactsUpdateArtifactTemplate from './tools/update_artifact_template.js'
 import * as BrowserClick from './tools/browser_click.js'
 import * as BrowserClose from './tools/browser_close.js'
 import * as BrowserExtensionDelete from './tools/browser_extension_delete.js'
@@ -172,6 +158,7 @@ import * as BrowserReplayStop from './tools/browser_replay_stop.js'
 import * as BrowserScreenshot from './tools/browser_screenshot.js'
 import * as BrowserScroll from './tools/browser_scroll.js'
 import * as BrowserType from './tools/browser_type.js'
+import * as SupportBugReporting from './tools/bug_reporting.js'
 import * as MemoryBulkDeleteNotes from './tools/bulk-delete-notes.js'
 import * as MemoryDeleteNote from './tools/delete-note.js'
 import * as MemoryExport from './tools/memory-export.js'
@@ -203,13 +190,14 @@ import * as ConnectionsListServiceConnections from './tools/list_service_connect
 import * as ConnectionsMetaAdCreativeMedia from './tools/meta_ad_creative_media.js'
 import * as ConnectionsReadServiceConnection from './tools/read_service_connection.js'
 import * as ConnectionsRenewConnectedDataDownload from './tools/renew_connected_data_download.js'
-import * as ConnectionsSetScheduledActionConnections from './tools/set_scheduled_action_connections.js'
 import * as ConnectionsSlackSendMessage from './tools/slack_send_message.js'
 import * as ConnectionsTestServiceConnection from './tools/test_service_connection.js'
 import * as ConnectionsZoomCreateMeeting from './tools/zoom_create_meeting.js'
 import * as SerpIntelligencePageSnapshots from './tools/capture_serp_page_snapshots.js'
 import * as SerpIntelligenceSnapshot from './tools/capture_serp_snapshot.js'
 import * as CommonsClaimPublication from './tools/commons_claim_publication.js'
+import * as CommonsDeleteEditorialArticle from './tools/commons_delete_editorial_article.js'
+import * as CommonsDeletePublication from './tools/commons_delete_publication.js'
 import * as CommonsGetEntity from './tools/commons_get_entity.js'
 import * as CommonsGetEntityLedger from './tools/commons_get_entity_ledger.js'
 import * as CommonsGetEntityLinkset from './tools/commons_get_entity_linkset.js'
@@ -218,6 +206,7 @@ import * as CommonsGetPublication from './tools/commons_get_publication.js'
 import * as CommonsHostImage from './tools/commons_host_image.js'
 import * as CommonsListFilters from './tools/commons_list_filters.js'
 import * as CommonsListNeedsLinks from './tools/commons_list_needs_links.js'
+import * as CommonsListPublications from './tools/commons_list_publications.js'
 import * as CommonsPrepareEntity from './tools/commons_prepare_entity.js'
 import * as CommonsPreparePublication from './tools/commons_prepare_publication.js'
 import * as CommonsPublishEditorial from './tools/commons_publish_editorial.js'
@@ -292,8 +281,6 @@ import * as FactsHistory from './tools/fact-history.js'
 import * as FactsRecordFact from './tools/record-fact.js'
 import * as ReviewsG2Reviews from './tools/g2_reviews.js'
 import * as ReviewsTrustpilotReviews from './tools/trustpilot_reviews.js'
-import * as ArtifactsGetArtifactTemplateExample from './tools/get_artifact_template_example.js'
-import * as ArtifactsRead from './tools/report_artifact_read.js'
 import * as GoogleAdsPageIntel from './tools/google_ads_page_intel.js'
 import * as GoogleAdsSearch from './tools/google_ads_search.js'
 import * as GoogleAdsTranscribe from './tools/google_ads_transcribe.js'
@@ -318,6 +305,7 @@ import * as LeadsEnrich from './tools/lead_list_enrich.js'
 import * as LeadsEnrichStatus from './tools/lead_list_enrich_status.js'
 import * as LeadsImport from './tools/lead_list_import.js'
 import * as LeadsUploadStart from './tools/lead_list_upload_start.js'
+import * as LeadListsLeadListEnrichCancel from './tools/lead_list_enrich_cancel.js'
 import * as LibraryIngest from './tools/library-ingest.js'
 import * as TagsListMemoryTags from './tools/list-memory-tags.js'
 import * as TagsMergeMemoryTags from './tools/merge-memory-tags.js'
@@ -888,7 +876,7 @@ export const MCP_TOOL_BINDINGS = [
   },
   {
     "name": "archive_artifact_template",
-    "category": "schedule",
+    "category": "artifacts",
     "methodName": "archiveArtifactTemplate"
   },
   {
@@ -897,9 +885,19 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "archiveRead"
   },
   {
-    "name": "archive_scheduled_run",
-    "category": "schedule",
-    "methodName": "archiveScheduledRun"
+    "name": "artifact_describe",
+    "category": "artifacts",
+    "methodName": "describe"
+  },
+  {
+    "name": "artifact_download",
+    "category": "artifacts",
+    "methodName": "download"
+  },
+  {
+    "name": "artifact_read",
+    "category": "artifacts",
+    "methodName": "readRetained"
   },
   {
     "name": "audit_site",
@@ -1017,6 +1015,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "type"
   },
   {
+    "name": "bug_reporting",
+    "category": "support",
+    "methodName": "bugReporting"
+  },
+  {
     "name": "bulk-delete-notes",
     "category": "memory",
     "methodName": "bulkDeleteNotes"
@@ -1045,6 +1048,16 @@ export const MCP_TOOL_BINDINGS = [
     "name": "commons_claim_publication",
     "category": "commons",
     "methodName": "claimPublication"
+  },
+  {
+    "name": "commons_delete_editorial_article",
+    "category": "commons",
+    "methodName": "deleteEditorialArticle"
+  },
+  {
+    "name": "commons_delete_publication",
+    "category": "commons",
+    "methodName": "deletePublication"
   },
   {
     "name": "commons_get_entity",
@@ -1085,6 +1098,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "commons_list_needs_links",
     "category": "commons",
     "methodName": "listNeedsLinks"
+  },
+  {
+    "name": "commons_list_publications",
+    "category": "commons",
+    "methodName": "listPublications"
   },
   {
     "name": "commons_prepare_entity",
@@ -1138,7 +1156,7 @@ export const MCP_TOOL_BINDINGS = [
   },
   {
     "name": "create_artifact_template",
-    "category": "schedule",
+    "category": "artifacts",
     "methodName": "createArtifactTemplate"
   },
   {
@@ -1147,19 +1165,9 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "createReadingRoom"
   },
   {
-    "name": "create_scheduled_run_view_link",
-    "category": "schedule",
-    "methodName": "createScheduledRunViewLink"
-  },
-  {
     "name": "create-channel",
     "category": "channels",
     "methodName": "createChannel"
-  },
-  {
-    "name": "create-scheduled-action",
-    "category": "schedule",
-    "methodName": "createScheduledAction"
   },
   {
     "name": "create-secure-vault",
@@ -1287,11 +1295,6 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "deleteNote"
   },
   {
-    "name": "delete-scheduled-action",
-    "category": "schedule",
-    "methodName": "deleteScheduledAction"
-  },
-  {
     "name": "delete-vault",
     "category": "vaults",
     "methodName": "deleteVault"
@@ -1383,18 +1386,13 @@ export const MCP_TOOL_BINDINGS = [
   },
   {
     "name": "get_artifact_template",
-    "category": "schedule",
+    "category": "artifacts",
     "methodName": "getArtifactTemplate"
   },
   {
     "name": "get_artifact_template_example",
     "category": "artifacts",
     "methodName": "getArtifactTemplateExample"
-  },
-  {
-    "name": "get_scheduled_run",
-    "category": "schedule",
-    "methodName": "getScheduledRun"
   },
   {
     "name": "get-chat-link",
@@ -1410,16 +1408,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "get-message-note",
     "category": "channels",
     "methodName": "getMessageNote"
-  },
-  {
-    "name": "get-schedule-link",
-    "category": "schedule",
-    "methodName": "getScheduleLink"
-  },
-  {
-    "name": "get-schedule-status",
-    "category": "schedule",
-    "methodName": "getScheduleStatus"
   },
   {
     "name": "get-vault-app-link",
@@ -1597,6 +1585,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "enrich"
   },
   {
+    "name": "lead_list_enrich_cancel",
+    "category": "leadLists",
+    "methodName": "leadListEnrichCancel"
+  },
+  {
     "name": "lead_list_enrich_status",
     "category": "leads",
     "methodName": "enrichStatus"
@@ -1618,13 +1611,8 @@ export const MCP_TOOL_BINDINGS = [
   },
   {
     "name": "list_artifact_templates",
-    "category": "schedule",
+    "category": "artifacts",
     "methodName": "listArtifactTemplates"
-  },
-  {
-    "name": "list_scheduled_runs",
-    "category": "schedule",
-    "methodName": "listScheduledRuns"
   },
   {
     "name": "list_service_connections",
@@ -1650,11 +1638,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "list-memory-tags",
     "category": "tags",
     "methodName": "listMemoryTags"
-  },
-  {
-    "name": "list-scheduled-actions",
-    "category": "schedule",
-    "methodName": "listScheduledActions"
   },
   {
     "name": "list-shared-with-me",
@@ -1720,16 +1703,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "maps_search",
     "category": "maps",
     "methodName": "search"
-  },
-  {
-    "name": "mark_scheduled_run_opened",
-    "category": "schedule",
-    "methodName": "markScheduledRunOpened"
-  },
-  {
-    "name": "mark_scheduled_run_unopened",
-    "category": "schedule",
-    "methodName": "markScheduledRunUnopened"
   },
   {
     "name": "memory-backlinks",
@@ -1807,11 +1780,6 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "myMentions"
   },
   {
-    "name": "pause-scheduled-action",
-    "category": "schedule",
-    "methodName": "pauseScheduledAction"
-  },
-  {
     "name": "poll-channel",
     "category": "channels",
     "methodName": "pollChannel"
@@ -1830,11 +1798,6 @@ export const MCP_TOOL_BINDINGS = [
     "name": "prepare-memory-write",
     "category": "capture",
     "methodName": "prepareMemoryWrite"
-  },
-  {
-    "name": "propose-scheduled-action",
-    "category": "schedule",
-    "methodName": "proposeScheduledAction"
   },
   {
     "name": "provision-defaults",
@@ -1942,24 +1905,9 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "resolveMemoryTags"
   },
   {
-    "name": "resume-scheduled-action",
-    "category": "schedule",
-    "methodName": "resumeScheduledAction"
-  },
-  {
-    "name": "revoke_scheduled_run_view_link",
-    "category": "schedule",
-    "methodName": "revokeScheduledRunViewLink"
-  },
-  {
     "name": "revoke-chat-link",
     "category": "access",
     "methodName": "revokeChatLink"
-  },
-  {
-    "name": "revoke-schedule-link",
-    "category": "schedule",
-    "methodName": "revokeScheduleLink"
   },
   {
     "name": "revoke-vault-app-link",
@@ -2002,24 +1950,9 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "serpIdentityList"
   },
   {
-    "name": "set_scheduled_action_connections",
-    "category": "connections",
-    "methodName": "setScheduledActionConnections"
-  },
-  {
     "name": "set-agent-identity",
     "category": "access",
     "methodName": "setAgentIdentity"
-  },
-  {
-    "name": "set-schedule-defaults",
-    "category": "schedule",
-    "methodName": "setScheduleDefaults"
-  },
-  {
-    "name": "set-schedule-entitlement",
-    "category": "schedule",
-    "methodName": "setScheduleEntitlement"
   },
   {
     "name": "site_export_image",
@@ -2098,13 +2031,8 @@ export const MCP_TOOL_BINDINGS = [
   },
   {
     "name": "update_artifact_template",
-    "category": "schedule",
+    "category": "artifacts",
     "methodName": "updateArtifactTemplate"
-  },
-  {
-    "name": "update-scheduled-action",
-    "category": "schedule",
-    "methodName": "updateScheduledAction"
   },
   {
     "name": "upsert-memory-tag",
@@ -2709,103 +2637,47 @@ export class WebNamespace {
   }
 }
 
-export class ScheduleNamespace {
+export class ArtifactsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
-  async archiveArtifactTemplate(input: ScheduleArchiveArtifactTemplate.Input): Promise<ScheduleArchiveArtifactTemplate.Output> {
-    return this.callTool('archive_artifact_template', input) as Promise<ScheduleArchiveArtifactTemplate.Output>
+  async archiveArtifactTemplate(input: ArtifactsArchiveArtifactTemplate.Input): Promise<ArtifactsArchiveArtifactTemplate.Output> {
+    return this.callTool('archive_artifact_template', input) as Promise<ArtifactsArchiveArtifactTemplate.Output>
   }
 
-  async archiveScheduledRun(input: ScheduleArchiveScheduledRun.Input): Promise<ScheduleArchiveScheduledRun.Output> {
-    return this.callTool('archive_scheduled_run', input) as Promise<ScheduleArchiveScheduledRun.Output>
+  async describe(input: ArtifactsDescribe.Input): Promise<ArtifactsDescribe.Output> {
+    return this.callTool('artifact_describe', input) as Promise<ArtifactsDescribe.Output>
   }
 
-  async createArtifactTemplate(input: ScheduleCreateArtifactTemplate.Input = {} as ScheduleCreateArtifactTemplate.Input): Promise<ScheduleCreateArtifactTemplate.Output> {
-    return this.callTool('create_artifact_template', input) as Promise<ScheduleCreateArtifactTemplate.Output>
+  async download(input: ArtifactsDownload.Input): Promise<ArtifactsDownload.Output> {
+    return this.callTool('artifact_download', input) as Promise<ArtifactsDownload.Output>
   }
 
-  async createScheduledRunViewLink(input: ScheduleCreateScheduledRunViewLink.Input): Promise<ScheduleCreateScheduledRunViewLink.Output> {
-    return this.callTool('create_scheduled_run_view_link', input) as Promise<ScheduleCreateScheduledRunViewLink.Output>
+  async readRetained(input: ArtifactsReadRetained.Input): Promise<ArtifactsReadRetained.Output> {
+    return this.callTool('artifact_read', input) as Promise<ArtifactsReadRetained.Output>
   }
 
-  async createScheduledAction(input: ScheduleCreateScheduledAction.Input): Promise<ScheduleCreateScheduledAction.Output> {
-    return this.callTool('create-scheduled-action', input) as Promise<ScheduleCreateScheduledAction.Output>
+  async createArtifactTemplate(input: ArtifactsCreateArtifactTemplate.Input = {} as ArtifactsCreateArtifactTemplate.Input): Promise<ArtifactsCreateArtifactTemplate.Output> {
+    return this.callTool('create_artifact_template', input) as Promise<ArtifactsCreateArtifactTemplate.Output>
   }
 
-  async deleteScheduledAction(input: ScheduleDeleteScheduledAction.Input): Promise<ScheduleDeleteScheduledAction.Output> {
-    return this.callTool('delete-scheduled-action', input) as Promise<ScheduleDeleteScheduledAction.Output>
+  async getArtifactTemplate(input: ArtifactsGetArtifactTemplate.Input): Promise<ArtifactsGetArtifactTemplate.Output> {
+    return this.callTool('get_artifact_template', input) as Promise<ArtifactsGetArtifactTemplate.Output>
   }
 
-  async getArtifactTemplate(input: ScheduleGetArtifactTemplate.Input): Promise<ScheduleGetArtifactTemplate.Output> {
-    return this.callTool('get_artifact_template', input) as Promise<ScheduleGetArtifactTemplate.Output>
+  async getArtifactTemplateExample(input: ArtifactsGetArtifactTemplateExample.Input): Promise<ArtifactsGetArtifactTemplateExample.Output> {
+    return this.callTool('get_artifact_template_example', input) as Promise<ArtifactsGetArtifactTemplateExample.Output>
   }
 
-  async getScheduledRun(input: ScheduleGetScheduledRun.Input): Promise<ScheduleGetScheduledRun.Output> {
-    return this.callTool('get_scheduled_run', input) as Promise<ScheduleGetScheduledRun.Output>
+  async listArtifactTemplates(input: ArtifactsListArtifactTemplates.Input = {} as ArtifactsListArtifactTemplates.Input): Promise<ArtifactsListArtifactTemplates.Output> {
+    return this.callTool('list_artifact_templates', input) as Promise<ArtifactsListArtifactTemplates.Output>
   }
 
-  async getScheduleLink(input: ScheduleGetScheduleLink.Input = {} as ScheduleGetScheduleLink.Input): Promise<ScheduleGetScheduleLink.Output> {
-    return this.callTool('get-schedule-link', input) as Promise<ScheduleGetScheduleLink.Output>
+  async read(input: ArtifactsRead.Input): Promise<ArtifactsRead.Output> {
+    return this.callTool('report_artifact_read', input) as Promise<ArtifactsRead.Output>
   }
 
-  async getScheduleStatus(input: ScheduleGetScheduleStatus.Input = {} as ScheduleGetScheduleStatus.Input): Promise<ScheduleGetScheduleStatus.Output> {
-    return this.callTool('get-schedule-status', input) as Promise<ScheduleGetScheduleStatus.Output>
-  }
-
-  async listArtifactTemplates(input: ScheduleListArtifactTemplates.Input = {} as ScheduleListArtifactTemplates.Input): Promise<ScheduleListArtifactTemplates.Output> {
-    return this.callTool('list_artifact_templates', input) as Promise<ScheduleListArtifactTemplates.Output>
-  }
-
-  async listScheduledRuns(input: ScheduleListScheduledRuns.Input = {} as ScheduleListScheduledRuns.Input): Promise<ScheduleListScheduledRuns.Output> {
-    return this.callTool('list_scheduled_runs', input) as Promise<ScheduleListScheduledRuns.Output>
-  }
-
-  async listScheduledActions(input: ScheduleListScheduledActions.Input = {} as ScheduleListScheduledActions.Input): Promise<ScheduleListScheduledActions.Output> {
-    return this.callTool('list-scheduled-actions', input) as Promise<ScheduleListScheduledActions.Output>
-  }
-
-  async markScheduledRunOpened(input: ScheduleMarkScheduledRunOpened.Input): Promise<ScheduleMarkScheduledRunOpened.Output> {
-    return this.callTool('mark_scheduled_run_opened', input) as Promise<ScheduleMarkScheduledRunOpened.Output>
-  }
-
-  async markScheduledRunUnopened(input: ScheduleMarkScheduledRunUnopened.Input): Promise<ScheduleMarkScheduledRunUnopened.Output> {
-    return this.callTool('mark_scheduled_run_unopened', input) as Promise<ScheduleMarkScheduledRunUnopened.Output>
-  }
-
-  async pauseScheduledAction(input: SchedulePauseScheduledAction.Input): Promise<SchedulePauseScheduledAction.Output> {
-    return this.callTool('pause-scheduled-action', input) as Promise<SchedulePauseScheduledAction.Output>
-  }
-
-  async proposeScheduledAction(input: ScheduleProposeScheduledAction.Input): Promise<ScheduleProposeScheduledAction.Output> {
-    return this.callTool('propose-scheduled-action', input) as Promise<ScheduleProposeScheduledAction.Output>
-  }
-
-  async resumeScheduledAction(input: ScheduleResumeScheduledAction.Input): Promise<ScheduleResumeScheduledAction.Output> {
-    return this.callTool('resume-scheduled-action', input) as Promise<ScheduleResumeScheduledAction.Output>
-  }
-
-  async revokeScheduledRunViewLink(input: ScheduleRevokeScheduledRunViewLink.Input): Promise<ScheduleRevokeScheduledRunViewLink.Output> {
-    return this.callTool('revoke_scheduled_run_view_link', input) as Promise<ScheduleRevokeScheduledRunViewLink.Output>
-  }
-
-  async revokeScheduleLink(input: ScheduleRevokeScheduleLink.Input = {} as ScheduleRevokeScheduleLink.Input): Promise<ScheduleRevokeScheduleLink.Output> {
-    return this.callTool('revoke-schedule-link', input) as Promise<ScheduleRevokeScheduleLink.Output>
-  }
-
-  async setScheduleDefaults(input: ScheduleSetScheduleDefaults.Input): Promise<ScheduleSetScheduleDefaults.Output> {
-    return this.callTool('set-schedule-defaults', input) as Promise<ScheduleSetScheduleDefaults.Output>
-  }
-
-  async setScheduleEntitlement(input: ScheduleSetScheduleEntitlement.Input): Promise<ScheduleSetScheduleEntitlement.Output> {
-    return this.callTool('set-schedule-entitlement', input) as Promise<ScheduleSetScheduleEntitlement.Output>
-  }
-
-  async updateArtifactTemplate(input: ScheduleUpdateArtifactTemplate.Input): Promise<ScheduleUpdateArtifactTemplate.Output> {
-    return this.callTool('update_artifact_template', input) as Promise<ScheduleUpdateArtifactTemplate.Output>
-  }
-
-  async updateScheduledAction(input: ScheduleUpdateScheduledAction.Input): Promise<ScheduleUpdateScheduledAction.Output> {
-    return this.callTool('update-scheduled-action', input) as Promise<ScheduleUpdateScheduledAction.Output>
+  async updateArtifactTemplate(input: ArtifactsUpdateArtifactTemplate.Input): Promise<ArtifactsUpdateArtifactTemplate.Output> {
+    return this.callTool('update_artifact_template', input) as Promise<ArtifactsUpdateArtifactTemplate.Output>
   }
 }
 
@@ -2898,6 +2770,14 @@ export class BrowserNamespace {
 
   async type(input: BrowserType.Input): Promise<BrowserType.Output> {
     return this.callTool('browser_type', input) as Promise<BrowserType.Output>
+  }
+}
+
+export class SupportNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async bugReporting(input: SupportBugReporting.Input = {} as SupportBugReporting.Input): Promise<SupportBugReporting.Output> {
+    return this.callTool('bug_reporting', input) as Promise<SupportBugReporting.Output>
   }
 }
 
@@ -3032,10 +2912,6 @@ export class ConnectionsNamespace {
     return this.callTool('renew_connected_data_download', input) as Promise<ConnectionsRenewConnectedDataDownload.Output>
   }
 
-  async setScheduledActionConnections(input: ConnectionsSetScheduledActionConnections.Input): Promise<ConnectionsSetScheduledActionConnections.Output> {
-    return this.callTool('set_scheduled_action_connections', input) as Promise<ConnectionsSetScheduledActionConnections.Output>
-  }
-
   async slackSendMessage(input: ConnectionsSlackSendMessage.Input): Promise<ConnectionsSlackSendMessage.Output> {
     return this.callTool('slack_send_message', input) as Promise<ConnectionsSlackSendMessage.Output>
   }
@@ -3068,6 +2944,14 @@ export class CommonsNamespace {
     return this.callTool('commons_claim_publication', input) as Promise<CommonsClaimPublication.Output>
   }
 
+  async deleteEditorialArticle(input: CommonsDeleteEditorialArticle.Input): Promise<CommonsDeleteEditorialArticle.Output> {
+    return this.callTool('commons_delete_editorial_article', input) as Promise<CommonsDeleteEditorialArticle.Output>
+  }
+
+  async deletePublication(input: CommonsDeletePublication.Input): Promise<CommonsDeletePublication.Output> {
+    return this.callTool('commons_delete_publication', input) as Promise<CommonsDeletePublication.Output>
+  }
+
   async getEntity(input: CommonsGetEntity.Input): Promise<CommonsGetEntity.Output> {
     return this.callTool('commons_get_entity', input) as Promise<CommonsGetEntity.Output>
   }
@@ -3098,6 +2982,10 @@ export class CommonsNamespace {
 
   async listNeedsLinks(input: CommonsListNeedsLinks.Input = {} as CommonsListNeedsLinks.Input): Promise<CommonsListNeedsLinks.Output> {
     return this.callTool('commons_list_needs_links', input) as Promise<CommonsListNeedsLinks.Output>
+  }
+
+  async listPublications(input: CommonsListPublications.Input = {} as CommonsListPublications.Input): Promise<CommonsListPublications.Output> {
+    return this.callTool('commons_list_publications', input) as Promise<CommonsListPublications.Output>
   }
 
   async prepareEntity(input: CommonsPrepareEntity.Input): Promise<CommonsPrepareEntity.Output> {
@@ -3316,7 +3204,7 @@ export class CrmNamespace {
     return this.callTool('crm-task-upsert', input) as Promise<CrmTaskUpsert.Output>
   }
 
-  async workSearch(input: CrmWorkSearch.Input = {} as CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
+  async workSearch(input: CrmWorkSearch.Input): Promise<CrmWorkSearch.Output> {
     return this.callTool('crm-work-search', input) as Promise<CrmWorkSearch.Output>
   }
 }
@@ -3441,18 +3329,6 @@ export class ReviewsNamespace {
   }
 }
 
-export class ArtifactsNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async getArtifactTemplateExample(input: ArtifactsGetArtifactTemplateExample.Input): Promise<ArtifactsGetArtifactTemplateExample.Output> {
-    return this.callTool('get_artifact_template_example', input) as Promise<ArtifactsGetArtifactTemplateExample.Output>
-  }
-
-  async read(input: ArtifactsRead.Input): Promise<ArtifactsRead.Output> {
-    return this.callTool('report_artifact_read', input) as Promise<ArtifactsRead.Output>
-  }
-}
-
 export class GoogleAdsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3566,6 +3442,14 @@ export class LeadsNamespace {
 
   async uploadStart(input: LeadsUploadStart.Input): Promise<LeadsUploadStart.Output> {
     return this.callTool('lead_list_upload_start', input) as Promise<LeadsUploadStart.Output>
+  }
+}
+
+export class LeadListsNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async leadListEnrichCancel(input: LeadListsLeadListEnrichCancel.Input): Promise<LeadListsLeadListEnrichCancel.Output> {
+    return this.callTool('lead_list_enrich_cancel', input) as Promise<LeadListsLeadListEnrichCancel.Output>
   }
 }
 
@@ -3696,7 +3580,7 @@ export class RedditNamespace {
     return this.callTool('reddit_thread', input) as Promise<RedditThread.Output>
   }
 
-  async trending(input: RedditTrending.Input): Promise<RedditTrending.Output> {
+  async trending(input: RedditTrending.Input = {} as RedditTrending.Input): Promise<RedditTrending.Output> {
     return this.callTool('reddit_trending', input) as Promise<RedditTrending.Output>
   }
 }
@@ -3806,8 +3690,9 @@ export class GeneratedMcpToolsClient {
   readonly vaults: VaultsNamespace
   readonly analytics: AnalyticsNamespace
   readonly web: WebNamespace
-  readonly schedule: ScheduleNamespace
+  readonly artifacts: ArtifactsNamespace
   readonly browser: BrowserNamespace
+  readonly support: SupportNamespace
   readonly memory: MemoryNamespace
   readonly connections: ConnectionsNamespace
   readonly serpIntelligence: SerpIntelligenceNamespace
@@ -3823,12 +3708,12 @@ export class GeneratedMcpToolsClient {
   readonly facebook: FacebookNamespace
   readonly facts: FactsNamespace
   readonly reviews: ReviewsNamespace
-  readonly artifacts: ArtifactsNamespace
   readonly googleAds: GoogleAdsNamespace
   readonly search: SearchNamespace
   readonly images: ImagesNamespace
   readonly instagram: InstagramNamespace
   readonly leads: LeadsNamespace
+  readonly leadLists: LeadListsNamespace
   readonly library: LibraryNamespace
   readonly tags: TagsNamespace
   readonly maps: MapsNamespace
@@ -3847,8 +3732,9 @@ export class GeneratedMcpToolsClient {
     this.vaults = new VaultsNamespace(callTool)
     this.analytics = new AnalyticsNamespace(callTool)
     this.web = new WebNamespace(callTool)
-    this.schedule = new ScheduleNamespace(callTool)
+    this.artifacts = new ArtifactsNamespace(callTool)
     this.browser = new BrowserNamespace(callTool)
+    this.support = new SupportNamespace(callTool)
     this.memory = new MemoryNamespace(callTool)
     this.connections = new ConnectionsNamespace(callTool)
     this.serpIntelligence = new SerpIntelligenceNamespace(callTool)
@@ -3864,12 +3750,12 @@ export class GeneratedMcpToolsClient {
     this.facebook = new FacebookNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
     this.reviews = new ReviewsNamespace(callTool)
-    this.artifacts = new ArtifactsNamespace(callTool)
     this.googleAds = new GoogleAdsNamespace(callTool)
     this.search = new SearchNamespace(callTool)
     this.images = new ImagesNamespace(callTool)
     this.instagram = new InstagramNamespace(callTool)
     this.leads = new LeadsNamespace(callTool)
+    this.leadLists = new LeadListsNamespace(callTool)
     this.library = new LibraryNamespace(callTool)
     this.tags = new TagsNamespace(callTool)
     this.maps = new MapsNamespace(callTool)

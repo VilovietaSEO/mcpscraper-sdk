@@ -74,10 +74,19 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   site_export_read: 'web',
   site_export_image: 'web',
   archive_read: 'web',
+  archive_artifact_template: 'artifacts',
+  create_artifact_template: 'artifacts',
+  get_artifact_template: 'artifacts',
+  list_artifact_templates: 'artifacts',
+  update_artifact_template: 'artifacts',
+  artifact_read: 'artifacts',
+  artifact_describe: 'artifacts',
+  artifact_download: 'artifacts',
   editorial_reading_room_guide: 'editorial',
   create_editorial_reading_room: 'editorial',
   renew_editorial_reading_room_download: 'editorial',
   credits_info: 'billing',
+  bug_reporting: 'support',
   list_service_connections: 'connections',
   test_service_connection: 'connections',
   describe_service_connection_tool: 'connections',
@@ -90,12 +99,9 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   meta_ad_creative_media: 'connections',
   import_service_connection_to_memory: 'connections',
   call_service_connection_action: 'connections',
-  set_scheduled_action_connections: 'connections',
   export_connected_service_data: 'connections',
   export_search_console_table_data: 'connections',
   renew_connected_data_download: 'connections',
-  create_scheduled_run_view_link: 'schedule',
-  revoke_scheduled_run_view_link: 'schedule',
   directory_workflow: 'directory',
   directory_workflow_status: 'directory',
   location_markets: 'directory',
@@ -151,12 +157,14 @@ const EXPLICIT_METHOD_NAMES: Record<string, string> = {
   query_fanout_workflow: 'queryFanout',
   rank_tracker_workflow: 'rankTracker',
   report_artifact_read: 'read',
+  artifact_read: 'readRetained',
   editorial_reading_room_guide: 'readingRoomGuide',
   create_editorial_reading_room: 'createReadingRoom',
   renew_editorial_reading_room_download: 'renewReadingRoomDownload',
   trustpilot_reviews: 'trustpilotReviews',
   g2_reviews: 'g2Reviews',
   credits_info: 'creditsInfo',
+  bug_reporting: 'bugReporting',
   capture_serp_snapshot: 'snapshot',
   capture_serp_page_snapshots: 'pageSnapshots',
 }
@@ -293,7 +301,9 @@ async function main(): Promise<void> {
 
   const tools: UnifiedTool[] = liveTools.map(tool => {
     const prior = existingTools.get(tool.name)
-    const category = prior?.category ?? memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
+    const category = /^(?:archive|create|get|list|update)_artifact_templates?$/.test(tool.name)
+      ? 'artifacts'
+      : prior?.category ?? memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
     return {
       name: tool.name,
       title: tool.title,

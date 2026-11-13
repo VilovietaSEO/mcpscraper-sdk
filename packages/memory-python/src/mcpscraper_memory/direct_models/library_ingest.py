@@ -11,7 +11,7 @@ class LibraryIngestInput(BaseModel):
     title: str = Field(..., alias="title", description="Short human-readable title for the item; used to build the stored path. Must be non-empty.")
     content: str = Field(..., alias="content", description="The full captured text (scrape/transcript/output) to store and index. Must be non-empty.")
     source: str = Field(..., alias="source", description="Provenance of the content, e.g. a URL or tool name. Must be non-empty.")
-    captured_at: str | None = Field(None, alias="capturedAt", description="ISO-8601 capture timestamp. Optional; defaults to now. Also seeds the deterministic storage path.")
+    captured_at: str | None = Field(None, alias="capturedAt", description="ISO-8601 capture timestamp. Defaults to now and seeds the storage path with title. Preserve this timestamp and title on retries; omitting it can create another note.")
     summary: str | None = Field(None, alias="summary", description="Retrieval-ready source summary. Optional; a provenance summary is generated when omitted.")
     tags: list[str] | None = Field(None, alias="tags", description="Reviewed canonical tags. Tags resolve against the account's existing vocabulary; new tags require a one-line description. When omitted, only deterministic source-provenance tags are recorded.")
     tag_descriptions: dict[str, Any] | None = Field(None, alias="tagDescriptions", description="One-line meaning for any supplied tag that is new to the account, keyed by tag.")

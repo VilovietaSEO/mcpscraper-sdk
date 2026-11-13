@@ -24,7 +24,7 @@ export interface Input {
    */
   source: string;
   /**
-   * ISO-8601 capture timestamp. Optional; defaults to now. Also seeds the deterministic storage path.
+   * ISO-8601 capture timestamp. Defaults to now and seeds the storage path with title. Preserve this timestamp and title on retries; omitting it can create another note.
    */
   capturedAt?: string;
   /**

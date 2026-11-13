@@ -15,6 +15,9 @@ test('server-owned REST paths and errors project into the complete OpenAPI contr
   assert.equal(openapi.paths['/directory/run'].post.responses['202'].content['application/json'].schema.$ref, '#/components/schemas/DirectoryJobResponse')
   assert.equal(openapi.paths['/directory/jobs/{jobId}'].get.responses['404'].content['application/json'].schema.$ref, '#/components/schemas/DirectoryJobNotFound')
   assert.ok(openapi.components.schemas.PublicErrorEnvelope.properties.error_code.enum.includes('directory_job_not_found'))
+  assert.equal(Object.keys(openapi.paths).some(path => path.includes('/schedules')), false)
+  assert.equal('WorkflowSchedule' in openapi.components.schemas, false)
+  assert.equal(openapi.paths['/workflows/run'].post.operationId, 'runWorkflow')
 })
 
 test('source parity rejects a changed server artifact with an unchanged digest', () => {

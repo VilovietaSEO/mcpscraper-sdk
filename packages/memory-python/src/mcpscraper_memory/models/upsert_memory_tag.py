@@ -3,18 +3,18 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class UpsertMemoryTagInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="")
     session_id: str | None = Field(None, alias="sessionId", description="")
     tag: str = Field(..., alias="tag", description="")
     description: str | None = Field(None, alias="description", description="")
     aliases: list[str] | None = Field(None, alias="aliases", description="")
-    status: Literal["active", "deprecated"] | None = Field(None, alias="status", description="")
+    status: Literal['active', 'deprecated'] | None = Field(None, alias="status", description="")
 
 
 class UpsertMemoryTagOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="")
     tag: dict[str, Any] | None = Field(None, alias="tag", description="")

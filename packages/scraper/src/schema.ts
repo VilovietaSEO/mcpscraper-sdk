@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+    "/bugs/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Prepare, submit or read a private bug report
+         * @description Prepare a redacted one-day draft from observed evidence. Submit its exact reportId and reviewToken only at the user’s request. Submitted reports and verified account email are shared with private support for 365 days. Free; status and repeated submit are safe.
+         */
+        post: operations["bugReporting"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/harvest": {
         parameters: {
             query?: never;
@@ -44,7 +64,10 @@ export interface paths {
          *     positions, URLs, titles, and descriptions for 20 Credits per delivered
          *     page, or 35 Credits when the backup supplies the result. Full mode adds
          *     available same-page SERP features for 35 Credits per delivered page.
-         *     Both modes default to one page; set `pages: 2` explicitly for two.
+         *     Both modes default to one page; set `pages: 2` explicitly for two unfiltered
+         *     organic pages without a backup provider. With `serpOnly: true`, `recency: week` or `month` returns
+         *     one page for 35 Credits. Combining recency with two pages is rejected
+         *     before acquisition or billing.
          *     A 35-Credit-per-requested-page hold is settled after delivery.
          *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
          *     (400 Credit base + 10 Credits per question actually returned; unused estimate is
@@ -557,7 +580,7 @@ export interface paths {
         put?: never;
         /**
          * Capture a Reddit post and its comment tree
-         * @description Costs 30 credits for the thread plus 2 credits per comment actually returned. Refunded automatically if Reddit blocks the request after retries.
+         * @description Opens a known Reddit thread directly without a discovery search. Costs 30 credits for the thread plus 2 credits per comment actually returned. Refunded automatically if Reddit blocks the request after retries.
          */
         post: operations["redditThread"];
         delete?: never;
@@ -576,14 +599,12 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * Discover and rank the top recent Reddit threads for a topic
-         * @description Finds relevant recent Reddit threads via a Google site:reddit.com search over a week/month window,
-         *     then (by default) scrapes them all in parallel for real upvotes, comments, and the questions people
-         *     asked, and ranks by engagement (upvotes + 2x comments). Billing: one discovery debit plus, when
-         *     includeComments is true, 30 credits per scraped thread and 2 credits per captured comment, each
-         *     refunded on failure. Set includeComments:false for a cheap discovery-only sweep (thread list, no
-         *     engagement stats, no per-thread billing). Scraping respects a soft deadline and returns partial:true
-         *     if it stops early rather than exceeding the request limit.
+         * Discover and rank Reddit discussions for a topic
+         * @description Finds Reddit discussions for a topic or subreddit. Omit the window for an all-time search.
+         *     Review mode previews links. Approve mode fetches only selected URLs from the review.
+         *     Auto mode discovers and fetches threads immediately. Dated fetches verify post or comment timestamps.
+         *     Discovery, verified threads, and returned comment text are billed separately. Undated link-only
+         *     searches bill discovery only. An empty delivery refunds the discovery charge.
          */
         post: operations["redditTrending"];
         delete?: never;
@@ -927,59 +948,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/workflows/schedules": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List your workflow schedules */
-        get: operations["listWorkflowSchedules"];
-        put?: never;
-        /** Create a recurring schedule for a workflow */
-        post: operations["createWorkflowSchedule"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/workflows/schedules/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** Delete a workflow schedule */
-        delete: operations["deleteWorkflowSchedule"];
-        options?: never;
-        head?: never;
-        /** Update a workflow schedule */
-        patch: operations["patchWorkflowSchedule"];
-        trace?: never;
-    };
-    "/workflows/schedules/{id}/run": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Trigger a workflow schedule immediately, out of cadence */
-        post: operations["runWorkflowScheduleNow"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/gmail/messages/search": {
         parameters: {
             query?: never;
@@ -1309,7 +1277,7 @@ export interface components {
             /** @description Optional US ZIP override. */
             proxyZip?: string;
             /**
-             * @description Google result pages to fetch. Full mode alone does not request page 2.
+             * @description Google result pages to fetch. Full mode alone does not request page 2. For serpOnly searches, two pages require an omitted recency filter.
              * @default 1
              */
             pages: number;
@@ -1325,7 +1293,7 @@ export interface components {
              */
             serpOnly: boolean;
             /**
-             * @description Optional Google time filter. Ordinary search_serp accepts week or month and returns organic browser results; PAA harvest also accepts day and year. Omit for all-time results.
+             * @description Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 35 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results.
              * @enum {string}
              */
             recency?: "day" | "week" | "month" | "year";
@@ -1876,115 +1844,396 @@ export interface components {
             debug: boolean;
         };
         SerpIntelligenceOrganicResult: {
-            position?: number;
-            title?: string;
-            url?: string;
-            domain?: string;
-            cite?: string | null;
-            snippet?: string | null;
-            isRedditStyle?: boolean;
-            inlineRating?: {
-                value?: string;
-                count?: string;
+            position: number;
+            title: string;
+            url: string;
+            rawUrl?: string;
+            resolvedUrl?: string | null;
+            /** @enum {string} */
+            linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+            /** @enum {string} */
+            resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
+            sourcePage?: 1 | 2;
+            domain: string;
+            cite: string | null;
+            snippet: string | null;
+            isRedditStyle: boolean;
+            inlineRating: {
+                value: string;
+                count: string;
             } | null;
         };
         SerpIntelligenceHarvestResult: {
-            seed?: string;
-            location?: string | null;
-            extractedAt?: string;
-            totalQuestions?: number;
+            seed: string;
+            location: string | null;
+            extractedAt: string;
+            totalQuestions: number;
             /** @enum {string} */
-            surface?: "web" | "aim" | "unknown";
-            aiOverview?: {
-                detected?: boolean;
-                text?: string | null;
-                citations?: {
-                    text?: string;
-                    href?: string;
+            surface: "web" | "aim" | "unknown";
+            aiOverview: {
+                detected: boolean;
+                text: string | null;
+                citations: {
+                    text: string;
+                    href: string;
+                    rawUrl?: string;
+                    resolvedUrl?: string | null;
+                    /** @enum {string} */
+                    linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+                    /** @enum {string} */
+                    resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
+                }[];
+                expanded?: boolean;
+                fullyExpanded?: boolean;
+                sections?: string[];
+                shareUrl?: string | null;
+            };
+            aiMode: {
+                detected: boolean;
+                text: string | null;
+                citations: {
+                    text: string;
+                    href: string;
+                    rawUrl?: string;
+                    resolvedUrl?: string | null;
+                    /** @enum {string} */
+                    linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+                    /** @enum {string} */
+                    resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
                 }[];
             };
-            aiMode?: {
-                detected?: boolean;
-                text?: string | null;
-                citations?: {
-                    text?: string;
-                    href?: string;
+            tree: components["schemas"]["SerpIntelligencePaaNode"][];
+            flat: {
+                seed_query: string;
+                question_id: string;
+                google_link_id: string;
+                google_evidence_id: string;
+                question: string;
+                answer: string;
+                answerExpansionIncomplete?: boolean;
+                source_title: string;
+                source_site: string;
+                source_cite: string;
+                sources: {
+                    url: string;
+                    rawUrl?: string;
+                    resolvedUrl?: string | null;
+                    /** @enum {string} */
+                    linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+                    /** @enum {string} */
+                    resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
+                    title: string | null;
+                    site: string | null;
+                    description?: string | null;
                 }[];
-            };
-            tree?: unknown[];
-            flat?: unknown[];
-            videos?: unknown[];
-            forums?: unknown[];
-            organicResults?: components["schemas"]["SerpIntelligenceOrganicResult"][];
-            localPack?: unknown[];
-            entityIds?: {
-                entities?: {
-                    name?: string;
-                    kgId?: string | null;
-                    cid?: string | null;
-                    gcid?: string | null;
+                depth: number;
+                parent_question: string;
+                extracted_at: string;
+            }[];
+            videos: {
+                /** @enum {string} */
+                type: "video" | "short_video";
+                title: string;
+                channel: string;
+                platform: string;
+                duration: string;
+                url: string;
+            }[];
+            forums: {
+                title: string;
+                source: string;
+                url: string;
+            }[];
+            organicResults: components["schemas"]["SerpIntelligenceOrganicResult"][];
+            localPack: {
+                position: number;
+                name: string;
+                cid?: string | null;
+                rating?: string | null;
+                reviewCount?: string | null;
+                metadata?: string[];
+                websiteUrl?: string | null;
+                directionsUrl?: string | null;
+            }[];
+            entityIds: {
+                entities: {
+                    name: string;
+                    kgId: string | null;
+                    cid: string | null;
+                    gcid: string | null;
                 }[];
-                kgIds?: string[];
-                cids?: string[];
-                gcids?: string[];
+                kgIds: string[];
+                cids: string[];
+                gcids: string[];
             };
-            stats?: {
-                seed?: string;
-                totalQuestions?: number;
-                maxDepthReached?: number;
-                durationMs?: number;
-                errorCount?: number;
+            stats: {
+                seed: string;
+                totalQuestions: number;
+                maxDepthReached: number;
+                durationMs: number;
+                errorCount: number;
             };
-            diagnostics?: {
-                [key: string]: unknown;
+            diagnostics: components["schemas"]["SerpIntelligenceHarvestDiagnostics"];
+            whatPeopleSaying: {
+                /** @enum {string} */
+                type: "reddit" | "facebook" | "instagram" | "tiktok" | "youtube" | "news" | "unknown";
+                title: string;
+                url: string;
+                source: string;
+                platform: string;
+                popularComment: string | null;
+                engagement: string;
+                date: string;
+                duration: string | null;
+                authorNote: string | null;
+            }[];
+        };
+        SerpIntelligenceHarvestDiagnostics: {
+            /** @enum {string} */
+            completionStatus: "paa_found" | "no_paa" | "serp_only";
+            /** @enum {string|null} */
+            problem?: null;
+            /** @enum {string} */
+            resultQuality?: "complete" | "partial" | "degraded";
+            degradedResult?: boolean;
+            degradationReasons?: ("empty_primary_serp" | "page_two_missing")[];
+            retryRecommended?: boolean;
+            noPaaObserved?: boolean;
+            phaseTimings?: {
+                providerConnectMs?: number;
+                navigationMs?: number;
+                serpParseMs?: number;
+                paaExpansionMs?: number;
+                linkResolutionMs?: number;
+                totalServerMs: number;
             };
-            whatPeopleSaying?: unknown[];
+            pagination?: {
+                requestedPages: 1 | 2;
+                capturedPages: 1 | 2;
+                /** @enum {string} */
+                page2Status: "not_requested" | "not_attempted" | "captured" | "unavailable" | "failed";
+                page1OrganicCount: number;
+                page2OrganicCount: number;
+                /** @enum {string} */
+                failureCode?: "missing_next" | "invalid_next" | "empty_page" | "captcha" | "timeout" | "navigation_error" | "unsupported_driver";
+            };
+            completeness?: {
+                paaWithoutAnswer: number;
+                paaWithoutSource: number;
+                paaIncompleteAnswers?: number;
+                paaAnswersRecovered: number;
+                aioShareCaptured: boolean | null;
+                paaRequested?: number;
+                paaReturned?: number;
+                paaUnique?: number;
+            };
+            interruption?: {
+                /** @enum {string} */
+                code: "browser_session_interrupted" | "request_aborted" | "timeout";
+            };
+            warnings?: {
+                /** @enum {string} */
+                code: "short_videos_captcha_skipped" | "paa_partial";
+                /** @enum {string} */
+                surface: "short_videos" | "paa";
+                retryable: boolean;
+            }[];
+            links?: {
+                linkCandidatesObserved: number;
+                plainLinksObserved: number;
+                googleUrlRedirectsObserved: number;
+                googleGotoRedirectsObserved: number;
+                redirectsResolved: number;
+                redirectsUnresolved: number;
+                redirectsRejected: number;
+                resolverNonGoogleRequestsObserved: number;
+                paaSourcesPreserved: number;
+                aiOverviewLabelValidated: boolean;
+            };
+            paaLifecycle?: {
+                requestedQuestions: number;
+                questionsFound: number;
+                /** @enum {string} */
+                targetStatus: "met" | "not_met";
+                /** @enum {string} */
+                discoveryStatus: "in_progress" | "target_reached" | "frontier_exhausted" | "no_paa_observed" | "interrupted" | "recovery_exhausted";
+                /** @enum {string} */
+                materialStatus: "complete" | "partial";
+                automaticRetries: number;
+                retryBreakdown: {
+                    controlRetries: number;
+                    browserRetries: number;
+                    providerFallbacks: number;
+                    runtimeRecoveries: number;
+                    idempotentReplays: number;
+                };
+                knownQuestions: number;
+                processedQuestions: number;
+                failedInteractions: number;
+                noGrowthConfirmations: number;
+                visibleControls?: number;
+                eligibleControls?: number;
+                dispatchedInteractions?: number;
+                confirmedInteractions?: number;
+                unconfirmedInteractions?: number;
+            };
+        };
+        SerpIntelligenceLocationEvidence: {
+            /** @enum {string} */
+            status: "not_requested" | "matched" | "mismatch" | "unknown";
+            expected: {
+                city: string;
+                regionCode: string | null;
+                canonicalLocation: string;
+            } | null;
+            candidates: {
+                city: string;
+                regionCode: string;
+                count: number;
+                examples: string[];
+            }[];
+        };
+        SerpIntelligenceCaptureAttempt: {
+            attemptNumber: number;
+            /** @enum {string} */
+            outcome: "paa_found" | "paa_partial" | "no_paa" | "serp_only" | "degraded_result" | "captcha" | "request_aborted" | "timeout" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "browser_session_interrupted" | "mcp_unavailable" | "error" | "page_captured" | "page_failed";
+            startedAt?: string;
+            completedAt?: string;
+            durationMs?: number;
+            /** @enum {string} */
+            problemCode?: "paa_found" | "paa_partial" | "no_paa" | "serp_only" | "degraded_result" | "captcha" | "request_aborted" | "timeout" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "browser_session_interrupted" | "mcp_unavailable" | "error" | "captcha_exhausted" | "harvest_timeout" | "service_unavailable" | "vendor_unavailable" | "extraction_failed" | "invalid_url" | "capture_failed";
+            cleanupSucceeded?: boolean | null;
         };
         SerpPageSnapshotCapture: {
-            url?: string;
-            requestedUrl?: string;
-            finalUrl?: string | null;
+            /** Format: uri */
+            url: string;
+            /** Format: uri */
+            requestedUrl: string;
+            /** Format: uri */
+            finalUrl: string | null;
             /** @enum {string} */
-            sourceKind?: "organic" | "ai_citation" | "local_pack_website" | "configured_target" | "site_subject";
-            sourcePosition?: number | null;
+            sourceKind: "organic" | "ai_citation" | "local_pack_website" | "configured_target" | "site_subject";
+            sourcePosition: number | null;
             /** @enum {string} */
-            status?: "captured" | "skipped" | "failed";
+            status: "captured" | "skipped" | "failed";
             /** @enum {string|null} */
-            fetchedVia?: "fetch" | "headless" | "browser" | "mcp" | null;
-            httpStatus?: number | null;
-            contentType?: string | null;
-            title?: string | null;
-            canonicalUrl?: string | null;
-            metaDescription?: string | null;
-            headings?: {
-                level?: number;
-                text?: string;
+            fetchedVia: "fetch" | "headless" | "browser" | "mcp" | null;
+            httpStatus: number | null;
+            contentType: string | null;
+            title: string | null;
+            /** Format: uri */
+            canonicalUrl: string | null;
+            metaDescription: string | null;
+            /** @default [] */
+            headings: {
+                level: number;
+                text: string;
             }[];
-            artifact?: {
-                htmlBlobUrl?: string | null;
-                textBlobUrl?: string | null;
-                markdownBlobUrl?: string | null;
-                screenshotBlobUrl?: string | null;
-                contentSha256?: string | null;
-                capturedAt?: string | null;
+            artifact: {
+                /** Format: uri */
+                htmlBlobUrl: string | null;
+                /** Format: uri */
+                textBlobUrl: string | null;
+                /** Format: uri */
+                markdownBlobUrl: string | null;
+                /** Format: uri */
+                screenshotBlobUrl: string | null;
+                contentSha256: string | null;
+                capturedAt: string | null;
             };
-            error?: {
-                code?: string;
-                message?: string;
+            error: {
+                /** @enum {string} */
+                code: "invalid_url" | "timeout" | "capture_failed";
+                message: string;
             } | null;
+            schemaTypes?: string[];
+            wordCount?: number;
+            linkCounts?: {
+                wordCount: number;
+                internalLinkCount: number;
+                externalLinkCount: number;
+                totalLinkCount: number;
+            };
+            hashes?: {
+                htmlSha256: string | null;
+                markdownSha256: string | null;
+                textSha256: string | null;
+            };
+            content?: {
+                html: string | null;
+                markdown: string | null;
+                text: string | null;
+            };
+            diagnostics?: {
+                requestedAt: string;
+                completedAt: string;
+                durationMs: number;
+                urlValidation: {
+                    passed: boolean;
+                };
+                browserFallback: {
+                    configured: boolean;
+                    used: boolean;
+                    boundedByTimeoutMs: number;
+                };
+                content: {
+                    htmlIncluded: boolean;
+                    markdownIncluded: boolean;
+                    textIncluded: boolean;
+                    maxContentChars: number;
+                    truncated: boolean;
+                };
+            };
+        };
+        SerpIntelligencePageSnapshotDiagnostics: {
+            requestedCount?: number;
+            capturedCount?: number;
+            failedCount?: number;
+            maxConcurrency?: number;
+            timeoutMs?: number;
         };
         SerpIntelligenceCaptureResponse: {
-            harvestResult?: components["schemas"]["SerpIntelligenceHarvestResult"];
-            locationEvidence?: {
-                [key: string]: unknown;
-            } | null;
-            pageSnapshotArtifacts?: components["schemas"]["SerpPageSnapshotCapture"][];
+            harvestResult: components["schemas"]["SerpIntelligenceHarvestResult"];
+            attempts: components["schemas"]["SerpIntelligenceCaptureAttempt"][];
+            locationEvidence: components["schemas"]["SerpIntelligenceLocationEvidence"] | null;
+            pageSnapshotArtifacts: components["schemas"]["SerpPageSnapshotCapture"][];
             billing: {
                 creditsUsed: number;
+                requestId?: string;
+                jobId?: string;
             };
         };
         SerpIntelligencePageSnapshotsResponse: {
-            pageSnapshotArtifacts?: components["schemas"]["SerpPageSnapshotCapture"][];
+            pageSnapshotArtifacts: components["schemas"]["SerpPageSnapshotCapture"][];
+            /** @default [] */
+            attempts: components["schemas"]["SerpIntelligenceCaptureAttempt"][];
+            diagnostics?: components["schemas"]["SerpIntelligencePageSnapshotDiagnostics"];
+        };
+        SerpIntelligencePaaNode: {
+            questionId: string;
+            googleLinkId: string | null;
+            googleEvidenceId: string | null;
+            question: string;
+            answer: string | null;
+            answerExpansionIncomplete?: boolean;
+            sourceTitle: string | null;
+            sourceSite: string | null;
+            sourceCite: string | null;
+            sources: {
+                url: string;
+                rawUrl?: string;
+                resolvedUrl?: string | null;
+                /** @enum {string} */
+                linkType?: "plain" | "google_url_redirect" | "google_goto_redirect";
+                /** @enum {string} */
+                resolutionStatus?: "not_needed" | "resolved" | "unresolved" | "rejected";
+                title: string | null;
+                site: string | null;
+                description?: string | null;
+            }[];
+            depth: number;
+            parentQuestion: string | null;
+            children: components["schemas"]["SerpIntelligencePaaNode"][];
         };
         WorkflowRun: {
             id?: string;
@@ -2029,21 +2278,6 @@ export interface components {
                 title?: string | null;
             } | null;
             done?: boolean;
-        };
-        WorkflowSchedule: {
-            id?: string;
-            workflow_id?: string;
-            name?: string;
-            /** @enum {string} */
-            status?: "active" | "paused";
-            input?: {
-                [key: string]: unknown;
-            };
-            /** @enum {string} */
-            cadence?: "daily" | "weekly" | "monthly";
-            timezone?: string;
-            webhook_url?: string | null;
-            next_run_at?: string | null;
         };
         CallMemoryToolRequest: {
             /** @description A tool name from contracts/memory.tools.json, e.g. "memory-search". */
@@ -2149,6 +2383,303 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
+        RedditThreadRequest: {
+            /** @description A known Reddit thread URL to open directly without searching; legacy Reddit hostnames are normalized to the current page. */
+            url: string;
+            maxComments?: number;
+        };
+        RedditThreadResponse: {
+            title?: string;
+            author?: string | null;
+            score?: string | null;
+            postBody?: string;
+            /**
+             * Format: date-time
+             * @description Observed publication timestamp when available.
+             */
+            publishedAt?: string | null;
+            numComments?: number;
+            comments?: {
+                author?: string | null;
+                score?: string;
+                depth?: number;
+                body?: string;
+                /** Format: date-time */
+                publishedAt?: string;
+            }[];
+            sourceUrl?: string;
+        };
+        RedditTrendingRequest: {
+            /** @description Topic to search. Required for discovery. */
+            topic?: string;
+            /** @enum {string} */
+            approvalMode?: "review" | "approve" | "auto";
+            /**
+             * Format: uuid
+             * @description Required in approve mode.
+             */
+            reviewId?: string;
+            /** @description Required in approve mode. Pass only URLs selected from the review. */
+            approvedUrls?: string[];
+            /** @description Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit. */
+            subreddit?: string;
+            /**
+             * @description Activity window. A verified post or comment timestamp can qualify a thread.
+             * @default all
+             * @enum {string}
+             */
+            window: "week" | "14d" | "month" | "year" | "all";
+            /**
+             * @description Maximum number of relevant threads to deliver. Each scraped thread and its returned comments are billed separately.
+             * @default 20
+             */
+            maxThreads: number;
+            /**
+             * @description Return captured comment text. Dated results still open and bill for verified threads when false.
+             * @default true
+             */
+            includeComments: boolean;
+            /**
+             * @description Comments captured (and billed) per scraped thread when includeComments is true.
+             * @default 50
+             */
+            maxCommentsPerThread: number;
+        };
+        RedditTrendingResponse: {
+            topic?: string;
+            review?: {
+                /** Format: uuid */
+                id: string;
+                /** Format: date-time */
+                expiresAt: string;
+                /** @enum {string} */
+                window?: "week" | "14d" | "month" | "year" | "all";
+                includeComments?: boolean;
+                maxCommentsPerThread?: number;
+            };
+            subreddit?: string | null;
+            /** @description Resolved publication window: "7d", "14d", "30d", "365d" or "all". */
+            window?: string;
+            totals?: {
+                threads?: number;
+                upvotes?: number;
+                comments?: number;
+            };
+            rankedThreads?: {
+                title?: string;
+                url?: string;
+                subreddit?: string;
+                score?: number;
+                commentCount?: number;
+                engagementScore?: number;
+                ageText?: string;
+                postBody?: string;
+                /**
+                 * Format: date-time
+                 * @description Observed publication timestamp when available.
+                 */
+                publishedAt?: string | null;
+                /**
+                 * Format: date-time
+                 * @description Latest verified captured comment timestamp when comment text is omitted.
+                 */
+                latestCommentPublishedAt?: string | null;
+                comments?: {
+                    author: string;
+                    score: string;
+                    depth: number;
+                    body: string;
+                    /** Format: date-time */
+                    publishedAt?: string;
+                }[];
+                /** @description Text comments actually returned for this thread. */
+                capturedCommentCount?: number;
+                /** @description Requested per-thread comment cap. */
+                requestedCommentLimit?: number;
+                commentCoverage?: {
+                    requestedLimit: number;
+                    returnedCount: number;
+                    declaredCount: number;
+                    status: components["schemas"]["RedditCommentCoverageStatus"];
+                    reason: components["schemas"]["RedditCommentCoverageReason"];
+                };
+                topQuestions?: string[];
+            }[];
+            questions?: {
+                question?: string;
+                threadUrl?: string;
+            }[];
+            threadsScraped?: number;
+            candidatesFound?: number;
+            /** @description True when coverage is partial or the requested delivery target was missed. */
+            partial?: boolean;
+            /** @description The site-scoped query used by the discovery provider. */
+            searchQuery?: string;
+            /** @enum {string} */
+            discoverySource?: "google_serp" | "reddit_search_fallback" | "none";
+            /** @enum {string} */
+            resultQuality?: "complete" | "partial" | "degraded";
+            degradedResult?: boolean;
+            degradationReasons?: string[];
+            retryRecommended?: boolean;
+            billingRefunded?: boolean;
+        };
+        /** @enum {string} */
+        RedditCommentCoverageStatus: "complete" | "partial";
+        /** @enum {string} */
+        RedditCommentCoverageReason: "requested_limit_reached" | "declared_count_reached" | "stable_visible_shortfall" | "capture_shortfall" | "funding_limited";
+        BugReportingRequest: {
+            /**
+             * @description prepare saves a private one-day draft for review; submit sends that exact draft to support; status reads your report receipt.
+             * @default prepare
+             * @enum {string}
+             */
+            action: "prepare" | "submit" | "status";
+            /** @description Required for prepare. Collect known evidence from the conversation before asking the user for missing details. */
+            report?: {
+                /** @description Short description of the problem in plain language. */
+                title: string;
+                /** @description What the user was trying to accomplish, using their words. */
+                goal: string;
+                /** @description What should have happened. */
+                expected: string;
+                /** @description What actually happened. Separate observations from suspected causes. */
+                actual: string;
+                /** @description Ordered reproduction steps, including retries and what changed. */
+                steps: string[];
+                /** @description Calls in the order made. Include successful calls that explain the failure. */
+                attempts: {
+                    /** @description Exact tool name or REST method and path. */
+                    tool: string;
+                    /**
+                     * Format: date-time
+                     * @description Observed call time with timezone; omit if unknown.
+                     */
+                    submittedAt?: string;
+                    /** @description Exact submitted arguments as JSON or text. Remove credentials, cookies and unrelated private content first. Do not reconstruct unknown arguments. */
+                    arguments: string;
+                    /** @description Observed response or error text, including error codes and retry outcome. Remove secrets. */
+                    result: string;
+                    /** @description Returned request ID, when available. */
+                    requestId?: string;
+                    /** @description Returned job or run ID, when available. */
+                    jobId?: string;
+                }[];
+                /** @description Observed client environment; use unknown rather than guessing. */
+                client: {
+                    /** @description Observed application or SDK name. */
+                    name: string;
+                    /** @description Observed application or package version; omit if unknown. */
+                    version?: string;
+                    /**
+                     * @description Connection or install route used for the failed calls.
+                     * @enum {string}
+                     */
+                    transport: "oauth" | "api-key" | "npx" | "npm" | "sdk" | "mcpb" | "rest" | "unknown";
+                    /** @description Observed operating system; omit if unknown. */
+                    operatingSystem?: string;
+                    /** @description Observed AI model; omit if unknown. */
+                    model?: string;
+                };
+                /** @description Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump. */
+                context?: string;
+                /**
+                 * @description Evidence that is unknown or unavailable; do not invent it.
+                 * @default []
+                 */
+                missing: string[];
+            };
+            /**
+             * Format: uuid
+             * @description ID returned by prepare; required for submit or status.
+             */
+            reportId?: string;
+            /** @description Exact token returned by prepare; required for submit. A changed report requires a new prepare. */
+            reviewToken?: string;
+            /** @description Set true only when the user has asked to submit this bug or approved the reviewed draft. Repeated errors alone do not authorize submission. */
+            userApproved?: boolean;
+        };
+        BugReportingResponse: {
+            /** @enum {boolean} */
+            ok: true;
+            accountEmail: string;
+            /** Format: uuid */
+            reportId: string;
+            /** @enum {string} */
+            status: "draft" | "submitted";
+            receivedAt: string;
+            submittedAt: string | null;
+            expiresAt: string;
+            report: {
+                /** @description Short description of the problem in plain language. */
+                title: string;
+                /** @description What the user was trying to accomplish, using their words. */
+                goal: string;
+                /** @description What should have happened. */
+                expected: string;
+                /** @description What actually happened. Separate observations from suspected causes. */
+                actual: string;
+                /** @description Ordered reproduction steps, including retries and what changed. */
+                steps: string[];
+                /** @description Calls in the order made. Include successful calls that explain the failure. */
+                attempts: {
+                    /** @description Exact tool name or REST method and path. */
+                    tool: string;
+                    /**
+                     * Format: date-time
+                     * @description Observed call time with timezone; omit if unknown.
+                     */
+                    submittedAt?: string;
+                    /** @description Exact submitted arguments as JSON or text. Remove credentials, cookies and unrelated private content first. Do not reconstruct unknown arguments. */
+                    arguments: string;
+                    /** @description Observed response or error text, including error codes and retry outcome. Remove secrets. */
+                    result: string;
+                    /** @description Returned request ID, when available. */
+                    requestId?: string;
+                    /** @description Returned job or run ID, when available. */
+                    jobId?: string;
+                }[];
+                /** @description Observed client environment; use unknown rather than guessing. */
+                client: {
+                    /** @description Observed application or SDK name. */
+                    name: string;
+                    /** @description Observed application or package version; omit if unknown. */
+                    version?: string;
+                    /**
+                     * @description Connection or install route used for the failed calls.
+                     * @enum {string}
+                     */
+                    transport: "oauth" | "api-key" | "npx" | "npm" | "sdk" | "mcpb" | "rest" | "unknown";
+                    /** @description Observed operating system; omit if unknown. */
+                    operatingSystem?: string;
+                    /** @description Observed AI model; omit if unknown. */
+                    model?: string;
+                };
+                /** @description Impact, frequency, useful prior context, and suspected cause clearly labeled as a guess. No full conversation dump. */
+                context?: string;
+                /**
+                 * @description Evidence that is unknown or unavailable; do not invent it.
+                 * @default []
+                 */
+                missing: string[];
+            };
+            reviewToken?: string;
+            redacted: boolean;
+            message: string;
+        };
+        BugReportingError: {
+            error?: string;
+            /** @enum {string} */
+            error_code: "request_aborted" | "captcha_exhausted" | "captcha_or_blocked" | "location_mismatch" | "proxy_tunnel_failed" | "proxy_unavailable" | "harvest_timeout" | "mcp_request_timeout" | "mcp_http_error" | "extraction_failed" | "concurrency_limit_exceeded" | "unauthorized" | "forbidden" | "invalid_request" | "rate_limited" | "upstream_rate_limited" | "insufficient_balance" | "service_unavailable" | "response_lost" | "vendor_unavailable" | "page_not_found" | "page_forbidden" | "page_rate_limited" | "page_server_error" | "page_http_error" | "bot_check_unresolved" | "page_too_large" | "page_unreachable" | "browser_session_interrupted" | "site_export_not_found" | "directory_job_not_found" | "site_export_format_unavailable" | "site_export_read_failed" | "site_export_image_not_found" | "image_url_invalid" | "image_url_not_https" | "image_host_unresolvable" | "image_host_blocked" | "image_redirect_invalid" | "image_source_unavailable" | "image_too_large" | "image_redirect_limit" | "image_base64_invalid" | "image_source_missing" | "image_source_ambiguous" | "image_source_type_invalid" | "image_artifact_not_found" | "image_page_too_large" | "page_image_not_found" | "page_image_candidates_unusable" | "image_format_unsupported" | "image_storage_unconfigured" | "featured_image_unhostable";
+            /** @enum {string} */
+            error_type: "request_aborted" | "captcha" | "location_mismatch" | "connection" | "timeout" | "extraction" | "concurrency_limit" | "unauthorized" | "forbidden" | "invalid_request" | "not_found" | "rate_limit" | "billing" | "service_unavailable";
+            message: string;
+            retryable: boolean;
+            /** @enum {string} */
+            charge_status: "not_charged";
+        } & {
+            [key: string]: unknown;
+        };
         MapsSearchRequest: {
             query: string;
             location?: string;
@@ -2170,9 +2701,6 @@ export interface components {
             debug: boolean;
         };
         MapsSearchResponse: {
-            provider?: string;
-            fallbackFrom?: string;
-            acquisitionProvider?: string;
             query: string;
             location: string | null;
             searchQuery: string;
@@ -2432,6 +2960,102 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    bugReporting: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BugReportingRequest"];
+            };
+        };
+        responses: {
+            /** @description Prepare, submit or read a private bug report */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingResponse"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+            /** @description Prepare, submit or read a private bug report */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BugReportingError"];
+                };
+            };
+        };
+    };
     startHarvest: {
         parameters: {
             query?: never;
@@ -3378,11 +4002,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": {
-                    /** @description A reddit.com or redd.it thread URL. */
-                    url: string;
-                    maxComments?: number;
-                };
+                "application/json": components["schemas"]["RedditThreadRequest"];
             };
         };
         responses: {
@@ -3392,20 +4012,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        title?: string;
-                        author?: string | null;
-                        score?: string | null;
-                        postBody?: string;
-                        numComments?: number;
-                        comments?: {
-                            author?: string | null;
-                            score?: string;
-                            depth?: number;
-                            body?: string;
-                        }[];
-                        sourceUrl?: string;
-                    };
+                    "application/json": components["schemas"]["RedditThreadResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
@@ -3430,33 +4037,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": {
-                    /** @description Topic in plain words, e.g. "crm for small business". Not a URL. */
-                    topic: string;
-                    /** @description Bare subreddit name to scope the scan, e.g. "SEO" (no r/ prefix). Omit to scan all of Reddit. */
-                    subreddit?: string;
-                    /**
-                     * @description How recent the threads must be.
-                     * @default month
-                     * @enum {string}
-                     */
-                    window?: "week" | "month";
-                    /**
-                     * @description How many discovered threads to scrape and rank (scrape-all default). Lower to cap cost.
-                     * @default 20
-                     */
-                    maxThreads?: number;
-                    /**
-                     * @description true = scrape each thread for engagement + questions and rank; false = cheap discovery-only list.
-                     * @default true
-                     */
-                    includeComments?: boolean;
-                    /**
-                     * @description Comments captured (and billed) per scraped thread when includeComments is true.
-                     * @default 50
-                     */
-                    maxCommentsPerThread?: number;
-                };
+                "application/json": components["schemas"]["RedditTrendingRequest"];
             };
         };
         responses: {
@@ -3466,42 +4047,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        topic?: string;
-                        subreddit?: string | null;
-                        /** @description Resolved window, e.g. "7d" or "30d". */
-                        window?: string;
-                        totals?: {
-                            threads?: number;
-                            upvotes?: number;
-                            comments?: number;
-                        };
-                        rankedThreads?: {
-                            title?: string;
-                            url?: string;
-                            subreddit?: string;
-                            score?: number;
-                            commentCount?: number;
-                            engagementScore?: number;
-                            ageText?: string;
-                            topQuestions?: string[];
-                        }[];
-                        questions?: {
-                            question?: string;
-                            threadUrl?: string;
-                        }[];
-                        threadsScraped?: number;
-                        candidatesFound?: number;
-                        /** @description true if scraping stopped early at the time limit. */
-                        partial?: boolean;
-                        /** @description The Google site:reddit.com query used for discovery. */
-                        searchQuery?: string;
-                    };
+                    "application/json": components["schemas"]["RedditTrendingResponse"];
                 };
             };
             400: components["responses"]["BadRequest"];
             402: components["responses"]["InsufficientBalance"];
-            /** @description No Reddit threads found for that topic and window — billed amount was refunded. */
+            /** @description Review is unavailable or expired. */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -4204,172 +4755,6 @@ export interface operations {
                 };
                 content?: never;
             };
-        };
-    };
-    listWorkflowSchedules: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Schedule list. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schedules?: components["schemas"]["WorkflowSchedule"][];
-                    };
-                };
-            };
-            401: components["responses"]["Unauthorized"];
-        };
-    };
-    createWorkflowSchedule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    workflowId: string;
-                    name?: string;
-                    input?: {
-                        [key: string]: unknown;
-                    };
-                    /**
-                     * @default weekly
-                     * @enum {string}
-                     */
-                    cadence?: "daily" | "weekly" | "monthly";
-                    /** @default UTC */
-                    timezone?: string;
-                    /** Format: uri */
-                    webhookUrl?: string;
-                    /** Format: date-time */
-                    nextRunAt?: string;
-                };
-            };
-        };
-        responses: {
-            /** @description Schedule created. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schedule?: components["schemas"]["WorkflowSchedule"];
-                    };
-                };
-            };
-            400: components["responses"]["BadRequest"];
-        };
-    };
-    deleteWorkflowSchedule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Deleted. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        ok?: boolean;
-                    };
-                };
-            };
-            404: components["responses"]["NotFound"];
-        };
-    };
-    patchWorkflowSchedule: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    name?: string;
-                    /** @enum {string} */
-                    status?: "active" | "paused";
-                    input?: {
-                        [key: string]: unknown;
-                    };
-                    /** @enum {string} */
-                    cadence?: "daily" | "weekly" | "monthly";
-                    timezone?: string;
-                    /** Format: uri */
-                    webhookUrl?: string | null;
-                    /** Format: date-time */
-                    nextRunAt?: string | null;
-                };
-            };
-        };
-        responses: {
-            /** @description Updated schedule. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        schedule?: components["schemas"]["WorkflowSchedule"];
-                    };
-                };
-            };
-            400: components["responses"]["BadRequest"];
-            404: components["responses"]["NotFound"];
-        };
-    };
-    runWorkflowScheduleNow: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Run started. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        run?: components["schemas"]["WorkflowRun"];
-                        summary?: {
-                            [key: string]: unknown;
-                        };
-                    };
-                };
-            };
-            404: components["responses"]["NotFound"];
-            429: components["responses"]["ConcurrencyLimitExceeded"];
-            500: components["responses"]["ServerError"];
         };
     };
     gmailSearchMessages: {

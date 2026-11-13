@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import { Command } from 'commander'
+import { Command, Option } from 'commander'
 import { fileURLToPath } from 'node:url'
 import { mkdirSync, realpathSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { randomUUID } from 'node:crypto'
-import { ScraperClient, ScraperApiError, type McpContentBlock, type McpToolCallResult } from 'mcpscraper-sdk'
+import { ScraperClient, ScraperApiError, type ClientAttribution, type McpContentBlock, type McpToolCallResult } from 'mcpscraper-sdk'
 import { CLI_VERSION } from './version.js'
 import { MCP_TOOL_CATALOG, MCP_TOOL_COUNT } from './generated-tools.js'
 
@@ -139,6 +139,15 @@ async function run(fn: () => Promise<void>): Promise<void> {
   }
 }
 
+export function observedInstallChannel(executablePath = process.argv[1]): 'npx' | undefined {
+  if (!executablePath) return undefined
+  let resolvedPath = executablePath
+  try { resolvedPath = realpathSync(executablePath) } catch { /* Keep the observed invocation path. */ }
+  return [executablePath, resolvedPath].some(path => path.replace(/\\/g, '/').includes('/_npx/'))
+    ? 'npx'
+    : undefined
+}
+
 export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fetch): Command {
   function resolveApiKey(cmd: Command): string {
     const opts = cmd.optsWithGlobals() as { apiKey?: string }
@@ -150,8 +159,34 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
     return key
   }
 
-  function client(cmd: Command): ScraperClient {
-    return new ScraperClient({ apiKey: resolveApiKey(cmd), fetch: fetchImpl })
+  function client(cmd: Command, surface: 'rest' | 'mcp-http' = 'rest'): ScraperClient {
+    const opts = cmd.optsWithGlobals() as {
+      baseUrl?: string
+      installChannel?: ClientAttribution['installChannel']
+      aiClient?: ClientAttribution['aiClient']
+      aiModel?: string
+    }
+    if (opts.baseUrl !== undefined) {
+      let baseUrl: URL
+      try { baseUrl = new URL(opts.baseUrl) } catch { throw new Error('--base-url must be an HTTP(S) URL without credentials, query or fragment') }
+      if (!['http:', 'https:'].includes(baseUrl.protocol) || baseUrl.username || baseUrl.password || baseUrl.search || baseUrl.hash) {
+        throw new Error('--base-url must be an HTTP(S) URL without credentials, query or fragment')
+      }
+    }
+    if (opts.aiModel !== undefined && !/^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,79}$/.test(opts.aiModel)) {
+      throw new Error('--ai-model must be a model identifier of 1–80 letters, digits, dots, underscores, colons, slashes or hyphens, starting with a letter or digit')
+    }
+    return new ScraperClient({
+      apiKey: resolveApiKey(cmd),
+      baseUrl: opts.baseUrl?.replace(/\/+$/, ''),
+      fetch: fetchImpl,
+      clientAttribution: {
+        surface,
+        installChannel: opts.installChannel ?? observedInstallChannel(),
+        aiClient: opts.aiClient,
+        aiModel: opts.aiModel,
+      },
+    })
   }
 
   const program = new Command()
@@ -160,6 +195,15 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
     .description(`CLI for all ${MCP_TOOL_COUNT} mcpscraper.dev MCP tools plus ergonomic shortcuts`)
     .version(CLI_VERSION)
     .option('--api-key <key>', 'mcpscraper.dev API key (or set MCPSCRAPER_API_KEY)')
+    .addOption(new Option('--base-url <url>', 'API base URL for a selected deployment (or MCPSCRAPER_BASE_URL)')
+      .env('MCPSCRAPER_BASE_URL'))
+    .addOption(new Option('--install-channel <channel>', 'declared installation channel (or MCP_SCRAPER_INSTALL_CHANNEL)')
+      .choices(['npx', 'npm', 'source', 'mcpb']).env('MCP_SCRAPER_INSTALL_CHANNEL'))
+    .addOption(new Option('--ai-client <client>', 'declared AI client (or MCP_SCRAPER_AI_CLIENT)')
+      .choices(['claude', 'claude-desktop', 'claude-code', 'chatgpt', 'codex', 'cursor', 'gemini', 'other'])
+      .env('MCP_SCRAPER_AI_CLIENT'))
+    .addOption(new Option('--ai-model <model>', 'declared model identifier (or MCP_SCRAPER_AI_MODEL)')
+      .env('MCP_SCRAPER_AI_MODEL'))
 
   program
     .command('search <query>')
@@ -423,7 +467,8 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
     .option('--yes', 'confirm a tool marked destructive')
     .option('--media-dir <path>', 'directory for inline MCP images (defaults to ~/Downloads/mcp-scraper)')
     .option('--json', 'print raw JSON')
-    .action(async (name: string, opts: { args: string; yes?: boolean; mediaDir?: string; json?: boolean }, cmd: Command) => {
+    .option('--raw-result', 'preserve the MCP envelope, metadata and resource links; inline binary becomes saved-file metadata')
+    .action(async (name: string, opts: { args: string; yes?: boolean; mediaDir?: string; json?: boolean; rawResult?: boolean }, cmd: Command) => {
       await run(async () => {
         const tool = MCP_TOOL_CATALOG.find(entry => entry.name === name)
         if (!tool) throw new Error(`Unknown tool "${name}". Run "mcpscraper tools list" for all ${MCP_TOOL_COUNT} names.`)
@@ -431,9 +476,10 @@ export function createProgram(fetchImpl: typeof globalThis.fetch = globalThis.fe
         if (annotations.destructiveHint && !opts.yes) {
           throw new Error(`Tool "${name}" is marked destructive. Re-run with --yes to confirm.`)
         }
-        const rawResult = await client(cmd).tools.callToolResult(name, parseToolArgs(opts.args))
-        const result = printableToolResult(saveToolMedia(name, rawResult, opts.mediaDir))
-        if (opts.json || typeof result !== 'string') console.log(JSON.stringify(result, null, 2))
+        const rawResult = await client(cmd, 'mcp-http').tools.callToolResult(name, parseToolArgs(opts.args))
+        const savedResult = saveToolMedia(name, rawResult, opts.mediaDir)
+        const result = opts.rawResult ? savedResult : printableToolResult(savedResult)
+        if (opts.json || opts.rawResult || typeof result !== 'string') console.log(JSON.stringify(result, null, 2))
         else console.log(result)
       })
     })

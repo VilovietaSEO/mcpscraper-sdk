@@ -4,6 +4,198 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.59.4] - 2026-11-11 — targets mcp-scraper 0.103.12
+
+### Added
+
+- Preview Reddit Trends URLs, fetch only the approved URLs, or auto-approve in one call. Node, Python and CLI bindings include the approval inputs and review result.
+
+### Packages
+
+- Node scraper 0.59.4, unified Node client 0.58.4, CLI 0.57.3, Python scraper 0.57.4 and unified Python client 0.54.4.
+
+## [0.59.3] - 2026-11-10 — targets mcp-scraper 0.103.11
+
+### Fixed
+
+- Regenerate the Reddit bindings for all-time discovery, verified post or comment activity, and comment timestamps. Dated link-only requests now verify and bill for delivered threads.
+
+### Packages
+
+- Node scraper 0.59.3, unified Node client 0.58.3, CLI 0.57.2, Python scraper 0.57.3 and unified Python client 0.54.3.
+
+## [0.59.2] - 2026-11-10 — targets mcp-scraper 0.103.10
+
+### Added
+
+- Request a 14-day window for Reddit trending and read publication dates and captured comment text in the same response. The generated Node, Python and CLI contracts also expose whether delivery fell short and whether discovery was refunded.
+
+### Packages
+
+- Node scraper 0.59.2, unified Node client 0.58.2, CLI 0.57.1, Python scraper 0.57.2 and unified Python client 0.54.2.
+
+## [0.59.1] - 2026-11-04 — targets mcp-scraper 0.103.1
+
+### Fixed
+
+- Type optional PAA job progress `phase` and `observedAt` in the unified Node and both Python clients, generated from the complete server output contract. Existing request, polling and legacy-response compatibility remain unchanged.
+- Raise the primary Node SDK's minimum unified-client dependency so upgrades receive the updated progress types. Release Node scraper 0.59.1, unified Node client 0.58.1, Python scraper 0.57.1 and unified Python client 0.54.1. The unchanged CLI 0.57.0 remains compatible.
+
+## [0.59.0] - 2026-11-03 — targets mcp-scraper 0.103.0
+
+### Added
+
+- Typed publication listing and article/publication deletion in Node, Python, CLI, and cURL, generated from the complete 352-tool server contract.
+
+### Changed
+
+- Support multiple publication subdomains, authenticated owner source reads, content-preserving edits, and explicit full replacement. Use edition revisions for article changes and publication revisions for full deletion; preserve retry keys for exact retries.
+- Release Node scraper 0.59.0, unified Node client 0.58.0, CLI 0.57.0, Python scraper 0.57.0, and unified Python client 0.54.0. Both unified clients embed the full publication contract.
+
+## [0.58.1] - 2026-10-23 — targets mcp-scraper 0.102.1
+
+### Fixed
+
+- Include the required client capabilities and identity alongside the protocol revision in Node, Python, CLI and cURL requests. The 0.58.0 SDK release sent an incomplete envelope and must be upgraded.
+- Release Node scraper 0.58.1, unified Node client 0.57.1, CLI 0.56.1, Python scraper 0.56.1 and unified Python client 0.53.1.
+
+
+## [0.58.0] - 2026-10-23 — targets mcp-scraper 0.102.0
+
+### Changed
+
+- Use protocol `2026-07-28` consistently in Node, Python, CLI and cURL calls, including matching named routing and request metadata. Upgrade the SDKs with the strict hosted MCP release.
+- Replace MCP Task handle workflows with returned job/run IDs and dedicated status tools. Regenerate all 349 tool bindings and add `lead_list_enrich_cancel`.
+
+### Packages
+
+- Node scraper 0.58.0, unified Node client 0.57.0, CLI 0.56.0, Python scraper 0.56.0 and unified Python client 0.53.0.
+
+
+## [0.57.0] - 2026-10-22 — targets mcp-scraper 0.101.0
+
+### Added
+
+- Use Bug Reporting from Node, Python and the CLI to prepare a redacted record of calls and errors, review it and submit it to private support at the user’s request. Generated inputs, responses, descriptions and REST models share the server contract.
+
+### Changed
+
+- Node scraper 0.57.0, unified Node client 0.56.0, CLI 0.55.0, Python scraper 0.55.0 and unified Python client 0.52.0 include the new support workflow. Existing tool calls remain compatible.
+
+## [0.56.1] - 2026-10-21 — targets mcp-scraper 0.100.2
+
+### Fixed
+
+- Decode streamed MCP responses as UTF-8 and preserve non-ASCII review text, joining complete event data without treating Unicode text as protocol line breaks.
+- Retain the JSON-RPC response when progress notifications follow it, and accept multiline event data and CR/LF framing.
+
+### Changed
+
+- Python scraper 0.54.1 and Python Memory 0.51.1. Node scraper 0.56.0, Node Memory 0.55.0 and CLI 0.54.0 remain unchanged.
+
+## [0.56.0] - 2026-10-21 — targets mcp-scraper 0.100.2
+
+### Added
+
+- Accept the past-year Reddit discovery window in Node, Python and CLI inputs. Optional thread publication dates and captured/requested comment counts make result coverage explicit.
+
+### Changed
+
+- Align Reddit guidance across generated clients: known thread links open directly, while topic discovery selects relevant search candidates before collecting their comments.
+- Node scraper 0.56.0, Node Memory 0.55.0, CLI 0.54.0, Python scraper 0.54.0 and Python Memory 0.51.0. Update the Node dependencies together to receive the new Reddit contract.
+
+### Fixed
+
+- Refresh all 347 public tool contracts and generated Node, Python and CLI bindings against server 0.100.2, including connected-export arguments and optional result metadata.
+- Keep Maps discovery, saved review pagination and explicit partial-run recovery available through the existing client interfaces. The hosted server verifies the selected location and handles review-list expansion and infinite scrolling.
+
+## [0.55.1] - 2026-10-17 — targets mcp-scraper 0.99.1
+
+### Fixed
+
+- Correct generated Node, Python and CLI site-mapping guidance: start `extract_site` directly when page content is needed. Use `map_site_urls` when the URL inventory itself is the requested result, so extraction does not require a separate preliminary crawl.
+- Add a direct site-export example with a stable retry key and the existing status and page readers.
+- Exclude repository metadata from Python source distributions while keeping the complete public clients and models.
+
+### Changed
+
+- Node Memory 0.54.1, CLI 0.53.1, Python scraper 0.53.1 and Python Memory 0.50.1. Tool names, inputs and method bindings remain compatible.
+- Node scraper remains 0.55.0 and accepts Node Memory 0.54.1 through its existing dependency range. Existing lockfiles must update `mcpscraper-memory-sdk` to receive the corrected generated guidance.
+
+## [0.55.0] - 2026-10-16 — targets mcp-scraper 0.99.0
+
+### Added
+
+- Type optional on-demand Markdown export handles in artifact delivery across unified and direct Memory Node and Python clients. Use the export artifact ID with the existing artifact readers or download method to generate the requested format without repeating acquisition.
+
+### Fixed
+
+- Align generated Node, Python and CLI Search guidance with the current server: date filters and saved search identities require one page, while unfiltered searches can request two pages. Update examples to use valid combinations.
+- Refresh the generated catalog and curated REST documentation together while retaining the 347 tool names, input types, recovery identifiers and artifact readers.
+
+### Changed
+
+- Node scraper 0.55.0, Node Memory 0.54.0, CLI 0.53.0, Python scraper 0.53.0 and Python Memory 0.50.0.
+
+## [0.54.1] - 2026-10-15 — targets mcp-scraper 0.97.1
+
+### Fixed
+
+- Remove upstream identity, session and service-diagnostic fields from generated Maps and job models and CLI discovery.
+- Regenerate Node, Python and REST contracts from the current server. Existing job identifiers, status and credit-settlement fields remain available.
+
+### Changed
+
+- Node scraper 0.54.1, Node Memory 0.53.1, CLI 0.52.1, Python scraper 0.52.1 and Python Memory 0.49.1.
+
+## [0.54.0] - 2026-10-13 — targets mcp-scraper 0.97.0
+
+### Removed
+
+- **Breaking:** Remove user scheduling, scheduled-result and automatic optimization methods from Node, Python and CLI discovery. Workflow recurrence REST methods and the `WorkflowSchedule` schema are removed. Run supported workflows explicitly and use their existing status and artifact readers.
+- Remove recurring rank-check inputs and scheduling-only guidance from generated contracts and examples.
+
+### Changed
+
+- **Migration:** Generic artifact-template methods move from `client.schedule` to `client.artifacts`, and from `client.memoryTools.schedule` to `client.memoryTools.artifacts`. Python uses the same `artifacts` namespace. Template tool names, saved template identifiers and versions remain unchanged.
+- Generate the 347-tool MCP Scraper catalog and 126-tool Memory contract. Retain manual Memory, Research, CRM, video, connections and workflow clients, complete artifact delivery, client attribution, retry keys and the 20-second minimum PAA status interval.
+- Refresh retained Memory convenience schemas from the registered server contract and prune withdrawn methods and models during generation, so client regeneration cannot restore the retired feature.
+
+Published and verified Node scraper 0.54.0, Node Memory 0.53.0, CLI 0.52.0, Python scraper 0.52.0 and Python Memory 0.49.0. Fresh registry installs, Node ESM/CommonJS and Python imports, NPX launch, authenticated SDK reads, and all seven registry/GitHub archive hashes and confidentiality checks passed.
+
+Verified against MCP Scraper 0.97.0 and native Memory 2.0.2, which preserves the released Memory 2.0.0 contract with 126 tools. Saved request attribution was verified for an eligible workflow read as SDK/npm/Codex; client-version persistence remains unavailable in the existing reporting schema. The [publication record](docs/releases/v0.54.0-publication.json) identifies the immutable package source; this documentation follow-up does not change published artifacts.
+
+## [0.53.1] - 2026-10-13 — targets mcp-scraper 0.96.1
+
+### Fixed
+
+- Use the server's 20-second minimum polling guidance for durable PAA harvests across Node, Python and CLI catalogs, so clients can wait for ongoing work without excessive status checks.
+- Preserve available source titles, source names and display links in initial SERP PAA previews. Complete answers remain available through PAA harvest results and retained artifacts.
+
+Verified against MCP Scraper 0.96.1 with 367 unified tools. Package versions are Node scraper 0.53.1, Node Memory 0.52.1, CLI 0.51.1, Python scraper 0.51.1 and Python Memory 0.48.1. Polling guidance does not imply a fixed harvest completion time.
+
+## [0.53.0] - 2026-10-12 — targets mcp-scraper 0.96.0
+
+### Added
+
+- Send explicit client surface, installation channel and AI client/model labels from Node, Python and CLI requests for customer reporting. Keep the server request ID with each response callback and API error, including overlapping calls; observer failures cannot replace a received result.
+- Generate the updated 367-tool server catalog and retained artifact describe, text-read and download methods. Preserve the existing report-artifact read binding and complete MCP content and resource links.
+- Select the server endpoint and client labels in the CLI, and use `--raw-result` to retain the MCP envelope, metadata and resource links without changing existing parsed JSON output. Inline binary content is saved to local files.
+
+### Changed
+
+- Represent inline and artifact alternatives as generated Python output unions. Client methods return the selected model; callers validating payloads directly should use `pydantic.TypeAdapter(Output)` instead of `Output.model_validate(...)`.
+- Include artifact delivery in Memory convenience output types while preserving method names and inputs. Check `delivery.mode` before accessing inline result fields, then read or download the complete retained content.
+
+### Fixed
+
+- SERP Intelligence responses preserve typed answers, source links and page content while excluding private transport diagnostics and raw provider payloads.
+- Keep complete Research and CRM tool descriptions, correct field, cost, retry and write guidance, and remove authentication arguments from unified CRM work search across generated Node, Python and CLI catalogs.
+- Accept complete artifact delivery envelopes in Python methods and Memory convenience clients. Preserve explicit null inputs, nullable output fields and numeric values without requiring a newer Pydantic minimum.
+- Retain safe recovery identifiers and caller retry keys after uncertain outcomes so clients can inspect or resume existing paid work. Support streamed Memory responses without dropping result content, and attach request IDs to malformed-response errors without repeating the call.
+
+Verified against MCP Scraper 0.96.0 with 367 unified tools and Memory 1.23.1 with 146 direct tools. Package versions are Node scraper 0.53.0, Node Memory 0.52.0, CLI 0.51.0, Python scraper 0.51.0 and Python Memory 0.48.0. Saved client attribution requires server request capture to be enabled.
+
 ## [0.52.0] - 2026-09-29 — targets mcp-scraper 0.95.2
 
 ### Added
@@ -750,7 +942,12 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.52.0...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.59.4...HEAD
+[0.56.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.55.1...v0.56.0
+[0.55.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.55.0...v0.55.1
+[0.54.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.53.1...v0.54.0
+[0.53.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.53.0...v0.53.1
+[0.53.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.52.0...v0.53.0
 [0.52.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.51.0...v0.52.0
 [0.51.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.50.1...v0.51.0
 [0.50.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.50.0...v0.50.1
@@ -761,3 +958,23 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 [0.48.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.46.0...v0.47.0
 [0.43.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.42.0...v0.43.0
+
+[0.54.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.54.0...v0.54.1
+
+[0.55.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.54.1...v0.55.0
+
+[0.56.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.56.0...v0.56.1
+
+[0.57.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.56.1...v0.57.0
+
+[0.58.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.57.0...v0.58.0
+
+[0.58.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.58.0...v0.58.1
+
+[0.59.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.58.1...v0.59.0
+
+[0.59.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.59.0...v0.59.1
+
+[0.59.2]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.59.1...v0.59.2
+[0.59.3]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.59.2...v0.59.3
+[0.59.4]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.59.3...v0.59.4

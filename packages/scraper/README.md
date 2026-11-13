@@ -2,7 +2,7 @@
 
 Official TypeScript/JavaScript client for the [mcpscraper.dev](https://mcpscraper.dev) REST API — SERP search, People-Also-Ask harvesting, single-page and whole-site extraction, YouTube, Facebook/Google Ads Transparency, Instagram, Reddit, video breakdown, Google Maps, and directory/rank-tracking workflows.
 
-[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/main/CHANGELOG.md)
+[Release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1)
 
 This is a thin HTTP client generated against [`../../contracts/scraper.openapi.generated.json`](../../contracts/scraper.openapi.generated.json), the complete public REST contract for the hosted API. It contains no scraping, proxy, or billing logic — only typed request/response plumbing.
 
@@ -41,11 +41,11 @@ Every non-2xx response throws a `ScraperApiError` with `status`, `code`, and the
 - `err.isConcurrencyLimitExceeded()` — narrows `err.body` to `{ active, limit, retryable, upgrade, ... }`.
 - `err.isVerificationChallenge()` / `err.isTimeout()` — preserve actionable, vendor-neutral retry and charge details returned by the service.
 
-Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches use a managed browser for organic results at 35 Credits per delivered page, and unfiltered searches use it only as the final backup. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity `n` adds `2n` slots for `$5n` without changing the base plan.
+Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches return one page of organic results at 35 Credits; omit the date filter when requesting two pages. Unfiltered one-page light searches try the primary path twice, then one API fallback; an unfiltered one-page full search uses the feature-capable API directly. Date filters and saved search identities require one page. Combining either with two pages is rejected before acquisition or billing. Two-page searches return organic results without a backup provider. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity `n` adds `2n` slots for `$5n` without changing the base plan.
 
 ## API surface
 
-`client.tools` is the generated, typed 364-tool MCP surface from `contracts/mcp.tools.json`, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
+`client.tools` is the generated, typed manifest-backed MCP surface from `contracts/mcp.tools.json`, including provider-neutral X-Ray surveys, attribution-impact reporting, and truthful evidence-status operations.
 
 For multimodal results such as `meta_ad_creative_media`, call `client.tools.callToolResult(...)` to preserve native MCP image/audio/resource blocks. `callTool(...)` remains backward-compatible and returns the parsed structured or text value.
 
@@ -62,8 +62,7 @@ await client.tools.connections.exportConnectedServiceData({
   dataset: 'resend_data',
   lastDays: 7,
 })
-const inbox = await client.tools.schedule.listScheduledRuns({ view: 'inbox' })
-const templates = await client.tools.schedule.listArtifactTemplates({ status: 'active' })
+const templates = await client.tools.artifacts.listArtifactTemplates({ status: 'active' })
 ```
 
 Lead enrichment is available through the same generated surface. Supply mapped rows directly, or call `client.tools.leads.import(...)` first for CSV/TSV/XLSX input:
@@ -81,11 +80,11 @@ const job = await client.tools.leads.enrich({
 })
 ```
 
-The connected-data export performs bounded Gmail, Calendar, Google Search Console, Zoom, Meta Marketing, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Use `exportConnectedServiceData({ dataset: 'search_console_performance' })` for a fresh Search Console API extract. A scheduled `connection_sync` maintains a typed `gsc_performance_*` table exposed as `listServiceConnections().tableName`; use `exportSearchConsoleTableData` for a server-filtered download from that persisted table. Use `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected Meta ad accounts. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renewConnectedDataDownload({ artifactId })`. Use `listServiceConnections` for verified grants and per-tool permission blockers, then `describeServiceConnectionTool` for the exact provider-native schema before calling through the generic connection bridges.
+The connected-data export performs bounded Gmail, Calendar, Google Search Console, Zoom, Meta Marketing, or Resend pagination server-side and returns small results inline or a private seven-day JSONL artifact. Use `exportConnectedServiceData({ dataset: 'search_console_performance' })` for a fresh Search Console API extract. Existing persisted Search Console data is exposed as `listServiceConnections().tableName`; use `exportSearchConsoleTableData` for a server-filtered download from that table. Use `meta_ads_insights` for daily account, campaign, ad-set, and ad reporting across connected Meta ad accounts. Resend can aggregate sent/received mail, logs, contacts, broadcasts, and templates with `resend_data`. Resume partial exports with the returned `continuation` object; renew an expired signed URL with `client.tools.connections.renewConnectedDataDownload({ artifactId })`. Use `listServiceConnections` for verified grants and per-tool permission blockers, then `describeServiceConnectionTool` for the exact provider-native schema before calling through the generic connection bridges.
 
-Search Console also provides six API-only batches through those connection bridges: reads `inspect-urls` and `query-search-analytics-batch`, and gated actions `add-sites-batch`, `submit-sitemaps-batch`, `delete-sites-batch`, and `delete-sitemaps-batch`. They require no database, return per-item receipts, and can be bound to scheduled agent runs. Delete batches default to dry-run and require the live schema's exact confirmation token for execution; all actions require the connection's action switch.
+Search Console also provides six API-only batches through those connection bridges: reads `inspect-urls` and `query-search-analytics-batch`, and gated actions `add-sites-batch`, `submit-sitemaps-batch`, `delete-sites-batch`, and `delete-sitemaps-batch`. They require no database and return per-item receipts. Delete batches default to dry-run and require the live schema's exact confirmation token for execution; all actions require the connection's action switch.
 
-Integrations are included with an active Starter plan or higher: OAuth connect/reconnect and direct connected-service reads, approved actions, exports, and snapshots do not currently have an extra connection-operation debit. Scheduled Actions use the shared Credit balance at 75 Credits per started occurrence; agent-mode runs also add 1.5 times OpenRouter's actual reported model cost. Inspect the live policy with `await client.tools.schedule.getScheduleStatus()`.
+Integrations are included with an active Starter plan or higher: OAuth connect/reconnect and direct connected-service reads, approved actions, exports, and snapshots do not currently have an extra connection-operation debit.
 
 Core operations are flat on the client: `startHarvest`, `searchSerp`, `harvestPaa`, `extractUrl`, `mapSiteUrls`, `extractSite`, `auditSite`, `getExtractSiteStatus`, `archiveRead`, `listJobs`, `getJob`, `getHistory`, `getLedger`.
 
@@ -98,7 +97,7 @@ in [`../../examples/paa-two-page.mjs`](../../examples/paa-two-page.mjs).
 
 ### Durable acquisition
 
-Long-running agents can start SERP/PAA work once and poll the provider-owned job
+Long-running agents can start SERP work once and poll the provider-owned job
 instead of holding one synchronous request open:
 
 ```ts
@@ -170,7 +169,7 @@ console.log(page.memory) // { deposited: true, vault: 'competitors', noteId: '..
 
 ## Memory tools, using only this API key
 
-`client.memoryTools` exposes every tool from [`mcpscraper-memory-sdk`](../memory) — access/keys, channels, memory search/CRUD, tables, vaults, facts, schedule, webhooks, video — dispatched through `POST /memory/mcp-call` with your mcpscraper.dev API key. No separate memory key needed; a memory identity is auto-provisioned for your account on first use:
+`client.memoryTools` exposes every tool from [`mcpscraper-memory-sdk`](../memory) — access/keys, channels, memory search/CRUD, tables, vaults, facts, artifacts, webhooks, video — dispatched through `POST /memory/mcp-call` with your mcpscraper.dev API key. No separate memory key needed; a memory identity is auto-provisioned for your account on first use:
 
 ```ts
 const hits = await client.memoryTools.memory.search({ query: 'competitor pricing pages' })
@@ -192,4 +191,52 @@ npm run verify:rest-contract
 
 [Repo README](../../README.md) (multi-language examples with real sample output) · [`mcpscraper-memory-sdk`](../memory) (Node, full 121-tool direct-memory surface) · [`mcpscraper-sdk` on PyPI](https://pypi.org/project/mcpscraper-sdk/) · [`mcpscraper-cli`](../cli)
 
-Release changes: [SDK 0.52.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.52.0).
+Durable PAA harvests should wait at least 20 seconds between status checks and honor a longer returned polling interval. Keep the same job ID and retry key while the original work is running.
+
+Release changes: [SDK 0.56.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.56.0).
+
+## Client attribution and full results
+
+Clients accept `clientAttribution: { installChannel?, aiClient?, aiModel? }` and default to calling surface `sdk`. Set only known caller labels; unspecified labels stay unknown. `onResponse({ requestId, status })` receives per-response correlation without changing results, and errors keep their own `requestId`. These options also apply to `McpToolsClient` and `MemoryClient`; labels are reporting declarations, not authorization.
+
+Large tool outputs may be delivery envelopes instead of inline domain values. Preserve `delivery`, `scope` and `recovery`, then use `tools.artifacts.describe`, `readRetained` (follow `nextOffset` to null), or `download` with the returned artifact ID. The legacy `artifacts.read` method remains the report reader. `callToolResult` preserves native content/resource links. Download URL expiry differs from artifact retention; renew a URL through `download` without rerunning acquisition. Use the returned capability for binary files.
+
+Artifact delivery may include optional `delivery.availableExports` handles. Use the
+export artifact ID with `artifact_download`, `artifact_read` or `artifact_describe`
+to generate Markdown from retained JSON without repeating acquisition. The
+[on-demand export example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.55.0/examples/serp-on-demand-export.mjs)
+shows the complete flow and preserves a retry key for uncertain search responses.
+
+## Reddit discovery and known threads
+
+Use `reddit_trending` with `window:"year"` to discover past-year search candidates and
+select relevant threads before collecting comments. Set `maxThreads` to bound the
+number selected and `maxCommentsPerThread:20` for a per-thread capture limit.
+Twenty is a request limit; inspect returned coverage because fewer accessible text
+comments can produce a partial result. Publication dates are optional when unknown.
+
+Pass a known Reddit thread URL directly to `reddit_thread` with `maxComments:20`;
+it does not require a discovery call first. Trending returns ranked summaries and
+questions; the thread tool returns full comment bodies. Preserve each operation's
+retry key and exact inputs after an uncertain response.
+
+The [past-year and direct-thread example](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.56.0/examples/reddit-past-year.mjs)
+shows both paths.
+
+## Saved Maps reviews
+
+Server 0.100.1 improves Maps discovery, review text and list collection through the existing interfaces. Use the exact name and location returned by discovery. Read the saved run and its review pages before considering a new acquisition. An explicit resume uses a fresh browser and reopens the profile and reviews; it retains saved review IDs. A new resume key authorizes a separately billed attempt, while repeating that key reads the same run.
+
+## Bug Reporting
+
+Use `bug_reporting` to prepare a redacted draft from observed calls and errors. Review the returned report, then submit its exact `reportId` and `reviewToken` only when the user requests submission. Status returns the private receipt. The support team receives the report and verified account email. Drafts expire after one day; submitted reports after 365 days. See [the complete workflow](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.57.0/examples/bug-reporting.mjs) and [release history](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.57.0).
+
+## Consistent hosted MCP protocol
+
+This release targets MCP Scraper 0.103.10 with 352 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+
+Publication management: list owned subdomains with `commons_list_publications`, select a name with `commons_get_publication`, and edit one article with `commons_update_editorial_article`. Publishing merges omitted articles by default; use `mode:replace` for a full replacement. Use the dedicated article or publication delete tool with its current revision and a stable retry key. See the [release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0).
+
+PAA job progress can include the optional `phase` and `observedAt` fields. They identify observed extraction work separately from worker renewal. Existing polling and request arguments remain compatible. See [the release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
+
+Use Reddit Trends review mode to preview links, approve mode to fetch selected threads, or auto mode to search and fetch in one call. See the [0.59.4 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.4) for the compatible package versions.

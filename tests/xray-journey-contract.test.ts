@@ -22,20 +22,23 @@ test('analytics_list_journeys projects its selector, evidence tier, null branche
   const manifest = JSON.parse(files.contract) as { toolCount: number; tools: Array<Record<string, any>> }
   const tool = manifest.tools.find(candidate => candidate.name === 'analytics_list_journeys')
   assert.ok(tool)
-  assert.equal(manifest.toolCount, 364)
+  assert.equal(manifest.toolCount, manifest.tools.length)
   assert.deepEqual(tool.inputSchema.properties.journeyTier.enum, ['confirmed', 'best_guess', 'all'])
   assert.equal(tool.inputSchema.properties.journeyTier.default, 'confirmed')
-  assert.equal(tool.outputSchema.properties.bestGuess.anyOf[0].properties.journeyTier.const, 'candidate_assisted')
-  assert.ok(tool.outputSchema.required.includes('confirmed'))
-  assert.ok(tool.outputSchema.required.includes('bestGuess'))
-  assert.deepEqual(tool.outputSchema.properties.confirmed.anyOf[0].properties.pageInfo.required, ['nextCursor', 'hasNextPage'])
+  const output = tool.outputSchema.anyOf[0]
+  assert.equal(tool.outputSchema.anyOf[1].properties.delivery.properties.mode.const, 'artifact')
+  assert.equal(output.properties.bestGuess.anyOf[0].properties.journeyTier.const, 'candidate_assisted')
+  assert.ok(output.required.includes('confirmed'))
+  assert.ok(output.required.includes('bestGuess'))
+  assert.deepEqual(output.properties.confirmed.anyOf[0].properties.pageInfo.required, ['nextCursor', 'hasNextPage'])
 
   assert.match(files.node, /journeyTier\?: "confirmed" \| "best_guess" \| "all"/)
   assert.match(files.node, /journeyTier: "candidate_assisted"/)
   assert.match(files.node, /nextCursor: string \| null/)
   for (const python of [files.scraperPython, files.memoryPython]) {
     assert.match(python, /Literal\['confirmed', 'best_guess', 'all'\]/)
-    assert.match(python, /best_guess: Any/)
+    assert.match(python, /best_guess: Union\[/)
+    assert.match(python, /'journeyTier': Required\[Literal\['candidate_assisted'\]\]/)
   }
   assert.match(files.cli, /"name": "analytics_list_journeys"/)
   assert.match(files.curl, /`analytics_list_journeys` — List X-Ray Journeys/)
@@ -57,11 +60,12 @@ test('enhanced journey windows and complete confirmed output project into every 
     assert.match(tool.inputSchema.properties.from.description, /90 days/)
     assert.equal(tool.inputSchema.properties.to.format, 'date-time')
     assert.match(tool.inputSchema.properties.to.description, /366 days/)
-    assert.deepEqual(tool.outputSchema.required, ['ok', 'data'])
-    assert.equal(tool.outputSchema.properties.data.properties.journeyTier.const, 'confirmed')
-    assert.equal(tool.outputSchema.properties.data.properties.candidateAssisted.type, 'null')
+    const output = tool.outputSchema.anyOf[0]
+    assert.deepEqual(output.required, ['ok', 'data'])
+    assert.equal(output.properties.data.properties.journeyTier.const, 'confirmed')
+    assert.equal(output.properties.data.properties.candidateAssisted.type, 'null')
     for (const field of ['subject', 'range', 'summary', 'commonPages', 'acquisition', 'eventBreakdown', 'sessions', 'items', 'pageInfo']) {
-      assert.ok(tool.outputSchema.properties.data.required.includes(field), `${name}.${field}`)
+      assert.ok(output.properties.data.required.includes(field), `${name}.${field}`)
     }
   }
 
@@ -72,9 +76,9 @@ test('enhanced journey windows and complete confirmed output project into every 
   assert.match(files.nodeVisitor, /eventBreakdown:/)
   assert.match(files.nodeVisitor, /occurredAt: string/)
   for (const python of [files.scraperPythonVisitor, files.memoryPythonVisitor]) {
-    assert.match(python, /from_: str \| None/)
-    assert.match(python, /alias="from"/)
-    assert.match(python, /to: str \| None/)
+    assert.match(python, /from_: Union\[str, None\]/)
+    assert.match(python, /alias='from'/)
+    assert.match(python, /to: Union\[str, None\]/)
   }
   assert.match(files.cli, /"name": "analytics_get_visitor_journey"/)
   assert.match(files.curl, /`analytics_get_visitor_journey` — Get Visitor Journey/)

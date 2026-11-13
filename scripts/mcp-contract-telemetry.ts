@@ -1,4 +1,5 @@
 export const INTERNAL_TELEMETRY_FIELDS = new Set([
+  'provider', 'fallbackFrom', 'acquisitionProvider', 'providerSessionId', 'providerErrorCode', 'providerErrorMessage', 'providerStatus', 'providerLookupStatus', 'providerDurationMs', 'providerBandwidthBytes', 'providerCaptcha', 'providerCheckedAt', 'providerSessionObservedAt', 'reasonSource',
   'attempts', 'observedIp', 'observedCity', 'observedRegion',
   'proxyResolutionSource', 'proxyTargetLevel', 'proxyTargetLocation', 'proxyTargetZip',
   'proxyIdSuffix', 'browserSessionId', 'browserSessionIdSuffix',

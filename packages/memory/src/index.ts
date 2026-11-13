@@ -2,6 +2,9 @@ export { MemoryClient } from './client.js'
 export type { MemoryClientOptions } from './client.js'
 export { MemoryApiError } from './errors.js'
 export type { MemoryApiErrorDetails } from './errors.js'
+export { clientAttributionHeaders, responseMetadata, notifyResponse } from './client-metadata.js'
+export type { ClientAttribution, ClientMetadataOptions, ResponseMetadata } from './client-metadata.js'
+export type { ArtifactDelivery, DeliveredNamespace } from './delivery-types.js'
 export {
   AccessNamespace,
   CaptureNamespace,
@@ -12,7 +15,7 @@ export {
   LibraryNamespace,
   MemoryNamespace,
   RecallNamespace,
-  ScheduleNamespace,
+  ArtifactsNamespace,
   StorageNamespace,
   TablesNamespace,
   TagsNamespace,

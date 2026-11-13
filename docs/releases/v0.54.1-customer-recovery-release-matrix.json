@@ -1,0 +1,1601 @@
+{
+  "schemaVersion": 3,
+  "product": "MCP Scraper",
+  "release": "0.97.1",
+  "releaseState": "published_and_live_verified_with_maps_limitation",
+  "gateEvidencePhase": "post_publication_and_production",
+  "releaseTargetBranch": "codex/xray-runtime-repair",
+  "releaseVersions": {
+    "server": "0.97.1",
+    "worker": "0.15.0",
+    "web": "0.96.1",
+    "memory": "2.0.0",
+    "memory-db": "2.0.0",
+    "memory-tools": "2.0.0",
+    "memory-compat": "0.2.0",
+    "sdk": "0.54.1",
+    "sdk-scraper-node": "0.54.1",
+    "sdk-memory-node": "0.53.1",
+    "sdk-cli": "0.52.1",
+    "sdk-scraper-python": "0.52.1",
+    "sdk-memory-python": "0.49.1"
+  },
+  "candidateSource": {
+    "serverCommit": "ed8c14d70ee98cd85701642038b158caa1c94d52",
+    "sdkCommit": "26194c35e94d2b2c6308a98b43fe6bc53e66d70a",
+    "note": "Merged commits identify immutable release tags and tested deployment bytes; this later documentation receipt does not retag artifacts."
+  },
+  "inventoryBaseline": "docs/releases/v0.96.3-native-runtime-release-matrix.json",
+  "releaseUnits": [
+    {
+      "id": "server",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": ".",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "paa-crawler",
+      "tagNamespace": "v",
+      "disposition": "changed",
+      "impactEvidence": [
+        "Customer-safe execution errors and terminal settlement public contract update."
+      ],
+      "plannedActions": [
+        "changelog",
+        "build",
+        "version",
+        "tag",
+        "publish",
+        "deploy",
+        "verify"
+      ],
+      "candidateVersion": "0.97.1"
+    },
+    {
+      "id": "worker",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "apps/worker",
+      "changelogPath": "apps/worker/CHANGELOG.md",
+      "deploymentTarget": "mcp-scraper-scheduler",
+      "tagNamespace": "worker-v",
+      "disposition": "not_applicable",
+      "impactEvidence": [
+        "No source or consumed-contract changes in this release; retained topology only."
+      ],
+      "plannedActions": [],
+      "candidateVersion": "0.15.0"
+    },
+    {
+      "id": "web",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "apps/web",
+      "changelogPath": "apps/web/CHANGELOG.md",
+      "deploymentTarget": "mcpscraper-web",
+      "tagNamespace": "web-v",
+      "disposition": "dependent",
+      "impactEvidence": [
+        "Generated public REST documentation consumes changed server schemas."
+      ],
+      "plannedActions": [
+        "changelog",
+        "build",
+        "version",
+        "tag",
+        "deploy",
+        "verify"
+      ],
+      "candidateVersion": "0.96.1"
+    },
+    {
+      "id": "memory",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "apps/memory",
+      "changelogPath": "apps/memory/CHANGELOG.md",
+      "deploymentTarget": "mcp-memory-and-npm",
+      "tagNamespace": "memory-v",
+      "disposition": "not_applicable",
+      "impactEvidence": [
+        "No source or consumed-contract changes in this release; retained topology only."
+      ],
+      "plannedActions": [],
+      "candidateVersion": "2.0.0"
+    },
+    {
+      "id": "memory-db",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "apps/memory/packages/memory-db",
+      "changelogPath": "apps/memory/packages/memory-db/CHANGELOG.md",
+      "deploymentTarget": "npm",
+      "tagNamespace": "memory-db-v",
+      "disposition": "not_applicable",
+      "impactEvidence": [
+        "No source or consumed-contract changes in this release; retained topology only."
+      ],
+      "plannedActions": [],
+      "candidateVersion": "2.0.0"
+    },
+    {
+      "id": "memory-tools",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "apps/memory/packages/memory-tools",
+      "changelogPath": "apps/memory/packages/memory-tools/CHANGELOG.md",
+      "deploymentTarget": "npm",
+      "tagNamespace": "memory-tools-v",
+      "disposition": "not_applicable",
+      "impactEvidence": [
+        "No source or consumed-contract changes in this release; retained topology only."
+      ],
+      "plannedActions": [],
+      "candidateVersion": "2.0.0"
+    },
+    {
+      "id": "memory-compat",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "apps/memory/cli",
+      "changelogPath": "apps/memory/cli/CHANGELOG.md",
+      "deploymentTarget": "npm",
+      "tagNamespace": "memory-compat-v",
+      "disposition": "not_applicable",
+      "impactEvidence": [
+        "No source or consumed-contract changes in this release; retained topology only."
+      ],
+      "plannedActions": [],
+      "candidateVersion": "0.2.0"
+    },
+    {
+      "id": "scheduler",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "apps/scheduler",
+      "changelogPath": "apps/worker/CHANGELOG.md",
+      "deploymentTarget": "migrated-to-worker",
+      "tagNamespace": "scheduler-v",
+      "disposition": "not_applicable",
+      "impactEvidence": [
+        "No source or consumed-contract changes in this release; retained topology only."
+      ],
+      "plannedActions": []
+    },
+    {
+      "id": "sdk",
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-sdk.git",
+      "rootPath": ".",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "github-sdk-release",
+      "tagNamespace": "v",
+      "disposition": "dependent",
+      "impactEvidence": [
+        "Customer-safe execution errors and terminal settlement public contract update."
+      ],
+      "plannedActions": [
+        "changelog",
+        "build",
+        "version",
+        "tag",
+        "publish",
+        "verify"
+      ],
+      "candidateVersion": "0.54.1"
+    },
+    {
+      "id": "sdk-scraper-node",
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-sdk.git",
+      "rootPath": "packages/scraper",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "npm",
+      "tagNamespace": "scraper-node-v",
+      "disposition": "dependent",
+      "impactEvidence": [
+        "Customer-safe execution errors and terminal settlement public contract update."
+      ],
+      "plannedActions": [
+        "changelog",
+        "build",
+        "version",
+        "tag",
+        "publish",
+        "verify"
+      ],
+      "candidateVersion": "0.54.1"
+    },
+    {
+      "id": "sdk-memory-node",
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-sdk.git",
+      "rootPath": "packages/memory",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "npm",
+      "tagNamespace": "memory-node-v",
+      "disposition": "dependent",
+      "impactEvidence": [
+        "Customer-safe execution errors and terminal settlement public contract update."
+      ],
+      "plannedActions": [
+        "changelog",
+        "build",
+        "version",
+        "tag",
+        "publish",
+        "verify"
+      ],
+      "candidateVersion": "0.53.1"
+    },
+    {
+      "id": "sdk-cli",
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-sdk.git",
+      "rootPath": "packages/cli",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "npm",
+      "tagNamespace": "cli-v",
+      "disposition": "dependent",
+      "impactEvidence": [
+        "Customer-safe execution errors and terminal settlement public contract update."
+      ],
+      "plannedActions": [
+        "changelog",
+        "build",
+        "version",
+        "tag",
+        "publish",
+        "verify"
+      ],
+      "candidateVersion": "0.52.1"
+    },
+    {
+      "id": "sdk-scraper-python",
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-sdk.git",
+      "rootPath": "packages/scraper-python",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "pypi",
+      "tagNamespace": "scraper-python-v",
+      "disposition": "dependent",
+      "impactEvidence": [
+        "Customer-safe execution errors and terminal settlement public contract update."
+      ],
+      "plannedActions": [
+        "changelog",
+        "build",
+        "version",
+        "tag",
+        "publish",
+        "verify"
+      ],
+      "candidateVersion": "0.52.1"
+    },
+    {
+      "id": "sdk-memory-python",
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-sdk.git",
+      "rootPath": "packages/memory-python",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "pypi",
+      "tagNamespace": "memory-python-v",
+      "disposition": "dependent",
+      "impactEvidence": [
+        "Customer-safe execution errors and terminal settlement public contract update."
+      ],
+      "plannedActions": [
+        "changelog",
+        "build",
+        "version",
+        "tag",
+        "publish",
+        "verify"
+      ],
+      "candidateVersion": "0.49.1"
+    },
+    {
+      "id": "nango",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "nango-integrations",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "existing-nango-functions",
+      "tagNamespace": "nango-v",
+      "disposition": "not_applicable",
+      "impactEvidence": [
+        "No source or consumed-contract changes in this release; retained topology only."
+      ],
+      "plannedActions": []
+    },
+    {
+      "id": "modal",
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
+      "rootPath": "modal",
+      "changelogPath": "CHANGELOG.md",
+      "deploymentTarget": "existing-modal-deployment",
+      "tagNamespace": "modal-v",
+      "disposition": "not_applicable",
+      "impactEvidence": [
+        "No source or consumed-contract changes in this release; retained topology only."
+      ],
+      "plannedActions": []
+    }
+  ],
+  "expectedSurfaceIds": [
+    "runtime:server",
+    "contract:mcp-tools",
+    "package:npm",
+    "bundle:mcpb",
+    "client:cli",
+    "form:curl",
+    "message:npm-installer",
+    "message:claude-mcpb",
+    "docs:readme",
+    "changelog:server",
+    "release:github",
+    "deployment:production",
+    "auth:oauth",
+    "runtime:scheduler",
+    "runtime:web",
+    "runtime:memory",
+    "package:memory-db",
+    "package:memory-tools",
+    "sdk:node",
+    "sdk:python",
+    "docs:product",
+    "docs:dashboard",
+    "marketing:site",
+    "contract:cost-coverage",
+    "sdk:node-memory",
+    "sdk:cli",
+    "changelog:sdk",
+    "changelog:web",
+    "contract:sdk-tools",
+    "sdk:python-memory",
+    "release:sdk-github",
+    "deployment:web",
+    "registry:npm-sdk-scraper",
+    "registry:npm-sdk-memory",
+    "registry:npm-sdk-cli",
+    "registry:pypi-sdk-scraper",
+    "registry:pypi-sdk-memory",
+    "contract:rest-server",
+    "contract:rest-web",
+    "contract:rest-sdk-source",
+    "contract:rest-openapi",
+    "form:rest-node",
+    "form:rest-python",
+    "contract:memory-tools",
+    "contract:sdk-memory-tools",
+    "package:memory-bridge",
+    "deployment:memory",
+    "resource:shared-guide",
+    "client:installed-codex",
+    "changelog:memory-tools",
+    "changelog:memory",
+    "changelog:scheduler",
+    "tag:scheduler",
+    "deployment:scheduler",
+    "auth:runtime-jobs",
+    "auth:scheduler-jobs",
+    "runtime:worker",
+    "changelog:worker",
+    "tag:worker",
+    "deployment:worker",
+    "auth:worker-jobs",
+    "changelog:memory-db",
+    "package:memory-compat",
+    "changelog:memory-compat",
+    "client:memory-stdio",
+    "client:npx",
+    "form:chatgpt",
+    "form:claude",
+    "docs:rest-viewer",
+    "docs:integrations-setup",
+    "docs:getting-started",
+    "docs:xray",
+    "migration:user-scheduling",
+    "retired:user-schedules",
+    "retired:workflow-recurrence",
+    "retired:crm-recurrence",
+    "retired:assistant-reminders",
+    "retired:frontend-scheduling",
+    "retired:inngest-mastra",
+    "integration:nango-functions",
+    "integration:modal-runtime",
+    "integration:acquisition-providers",
+    "archive:npm-tgz:mcpscraper-sdk",
+    "archive:npm-tgz:mcpscraper-memory-sdk",
+    "archive:npm-tgz:mcpscraper-cli",
+    "archive:python-wheel:mcpscraper-sdk",
+    "archive:python-sdist:mcpscraper-sdk",
+    "archive:python-wheel:mcpscraper-memory-sdk",
+    "archive:python-sdist:mcpscraper-memory-sdk"
+  ],
+  "surfaces": [
+    {
+      "id": "runtime:server",
+      "kind": "runtime",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "contract:mcp-tools",
+      "kind": "generated_contract",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "contractGroup": "public-mcp-tools",
+      "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "package:npm",
+      "kind": "package_registry",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "bundle:mcpb",
+      "kind": "downloadable_bundle",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "client:cli",
+      "kind": "sdk",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "form:curl",
+      "kind": "generated_contract",
+      "releaseUnit": "sdk",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "contractGroup": "public-mcp-tools",
+      "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "message:npm-installer",
+      "kind": "client_copy",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "message:claude-mcpb",
+      "kind": "client_copy",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "docs:readme",
+      "kind": "documentation",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "changelog:server",
+      "kind": "changelog",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "release:github",
+      "kind": "release_notes",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "deployment:production",
+      "kind": "hosted_deployment",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "auth:oauth",
+      "kind": "oauth",
+      "releaseUnit": "server",
+      "state": "not_applicable",
+      "evidence": [
+        "No scheduling migration or OAuth change in this patch; prior release state is retained without reapplying."
+      ],
+      "version": "0.97.1"
+    },
+    {
+      "id": "runtime:scheduler",
+      "kind": "runtime",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "runtime:web",
+      "kind": "runtime",
+      "releaseUnit": "web",
+      "state": "verified",
+      "evidence": [
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
+      ],
+      "version": "0.96.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "runtime:memory",
+      "kind": "runtime",
+      "releaseUnit": "memory",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0"
+    },
+    {
+      "id": "package:memory-db",
+      "kind": "package_registry",
+      "releaseUnit": "memory-db",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0",
+      "artifactRef": "candidateArtifacts:memory-db"
+    },
+    {
+      "id": "package:memory-tools",
+      "kind": "package_registry",
+      "releaseUnit": "memory-tools",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0",
+      "artifactRef": "candidateArtifacts:memory-tools"
+    },
+    {
+      "id": "sdk:node",
+      "kind": "sdk",
+      "releaseUnit": "sdk-scraper-node",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "contractGroup": "public-mcp-tools",
+      "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "sdk:python",
+      "kind": "sdk",
+      "releaseUnit": "sdk-scraper-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.52.1",
+      "contractGroup": "public-mcp-tools",
+      "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "docs:product",
+      "kind": "documentation",
+      "releaseUnit": "web",
+      "state": "not_applicable",
+      "evidence": [
+        "Only generated public API reference changes; dashboard and marketing flows remain unchanged."
+      ],
+      "version": "0.96.0"
+    },
+    {
+      "id": "docs:dashboard",
+      "kind": "documentation",
+      "releaseUnit": "web",
+      "state": "not_applicable",
+      "evidence": [
+        "Only generated public API reference changes; dashboard and marketing flows remain unchanged."
+      ],
+      "version": "0.96.0"
+    },
+    {
+      "id": "marketing:site",
+      "kind": "marketing",
+      "releaseUnit": "web",
+      "state": "not_applicable",
+      "evidence": [
+        "Only generated public API reference changes; dashboard and marketing flows remain unchanged."
+      ],
+      "version": "0.96.0"
+    },
+    {
+      "id": "contract:cost-coverage",
+      "kind": "generated_contract",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "sdk:node-memory",
+      "kind": "sdk",
+      "releaseUnit": "sdk-memory-node",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.53.1",
+      "contractGroup": "public-mcp-tools",
+      "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "sdk:cli",
+      "kind": "sdk",
+      "releaseUnit": "sdk-cli",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.52.1",
+      "contractGroup": "public-mcp-tools",
+      "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "changelog:sdk",
+      "kind": "changelog",
+      "releaseUnit": "sdk",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "changelog:web",
+      "kind": "changelog",
+      "releaseUnit": "web",
+      "state": "verified",
+      "evidence": [
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
+      ],
+      "version": "0.96.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "contract:sdk-tools",
+      "kind": "generated_contract",
+      "releaseUnit": "sdk",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "contractGroup": "public-mcp-tools",
+      "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "sdk:python-memory",
+      "kind": "sdk",
+      "releaseUnit": "sdk-memory-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.49.1",
+      "contractGroup": "public-mcp-tools",
+      "contractSha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "release:sdk-github",
+      "kind": "release_notes",
+      "releaseUnit": "sdk",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "deployment:web",
+      "kind": "hosted_deployment",
+      "releaseUnit": "web",
+      "state": "verified",
+      "evidence": [
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
+      ],
+      "version": "0.96.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "registry:npm-sdk-scraper",
+      "kind": "package_registry",
+      "releaseUnit": "sdk-scraper-node",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "registry:npm-sdk-memory",
+      "kind": "package_registry",
+      "releaseUnit": "sdk-memory-node",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.53.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "registry:npm-sdk-cli",
+      "kind": "package_registry",
+      "releaseUnit": "sdk-cli",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.52.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "registry:pypi-sdk-scraper",
+      "kind": "package_registry",
+      "releaseUnit": "sdk-scraper-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.52.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "registry:pypi-sdk-memory",
+      "kind": "package_registry",
+      "releaseUnit": "sdk-memory-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.49.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "contract:rest-server",
+      "kind": "generated_contract",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "contractGroup": "public-rest-v1",
+      "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "contract:rest-web",
+      "kind": "generated_contract",
+      "releaseUnit": "web",
+      "state": "verified",
+      "evidence": [
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
+      ],
+      "version": "0.96.1",
+      "contractGroup": "public-rest-v1",
+      "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "contract:rest-sdk-source",
+      "kind": "generated_contract",
+      "releaseUnit": "sdk",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "contractGroup": "public-rest-v1",
+      "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "contract:rest-openapi",
+      "kind": "generated_contract",
+      "releaseUnit": "sdk",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "contractGroup": "public-rest-v1",
+      "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "form:rest-node",
+      "kind": "generated_contract",
+      "releaseUnit": "sdk-scraper-node",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "contractGroup": "public-rest-v1",
+      "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "form:rest-python",
+      "kind": "generated_contract",
+      "releaseUnit": "sdk-scraper-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.52.1",
+      "contractGroup": "public-rest-v1",
+      "contractSha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "contract:memory-tools",
+      "kind": "generated_contract",
+      "releaseUnit": "memory",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0"
+    },
+    {
+      "id": "contract:sdk-memory-tools",
+      "kind": "generated_contract",
+      "releaseUnit": "sdk",
+      "state": "not_applicable",
+      "evidence": [
+        "Standalone Memory producer contract unchanged; only the unified MCP contract projection changes."
+      ],
+      "version": "0.54.0"
+    },
+    {
+      "id": "package:memory-bridge",
+      "kind": "package_registry",
+      "releaseUnit": "memory",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0"
+    },
+    {
+      "id": "deployment:memory",
+      "kind": "hosted_deployment",
+      "releaseUnit": "memory",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0"
+    },
+    {
+      "id": "resource:shared-guide",
+      "kind": "generated_contract",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "client:installed-codex",
+      "kind": "sdk",
+      "releaseUnit": "server",
+      "state": "not_applicable",
+      "evidence": [
+        "No local connector registration changes requested; new package and hosted behavior are verified separately."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "candidate_readiness"
+    },
+    {
+      "id": "changelog:memory-tools",
+      "kind": "changelog",
+      "releaseUnit": "memory-tools",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0",
+      "artifactRef": "candidateArtifacts:memory-tools"
+    },
+    {
+      "id": "changelog:memory",
+      "kind": "changelog",
+      "releaseUnit": "memory",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0"
+    },
+    {
+      "id": "changelog:scheduler",
+      "kind": "changelog",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "tag:scheduler",
+      "kind": "release_tag",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "deployment:scheduler",
+      "kind": "hosted_deployment",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "auth:runtime-jobs",
+      "kind": "internal_auth",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "auth:scheduler-jobs",
+      "kind": "internal_auth",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "runtime:worker",
+      "kind": "runtime",
+      "releaseUnit": "worker",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "0.15.0"
+    },
+    {
+      "id": "changelog:worker",
+      "kind": "changelog",
+      "releaseUnit": "worker",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "0.15.0"
+    },
+    {
+      "id": "tag:worker",
+      "kind": "release_tag",
+      "releaseUnit": "worker",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "0.15.0"
+    },
+    {
+      "id": "deployment:worker",
+      "kind": "hosted_deployment",
+      "releaseUnit": "worker",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "0.15.0"
+    },
+    {
+      "id": "auth:worker-jobs",
+      "kind": "internal_auth",
+      "releaseUnit": "worker",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "0.15.0"
+    },
+    {
+      "id": "changelog:memory-db",
+      "kind": "changelog",
+      "releaseUnit": "memory-db",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0"
+    },
+    {
+      "id": "package:memory-compat",
+      "kind": "package_registry",
+      "releaseUnit": "memory-compat",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "0.2.0"
+    },
+    {
+      "id": "changelog:memory-compat",
+      "kind": "changelog",
+      "releaseUnit": "memory-compat",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "0.2.0"
+    },
+    {
+      "id": "client:memory-stdio",
+      "kind": "client_package",
+      "releaseUnit": "memory",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ],
+      "version": "2.0.0"
+    },
+    {
+      "id": "client:npx",
+      "kind": "client_package",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "form:chatgpt",
+      "kind": "generated_contract",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "form:claude",
+      "kind": "generated_contract",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "docs:rest-viewer",
+      "kind": "documentation",
+      "releaseUnit": "web",
+      "state": "verified",
+      "evidence": [
+        "Web tag web-v0.96.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; build passed.",
+        "Deployment dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM READY at exact commit; https://mcpscraper.dev/docs renders updated reference."
+      ],
+      "version": "0.96.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "docs:integrations-setup",
+      "kind": "documentation",
+      "releaseUnit": "web",
+      "state": "not_applicable",
+      "evidence": [
+        "Only generated public API reference changes; dashboard and marketing flows remain unchanged."
+      ],
+      "version": "0.96.0"
+    },
+    {
+      "id": "docs:getting-started",
+      "kind": "documentation",
+      "releaseUnit": "web",
+      "state": "not_applicable",
+      "evidence": [
+        "Only generated public API reference changes; dashboard and marketing flows remain unchanged."
+      ],
+      "version": "0.96.0"
+    },
+    {
+      "id": "docs:xray",
+      "kind": "documentation",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "migration:user-scheduling",
+      "kind": "data_migration",
+      "releaseUnit": "server",
+      "state": "not_applicable",
+      "evidence": [
+        "No scheduling migration or OAuth change in this patch; prior release state is retained without reapplying."
+      ],
+      "version": "0.97.1"
+    },
+    {
+      "id": "retired:user-schedules",
+      "kind": "retired_surface",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "retired:workflow-recurrence",
+      "kind": "retired_surface",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "retired:crm-recurrence",
+      "kind": "retired_surface",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "retired:assistant-reminders",
+      "kind": "retired_surface",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "retired:frontend-scheduling",
+      "kind": "retired_surface",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "retired:inngest-mastra",
+      "kind": "retired_surface",
+      "releaseUnit": "scheduler",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "integration:nango-functions",
+      "kind": "provider_functions",
+      "releaseUnit": "nango",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "integration:modal-runtime",
+      "kind": "provider_runtime",
+      "releaseUnit": "modal",
+      "state": "not_applicable",
+      "evidence": [
+        "Owning unit is unchanged and outside this contract dependency closure."
+      ]
+    },
+    {
+      "id": "integration:acquisition-providers",
+      "kind": "provider_compatibility",
+      "releaseUnit": "server",
+      "state": "verified",
+      "evidence": [
+        "Released tag v0.97.1 points to ed8c14d70ee98cd85701642038b158caa1c94d52; full native test/package gate passed.",
+        "npm0.97.1 exact tarball SHA-256 verified and freshly installed; release MCPB and hosted download match tested bytes.",
+        "Production Vercel deployment dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ READY; public MCP version and corrected job/Maps responses verified."
+      ],
+      "version": "0.97.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "archive:npm-tgz:mcpscraper-sdk",
+      "kind": "downloadable_bundle",
+      "releaseUnit": "sdk-scraper-node",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.54.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "archive:npm-tgz:mcpscraper-memory-sdk",
+      "kind": "downloadable_bundle",
+      "releaseUnit": "sdk-memory-node",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.53.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "archive:npm-tgz:mcpscraper-cli",
+      "kind": "downloadable_bundle",
+      "releaseUnit": "sdk-cli",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.52.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "archive:python-wheel:mcpscraper-sdk",
+      "kind": "downloadable_bundle",
+      "releaseUnit": "sdk-scraper-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.52.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "archive:python-sdist:mcpscraper-sdk",
+      "kind": "downloadable_bundle",
+      "releaseUnit": "sdk-scraper-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.52.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "archive:python-wheel:mcpscraper-memory-sdk",
+      "kind": "downloadable_bundle",
+      "releaseUnit": "sdk-memory-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.49.1",
+      "proofPhase": "post_publication"
+    },
+    {
+      "id": "archive:python-sdist:mcpscraper-memory-sdk",
+      "kind": "downloadable_bundle",
+      "releaseUnit": "sdk-memory-python",
+      "state": "verified",
+      "evidence": [
+        "SDK tag v0.54.1 points to 26194c35e94d2b2c6308a98b43fe6bc53e66d70a; generated347-tool and REST parity passed.",
+        "All three npm and two Python releases have exact remote archive digests; fresh registry installs and Node/Python imports pass.",
+        "GitHub release has all seven verified archive digests."
+      ],
+      "version": "0.49.1",
+      "proofPhase": "post_publication"
+    }
+  ],
+  "candidateProof": {
+    "server": "Final npm run package:public:639 test files,5602 passing tests,18 skipped; typecheck/build, entrypoints and contract/confidentiality scans pass.",
+    "web": "Physical dependency build passed; Vercel READY at merged server commit; live API/SDK reference renders.",
+    "sdk": "Node builds/typechecks/workspace tests;21 projection tests;66 scraper and42 Memory Python tests; REST and347-tool parity. Fresh registry installs and imports pass.",
+    "recovery": "Supported canonical API settles original holds once; terminal jobs and settlement receipts read back; repeated apply replays without additional refund. Account has no remaining held jobs.",
+    "maps": "Matched hosted session10/81; US residential10/81; UI tab5/81; historical isolated context10/81. Full-review solution unresolved. Public status now partial.",
+    "liveControls": "Own-account PAA returned1 complete answer in19254ms; SERP9 results, attempt13328ms. Authorized public status reads omit provider identity."
+  },
+  "notes": [
+    "Release fixes public provider disclosure and original-hold terminal recovery; full Maps review loading is still unresolved.",
+    "Customer financial proof remains private; public receipts contain no customer identifiers.",
+    "Unaffected release units were not republished or deployed."
+  ],
+  "formerRepositoryMigrations": [
+    {
+      "repository": "https://github.com/VilovietaSEO/mcp-scraper-scheduler.git",
+      "state": "not_applicable",
+      "evidence": "Previously consolidated into this repository; current active roots are registered in product-topology.json and docs/releases/product-repository-migration-release-matrix.json. This release uses existing provider projects and performs no repository archival."
+    },
+    {
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-web.git",
+      "state": "not_applicable",
+      "evidence": "Previously consolidated into this repository; current active roots are registered in product-topology.json and docs/releases/product-repository-migration-release-matrix.json. This release uses existing provider projects and performs no repository archival."
+    },
+    {
+      "repository": "https://github.com/VilovietaSEO/mcp-memory.git",
+      "state": "not_applicable",
+      "evidence": "Previously consolidated into this repository; current active roots are registered in product-topology.json and docs/releases/product-repository-migration-release-matrix.json. This release uses existing provider projects and performs no repository archival."
+    },
+    {
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-memory-db.git",
+      "state": "not_applicable",
+      "evidence": "Previously consolidated into this repository; current active roots are registered in product-topology.json and docs/releases/product-repository-migration-release-matrix.json. This release uses existing provider projects and performs no repository archival."
+    },
+    {
+      "repository": "https://github.com/VilovietaSEO/mcpscraper-memory-tools.git",
+      "state": "not_applicable",
+      "evidence": "Previously consolidated into this repository; current active roots are registered in product-topology.json and docs/releases/product-repository-migration-release-matrix.json. This release uses existing provider projects and performs no repository archival."
+    }
+  ],
+  "contractFingerprints": {
+    "public-mcp-tools": {
+      "sha256": "81282878d7ebcbbb06e7ce9c8eb98c3ef9790fa1d8a1bf303597dc8d4dc95046",
+      "meaning": "Final server-produced contract shared by verified consumer projections."
+    },
+    "public-rest-v1": {
+      "sha256": "456175de96f678f35af9541a8098a7ed70b2d48ff0978cca30d4f89df48781e8",
+      "meaning": "Final server-produced contract shared by verified consumer projections."
+    }
+  },
+  "baselineMatrix": "v0.97.0-scheduling-retirement-release-matrix.json",
+  "publicationProof": {
+    "npm": {
+      "mcp-scraper": {
+        "version": "0.97.1",
+        "sha256": "c875d92d7862cc45f31ee141b97b446caacfa2eaf94336224137225b42f388c0",
+        "tarball": "https://registry.npmjs.org/mcp-scraper/-/mcp-scraper-0.97.1.tgz"
+      },
+      "mcpscraper-sdk": {
+        "version": "0.54.1",
+        "sha256": "3e690aa5c012cdbebc65bb5ee150392c04b4c27401fa0b73630d9ab218a949cc",
+        "tarball": "https://registry.npmjs.org/mcpscraper-sdk/-/mcpscraper-sdk-0.54.1.tgz"
+      },
+      "mcpscraper-memory-sdk": {
+        "version": "0.53.1",
+        "sha256": "d987b0c6d855ff77da1ac496de10ca3f7526af8ad6c07ea3aa628b7c0352faf8",
+        "tarball": "https://registry.npmjs.org/mcpscraper-memory-sdk/-/mcpscraper-memory-sdk-0.53.1.tgz"
+      },
+      "mcpscraper-cli": {
+        "version": "0.52.1",
+        "sha256": "d24b05fc21a4c458923c630054a6474147445cd69b0494d7c052369d8c615e5c",
+        "tarball": "https://registry.npmjs.org/mcpscraper-cli/-/mcpscraper-cli-0.52.1.tgz"
+      }
+    },
+    "pypi": {
+      "mcpscraper-sdk": {
+        "version": "0.52.1",
+        "files": [
+          {
+            "filename": "mcpscraper_sdk-0.52.1-py3-none-any.whl",
+            "sha256": "eed9b5476b8639d6ca6bc0994073221c0beac6529712f7e25869e9e12387e791"
+          },
+          {
+            "filename": "mcpscraper_sdk-0.52.1.tar.gz",
+            "sha256": "5c10e1139440063bfe54037e346c7b3409322492e87fef931428a3fdc7890e30"
+          }
+        ]
+      },
+      "mcpscraper-memory-sdk": {
+        "version": "0.49.1",
+        "files": [
+          {
+            "filename": "mcpscraper_memory_sdk-0.49.1-py3-none-any.whl",
+            "sha256": "06cd8d867c284db8a988d95907e54f6e1eeb390cbc05cb95da67ffccfdc2372a"
+          },
+          {
+            "filename": "mcpscraper_memory_sdk-0.49.1.tar.gz",
+            "sha256": "6c10eda9fabc9a0e2679388ab5065037aa671d59824153b6281d5fe9d4e1c6e1"
+          }
+        ]
+      }
+    },
+    "deployments": {
+      "server": {
+        "id": "dpl_C5y8KKJbGYJspU7ebKmCqkxuyffZ",
+        "url": "paa-crawler-gfa8cyo3k-andrew-contentsprous-projects.vercel.app",
+        "projectId": "prj_Iji1haqOEHX3xN1pmF6l6ozcXHfm",
+        "commit": "ed8c14d70ee98cd85701642038b158caa1c94d52",
+        "state": "READY",
+        "aliases": []
+      },
+      "web": {
+        "id": "dpl_Gk4njv2579UM2Vpr88PW8ibc5pwM",
+        "url": "mcpscraper-3h6ffuqcn-andrew-contentsprous-projects.vercel.app",
+        "projectId": "prj_kihMsAA3C3QcREPxS2JP0V8RRynw",
+        "commit": "ed8c14d70ee98cd85701642038b158caa1c94d52",
+        "state": "READY",
+        "aliases": [
+          "mcpscraper-web.vercel.app",
+          "mcpscraper-web-andrew-contentsprous-projects.vercel.app"
+        ]
+      }
+    },
+    "freshRegistryInstall": {
+      "node": "Exact four versions installed from npm; both SDK modules imported (7 and28 exports).",
+      "python": "Exact two versions installed from PyPI with fresh index; mcpscraper and mcpscraper_memory imported."
+    },
+    "liveChecks": {
+      "jobs": "Terminal failed with settled original holds; recovery replay makes no additional refund.",
+      "maps": "Public partial, ten reviews, requested reviews/services/areasServed unavailable; provider identity absent.",
+      "mcp": "server/discover advertises0.97.1.",
+      "docs": "API & SDK Reference renders347-tool reference at https://mcpscraper.dev/docs.",
+      "xray": "Live entitlement access:true,status:free,reason:temporary_free_access; no active Thorbit requirement or MCP Scraper credit charge.",
+      "mcpbSha256": "2c98f521dd1cb860f08a6344febd9f7a4607606d9767085f899a0f834b5d88b1"
+    },
+    "source": {
+      "server": "ed8c14d70ee98cd85701642038b158caa1c94d52",
+      "sdk": "26194c35e94d2b2c6308a98b43fe6bc53e66d70a"
+    },
+    "releaseUrls": [
+      "https://github.com/VilovietaSEO/mcp-scraper/releases/tag/v0.97.1",
+      "https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.54.1"
+    ],
+    "knownLimitation": "Full Maps review extraction remains unresolved when Google serves a limited view. No verified full-review solution or ETA."
+  }
+}

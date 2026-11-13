@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class MemorySearchInput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     api_key: str | None = Field(None, alias="apiKey", description="Caller API key. Optional when the MCP session is authenticated.")
     session_id: str | None = Field(None, alias="sessionId", description="Session identifier. Optional; defaults to the current MCP session.")
@@ -13,8 +13,8 @@ class MemorySearchInput(BaseModel):
     queries: list[str] | None = Field(None, alias="queries", description="Caller-provided focused query variants. The planner deduplicates these with query, original wording, and tag/entity terms.")
     entities: list[str] | None = Field(None, alias="entities", description="Named entities or exact terms used to form a focused query variant.")
     tags: list[str] | None = Field(None, alias="tags", description="Exact canonical tags used for tag-channel retrieval and filtering.")
-    tag_mode: Literal["any", "all"] | None = Field(None, alias="tagMode", description="Whether a note must match any or all supplied tags. Default any.")
-    kind: Literal["note", "library", "capture", "decision", "message"] | None = Field(None, alias="kind", description="Exact persisted note-kind filter.")
+    tag_mode: Literal['any', 'all'] | None = Field(None, alias="tagMode", description="Whether a note must match any or all supplied tags. Default any.")
+    kind: Literal['note', 'library', 'capture', 'decision', 'message'] | None = Field(None, alias="kind", description="Exact persisted note-kind filter.")
     type: str | None = Field(None, alias="type", description="Exact props.type filter.")
     date_from: str | None = Field(None, alias="dateFrom", description="Inclusive lower bound for note updatedAt.")
     date_to: str | None = Field(None, alias="dateTo", description="Inclusive upper bound for note updatedAt.")
@@ -30,7 +30,7 @@ class MemorySearchInput(BaseModel):
 
 
 class MemorySearchOutput(BaseModel):
-    model_config = ConfigDict(populate_by_name=True, extra="allow")
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
 
     ok: bool = Field(..., alias="ok", description="")
     vault: str | None = Field(None, alias="vault", description="")

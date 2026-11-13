@@ -1,128 +1,145 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "basis": "Current registry artifact plus five percent byte headroom; file counts may not increase for this additive generated-contract release.",
-    "source": "npm and PyPI registry artifacts downloaded on 2026-09-02",
+    "basis": "Exact latest public registry artifacts, with 15 percent plus small metadata allowance for three new tools and refreshed schemas; Python permits three new tool model files.",
+    "source": "Official registry archives downloaded 2026-11-03",
     "failClosed": true
   },
   "artifacts": [
     {
-      "package": "mcpscraper-sdk",
+      "package": "mcp-scraper",
       "format": "npm-tgz",
-      "candidateVersion": "0.41.0",
-      "baseline": {
-        "version": "0.40.0",
-        "sha256": "95db887e9b57d00c133885fd761dab18031f36bfb288b5ef9e00f8cfd9c3b1bf",
-        "compressedBytes": 80732,
-        "unpackedBytes": 977731,
-        "fileCount": 6
-      },
+      "baselineVersion": "0.102.6",
+      "candidateVersion": "0.103.0",
+      "sha256": "4f1e63b8cb0565e3f8bbc33b71dcf28468b570dff0a634429fbcb1e4781bdf64",
+      "compressedBytes": 30908,
+      "unpackedBytes": 101077,
+      "fileCount": 14,
       "maximum": {
-        "compressedBytes": 84769,
-        "unpackedBytes": 1026618,
-        "fileCount": 6
+        "compressedBytes": 40544,
+        "unpackedBytes": 126238,
+        "fileCount": 14,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
       }
     },
     {
-      "package": "mcpscraper-memory-sdk",
+      "package": "mcpscraper-sdk",
       "format": "npm-tgz",
-      "candidateVersion": "0.41.0",
-      "baseline": {
-        "version": "0.40.0",
-        "sha256": "209d4404bd52154d3d0e80b07c4f13fcfba2e51baf6468b0a08889549680dbd1",
-        "compressedBytes": 285178,
-        "unpackedBytes": 10641177,
-        "fileCount": 5
-      },
+      "baselineVersion": "0.58.1",
+      "candidateVersion": "0.59.0",
+      "sha256": "5772064005d169445fecb2bc1e123643d489a5b177c5eb472a94594fac35ce2e",
+      "compressedBytes": 74385,
+      "unpackedBytes": 495895,
+      "fileCount": 6,
       "maximum": {
-        "compressedBytes": 299437,
-        "unpackedBytes": 11173236,
-        "fileCount": 5
+        "compressedBytes": 90542,
+        "unpackedBytes": 580279,
+        "fileCount": 6,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
       }
     },
     {
       "package": "mcpscraper-cli",
       "format": "npm-tgz",
-      "candidateVersion": "0.40.0",
-      "baseline": {
-        "version": "0.39.0",
-        "sha256": "39977ab006d3daa13b9a6b592beecde88eb98916463d40a4fddb75012587b815",
-        "compressedBytes": 156727,
-        "unpackedBytes": 1139019,
-        "fileCount": 3
-      },
+      "baselineVersion": "0.56.1",
+      "candidateVersion": "0.57.0",
+      "sha256": "4485e534264ed1807668c66ac626cc67db869d904c7ee141bd06222c9bac85db",
+      "compressedBytes": 157130,
+      "unpackedBytes": 1102760,
+      "fileCount": 3,
       "maximum": {
-        "compressedBytes": 164564,
-        "unpackedBytes": 1195970,
-        "fileCount": 3
+        "compressedBytes": 185699,
+        "unpackedBytes": 1278174,
+        "fileCount": 3,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
       }
     },
     {
       "package": "mcpscraper-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.39.0",
-      "baseline": {
-        "version": "0.38.0",
-        "sha256": "2506eb3d7414e764cf490d79da6f19e407b4bbced8000aafc86dad2929c231ca",
-        "compressedBytes": 376728,
-        "unpackedBytes": 1089622,
-        "fileCount": 388
-      },
+      "baselineVersion": "0.56.1",
+      "candidateVersion": "0.57.0",
+      "sha256": "2c8a7315de9ac8a342819d2f1be0d79b727db783e957f474ed1028cd1076840c",
+      "compressedBytes": 729402,
+      "unpackedBytes": 3404779,
+      "fileCount": 360,
       "maximum": {
-        "compressedBytes": 395565,
-        "unpackedBytes": 1144104,
-        "fileCount": 388
+        "compressedBytes": 843812,
+        "unpackedBytes": 3925495,
+        "fileCount": 363,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
       }
     },
     {
       "package": "mcpscraper-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.39.0",
-      "baseline": {
-        "version": "0.38.0",
-        "sha256": "975ce450b39473b3a3814709755d1cd6e52bbc7c46b68f679f79ff60ffe03015",
-        "compressedBytes": 146480,
-        "unpackedBytes": 1058656,
-        "fileCount": 389
-      },
+      "baselineVersion": "0.56.1",
+      "candidateVersion": "0.57.0",
+      "sha256": "ffc29d020289000cb048e947d4611a602b4d3ed672792baf8967eb0ff27bb57b",
+      "compressedBytes": 291048,
+      "unpackedBytes": 3382154,
+      "fileCount": 360,
       "maximum": {
-        "compressedBytes": 153804,
-        "unpackedBytes": 1111589,
-        "fileCount": 389
+        "compressedBytes": 339705,
+        "unpackedBytes": 3899477,
+        "fileCount": 363,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
+      }
+    },
+    {
+      "package": "mcpscraper-memory-sdk",
+      "format": "npm-tgz",
+      "baselineVersion": "0.57.1",
+      "candidateVersion": "0.58.0",
+      "sha256": "2e11282053762644fc378c8f8e7b317387600b6f3947ed1e92bae58fd749e91d",
+      "compressedBytes": 303095,
+      "unpackedBytes": 12415092,
+      "fileCount": 5,
+      "maximum": {
+        "compressedBytes": 353559,
+        "unpackedBytes": 14287355,
+        "fileCount": 5,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
       }
     },
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-wheel",
-      "candidateVersion": "0.37.0",
-      "baseline": {
-        "version": "0.36.0",
-        "sha256": "a2e9448f07387e5e9aead4efeb889e4dc6223285d8590b5d8431b8fc4210ba42",
-        "compressedBytes": 580262,
-        "unpackedBytes": 1503230,
-        "fileCount": 655
-      },
+      "baselineVersion": "0.53.1",
+      "candidateVersion": "0.54.0",
+      "sha256": "7bc4c7023a8018fee1bfc5df0c53601f987557ce896553315d00b1778af3a9d0",
+      "compressedBytes": 900309,
+      "unpackedBytes": 3743480,
+      "fileCount": 587,
       "maximum": {
-        "compressedBytes": 609276,
-        "unpackedBytes": 1578392,
-        "fileCount": 655
+        "compressedBytes": 1040355,
+        "unpackedBytes": 4315002,
+        "fileCount": 590,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
       }
     },
     {
       "package": "mcpscraper-memory-sdk",
       "format": "python-sdist",
-      "candidateVersion": "0.37.0",
-      "baseline": {
-        "version": "0.36.0",
-        "sha256": "c16787df9c51cc60a11d84f18569de0d2d4be2949087f6ba61be422e4568c6ac",
-        "compressedBytes": 194505,
-        "unpackedBytes": 1436345,
-        "fileCount": 656
-      },
+      "baselineVersion": "0.53.1",
+      "candidateVersion": "0.54.0",
+      "sha256": "d885c1842a15e9a28b49bba35c9f76650efc0ae05b53c875de231796cc663711",
+      "compressedBytes": 324767,
+      "unpackedBytes": 3688199,
+      "fileCount": 587,
       "maximum": {
-        "compressedBytes": 204231,
-        "unpackedBytes": 1508163,
-        "fileCount": 656
+        "compressedBytes": 378482,
+        "unpackedBytes": 4251428,
+        "fileCount": 590,
+        "sourceMaps": 0,
+        "nestedNodeModulesEntries": 0
       }
     }
   ]

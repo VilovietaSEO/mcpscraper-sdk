@@ -4,7 +4,7 @@ import { mkdtempSync, readFileSync, rmSync, symlinkSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { createProgram, isMainModule } from '../src/cli.js'
+import { createProgram, isMainModule, observedInstallChannel } from '../src/cli.js'
 import { MCP_TOOL_COUNT } from '../src/generated-tools.js'
 
 function jsonResponse(status: number, body: unknown): Response {
@@ -44,6 +44,75 @@ test('recognizes an npm-style symlink as the CLI entrypoint', { skip: process.pl
 test('reports the package version', () => {
   const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as { version: string }
   assert.equal(createProgram().version(), packageJson.version)
+})
+
+test('observes NPX only from the executable cache path', () => {
+  assert.equal(observedInstallChannel('/Users/example/.npm/_npx/run/node_modules/.bin/mcpscraper'), 'npx')
+  assert.equal(observedInstallChannel('C:\\Users\\example\\npm-cache\\_npx\\run\\node_modules\\.bin\\mcpscraper'), 'npx')
+  assert.equal(observedInstallChannel('/usr/local/bin/mcpscraper'), undefined)
+  assert.equal(observedInstallChannel('/workspace/packages/cli/src/cli.ts'), undefined)
+  assert.equal(observedInstallChannel('/node_modules/npm/bin/npm-cli.js'), undefined)
+})
+
+test('REST shortcuts send declared attribution without changing authentication or tool arguments', async () => {
+  let capturedHeaders: Headers = new Headers()
+  let capturedBody: Record<string, unknown> = {}
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    capturedHeaders = new Headers(init?.headers)
+    capturedBody = JSON.parse(String(init?.body))
+    return jsonResponse(200, { urls: [] })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', '--install-channel', 'npm',
+      '--ai-client', 'claude-code', '--ai-model', 'claude-sonnet-4', 'map', 'https://example.com', '--json',
+    ])
+  } finally { capture.restore() }
+  assert.equal(capturedHeaders.get('x-api-key'), 'sk_test')
+  assert.equal(capturedHeaders.get('x-mcp-client-surface'), 'rest')
+  assert.equal(capturedHeaders.get('x-mcp-install-channel'), 'npm')
+  assert.equal(capturedHeaders.get('x-mcp-ai-client'), 'claude-code')
+  assert.equal(capturedHeaders.get('x-mcp-ai-model'), 'claude-sonnet-4')
+  assert.equal(capturedBody.url, 'https://example.com')
+  assert.equal('aiClient' in capturedBody, false)
+  assert.equal('installChannel' in capturedBody, false)
+})
+
+test('global attribution environment configuration is explicit and command flags take precedence', async () => {
+  const envNames = ['MCP_SCRAPER_INSTALL_CHANNEL', 'MCP_SCRAPER_AI_CLIENT', 'MCP_SCRAPER_AI_MODEL'] as const
+  const saved = new Map(envNames.map(name => [name, process.env[name]]))
+  const capturedHeaders: Headers[] = []
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    capturedHeaders.push(new Headers(init?.headers))
+    return jsonResponse(200, { urls: [] })
+  }
+  const capture = captureLogs()
+  try {
+    process.env.MCP_SCRAPER_INSTALL_CHANNEL = 'source'
+    process.env.MCP_SCRAPER_AI_CLIENT = 'codex'
+    process.env.MCP_SCRAPER_AI_MODEL = 'gpt-6'
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'map', 'https://example.com', '--json',
+    ])
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', '--install-channel', 'npm', '--ai-client', 'other',
+      '--ai-model', 'custom/model-1', 'map', 'https://example.com', '--json',
+    ])
+  } finally {
+    capture.restore()
+    for (const name of envNames) {
+      const value = saved.get(name)
+      if (value === undefined) delete process.env[name]
+      else process.env[name] = value
+    }
+  }
+  assert.equal(capturedHeaders[0].get('x-mcp-install-channel'), 'source')
+  assert.equal(capturedHeaders[0].get('x-mcp-ai-client'), 'codex')
+  assert.equal(capturedHeaders[0].get('x-mcp-ai-model'), 'gpt-6')
+  assert.equal(capturedHeaders[1].get('x-mcp-install-channel'), 'npm')
+  assert.equal(capturedHeaders[1].get('x-mcp-ai-client'), 'other')
+  assert.equal(capturedHeaders[1].get('x-mcp-ai-model'), 'custom/model-1')
 })
 
 test('search sends the query and prints organic results', async () => {
@@ -206,6 +275,9 @@ test('tools list exposes the complete generated CLI catalog', async () => {
   assert.ok(catalog.some(tool => tool.name === 'describe_service_connection_tool'))
   assert.ok(catalog.some(tool => tool.name === 'import_service_connection_to_memory'))
   assert.ok(catalog.some(tool => tool.name === 'archive_read'))
+  assert.ok(catalog.some(tool => tool.name === 'artifact_read'))
+  assert.ok(catalog.some(tool => tool.name === 'artifact_describe'))
+  assert.ok(catalog.some(tool => tool.name === 'artifact_download'))
 })
 
 test('tools call saves inline MCP binary blocks and never prints base64', async () => {
@@ -292,4 +364,141 @@ test('tools call dispatches any catalog tool through unified MCP JSON-RPC', asyn
   assert.equal(capturedBody.method, 'tools/call')
   assert.equal(capturedBody.params.name, 'list-vaults')
   assert.equal(JSON.parse(capture.logs.join('')).ok, true)
+})
+
+test('generic tool JSON keeps complete artifact metadata, resource links and MCP structure with HTTP attribution', async () => {
+  let capturedHeaders: Headers = new Headers()
+  const result = {
+    content: [
+      { type: 'text', text: 'Complete content is available through the artifact reader.' },
+      { type: 'resource_link', uri: 'https://example.com/download/opaque', name: 'transcript.txt', mimeType: 'text/plain' },
+    ],
+    structuredContent: {
+      artifactId: 'artifact_123', delivery: 'artifact', totalBytes: 120_000,
+      expiresAt: '2026-10-13T00:00:00Z', excerpt: 'First section', nextOffset: 64_000,
+    },
+    _meta: { deliveryVersion: 1 },
+  }
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    capturedHeaders = new Headers(init?.headers)
+    const body = JSON.parse(String(init?.body)) as { id: number }
+    return jsonResponse(200, { jsonrpc: '2.0', id: body.id, result })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', '--install-channel', 'npx', '--ai-client', 'codex',
+      'tools', 'call', 'list-vaults', '--args', '{}', '--json',
+    ])
+  } finally { capture.restore() }
+  assert.equal(capturedHeaders.get('x-mcp-client-surface'), 'mcp-http')
+  assert.equal(capturedHeaders.get('x-mcp-install-channel'), 'npx')
+  assert.equal(capturedHeaders.get('x-mcp-ai-client'), 'codex')
+  assert.deepEqual(JSON.parse(capture.logs.join('')), result)
+})
+
+test('--raw-result retains MCP text and metadata while --json keeps the existing structured response shape', async () => {
+  const result = { content: [{ type: 'text', text: 'Response summary' }], structuredContent: { ok: true }, _meta: { marker: 'kept' } }
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    const body = JSON.parse(String(init?.body)) as { id: number }
+    return jsonResponse(200, { jsonrpc: '2.0', id: body.id, result })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'tools', 'call', 'list-vaults', '--json',
+    ])
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', 'tools', 'call', 'list-vaults', '--raw-result',
+    ])
+  } finally { capture.restore() }
+  assert.deepEqual(JSON.parse(capture.logs[0]), result.structuredContent)
+  assert.deepEqual(JSON.parse(capture.logs[1]), result)
+})
+
+test('--base-url selects the branch deployment for REST and generic MCP without changing production defaults', async () => {
+  const capturedUrls: string[] = []
+  const fetchImpl = async (url: string | URL, init?: RequestInit) => {
+    capturedUrls.push(String(url))
+    const body = JSON.parse(String(init?.body)) as { id?: number }
+    return body.id === undefined ? jsonResponse(200, { urls: [] }) : jsonResponse(200, {
+      jsonrpc: '2.0', id: body.id, result: { structuredContent: { ok: true } },
+    })
+  }
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', '--base-url', 'https://branch.example.com/', 'map', 'https://example.com', '--json',
+    ])
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', '--base-url', 'https://branch.example.com/', 'tools', 'call', 'list-vaults', '--json',
+    ])
+  } finally { capture.restore() }
+  assert.deepEqual(capturedUrls, ['https://branch.example.com/map-urls', 'https://branch.example.com/mcp'])
+})
+
+test('--base-url rejects URL credentials without sending a request or echoing their values', async () => {
+  let requestCount = 0
+  const fetchImpl = async () => { requestCount++; return jsonResponse(200, {}) }
+  const capture = captureLogs()
+  const originalExitCode = process.exitCode
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', '--base-url', 'https://example-user:example-password@branch.example.com',
+      'map', 'https://example.com', '--json',
+    ])
+  } finally {
+    capture.restore()
+    process.exitCode = originalExitCode
+  }
+  assert.equal(requestCount, 0)
+  assert.ok(capture.errors.some(error => error.includes('without credentials')))
+  assert.equal(capture.errors.join('').includes('example-password'), false)
+})
+
+test('all retained-file tools dispatch through the generic CLI without acquisition', async () => {
+  const calls: Array<{ method: string; params: { name: string; arguments: unknown } }> = []
+  const fetchImpl = async (_url: string | URL, init?: RequestInit) => {
+    const body = JSON.parse(String(init?.body)) as { id: number; method: string; params: { name: string; arguments: unknown } }
+    calls.push(body)
+    return jsonResponse(200, {
+      jsonrpc: '2.0', id: body.id,
+      result: { structuredContent: { artifactId: 'artifact_123', tool: body.params.name } },
+    })
+  }
+  const capture = captureLogs()
+  try {
+    for (const name of ['artifact_read', 'artifact_describe', 'artifact_download']) {
+      await createProgram(fetchImpl as typeof fetch).parseAsync([
+        'node', 'mcpscraper', '--api-key', 'sk_test', 'tools', 'call', name, '--args', '{"artifactId":"artifact_123"}', '--json',
+      ])
+    }
+  } finally { capture.restore() }
+  assert.equal(calls.length, 3)
+  assert.deepEqual(calls.map(call => call.params.name), ['artifact_read', 'artifact_describe', 'artifact_download'])
+  for (const call of calls) {
+    assert.equal(call.method, 'tools/call')
+    assert.deepEqual(call.params.arguments, { artifactId: 'artifact_123' })
+  }
+})
+
+test('invalid declared attribution fails before sending a request', async () => {
+  let requestCount = 0
+  const fetchImpl = async () => { requestCount++; return jsonResponse(200, {}) }
+  const command = createProgram(fetchImpl as typeof fetch).exitOverride().configureOutput({ writeErr: () => {} })
+  await assert.rejects(command.parseAsync([
+    'node', 'mcpscraper', '--api-key', 'sk_test', '--install-channel', 'guessed', 'map', 'https://example.com',
+  ]), /Allowed choices/)
+  const originalExitCode = process.exitCode
+  const capture = captureLogs()
+  try {
+    await createProgram(fetchImpl as typeof fetch).parseAsync([
+      'node', 'mcpscraper', '--api-key', 'sk_test', '--ai-model', 'model with spaces', 'map', 'https://example.com',
+    ])
+  } finally {
+    capture.restore()
+    process.exitCode = originalExitCode
+  }
+  assert.equal(requestCount, 0)
+  assert.ok(capture.errors.length > 0)
 })

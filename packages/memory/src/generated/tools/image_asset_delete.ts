@@ -15,14 +15,10 @@ export interface Input {
   confirmDelete: true;
 }
 
-export type Output =
-  | {
-      ok: true;
-      deleted: boolean;
-      assetId: string;
-    }
-  | {
-      ok: false;
-      code: string;
-      error: string;
-    };
+export interface Output {
+  ok: boolean;
+  deleted?: boolean;
+  assetId?: string;
+  code?: string;
+  error?: string;
+}
