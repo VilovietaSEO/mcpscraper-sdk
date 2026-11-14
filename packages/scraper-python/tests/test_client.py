@@ -638,6 +638,7 @@ def test_unified_tool_dispatches_through_mcp():
         "phaseTimings": None,
         "durationMs": None,
         "attemptCount": 1,
+        "linkResolution": None,
         "pagination": None,
         "serpCompleteness": None,
     }
