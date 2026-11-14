@@ -233,10 +233,10 @@ Use `bug_reporting` to prepare a redacted draft from observed calls and errors. 
 
 ## Consistent hosted MCP protocol
 
-This release targets MCP Scraper 0.103.10 with 352 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+This release targets MCP Scraper 0.105.0 with 364 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
 
 Publication management: list owned subdomains with `commons_list_publications`, select a name with `commons_get_publication`, and edit one article with `commons_update_editorial_article`. Publishing merges omitted articles by default; use `mode:replace` for a full replacement. Use the dedicated article or publication delete tool with its current revision and a stable retry key. See the [release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0).
 
 PAA job progress can include the optional `phase` and `observedAt` fields. They identify observed extraction work separately from worker renewal. Existing polling and request arguments remain compatible. See [the release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
 
-Pass `linkResolution: deferred` to Search or a People Also Ask harvest to receive results before wrapped Google links are resolved, then read the same job again for the destination URLs. See the [0.59.5 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.5) for the compatible package versions.
+Search Zillow listings and Amazon products, and read property, agent, product, review, offer, deal and seller details, through the new `zillow` and `amazon` tool groups. See the [0.60.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.60.0) for the compatible package versions.

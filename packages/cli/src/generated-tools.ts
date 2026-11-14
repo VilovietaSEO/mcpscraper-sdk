@@ -555,6 +555,469 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "amazon_bestsellers",
+    "category": "amazon",
+    "title": "Amazon Best Sellers",
+    "description": "Top-ranked products in an Amazon Best Sellers category URL: rank, title, price and rating. About 17 Credits (twice the upstream charge, at most 51); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of results to return (1-20, default 20).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Amazon Best Sellers category URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Best Sellers",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "amazon_deals",
+    "category": "amazon",
+    "title": "Amazon Deals",
+    "description": "Today's Amazon deals for one marketplace: ASIN, title, deal price, list price, discount and deal type. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "description": "Amazon marketplace to read, as its domain; omit it for amazon.com.",
+          "type": "string",
+          "enum": [
+            "amazon.com",
+            "amazon.co.uk",
+            "amazon.de",
+            "amazon.fr",
+            "amazon.it",
+            "amazon.es",
+            "amazon.nl",
+            "amazon.se",
+            "amazon.pl",
+            "amazon.ca",
+            "amazon.com.mx",
+            "amazon.com.br",
+            "amazon.co.jp",
+            "amazon.in",
+            "amazon.com.au",
+            "amazon.sg",
+            "amazon.ae",
+            "amazon.sa",
+            "amazon.com.tr",
+            "amazon.eg"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Deals",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "amazon_offers",
+    "category": "amazon",
+    "title": "Amazon Product Offers",
+    "description": "Every seller offer for one Amazon product, Buy Box first: price, condition, seller, seller rating, Prime and delivery. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "description": "1-based page of the other sellers' offers, about 10 a page; page 1 also carries the Buy Box.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "product": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Amazon product ASIN or a product link on one of the marketplaces listed under region, such as."
+        },
+        "region": {
+          "description": "Amazon marketplace the product ASIN belongs to; a product URL sets it from its own domain.",
+          "type": "string",
+          "enum": [
+            "amazon.com",
+            "amazon.co.uk",
+            "amazon.de",
+            "amazon.fr",
+            "amazon.it",
+            "amazon.es",
+            "amazon.nl",
+            "amazon.se",
+            "amazon.pl",
+            "amazon.ca",
+            "amazon.com.mx",
+            "amazon.com.br",
+            "amazon.co.jp",
+            "amazon.in",
+            "amazon.com.au",
+            "amazon.sg",
+            "amazon.ae",
+            "amazon.sa",
+            "amazon.com.tr",
+            "amazon.eg"
+          ]
+        }
+      },
+      "required": [
+        "product"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Product Offers",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "amazon_product",
+    "category": "amazon",
+    "title": "Amazon Product Details",
+    "description": "Full details for one Amazon product by URL: title, brand, price, images, ratings, variants and attributes. About 15 Credits (twice the upstream charge, at most 44); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full Amazon product URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Product Details",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "amazon_products_by_asin",
+    "category": "amazon",
+    "title": "Amazon Products by ASIN",
+    "description": "Details for up to 10 Amazon products by ASIN in one call: title, brand, price, ratings, images and attributes. About 53 Credits per product (twice the upstream charge, at most 792); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "amazonDomain": {
+          "description": "Amazon marketplace domain to fetch products from.",
+          "type": "string",
+          "minLength": 1
+        },
+        "asins": {
+          "minItems": 1,
+          "maxItems": 10,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Up to 10 Amazon ASINs to look up."
+        },
+        "limit": {
+          "description": "Maximum number of products to return (1-10); fewer costs less.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "asins"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Products by ASIN",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "amazon_reviews",
+    "category": "amazon",
+    "title": "Amazon Product Reviews",
+    "description": "Customer reviews for an Amazon product by ASIN or URL: rating, title, text, date and verified-purchase flag. About 256 Credits (twice the upstream charge, at most 384); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "endDate": {
+          "description": "Only return reviews on or before this date, inclusive, in YYYY-MM-DD format.",
+          "type": "string",
+          "minLength": 1
+        },
+        "keyword": {
+          "description": "Only return reviews whose title or text contains this keyword, case-insensitively.",
+          "type": "string",
+          "minLength": 1
+        },
+        "limit": {
+          "description": "Maximum number of results to return (1-50, default 50).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "product": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Amazon product ASIN or a product link on one of the marketplaces listed under region, such as."
+        },
+        "ratings": {
+          "description": "Only return reviews whose star rating is in this set; omit for all ratings.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        },
+        "region": {
+          "description": "Amazon marketplace domain the product ASIN belongs to.",
+          "type": "string",
+          "enum": [
+            "amazon.com",
+            "amazon.ca",
+            "amazon.de",
+            "amazon.fr",
+            "amazon.co.uk",
+            "amazon.it",
+            "amazon.es",
+            "amazon.com.au",
+            "amazon.co.jp",
+            "amazon.com.br",
+            "amazon.com.mx",
+            "amazon.nl",
+            "amazon.ie",
+            "amazon.se",
+            "amazon.com.tr",
+            "amazon.ae",
+            "amazon.sg",
+            "amazon.sa",
+            "amazon.pl",
+            "amazon.com.be",
+            "amazon.eg",
+            "amazon.in"
+          ]
+        },
+        "sort": {
+          "description": "Review sort order: most helpful first or most recent first.",
+          "type": "string",
+          "enum": [
+            "helpful",
+            "recent"
+          ]
+        },
+        "startDate": {
+          "description": "Only return reviews on or after this date, inclusive, in YYYY-MM-DD format.",
+          "type": "string",
+          "minLength": 1
+        },
+        "verifiedOnly": {
+          "description": "Set true to return only verified-purchase reviews.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "product"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Product Reviews",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "amazon_search",
+    "category": "amazon",
+    "title": "Amazon Product Search",
+    "description": "Products from an Amazon search or category URL, up to 20: title, price, rating and thumbnail. About 12 Credits (twice the upstream charge, at most 36); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of results to return (1-20, default 20).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Amazon search or category URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Product Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "amazon_seller",
+    "category": "amazon",
+    "title": "Amazon Seller Profile",
+    "description": "One Amazon seller by seller ID: name, rating, positive feedback share, feedback counts and business details. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "description": "Amazon marketplace to read, as its domain; omit it for amazon.com.",
+          "type": "string",
+          "enum": [
+            "amazon.com",
+            "amazon.co.uk",
+            "amazon.de",
+            "amazon.fr",
+            "amazon.it",
+            "amazon.es",
+            "amazon.nl",
+            "amazon.se",
+            "amazon.pl",
+            "amazon.ca",
+            "amazon.com.mx",
+            "amazon.com.br",
+            "amazon.co.jp",
+            "amazon.in",
+            "amazon.com.au",
+            "amazon.sg",
+            "amazon.ae",
+            "amazon.sa",
+            "amazon.com.tr",
+            "amazon.eg"
+          ]
+        },
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Amazon seller ID, the value after seller= in a seller page URL."
+        }
+      },
+      "required": [
+        "sellerId"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Seller Profile",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "amazon_seller_products",
+    "category": "amazon",
+    "title": "Amazon Seller Storefront",
+    "description": "One page of an Amazon seller's storefront by seller ID: ASIN, title, price, rating and badges. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "description": "1-based page of the seller's storefront.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "region": {
+          "description": "Amazon marketplace to read, as its domain; omit it for amazon.com.",
+          "type": "string",
+          "enum": [
+            "amazon.com",
+            "amazon.co.uk",
+            "amazon.de",
+            "amazon.fr",
+            "amazon.it",
+            "amazon.es",
+            "amazon.nl",
+            "amazon.se",
+            "amazon.pl",
+            "amazon.ca",
+            "amazon.com.mx",
+            "amazon.com.br",
+            "amazon.co.jp",
+            "amazon.in",
+            "amazon.com.au",
+            "amazon.sg",
+            "amazon.ae",
+            "amazon.sa",
+            "amazon.com.tr",
+            "amazon.eg"
+          ]
+        },
+        "sellerId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Amazon seller ID, the value after seller= in a seller page URL."
+        }
+      },
+      "required": [
+        "sellerId"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Amazon Seller Storefront",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "analytics_apply_site_setup",
     "category": "analytics",
     "title": "Apply X-Ray Site Setup",
@@ -28809,6 +29272,218 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "YouTube Transcription",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "zillow_agent",
+    "category": "zillow",
+    "title": "Zillow Agent Profile",
+    "description": "One Zillow agent profile by URL: name, phone, email, brokerage, rating, review count, sales and service areas. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Zillow agent profile URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Zillow Agent Profile",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "zillow_property",
+    "category": "zillow",
+    "title": "Zillow Property Details",
+    "description": "Full details for one Zillow listing by URL: price, facts and features, photos, and price and tax history. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Zillow property details URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Zillow Property Details",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "zillow_search",
+    "category": "zillow",
+    "title": "Zillow Listing Search",
+    "description": "Search Zillow listings for sale, for rent or sold in a city, ZIP, county or neighborhood, with price, bedroom, size, home-type and recency filters. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "daysOnZillow": {
+          "description": "Only include listings on Zillow at most this long.",
+          "type": "string",
+          "enum": [
+            "1_day",
+            "1_week",
+            "2_weeks",
+            "1_month",
+            "3_months",
+            "6_months",
+            "12_months",
+            "24_months",
+            "36_months"
+          ]
+        },
+        "homeTypes": {
+          "description": "Filter by property type; omit for any.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "singleFamily",
+              "multiFamily",
+              "townhome",
+              "condo",
+              "apartment",
+              "manufactured",
+              "land"
+            ]
+          }
+        },
+        "includeAcceptingBackupOffers": {
+          "description": "Include listings accepting backup offers, which Zillow excludes by default.",
+          "type": "boolean"
+        },
+        "includePendingAndUnderContract": {
+          "description": "Include pending and under-contract listings, which Zillow excludes by default.",
+          "type": "boolean"
+        },
+        "includeRoomForRent": {
+          "description": "Include room-for-rent listings in rent searches; when omitted or false only entire places are returned.",
+          "type": "boolean"
+        },
+        "limit": {
+          "description": "Maximum number of results to return (1-25, default 25).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 25
+        },
+        "listingTypes": {
+          "description": "Listing types to include for buy searches; omit for all standard types. fsba = agent listed, fsbo = for sale by owner.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "fsba",
+              "fsbo",
+              "newConstruction",
+              "comingSoon",
+              "auction",
+              "foreclosure",
+              "foreclosed",
+              "preforeclosure"
+            ]
+          }
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Region-level location to search: ZIP code, city and state, county, or neighborhood."
+        },
+        "maxBedrooms": {
+          "description": "Maximum number of bedrooms.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxLivingAreaSqft": {
+          "description": "Maximum living area in square feet.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "maxPrice": {
+          "description": "Maximum price in USD: monthly rent for rentals, total price for buy/sold.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "minBedrooms": {
+          "description": "Minimum number of bedrooms.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "minLivingAreaSqft": {
+          "description": "Minimum living area in square feet.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "minPrice": {
+          "description": "Minimum price in USD: monthly rent for rentals, total price for buy/sold.",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "operation": {
+          "description": "Listing type: buy (for sale), rent, or sold.",
+          "type": "string",
+          "enum": [
+            "buy",
+            "rent",
+            "sold"
+          ]
+        },
+        "showOnlyPriceReductions": {
+          "description": "Only show listings with a price reduction.",
+          "type": "boolean"
+        },
+        "sortBy": {
+          "description": "Sort order for results; omit for Zillow's default relevance. rentalPriorityScore applies to rent searches only.",
+          "type": "string",
+          "enum": [
+            "newest",
+            "recentlyChanged",
+            "price_high",
+            "price_low",
+            "bedrooms",
+            "bathrooms",
+            "rentalPriorityScore"
+          ]
+        }
+      },
+      "required": [
+        "location"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Zillow Listing Search",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": false,
