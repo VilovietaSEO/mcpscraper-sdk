@@ -1,4 +1,4 @@
-# All 352 MCP tools with cURL
+# All 364 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -92,7 +92,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (352)
+## Complete catalog (364)
 
 ## access
 
@@ -128,6 +128,18 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `list-vaults` — List Vaults
 - `provision-defaults` — Provision Default Vaults
 - `route-memory` — Route Memory
+
+## amazon
+
+- `amazon_bestsellers` — Amazon Best Sellers
+- `amazon_deals` — Amazon Deals
+- `amazon_offers` — Amazon Product Offers
+- `amazon_product` — Amazon Product Details
+- `amazon_products_by_asin` — Amazon Products by ASIN
+- `amazon_reviews` — Amazon Product Reviews
+- `amazon_search` — Amazon Product Search
+- `amazon_seller` — Amazon Seller Profile
+- `amazon_seller_products` — Amazon Seller Storefront
 
 ## analytics
 
@@ -565,3 +577,9 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 - `youtube_harvest` — YouTube Video Harvest
 - `youtube_transcribe` — YouTube Transcription
+
+## zillow
+
+- `zillow_agent` — Zillow Agent Profile
+- `zillow_property` — Zillow Property Details
+- `zillow_search` — Zillow Listing Search

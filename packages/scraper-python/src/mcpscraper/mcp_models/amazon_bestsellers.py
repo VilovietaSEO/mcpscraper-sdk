@@ -1,0 +1,101 @@
+from typing import Annotated, Any, Literal, Union
+from typing_extensions import NotRequired, Required, TypedDict
+from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
+
+
+class AmazonBestsellersInput(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
+
+    limit: Union[Annotated[int, Field(ge=1, le=20)], None] = Field(None, alias='limit', description='Maximum number of results to return (1-20, default 20).')
+    url: Annotated[str, Field(min_length=1)] = Field(..., alias='url', description='Amazon Best Sellers category URL.')
+
+
+class AmazonBestsellersOutputVariant1(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    tool: str = Field(..., alias='tool', description='The tool that produced this result.')
+    count: Annotated[int, Field(ge=-9007199254740991, le=9007199254740991)] = Field(..., alias='count', description='Number of records returned.')
+    items: list[dict[str, Any]] = Field(..., alias='items', description='Returned records. A lookup of one thing returns a single record.')
+    charged_credits: Union[float, int] = Field(..., alias='chargedCredits', description='Credits charged for this call.')
+    duration_ms: Union[Union[float, int], None] = Field(..., alias='durationMs', description='Time taken in milliseconds.')
+
+
+AmazonBestsellersOutputVariant2DeliveryArtifactsItem = TypedDict('AmazonBestsellersOutputVariant2DeliveryArtifactsItem', {
+    'artifactId': Required[str],
+    'filename': Required[str],
+    'contentType': Required[str],
+    'bytes': Required[Union[float, int]],
+    'sha256': Required[str],
+    'expiresAt': Required[str],
+    'capabilities': Required[list[str]],
+    'downloadUrl': Required[Union[str, None]],
+    'downloadUrlExpiresAt': Required[Union[str, None]],
+    'downloadState': Required[Literal['available', 'local', 'unavailable']],
+})
+AmazonBestsellersOutputVariant2DeliveryArtifactsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+AmazonBestsellersOutputVariant2DeliveryAvailableExportsItem = TypedDict('AmazonBestsellersOutputVariant2DeliveryAvailableExportsItem', {
+    'artifactId': Required[str],
+    'sourceArtifactId': Required[str],
+    'filename': Required[Literal['result.md']],
+    'contentType': Required[Literal['text/markdown; charset=utf-8']],
+    'state': Required[Literal['on-demand']],
+})
+AmazonBestsellersOutputVariant2DeliveryAvailableExportsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+AmazonBestsellersOutputVariant2DeliveryStorageFailureVariant1 = TypedDict('AmazonBestsellersOutputVariant2DeliveryStorageFailureVariant1', {
+    'artifactId': Required[Union[str, None]],
+    'outcome': Required[Literal['unknown', 'bytes-stored-metadata-pending', 'failed']],
+})
+AmazonBestsellersOutputVariant2DeliveryStorageFailureVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+AmazonBestsellersOutputVariant2Delivery = TypedDict('AmazonBestsellersOutputVariant2Delivery', {
+    'mode': Required[Literal['artifact']],
+    'status': Required[Literal['complete', 'partial', 'unavailable']],
+    'retainedRepresentation': Required[Literal['formatted-tool-result']],
+    'sourceIsError': Required[bool],
+    'artifacts': Required[list[AmazonBestsellersOutputVariant2DeliveryArtifactsItem]],
+    'availableExports': NotRequired[list[AmazonBestsellersOutputVariant2DeliveryAvailableExportsItem]],
+    'downloadLinksOmitted': Required[bool],
+    'scopeOmittedFields': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'storageFailure': Required[Union[AmazonBestsellersOutputVariant2DeliveryStorageFailureVariant1, None]],
+    'nextAction': Required[str],
+})
+AmazonBestsellersOutputVariant2Delivery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+AmazonBestsellersOutputVariant2RecoveryOperation = TypedDict('AmazonBestsellersOutputVariant2RecoveryOperation', {
+    'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
+    'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
+    'state': Required[Annotated[str, Field(max_length=100)]],
+})
+AmazonBestsellersOutputVariant2RecoveryOperation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+AmazonBestsellersOutputVariant2Recovery = TypedDict('AmazonBestsellersOutputVariant2Recovery', {
+    'idempotencyKey': NotRequired[Annotated[str, Field(max_length=512)]],
+    'operationId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'runId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'jobId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'operation': NotRequired[AmazonBestsellersOutputVariant2RecoveryOperation],
+})
+AmazonBestsellersOutputVariant2Recovery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+class AmazonBestsellersOutputVariant2(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
+
+    delivery: AmazonBestsellersOutputVariant2Delivery = Field(..., alias='delivery', description='')
+    preview: str = Field(..., alias='preview', description='')
+    scope: dict[str, Union[str, Union[float, int], bool, None]] = Field(..., alias='scope', description='')
+    recovery: AmazonBestsellersOutputVariant2Recovery = Field(..., alias='recovery', description='')
+
+
+# Union schema: validate external payloads with TypeAdapter(AmazonBestsellersOutput).
+AmazonBestsellersOutput = Union[AmazonBestsellersOutputVariant1, AmazonBestsellersOutputVariant2]
+
+_AmazonBestsellersInputAdapter = TypeAdapter(AmazonBestsellersInput)
+_AmazonBestsellersOutputAdapter = TypeAdapter(AmazonBestsellersOutput)

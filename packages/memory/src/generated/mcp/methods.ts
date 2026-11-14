@@ -29,6 +29,15 @@ import * as VaultsListSharedWithMe from './tools/list-shared-with-me.js'
 import * as VaultsListVaults from './tools/list-vaults.js'
 import * as VaultsProvisionDefaults from './tools/provision-defaults.js'
 import * as VaultsRouteMemory from './tools/route-memory.js'
+import * as AmazonBestsellers from './tools/amazon_bestsellers.js'
+import * as AmazonDeals from './tools/amazon_deals.js'
+import * as AmazonOffers from './tools/amazon_offers.js'
+import * as AmazonProduct from './tools/amazon_product.js'
+import * as AmazonProductsByAsin from './tools/amazon_products_by_asin.js'
+import * as AmazonReviews from './tools/amazon_reviews.js'
+import * as AmazonSearch from './tools/amazon_search.js'
+import * as AmazonSeller from './tools/amazon_seller.js'
+import * as AmazonSellerProducts from './tools/amazon_seller_products.js'
 import * as AnalyticsApplySiteSetup from './tools/analytics_apply_site_setup.js'
 import * as AnalyticsArchiveEventDefinition from './tools/analytics_archive_event_definition.js'
 import * as AnalyticsCommitCrmImport from './tools/analytics_commit_crm_import.js'
@@ -352,6 +361,9 @@ import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
 import * as VideoAnalyzeStatus from './tools/video-analyze-status.js'
 import * as YoutubeHarvest from './tools/youtube_harvest.js'
 import * as YoutubeTranscribe from './tools/youtube_transcribe.js'
+import * as ZillowAgent from './tools/zillow_agent.js'
+import * as ZillowProperty from './tools/zillow_property.js'
+import * as ZillowSearch from './tools/zillow_search.js'
 
 export const MCP_TOOL_BINDINGS = [
   {
@@ -438,6 +450,51 @@ export const MCP_TOOL_BINDINGS = [
     "name": "add-vault",
     "category": "vaults",
     "methodName": "addVault"
+  },
+  {
+    "name": "amazon_bestsellers",
+    "category": "amazon",
+    "methodName": "bestsellers"
+  },
+  {
+    "name": "amazon_deals",
+    "category": "amazon",
+    "methodName": "deals"
+  },
+  {
+    "name": "amazon_offers",
+    "category": "amazon",
+    "methodName": "offers"
+  },
+  {
+    "name": "amazon_product",
+    "category": "amazon",
+    "methodName": "product"
+  },
+  {
+    "name": "amazon_products_by_asin",
+    "category": "amazon",
+    "methodName": "productsByAsin"
+  },
+  {
+    "name": "amazon_reviews",
+    "category": "amazon",
+    "methodName": "reviews"
+  },
+  {
+    "name": "amazon_search",
+    "category": "amazon",
+    "methodName": "search"
+  },
+  {
+    "name": "amazon_seller",
+    "category": "amazon",
+    "methodName": "seller"
+  },
+  {
+    "name": "amazon_seller_products",
+    "category": "amazon",
+    "methodName": "sellerProducts"
   },
   {
     "name": "analytics_apply_site_setup",
@@ -2110,6 +2167,21 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "transcribe"
   },
   {
+    "name": "zillow_agent",
+    "category": "zillow",
+    "methodName": "agent"
+  },
+  {
+    "name": "zillow_property",
+    "category": "zillow",
+    "methodName": "property"
+  },
+  {
+    "name": "zillow_search",
+    "category": "zillow",
+    "methodName": "search"
+  },
+  {
     "name": "zoom_create_meeting",
     "category": "connections",
     "methodName": "zoomCreateMeeting"
@@ -2238,6 +2310,46 @@ export class VaultsNamespace {
 
   async routeMemory(input: VaultsRouteMemory.Input): Promise<VaultsRouteMemory.Output> {
     return this.callTool('route-memory', input) as Promise<VaultsRouteMemory.Output>
+  }
+}
+
+export class AmazonNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async bestsellers(input: AmazonBestsellers.Input): Promise<AmazonBestsellers.Output> {
+    return this.callTool('amazon_bestsellers', input) as Promise<AmazonBestsellers.Output>
+  }
+
+  async deals(input: AmazonDeals.Input = {} as AmazonDeals.Input): Promise<AmazonDeals.Output> {
+    return this.callTool('amazon_deals', input) as Promise<AmazonDeals.Output>
+  }
+
+  async offers(input: AmazonOffers.Input): Promise<AmazonOffers.Output> {
+    return this.callTool('amazon_offers', input) as Promise<AmazonOffers.Output>
+  }
+
+  async product(input: AmazonProduct.Input): Promise<AmazonProduct.Output> {
+    return this.callTool('amazon_product', input) as Promise<AmazonProduct.Output>
+  }
+
+  async productsByAsin(input: AmazonProductsByAsin.Input): Promise<AmazonProductsByAsin.Output> {
+    return this.callTool('amazon_products_by_asin', input) as Promise<AmazonProductsByAsin.Output>
+  }
+
+  async reviews(input: AmazonReviews.Input): Promise<AmazonReviews.Output> {
+    return this.callTool('amazon_reviews', input) as Promise<AmazonReviews.Output>
+  }
+
+  async search(input: AmazonSearch.Input): Promise<AmazonSearch.Output> {
+    return this.callTool('amazon_search', input) as Promise<AmazonSearch.Output>
+  }
+
+  async seller(input: AmazonSeller.Input): Promise<AmazonSeller.Output> {
+    return this.callTool('amazon_seller', input) as Promise<AmazonSeller.Output>
+  }
+
+  async sellerProducts(input: AmazonSellerProducts.Input): Promise<AmazonSellerProducts.Output> {
+    return this.callTool('amazon_seller_products', input) as Promise<AmazonSellerProducts.Output>
   }
 }
 
@@ -3685,9 +3797,26 @@ export class YoutubeNamespace {
   }
 }
 
+export class ZillowNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async agent(input: ZillowAgent.Input): Promise<ZillowAgent.Output> {
+    return this.callTool('zillow_agent', input) as Promise<ZillowAgent.Output>
+  }
+
+  async property(input: ZillowProperty.Input): Promise<ZillowProperty.Output> {
+    return this.callTool('zillow_property', input) as Promise<ZillowProperty.Output>
+  }
+
+  async search(input: ZillowSearch.Input): Promise<ZillowSearch.Output> {
+    return this.callTool('zillow_search', input) as Promise<ZillowSearch.Output>
+  }
+}
+
 export class GeneratedMcpToolsClient {
   readonly access: AccessNamespace
   readonly vaults: VaultsNamespace
+  readonly amazon: AmazonNamespace
   readonly analytics: AnalyticsNamespace
   readonly web: WebNamespace
   readonly artifacts: ArtifactsNamespace
@@ -3726,10 +3855,12 @@ export class GeneratedMcpToolsClient {
   readonly recall: RecallNamespace
   readonly video: VideoNamespace
   readonly youtube: YoutubeNamespace
+  readonly zillow: ZillowNamespace
 
   constructor(callTool: McpToolCallFn) {
     this.access = new AccessNamespace(callTool)
     this.vaults = new VaultsNamespace(callTool)
+    this.amazon = new AmazonNamespace(callTool)
     this.analytics = new AnalyticsNamespace(callTool)
     this.web = new WebNamespace(callTool)
     this.artifacts = new ArtifactsNamespace(callTool)
@@ -3768,5 +3899,6 @@ export class GeneratedMcpToolsClient {
     this.recall = new RecallNamespace(callTool)
     this.video = new VideoNamespace(callTool)
     this.youtube = new YoutubeNamespace(callTool)
+    this.zillow = new ZillowNamespace(callTool)
   }
 }

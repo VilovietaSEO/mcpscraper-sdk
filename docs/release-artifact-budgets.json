@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "basis": "Exact latest public registry artifacts, with 15 percent plus small metadata allowance for three new tools and refreshed schemas; Python permits three new tool model files.",
+    "basis": "Exact latest public registry artifacts, with 15 percent plus small metadata allowance for three new tools and refreshed schemas; Python permits three new tool model files. For 0.60.0 the Python file-count ceilings rose by twelve, one generated model file for each of the twelve Zillow and Amazon tools; byte ceilings are unchanged.",
     "source": "Official registry archives downloaded 2026-11-03",
     "failClosed": true
   },
@@ -69,7 +69,7 @@
       "maximum": {
         "compressedBytes": 843812,
         "unpackedBytes": 3925495,
-        "fileCount": 363,
+        "fileCount": 375,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -86,7 +86,7 @@
       "maximum": {
         "compressedBytes": 339705,
         "unpackedBytes": 3899477,
-        "fileCount": 363,
+        "fileCount": 375,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -120,7 +120,7 @@
       "maximum": {
         "compressedBytes": 1040355,
         "unpackedBytes": 4315002,
-        "fileCount": 590,
+        "fileCount": 602,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -137,7 +137,7 @@
       "maximum": {
         "compressedBytes": 378482,
         "unpackedBytes": 4251428,
-        "fileCount": 590,
+        "fileCount": 602,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }

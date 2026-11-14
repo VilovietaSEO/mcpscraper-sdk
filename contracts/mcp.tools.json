@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.104.1 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "4f6fcd9ac324c620863fbb25a87537397b7cc9ac69f08ac3641fa5dbb45a003e",
-  "toolCount": 352,
+  "generatedFrom": "mcp-scraper 0.105.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "126968779a5eab85c85910128cc43f540b5cb081f27a3ab04f4211956add1060",
+  "toolCount": 364,
   "tools": [
     {
       "name": "access-accept-share",
@@ -6086,6 +6086,3493 @@
         "destructiveHint": false,
         "idempotentHint": true,
         "openWorldHint": false
+      }
+    },
+    {
+      "name": "amazon_bestsellers",
+      "title": "Amazon Best Sellers",
+      "description": "Top-ranked products in an Amazon Best Sellers category URL: rank, title, price and rating. About 17 Credits (twice the upstream charge, at most 51); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "bestsellers",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Maximum number of results to return (1-20, default 20).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Amazon Best Sellers category URL."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Best Sellers",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "amazon_deals",
+      "title": "Amazon Deals",
+      "description": "Today's Amazon deals for one marketplace: ASIN, title, deal price, list price, discount and deal type. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "deals",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "description": "Amazon marketplace to read, as its domain; omit it for amazon.com.",
+            "type": "string",
+            "enum": [
+              "amazon.com",
+              "amazon.co.uk",
+              "amazon.de",
+              "amazon.fr",
+              "amazon.it",
+              "amazon.es",
+              "amazon.nl",
+              "amazon.se",
+              "amazon.pl",
+              "amazon.ca",
+              "amazon.com.mx",
+              "amazon.com.br",
+              "amazon.co.jp",
+              "amazon.in",
+              "amazon.com.au",
+              "amazon.sg",
+              "amazon.ae",
+              "amazon.sa",
+              "amazon.com.tr",
+              "amazon.eg"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Deals",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "amazon_offers",
+      "title": "Amazon Product Offers",
+      "description": "Every seller offer for one Amazon product, Buy Box first: price, condition, seller, seller rating, Prime and delivery. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "offers",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "description": "1-based page of the other sellers' offers, about 10 a page; page 1 also carries the Buy Box.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "product": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Amazon product ASIN or a product link on one of the marketplaces listed under region, such as."
+          },
+          "region": {
+            "description": "Amazon marketplace the product ASIN belongs to; a product URL sets it from its own domain.",
+            "type": "string",
+            "enum": [
+              "amazon.com",
+              "amazon.co.uk",
+              "amazon.de",
+              "amazon.fr",
+              "amazon.it",
+              "amazon.es",
+              "amazon.nl",
+              "amazon.se",
+              "amazon.pl",
+              "amazon.ca",
+              "amazon.com.mx",
+              "amazon.com.br",
+              "amazon.co.jp",
+              "amazon.in",
+              "amazon.com.au",
+              "amazon.sg",
+              "amazon.ae",
+              "amazon.sa",
+              "amazon.com.tr",
+              "amazon.eg"
+            ]
+          }
+        },
+        "required": [
+          "product"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Product Offers",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "amazon_product",
+      "title": "Amazon Product Details",
+      "description": "Full details for one Amazon product by URL: title, brand, price, images, ratings, variants and attributes. About 15 Credits (twice the upstream charge, at most 44); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "product",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Full Amazon product URL."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Product Details",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "amazon_products_by_asin",
+      "title": "Amazon Products by ASIN",
+      "description": "Details for up to 10 Amazon products by ASIN in one call: title, brand, price, ratings, images and attributes. About 53 Credits per product (twice the upstream charge, at most 792); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "productsByAsin",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "amazonDomain": {
+            "description": "Amazon marketplace domain to fetch products from.",
+            "type": "string",
+            "minLength": 1
+          },
+          "asins": {
+            "minItems": 1,
+            "maxItems": 10,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Up to 10 Amazon ASINs to look up."
+          },
+          "limit": {
+            "description": "Maximum number of products to return (1-10); fewer costs less.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          }
+        },
+        "required": [
+          "asins"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Products by ASIN",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "amazon_reviews",
+      "title": "Amazon Product Reviews",
+      "description": "Customer reviews for an Amazon product by ASIN or URL: rating, title, text, date and verified-purchase flag. About 256 Credits (twice the upstream charge, at most 384); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "reviews",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "endDate": {
+            "description": "Only return reviews on or before this date, inclusive, in YYYY-MM-DD format.",
+            "type": "string",
+            "minLength": 1
+          },
+          "keyword": {
+            "description": "Only return reviews whose title or text contains this keyword, case-insensitively.",
+            "type": "string",
+            "minLength": 1
+          },
+          "limit": {
+            "description": "Maximum number of results to return (1-50, default 50).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "product": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Amazon product ASIN or a product link on one of the marketplaces listed under region, such as."
+          },
+          "ratings": {
+            "description": "Only return reviews whose star rating is in this set; omit for all ratings.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+              ]
+            }
+          },
+          "region": {
+            "description": "Amazon marketplace domain the product ASIN belongs to.",
+            "type": "string",
+            "enum": [
+              "amazon.com",
+              "amazon.ca",
+              "amazon.de",
+              "amazon.fr",
+              "amazon.co.uk",
+              "amazon.it",
+              "amazon.es",
+              "amazon.com.au",
+              "amazon.co.jp",
+              "amazon.com.br",
+              "amazon.com.mx",
+              "amazon.nl",
+              "amazon.ie",
+              "amazon.se",
+              "amazon.com.tr",
+              "amazon.ae",
+              "amazon.sg",
+              "amazon.sa",
+              "amazon.pl",
+              "amazon.com.be",
+              "amazon.eg",
+              "amazon.in"
+            ]
+          },
+          "sort": {
+            "description": "Review sort order: most helpful first or most recent first.",
+            "type": "string",
+            "enum": [
+              "helpful",
+              "recent"
+            ]
+          },
+          "startDate": {
+            "description": "Only return reviews on or after this date, inclusive, in YYYY-MM-DD format.",
+            "type": "string",
+            "minLength": 1
+          },
+          "verifiedOnly": {
+            "description": "Set true to return only verified-purchase reviews.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "product"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Product Reviews",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "amazon_search",
+      "title": "Amazon Product Search",
+      "description": "Products from an Amazon search or category URL, up to 20: title, price, rating and thumbnail. About 12 Credits (twice the upstream charge, at most 36); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "search",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "description": "Maximum number of results to return (1-20, default 20).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Amazon search or category URL."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Product Search",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "amazon_seller",
+      "title": "Amazon Seller Profile",
+      "description": "One Amazon seller by seller ID: name, rating, positive feedback share, feedback counts and business details. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "seller",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "description": "Amazon marketplace to read, as its domain; omit it for amazon.com.",
+            "type": "string",
+            "enum": [
+              "amazon.com",
+              "amazon.co.uk",
+              "amazon.de",
+              "amazon.fr",
+              "amazon.it",
+              "amazon.es",
+              "amazon.nl",
+              "amazon.se",
+              "amazon.pl",
+              "amazon.ca",
+              "amazon.com.mx",
+              "amazon.com.br",
+              "amazon.co.jp",
+              "amazon.in",
+              "amazon.com.au",
+              "amazon.sg",
+              "amazon.ae",
+              "amazon.sa",
+              "amazon.com.tr",
+              "amazon.eg"
+            ]
+          },
+          "sellerId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Amazon seller ID, the value after seller= in a seller page URL."
+          }
+        },
+        "required": [
+          "sellerId"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Seller Profile",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "amazon_seller_products",
+      "title": "Amazon Seller Storefront",
+      "description": "One page of an Amazon seller's storefront by seller ID: ASIN, title, price, rating and badges. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+      "category": "amazon",
+      "methodName": "sellerProducts",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "description": "1-based page of the seller's storefront.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9007199254740991
+          },
+          "region": {
+            "description": "Amazon marketplace to read, as its domain; omit it for amazon.com.",
+            "type": "string",
+            "enum": [
+              "amazon.com",
+              "amazon.co.uk",
+              "amazon.de",
+              "amazon.fr",
+              "amazon.it",
+              "amazon.es",
+              "amazon.nl",
+              "amazon.se",
+              "amazon.pl",
+              "amazon.ca",
+              "amazon.com.mx",
+              "amazon.com.br",
+              "amazon.co.jp",
+              "amazon.in",
+              "amazon.com.au",
+              "amazon.sg",
+              "amazon.ae",
+              "amazon.sa",
+              "amazon.com.tr",
+              "amazon.eg"
+            ]
+          },
+          "sellerId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Amazon seller ID, the value after seller= in a seller page URL."
+          }
+        },
+        "required": [
+          "sellerId"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Amazon Seller Storefront",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
       }
     },
     {
@@ -192382,6 +195869,1226 @@
       "outputSchemaProvided": true,
       "annotations": {
         "title": "YouTube Transcription",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "zillow_agent",
+      "title": "Zillow Agent Profile",
+      "description": "One Zillow agent profile by URL: name, phone, email, brokerage, rating, review count, sales and service areas. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+      "category": "zillow",
+      "methodName": "agent",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Zillow agent profile URL."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Zillow Agent Profile",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "zillow_property",
+      "title": "Zillow Property Details",
+      "description": "Full details for one Zillow listing by URL: price, facts and features, photos, and price and tax history. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+      "category": "zillow",
+      "methodName": "property",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Zillow property details URL."
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Zillow Property Details",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": false,
+        "openWorldHint": true
+      }
+    },
+    {
+      "name": "zillow_search",
+      "title": "Zillow Listing Search",
+      "description": "Search Zillow listings for sale, for rent or sold in a city, ZIP, county or neighborhood, with price, bedroom, size, home-type and recency filters. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+      "category": "zillow",
+      "methodName": "search",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "daysOnZillow": {
+            "description": "Only include listings on Zillow at most this long.",
+            "type": "string",
+            "enum": [
+              "1_day",
+              "1_week",
+              "2_weeks",
+              "1_month",
+              "3_months",
+              "6_months",
+              "12_months",
+              "24_months",
+              "36_months"
+            ]
+          },
+          "homeTypes": {
+            "description": "Filter by property type; omit for any.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "singleFamily",
+                "multiFamily",
+                "townhome",
+                "condo",
+                "apartment",
+                "manufactured",
+                "land"
+              ]
+            }
+          },
+          "includeAcceptingBackupOffers": {
+            "description": "Include listings accepting backup offers, which Zillow excludes by default.",
+            "type": "boolean"
+          },
+          "includePendingAndUnderContract": {
+            "description": "Include pending and under-contract listings, which Zillow excludes by default.",
+            "type": "boolean"
+          },
+          "includeRoomForRent": {
+            "description": "Include room-for-rent listings in rent searches; when omitted or false only entire places are returned.",
+            "type": "boolean"
+          },
+          "limit": {
+            "description": "Maximum number of results to return (1-25, default 25).",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 25
+          },
+          "listingTypes": {
+            "description": "Listing types to include for buy searches; omit for all standard types. fsba = agent listed, fsbo = for sale by owner.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "fsba",
+                "fsbo",
+                "newConstruction",
+                "comingSoon",
+                "auction",
+                "foreclosure",
+                "foreclosed",
+                "preforeclosure"
+              ]
+            }
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Region-level location to search: ZIP code, city and state, county, or neighborhood."
+          },
+          "maxBedrooms": {
+            "description": "Maximum number of bedrooms.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "maxLivingAreaSqft": {
+            "description": "Maximum living area in square feet.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "maxPrice": {
+            "description": "Maximum price in USD: monthly rent for rentals, total price for buy/sold.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "minBedrooms": {
+            "description": "Minimum number of bedrooms.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "minLivingAreaSqft": {
+            "description": "Minimum living area in square feet.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "minPrice": {
+            "description": "Minimum price in USD: monthly rent for rentals, total price for buy/sold.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "operation": {
+            "description": "Listing type: buy (for sale), rent, or sold.",
+            "type": "string",
+            "enum": [
+              "buy",
+              "rent",
+              "sold"
+            ]
+          },
+          "showOnlyPriceReductions": {
+            "description": "Only show listings with a price reduction.",
+            "type": "boolean"
+          },
+          "sortBy": {
+            "description": "Sort order for results; omit for Zillow's default relevance. rentalPriorityScore applies to rent searches only.",
+            "type": "string",
+            "enum": [
+              "newest",
+              "recentlyChanged",
+              "price_high",
+              "price_low",
+              "bedrooms",
+              "bathrooms",
+              "rentalPriorityScore"
+            ]
+          }
+        },
+        "required": [
+          "location"
+        ],
+        "additionalProperties": false,
+        "$schema": "https://json-schema.org/draft/2020-12/schema"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "tool": {
+                "type": "string",
+                "description": "The tool that produced this result."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991,
+                "description": "Number of records returned."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                },
+                "description": "Returned records. A lookup of one thing returns a single record."
+              },
+              "chargedCredits": {
+                "type": "number",
+                "description": "Credits charged for this call."
+              },
+              "durationMs": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Time taken in milliseconds."
+              }
+            },
+            "required": [
+              "tool",
+              "count",
+              "items",
+              "chargedCredits",
+              "durationMs"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Zillow Listing Search",
         "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": false,
