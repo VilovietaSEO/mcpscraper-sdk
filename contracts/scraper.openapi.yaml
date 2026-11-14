@@ -102,11 +102,11 @@ paths:
         available same-page SERP features for 35 Credits per delivered page.
         Both modes default to one page; set `pages: 2` explicitly for two unfiltered
         organic pages without a backup provider. With `serpOnly: true`, `recency: week` or `month` returns
-        one page for 35 Credits. Combining recency with two pages is rejected
+        one page for 150 Credits. Combining recency with two pages is rejected
         before acquisition or billing.
         A 35-Credit-per-requested-page hold is settled after delivery.
         Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
-        (400 Credit base + 10 Credits per question actually returned; unused estimate is
+        (450 Credit base + 10 Credits per question actually returned; unused estimate is
         refunded). Runs synchronously and returns the result inline.
       requestBody:
         required: true
@@ -1475,7 +1475,7 @@ components:
         pages: { type: integer, minimum: 1, maximum: 2, default: 1, description: 'Google result pages to fetch. Full mode alone does not request page 2. For serpOnly searches, two pages require an omitted recency filter.' }
         mode: { type: string, enum: [light, full], default: light, description: 'For serpOnly searches: light returns organic results; full adds available same-page SERP features.' }
         serpOnly: { type: boolean, default: false, description: 'true = pure SERP call (search_serp); false = full PAA harvest.' }
-        recency: { type: string, enum: [day, week, month, year], description: 'Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 35 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results.' }
+        recency: { type: string, enum: [day, week, month, year], description: 'Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 150 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results.' }
         debug: { type: boolean, default: false }
 
     HarvestSyncResponse:

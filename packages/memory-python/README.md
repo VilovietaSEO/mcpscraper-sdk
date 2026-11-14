@@ -104,7 +104,7 @@ Use `bug_reporting` to prepare a redacted draft from observed calls and errors. 
 
 ## Consistent hosted MCP protocol
 
-This release targets MCP Scraper 0.106.1 with 459 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+This release targets MCP Scraper 0.107.0 with 459 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
 
 This unified client includes the Commons publication list and deletion tools and content-preserving article edits. See the [0.59.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0) for subdomain selection, revisions, and merge/replacement behavior.
 

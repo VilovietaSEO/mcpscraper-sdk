@@ -66,11 +66,11 @@ export interface paths {
          *     available same-page SERP features for 35 Credits per delivered page.
          *     Both modes default to one page; set `pages: 2` explicitly for two unfiltered
          *     organic pages without a backup provider. With `serpOnly: true`, `recency: week` or `month` returns
-         *     one page for 35 Credits. Combining recency with two pages is rejected
+         *     one page for 150 Credits. Combining recency with two pages is rejected
          *     before acquisition or billing.
          *     A 35-Credit-per-requested-page hold is settled after delivery.
          *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
-         *     (400 Credit base + 10 Credits per question actually returned; unused estimate is
+         *     (450 Credit base + 10 Credits per question actually returned; unused estimate is
          *     refunded). Runs synchronously and returns the result inline.
          */
         post: operations["harvestSync"];
@@ -1293,7 +1293,7 @@ export interface components {
              */
             serpOnly: boolean;
             /**
-             * @description Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 35 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results.
+             * @description Optional Google time filter. Ordinary search_serp accepts week or month for one page of organic results at 150 Credits; combining recency with pages 2 is rejected before acquisition or billing. PAA harvest also accepts day and year. Omit for all-time results.
              * @enum {string}
              */
             recency?: "day" | "week" | "month" | "year";

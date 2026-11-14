@@ -40,7 +40,7 @@ export interface Input {
    */
   linkResolution?: "complete" | "deferred";
   /**
-   * Limit Google results to the past week or past month. Date filters require one page, use the managed browser, and return organic listings only at 35 Credits. Omit for unfiltered results.
+   * Limit Google results to the past week or past month. Date filters require one page and return organic listings only at 150 Credits. Omit for unfiltered results.
    */
   recency?: "week" | "month";
 }
