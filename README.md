@@ -865,4 +865,4 @@ Publication management: list owned subdomains with `commons_list_publications`, 
 
 PAA job progress can include optional `phase` and `observedAt` fields describing observed extraction work independently of worker renewal. The updated Node and Python output models preserve legacy responses without these fields. See [the progress-types release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
 
-Search Zillow listings and Amazon products, and read property, agent, product, review, offer, deal and seller details, through the new `zillow` and `amazon` tool groups. See the [0.60.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.60.0) for the compatible package versions.
+Read LinkedIn, X and Instagram profiles, posts, comments, followers, jobs, ads and searches through the new `linkedin` and `twitter` tool groups and 43 new `instagram` tools. See the [0.61.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.61.0) for the compatible package versions.

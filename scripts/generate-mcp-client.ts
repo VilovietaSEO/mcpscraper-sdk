@@ -231,7 +231,7 @@ async function main(): Promise<void> {
   }))
   await writeFile(
     CLI_CATALOG_PATH,
-    `export const MCP_TOOL_CATALOG = ${JSON.stringify(cliCatalog, null, 2)} as const\nexport const MCP_TOOL_NAMES = MCP_TOOL_CATALOG.map(tool => tool.name)\nexport const MCP_TOOL_COUNT = MCP_TOOL_CATALOG.length\n`,
+    `export interface McpToolCatalogEntry {\n  readonly name: string\n  readonly category: string\n  readonly title?: string\n  readonly description?: string\n  readonly inputSchema: Readonly<Record<string, unknown>>\n  readonly annotations?: Readonly<Record<string, unknown>>\n}\n\nexport const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = ${JSON.stringify(cliCatalog, null, 2)}\nexport const MCP_TOOL_NAMES: readonly string[] = MCP_TOOL_CATALOG.map(tool => tool.name)\nexport const MCP_TOOL_COUNT: number = MCP_TOOL_CATALOG.length\n`,
   )
   await writeFile(CURL_DOC_PATH, `${renderCurlDocs(manifest.tools).trimEnd()}\n`)
 

@@ -1,4 +1,4 @@
-# All 364 MCP tools with cURL
+# All 459 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -92,7 +92,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (364)
+## Complete catalog (459)
 
 ## access
 
@@ -482,8 +482,51 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 ## instagram
 
+- `instagram_account_about` — Instagram About This Account
+- `instagram_audio_reels` — Instagram Reels by Audio
+- `instagram_basic_profile` — Instagram Basic Profile
+- `instagram_comment_likers` — Instagram Comment Likers
+- `instagram_comment_replies` — Instagram Comment Replies
+- `instagram_embed` — Instagram Profile Embed
+- `instagram_followers` — Instagram Followers
+- `instagram_following` — Instagram Following
+- `instagram_hashtag_analytics` — Instagram Hashtag Analytics
+- `instagram_hashtag_recent_posts` — Instagram Hashtag Recent Posts
+- `instagram_hashtag_top_posts` — Instagram Hashtag Top Posts
+- `instagram_highlight_detail` — Instagram Highlight Detail
+- `instagram_location_details` — Instagram Location Details
+- `instagram_location_posts` — Instagram Location Posts
 - `instagram_media_download` — Instagram Post/Reel Media Download
+- `instagram_media_transcript` — Instagram Media Transcript
+- `instagram_post` — Instagram Post
+- `instagram_post_comments` — Instagram Post Comments
+- `instagram_post_likers` — Instagram Post Likers
+- `instagram_profile_contact` — Instagram Profile Contact Info
 - `instagram_profile_content` — Instagram Profile Content Discovery
+- `instagram_profile_details` — Instagram Profile
+- `instagram_reel_transcript` — Instagram Reel Transcript
+- `instagram_reels_search` — Instagram Reels Search
+- `instagram_search` — Instagram Search
+- `instagram_search_audio` — Instagram Audio Search
+- `instagram_search_followers` — Instagram Search Followers
+- `instagram_search_following` — Instagram Search Following
+- `instagram_search_hashtag` — Instagram Hashtag Search
+- `instagram_search_locations` — Instagram Location Search
+- `instagram_search_profiles` — Instagram Profile Search
+- `instagram_search_profiles_contact` — Instagram Profile Search with Contact
+- `instagram_similar_profiles` — Instagram Similar Profiles
+- `instagram_stories_full` — Instagram Stories (full)
+- `instagram_stories_thin` — Instagram Stories (basic)
+- `instagram_story` — Instagram Story
+- `instagram_suggested_profiles` — Instagram Suggested Profiles
+- `instagram_tagged_posts` — Instagram Tagged Posts
+- `instagram_trending_reels` — Instagram Trending Reels
+- `instagram_user_highlights` — Instagram User Highlights
+- `instagram_user_posts` — Instagram User Posts
+- `instagram_user_reels` — Instagram User Reels
+- `instagram_user_reels_logged_in` — Instagram User Reels (Logged In)
+- `instagram_user_reposts` — Instagram User Reposts
+- `instagram_web_reels_search` — Instagram Reels Web Search
 
 ## leads
 
@@ -499,6 +542,45 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 ## library
 
 - `library-ingest` — Library Ingest
+
+## linkedin
+
+- `linkedin_ad` — LinkedIn Ad Details
+- `linkedin_ads` — LinkedIn Ads Library
+- `linkedin_ads_search` — LinkedIn Ad Search
+- `linkedin_article` — LinkedIn Article
+- `linkedin_comment_reactions` — LinkedIn Comment Reactions
+- `linkedin_comment_replies` — LinkedIn Comment Replies
+- `linkedin_company` — LinkedIn Company
+- `linkedin_company_employees` — LinkedIn Company Employees
+- `linkedin_company_posts` — LinkedIn Company Posts
+- `linkedin_company_posts_thin` — LinkedIn Company Posts (basic)
+- `linkedin_company_thin` — LinkedIn Company (basic)
+- `linkedin_email` — LinkedIn Email Finder
+- `linkedin_group` — LinkedIn Group
+- `linkedin_group_posts` — LinkedIn Group Posts
+- `linkedin_job` — LinkedIn Job
+- `linkedin_jobs` — LinkedIn Jobs
+- `linkedin_jobs_thin` — LinkedIn Jobs (index)
+- `linkedin_post` — LinkedIn Post
+- `linkedin_post_comments` — LinkedIn Post Comments
+- `linkedin_post_reactions` — LinkedIn Post Reactions
+- `linkedin_post_transcript` — LinkedIn Post Transcript
+- `linkedin_profile` — LinkedIn Profile
+- `linkedin_profile_comments` — LinkedIn Profile Comments
+- `linkedin_profile_posts_full` — LinkedIn Profile Posts (full)
+- `linkedin_profile_posts_thin` — LinkedIn Profile Posts (basic)
+- `linkedin_profile_reactions` — LinkedIn Profile Reactions
+- `linkedin_profile_thin` — LinkedIn Profile (basic)
+- `linkedin_search_companies` — LinkedIn Company Search
+- `linkedin_search_groups` — LinkedIn Group Search
+- `linkedin_search_leads` — LinkedIn Sales Navigator Lead Search
+- `linkedin_search_posts` — LinkedIn Post Search
+- `linkedin_search_posts_full` — LinkedIn Post Search (full)
+- `linkedin_search_profiles` — LinkedIn Profile Search
+- `linkedin_search_profiles_email` — LinkedIn Profile Search + Email
+- `linkedin_search_profiles_thin` — LinkedIn Profile Search (basic)
+- `linkedin_search_services` — LinkedIn Service Provider Search
 
 ## tags
 
@@ -565,6 +647,25 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 ## recall
 
 - `temporal-recall` — Temporal Memory Recall
+
+## twitter
+
+- `twitter_article` — X Article
+- `twitter_community` — X Community
+- `twitter_community_tweets` — X Community Posts
+- `twitter_followers` — X Followers
+- `twitter_following` — X Following
+- `twitter_profile` — X Profile
+- `twitter_replies` — X Post Replies
+- `twitter_search` — X Search
+- `twitter_search_communities` — X Community Search
+- `twitter_search_users` — X User Search
+- `twitter_thread` — X Post Thread
+- `twitter_trends` — X Trends
+- `twitter_tweet` — X Post
+- `twitter_tweet_transcript` — X Post Transcript
+- `twitter_user_posts` — X User Posts
+- `twitter_user_tweets` — X User Posts and Replies
 
 ## video
 

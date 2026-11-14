@@ -46,6 +46,12 @@ export type Output =
         [k: string]: unknown;
       }[];
       /**
+       * Values returned alongside the records, such as nextCursor for the next page, or totals.
+       */
+      meta?: {
+        [k: string]: unknown;
+      };
+      /**
        * Credits charged for this call.
        */
       chargedCredits: number;

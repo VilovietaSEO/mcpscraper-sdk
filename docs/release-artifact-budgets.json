@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "policy": {
-    "basis": "Exact latest public registry artifacts, with 15 percent plus small metadata allowance for three new tools and refreshed schemas; Python permits three new tool model files. For 0.60.0 the Python file-count ceilings rose by twelve, one generated model file for each of the twelve Zillow and Amazon tools; byte ceilings are unchanged.",
+    "basis": "Exact latest public registry artifacts, with 15 percent plus small metadata allowance for three new tools and refreshed schemas; Python permits three new tool model files. For 0.60.0 the Python file-count ceilings rose by twelve, one generated model file for each of the twelve Zillow and Amazon tools; byte ceilings are unchanged. For 0.61.0 the catalog grew from 364 to 459 tools (95 LinkedIn, X and Instagram tools): the Python file-count ceilings rose by 95, one generated model file for each tool, and the byte ceilings that the new tools exceeded (the CLI's unpacked catalog and the Python archives) were reset to the measured 0.61.0 candidate plus 3 percent.",
     "source": "Official registry archives downloaded 2026-11-03",
     "failClosed": true
   },
@@ -51,7 +51,7 @@
       "fileCount": 3,
       "maximum": {
         "compressedBytes": 185699,
-        "unpackedBytes": 1278174,
+        "unpackedBytes": 1327802,
         "fileCount": 3,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
@@ -67,9 +67,9 @@
       "unpackedBytes": 3404779,
       "fileCount": 360,
       "maximum": {
-        "compressedBytes": 843812,
-        "unpackedBytes": 3925495,
-        "fileCount": 375,
+        "compressedBytes": 954079,
+        "unpackedBytes": 4305946,
+        "fileCount": 470,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -85,8 +85,8 @@
       "fileCount": 360,
       "maximum": {
         "compressedBytes": 339705,
-        "unpackedBytes": 3899477,
-        "fileCount": 375,
+        "unpackedBytes": 4272086,
+        "fileCount": 470,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -118,9 +118,9 @@
       "unpackedBytes": 3743480,
       "fileCount": 587,
       "maximum": {
-        "compressedBytes": 1040355,
-        "unpackedBytes": 4315002,
-        "fileCount": 602,
+        "compressedBytes": 1131480,
+        "unpackedBytes": 4653923,
+        "fileCount": 697,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }
@@ -136,8 +136,8 @@
       "fileCount": 587,
       "maximum": {
         "compressedBytes": 378482,
-        "unpackedBytes": 4251428,
-        "fileCount": 602,
+        "unpackedBytes": 4585436,
+        "fileCount": 697,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
       }

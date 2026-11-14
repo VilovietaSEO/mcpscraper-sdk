@@ -1,4 +1,13 @@
-export const MCP_TOOL_CATALOG = [
+export interface McpToolCatalogEntry {
+  readonly name: string
+  readonly category: string
+  readonly title?: string
+  readonly description?: string
+  readonly inputSchema: Readonly<Record<string, unknown>>
+  readonly annotations?: Readonly<Record<string, unknown>>
+}
+
+export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
   {
     "name": "access-accept-share",
     "category": "access",
@@ -558,7 +567,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_bestsellers",
     "category": "amazon",
     "title": "Amazon Best Sellers",
-    "description": "Top-ranked products in an Amazon Best Sellers category URL: rank, title, price and rating. About 17 Credits (twice the upstream charge, at most 51); failed calls are refunded.",
+    "description": "Top-ranked products in an Amazon Best Sellers category URL: rank, title, price and rating. About 18 Credits (twice the upstream charge, at most 53); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -592,7 +601,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_deals",
     "category": "amazon",
     "title": "Amazon Deals",
-    "description": "Today's Amazon deals for one marketplace: ASIN, title, deal price, list price, discount and deal type. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+    "description": "Today's Amazon deals for one marketplace: ASIN, title, deal price, list price, discount and deal type. About 15 Credits (twice the upstream charge, at most 43); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -638,7 +647,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_offers",
     "category": "amazon",
     "title": "Amazon Product Offers",
-    "description": "Every seller offer for one Amazon product, Buy Box first: price, condition, seller, seller rating, Prime and delivery. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+    "description": "Every seller offer for one Amazon product, Buy Box first: price, condition, seller, seller rating, Prime and delivery. About 15 Credits (twice the upstream charge, at most 43); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -698,7 +707,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_product",
     "category": "amazon",
     "title": "Amazon Product Details",
-    "description": "Full details for one Amazon product by URL: title, brand, price, images, ratings, variants and attributes. About 15 Credits (twice the upstream charge, at most 44); failed calls are refunded.",
+    "description": "Full details for one Amazon product by URL: title, brand, price, images, ratings, variants and attributes. About 15 Credits (twice the upstream charge, at most 45); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -726,7 +735,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_products_by_asin",
     "category": "amazon",
     "title": "Amazon Products by ASIN",
-    "description": "Details for up to 10 Amazon products by ASIN in one call: title, brand, price, ratings, images and attributes. About 53 Credits per product (twice the upstream charge, at most 792); failed calls are refunded.",
+    "description": "Details for up to 10 Amazon products by ASIN in one call: title, brand, price, ratings, images and attributes. About 55 Credits per product (twice the upstream charge, at most 825); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -770,7 +779,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_reviews",
     "category": "amazon",
     "title": "Amazon Product Reviews",
-    "description": "Customer reviews for an Amazon product by ASIN or URL: rating, title, text, date and verified-purchase flag. About 256 Credits (twice the upstream charge, at most 384); failed calls are refunded.",
+    "description": "Customer reviews for an Amazon product by ASIN or URL: rating, title, text, date and verified-purchase flag. About 267 Credits (twice the upstream charge, at most 400); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -873,7 +882,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_search",
     "category": "amazon",
     "title": "Amazon Product Search",
-    "description": "Products from an Amazon search or category URL, up to 20: title, price, rating and thumbnail. About 12 Credits (twice the upstream charge, at most 36); failed calls are refunded.",
+    "description": "Products from an Amazon search or category URL, up to 20: title, price, rating and thumbnail. About 13 Credits (twice the upstream charge, at most 38); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -907,7 +916,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_seller",
     "category": "amazon",
     "title": "Amazon Seller Profile",
-    "description": "One Amazon seller by seller ID: name, rating, positive feedback share, feedback counts and business details. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+    "description": "One Amazon seller by seller ID: name, rating, positive feedback share, feedback counts and business details. About 15 Credits (twice the upstream charge, at most 43); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -961,7 +970,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "amazon_seller_products",
     "category": "amazon",
     "title": "Amazon Seller Storefront",
-    "description": "One page of an Amazon seller's storefront by seller ID: ASIN, title, price, rating and badges. About 14 Credits (twice the upstream charge, at most 41); failed calls are refunded.",
+    "description": "One page of an Amazon seller's storefront by seller ID: ASIN, title, price, rating and badges. About 15 Credits (twice the upstream charge, at most 43); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22525,6 +22534,452 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "instagram_account_about",
+    "category": "instagram",
+    "title": "Instagram About This Account",
+    "description": "Get what Instagram's About this account page shows for a handle: when the account joined, the country it is based in, how many times it changed its username, and whether it is verified. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram About This Account",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_audio_reels",
+    "category": "instagram",
+    "title": "Instagram Reels by Audio",
+    "description": "List Instagram reels that use a given audio track by audio id. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "audioId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Audio identifier from the Instagram audio page URL."
+        },
+        "cursor": {
+          "description": "Pagination cursor returned by a previous response.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "audioId"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Reels by Audio",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_basic_profile",
+    "category": "instagram",
+    "title": "Instagram Basic Profile",
+    "description": "Fetch an Instagram account's core public profile fields (followers, posts, bio, verification) by user id. About 17 Credits (twice the upstream charge, at most 50); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram numeric user id (the account's internal all-digits id, e.g. 314216), NOT the @handle or profile URL. Passing a handle here returns no profile."
+        }
+      },
+      "required": [
+        "userId"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Basic Profile",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_comment_likers",
+    "category": "instagram",
+    "title": "Instagram Comment Likers",
+    "description": "List the accounts that liked an Instagram comment, one page of up to 50 likers per call with cursor pagination, with each liker's handle, display name, verified and private flags and avatar. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "commentId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram's numeric comment id, as instagram_post_comments returns it in a comment's id."
+        },
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "commentId"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Comment Likers",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_comment_replies",
+    "category": "instagram",
+    "title": "Instagram Comment Replies",
+    "description": "List the replies to an Instagram comment with cursor pagination (text, author, likes). About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "commentId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram comment ID, a comment's id from instagram_post_comments."
+        },
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full Instagram post or reel URL the comment belongs to, carrying the media shortcode: /p/, /reel/, /reels/, or /tv/."
+        }
+      },
+      "required": [
+        "commentId",
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Comment Replies",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_embed",
+    "category": "instagram",
+    "title": "Instagram Profile Embed",
+    "description": "Fetch the public embed HTML for an Instagram profile by handle. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Profile Embed",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_followers",
+    "category": "instagram",
+    "title": "Instagram Followers",
+    "description": "List about the first 50 followers of any public Instagram account by username: follower usernames, names, and profile details. Instagram caps follower lists, so this returns one page, not the whole list. About 29 Credits (twice the upstream charge, at most 87); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The Instagram username, user ID, or profile URL whose followers to list (e.g. natgeo)."
+        }
+      },
+      "required": [
+        "username"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Followers",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_following",
+    "category": "instagram",
+    "title": "Instagram Following",
+    "description": "List about the first 50 accounts a public Instagram user follows: usernames, names, and profile details. Instagram caps these lists, so this returns one page, not the whole list. About 29 Credits (twice the upstream charge, at most 87); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The Instagram username, user ID, or profile URL whose following list to fetch (e.g. natgeo)."
+        }
+      },
+      "required": [
+        "username"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Following",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_hashtag_analytics",
+    "category": "instagram",
+    "title": "Instagram Hashtag Analytics",
+    "description": "Get the total post count for any Instagram hashtag. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "hashtag": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The Instagram hashtag to analyze, with or without the # symbol (e.g. streetphotography)."
+        }
+      },
+      "required": [
+        "hashtag"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Hashtag Analytics",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_hashtag_recent_posts",
+    "category": "instagram",
+    "title": "Instagram Hashtag Recent Posts",
+    "description": "Instagram posts published under a hashtag, newest first, read from its live chronological feed rather than a web search index. About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "hashtag": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Hashtag to monitor, without the leading #."
+        }
+      },
+      "required": [
+        "hashtag"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Hashtag Recent Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_hashtag_top_posts",
+    "category": "instagram",
+    "title": "Instagram Hashtag Top Posts",
+    "description": "Instagram's own top-ranked posts for a hashtag, read from its live hashtag feed rather than a web search index, with view, like, and comment counts. About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "hashtag": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Hashtag to fetch, without the leading #."
+        }
+      },
+      "required": [
+        "hashtag"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Hashtag Top Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_highlight_detail",
+    "category": "instagram",
+    "title": "Instagram Highlight Detail",
+    "description": "Fetch the details and media items of a single Instagram story highlight by id or highlight URL. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The highlight to retrieve: its numeric id (e.g. 18201653992314974), the highlight:<id> form, or its highlight URL (https://www.instagram.com/stories/highlights/<id>/). instagram_user_highlights returns the id of each highlight."
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Highlight Detail",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_location_details",
+    "category": "instagram",
+    "title": "Instagram Location Details",
+    "description": "Look up one Instagram location by id: its name, category, coordinates, number of tagged posts and page slug, plus the street address, postal code, phone and linked business account when Instagram lists them. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "locationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram's numeric location id, as instagram_search_locations returns it."
+        }
+      },
+      "required": [
+        "locationId"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Location Details",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_location_posts",
+    "category": "instagram",
+    "title": "Instagram Location Posts",
+    "description": "List public Instagram posts tagged at a location, ranked or most recent, with cursor pagination. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "locationId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram location id, as returned by instagram_search_locations."
+        },
+        "sort": {
+          "description": "Order the posts by Instagram's top ranking or by newest first. Defaults to ranked.",
+          "type": "string",
+          "enum": [
+            "ranked",
+            "recent"
+          ]
+        }
+      },
+      "required": [
+        "locationId"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Location Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "instagram_media_download",
     "category": "instagram",
     "title": "Instagram Post/Reel Media Download",
@@ -22598,6 +23053,151 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "instagram_media_transcript",
+    "category": "instagram",
+    "title": "Instagram Media Transcript",
+    "description": "Get the spoken-audio transcript text for an Instagram post or reel by URL. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram post or reel URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Media Transcript",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_post",
+    "category": "instagram",
+    "title": "Instagram Post",
+    "description": "Fetch a single Instagram post or reel by URL: media URLs, like count, owner and type. For the spoken words use instagram_media_transcript. About 9 Credits (twice the upstream charge, at most 25); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full Instagram post or reel URL, carrying the media shortcode: /p/, /reel/, /reels/, or /tv/."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Post",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_post_comments",
+    "category": "instagram",
+    "title": "Instagram Post Comments",
+    "description": "List the comments on an Instagram post or reel by URL with cursor pagination (text, author, likes). About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full Instagram post or reel URL, carrying the media shortcode: /p/, /reel/, /reels/, or /tv/."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Post Comments",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_post_likers",
+    "category": "instagram",
+    "title": "Instagram Post Likers",
+    "description": "List the accounts that liked a public Instagram post, one page of likers per call, with each liker's handle, display name, verified flag and avatar. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical URL of a public Instagram post or reel, carrying the media shortcode: /p/, /reel/, /reels/, or /tv/."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Post Likers",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_profile_contact",
+    "category": "instagram",
+    "title": "Instagram Profile Contact Info",
+    "description": "Look up the contact email and phone number an Instagram creator or business publishes on its profile, including the address behind the profile's Email button that public profile lookups do not return. About 30 Credits (twice the upstream charge, at most 88); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Profile Contact Info",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "instagram_profile_content",
     "category": "instagram",
     "title": "Instagram Profile Content Discovery",
@@ -22657,6 +23257,794 @@ export const MCP_TOOL_CATALOG = [
     },
     "annotations": {
       "title": "Instagram Profile Content Discovery",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_profile_details",
+    "category": "instagram",
+    "title": "Instagram Profile",
+    "description": "Fetch an Instagram account's public profile (followers, posts, bio, verification) by handle. About 15 Credits (twice the upstream charge, at most 45); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Profile",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_reel_transcript",
+    "category": "instagram",
+    "title": "Instagram Reel Transcript",
+    "description": "Transcribe a public Instagram reel or video post by URL: full speech transcript with speaker labels and optional word-level timestamps. For plain transcript text only, instagram_media_transcript is lighter. Up to 1659 Credits, by how much comes back (twice the upstream charge, at most 2488); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The URL of a public Instagram reel or video post (e.g. https://www.instagram.com/reel/C8yKXdRxKqK/), or an Instagram CDN media URL you already hold."
+        },
+        "wordTimestamps": {
+          "description": "Set true to include a precise timestamp for every word in the transcript (e.g. true).",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Reel Transcript",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_reels_search",
+    "category": "instagram",
+    "title": "Instagram Reels Search",
+    "description": "Search Instagram Reels by keyword against Instagram's own reels search and get matching reels with view, like and comment counts, caption, creator and duration. Results are relevance-ranked, not chronological. About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Search keyword (e.g. \"crossfit\")."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Reels Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_search",
+    "category": "instagram",
+    "title": "Instagram Search",
+    "description": "Search Instagram for users, hashtags, or places by keyword and get matching results with names, counts, and links. About 21 Credits (twice the upstream charge, at most 63); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of results to return (1-20, default 20).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Keyword to search Instagram for; one or more words without special punctuation (e.g. coffee roastery)."
+        },
+        "type": {
+          "description": "What to search for: user profiles, hashtags, or places (e.g. hashtag).",
+          "type": "string",
+          "enum": [
+            "user",
+            "hashtag",
+            "place"
+          ]
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_search_audio",
+    "category": "instagram",
+    "title": "Instagram Audio Search",
+    "description": "Search Instagram's audio library by keyword and get licensed tracks and creators' original sounds, each with an audio id you can pass to instagram_audio_reels, its title, artist, and length. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Words to search Instagram's audio for, such as a song title, an artist, or a phrase. One call returns one page of up to about 13 results; there is no next page."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Audio Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_search_followers",
+    "category": "instagram",
+    "title": "Instagram Search Followers",
+    "description": "Search the followers of a public Instagram account by name or username, using Instagram's own follower search. On smaller accounts it searches the whole follower list and returns close matches ranked by Instagram. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name or username text to look for among this account's followers (e.g. john)."
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The Instagram username whose followers to search, without the leading @ (e.g. milada2788)."
+        }
+      },
+      "required": [
+        "query",
+        "username"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Search Followers",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_search_following",
+    "category": "instagram",
+    "title": "Instagram Search Following",
+    "description": "Search the accounts a public Instagram user follows by name or username. Matching is Instagram's own loose search, so results are close matches ranked by Instagram and some may not contain your exact word. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name or username text to look for among the accounts this user follows (e.g. skin). Instagram matches loosely, so close matches are returned too."
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The Instagram username whose following list to search, without the leading @ (e.g. moogooskincare)."
+        }
+      },
+      "required": [
+        "query",
+        "username"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Search Following",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_search_hashtag",
+    "category": "instagram",
+    "title": "Instagram Hashtag Search",
+    "description": "Search posts under an Instagram hashtag through a web search index rather than Instagram's own hashtag feed. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response.",
+          "type": "string",
+          "minLength": 1
+        },
+        "datePosted": {
+          "description": "Restrict results to posts published within this window.",
+          "type": "string",
+          "enum": [
+            "last-hour",
+            "last-day",
+            "last-week",
+            "last-month",
+            "last-year"
+          ]
+        },
+        "hashtag": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Hashtag to search, without the leading #."
+        },
+        "mediaType": {
+          "description": "Filter by media type. One of all, reel.",
+          "type": "string",
+          "enum": [
+            "all",
+            "reel"
+          ]
+        }
+      },
+      "required": [
+        "hashtag"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Hashtag Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_search_locations",
+    "category": "instagram",
+    "title": "Instagram Location Search",
+    "description": "Search Instagram locations by keyword and return each place's id, name, address and coordinates. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Place name, address or city to search for."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Location Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_search_profiles",
+    "category": "instagram",
+    "title": "Instagram Profile Search",
+    "description": "Search public Instagram profiles by a bio or caption keyword. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor returned by a previous response.",
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Bio or caption keyword/phrase to search for."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Profile Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_search_profiles_contact",
+    "category": "instagram",
+    "title": "Instagram Profile Search with Contact",
+    "description": "Search public Instagram profiles by a bio or caption keyword and get each account's country, the month it joined, and the public email and phone number it lists. Up to 1334 Credits, by how much comes back (twice the upstream charge, at most 2000); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor returned by a previous response.",
+          "type": "string",
+          "minLength": 1
+        },
+        "limit": {
+          "description": "Most profiles to return on this page, 1 to 12.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Bio or caption keyword/phrase to search for."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Profile Search with Contact",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_similar_profiles",
+    "category": "instagram",
+    "title": "Instagram Similar Profiles",
+    "description": "List the related profiles Instagram's website shows for a public profile, with each account's handle, display name, verified flag and avatar. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Similar Profiles",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_stories_full",
+    "category": "instagram",
+    "title": "Instagram Stories (full)",
+    "description": "Fetch a public Instagram account's currently live stories with media, type, dimensions, posting time, and 24-hour expiry by username. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username or handle without the @."
+        }
+      },
+      "required": [
+        "username"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Stories (full)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_stories_thin",
+    "category": "instagram",
+    "title": "Instagram Stories (basic)",
+    "description": "Fetch a public Instagram account's currently live stories - media URL, owner, and posting time - by username. Lightweight projection; for media type, dimensions, and the 24h expiry time use instagram_stories_full. About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username/handle to fetch currently live stories for (without the @)."
+        }
+      },
+      "required": [
+        "username"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Stories (basic)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_story",
+    "category": "instagram",
+    "title": "Instagram Story",
+    "description": "Fetch one live Instagram story by its link or id, with its image or video, posting time, author, and the accounts, links and stickers placed on it. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The story's link, such as https://www.instagram.com/stories/nasa/4029751009399397766/, or its numeric id alone. A story stays available for 24 hours after it is posted."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Story",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_suggested_profiles",
+    "category": "instagram",
+    "title": "Instagram Suggested Profiles",
+    "description": "List the full set of accounts Instagram suggests as similar to a public profile, the list its app shows, with each account's handle, display name, verified flag, private flag and avatar. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Suggested Profiles",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_tagged_posts",
+    "category": "instagram",
+    "title": "Instagram Tagged Posts",
+    "description": "List the posts an Instagram user is tagged in, with cursor pagination (author, caption, likes, comments). About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Tagged Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_trending_reels",
+    "category": "instagram",
+    "title": "Instagram Trending Reels",
+    "description": "List currently trending Instagram reels. Instagram does not return play counts on this feed. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Trending Reels",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_user_highlights",
+    "category": "instagram",
+    "title": "Instagram User Highlights",
+    "description": "List an Instagram account's story highlight reels by handle. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        },
+        "userId": {
+          "description": "Instagram numeric user id (optional, faster than handle).",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram User Highlights",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_user_posts",
+    "category": "instagram",
+    "title": "Instagram User Posts",
+    "description": "List an Instagram account's recent posts (likes, comments, captions) by handle with cursor pagination. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram username without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram User Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_user_reels",
+    "category": "instagram",
+    "title": "Instagram User Reels",
+    "description": "List an Instagram account's reels by handle with cursor pagination (caption, plays, likes, comments). About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor (max_id) from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "handle": {
+          "description": "Instagram handle.",
+          "type": "string",
+          "minLength": 1
+        },
+        "userId": {
+          "description": "Instagram user id (faster than handle when known).",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram User Reels",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_user_reels_logged_in",
+    "category": "instagram",
+    "title": "Instagram User Reels (Logged In)",
+    "description": "List an Instagram account's reels by handle as a logged-in Instagram viewer sees them, with cursor pagination: everything instagram_user_reels returns plus saves, reposts, the caption-track URL and, for reels cross-posted to Facebook, the Facebook views, likes and comments. About 29 Credits (twice the upstream charge, at most 87); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor (max_id) from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "handle": {
+          "description": "Instagram handle.",
+          "type": "string",
+          "minLength": 1
+        },
+        "userId": {
+          "description": "Instagram user id (faster than handle when known).",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram User Reels (Logged In)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_user_reposts",
+    "category": "instagram",
+    "title": "Instagram User Reposts",
+    "description": "List the posts a public Instagram account has reposted to its feed, with cursor pagination. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "userId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Instagram's numeric account id, as returned by instagram_profile_details."
+        }
+      },
+      "required": [
+        "userId"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram User Reposts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "instagram_web_reels_search",
+    "category": "instagram",
+    "title": "Instagram Reels Web Search",
+    "description": "Search Instagram Reels through a web search index rather than Instagram's own search, and get matching reels (caption, likes, comments, creator, and duration). About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "datePosted": {
+          "description": "Recency hint, not a hard filter.",
+          "type": "string",
+          "enum": [
+            "last-week",
+            "last-month",
+            "last-year"
+          ]
+        },
+        "page": {
+          "description": "1-based results page.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Search keyword (e.g. \"crossfit\")."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Instagram Reels Web Search",
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": false,
@@ -23213,6 +24601,2547 @@ export const MCP_TOOL_CATALOG = [
     "annotations": {
       "title": "Library Ingest",
       "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_ad",
+    "category": "linkedin",
+    "title": "LinkedIn Ad Details",
+    "description": "Look up a single LinkedIn Ad Library ad by URL and get the advertiser, headline, creative text, format, CTA, run dates, and impressions. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "LinkedIn Ad Library ad URL (e.g. \"https://www.linkedin.com/ad-library/detail/666281156\")."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Ad Details",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_ads",
+    "category": "linkedin",
+    "title": "LinkedIn Ads Library",
+    "description": "Search the LinkedIn Ad Library by search URL and list the matching ads (advertiser, creative text, format). Up to 205 Credits, by how much comes back (twice the upstream charge, at most 308); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of results to return (1-20, default 20).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "LinkedIn Ad Library search URL or a LinkedIn company URL (e.g. https://www.linkedin.com/ad-library/search?companyIds=1035)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Ads Library",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_ads_search",
+    "category": "linkedin",
+    "title": "LinkedIn Ad Search",
+    "description": "Search the LinkedIn Ad Library by company or keyword and list matching ads (advertiser, headline, creative text, format, CTA, and run dates) with pagination. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "description": "Company name to search (e.g. \"microsoft\").",
+          "type": "string",
+          "minLength": 1
+        },
+        "companyId": {
+          "description": "LinkedIn company identifier.",
+          "type": "string",
+          "minLength": 1
+        },
+        "countries": {
+          "description": "Comma-separated two-letter country codes (e.g. \"US,CA,MX\").",
+          "type": "string",
+          "minLength": 1
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor; omit for the first page.",
+          "type": "string",
+          "minLength": 1
+        },
+        "endDate": {
+          "description": "Search end date in YYYY-MM-DD format. Today or a later date is moved back to yesterday in UTC when your range overlaps LinkedIn's accepted dates.",
+          "type": "string",
+          "minLength": 1
+        },
+        "keyword": {
+          "description": "Keyword term for the ad search.",
+          "type": "string",
+          "minLength": 1
+        },
+        "startDate": {
+          "description": "Search start date in YYYY-MM-DD format. An earlier date is moved up to one year ago in UTC when your range overlaps LinkedIn's accepted dates.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Ad Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_article",
+    "category": "linkedin",
+    "title": "LinkedIn Article",
+    "description": "Read a public LinkedIn article or newsletter issue by URL, including its full body text, author, publication time, and engagement counts. About 95 Credits (twice the upstream charge, at most 283); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Public LinkedIn article or newsletter issue URL, e.g. https://www.linkedin.com/pulse/your-article-slug."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Article",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_comment_reactions",
+    "category": "linkedin",
+    "title": "LinkedIn Comment Reactions",
+    "description": "List who reacted to a comment on a LinkedIn post - reactor name, profile URL, job title, and reaction type, 100 per page. About 44 Credits (twice the upstream charge, at most 130); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "description": "Which page of up to 100 reactions to return, starting at 1 (default 1).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "LinkedIn comment URL, as returned in the url field of linkedin_post_comments or copied with \"Copy link to comment\" (a /feed/update/... link carrying commentUrn and dashCommentUrn)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Comment Reactions",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_comment_replies",
+    "category": "linkedin",
+    "title": "LinkedIn Comment Replies",
+    "description": "List up to the 10 newest replies to a comment on a LinkedIn post - reply text, replier name/URL/job title, timestamps, and likes. About 44 Credits (twice the upstream charge, at most 130); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "LinkedIn comment URL, as returned in the url field of linkedin_post_comments or copied with \"Copy link to comment\" (a /feed/update/... link carrying commentUrn and dashCommentUrn)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Comment Replies",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_company",
+    "category": "linkedin",
+    "title": "LinkedIn Company",
+    "description": "Fetch a full LinkedIn company page by URL: name, description, industry, employee count and range, follower count, founded year, headquarters and office locations, funding data, tagline, logo, website, and specialities. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn company page URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Company",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_company_employees",
+    "category": "linkedin",
+    "title": "LinkedIn Company Employees",
+    "description": "List the employees of a LinkedIn company by name or company URL, with optional job-title filtering. About 100 Credits (twice the upstream charge, at most 300); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Company name or LinkedIn company URL (e.g. google or https://www.linkedin.com/company/google/)."
+        },
+        "jobTitle": {
+          "description": "Optional job-title filter supporting boolean operators (e.g. CEO OR CTO).",
+          "type": "string",
+          "minLength": 1
+        },
+        "limit": {
+          "description": "Maximum number of results to return (1-10, default 10).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "company"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Company Employees",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_company_posts",
+    "category": "linkedin",
+    "title": "LinkedIn Company Posts",
+    "description": "List a LinkedIn company page's recent posts by URL: full text, canonical link, publish date, author, engagement counts with a per-reaction breakdown, and attached media. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "includeQuotePosts": {
+          "description": "Include quote posts (posts shared with an added comment). Defaults to true; set false to exclude them.",
+          "type": "boolean"
+        },
+        "includeReposts": {
+          "description": "Include reposts (posts shared without an added comment). Defaults to true; set false to exclude them.",
+          "type": "boolean"
+        },
+        "limit": {
+          "description": "Maximum number of posts to return.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "postedLimit": {
+          "description": "Only return posts published within this window (default any).",
+          "type": "string",
+          "enum": [
+            "any",
+            "1h",
+            "24h",
+            "week",
+            "month",
+            "3months",
+            "6months",
+            "year"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn company page URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Company Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_company_posts_thin",
+    "category": "linkedin",
+    "title": "LinkedIn Company Posts (basic)",
+    "description": "A LinkedIn company page's recent posts, text and link only. No engagement counts, author details, media, or reaction breakdown - for those use linkedin_company_posts. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "description": "Page number for pagination.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn company page URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Company Posts (basic)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_company_thin",
+    "category": "linkedin",
+    "title": "LinkedIn Company (basic)",
+    "description": "Basic LinkedIn company page by URL: name, description, employee count, industry, logo, website, tagline. No follower count, founded year, office locations, or funding data - for those use linkedin_company. About 17 Credits (twice the upstream charge, at most 50); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn company page URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Company (basic)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_email",
+    "category": "linkedin",
+    "title": "LinkedIn Email Finder",
+    "description": "Find the deliverability-validated work email behind a LinkedIn profile URL or public ID. Returns each discovered email with its deliverability, validation status, and quality score, plus the person's name and headline. About 184 Credits (twice the upstream charge, at most 275); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "profileUrl": {
+          "type": "string",
+          "minLength": 1,
+          "description": "LinkedIn profile URL or public identifier (the last part of the URL) to find the deliverability-validated work email for."
+        }
+      },
+      "required": [
+        "profileUrl"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Email Finder",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_group",
+    "category": "linkedin",
+    "title": "LinkedIn Group",
+    "description": "Fetch one LinkedIn group by URL or id: name, description, rules, member count, logo and cover image, creation date, visibility and join settings, and its admins. About 22 Credits (twice the upstream charge, at most 65); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "groupId": {
+          "description": "Numeric LinkedIn group id (e.g. 1898033), the number in the group URL. Send this or url.",
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "description": "LinkedIn group URL (e.g. https://www.linkedin.com/groups/1898033). Send this or groupId.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Group",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_group_posts",
+    "category": "linkedin",
+    "title": "LinkedIn Group Posts",
+    "description": "List the posts in a LinkedIn group by group URL, newest first: full text, canonical link, publish date, author, engagement counts with a per-reaction breakdown, and attached media. About 44 Credits (twice the upstream charge, at most 130); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "description": "Which page of about 100 posts to return, starting at 1 (default 1). Page 2 continues where page 1 ended, going further back in time.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "postedLimit": {
+          "description": "Only return posts published within this window (default any). The window is applied to the page, so a page can come back with fewer posts or none.",
+          "type": "string",
+          "enum": [
+            "any",
+            "1h",
+            "24h",
+            "week",
+            "month",
+            "3months",
+            "6months",
+            "year"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn group URL (e.g. https://www.linkedin.com/groups/1898033)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Group Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_job",
+    "category": "linkedin",
+    "title": "LinkedIn Job",
+    "description": "Fetch one LinkedIn job posting by URL: title, full description, location, salary when disclosed, applicant count, employment and workplace type, seniority, benefits, industries, apply links, posting and expiry dates, the hiring team, the applicant tracking system behind it, and the hiring company with its size, follower count, website and description. About 25 Credits (twice the upstream charge, at most 75); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn job posting URL, e.g. https://www.linkedin.com/jobs/view/4431721875/."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Job",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_jobs",
+    "category": "linkedin",
+    "title": "LinkedIn Jobs",
+    "description": "Search LinkedIn job listings by title and location - full records with description, salary, applicant count, seniority, company details, and benefits. Up to 25 jobs per request. About 325 Credits (twice the upstream charge, at most 488); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "company": {
+          "description": "Filter to a specific company by name (e.g. Google).",
+          "type": "string",
+          "minLength": 1
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; pass it to fetch the next page of job listings.",
+          "type": "string",
+          "minLength": 1
+        },
+        "easyApply": {
+          "description": "When true, only return jobs offering LinkedIn Easy Apply.",
+          "type": "boolean"
+        },
+        "employmentType": {
+          "description": "Filter by employment type.",
+          "type": "string",
+          "enum": [
+            "full-time",
+            "part-time",
+            "contract",
+            "internship",
+            "temporary"
+          ]
+        },
+        "experienceLevel": {
+          "description": "Filter by required seniority/experience level.",
+          "type": "string",
+          "enum": [
+            "internship",
+            "entry",
+            "associate",
+            "mid-senior",
+            "director",
+            "executive"
+          ]
+        },
+        "location": {
+          "description": "City, region, or country to search within (e.g. United States, San Francisco).",
+          "type": "string",
+          "minLength": 1
+        },
+        "postedLimit": {
+          "description": "Only jobs posted within this window (past hour, 24 hours, week, or month).",
+          "type": "string",
+          "enum": [
+            "1h",
+            "24h",
+            "week",
+            "month"
+          ]
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Job title or keywords to search. Supports LinkedIn boolean operators."
+        },
+        "salary": {
+          "description": "Filter by minimum base salary band (US dollars).",
+          "type": "string",
+          "enum": [
+            "40k+",
+            "60k+",
+            "80k+",
+            "100k+",
+            "120k+",
+            "140k+",
+            "160k+",
+            "180k+",
+            "200k+"
+          ]
+        },
+        "sortBy": {
+          "description": "Sort order: most recent (date) or best match (relevance).",
+          "type": "string",
+          "enum": [
+            "date",
+            "relevance"
+          ]
+        },
+        "under10Applicants": {
+          "description": "When true, only return jobs with fewer than 10 applicants (lower competition).",
+          "type": "boolean"
+        },
+        "workplaceType": {
+          "description": "Filter by workplace type (remote, hybrid, or onsite).",
+          "type": "string",
+          "enum": [
+            "remote",
+            "hybrid",
+            "onsite"
+          ]
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Jobs",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_jobs_thin",
+    "category": "linkedin",
+    "title": "LinkedIn Jobs (index)",
+    "description": "Light LinkedIn job search: title, company, location, posted date, URL. No description, salary, applicant counts, or seniority - for those use linkedin_jobs. About 11 Credits (twice the upstream charge, at most 33); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "companyId": {
+          "description": "Filter to a specific company by its LinkedIn numeric company id.",
+          "type": "string",
+          "minLength": 1
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; pass it to fetch the next page of job listings.",
+          "type": "string",
+          "minLength": 1
+        },
+        "employmentType": {
+          "description": "Filter by employment type.",
+          "type": "string",
+          "enum": [
+            "full-time",
+            "part-time",
+            "contract",
+            "internship",
+            "temporary"
+          ]
+        },
+        "experienceLevel": {
+          "description": "Filter by required seniority/experience level.",
+          "type": "string",
+          "enum": [
+            "internship",
+            "entry",
+            "associate",
+            "mid-senior",
+            "director",
+            "executive"
+          ]
+        },
+        "geoId": {
+          "description": "LinkedIn geo id to target a precise location (e.g. 103644278 for the United States); more exact than the free-text location.",
+          "type": "string",
+          "minLength": 1
+        },
+        "location": {
+          "description": "City, region, or country to search within.",
+          "type": "string",
+          "minLength": 1
+        },
+        "postedLimit": {
+          "description": "Only jobs posted within this window (past 24 hours, week, or month).",
+          "type": "string",
+          "enum": [
+            "24h",
+            "week",
+            "month"
+          ]
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Job title or keywords to search."
+        },
+        "workplaceType": {
+          "description": "Filter by workplace type (remote, hybrid, or onsite).",
+          "type": "string",
+          "enum": [
+            "remote",
+            "hybrid",
+            "onsite"
+          ]
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Jobs (index)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_post",
+    "category": "linkedin",
+    "title": "LinkedIn Post",
+    "description": "Fetch a single LinkedIn post or article by URL (title, text, author, like and comment counts, publish date). About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn post or article URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Post",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_post_comments",
+    "category": "linkedin",
+    "title": "LinkedIn Post Comments",
+    "description": "List comments on a LinkedIn post - full text, commenter name/URL/job title, timestamps, and engagement. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of comments to return.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "postedLimit": {
+          "description": "Only return comments posted within this window (default any).",
+          "type": "string",
+          "enum": [
+            "any",
+            "24h",
+            "week",
+            "month",
+            "3months",
+            "6months",
+            "year"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full URL of the LinkedIn post to list comments for."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Post Comments",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_post_reactions",
+    "category": "linkedin",
+    "title": "LinkedIn Post Reactions",
+    "description": "List who reacted to a LinkedIn post - reactor name, profile URL, job title, and reaction type. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of reactions to return (1-100, default 100).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "URL of the LinkedIn post to list reactions for (a /posts/...-activity-... or /feed/update/urn:li:activity:... link)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Post Reactions",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_post_transcript",
+    "category": "linkedin",
+    "title": "LinkedIn Post Transcript",
+    "description": "Get the spoken transcript of a LinkedIn video post by URL. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The full URL of the LinkedIn post to get the video transcript from."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Post Transcript",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_profile",
+    "category": "linkedin",
+    "title": "LinkedIn Profile",
+    "description": "Fetch a rich LinkedIn member profile by URL: name, headline, avatar, location, connections and followers, current position, and full work experience with job titles, descriptions, dates, employment/workplace type, and per-role skills, plus education, skills, certifications, honors and awards, languages, projects, publications, and verified/premium/open-to-work flags. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn profile URL."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_profile_comments",
+    "category": "linkedin",
+    "title": "LinkedIn Profile Comments",
+    "description": "List the comments a LinkedIn member has left on other people's posts - the comment text, its permalink and timestamp, plus the post it was left on and that post's author and engagement. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of comments to return.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "postedLimit": {
+          "description": "Only return comments posted within this window (default any).",
+          "type": "string",
+          "enum": [
+            "any",
+            "24h",
+            "week",
+            "month"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full URL of the LinkedIn member profile whose comments on other people's posts should be listed."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile Comments",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_profile_posts_full",
+    "category": "linkedin",
+    "title": "LinkedIn Profile Posts (full)",
+    "description": "Fetch recent public LinkedIn profile posts with enriched author, engagement, article, newsletter, media, annotation, repost, and social activity details. About 84 Credits (twice the upstream charge, at most 250); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "contextCountry": {
+          "description": "Regional LinkedIn context used when retrieving posts.",
+          "type": "string",
+          "enum": [
+            "any",
+            "US",
+            "GB",
+            "DE",
+            "FR"
+          ]
+        },
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "includeQuotePosts": {
+          "description": "Whether to include quote posts that add commentary to shared content.",
+          "type": "boolean"
+        },
+        "includeReposts": {
+          "description": "Whether to include reposts that share content without added commentary.",
+          "type": "boolean"
+        },
+        "limit": {
+          "description": "Most posts to return (1-100, default 10).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "postedLimit": {
+          "description": "Only return posts published within this relative time window.",
+          "type": "string",
+          "enum": [
+            "any",
+            "1h",
+            "24h",
+            "week",
+            "month",
+            "3months",
+            "6months",
+            "year"
+          ]
+        },
+        "postedLimitDate": {
+          "description": "Only return posts published on or after this date or timestamp, using a JavaScript-compatible date-time string.",
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full URL of the public LinkedIn profile whose posts should be returned."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile Posts (full)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_profile_posts_thin",
+    "category": "linkedin",
+    "title": "LinkedIn Profile Posts (basic)",
+    "description": "Fetch recent public LinkedIn profile posts with portable identity, author, engagement, article, image, video, and repost fields. About 84 Credits (twice the upstream charge, at most 250); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response's nextCursor.",
+          "type": "string",
+          "minLength": 1
+        },
+        "limit": {
+          "description": "Most posts to return (10-100, default 10).",
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 100
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full URL of the public LinkedIn profile whose posts should be returned."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile Posts (basic)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_profile_reactions",
+    "category": "linkedin",
+    "title": "LinkedIn Profile Reactions",
+    "description": "List the posts a LinkedIn member has reacted to - the reaction, its timestamp, and the full post it was made on with author and engagement. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of reactions to return.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full URL of the LinkedIn member profile whose reactions to list, for example https://www.linkedin.com/in/williamhgates."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile Reactions",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_profile_thin",
+    "category": "linkedin",
+    "title": "LinkedIn Profile (basic)",
+    "description": "Light LinkedIn profile by URL: name, avatar, location, followers, current company, and a basic experience and education list. For full experience detail, skills, certifications, and verified flags use linkedin_profile. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full LinkedIn person profile URL, carrying the profile id after /in/, for example https://www.linkedin.com/in/williamhgates."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile (basic)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_companies",
+    "category": "linkedin",
+    "title": "LinkedIn Company Search",
+    "description": "Search LinkedIn companies by keyword with an optional location filter: name, URL, industry, size and description for each match. About 84 Credits (twice the upstream charge, at most 250); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of results to return (1-20, default 20).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "location": {
+          "description": "Optional location filter, written out in full (e.g. United Kingdom or San Francisco).",
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Keyword to search LinkedIn companies for (e.g. marketing agency)."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Company Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_groups",
+    "category": "linkedin",
+    "title": "LinkedIn Group Search",
+    "description": "Search LinkedIn groups by keyword, 10 per page: group name, URL, member count, summary, and logo. About 22 Credits (twice the upstream charge, at most 65); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "description": "Which page of up to 10 groups to return, starting at 1 (1-100, default 1).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Keyword to search LinkedIn groups for (e.g. python or sales)."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Group Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_leads",
+    "category": "linkedin",
+    "title": "LinkedIn Sales Navigator Lead Search",
+    "description": "LinkedIn lead search with Sales Navigator's search and filters: one call returns a page of up to 25 people matching a keyword and Sales Navigator lead filters (location, job title, current and past company, school, seniority, function, company size, and more), or the results of a Sales Navigator lead-search URL you built yourself. About 1167 Credits (twice the upstream charge, at most 1750); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "companyHeadcount": {
+          "description": "Filter by current company size (employee count). Codes: A=Self-Employed, B=1-10, C=11-50, D=51-200, E=201-500, F=501-1,000, G=1,001-5,000, H=5,001-10,000, I=10,001+.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I"
+            ]
+          }
+        },
+        "companyHeadquarterLocations": {
+          "description": "Filter by the location of the person's current company headquarters, by place name (e.g. ['United States']). Commas are not allowed in a value. Up to 70 values.",
+          "maxItems": 70,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "currentCompanies": {
+          "description": "Filter to people who currently work at any of these companies, by name (e.g. ['Google','Meta']). Multiple names widen the match (OR). Commas are not allowed in a value. Up to 50 values.",
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCompanyHeadquarterLocations": {
+          "description": "Exclude people whose current company is headquartered in any of these locations. Commas are not allowed in a value. Up to 70 values.",
+          "maxItems": 70,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCurrentCompanies": {
+          "description": "Exclude people who currently work at any of these companies, by name. Commas are not allowed in a value. Up to 50 values.",
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCurrentJobTitles": {
+          "description": "Exclude people whose current job title matches any of these. Commas are not allowed in a value. Up to 70 values.",
+          "maxItems": 70,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeFunctionIds": {
+          "description": "Exclude these job functions (same codes as functionIds). Up to 30 values.",
+          "maxItems": 30,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "25",
+              "26"
+            ]
+          }
+        },
+        "excludeLocations": {
+          "description": "Exclude people in any of these locations, by place name. Commas are not allowed in a value. Up to 70 values.",
+          "maxItems": 70,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludePastCompanies": {
+          "description": "Exclude people who previously worked at any of these companies, by name. Commas are not allowed in a value. Up to 50 values.",
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludePastJobTitles": {
+          "description": "Exclude people who held any of these past job titles. Commas are not allowed in a value. Up to 70 values.",
+          "maxItems": 70,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeSchools": {
+          "description": "Exclude people who attended any of these schools, by name. Commas are not allowed in a value. Up to 50 values.",
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeSeniorityLevelIds": {
+          "description": "Exclude these seniority levels (same codes as seniorityLevelIds). Up to 20 values.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "100",
+              "110",
+              "120",
+              "130",
+              "200",
+              "210",
+              "220",
+              "300",
+              "310",
+              "320"
+            ]
+          }
+        },
+        "firstNames": {
+          "description": "Filter to people whose first name matches any of these. Commas are not allowed in a value. Up to 70 values.",
+          "maxItems": 70,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "functionIds": {
+          "description": "Filter by job function. Codes: 1=Accounting, 2=Administrative, 3=Arts and Design, 4=Business Development, 5=Community and Social Services, 6=Consulting, 7=Education, 8=Engineering, 9=Entrepreneurship, 10=Finance, 11=Healthcare Services, 12=Human Resources, 13=Information Technology, 14=Legal, 15=Marketing, 16=Media and Communication, 17=Military and Protective Services, 18=Operations, 19=Product Management, 20=Program and Project Management, 21=Purchasing, 22=Quality Assurance, 23=Real Estate, 24=Research, 25=Sales, 26=Customer Success and Support.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "25",
+              "26"
+            ]
+          }
+        },
+        "jobTitle": {
+          "description": "Optional current job title filter (e.g. 'Software Engineer'). Commas are not allowed in a value.",
+          "type": "string",
+          "minLength": 1
+        },
+        "lastNames": {
+          "description": "Filter to people whose last name matches any of these. Commas are not allowed in a value. Up to 70 values.",
+          "maxItems": 70,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "location": {
+          "description": "Optional location filter (e.g. 'San Francisco'). Commas are not allowed in a value.",
+          "type": "string",
+          "minLength": 1
+        },
+        "page": {
+          "description": "Which page of up to 25 leads to return, starting at 1 (1-100, default 1). Also pages through a salesNavUrl search.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "pastCompanies": {
+          "description": "Filter to people who previously worked at any of these companies, by name. Commas are not allowed in a value. Up to 50 values.",
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pastJobTitles": {
+          "description": "Filter by a past job title the person held (e.g. ['Product Manager']). Commas are not allowed in a value. Up to 70 values.",
+          "maxItems": 70,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "profileLanguages": {
+          "description": "Filter by the profile's primary language.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Arabic",
+              "English",
+              "Spanish",
+              "Portuguese",
+              "Chinese",
+              "French",
+              "Italian",
+              "Russian",
+              "German",
+              "Dutch",
+              "Turkish",
+              "Tagalog",
+              "Polish",
+              "Korean",
+              "Japanese",
+              "Malay",
+              "Norwegian",
+              "Danish",
+              "Romanian",
+              "Swedish",
+              "Bahasa Indonesia",
+              "Czech"
+            ]
+          }
+        },
+        "query": {
+          "description": "Search keywords for LinkedIn leads: a role, name, or keywords (e.g. 'Marketing Manager'). Provide this or salesNavUrl.",
+          "type": "string",
+          "minLength": 1
+        },
+        "recentlyChangedJobs": {
+          "description": "When true, only return people who recently changed jobs (a strong sales/recruiting signal).",
+          "type": "boolean"
+        },
+        "recentlyPostedOnLinkedIn": {
+          "description": "When true, only return people who recently posted on LinkedIn (an activity signal).",
+          "type": "boolean"
+        },
+        "salesNavUrl": {
+          "description": "Alternatively, a LinkedIn Sales Navigator lead-search URL you built in Sales Navigator (e.g. https://www.linkedin.com/sales/search/people?query=(keywords%3Aengineer)).",
+          "type": "string",
+          "minLength": 1
+        },
+        "schools": {
+          "description": "Filter to people who attended any of these schools, by name. Commas are not allowed in a value. Up to 50 values.",
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "seniorityLevelIds": {
+          "description": "Filter by seniority level. Codes: 100=In Training, 110=Entry Level, 120=Senior, 130=Strategic, 200=Entry Level Manager, 210=Experienced Manager, 220=Director, 300=Vice President, 310=CXO, 320=Owner/Partner.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "100",
+              "110",
+              "120",
+              "130",
+              "200",
+              "210",
+              "220",
+              "300",
+              "310",
+              "320"
+            ]
+          }
+        },
+        "yearsAtCurrentCompanyIds": {
+          "description": "Filter by tenure at the current company. Codes: 1=Less than 1 year, 2=1 to 2 years, 3=3 to 5 years, 4=6 to 10 years, 5=More than 10 years.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        },
+        "yearsOfExperienceIds": {
+          "description": "Filter by total years of experience. Codes: 1=Less than 1 year, 2=1 to 2 years, 3=3 to 5 years, 4=6 to 10 years, 5=More than 10 years.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Sales Navigator Lead Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_posts",
+    "category": "linkedin",
+    "title": "LinkedIn Post Search",
+    "description": "Search public LinkedIn posts by keyword (text, link, publish date). Results come from search-engine matches over public LinkedIn posts and work best with English keywords. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Pagination cursor from a previous response.",
+          "type": "string",
+          "minLength": 1
+        },
+        "datePosted": {
+          "description": "Filter by recency. One of last-hour, last-day, last-week, last-month, last-year.",
+          "type": "string",
+          "enum": [
+            "last-hour",
+            "last-day",
+            "last-week",
+            "last-month",
+            "last-year"
+          ]
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The post search query."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Post Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_posts_full",
+    "category": "linkedin",
+    "title": "LinkedIn Post Search (full)",
+    "description": "Search public LinkedIn posts with rich author, engagement, attachment, and poll details. About 67 Credits (twice the upstream charge, at most 200); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "authorCompanyNames": {
+          "description": "Only return posts by people associated with these company names.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "authorIndustryIds": {
+          "description": "Only return posts by authors associated with these LinkedIn industry IDs.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "authorKeywords": {
+          "description": "Only return posts whose author profile headline or job title contains at least one of these keywords.",
+          "type": "string",
+          "minLength": 1
+        },
+        "authorUrls": {
+          "description": "Only return posts authored by these LinkedIn profile or company URLs.",
+          "maxItems": 10,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "contentType": {
+          "description": "Only return posts carrying this content type.",
+          "type": "string",
+          "enum": [
+            "all",
+            "videos",
+            "images",
+            "jobs",
+            "live-videos",
+            "documents",
+            "collaborative-articles"
+          ]
+        },
+        "datePosted": {
+          "description": "Only return posts published within this relative time window.",
+          "type": "string",
+          "enum": [
+            "last-hour",
+            "last-day",
+            "last-week",
+            "last-month",
+            "last-three-months",
+            "last-six-months",
+            "last-year"
+          ]
+        },
+        "limit": {
+          "description": "Maximum number of posts to return (1-100, default 10). The upper bound is one LinkedIn search page.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "mentioningMemberUrls": {
+          "description": "Only return posts mentioning these LinkedIn member profile URLs.",
+          "maxItems": 10,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "LinkedIn post search query, including quoted terms or Boolean operators accepted by LinkedIn search."
+        },
+        "sort": {
+          "description": "Order results by search relevance or publication date.",
+          "type": "string",
+          "enum": [
+            "relevance",
+            "date"
+          ]
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Post Search (full)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_profiles",
+    "category": "linkedin",
+    "title": "LinkedIn Profile Search",
+    "description": "Search LinkedIn profiles by keyword with location, job-title, company, school and seniority filters. Each match is a full profile: name, headline, location, current position, work experience, education and skills. For names and URLs only use linkedin_search_profiles_thin. Up to 3300 Credits, by how much comes back (twice the upstream charge, at most 4950); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "companyHeadcount": {
+          "description": "Filter by current company size (employee count). Codes: A=Self-Employed, B=1-10, C=11-50, D=51-200, E=201-500, F=501-1,000, G=1,001-5,000, H=5,001-10,000, I=10,001+.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I"
+            ]
+          }
+        },
+        "companyHeadquarterLocations": {
+          "description": "Filter by the location of the person's current company headquarters, by place name (e.g. ['United States']).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "currentCompanies": {
+          "description": "Filter to people who currently work at any of these companies, by name (e.g. ['Google','Meta']). Multiple names widen the match (OR).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCompanyHeadquarterLocations": {
+          "description": "Exclude people whose current company is headquartered in any of these locations.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCurrentCompanies": {
+          "description": "Exclude people who currently work at any of these companies, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCurrentJobTitles": {
+          "description": "Exclude people whose current job title matches any of these.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeFunctionIds": {
+          "description": "Exclude these job functions (same codes as functionIds).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "25",
+              "26"
+            ]
+          }
+        },
+        "excludeLocations": {
+          "description": "Exclude people in any of these locations, by place name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludePastCompanies": {
+          "description": "Exclude people who previously worked at any of these companies, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludePastJobTitles": {
+          "description": "Exclude people who held any of these past job titles.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeSchools": {
+          "description": "Exclude people who attended any of these schools, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeSeniorityLevelIds": {
+          "description": "Exclude these seniority levels (same codes as seniorityLevelIds).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "100",
+              "110",
+              "120",
+              "130",
+              "200",
+              "210",
+              "220",
+              "300",
+              "310",
+              "320"
+            ]
+          }
+        },
+        "firstNames": {
+          "description": "Filter to people whose first name matches any of these.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "functionIds": {
+          "description": "Filter by job function. Codes: 1=Accounting, 2=Administrative, 3=Arts and Design, 4=Business Development, 5=Community and Social Services, 6=Consulting, 7=Education, 8=Engineering, 9=Entrepreneurship, 10=Finance, 11=Healthcare Services, 12=Human Resources, 13=Information Technology, 14=Legal, 15=Marketing, 16=Media and Communication, 17=Military and Protective Services, 18=Operations, 19=Product Management, 20=Program and Project Management, 21=Purchasing, 22=Quality Assurance, 23=Real Estate, 24=Research, 25=Sales, 26=Customer Success and Support.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "25",
+              "26"
+            ]
+          }
+        },
+        "jobTitle": {
+          "description": "Optional current job title filter (e.g. 'Software Engineer').",
+          "type": "string",
+          "minLength": 1
+        },
+        "lastNames": {
+          "description": "Filter to people whose last name matches any of these.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "limit": {
+          "description": "Maximum number of full profiles to return (1-25, default 10).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 25
+        },
+        "location": {
+          "description": "Optional location filter (e.g. 'San Francisco').",
+          "type": "string",
+          "minLength": 1
+        },
+        "pastCompanies": {
+          "description": "Filter to people who previously worked at any of these companies, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pastJobTitles": {
+          "description": "Filter by a past job title the person held (e.g. ['Product Manager']).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "profileLanguages": {
+          "description": "Filter by the profile's primary language.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Arabic",
+              "English",
+              "Spanish",
+              "Portuguese",
+              "Chinese",
+              "French",
+              "Italian",
+              "Russian",
+              "German",
+              "Dutch",
+              "Turkish",
+              "Tagalog",
+              "Polish",
+              "Korean",
+              "Japanese",
+              "Malay",
+              "Norwegian",
+              "Danish",
+              "Romanian",
+              "Swedish",
+              "Bahasa Indonesia",
+              "Czech"
+            ]
+          }
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Search query for LinkedIn profiles: a role, name, or keywords (e.g. 'Marketing Manager')."
+        },
+        "recentlyChangedJobs": {
+          "description": "When true, only return people who recently changed jobs (a strong sales/recruiting signal).",
+          "type": "boolean"
+        },
+        "recentlyPostedOnLinkedIn": {
+          "description": "When true, only return people who recently posted on LinkedIn (an activity signal).",
+          "type": "boolean"
+        },
+        "schools": {
+          "description": "Filter to people who attended any of these schools, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "seniorityLevelIds": {
+          "description": "Filter by seniority level. Codes: 100=In Training, 110=Entry Level, 120=Senior, 130=Strategic, 200=Entry Level Manager, 210=Experienced Manager, 220=Director, 300=Vice President, 310=CXO, 320=Owner/Partner.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "100",
+              "110",
+              "120",
+              "130",
+              "200",
+              "210",
+              "220",
+              "300",
+              "310",
+              "320"
+            ]
+          }
+        },
+        "yearsAtCurrentCompanyIds": {
+          "description": "Filter by tenure at the current company. Codes: 1=Less than 1 year, 2=1 to 2 years, 3=3 to 5 years, 4=6 to 10 years, 5=More than 10 years.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        },
+        "yearsOfExperienceIds": {
+          "description": "Filter by total years of experience. Codes: 1=Less than 1 year, 2=1 to 2 years, 3=3 to 5 years, 4=6 to 10 years, 5=More than 10 years.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_profiles_email",
+    "category": "linkedin",
+    "title": "LinkedIn Profile Search + Email",
+    "description": "LinkedIn people search returning a full profile and a verified work email for each match. Email discovery is best effort; a match without a found email still counts toward the charge. For one known profile use linkedin_email. Up to 5600 Credits, by how much comes back (twice the upstream charge, at most 8400); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "companyHeadcount": {
+          "description": "Filter by current company size (employee count). Codes: A=Self-Employed, B=1-10, C=11-50, D=51-200, E=201-500, F=501-1,000, G=1,001-5,000, H=5,001-10,000, I=10,001+.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H",
+              "I"
+            ]
+          }
+        },
+        "companyHeadquarterLocations": {
+          "description": "Filter by the location of the person's current company headquarters, by place name (e.g. ['United States']).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "currentCompanies": {
+          "description": "Filter to people who currently work at any of these companies, by name (e.g. ['Google','Meta']). Multiple names widen the match (OR).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCompanyHeadquarterLocations": {
+          "description": "Exclude people whose current company is headquartered in any of these locations.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCurrentCompanies": {
+          "description": "Exclude people who currently work at any of these companies, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeCurrentJobTitles": {
+          "description": "Exclude people whose current job title matches any of these.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeFunctionIds": {
+          "description": "Exclude these job functions (same codes as functionIds).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "25",
+              "26"
+            ]
+          }
+        },
+        "excludeLocations": {
+          "description": "Exclude people in any of these locations, by place name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludePastCompanies": {
+          "description": "Exclude people who previously worked at any of these companies, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludePastJobTitles": {
+          "description": "Exclude people who held any of these past job titles.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeSchools": {
+          "description": "Exclude people who attended any of these schools, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "excludeSeniorityLevelIds": {
+          "description": "Exclude these seniority levels (same codes as seniorityLevelIds).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "100",
+              "110",
+              "120",
+              "130",
+              "200",
+              "210",
+              "220",
+              "300",
+              "310",
+              "320"
+            ]
+          }
+        },
+        "firstNames": {
+          "description": "Filter to people whose first name matches any of these.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "functionIds": {
+          "description": "Filter by job function. Codes: 1=Accounting, 2=Administrative, 3=Arts and Design, 4=Business Development, 5=Community and Social Services, 6=Consulting, 7=Education, 8=Engineering, 9=Entrepreneurship, 10=Finance, 11=Healthcare Services, 12=Human Resources, 13=Information Technology, 14=Legal, 15=Marketing, 16=Media and Communication, 17=Military and Protective Services, 18=Operations, 19=Product Management, 20=Program and Project Management, 21=Purchasing, 22=Quality Assurance, 23=Real Estate, 24=Research, 25=Sales, 26=Customer Success and Support.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "25",
+              "26"
+            ]
+          }
+        },
+        "jobTitle": {
+          "description": "Optional current job title filter (e.g. 'Software Engineer').",
+          "type": "string",
+          "minLength": 1
+        },
+        "lastNames": {
+          "description": "Filter to people whose last name matches any of these.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "limit": {
+          "description": "Maximum number of full profiles (with email) to return (1-25, default 10).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 25
+        },
+        "location": {
+          "description": "Optional location filter (e.g. 'San Francisco').",
+          "type": "string",
+          "minLength": 1
+        },
+        "pastCompanies": {
+          "description": "Filter to people who previously worked at any of these companies, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pastJobTitles": {
+          "description": "Filter by a past job title the person held (e.g. ['Product Manager']).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "profileLanguages": {
+          "description": "Filter by the profile's primary language.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Arabic",
+              "English",
+              "Spanish",
+              "Portuguese",
+              "Chinese",
+              "French",
+              "Italian",
+              "Russian",
+              "German",
+              "Dutch",
+              "Turkish",
+              "Tagalog",
+              "Polish",
+              "Korean",
+              "Japanese",
+              "Malay",
+              "Norwegian",
+              "Danish",
+              "Romanian",
+              "Swedish",
+              "Bahasa Indonesia",
+              "Czech"
+            ]
+          }
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Search query for LinkedIn profiles: a role, name, or keywords (e.g. 'Marketing Manager')."
+        },
+        "recentlyChangedJobs": {
+          "description": "When true, only return people who recently changed jobs (a strong sales/recruiting signal).",
+          "type": "boolean"
+        },
+        "recentlyPostedOnLinkedIn": {
+          "description": "When true, only return people who recently posted on LinkedIn (an activity signal).",
+          "type": "boolean"
+        },
+        "schools": {
+          "description": "Filter to people who attended any of these schools, by name.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "seniorityLevelIds": {
+          "description": "Filter by seniority level. Codes: 100=In Training, 110=Entry Level, 120=Senior, 130=Strategic, 200=Entry Level Manager, 210=Experienced Manager, 220=Director, 300=Vice President, 310=CXO, 320=Owner/Partner.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "100",
+              "110",
+              "120",
+              "130",
+              "200",
+              "210",
+              "220",
+              "300",
+              "310",
+              "320"
+            ]
+          }
+        },
+        "yearsAtCurrentCompanyIds": {
+          "description": "Filter by tenure at the current company. Codes: 1=Less than 1 year, 2=1 to 2 years, 3=3 to 5 years, 4=6 to 10 years, 5=More than 10 years.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        },
+        "yearsOfExperienceIds": {
+          "description": "Filter by total years of experience. Codes: 1=Less than 1 year, 2=1 to 2 years, 3=3 to 5 years, 4=6 to 10 years, 5=More than 10 years.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ]
+          }
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile Search + Email",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_profiles_thin",
+    "category": "linkedin",
+    "title": "LinkedIn Profile Search (basic)",
+    "description": "Light LinkedIn people search: name, headline, profile URL, location. No full profile or email - for full profiles use linkedin_search_profiles, and add emails with linkedin_search_profiles_email. About 534 Credits (twice the upstream charge, at most 800); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "currentCompanyId": {
+          "description": "Filter by current employer, using a numeric LinkedIn company id. Comma-separate for several.",
+          "type": "string",
+          "minLength": 1
+        },
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; a page holds 10 profiles.",
+          "type": "string",
+          "minLength": 1
+        },
+        "firstName": {
+          "description": "Filter by first name (e.g. Jane).",
+          "type": "string",
+          "minLength": 1
+        },
+        "followerOfUrn": {
+          "description": "Return only people who follow this member, given the member's LinkedIn URN.",
+          "type": "string",
+          "minLength": 1
+        },
+        "industryId": {
+          "description": "Filter by industry, using a LinkedIn industry id.",
+          "type": "string",
+          "minLength": 1
+        },
+        "lastName": {
+          "description": "Filter by last name (e.g. Okafor).",
+          "type": "string",
+          "minLength": 1
+        },
+        "locationId": {
+          "description": "Filter by location, using a LinkedIn geocode id.",
+          "type": "string",
+          "minLength": 1
+        },
+        "pastCompanyId": {
+          "description": "Filter by a previous employer, using a numeric LinkedIn company id.",
+          "type": "string",
+          "minLength": 1
+        },
+        "profileLanguage": {
+          "description": "Filter by the language the profile is written in (ISO 2-letter code, e.g. en).",
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Search query for LinkedIn profiles - a role, name, or keywords (e.g. 'Marketing Manager')."
+        },
+        "schoolId": {
+          "description": "Filter by school, using a LinkedIn school id.",
+          "type": "string",
+          "minLength": 1
+        },
+        "serviceCategoryId": {
+          "description": "Filter by service category, using a numeric service-category id.",
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "description": "Filter by job title or headline (e.g. Head of Talent).",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Profile Search (basic)",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "linkedin_search_services",
+    "category": "linkedin",
+    "title": "LinkedIn Service Provider Search",
+    "description": "Find freelancers and service providers on LinkedIn by the service they offer (e.g. 'Web Development'), optionally in a location. About 44 Credits (twice the upstream charge, at most 130); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "geoId": {
+          "description": "LinkedIn geo id to target a precise location (e.g. 103644278 for the United States); more exact than the free-text location, and overrides it when both are sent.",
+          "type": "string",
+          "minLength": 1
+        },
+        "location": {
+          "description": "Optional location filter as a place name (e.g. 'Australia', 'New York').",
+          "type": "string",
+          "minLength": 1
+        },
+        "page": {
+          "description": "Which page of up to 10 people to return, starting at 1 (1-100, default 1).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The service to search for, as keywords (e.g. 'Web Development', 'Accounting', 'Photography')."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "LinkedIn Service Provider Search",
+      "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": false,
       "openWorldHint": true
@@ -27829,6 +31758,525 @@ export const MCP_TOOL_CATALOG = [
     }
   },
   {
+    "name": "twitter_article",
+    "category": "twitter",
+    "title": "X Article",
+    "description": "Get a public X long-form article from its wrapper post URL, including its author, engagement, cover image, and structured content blocks. About 9 Credits (twice the upstream charge, at most 27); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical x.com or twitter.com URL of the public wrapper post for an X Article."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Article",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_community",
+    "category": "twitter",
+    "title": "X Community",
+    "description": "Fetch a Twitter/X community's public details (name, description, member count, join policy) by URL. About 2 Credits (twice the upstream charge, at most 5); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Community URL (e.g. https://x.com/i/communities/1926186499399139650)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Community",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_community_tweets",
+    "category": "twitter",
+    "title": "X Community Posts",
+    "description": "List recent tweets posted in a Twitter/X community by URL. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Community URL (e.g. https://x.com/i/communities/1926186499399139650)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Community Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_followers",
+    "category": "twitter",
+    "title": "X Followers",
+    "description": "Fetch the follower list of any public X (Twitter) account by username with cursor pagination. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; pass it to fetch the next page of followers.",
+          "type": "string",
+          "minLength": 1
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The X (Twitter) username to fetch followers for, without the @ prefix (e.g. elonmusk)."
+        }
+      },
+      "required": [
+        "username"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Followers",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_following",
+    "category": "twitter",
+    "title": "X Following",
+    "description": "List the accounts a public X (Twitter) account follows by username with cursor pagination. Limit is a per-page maximum; follow the response's nextCursor for more. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; pass it to fetch the next page of followed accounts.",
+          "type": "string",
+          "minLength": 1
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The X (Twitter) username to fetch the following list for, without the @ prefix (e.g. elonmusk)."
+        }
+      },
+      "required": [
+        "username"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Following",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_profile",
+    "category": "twitter",
+    "title": "X Profile",
+    "description": "Fetch a Twitter/X account's public profile (followers, tweets, bio, verification) by handle. About 4 Credits (twice the upstream charge, at most 11); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Twitter/X handle without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Profile",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_replies",
+    "category": "twitter",
+    "title": "X Post Replies",
+    "description": "Fetch the replies to any X (Twitter) post URL as structured records: author, text, and engagement. An empty result is valid and does not assert whether the target post exists. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; pass it to fetch the next page of replies.",
+          "type": "string",
+          "minLength": 1
+        },
+        "limit": {
+          "description": "Maximum number of results to return (1-40, default 40).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 40
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Full URL of the X (Twitter) post to fetch replies for (e.g. https://x.com/nasa/status/1846987139428634858)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Post Replies",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_search",
+    "category": "twitter",
+    "title": "X Search",
+    "description": "Search X (Twitter) with full advanced-search syntax (operators like from:, since:, until:, min_faves: work inline in the query) and get structured tweets with text, author, engagement, and cursor pagination. About 9 Credits (twice the upstream charge, at most 27); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; pass it to fetch the next page of search results.",
+          "type": "string",
+          "minLength": 1
+        },
+        "limit": {
+          "description": "Page size to ask for (1-50, default 20). A page is never trimmed after the call, so follow nextCursor to continue exactly where this response ended.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Search query in X advanced-search syntax. Bare terms are ANDed, so use one short phrase or OR between alternatives. Operators work inline: from:, to:, since:YYYY-MM-DD, until:, min_faves:N, \"exact phrase\", -term, filter:media, -filter:replies, lang:en."
+        },
+        "queryType": {
+          "description": "Which posts to return: 'Latest' (newest first, the default), 'Top' (most popular), 'Photos' (newest posts with images), or 'Videos' (newest posts with video).",
+          "type": "string",
+          "enum": [
+            "Latest",
+            "Top",
+            "Photos",
+            "Videos"
+          ]
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_search_communities",
+    "category": "twitter",
+    "title": "X Community Search",
+    "description": "Search X (Twitter) communities by keyword and get their id, name, topic, and member count with cursor pagination. This is how you find a community URL to pass to twitter_community or twitter_community_tweets. Up to 19 Credits, by how much comes back (twice the upstream charge, at most 28); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; pass it to fetch the next page of communities.",
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Keyword to match against X (Twitter) community names and topics (e.g. artificial intelligence)."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Community Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_search_users",
+    "category": "twitter",
+    "title": "X User Search",
+    "description": "Search X (Twitter) accounts by keyword - the People tab of X search. Use twitter_search for posts. About 9 Credits (twice the upstream charge, at most 27); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page; pass it to fetch the next page of accounts.",
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Keyword to match against X (Twitter) handles, display names, and profile bios."
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X User Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_thread",
+    "category": "twitter",
+    "title": "X Post Thread",
+    "description": "Resolve the linear self-thread containing an X (Twitter) post, from its root through the author's linked continuations. This excludes replies from other users. About 45 Credits (twice the upstream charge, at most 135); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical x.com or twitter.com status URL with a numeric tweet ID."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Post Thread",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_trends",
+    "category": "twitter",
+    "title": "X Trends",
+    "description": "Get current X (Twitter) trends for worldwide, a country, or a city in X ranking order, including the resolved location. About 2 Credits (twice the upstream charge, at most 5); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "limit": {
+          "description": "Maximum number of ranked trends to return (1-50, default 50).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "location": {
+          "description": "Country name, city name, or ISO country code. Omit for worldwide trends.",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Trends",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_tweet",
+    "category": "twitter",
+    "title": "X Post",
+    "description": "Fetch a single Twitter/X tweet by URL with its full text and engagement counts (likes, retweets, replies, quotes, bookmarks, views). About 4 Credits (twice the upstream charge, at most 11); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical x.com or twitter.com status URL with a numeric tweet ID, including /i/web/status and media-share variants."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Post",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_tweet_transcript",
+    "category": "twitter",
+    "title": "X Post Transcript",
+    "description": "Extract the spoken transcript from a Twitter/X video tweet by URL. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Tweet URL of the video to transcribe (e.g. https://x.com/TheoVon/status/1916982720317821050)."
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X Post Transcript",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_user_posts",
+    "category": "twitter",
+    "title": "X User Posts",
+    "description": "Get an X (Twitter) account's profile Posts-tab timeline by handle. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page.",
+          "type": "string",
+          "minLength": 1
+        },
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Twitter/X handle without the leading @."
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X User Posts",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
+    "name": "twitter_user_tweets",
+    "category": "twitter",
+    "title": "X User Posts and Replies",
+    "description": "Get up to the requested limit of tweets and replies authored by an X (Twitter) account, with engagement, views, language, and cursor pagination where available. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "cursor": {
+          "description": "Opaque pagination cursor from a previous response's nextCursor. Omit for the first page.",
+          "type": "string",
+          "minLength": 1
+        },
+        "handle": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Twitter/X handle without the leading @."
+        },
+        "limit": {
+          "description": "Page size to ask for (1-100, default 20). A page is never trimmed after the call, so follow nextCursor and pass it back as cursor to continue exactly where this response ended.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "handle"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "X User Posts and Replies",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "update_artifact_template",
     "category": "artifacts",
     "title": "Update Template",
@@ -29282,7 +33730,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "zillow_agent",
     "category": "zillow",
     "title": "Zillow Agent Profile",
-    "description": "One Zillow agent profile by URL: name, phone, email, brokerage, rating, review count, sales and service areas. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+    "description": "One Zillow agent profile by URL: name, phone, email, brokerage, rating, review count, sales and service areas. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -29310,7 +33758,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "zillow_property",
     "category": "zillow",
     "title": "Zillow Property Details",
-    "description": "Full details for one Zillow listing by URL: price, facts and features, photos, and price and tax history. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+    "description": "Full details for one Zillow listing by URL: price, facts and features, photos, and price and tax history. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -29338,7 +33786,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "zillow_search",
     "category": "zillow",
     "title": "Zillow Listing Search",
-    "description": "Search Zillow listings for sale, for rent or sold in a city, ZIP, county or neighborhood, with price, bedroom, size, home-type and recency filters. About 13 Credits (twice the upstream charge, at most 39); failed calls are refunded.",
+    "description": "Search Zillow listings for sale, for rent or sold in a city, ZIP, county or neighborhood, with price, bedroom, size, home-type and recency filters. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -29560,6 +34008,6 @@ export const MCP_TOOL_CATALOG = [
       "openWorldHint": true
     }
   }
-] as const
-export const MCP_TOOL_NAMES = MCP_TOOL_CATALOG.map(tool => tool.name)
-export const MCP_TOOL_COUNT = MCP_TOOL_CATALOG.length
+]
+export const MCP_TOOL_NAMES: readonly string[] = MCP_TOOL_CATALOG.map(tool => tool.name)
+export const MCP_TOOL_COUNT: number = MCP_TOOL_CATALOG.length

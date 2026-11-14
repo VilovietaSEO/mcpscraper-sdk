@@ -194,8 +194,8 @@ Server 0.100.1 improves Maps discovery, review text and list collection through 
 
 ## Consistent hosted MCP protocol
 
-This release targets MCP Scraper 0.105.0 with 364 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+This release targets MCP Scraper 0.106.1 with 459 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
 
 Publication management: list owned subdomains with `commons_list_publications`, select a name with `commons_get_publication`, and edit one article with `commons_update_editorial_article`. Publishing merges omitted articles by default; use `mode:replace` for a full replacement. Use the dedicated article or publication delete tool with its current revision and a stable retry key. See the [release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0).
 
-Search Zillow listings and Amazon products, and read property, agent, product, review, offer, deal and seller details, through the new `zillow` and `amazon` tool groups. See the [0.60.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.60.0) for the compatible package versions.
+Read LinkedIn, X and Instagram profiles, posts, comments, followers, jobs, ads and searches through the new `linkedin` and `twitter` tool groups and 43 new `instagram` tools. See the [0.61.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.61.0) for the compatible package versions.
