@@ -21,6 +21,7 @@ class HarvestPaaStartInput(BaseModel):
     include_videos: Union[bool, None] = Field(None, alias='includeVideos', description='Include video result names and URLs present on the original SERP.')
     include_ai_overview: Union[bool, None] = Field(None, alias='includeAiOverview', description='Include AI Overview and AI Mode text and citations when present.')
     include_what_people_saying: Union[bool, None] = Field(None, alias='includeWhatPeopleSaying', description='Include the What People Are Saying social surface when present.')
+    link_resolution: Union[Literal['complete', 'deferred'], None] = Field(None, alias='linkResolution', description='complete waits until source and result links are real destination URLs, which adds about a minute after the questions are captured. deferred finishes the job as soon as questions, answers and sources are captured: wrapped links stay as working Google redirect links marked pending, and a later harvest_paa_status read of the same jobId supplies the destination URLs at no charge.')
 
 
 HarvestPaaStartOutputVariant1StatusVariant1 = TypedDict('HarvestPaaStartOutputVariant1StatusVariant1', {

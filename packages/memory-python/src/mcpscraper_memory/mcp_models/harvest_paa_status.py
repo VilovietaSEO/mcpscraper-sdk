@@ -179,6 +179,14 @@ HarvestPaaStatusOutputVariant1ResultVariant1PaginationVariant1 = TypedDict('Harv
 HarvestPaaStatusOutputVariant1ResultVariant1PaginationVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+HarvestPaaStatusOutputVariant1ResultVariant1LinkResolutionVariant1 = TypedDict('HarvestPaaStatusOutputVariant1ResultVariant1LinkResolutionVariant1', {
+    'mode': Required[Literal['deferred']],
+    'pending': Required[Annotated[int, Field(ge=1, le=9007199254740991)]],
+    'readyAfterSeconds': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+})
+HarvestPaaStatusOutputVariant1ResultVariant1LinkResolutionVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 HarvestPaaStatusOutputVariant1ResultVariant1PaaLifecycleVariant1RetryBreakdown = TypedDict('HarvestPaaStatusOutputVariant1ResultVariant1PaaLifecycleVariant1RetryBreakdown', {
     'controlRetries': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
     'browserRetries': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
@@ -311,6 +319,7 @@ HarvestPaaStatusOutputVariant1ResultVariant1 = TypedDict('HarvestPaaStatusOutput
     'completionStatus': Required[Union[str, None]],
     'resultQuality': Required[Union[str, None]],
     'retryRecommended': Required[Union[bool, None]],
+    'linkResolution': NotRequired[Union[HarvestPaaStatusOutputVariant1ResultVariant1LinkResolutionVariant1, None]],
     'paaLifecycle': Required[Union[HarvestPaaStatusOutputVariant1ResultVariant1PaaLifecycleVariant1, None]],
     'phaseTimings': Required[Union[HarvestPaaStatusOutputVariant1ResultVariant1PhaseTimingsVariant1, None]],
     'questionCount': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],

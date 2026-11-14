@@ -18,6 +18,11 @@ export type Output =
       degradedResult: boolean | null;
       degradationReasons: string[];
       retryRecommended: boolean | null;
+      linkResolution?: {
+        mode: "deferred";
+        pending: number;
+        readyAfterSeconds: number;
+      } | null;
       pagination: {
         requestedPages: 1 | 2;
         capturedPages: 1 | 2;
