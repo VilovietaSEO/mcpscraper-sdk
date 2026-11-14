@@ -308,14 +308,93 @@ import * as ImagesFolderCreate from './tools/image_folder_create.js'
 import * as ImagesFolderList from './tools/image_folder_list.js'
 import * as ImagesProjectCreate from './tools/image_project_create.js'
 import * as ImagesProjectList from './tools/image_project_list.js'
+import * as InstagramAccountAbout from './tools/instagram_account_about.js'
+import * as InstagramAudioReels from './tools/instagram_audio_reels.js'
+import * as InstagramBasicProfile from './tools/instagram_basic_profile.js'
+import * as InstagramCommentLikers from './tools/instagram_comment_likers.js'
+import * as InstagramCommentReplies from './tools/instagram_comment_replies.js'
+import * as InstagramEmbed from './tools/instagram_embed.js'
+import * as InstagramFollowers from './tools/instagram_followers.js'
+import * as InstagramFollowing from './tools/instagram_following.js'
+import * as InstagramHashtagAnalytics from './tools/instagram_hashtag_analytics.js'
+import * as InstagramHashtagRecentPosts from './tools/instagram_hashtag_recent_posts.js'
+import * as InstagramHashtagTopPosts from './tools/instagram_hashtag_top_posts.js'
+import * as InstagramHighlightDetail from './tools/instagram_highlight_detail.js'
+import * as InstagramLocationDetails from './tools/instagram_location_details.js'
+import * as InstagramLocationPosts from './tools/instagram_location_posts.js'
 import * as InstagramMediaDownload from './tools/instagram_media_download.js'
+import * as InstagramMediaTranscript from './tools/instagram_media_transcript.js'
+import * as InstagramPost from './tools/instagram_post.js'
+import * as InstagramPostComments from './tools/instagram_post_comments.js'
+import * as InstagramPostLikers from './tools/instagram_post_likers.js'
+import * as InstagramProfileContact from './tools/instagram_profile_contact.js'
 import * as InstagramProfileContent from './tools/instagram_profile_content.js'
+import * as InstagramProfileDetails from './tools/instagram_profile_details.js'
+import * as InstagramReelTranscript from './tools/instagram_reel_transcript.js'
+import * as InstagramReelsSearch from './tools/instagram_reels_search.js'
+import * as InstagramSearch from './tools/instagram_search.js'
+import * as InstagramSearchAudio from './tools/instagram_search_audio.js'
+import * as InstagramSearchFollowers from './tools/instagram_search_followers.js'
+import * as InstagramSearchFollowing from './tools/instagram_search_following.js'
+import * as InstagramSearchHashtag from './tools/instagram_search_hashtag.js'
+import * as InstagramSearchLocations from './tools/instagram_search_locations.js'
+import * as InstagramSearchProfiles from './tools/instagram_search_profiles.js'
+import * as InstagramSearchProfilesContact from './tools/instagram_search_profiles_contact.js'
+import * as InstagramSimilarProfiles from './tools/instagram_similar_profiles.js'
+import * as InstagramStoriesFull from './tools/instagram_stories_full.js'
+import * as InstagramStoriesThin from './tools/instagram_stories_thin.js'
+import * as InstagramStory from './tools/instagram_story.js'
+import * as InstagramSuggestedProfiles from './tools/instagram_suggested_profiles.js'
+import * as InstagramTaggedPosts from './tools/instagram_tagged_posts.js'
+import * as InstagramTrendingReels from './tools/instagram_trending_reels.js'
+import * as InstagramUserHighlights from './tools/instagram_user_highlights.js'
+import * as InstagramUserPosts from './tools/instagram_user_posts.js'
+import * as InstagramUserReels from './tools/instagram_user_reels.js'
+import * as InstagramUserReelsLoggedIn from './tools/instagram_user_reels_logged_in.js'
+import * as InstagramUserReposts from './tools/instagram_user_reposts.js'
+import * as InstagramWebReelsSearch from './tools/instagram_web_reels_search.js'
 import * as LeadsEnrich from './tools/lead_list_enrich.js'
 import * as LeadsEnrichStatus from './tools/lead_list_enrich_status.js'
 import * as LeadsImport from './tools/lead_list_import.js'
 import * as LeadsUploadStart from './tools/lead_list_upload_start.js'
 import * as LeadListsLeadListEnrichCancel from './tools/lead_list_enrich_cancel.js'
 import * as LibraryIngest from './tools/library-ingest.js'
+import * as LinkedinAd from './tools/linkedin_ad.js'
+import * as LinkedinAds from './tools/linkedin_ads.js'
+import * as LinkedinAdsSearch from './tools/linkedin_ads_search.js'
+import * as LinkedinArticle from './tools/linkedin_article.js'
+import * as LinkedinCommentReactions from './tools/linkedin_comment_reactions.js'
+import * as LinkedinCommentReplies from './tools/linkedin_comment_replies.js'
+import * as LinkedinCompany from './tools/linkedin_company.js'
+import * as LinkedinCompanyEmployees from './tools/linkedin_company_employees.js'
+import * as LinkedinCompanyPosts from './tools/linkedin_company_posts.js'
+import * as LinkedinCompanyPostsThin from './tools/linkedin_company_posts_thin.js'
+import * as LinkedinCompanyThin from './tools/linkedin_company_thin.js'
+import * as LinkedinEmail from './tools/linkedin_email.js'
+import * as LinkedinGroup from './tools/linkedin_group.js'
+import * as LinkedinGroupPosts from './tools/linkedin_group_posts.js'
+import * as LinkedinJob from './tools/linkedin_job.js'
+import * as LinkedinJobs from './tools/linkedin_jobs.js'
+import * as LinkedinJobsThin from './tools/linkedin_jobs_thin.js'
+import * as LinkedinPost from './tools/linkedin_post.js'
+import * as LinkedinPostComments from './tools/linkedin_post_comments.js'
+import * as LinkedinPostReactions from './tools/linkedin_post_reactions.js'
+import * as LinkedinPostTranscript from './tools/linkedin_post_transcript.js'
+import * as LinkedinProfile from './tools/linkedin_profile.js'
+import * as LinkedinProfileComments from './tools/linkedin_profile_comments.js'
+import * as LinkedinProfilePostsFull from './tools/linkedin_profile_posts_full.js'
+import * as LinkedinProfilePostsThin from './tools/linkedin_profile_posts_thin.js'
+import * as LinkedinProfileReactions from './tools/linkedin_profile_reactions.js'
+import * as LinkedinProfileThin from './tools/linkedin_profile_thin.js'
+import * as LinkedinSearchCompanies from './tools/linkedin_search_companies.js'
+import * as LinkedinSearchGroups from './tools/linkedin_search_groups.js'
+import * as LinkedinSearchLeads from './tools/linkedin_search_leads.js'
+import * as LinkedinSearchPosts from './tools/linkedin_search_posts.js'
+import * as LinkedinSearchPostsFull from './tools/linkedin_search_posts_full.js'
+import * as LinkedinSearchProfiles from './tools/linkedin_search_profiles.js'
+import * as LinkedinSearchProfilesEmail from './tools/linkedin_search_profiles_email.js'
+import * as LinkedinSearchProfilesThin from './tools/linkedin_search_profiles_thin.js'
+import * as LinkedinSearchServices from './tools/linkedin_search_services.js'
 import * as TagsListMemoryTags from './tools/list-memory-tags.js'
 import * as TagsMergeMemoryTags from './tools/merge-memory-tags.js'
 import * as TagsResolveMemoryTags from './tools/resolve-memory-tags.js'
@@ -355,6 +434,22 @@ import * as TablesInsertRows from './tools/table-insert-rows.js'
 import * as TablesList from './tools/table-list.js'
 import * as TablesQuery from './tools/table-query.js'
 import * as RecallTemporalRecall from './tools/temporal-recall.js'
+import * as TwitterArticle from './tools/twitter_article.js'
+import * as TwitterCommunity from './tools/twitter_community.js'
+import * as TwitterCommunityTweets from './tools/twitter_community_tweets.js'
+import * as TwitterFollowers from './tools/twitter_followers.js'
+import * as TwitterFollowing from './tools/twitter_following.js'
+import * as TwitterProfile from './tools/twitter_profile.js'
+import * as TwitterReplies from './tools/twitter_replies.js'
+import * as TwitterSearch from './tools/twitter_search.js'
+import * as TwitterSearchCommunities from './tools/twitter_search_communities.js'
+import * as TwitterSearchUsers from './tools/twitter_search_users.js'
+import * as TwitterThread from './tools/twitter_thread.js'
+import * as TwitterTrends from './tools/twitter_trends.js'
+import * as TwitterTweet from './tools/twitter_tweet.js'
+import * as TwitterTweetTranscript from './tools/twitter_tweet_transcript.js'
+import * as TwitterUserPosts from './tools/twitter_user_posts.js'
+import * as TwitterUserTweets from './tools/twitter_user_tweets.js'
 import * as VideoFrameAnalysis from './tools/video_frame_analysis.js'
 import * as VideoFrameAnalysisStatus from './tools/video_frame_analysis_status.js'
 import * as VideoAnalyzeStart from './tools/video-analyze-start.js'
@@ -1627,14 +1722,229 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "importServiceConnectionToMemory"
   },
   {
+    "name": "instagram_account_about",
+    "category": "instagram",
+    "methodName": "accountAbout"
+  },
+  {
+    "name": "instagram_audio_reels",
+    "category": "instagram",
+    "methodName": "audioReels"
+  },
+  {
+    "name": "instagram_basic_profile",
+    "category": "instagram",
+    "methodName": "basicProfile"
+  },
+  {
+    "name": "instagram_comment_likers",
+    "category": "instagram",
+    "methodName": "commentLikers"
+  },
+  {
+    "name": "instagram_comment_replies",
+    "category": "instagram",
+    "methodName": "commentReplies"
+  },
+  {
+    "name": "instagram_embed",
+    "category": "instagram",
+    "methodName": "embed"
+  },
+  {
+    "name": "instagram_followers",
+    "category": "instagram",
+    "methodName": "followers"
+  },
+  {
+    "name": "instagram_following",
+    "category": "instagram",
+    "methodName": "following"
+  },
+  {
+    "name": "instagram_hashtag_analytics",
+    "category": "instagram",
+    "methodName": "hashtagAnalytics"
+  },
+  {
+    "name": "instagram_hashtag_recent_posts",
+    "category": "instagram",
+    "methodName": "hashtagRecentPosts"
+  },
+  {
+    "name": "instagram_hashtag_top_posts",
+    "category": "instagram",
+    "methodName": "hashtagTopPosts"
+  },
+  {
+    "name": "instagram_highlight_detail",
+    "category": "instagram",
+    "methodName": "highlightDetail"
+  },
+  {
+    "name": "instagram_location_details",
+    "category": "instagram",
+    "methodName": "locationDetails"
+  },
+  {
+    "name": "instagram_location_posts",
+    "category": "instagram",
+    "methodName": "locationPosts"
+  },
+  {
     "name": "instagram_media_download",
     "category": "instagram",
     "methodName": "mediaDownload"
   },
   {
+    "name": "instagram_media_transcript",
+    "category": "instagram",
+    "methodName": "mediaTranscript"
+  },
+  {
+    "name": "instagram_post",
+    "category": "instagram",
+    "methodName": "post"
+  },
+  {
+    "name": "instagram_post_comments",
+    "category": "instagram",
+    "methodName": "postComments"
+  },
+  {
+    "name": "instagram_post_likers",
+    "category": "instagram",
+    "methodName": "postLikers"
+  },
+  {
+    "name": "instagram_profile_contact",
+    "category": "instagram",
+    "methodName": "profileContact"
+  },
+  {
     "name": "instagram_profile_content",
     "category": "instagram",
     "methodName": "profileContent"
+  },
+  {
+    "name": "instagram_profile_details",
+    "category": "instagram",
+    "methodName": "profileDetails"
+  },
+  {
+    "name": "instagram_reel_transcript",
+    "category": "instagram",
+    "methodName": "reelTranscript"
+  },
+  {
+    "name": "instagram_reels_search",
+    "category": "instagram",
+    "methodName": "reelsSearch"
+  },
+  {
+    "name": "instagram_search",
+    "category": "instagram",
+    "methodName": "search"
+  },
+  {
+    "name": "instagram_search_audio",
+    "category": "instagram",
+    "methodName": "searchAudio"
+  },
+  {
+    "name": "instagram_search_followers",
+    "category": "instagram",
+    "methodName": "searchFollowers"
+  },
+  {
+    "name": "instagram_search_following",
+    "category": "instagram",
+    "methodName": "searchFollowing"
+  },
+  {
+    "name": "instagram_search_hashtag",
+    "category": "instagram",
+    "methodName": "searchHashtag"
+  },
+  {
+    "name": "instagram_search_locations",
+    "category": "instagram",
+    "methodName": "searchLocations"
+  },
+  {
+    "name": "instagram_search_profiles",
+    "category": "instagram",
+    "methodName": "searchProfiles"
+  },
+  {
+    "name": "instagram_search_profiles_contact",
+    "category": "instagram",
+    "methodName": "searchProfilesContact"
+  },
+  {
+    "name": "instagram_similar_profiles",
+    "category": "instagram",
+    "methodName": "similarProfiles"
+  },
+  {
+    "name": "instagram_stories_full",
+    "category": "instagram",
+    "methodName": "storiesFull"
+  },
+  {
+    "name": "instagram_stories_thin",
+    "category": "instagram",
+    "methodName": "storiesThin"
+  },
+  {
+    "name": "instagram_story",
+    "category": "instagram",
+    "methodName": "story"
+  },
+  {
+    "name": "instagram_suggested_profiles",
+    "category": "instagram",
+    "methodName": "suggestedProfiles"
+  },
+  {
+    "name": "instagram_tagged_posts",
+    "category": "instagram",
+    "methodName": "taggedPosts"
+  },
+  {
+    "name": "instagram_trending_reels",
+    "category": "instagram",
+    "methodName": "trendingReels"
+  },
+  {
+    "name": "instagram_user_highlights",
+    "category": "instagram",
+    "methodName": "userHighlights"
+  },
+  {
+    "name": "instagram_user_posts",
+    "category": "instagram",
+    "methodName": "userPosts"
+  },
+  {
+    "name": "instagram_user_reels",
+    "category": "instagram",
+    "methodName": "userReels"
+  },
+  {
+    "name": "instagram_user_reels_logged_in",
+    "category": "instagram",
+    "methodName": "userReelsLoggedIn"
+  },
+  {
+    "name": "instagram_user_reposts",
+    "category": "instagram",
+    "methodName": "userReposts"
+  },
+  {
+    "name": "instagram_web_reels_search",
+    "category": "instagram",
+    "methodName": "webReelsSearch"
   },
   {
     "name": "lead_list_enrich",
@@ -1665,6 +1975,186 @@ export const MCP_TOOL_BINDINGS = [
     "name": "library-ingest",
     "category": "library",
     "methodName": "ingest"
+  },
+  {
+    "name": "linkedin_ad",
+    "category": "linkedin",
+    "methodName": "ad"
+  },
+  {
+    "name": "linkedin_ads",
+    "category": "linkedin",
+    "methodName": "ads"
+  },
+  {
+    "name": "linkedin_ads_search",
+    "category": "linkedin",
+    "methodName": "adsSearch"
+  },
+  {
+    "name": "linkedin_article",
+    "category": "linkedin",
+    "methodName": "article"
+  },
+  {
+    "name": "linkedin_comment_reactions",
+    "category": "linkedin",
+    "methodName": "commentReactions"
+  },
+  {
+    "name": "linkedin_comment_replies",
+    "category": "linkedin",
+    "methodName": "commentReplies"
+  },
+  {
+    "name": "linkedin_company",
+    "category": "linkedin",
+    "methodName": "company"
+  },
+  {
+    "name": "linkedin_company_employees",
+    "category": "linkedin",
+    "methodName": "companyEmployees"
+  },
+  {
+    "name": "linkedin_company_posts",
+    "category": "linkedin",
+    "methodName": "companyPosts"
+  },
+  {
+    "name": "linkedin_company_posts_thin",
+    "category": "linkedin",
+    "methodName": "companyPostsThin"
+  },
+  {
+    "name": "linkedin_company_thin",
+    "category": "linkedin",
+    "methodName": "companyThin"
+  },
+  {
+    "name": "linkedin_email",
+    "category": "linkedin",
+    "methodName": "email"
+  },
+  {
+    "name": "linkedin_group",
+    "category": "linkedin",
+    "methodName": "group"
+  },
+  {
+    "name": "linkedin_group_posts",
+    "category": "linkedin",
+    "methodName": "groupPosts"
+  },
+  {
+    "name": "linkedin_job",
+    "category": "linkedin",
+    "methodName": "job"
+  },
+  {
+    "name": "linkedin_jobs",
+    "category": "linkedin",
+    "methodName": "jobs"
+  },
+  {
+    "name": "linkedin_jobs_thin",
+    "category": "linkedin",
+    "methodName": "jobsThin"
+  },
+  {
+    "name": "linkedin_post",
+    "category": "linkedin",
+    "methodName": "post"
+  },
+  {
+    "name": "linkedin_post_comments",
+    "category": "linkedin",
+    "methodName": "postComments"
+  },
+  {
+    "name": "linkedin_post_reactions",
+    "category": "linkedin",
+    "methodName": "postReactions"
+  },
+  {
+    "name": "linkedin_post_transcript",
+    "category": "linkedin",
+    "methodName": "postTranscript"
+  },
+  {
+    "name": "linkedin_profile",
+    "category": "linkedin",
+    "methodName": "profile"
+  },
+  {
+    "name": "linkedin_profile_comments",
+    "category": "linkedin",
+    "methodName": "profileComments"
+  },
+  {
+    "name": "linkedin_profile_posts_full",
+    "category": "linkedin",
+    "methodName": "profilePostsFull"
+  },
+  {
+    "name": "linkedin_profile_posts_thin",
+    "category": "linkedin",
+    "methodName": "profilePostsThin"
+  },
+  {
+    "name": "linkedin_profile_reactions",
+    "category": "linkedin",
+    "methodName": "profileReactions"
+  },
+  {
+    "name": "linkedin_profile_thin",
+    "category": "linkedin",
+    "methodName": "profileThin"
+  },
+  {
+    "name": "linkedin_search_companies",
+    "category": "linkedin",
+    "methodName": "searchCompanies"
+  },
+  {
+    "name": "linkedin_search_groups",
+    "category": "linkedin",
+    "methodName": "searchGroups"
+  },
+  {
+    "name": "linkedin_search_leads",
+    "category": "linkedin",
+    "methodName": "searchLeads"
+  },
+  {
+    "name": "linkedin_search_posts",
+    "category": "linkedin",
+    "methodName": "searchPosts"
+  },
+  {
+    "name": "linkedin_search_posts_full",
+    "category": "linkedin",
+    "methodName": "searchPostsFull"
+  },
+  {
+    "name": "linkedin_search_profiles",
+    "category": "linkedin",
+    "methodName": "searchProfiles"
+  },
+  {
+    "name": "linkedin_search_profiles_email",
+    "category": "linkedin",
+    "methodName": "searchProfilesEmail"
+  },
+  {
+    "name": "linkedin_search_profiles_thin",
+    "category": "linkedin",
+    "methodName": "searchProfilesThin"
+  },
+  {
+    "name": "linkedin_search_services",
+    "category": "linkedin",
+    "methodName": "searchServices"
   },
   {
     "name": "list_artifact_templates",
@@ -2085,6 +2575,86 @@ export const MCP_TOOL_BINDINGS = [
     "name": "trustpilot_reviews",
     "category": "reviews",
     "methodName": "trustpilotReviews"
+  },
+  {
+    "name": "twitter_article",
+    "category": "twitter",
+    "methodName": "article"
+  },
+  {
+    "name": "twitter_community",
+    "category": "twitter",
+    "methodName": "community"
+  },
+  {
+    "name": "twitter_community_tweets",
+    "category": "twitter",
+    "methodName": "communityTweets"
+  },
+  {
+    "name": "twitter_followers",
+    "category": "twitter",
+    "methodName": "followers"
+  },
+  {
+    "name": "twitter_following",
+    "category": "twitter",
+    "methodName": "following"
+  },
+  {
+    "name": "twitter_profile",
+    "category": "twitter",
+    "methodName": "profile"
+  },
+  {
+    "name": "twitter_replies",
+    "category": "twitter",
+    "methodName": "replies"
+  },
+  {
+    "name": "twitter_search",
+    "category": "twitter",
+    "methodName": "search"
+  },
+  {
+    "name": "twitter_search_communities",
+    "category": "twitter",
+    "methodName": "searchCommunities"
+  },
+  {
+    "name": "twitter_search_users",
+    "category": "twitter",
+    "methodName": "searchUsers"
+  },
+  {
+    "name": "twitter_thread",
+    "category": "twitter",
+    "methodName": "thread"
+  },
+  {
+    "name": "twitter_trends",
+    "category": "twitter",
+    "methodName": "trends"
+  },
+  {
+    "name": "twitter_tweet",
+    "category": "twitter",
+    "methodName": "tweet"
+  },
+  {
+    "name": "twitter_tweet_transcript",
+    "category": "twitter",
+    "methodName": "tweetTranscript"
+  },
+  {
+    "name": "twitter_user_posts",
+    "category": "twitter",
+    "methodName": "userPosts"
+  },
+  {
+    "name": "twitter_user_tweets",
+    "category": "twitter",
+    "methodName": "userTweets"
   },
   {
     "name": "update_artifact_template",
@@ -3528,12 +4098,184 @@ export class ImagesNamespace {
 export class InstagramNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
+  async accountAbout(input: InstagramAccountAbout.Input): Promise<InstagramAccountAbout.Output> {
+    return this.callTool('instagram_account_about', input) as Promise<InstagramAccountAbout.Output>
+  }
+
+  async audioReels(input: InstagramAudioReels.Input): Promise<InstagramAudioReels.Output> {
+    return this.callTool('instagram_audio_reels', input) as Promise<InstagramAudioReels.Output>
+  }
+
+  async basicProfile(input: InstagramBasicProfile.Input): Promise<InstagramBasicProfile.Output> {
+    return this.callTool('instagram_basic_profile', input) as Promise<InstagramBasicProfile.Output>
+  }
+
+  async commentLikers(input: InstagramCommentLikers.Input): Promise<InstagramCommentLikers.Output> {
+    return this.callTool('instagram_comment_likers', input) as Promise<InstagramCommentLikers.Output>
+  }
+
+  async commentReplies(input: InstagramCommentReplies.Input): Promise<InstagramCommentReplies.Output> {
+    return this.callTool('instagram_comment_replies', input) as Promise<InstagramCommentReplies.Output>
+  }
+
+  async embed(input: InstagramEmbed.Input): Promise<InstagramEmbed.Output> {
+    return this.callTool('instagram_embed', input) as Promise<InstagramEmbed.Output>
+  }
+
+  async followers(input: InstagramFollowers.Input): Promise<InstagramFollowers.Output> {
+    return this.callTool('instagram_followers', input) as Promise<InstagramFollowers.Output>
+  }
+
+  async following(input: InstagramFollowing.Input): Promise<InstagramFollowing.Output> {
+    return this.callTool('instagram_following', input) as Promise<InstagramFollowing.Output>
+  }
+
+  async hashtagAnalytics(input: InstagramHashtagAnalytics.Input): Promise<InstagramHashtagAnalytics.Output> {
+    return this.callTool('instagram_hashtag_analytics', input) as Promise<InstagramHashtagAnalytics.Output>
+  }
+
+  async hashtagRecentPosts(input: InstagramHashtagRecentPosts.Input): Promise<InstagramHashtagRecentPosts.Output> {
+    return this.callTool('instagram_hashtag_recent_posts', input) as Promise<InstagramHashtagRecentPosts.Output>
+  }
+
+  async hashtagTopPosts(input: InstagramHashtagTopPosts.Input): Promise<InstagramHashtagTopPosts.Output> {
+    return this.callTool('instagram_hashtag_top_posts', input) as Promise<InstagramHashtagTopPosts.Output>
+  }
+
+  async highlightDetail(input: InstagramHighlightDetail.Input): Promise<InstagramHighlightDetail.Output> {
+    return this.callTool('instagram_highlight_detail', input) as Promise<InstagramHighlightDetail.Output>
+  }
+
+  async locationDetails(input: InstagramLocationDetails.Input): Promise<InstagramLocationDetails.Output> {
+    return this.callTool('instagram_location_details', input) as Promise<InstagramLocationDetails.Output>
+  }
+
+  async locationPosts(input: InstagramLocationPosts.Input): Promise<InstagramLocationPosts.Output> {
+    return this.callTool('instagram_location_posts', input) as Promise<InstagramLocationPosts.Output>
+  }
+
   async mediaDownload(input: InstagramMediaDownload.Input): Promise<InstagramMediaDownload.Output> {
     return this.callTool('instagram_media_download', input) as Promise<InstagramMediaDownload.Output>
   }
 
+  async mediaTranscript(input: InstagramMediaTranscript.Input): Promise<InstagramMediaTranscript.Output> {
+    return this.callTool('instagram_media_transcript', input) as Promise<InstagramMediaTranscript.Output>
+  }
+
+  async post(input: InstagramPost.Input): Promise<InstagramPost.Output> {
+    return this.callTool('instagram_post', input) as Promise<InstagramPost.Output>
+  }
+
+  async postComments(input: InstagramPostComments.Input): Promise<InstagramPostComments.Output> {
+    return this.callTool('instagram_post_comments', input) as Promise<InstagramPostComments.Output>
+  }
+
+  async postLikers(input: InstagramPostLikers.Input): Promise<InstagramPostLikers.Output> {
+    return this.callTool('instagram_post_likers', input) as Promise<InstagramPostLikers.Output>
+  }
+
+  async profileContact(input: InstagramProfileContact.Input): Promise<InstagramProfileContact.Output> {
+    return this.callTool('instagram_profile_contact', input) as Promise<InstagramProfileContact.Output>
+  }
+
   async profileContent(input: InstagramProfileContent.Input = {} as InstagramProfileContent.Input): Promise<InstagramProfileContent.Output> {
     return this.callTool('instagram_profile_content', input) as Promise<InstagramProfileContent.Output>
+  }
+
+  async profileDetails(input: InstagramProfileDetails.Input): Promise<InstagramProfileDetails.Output> {
+    return this.callTool('instagram_profile_details', input) as Promise<InstagramProfileDetails.Output>
+  }
+
+  async reelTranscript(input: InstagramReelTranscript.Input): Promise<InstagramReelTranscript.Output> {
+    return this.callTool('instagram_reel_transcript', input) as Promise<InstagramReelTranscript.Output>
+  }
+
+  async reelsSearch(input: InstagramReelsSearch.Input): Promise<InstagramReelsSearch.Output> {
+    return this.callTool('instagram_reels_search', input) as Promise<InstagramReelsSearch.Output>
+  }
+
+  async search(input: InstagramSearch.Input): Promise<InstagramSearch.Output> {
+    return this.callTool('instagram_search', input) as Promise<InstagramSearch.Output>
+  }
+
+  async searchAudio(input: InstagramSearchAudio.Input): Promise<InstagramSearchAudio.Output> {
+    return this.callTool('instagram_search_audio', input) as Promise<InstagramSearchAudio.Output>
+  }
+
+  async searchFollowers(input: InstagramSearchFollowers.Input): Promise<InstagramSearchFollowers.Output> {
+    return this.callTool('instagram_search_followers', input) as Promise<InstagramSearchFollowers.Output>
+  }
+
+  async searchFollowing(input: InstagramSearchFollowing.Input): Promise<InstagramSearchFollowing.Output> {
+    return this.callTool('instagram_search_following', input) as Promise<InstagramSearchFollowing.Output>
+  }
+
+  async searchHashtag(input: InstagramSearchHashtag.Input): Promise<InstagramSearchHashtag.Output> {
+    return this.callTool('instagram_search_hashtag', input) as Promise<InstagramSearchHashtag.Output>
+  }
+
+  async searchLocations(input: InstagramSearchLocations.Input): Promise<InstagramSearchLocations.Output> {
+    return this.callTool('instagram_search_locations', input) as Promise<InstagramSearchLocations.Output>
+  }
+
+  async searchProfiles(input: InstagramSearchProfiles.Input): Promise<InstagramSearchProfiles.Output> {
+    return this.callTool('instagram_search_profiles', input) as Promise<InstagramSearchProfiles.Output>
+  }
+
+  async searchProfilesContact(input: InstagramSearchProfilesContact.Input): Promise<InstagramSearchProfilesContact.Output> {
+    return this.callTool('instagram_search_profiles_contact', input) as Promise<InstagramSearchProfilesContact.Output>
+  }
+
+  async similarProfiles(input: InstagramSimilarProfiles.Input): Promise<InstagramSimilarProfiles.Output> {
+    return this.callTool('instagram_similar_profiles', input) as Promise<InstagramSimilarProfiles.Output>
+  }
+
+  async storiesFull(input: InstagramStoriesFull.Input): Promise<InstagramStoriesFull.Output> {
+    return this.callTool('instagram_stories_full', input) as Promise<InstagramStoriesFull.Output>
+  }
+
+  async storiesThin(input: InstagramStoriesThin.Input): Promise<InstagramStoriesThin.Output> {
+    return this.callTool('instagram_stories_thin', input) as Promise<InstagramStoriesThin.Output>
+  }
+
+  async story(input: InstagramStory.Input): Promise<InstagramStory.Output> {
+    return this.callTool('instagram_story', input) as Promise<InstagramStory.Output>
+  }
+
+  async suggestedProfiles(input: InstagramSuggestedProfiles.Input): Promise<InstagramSuggestedProfiles.Output> {
+    return this.callTool('instagram_suggested_profiles', input) as Promise<InstagramSuggestedProfiles.Output>
+  }
+
+  async taggedPosts(input: InstagramTaggedPosts.Input): Promise<InstagramTaggedPosts.Output> {
+    return this.callTool('instagram_tagged_posts', input) as Promise<InstagramTaggedPosts.Output>
+  }
+
+  async trendingReels(input: InstagramTrendingReels.Input = {} as InstagramTrendingReels.Input): Promise<InstagramTrendingReels.Output> {
+    return this.callTool('instagram_trending_reels', input) as Promise<InstagramTrendingReels.Output>
+  }
+
+  async userHighlights(input: InstagramUserHighlights.Input): Promise<InstagramUserHighlights.Output> {
+    return this.callTool('instagram_user_highlights', input) as Promise<InstagramUserHighlights.Output>
+  }
+
+  async userPosts(input: InstagramUserPosts.Input): Promise<InstagramUserPosts.Output> {
+    return this.callTool('instagram_user_posts', input) as Promise<InstagramUserPosts.Output>
+  }
+
+  async userReels(input: InstagramUserReels.Input = {} as InstagramUserReels.Input): Promise<InstagramUserReels.Output> {
+    return this.callTool('instagram_user_reels', input) as Promise<InstagramUserReels.Output>
+  }
+
+  async userReelsLoggedIn(input: InstagramUserReelsLoggedIn.Input = {} as InstagramUserReelsLoggedIn.Input): Promise<InstagramUserReelsLoggedIn.Output> {
+    return this.callTool('instagram_user_reels_logged_in', input) as Promise<InstagramUserReelsLoggedIn.Output>
+  }
+
+  async userReposts(input: InstagramUserReposts.Input): Promise<InstagramUserReposts.Output> {
+    return this.callTool('instagram_user_reposts', input) as Promise<InstagramUserReposts.Output>
+  }
+
+  async webReelsSearch(input: InstagramWebReelsSearch.Input): Promise<InstagramWebReelsSearch.Output> {
+    return this.callTool('instagram_web_reels_search', input) as Promise<InstagramWebReelsSearch.Output>
   }
 }
 
@@ -3570,6 +4312,154 @@ export class LibraryNamespace {
 
   async ingest(input: LibraryIngest.Input): Promise<LibraryIngest.Output> {
     return this.callTool('library-ingest', input) as Promise<LibraryIngest.Output>
+  }
+}
+
+export class LinkedinNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async ad(input: LinkedinAd.Input): Promise<LinkedinAd.Output> {
+    return this.callTool('linkedin_ad', input) as Promise<LinkedinAd.Output>
+  }
+
+  async ads(input: LinkedinAds.Input): Promise<LinkedinAds.Output> {
+    return this.callTool('linkedin_ads', input) as Promise<LinkedinAds.Output>
+  }
+
+  async adsSearch(input: LinkedinAdsSearch.Input = {} as LinkedinAdsSearch.Input): Promise<LinkedinAdsSearch.Output> {
+    return this.callTool('linkedin_ads_search', input) as Promise<LinkedinAdsSearch.Output>
+  }
+
+  async article(input: LinkedinArticle.Input): Promise<LinkedinArticle.Output> {
+    return this.callTool('linkedin_article', input) as Promise<LinkedinArticle.Output>
+  }
+
+  async commentReactions(input: LinkedinCommentReactions.Input): Promise<LinkedinCommentReactions.Output> {
+    return this.callTool('linkedin_comment_reactions', input) as Promise<LinkedinCommentReactions.Output>
+  }
+
+  async commentReplies(input: LinkedinCommentReplies.Input): Promise<LinkedinCommentReplies.Output> {
+    return this.callTool('linkedin_comment_replies', input) as Promise<LinkedinCommentReplies.Output>
+  }
+
+  async company(input: LinkedinCompany.Input): Promise<LinkedinCompany.Output> {
+    return this.callTool('linkedin_company', input) as Promise<LinkedinCompany.Output>
+  }
+
+  async companyEmployees(input: LinkedinCompanyEmployees.Input): Promise<LinkedinCompanyEmployees.Output> {
+    return this.callTool('linkedin_company_employees', input) as Promise<LinkedinCompanyEmployees.Output>
+  }
+
+  async companyPosts(input: LinkedinCompanyPosts.Input): Promise<LinkedinCompanyPosts.Output> {
+    return this.callTool('linkedin_company_posts', input) as Promise<LinkedinCompanyPosts.Output>
+  }
+
+  async companyPostsThin(input: LinkedinCompanyPostsThin.Input): Promise<LinkedinCompanyPostsThin.Output> {
+    return this.callTool('linkedin_company_posts_thin', input) as Promise<LinkedinCompanyPostsThin.Output>
+  }
+
+  async companyThin(input: LinkedinCompanyThin.Input): Promise<LinkedinCompanyThin.Output> {
+    return this.callTool('linkedin_company_thin', input) as Promise<LinkedinCompanyThin.Output>
+  }
+
+  async email(input: LinkedinEmail.Input): Promise<LinkedinEmail.Output> {
+    return this.callTool('linkedin_email', input) as Promise<LinkedinEmail.Output>
+  }
+
+  async group(input: LinkedinGroup.Input = {} as LinkedinGroup.Input): Promise<LinkedinGroup.Output> {
+    return this.callTool('linkedin_group', input) as Promise<LinkedinGroup.Output>
+  }
+
+  async groupPosts(input: LinkedinGroupPosts.Input): Promise<LinkedinGroupPosts.Output> {
+    return this.callTool('linkedin_group_posts', input) as Promise<LinkedinGroupPosts.Output>
+  }
+
+  async job(input: LinkedinJob.Input): Promise<LinkedinJob.Output> {
+    return this.callTool('linkedin_job', input) as Promise<LinkedinJob.Output>
+  }
+
+  async jobs(input: LinkedinJobs.Input): Promise<LinkedinJobs.Output> {
+    return this.callTool('linkedin_jobs', input) as Promise<LinkedinJobs.Output>
+  }
+
+  async jobsThin(input: LinkedinJobsThin.Input): Promise<LinkedinJobsThin.Output> {
+    return this.callTool('linkedin_jobs_thin', input) as Promise<LinkedinJobsThin.Output>
+  }
+
+  async post(input: LinkedinPost.Input): Promise<LinkedinPost.Output> {
+    return this.callTool('linkedin_post', input) as Promise<LinkedinPost.Output>
+  }
+
+  async postComments(input: LinkedinPostComments.Input): Promise<LinkedinPostComments.Output> {
+    return this.callTool('linkedin_post_comments', input) as Promise<LinkedinPostComments.Output>
+  }
+
+  async postReactions(input: LinkedinPostReactions.Input): Promise<LinkedinPostReactions.Output> {
+    return this.callTool('linkedin_post_reactions', input) as Promise<LinkedinPostReactions.Output>
+  }
+
+  async postTranscript(input: LinkedinPostTranscript.Input): Promise<LinkedinPostTranscript.Output> {
+    return this.callTool('linkedin_post_transcript', input) as Promise<LinkedinPostTranscript.Output>
+  }
+
+  async profile(input: LinkedinProfile.Input): Promise<LinkedinProfile.Output> {
+    return this.callTool('linkedin_profile', input) as Promise<LinkedinProfile.Output>
+  }
+
+  async profileComments(input: LinkedinProfileComments.Input): Promise<LinkedinProfileComments.Output> {
+    return this.callTool('linkedin_profile_comments', input) as Promise<LinkedinProfileComments.Output>
+  }
+
+  async profilePostsFull(input: LinkedinProfilePostsFull.Input): Promise<LinkedinProfilePostsFull.Output> {
+    return this.callTool('linkedin_profile_posts_full', input) as Promise<LinkedinProfilePostsFull.Output>
+  }
+
+  async profilePostsThin(input: LinkedinProfilePostsThin.Input): Promise<LinkedinProfilePostsThin.Output> {
+    return this.callTool('linkedin_profile_posts_thin', input) as Promise<LinkedinProfilePostsThin.Output>
+  }
+
+  async profileReactions(input: LinkedinProfileReactions.Input): Promise<LinkedinProfileReactions.Output> {
+    return this.callTool('linkedin_profile_reactions', input) as Promise<LinkedinProfileReactions.Output>
+  }
+
+  async profileThin(input: LinkedinProfileThin.Input): Promise<LinkedinProfileThin.Output> {
+    return this.callTool('linkedin_profile_thin', input) as Promise<LinkedinProfileThin.Output>
+  }
+
+  async searchCompanies(input: LinkedinSearchCompanies.Input): Promise<LinkedinSearchCompanies.Output> {
+    return this.callTool('linkedin_search_companies', input) as Promise<LinkedinSearchCompanies.Output>
+  }
+
+  async searchGroups(input: LinkedinSearchGroups.Input): Promise<LinkedinSearchGroups.Output> {
+    return this.callTool('linkedin_search_groups', input) as Promise<LinkedinSearchGroups.Output>
+  }
+
+  async searchLeads(input: LinkedinSearchLeads.Input = {} as LinkedinSearchLeads.Input): Promise<LinkedinSearchLeads.Output> {
+    return this.callTool('linkedin_search_leads', input) as Promise<LinkedinSearchLeads.Output>
+  }
+
+  async searchPosts(input: LinkedinSearchPosts.Input): Promise<LinkedinSearchPosts.Output> {
+    return this.callTool('linkedin_search_posts', input) as Promise<LinkedinSearchPosts.Output>
+  }
+
+  async searchPostsFull(input: LinkedinSearchPostsFull.Input): Promise<LinkedinSearchPostsFull.Output> {
+    return this.callTool('linkedin_search_posts_full', input) as Promise<LinkedinSearchPostsFull.Output>
+  }
+
+  async searchProfiles(input: LinkedinSearchProfiles.Input): Promise<LinkedinSearchProfiles.Output> {
+    return this.callTool('linkedin_search_profiles', input) as Promise<LinkedinSearchProfiles.Output>
+  }
+
+  async searchProfilesEmail(input: LinkedinSearchProfilesEmail.Input): Promise<LinkedinSearchProfilesEmail.Output> {
+    return this.callTool('linkedin_search_profiles_email', input) as Promise<LinkedinSearchProfilesEmail.Output>
+  }
+
+  async searchProfilesThin(input: LinkedinSearchProfilesThin.Input): Promise<LinkedinSearchProfilesThin.Output> {
+    return this.callTool('linkedin_search_profiles_thin', input) as Promise<LinkedinSearchProfilesThin.Output>
+  }
+
+  async searchServices(input: LinkedinSearchServices.Input): Promise<LinkedinSearchServices.Output> {
+    return this.callTool('linkedin_search_services', input) as Promise<LinkedinSearchServices.Output>
   }
 }
 
@@ -3765,6 +4655,74 @@ export class RecallNamespace {
   }
 }
 
+export class TwitterNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async article(input: TwitterArticle.Input): Promise<TwitterArticle.Output> {
+    return this.callTool('twitter_article', input) as Promise<TwitterArticle.Output>
+  }
+
+  async community(input: TwitterCommunity.Input): Promise<TwitterCommunity.Output> {
+    return this.callTool('twitter_community', input) as Promise<TwitterCommunity.Output>
+  }
+
+  async communityTweets(input: TwitterCommunityTweets.Input): Promise<TwitterCommunityTweets.Output> {
+    return this.callTool('twitter_community_tweets', input) as Promise<TwitterCommunityTweets.Output>
+  }
+
+  async followers(input: TwitterFollowers.Input): Promise<TwitterFollowers.Output> {
+    return this.callTool('twitter_followers', input) as Promise<TwitterFollowers.Output>
+  }
+
+  async following(input: TwitterFollowing.Input): Promise<TwitterFollowing.Output> {
+    return this.callTool('twitter_following', input) as Promise<TwitterFollowing.Output>
+  }
+
+  async profile(input: TwitterProfile.Input): Promise<TwitterProfile.Output> {
+    return this.callTool('twitter_profile', input) as Promise<TwitterProfile.Output>
+  }
+
+  async replies(input: TwitterReplies.Input): Promise<TwitterReplies.Output> {
+    return this.callTool('twitter_replies', input) as Promise<TwitterReplies.Output>
+  }
+
+  async search(input: TwitterSearch.Input): Promise<TwitterSearch.Output> {
+    return this.callTool('twitter_search', input) as Promise<TwitterSearch.Output>
+  }
+
+  async searchCommunities(input: TwitterSearchCommunities.Input): Promise<TwitterSearchCommunities.Output> {
+    return this.callTool('twitter_search_communities', input) as Promise<TwitterSearchCommunities.Output>
+  }
+
+  async searchUsers(input: TwitterSearchUsers.Input): Promise<TwitterSearchUsers.Output> {
+    return this.callTool('twitter_search_users', input) as Promise<TwitterSearchUsers.Output>
+  }
+
+  async thread(input: TwitterThread.Input): Promise<TwitterThread.Output> {
+    return this.callTool('twitter_thread', input) as Promise<TwitterThread.Output>
+  }
+
+  async trends(input: TwitterTrends.Input = {} as TwitterTrends.Input): Promise<TwitterTrends.Output> {
+    return this.callTool('twitter_trends', input) as Promise<TwitterTrends.Output>
+  }
+
+  async tweet(input: TwitterTweet.Input): Promise<TwitterTweet.Output> {
+    return this.callTool('twitter_tweet', input) as Promise<TwitterTweet.Output>
+  }
+
+  async tweetTranscript(input: TwitterTweetTranscript.Input): Promise<TwitterTweetTranscript.Output> {
+    return this.callTool('twitter_tweet_transcript', input) as Promise<TwitterTweetTranscript.Output>
+  }
+
+  async userPosts(input: TwitterUserPosts.Input): Promise<TwitterUserPosts.Output> {
+    return this.callTool('twitter_user_posts', input) as Promise<TwitterUserPosts.Output>
+  }
+
+  async userTweets(input: TwitterUserTweets.Input): Promise<TwitterUserTweets.Output> {
+    return this.callTool('twitter_user_tweets', input) as Promise<TwitterUserTweets.Output>
+  }
+}
+
 export class VideoNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3844,6 +4802,7 @@ export class GeneratedMcpToolsClient {
   readonly leads: LeadsNamespace
   readonly leadLists: LeadListsNamespace
   readonly library: LibraryNamespace
+  readonly linkedin: LinkedinNamespace
   readonly tags: TagsNamespace
   readonly maps: MapsNamespace
   readonly graph: GraphNamespace
@@ -3853,6 +4812,7 @@ export class GeneratedMcpToolsClient {
   readonly research: ResearchNamespace
   readonly tables: TablesNamespace
   readonly recall: RecallNamespace
+  readonly twitter: TwitterNamespace
   readonly video: VideoNamespace
   readonly youtube: YoutubeNamespace
   readonly zillow: ZillowNamespace
@@ -3888,6 +4848,7 @@ export class GeneratedMcpToolsClient {
     this.leads = new LeadsNamespace(callTool)
     this.leadLists = new LeadListsNamespace(callTool)
     this.library = new LibraryNamespace(callTool)
+    this.linkedin = new LinkedinNamespace(callTool)
     this.tags = new TagsNamespace(callTool)
     this.maps = new MapsNamespace(callTool)
     this.graph = new GraphNamespace(callTool)
@@ -3897,6 +4858,7 @@ export class GeneratedMcpToolsClient {
     this.research = new ResearchNamespace(callTool)
     this.tables = new TablesNamespace(callTool)
     this.recall = new RecallNamespace(callTool)
+    this.twitter = new TwitterNamespace(callTool)
     this.video = new VideoNamespace(callTool)
     this.youtube = new YoutubeNamespace(callTool)
     this.zillow = new ZillowNamespace(callTool)

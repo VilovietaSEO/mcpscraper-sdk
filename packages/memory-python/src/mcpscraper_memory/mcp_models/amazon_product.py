@@ -15,6 +15,7 @@ class AmazonProductOutputVariant1(BaseModel):
     tool: str = Field(..., alias='tool', description='The tool that produced this result.')
     count: Annotated[int, Field(ge=-9007199254740991, le=9007199254740991)] = Field(..., alias='count', description='Number of records returned.')
     items: list[dict[str, Any]] = Field(..., alias='items', description='Returned records. A lookup of one thing returns a single record.')
+    meta: Union[dict[str, Any], None] = Field(None, alias='meta', description='Values returned alongside the records, such as nextCursor for the next page, or totals.')
     charged_credits: Union[float, int] = Field(..., alias='chargedCredits', description='Credits charged for this call.')
     duration_ms: Union[Union[float, int], None] = Field(..., alias='durationMs', description='Time taken in milliseconds.')
 
