@@ -24,7 +24,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 - Add the `twitter` tool group with 16 tools for X: posts, threads, replies, profiles, followers and following, search, user search, communities, trends, articles and video transcripts.
 - Add 43 tools to the `instagram` group: profiles, posts, reels, comments, likers, stories and highlights, hashtags, locations, audio, followers and following, searches and transcripts. The profile lookup is `profileDetails`.
 - Data tool results carry an optional `meta` object with paging values such as `nextCursor`; pass it back as `cursor` to read the next page. This applies to the `zillow` and `amazon` groups as well.
-- Node, Python, CLI and cURL bindings include all 95 tools. Each call is priced at twice its upstream cost; the usual and maximum Credits are stated in each tool's description.
+- Node, Python, CLI and cURL bindings include all 95 tools. The usual and maximum Credits are stated in each tool's description.
 
 ### Packages
 
@@ -36,7 +36,7 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 - Add the `zillow` tool group: `search` (listings for sale, for rent or sold, with filters), `property` (full details for one listing) and `agent` (one agent profile).
 - Add the `amazon` tool group: `search`, `product`, `productsByAsin`, `reviews`, `offers`, `bestsellers`, `deals`, `seller` and `sellerProducts`.
-- Node, Python, CLI and cURL bindings include the twelve tools. Each call is priced at twice its upstream cost; the usual and maximum Credits are stated in each tool's description.
+- Node, Python, CLI and cURL bindings include the twelve tools. The usual and maximum Credits are stated in each tool's description.
 
 ### Packages
 
