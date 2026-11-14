@@ -21370,6 +21370,15 @@ export const MCP_TOOL_CATALOG = [
           "default": false,
           "description": "Include the What People Are Saying social surface when present.",
           "type": "boolean"
+        },
+        "linkResolution": {
+          "default": "complete",
+          "description": "complete waits until source and result links are real destination URLs, which adds about a minute after the questions are captured. deferred finishes the job as soon as questions, answers and sources are captured: wrapped links stay as working Google redirect links marked pending, and a later harvest_paa_status read of the same jobId supplies the destination URLs at no charge.",
+          "type": "string",
+          "enum": [
+            "complete",
+            "deferred"
+          ]
         }
       },
       "required": [
@@ -21390,7 +21399,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "harvest_paa_status",
     "category": "other",
     "title": "Check Durable Google PAA Harvest",
-    "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, attempt outcomes, terminal rows, and billing. Wait at least 20 seconds before the first check and each later check. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. Polling never starts or bills another run.",
+    "description": "Poll an owner-scoped harvest_paa_start job for saved answers and source descriptions, progress, recovery count, target/discovery status, material completeness, pagination, interaction outcomes, attempt outcomes, terminal rows, and billing. Wait at least 20 seconds before the first check and each later check. Unfinished answer expansion is partial. Page two adds organic results; PAA comes from page one. frontier_exhausted requires every observed eligible PAA control processed plus three healthy no-growth confirmations; interruption never means exhaustion. For a job started with linkResolution:deferred, a later read supplies destination URLs for links that were pending. Polling never starts or bills another run.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26456,6 +26465,15 @@ export const MCP_TOOL_CATALOG = [
           "minimum": 1,
           "maximum": 2
         },
+        "linkResolution": {
+          "default": "complete",
+          "description": "complete waits until result links are real destination URLs, which can add 30 to 60 seconds when Google wraps them. deferred returns as soon as results are captured: wrapped links stay as working Google redirect links marked pending, and search_serp_status with the returned jobId supplies the destination URLs at no charge once they unlock, usually within a minute; the result states the wait.",
+          "type": "string",
+          "enum": [
+            "complete",
+            "deferred"
+          ]
+        },
         "recency": {
           "description": "Limit Google results to the past week or past month. Date filters require one page, use the managed browser, and return organic listings only at 35 Credits. Omit for unfiltered results.",
           "type": "string",
@@ -26482,7 +26500,7 @@ export const MCP_TOOL_CATALOG = [
     "name": "search_serp_status",
     "category": "other",
     "title": "Check Durable Google SERP Lookup",
-    "description": "Read an existing durable SERP job created through the legacy HTTP job API. Ordinary search_serp calls now return directly and do not create a job to poll. Reading status never starts or bills another search.",
+    "description": "Read a saved search by jobId. For a search made with linkResolution:deferred, this supplies the destination URLs for links that were pending; wait the number of seconds the search result states, and call again if some are still pending. Also reads a durable SERP job created through the legacy HTTP job API. Reading never starts or bills another search.",
     "inputSchema": {
       "type": "object",
       "properties": {

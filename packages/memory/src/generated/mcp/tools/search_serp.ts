@@ -36,6 +36,10 @@ export interface Input {
    */
   pages?: number;
   /**
+   * complete waits until result links are real destination URLs, which can add 30 to 60 seconds when Google wraps them. deferred returns as soon as results are captured: wrapped links stay as working Google redirect links marked pending, and search_serp_status with the returned jobId supplies the destination URLs at no charge once they unlock, usually within a minute; the result states the wait.
+   */
+  linkResolution?: "complete" | "deferred";
+  /**
    * Limit Google results to the past week or past month. Date filters require one page, use the managed browser, and return organic listings only at 35 Credits. Omit for unfiltered results.
    */
   recency?: "week" | "month";
@@ -54,6 +58,11 @@ export type Output =
       degradedResult: boolean | null;
       degradationReasons: string[];
       retryRecommended: boolean | null;
+      linkResolution?: {
+        mode: "deferred";
+        pending: number;
+        readyAfterSeconds: number;
+      } | null;
       pagination: {
         requestedPages: 1 | 2;
         capturedPages: 1 | 2;

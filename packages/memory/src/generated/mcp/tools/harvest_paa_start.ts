@@ -59,6 +59,10 @@ export interface Input {
    * Include the What People Are Saying social surface when present.
    */
   includeWhatPeopleSaying?: boolean;
+  /**
+   * complete waits until source and result links are real destination URLs, which adds about a minute after the questions are captured. deferred finishes the job as soon as questions, answers and sources are captured: wrapped links stay as working Google redirect links marked pending, and a later harvest_paa_status read of the same jobId supplies the destination URLs at no charge.
+   */
+  linkResolution?: "complete" | "deferred";
 }
 
 export type Output =

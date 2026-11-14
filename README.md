@@ -865,4 +865,4 @@ Publication management: list owned subdomains with `commons_list_publications`, 
 
 PAA job progress can include optional `phase` and `observedAt` fields describing observed extraction work independently of worker renewal. The updated Node and Python output models preserve legacy responses without these fields. See [the progress-types release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
 
-Use Reddit Trends review mode to preview links, approve mode to fetch selected threads, or auto mode to search and fetch in one call. See the [0.59.4 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.4) for the compatible package versions.
+Pass `linkResolution: deferred` to Search or a People Also Ask harvest to receive results before wrapped Google links are resolved, then read the same job again for the destination URLs. See the [0.59.5 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.5) for the compatible package versions.

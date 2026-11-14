@@ -9,6 +9,14 @@ class SearchSerpStatusInput(BaseModel):
     job_id: Annotated[str, Field(min_length=1, max_length=200)] = Field(..., alias='jobId', description='The jobId returned by search_serp.')
 
 
+SearchSerpStatusOutputVariant1LinkResolutionVariant1 = TypedDict('SearchSerpStatusOutputVariant1LinkResolutionVariant1', {
+    'mode': Required[Literal['deferred']],
+    'pending': Required[Annotated[int, Field(ge=1, le=9007199254740991)]],
+    'readyAfterSeconds': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+})
+SearchSerpStatusOutputVariant1LinkResolutionVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 SearchSerpStatusOutputVariant1PaginationVariant1 = TypedDict('SearchSerpStatusOutputVariant1PaginationVariant1', {
     'requestedPages': Required[Union[Literal[1], Literal[2]]],
     'capturedPages': Required[Union[Literal[1], Literal[2]]],
@@ -226,6 +234,7 @@ class SearchSerpStatusOutputVariant1(BaseModel):
     degraded_result: Union[bool, None] = Field(..., alias='degradedResult', description='')
     degradation_reasons: list[str] = Field(..., alias='degradationReasons', description='')
     retry_recommended: Union[bool, None] = Field(..., alias='retryRecommended', description='')
+    link_resolution: Union[Union[SearchSerpStatusOutputVariant1LinkResolutionVariant1, None], None] = Field(None, alias='linkResolution', description='')
     pagination: Union[SearchSerpStatusOutputVariant1PaginationVariant1, None] = Field(..., alias='pagination', description='')
     serp_completeness: Union[SearchSerpStatusOutputVariant1SerpCompletenessVariant1, None] = Field(..., alias='serpCompleteness', description='')
     organic_results: list[SearchSerpStatusOutputVariant1OrganicResultsItem] = Field(..., alias='organicResults', description='')

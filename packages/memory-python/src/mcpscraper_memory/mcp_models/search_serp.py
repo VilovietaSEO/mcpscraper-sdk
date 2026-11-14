@@ -15,7 +15,16 @@ class SearchSerpInput(BaseModel):
     idempotency_key: Union[Annotated[str, Field(min_length=8, max_length=200)], None] = Field(None, alias='idempotencyKey', description='Retry key: reuse after a timeout to avoid re-billing. New key per search.')
     serp_identity: Union[str, None] = Field(None, alias='serpIdentity', description='Optional persistent SERP identity created with serp_identity_create. Reuses the same saved browser state and fixed network address across calls.')
     pages: Union[Annotated[int, Field(ge=1, le=2)], None] = Field(None, alias='pages', description='One page by default. Set 2 only when the user explicitly requests two pages; two-page searches have no backup provider, cannot combine recency or serpIdentity, and include organic listings only; if page 2 is unavailable, page 1 is returned and billed when available.')
+    link_resolution: Union[Literal['complete', 'deferred'], None] = Field(None, alias='linkResolution', description='complete waits until result links are real destination URLs, which can add 30 to 60 seconds when Google wraps them. deferred returns as soon as results are captured: wrapped links stay as working Google redirect links marked pending, and search_serp_status with the returned jobId supplies the destination URLs at no charge once they unlock, usually within a minute; the result states the wait.')
     recency: Union[Literal['week', 'month'], None] = Field(None, alias='recency', description='Limit Google results to the past week or past month. Date filters require one page, use the managed browser, and return organic listings only at 35 Credits. Omit for unfiltered results.')
+
+
+SearchSerpOutputVariant1LinkResolutionVariant1 = TypedDict('SearchSerpOutputVariant1LinkResolutionVariant1', {
+    'mode': Required[Literal['deferred']],
+    'pending': Required[Annotated[int, Field(ge=1, le=9007199254740991)]],
+    'readyAfterSeconds': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+})
+SearchSerpOutputVariant1LinkResolutionVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 SearchSerpOutputVariant1PaginationVariant1 = TypedDict('SearchSerpOutputVariant1PaginationVariant1', {
@@ -235,6 +244,7 @@ class SearchSerpOutputVariant1(BaseModel):
     degraded_result: Union[bool, None] = Field(..., alias='degradedResult', description='')
     degradation_reasons: list[str] = Field(..., alias='degradationReasons', description='')
     retry_recommended: Union[bool, None] = Field(..., alias='retryRecommended', description='')
+    link_resolution: Union[Union[SearchSerpOutputVariant1LinkResolutionVariant1, None], None] = Field(None, alias='linkResolution', description='')
     pagination: Union[SearchSerpOutputVariant1PaginationVariant1, None] = Field(..., alias='pagination', description='')
     serp_completeness: Union[SearchSerpOutputVariant1SerpCompletenessVariant1, None] = Field(..., alias='serpCompleteness', description='')
     organic_results: list[SearchSerpOutputVariant1OrganicResultsItem] = Field(..., alias='organicResults', description='')

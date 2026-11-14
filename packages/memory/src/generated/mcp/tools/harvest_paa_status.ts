@@ -5020,6 +5020,11 @@ export type Output =
         completionStatus: string | null;
         resultQuality: string | null;
         retryRecommended: boolean | null;
+        linkResolution?: {
+          mode: "deferred";
+          pending: number;
+          readyAfterSeconds: number;
+        } | null;
         paaLifecycle: {
           requestedQuestions: number;
           questionsFound: number;
