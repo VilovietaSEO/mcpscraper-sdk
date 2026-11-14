@@ -567,7 +567,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_bestsellers",
     "category": "amazon",
     "title": "Amazon Best Sellers",
-    "description": "Top-ranked products in an Amazon Best Sellers category URL: rank, title, price and rating. About 18 Credits (twice the upstream charge, at most 53); failed calls are refunded.",
+    "description": "Top-ranked products in an Amazon Best Sellers category URL: rank, title, price and rating. About 18 Credits (at most 53); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -601,7 +601,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_deals",
     "category": "amazon",
     "title": "Amazon Deals",
-    "description": "Today's Amazon deals for one marketplace: ASIN, title, deal price, list price, discount and deal type. About 15 Credits (twice the upstream charge, at most 43); failed calls are refunded.",
+    "description": "Today's Amazon deals for one marketplace: ASIN, title, deal price, list price, discount and deal type. About 15 Credits (at most 43); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -647,7 +647,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_offers",
     "category": "amazon",
     "title": "Amazon Product Offers",
-    "description": "Every seller offer for one Amazon product, Buy Box first: price, condition, seller, seller rating, Prime and delivery. About 15 Credits (twice the upstream charge, at most 43); failed calls are refunded.",
+    "description": "Every seller offer for one Amazon product, Buy Box first: price, condition, seller, seller rating, Prime and delivery. About 15 Credits (at most 43); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -707,7 +707,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_product",
     "category": "amazon",
     "title": "Amazon Product Details",
-    "description": "Full details for one Amazon product by URL: title, brand, price, images, ratings, variants and attributes. About 15 Credits (twice the upstream charge, at most 45); failed calls are refunded.",
+    "description": "Full details for one Amazon product by URL: title, brand, price, images, ratings, variants and attributes. About 15 Credits (at most 45); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -735,7 +735,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_products_by_asin",
     "category": "amazon",
     "title": "Amazon Products by ASIN",
-    "description": "Details for up to 10 Amazon products by ASIN in one call: title, brand, price, ratings, images and attributes. About 55 Credits per product (twice the upstream charge, at most 825); failed calls are refunded.",
+    "description": "Details for up to 10 Amazon products by ASIN in one call: title, brand, price, ratings, images and attributes. About 55 Credits per product (at most 825); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -779,7 +779,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_reviews",
     "category": "amazon",
     "title": "Amazon Product Reviews",
-    "description": "Customer reviews for an Amazon product by ASIN or URL: rating, title, text, date and verified-purchase flag. About 267 Credits (twice the upstream charge, at most 400); failed calls are refunded.",
+    "description": "Customer reviews for an Amazon product by ASIN or URL: rating, title, text, date and verified-purchase flag. About 267 Credits (at most 400); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -882,7 +882,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_search",
     "category": "amazon",
     "title": "Amazon Product Search",
-    "description": "Products from an Amazon search or category URL, up to 20: title, price, rating and thumbnail. About 13 Credits (twice the upstream charge, at most 38); failed calls are refunded.",
+    "description": "Products from an Amazon search or category URL, up to 20: title, price, rating and thumbnail. About 13 Credits (at most 38); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -916,7 +916,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_seller",
     "category": "amazon",
     "title": "Amazon Seller Profile",
-    "description": "One Amazon seller by seller ID: name, rating, positive feedback share, feedback counts and business details. About 15 Credits (twice the upstream charge, at most 43); failed calls are refunded.",
+    "description": "One Amazon seller by seller ID: name, rating, positive feedback share, feedback counts and business details. About 15 Credits (at most 43); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -970,7 +970,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "amazon_seller_products",
     "category": "amazon",
     "title": "Amazon Seller Storefront",
-    "description": "One page of an Amazon seller's storefront by seller ID: ASIN, title, price, rating and badges. About 15 Credits (twice the upstream charge, at most 43); failed calls are refunded.",
+    "description": "One page of an Amazon seller's storefront by seller ID: ASIN, title, price, rating and badges. About 15 Credits (at most 43); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -21647,7 +21647,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "harvest_paa",
     "category": "search",
     "title": "Google PAA + SERP Harvest",
-    "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Wait at least 20 seconds before the first durable job check and each later check. Optional SERP modules require include flags. Use gl and location for regional context. Costs 400 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
+    "description": "Expand one Google People Also Ask SERP into full captured answers, every source with available titles/descriptions, organic snippets, AI Overview evidence, ranking URLs, and entity IDs. Unfinished answer expansion is partial. Set pages to 2 for a second organic page when available; PAA expands once on page one, and pagination reports captured coverage. maxQuestions is a target count, not traversal depth. Results distinguish target_reached, proven frontier_exhausted, interruption, and recovery_exhausted; failed clicks and timeouts never prove exhaustion. This tool waits; use harvest_paa_start and harvest_paa_status for long runs. Wait at least 20 seconds before the first durable job check and each later check. Optional SERP modules require include flags. Use gl and location for regional context. Costs 450 Credits per harvest plus 10 Credits per question actually returned; unused hold is refunded. After a timeout or unknown response, reuse the same idempotencyKey. Call credits_info for current pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -21754,7 +21754,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "harvest_paa_start",
     "category": "other",
     "title": "Start Durable Google PAA Harvest",
-    "description": "Start a durable Google People Also Ask harvest and return its job receipt. Set pages to 2 to add the second organic-results page when available; PAA is still expanded once on the preserved first page, and pagination survives checkpoint recovery. maxQuestions is the requested target count. Interrupted workers resume under the same jobId, idempotency key and billing hold, preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Wait at least 20 seconds before checking jobId with harvest_paa_status and each later check. Costs 400 Credits plus 10 per retained question; unused hold is refunded.",
+    "description": "Start a durable Google People Also Ask harvest and return its job receipt. Set pages to 2 to add the second organic-results page when available; PAA is still expanded once on the preserved first page, and pagination survives checkpoint recovery. maxQuestions is the requested target count. Interrupted workers resume under the same jobId, idempotency key and billing hold, preserving checkpoints. Keep one idempotencyKey after a timeout, unknown response, or in-progress reply; replaying it recovers the existing job without a duplicate charge. Wait at least 20 seconds before checking jobId with harvest_paa_status and each later check. Costs 450 Credits plus 10 per retained question; unused hold is refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22537,7 +22537,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_account_about",
     "category": "instagram",
     "title": "Instagram About This Account",
-    "description": "Get what Instagram's About this account page shows for a handle: when the account joined, the country it is based in, how many times it changed its username, and whether it is verified. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "description": "Get what Instagram's About this account page shows for a handle: when the account joined, the country it is based in, how many times it changed its username, and whether it is verified. About 37 Credits (at most 110); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22565,7 +22565,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_audio_reels",
     "category": "instagram",
     "title": "Instagram Reels by Audio",
-    "description": "List Instagram reels that use a given audio track by audio id. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "List Instagram reels that use a given audio track by audio id. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22598,7 +22598,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_basic_profile",
     "category": "instagram",
     "title": "Instagram Basic Profile",
-    "description": "Fetch an Instagram account's core public profile fields (followers, posts, bio, verification) by user id. About 17 Credits (twice the upstream charge, at most 50); failed calls are refunded.",
+    "description": "Fetch an Instagram account's core public profile fields (followers, posts, bio, verification) by user id. About 17 Credits (at most 50); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22626,7 +22626,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_comment_likers",
     "category": "instagram",
     "title": "Instagram Comment Likers",
-    "description": "List the accounts that liked an Instagram comment, one page of up to 50 likers per call with cursor pagination, with each liker's handle, display name, verified and private flags and avatar. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "List the accounts that liked an Instagram comment, one page of up to 50 likers per call with cursor pagination, with each liker's handle, display name, verified and private flags and avatar. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22659,7 +22659,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_comment_replies",
     "category": "instagram",
     "title": "Instagram Comment Replies",
-    "description": "List the replies to an Instagram comment with cursor pagination (text, author, likes). About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "List the replies to an Instagram comment with cursor pagination (text, author, likes). About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22698,7 +22698,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_embed",
     "category": "instagram",
     "title": "Instagram Profile Embed",
-    "description": "Fetch the public embed HTML for an Instagram profile by handle. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Fetch the public embed HTML for an Instagram profile by handle. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22726,7 +22726,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_followers",
     "category": "instagram",
     "title": "Instagram Followers",
-    "description": "List about the first 50 followers of any public Instagram account by username: follower usernames, names, and profile details. Instagram caps follower lists, so this returns one page, not the whole list. About 29 Credits (twice the upstream charge, at most 87); failed calls are refunded.",
+    "description": "List about the first 50 followers of any public Instagram account by username: follower usernames, names, and profile details. Instagram caps follower lists, so this returns one page, not the whole list. About 29 Credits (at most 87); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22759,7 +22759,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_following",
     "category": "instagram",
     "title": "Instagram Following",
-    "description": "List about the first 50 accounts a public Instagram user follows: usernames, names, and profile details. Instagram caps these lists, so this returns one page, not the whole list. About 29 Credits (twice the upstream charge, at most 87); failed calls are refunded.",
+    "description": "List about the first 50 accounts a public Instagram user follows: usernames, names, and profile details. Instagram caps these lists, so this returns one page, not the whole list. About 29 Credits (at most 87); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22792,7 +22792,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_hashtag_analytics",
     "category": "instagram",
     "title": "Instagram Hashtag Analytics",
-    "description": "Get the total post count for any Instagram hashtag. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "Get the total post count for any Instagram hashtag. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22820,7 +22820,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_hashtag_recent_posts",
     "category": "instagram",
     "title": "Instagram Hashtag Recent Posts",
-    "description": "Instagram posts published under a hashtag, newest first, read from its live chronological feed rather than a web search index. About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "description": "Instagram posts published under a hashtag, newest first, read from its live chronological feed rather than a web search index. About 32 Credits (at most 94); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22853,7 +22853,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_hashtag_top_posts",
     "category": "instagram",
     "title": "Instagram Hashtag Top Posts",
-    "description": "Instagram's own top-ranked posts for a hashtag, read from its live hashtag feed rather than a web search index, with view, like, and comment counts. About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "description": "Instagram's own top-ranked posts for a hashtag, read from its live hashtag feed rather than a web search index, with view, like, and comment counts. About 32 Credits (at most 94); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22886,7 +22886,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_highlight_detail",
     "category": "instagram",
     "title": "Instagram Highlight Detail",
-    "description": "Fetch the details and media items of a single Instagram story highlight by id or highlight URL. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "Fetch the details and media items of a single Instagram story highlight by id or highlight URL. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22914,7 +22914,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_location_details",
     "category": "instagram",
     "title": "Instagram Location Details",
-    "description": "Look up one Instagram location by id: its name, category, coordinates, number of tagged posts and page slug, plus the street address, postal code, phone and linked business account when Instagram lists them. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "Look up one Instagram location by id: its name, category, coordinates, number of tagged posts and page slug, plus the street address, postal code, phone and linked business account when Instagram lists them. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -22942,7 +22942,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_location_posts",
     "category": "instagram",
     "title": "Instagram Location Posts",
-    "description": "List public Instagram posts tagged at a location, ranked or most recent, with cursor pagination. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "List public Instagram posts tagged at a location, ranked or most recent, with cursor pagination. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23056,7 +23056,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_media_transcript",
     "category": "instagram",
     "title": "Instagram Media Transcript",
-    "description": "Get the spoken-audio transcript text for an Instagram post or reel by URL. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Get the spoken-audio transcript text for an Instagram post or reel by URL. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23084,7 +23084,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_post",
     "category": "instagram",
     "title": "Instagram Post",
-    "description": "Fetch a single Instagram post or reel by URL: media URLs, like count, owner and type. For the spoken words use instagram_media_transcript. About 9 Credits (twice the upstream charge, at most 25); failed calls are refunded.",
+    "description": "Fetch a single Instagram post or reel by URL: media URLs, like count, owner and type. For the spoken words use instagram_media_transcript. About 9 Credits (at most 25); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23112,7 +23112,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_post_comments",
     "category": "instagram",
     "title": "Instagram Post Comments",
-    "description": "List the comments on an Instagram post or reel by URL with cursor pagination (text, author, likes). About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "description": "List the comments on an Instagram post or reel by URL with cursor pagination (text, author, likes). About 14 Credits (at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23145,7 +23145,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_post_likers",
     "category": "instagram",
     "title": "Instagram Post Likers",
-    "description": "List the accounts that liked a public Instagram post, one page of likers per call, with each liker's handle, display name, verified flag and avatar. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "List the accounts that liked a public Instagram post, one page of likers per call, with each liker's handle, display name, verified flag and avatar. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23173,7 +23173,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_profile_contact",
     "category": "instagram",
     "title": "Instagram Profile Contact Info",
-    "description": "Look up the contact email and phone number an Instagram creator or business publishes on its profile, including the address behind the profile's Email button that public profile lookups do not return. About 30 Credits (twice the upstream charge, at most 88); failed calls are refunded.",
+    "description": "Look up the contact email and phone number an Instagram creator or business publishes on its profile, including the address behind the profile's Email button that public profile lookups do not return. About 30 Credits (at most 88); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23267,7 +23267,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_profile_details",
     "category": "instagram",
     "title": "Instagram Profile",
-    "description": "Fetch an Instagram account's public profile (followers, posts, bio, verification) by handle. About 15 Credits (twice the upstream charge, at most 45); failed calls are refunded.",
+    "description": "Fetch an Instagram account's public profile (followers, posts, bio, verification) by handle. About 15 Credits (at most 45); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23295,7 +23295,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_reel_transcript",
     "category": "instagram",
     "title": "Instagram Reel Transcript",
-    "description": "Transcribe a public Instagram reel or video post by URL: full speech transcript with speaker labels and optional word-level timestamps. For plain transcript text only, instagram_media_transcript is lighter. Up to 1659 Credits, by how much comes back (twice the upstream charge, at most 2488); failed calls are refunded.",
+    "description": "Transcribe a public Instagram reel or video post by URL: full speech transcript with speaker labels and optional word-level timestamps. For plain transcript text only, instagram_media_transcript is lighter. Up to 1659 Credits, by how much comes back (at most 2488); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23327,7 +23327,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_reels_search",
     "category": "instagram",
     "title": "Instagram Reels Search",
-    "description": "Search Instagram Reels by keyword against Instagram's own reels search and get matching reels with view, like and comment counts, caption, creator and duration. Results are relevance-ranked, not chronological. About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "description": "Search Instagram Reels by keyword against Instagram's own reels search and get matching reels with view, like and comment counts, caption, creator and duration. Results are relevance-ranked, not chronological. About 32 Credits (at most 94); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23360,7 +23360,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_search",
     "category": "instagram",
     "title": "Instagram Search",
-    "description": "Search Instagram for users, hashtags, or places by keyword and get matching results with names, counts, and links. About 21 Credits (twice the upstream charge, at most 63); failed calls are refunded.",
+    "description": "Search Instagram for users, hashtags, or places by keyword and get matching results with names, counts, and links. About 21 Credits (at most 63); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23403,7 +23403,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_search_audio",
     "category": "instagram",
     "title": "Instagram Audio Search",
-    "description": "Search Instagram's audio library by keyword and get licensed tracks and creators' original sounds, each with an audio id you can pass to instagram_audio_reels, its title, artist, and length. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "Search Instagram's audio library by keyword and get licensed tracks and creators' original sounds, each with an audio id you can pass to instagram_audio_reels, its title, artist, and length. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23431,7 +23431,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_search_followers",
     "category": "instagram",
     "title": "Instagram Search Followers",
-    "description": "Search the followers of a public Instagram account by name or username, using Instagram's own follower search. On smaller accounts it searches the whole follower list and returns close matches ranked by Instagram. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "description": "Search the followers of a public Instagram account by name or username, using Instagram's own follower search. On smaller accounts it searches the whole follower list and returns close matches ranked by Instagram. About 37 Credits (at most 110); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23465,7 +23465,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_search_following",
     "category": "instagram",
     "title": "Instagram Search Following",
-    "description": "Search the accounts a public Instagram user follows by name or username. Matching is Instagram's own loose search, so results are close matches ranked by Instagram and some may not contain your exact word. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "description": "Search the accounts a public Instagram user follows by name or username. Matching is Instagram's own loose search, so results are close matches ranked by Instagram and some may not contain your exact word. About 37 Credits (at most 110); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23499,7 +23499,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_search_hashtag",
     "category": "instagram",
     "title": "Instagram Hashtag Search",
-    "description": "Search posts under an Instagram hashtag through a web search index rather than Instagram's own hashtag feed. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Search posts under an Instagram hashtag through a web search index rather than Instagram's own hashtag feed. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23551,7 +23551,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_search_locations",
     "category": "instagram",
     "title": "Instagram Location Search",
-    "description": "Search Instagram locations by keyword and return each place's id, name, address and coordinates. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "Search Instagram locations by keyword and return each place's id, name, address and coordinates. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23579,7 +23579,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_search_profiles",
     "category": "instagram",
     "title": "Instagram Profile Search",
-    "description": "Search public Instagram profiles by a bio or caption keyword. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Search public Instagram profiles by a bio or caption keyword. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23612,7 +23612,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_search_profiles_contact",
     "category": "instagram",
     "title": "Instagram Profile Search with Contact",
-    "description": "Search public Instagram profiles by a bio or caption keyword and get each account's country, the month it joined, and the public email and phone number it lists. Up to 1334 Credits, by how much comes back (twice the upstream charge, at most 2000); failed calls are refunded.",
+    "description": "Search public Instagram profiles by a bio or caption keyword and get each account's country, the month it joined, and the public email and phone number it lists. Up to 1334 Credits, by how much comes back (at most 2000); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23651,7 +23651,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_similar_profiles",
     "category": "instagram",
     "title": "Instagram Similar Profiles",
-    "description": "List the related profiles Instagram's website shows for a public profile, with each account's handle, display name, verified flag and avatar. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "description": "List the related profiles Instagram's website shows for a public profile, with each account's handle, display name, verified flag and avatar. About 37 Credits (at most 110); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23679,7 +23679,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_stories_full",
     "category": "instagram",
     "title": "Instagram Stories (full)",
-    "description": "Fetch a public Instagram account's currently live stories with media, type, dimensions, posting time, and 24-hour expiry by username. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "description": "Fetch a public Instagram account's currently live stories with media, type, dimensions, posting time, and 24-hour expiry by username. About 37 Credits (at most 110); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23707,7 +23707,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_stories_thin",
     "category": "instagram",
     "title": "Instagram Stories (basic)",
-    "description": "Fetch a public Instagram account's currently live stories - media URL, owner, and posting time - by username. Lightweight projection; for media type, dimensions, and the 24h expiry time use instagram_stories_full. About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "description": "Fetch a public Instagram account's currently live stories - media URL, owner, and posting time - by username. Lightweight projection; for media type, dimensions, and the 24h expiry time use instagram_stories_full. About 32 Credits (at most 94); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23735,7 +23735,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_story",
     "category": "instagram",
     "title": "Instagram Story",
-    "description": "Fetch one live Instagram story by its link or id, with its image or video, posting time, author, and the accounts, links and stickers placed on it. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "description": "Fetch one live Instagram story by its link or id, with its image or video, posting time, author, and the accounts, links and stickers placed on it. About 37 Credits (at most 110); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23763,7 +23763,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_suggested_profiles",
     "category": "instagram",
     "title": "Instagram Suggested Profiles",
-    "description": "List the full set of accounts Instagram suggests as similar to a public profile, the list its app shows, with each account's handle, display name, verified flag, private flag and avatar. About 37 Credits (twice the upstream charge, at most 110); failed calls are refunded.",
+    "description": "List the full set of accounts Instagram suggests as similar to a public profile, the list its app shows, with each account's handle, display name, verified flag, private flag and avatar. About 37 Credits (at most 110); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23791,7 +23791,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_tagged_posts",
     "category": "instagram",
     "title": "Instagram Tagged Posts",
-    "description": "List the posts an Instagram user is tagged in, with cursor pagination (author, caption, likes, comments). About 32 Credits (twice the upstream charge, at most 94); failed calls are refunded.",
+    "description": "List the posts an Instagram user is tagged in, with cursor pagination (author, caption, likes, comments). About 32 Credits (at most 94); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23824,7 +23824,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_trending_reels",
     "category": "instagram",
     "title": "Instagram Trending Reels",
-    "description": "List currently trending Instagram reels. Instagram does not return play counts on this feed. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "List currently trending Instagram reels. Instagram does not return play counts on this feed. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {},
@@ -23843,7 +23843,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_user_highlights",
     "category": "instagram",
     "title": "Instagram User Highlights",
-    "description": "List an Instagram account's story highlight reels by handle. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "List an Instagram account's story highlight reels by handle. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23876,7 +23876,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_user_posts",
     "category": "instagram",
     "title": "Instagram User Posts",
-    "description": "List an Instagram account's recent posts (likes, comments, captions) by handle with cursor pagination. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "description": "List an Instagram account's recent posts (likes, comments, captions) by handle with cursor pagination. About 14 Credits (at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23909,7 +23909,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_user_reels",
     "category": "instagram",
     "title": "Instagram User Reels",
-    "description": "List an Instagram account's reels by handle with cursor pagination (caption, plays, likes, comments). About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "description": "List an Instagram account's reels by handle with cursor pagination (caption, plays, likes, comments). About 14 Credits (at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23944,7 +23944,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_user_reels_logged_in",
     "category": "instagram",
     "title": "Instagram User Reels (Logged In)",
-    "description": "List an Instagram account's reels by handle as a logged-in Instagram viewer sees them, with cursor pagination: everything instagram_user_reels returns plus saves, reposts, the caption-track URL and, for reels cross-posted to Facebook, the Facebook views, likes and comments. About 29 Credits (twice the upstream charge, at most 87); failed calls are refunded.",
+    "description": "List an Instagram account's reels by handle as a logged-in Instagram viewer sees them, with cursor pagination: everything instagram_user_reels returns plus saves, reposts, the caption-track URL and, for reels cross-posted to Facebook, the Facebook views, likes and comments. About 29 Credits (at most 87); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -23979,7 +23979,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_user_reposts",
     "category": "instagram",
     "title": "Instagram User Reposts",
-    "description": "List the posts a public Instagram account has reposted to its feed, with cursor pagination. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "List the posts a public Instagram account has reposted to its feed, with cursor pagination. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24012,7 +24012,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "instagram_web_reels_search",
     "category": "instagram",
     "title": "Instagram Reels Web Search",
-    "description": "Search Instagram Reels through a web search index rather than Instagram's own search, and get matching reels (caption, likes, comments, creator, and duration). About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Search Instagram Reels through a web search index rather than Instagram's own search, and get matching reels (caption, likes, comments, creator, and duration). About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24610,7 +24610,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_ad",
     "category": "linkedin",
     "title": "LinkedIn Ad Details",
-    "description": "Look up a single LinkedIn Ad Library ad by URL and get the advertiser, headline, creative text, format, CTA, run dates, and impressions. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Look up a single LinkedIn Ad Library ad by URL and get the advertiser, headline, creative text, format, CTA, run dates, and impressions. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24638,7 +24638,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_ads",
     "category": "linkedin",
     "title": "LinkedIn Ads Library",
-    "description": "Search the LinkedIn Ad Library by search URL and list the matching ads (advertiser, creative text, format). Up to 205 Credits, by how much comes back (twice the upstream charge, at most 308); failed calls are refunded.",
+    "description": "Search the LinkedIn Ad Library by search URL and list the matching ads (advertiser, creative text, format). Up to 205 Credits, by how much comes back (at most 308); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24672,7 +24672,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_ads_search",
     "category": "linkedin",
     "title": "LinkedIn Ad Search",
-    "description": "Search the LinkedIn Ad Library by company or keyword and list matching ads (advertiser, headline, creative text, format, CTA, and run dates) with pagination. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Search the LinkedIn Ad Library by company or keyword and list matching ads (advertiser, headline, creative text, format, CTA, and run dates) with pagination. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24727,7 +24727,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_article",
     "category": "linkedin",
     "title": "LinkedIn Article",
-    "description": "Read a public LinkedIn article or newsletter issue by URL, including its full body text, author, publication time, and engagement counts. About 95 Credits (twice the upstream charge, at most 283); failed calls are refunded.",
+    "description": "Read a public LinkedIn article or newsletter issue by URL, including its full body text, author, publication time, and engagement counts. About 95 Credits (at most 283); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24755,7 +24755,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_comment_reactions",
     "category": "linkedin",
     "title": "LinkedIn Comment Reactions",
-    "description": "List who reacted to a comment on a LinkedIn post - reactor name, profile URL, job title, and reaction type, 100 per page. About 44 Credits (twice the upstream charge, at most 130); failed calls are refunded.",
+    "description": "List who reacted to a comment on a LinkedIn post - reactor name, profile URL, job title, and reaction type, 100 per page. About 44 Credits (at most 130); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24789,7 +24789,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_comment_replies",
     "category": "linkedin",
     "title": "LinkedIn Comment Replies",
-    "description": "List up to the 10 newest replies to a comment on a LinkedIn post - reply text, replier name/URL/job title, timestamps, and likes. About 44 Credits (twice the upstream charge, at most 130); failed calls are refunded.",
+    "description": "List up to the 10 newest replies to a comment on a LinkedIn post - reply text, replier name/URL/job title, timestamps, and likes. About 44 Credits (at most 130); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24817,7 +24817,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_company",
     "category": "linkedin",
     "title": "LinkedIn Company",
-    "description": "Fetch a full LinkedIn company page by URL: name, description, industry, employee count and range, follower count, founded year, headquarters and office locations, funding data, tagline, logo, website, and specialities. About 19 Credits (twice the upstream charge, at most 55); failed calls are refunded.",
+    "description": "Fetch a full LinkedIn company page by URL: name, description, industry, employee count and range, follower count, founded year, headquarters and office locations, funding data, tagline, logo, website, and specialities. About 19 Credits (at most 55); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24845,7 +24845,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_company_employees",
     "category": "linkedin",
     "title": "LinkedIn Company Employees",
-    "description": "List the employees of a LinkedIn company by name or company URL, with optional job-title filtering. About 100 Credits (twice the upstream charge, at most 300); failed calls are refunded.",
+    "description": "List the employees of a LinkedIn company by name or company URL, with optional job-title filtering. About 100 Credits (at most 300); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24884,7 +24884,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_company_posts",
     "category": "linkedin",
     "title": "LinkedIn Company Posts",
-    "description": "List a LinkedIn company page's recent posts by URL: full text, canonical link, publish date, author, engagement counts with a per-reaction breakdown, and attached media. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "description": "List a LinkedIn company page's recent posts by URL: full text, canonical link, publish date, author, engagement counts with a per-reaction breakdown, and attached media. About 49 Credits (at most 145); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24940,7 +24940,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_company_posts_thin",
     "category": "linkedin",
     "title": "LinkedIn Company Posts (basic)",
-    "description": "A LinkedIn company page's recent posts, text and link only. No engagement counts, author details, media, or reaction breakdown - for those use linkedin_company_posts. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "A LinkedIn company page's recent posts, text and link only. No engagement counts, author details, media, or reaction breakdown - for those use linkedin_company_posts. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -24974,7 +24974,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_company_thin",
     "category": "linkedin",
     "title": "LinkedIn Company (basic)",
-    "description": "Basic LinkedIn company page by URL: name, description, employee count, industry, logo, website, tagline. No follower count, founded year, office locations, or funding data - for those use linkedin_company. About 17 Credits (twice the upstream charge, at most 50); failed calls are refunded.",
+    "description": "Basic LinkedIn company page by URL: name, description, employee count, industry, logo, website, tagline. No follower count, founded year, office locations, or funding data - for those use linkedin_company. About 17 Credits (at most 50); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25002,7 +25002,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_email",
     "category": "linkedin",
     "title": "LinkedIn Email Finder",
-    "description": "Find the deliverability-validated work email behind a LinkedIn profile URL or public ID. Returns each discovered email with its deliverability, validation status, and quality score, plus the person's name and headline. About 184 Credits (twice the upstream charge, at most 275); failed calls are refunded.",
+    "description": "Find the deliverability-validated work email behind a LinkedIn profile URL or public ID. Returns each discovered email with its deliverability, validation status, and quality score, plus the person's name and headline. About 184 Credits (at most 275); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25030,7 +25030,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_group",
     "category": "linkedin",
     "title": "LinkedIn Group",
-    "description": "Fetch one LinkedIn group by URL or id: name, description, rules, member count, logo and cover image, creation date, visibility and join settings, and its admins. About 22 Credits (twice the upstream charge, at most 65); failed calls are refunded.",
+    "description": "Fetch one LinkedIn group by URL or id: name, description, rules, member count, logo and cover image, creation date, visibility and join settings, and its admins. About 22 Credits (at most 65); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25060,7 +25060,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_group_posts",
     "category": "linkedin",
     "title": "LinkedIn Group Posts",
-    "description": "List the posts in a LinkedIn group by group URL, newest first: full text, canonical link, publish date, author, engagement counts with a per-reaction breakdown, and attached media. About 44 Credits (twice the upstream charge, at most 130); failed calls are refunded.",
+    "description": "List the posts in a LinkedIn group by group URL, newest first: full text, canonical link, publish date, author, engagement counts with a per-reaction breakdown, and attached media. About 44 Credits (at most 130); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25108,7 +25108,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_job",
     "category": "linkedin",
     "title": "LinkedIn Job",
-    "description": "Fetch one LinkedIn job posting by URL: title, full description, location, salary when disclosed, applicant count, employment and workplace type, seniority, benefits, industries, apply links, posting and expiry dates, the hiring team, the applicant tracking system behind it, and the hiring company with its size, follower count, website and description. About 25 Credits (twice the upstream charge, at most 75); failed calls are refunded.",
+    "description": "Fetch one LinkedIn job posting by URL: title, full description, location, salary when disclosed, applicant count, employment and workplace type, seniority, benefits, industries, apply links, posting and expiry dates, the hiring team, the applicant tracking system behind it, and the hiring company with its size, follower count, website and description. About 25 Credits (at most 75); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25136,7 +25136,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_jobs",
     "category": "linkedin",
     "title": "LinkedIn Jobs",
-    "description": "Search LinkedIn job listings by title and location - full records with description, salary, applicant count, seniority, company details, and benefits. Up to 25 jobs per request. About 325 Credits (twice the upstream charge, at most 488); failed calls are refunded.",
+    "description": "Search LinkedIn job listings by title and location - full records with description, salary, applicant count, seniority, company details, and benefits. Up to 25 jobs per request. About 325 Credits (at most 488); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25252,7 +25252,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_jobs_thin",
     "category": "linkedin",
     "title": "LinkedIn Jobs (index)",
-    "description": "Light LinkedIn job search: title, company, location, posted date, URL. No description, salary, applicant counts, or seniority - for those use linkedin_jobs. About 11 Credits (twice the upstream charge, at most 33); failed calls are refunded.",
+    "description": "Light LinkedIn job search: title, company, location, posted date, URL. No description, salary, applicant counts, or seniority - for those use linkedin_jobs. About 11 Credits (at most 33); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25341,7 +25341,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_post",
     "category": "linkedin",
     "title": "LinkedIn Post",
-    "description": "Fetch a single LinkedIn post or article by URL (title, text, author, like and comment counts, publish date). About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "description": "Fetch a single LinkedIn post or article by URL (title, text, author, like and comment counts, publish date). About 14 Credits (at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25369,7 +25369,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_post_comments",
     "category": "linkedin",
     "title": "LinkedIn Post Comments",
-    "description": "List comments on a LinkedIn post - full text, commenter name/URL/job title, timestamps, and engagement. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "description": "List comments on a LinkedIn post - full text, commenter name/URL/job title, timestamps, and engagement. About 49 Credits (at most 145); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25416,7 +25416,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_post_reactions",
     "category": "linkedin",
     "title": "LinkedIn Post Reactions",
-    "description": "List who reacted to a LinkedIn post - reactor name, profile URL, job title, and reaction type. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "description": "List who reacted to a LinkedIn post - reactor name, profile URL, job title, and reaction type. About 49 Credits (at most 145); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25450,7 +25450,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_post_transcript",
     "category": "linkedin",
     "title": "LinkedIn Post Transcript",
-    "description": "Get the spoken transcript of a LinkedIn video post by URL. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Get the spoken transcript of a LinkedIn video post by URL. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25478,7 +25478,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_profile",
     "category": "linkedin",
     "title": "LinkedIn Profile",
-    "description": "Fetch a rich LinkedIn member profile by URL: name, headline, avatar, location, connections and followers, current position, and full work experience with job titles, descriptions, dates, employment/workplace type, and per-role skills, plus education, skills, certifications, honors and awards, languages, projects, publications, and verified/premium/open-to-work flags. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "description": "Fetch a rich LinkedIn member profile by URL: name, headline, avatar, location, connections and followers, current position, and full work experience with job titles, descriptions, dates, employment/workplace type, and per-role skills, plus education, skills, certifications, honors and awards, languages, projects, publications, and verified/premium/open-to-work flags. About 49 Credits (at most 145); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25506,7 +25506,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_profile_comments",
     "category": "linkedin",
     "title": "LinkedIn Profile Comments",
-    "description": "List the comments a LinkedIn member has left on other people's posts - the comment text, its permalink and timestamp, plus the post it was left on and that post's author and engagement. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "description": "List the comments a LinkedIn member has left on other people's posts - the comment text, its permalink and timestamp, plus the post it was left on and that post's author and engagement. About 49 Credits (at most 145); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25550,7 +25550,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_profile_posts_full",
     "category": "linkedin",
     "title": "LinkedIn Profile Posts (full)",
-    "description": "Fetch recent public LinkedIn profile posts with enriched author, engagement, article, newsletter, media, annotation, repost, and social activity details. About 84 Credits (twice the upstream charge, at most 250); failed calls are refunded.",
+    "description": "Fetch recent public LinkedIn profile posts with enriched author, engagement, article, newsletter, media, annotation, repost, and social activity details. About 84 Credits (at most 250); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25627,7 +25627,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_profile_posts_thin",
     "category": "linkedin",
     "title": "LinkedIn Profile Posts (basic)",
-    "description": "Fetch recent public LinkedIn profile posts with portable identity, author, engagement, article, image, video, and repost fields. About 84 Credits (twice the upstream charge, at most 250); failed calls are refunded.",
+    "description": "Fetch recent public LinkedIn profile posts with portable identity, author, engagement, article, image, video, and repost fields. About 84 Credits (at most 250); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25666,7 +25666,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_profile_reactions",
     "category": "linkedin",
     "title": "LinkedIn Profile Reactions",
-    "description": "List the posts a LinkedIn member has reacted to - the reaction, its timestamp, and the full post it was made on with author and engagement. About 49 Credits (twice the upstream charge, at most 145); failed calls are refunded.",
+    "description": "List the posts a LinkedIn member has reacted to - the reaction, its timestamp, and the full post it was made on with author and engagement. About 49 Credits (at most 145); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25700,7 +25700,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_profile_thin",
     "category": "linkedin",
     "title": "LinkedIn Profile (basic)",
-    "description": "Light LinkedIn profile by URL: name, avatar, location, followers, current company, and a basic experience and education list. For full experience detail, skills, certifications, and verified flags use linkedin_profile. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "description": "Light LinkedIn profile by URL: name, avatar, location, followers, current company, and a basic experience and education list. For full experience detail, skills, certifications, and verified flags use linkedin_profile. About 14 Credits (at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25728,7 +25728,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_companies",
     "category": "linkedin",
     "title": "LinkedIn Company Search",
-    "description": "Search LinkedIn companies by keyword with an optional location filter: name, URL, industry, size and description for each match. About 84 Credits (twice the upstream charge, at most 250); failed calls are refunded.",
+    "description": "Search LinkedIn companies by keyword with an optional location filter: name, URL, industry, size and description for each match. About 84 Credits (at most 250); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25767,7 +25767,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_groups",
     "category": "linkedin",
     "title": "LinkedIn Group Search",
-    "description": "Search LinkedIn groups by keyword, 10 per page: group name, URL, member count, summary, and logo. About 22 Credits (twice the upstream charge, at most 65); failed calls are refunded.",
+    "description": "Search LinkedIn groups by keyword, 10 per page: group name, URL, member count, summary, and logo. About 22 Credits (at most 65); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -25801,7 +25801,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_leads",
     "category": "linkedin",
     "title": "LinkedIn Sales Navigator Lead Search",
-    "description": "LinkedIn lead search with Sales Navigator's search and filters: one call returns a page of up to 25 people matching a keyword and Sales Navigator lead filters (location, job title, current and past company, school, seniority, function, company size, and more), or the results of a Sales Navigator lead-search URL you built yourself. About 1167 Credits (twice the upstream charge, at most 1750); failed calls are refunded.",
+    "description": "LinkedIn lead search with Sales Navigator's search and filters: one call returns a page of up to 25 people matching a keyword and Sales Navigator lead filters (location, job title, current and past company, school, seniority, function, company size, and more), or the results of a Sales Navigator lead-search URL you built yourself. About 1167 Credits (at most 1750); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26168,7 +26168,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_posts",
     "category": "linkedin",
     "title": "LinkedIn Post Search",
-    "description": "Search public LinkedIn posts by keyword (text, link, publish date). Results come from search-engine matches over public LinkedIn posts and work best with English keywords. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Search public LinkedIn posts by keyword (text, link, publish date). Results come from search-engine matches over public LinkedIn posts and work best with English keywords. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26212,7 +26212,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_posts_full",
     "category": "linkedin",
     "title": "LinkedIn Post Search (full)",
-    "description": "Search public LinkedIn posts with rich author, engagement, attachment, and poll details. About 67 Credits (twice the upstream charge, at most 200); failed calls are refunded.",
+    "description": "Search public LinkedIn posts with rich author, engagement, attachment, and poll details. About 67 Credits (at most 200); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26321,7 +26321,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_profiles",
     "category": "linkedin",
     "title": "LinkedIn Profile Search",
-    "description": "Search LinkedIn profiles by keyword with location, job-title, company, school and seniority filters. Each match is a full profile: name, headline, location, current position, work experience, education and skills. For names and URLs only use linkedin_search_profiles_thin. Up to 3300 Credits, by how much comes back (twice the upstream charge, at most 4950); failed calls are refunded.",
+    "description": "Search LinkedIn profiles by keyword with location, job-title, company, school and seniority filters. Each match is a full profile: name, headline, location, current position, work experience, education and skills. For names and URLs only use linkedin_search_profiles_thin. Up to 3300 Credits, by how much comes back (at most 4950); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -26670,7 +26670,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_profiles_email",
     "category": "linkedin",
     "title": "LinkedIn Profile Search + Email",
-    "description": "LinkedIn people search returning a full profile and a verified work email for each match. Email discovery is best effort; a match without a found email still counts toward the charge. For one known profile use linkedin_email. Up to 5600 Credits, by how much comes back (twice the upstream charge, at most 8400); failed calls are refunded.",
+    "description": "LinkedIn people search returning a full profile and a verified work email for each match. Email discovery is best effort; a match without a found email still counts toward the charge. For one known profile use linkedin_email. Up to 5600 Credits, by how much comes back (at most 8400); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -27019,7 +27019,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_profiles_thin",
     "category": "linkedin",
     "title": "LinkedIn Profile Search (basic)",
-    "description": "Light LinkedIn people search: name, headline, profile URL, location. No full profile or email - for full profiles use linkedin_search_profiles, and add emails with linkedin_search_profiles_email. About 534 Credits (twice the upstream charge, at most 800); failed calls are refunded.",
+    "description": "Light LinkedIn people search: name, headline, profile URL, location. No full profile or email - for full profiles use linkedin_search_profiles, and add emails with linkedin_search_profiles_email. About 534 Credits (at most 800); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -27107,7 +27107,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "linkedin_search_services",
     "category": "linkedin",
     "title": "LinkedIn Service Provider Search",
-    "description": "Find freelancers and service providers on LinkedIn by the service they offer (e.g. 'Web Development'), optionally in a location. About 44 Credits (twice the upstream charge, at most 130); failed calls are refunded.",
+    "description": "Find freelancers and service providers on LinkedIn by the service they offer (e.g. 'Web Development'), optionally in a location. About 44 Credits (at most 130); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -30796,7 +30796,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "search_serp",
     "category": "search",
     "title": "Google SERP Lookup",
-    "description": "Search Google. Default light mode returns one organic-results page. Use mode:full on an unfiltered one-page search for available local-pack, forum, video, AI, entity and PAA-preview features; check featureStatus for coverage. Full does not open result sites, expand PAA or open Maps profiles. Set pages:2 only when two pages are requested: organic results only, no backup provider. Date filters (recency:week/month) and saved serpIdentity require one page; identities cannot use full mode. One-page light tries twice before its API fallback. Light costs 20 Credits per delivered page (35 with fallback); one-page full or date-filtered search costs 35; two-page full costs 40; saved identities cost 60. Unavailable page 2 means partial coverage billed for page 1. Browser/two-page results mark rich features unsupported. Reuse the same idempotencyKey after an uncertain response. Call credits_info for pricing and balance.",
+    "description": "Search Google. Default light mode returns one organic-results page. Use mode:full on an unfiltered one-page search for available local-pack, forum, video, AI, entity and PAA-preview features; check featureStatus for coverage. Full does not open result sites, expand PAA or open Maps profiles. Set pages:2 only when two pages are requested: organic results only, no backup provider. Date filters (recency:week/month) and saved serpIdentity require one page; identities cannot use full mode. One-page light tries twice before its API fallback. Light costs 20 Credits per delivered page (35 with fallback); one-page full costs 35; a date-filtered search costs 150; two-page full costs 40; saved identities cost 60. Unavailable page 2 means partial coverage billed for page 1. Browser/two-page results mark rich features unsupported. Reuse the same idempotencyKey after an uncertain response. Call credits_info for pricing and balance.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -30867,7 +30867,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           ]
         },
         "recency": {
-          "description": "Limit Google results to the past week or past month. Date filters require one page, use the managed browser, and return organic listings only at 35 Credits. Omit for unfiltered results.",
+          "description": "Limit Google results to the past week or past month. Date filters require one page and return organic listings only at 150 Credits. Omit for unfiltered results.",
           "type": "string",
           "enum": [
             "week",
@@ -31761,7 +31761,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_article",
     "category": "twitter",
     "title": "X Article",
-    "description": "Get a public X long-form article from its wrapper post URL, including its author, engagement, cover image, and structured content blocks. About 9 Credits (twice the upstream charge, at most 27); failed calls are refunded.",
+    "description": "Get a public X long-form article from its wrapper post URL, including its author, engagement, cover image, and structured content blocks. About 9 Credits (at most 27); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -31789,7 +31789,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_community",
     "category": "twitter",
     "title": "X Community",
-    "description": "Fetch a Twitter/X community's public details (name, description, member count, join policy) by URL. About 2 Credits (twice the upstream charge, at most 5); failed calls are refunded.",
+    "description": "Fetch a Twitter/X community's public details (name, description, member count, join policy) by URL. About 2 Credits (at most 5); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -31817,7 +31817,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_community_tweets",
     "category": "twitter",
     "title": "X Community Posts",
-    "description": "List recent tweets posted in a Twitter/X community by URL. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "description": "List recent tweets posted in a Twitter/X community by URL. About 8 Credits (at most 23); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -31845,7 +31845,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_followers",
     "category": "twitter",
     "title": "X Followers",
-    "description": "Fetch the follower list of any public X (Twitter) account by username with cursor pagination. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "description": "Fetch the follower list of any public X (Twitter) account by username with cursor pagination. About 8 Credits (at most 23); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -31878,7 +31878,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_following",
     "category": "twitter",
     "title": "X Following",
-    "description": "List the accounts a public X (Twitter) account follows by username with cursor pagination. Limit is a per-page maximum; follow the response's nextCursor for more. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "description": "List the accounts a public X (Twitter) account follows by username with cursor pagination. Limit is a per-page maximum; follow the response's nextCursor for more. About 8 Credits (at most 23); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -31911,7 +31911,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_profile",
     "category": "twitter",
     "title": "X Profile",
-    "description": "Fetch a Twitter/X account's public profile (followers, tweets, bio, verification) by handle. About 4 Credits (twice the upstream charge, at most 11); failed calls are refunded.",
+    "description": "Fetch a Twitter/X account's public profile (followers, tweets, bio, verification) by handle. About 4 Credits (at most 11); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -31939,7 +31939,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_replies",
     "category": "twitter",
     "title": "X Post Replies",
-    "description": "Fetch the replies to any X (Twitter) post URL as structured records: author, text, and engagement. An empty result is valid and does not assert whether the target post exists. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "description": "Fetch the replies to any X (Twitter) post URL as structured records: author, text, and engagement. An empty result is valid and does not assert whether the target post exists. About 8 Credits (at most 23); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -31978,7 +31978,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_search",
     "category": "twitter",
     "title": "X Search",
-    "description": "Search X (Twitter) with full advanced-search syntax (operators like from:, since:, until:, min_faves: work inline in the query) and get structured tweets with text, author, engagement, and cursor pagination. About 9 Credits (twice the upstream charge, at most 27); failed calls are refunded.",
+    "description": "Search X (Twitter) with full advanced-search syntax (operators like from:, since:, until:, min_faves: work inline in the query) and get structured tweets with text, author, engagement, and cursor pagination. About 9 Credits (at most 27); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -32027,7 +32027,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_search_communities",
     "category": "twitter",
     "title": "X Community Search",
-    "description": "Search X (Twitter) communities by keyword and get their id, name, topic, and member count with cursor pagination. This is how you find a community URL to pass to twitter_community or twitter_community_tweets. Up to 19 Credits, by how much comes back (twice the upstream charge, at most 28); failed calls are refunded.",
+    "description": "Search X (Twitter) communities by keyword and get their id, name, topic, and member count with cursor pagination. This is how you find a community URL to pass to twitter_community or twitter_community_tweets. Up to 19 Credits, by how much comes back (at most 28); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -32060,7 +32060,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_search_users",
     "category": "twitter",
     "title": "X User Search",
-    "description": "Search X (Twitter) accounts by keyword - the People tab of X search. Use twitter_search for posts. About 9 Credits (twice the upstream charge, at most 27); failed calls are refunded.",
+    "description": "Search X (Twitter) accounts by keyword - the People tab of X search. Use twitter_search for posts. About 9 Credits (at most 27); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -32093,7 +32093,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_thread",
     "category": "twitter",
     "title": "X Post Thread",
-    "description": "Resolve the linear self-thread containing an X (Twitter) post, from its root through the author's linked continuations. This excludes replies from other users. About 45 Credits (twice the upstream charge, at most 135); failed calls are refunded.",
+    "description": "Resolve the linear self-thread containing an X (Twitter) post, from its root through the author's linked continuations. This excludes replies from other users. About 45 Credits (at most 135); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -32121,7 +32121,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_trends",
     "category": "twitter",
     "title": "X Trends",
-    "description": "Get current X (Twitter) trends for worldwide, a country, or a city in X ranking order, including the resolved location. About 2 Credits (twice the upstream charge, at most 5); failed calls are refunded.",
+    "description": "Get current X (Twitter) trends for worldwide, a country, or a city in X ranking order, including the resolved location. About 2 Credits (at most 5); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -32152,7 +32152,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_tweet",
     "category": "twitter",
     "title": "X Post",
-    "description": "Fetch a single Twitter/X tweet by URL with its full text and engagement counts (likes, retweets, replies, quotes, bookmarks, views). About 4 Credits (twice the upstream charge, at most 11); failed calls are refunded.",
+    "description": "Fetch a single Twitter/X tweet by URL with its full text and engagement counts (likes, retweets, replies, quotes, bookmarks, views). About 4 Credits (at most 11); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -32180,7 +32180,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_tweet_transcript",
     "category": "twitter",
     "title": "X Post Transcript",
-    "description": "Extract the spoken transcript from a Twitter/X video tweet by URL. About 20 Credits (twice the upstream charge, at most 60); failed calls are refunded.",
+    "description": "Extract the spoken transcript from a Twitter/X video tweet by URL. About 20 Credits (at most 60); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -32208,7 +32208,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_user_posts",
     "category": "twitter",
     "title": "X User Posts",
-    "description": "Get an X (Twitter) account's profile Posts-tab timeline by handle. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "description": "Get an X (Twitter) account's profile Posts-tab timeline by handle. About 8 Credits (at most 23); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -32241,7 +32241,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "twitter_user_tweets",
     "category": "twitter",
     "title": "X User Posts and Replies",
-    "description": "Get up to the requested limit of tweets and replies authored by an X (Twitter) account, with engagement, views, language, and cursor pagination where available. About 8 Credits (twice the upstream charge, at most 23); failed calls are refunded.",
+    "description": "Get up to the requested limit of tweets and replies authored by an X (Twitter) account, with engagement, views, language, and cursor pagination where available. About 8 Credits (at most 23); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -33730,7 +33730,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "zillow_agent",
     "category": "zillow",
     "title": "Zillow Agent Profile",
-    "description": "One Zillow agent profile by URL: name, phone, email, brokerage, rating, review count, sales and service areas. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "description": "One Zillow agent profile by URL: name, phone, email, brokerage, rating, review count, sales and service areas. About 14 Credits (at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -33758,7 +33758,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "zillow_property",
     "category": "zillow",
     "title": "Zillow Property Details",
-    "description": "Full details for one Zillow listing by URL: price, facts and features, photos, and price and tax history. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "description": "Full details for one Zillow listing by URL: price, facts and features, photos, and price and tax history. About 14 Credits (at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -33786,7 +33786,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "zillow_search",
     "category": "zillow",
     "title": "Zillow Listing Search",
-    "description": "Search Zillow listings for sale, for rent or sold in a city, ZIP, county or neighborhood, with price, bedroom, size, home-type and recency filters. About 14 Credits (twice the upstream charge, at most 40); failed calls are refunded.",
+    "description": "Search Zillow listings for sale, for rent or sold in a city, ZIP, county or neighborhood, with price, bedroom, size, home-type and recency filters. About 14 Credits (at most 40); failed calls are refunded.",
     "inputSchema": {
       "type": "object",
       "properties": {
