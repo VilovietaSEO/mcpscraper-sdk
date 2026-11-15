@@ -642,7 +642,7 @@ test('McpToolsClient exposes permission-aware connection inventory', async () =>
               providerAccountName: 'Example Business',
               providerIdentityStatus: 'verified',
               status: 'connected',
-              transport: 'nango',
+              transport: 'managed_oauth',
               actionsEnabled: false,
               readTools: ['list-ad-accounts'],
               actionTools: [],

@@ -291,8 +291,8 @@ def test_server_failures_do_not_expose_upstream_service_or_account_state():
         "https://mcpscraper.dev/harvest/sync",
         json={
             "error": "403 Organization spending cap reached",
-            "message": "See https://dashboard.onkernel.com/billing",
-            "provider": "Kernel",
+            "message": "See https://billing.vendor.example/account",
+            "provider": "ExampleVendor",
         },
         status=503,
     )
