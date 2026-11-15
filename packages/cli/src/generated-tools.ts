@@ -27862,7 +27862,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "maps_place_intel",
     "category": "maps",
     "title": "Google Maps Business Profile Details",
-    "description": "Inspect one named Google Business Profile: rating, reviews, category, address, phone, website, hours, About attributes, entity IDs/CID, services/areas, and optional photos when available. Use include:[\"all\"] or includeReviews/includeServices/includeImages; maxReviews and maxImages bound collection. Page saved reviews/images with maps_place_status and returned cursors. includeImages:true supplies a manifest, bounded AI image blocks, and an owner-scoped ZIP; imageScope:\"owner\" selects listing-owner photos. For category searches or multi-business lists use maps_search. Split business name from location.",
+    "description": "Inspect one named Google Business Profile: rating, reviews, category, address, phone, website, hours, About attributes, entity IDs/CID, services/areas, and optional photos when available. Use include:[\"all\"] or includeReviews/includeServices/includeImages; maxReviews and maxImages bound collection. Page saved reviews/images with maps_place_status and returned cursors. includeImages:true supplies a manifest, bounded AI image blocks, and an owner-scoped ZIP; imageScope:\"owner\" selects listing-owner photos. For category searches or multi-business lists use maps_search. Split business name from location. Costs 60 Credits plus 1 per saved review; 450 plus reviews when photos or services are requested.",
     "inputSchema": {
       "type": "object",
       "properties": {

@@ -365,7 +365,7 @@ wheels = [
 
 [[package]]
 name = "mcpscraper-sdk"
-version = "0.59.4"
+version = "0.59.5"
 source = { editable = "." }
 dependencies = [
     { name = "pydantic" },
