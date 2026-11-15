@@ -36,7 +36,7 @@ export interface Input {
    */
   pages?: number;
   /**
-   * complete waits until result links are real destination URLs, which can add 30 to 60 seconds when Google wraps them. deferred returns as soon as results are captured: wrapped links stay as working Google redirect links marked pending, and search_serp_status with the returned jobId supplies the destination URLs at no charge once they unlock, usually within a minute; the result states the wait.
+   * Omit for the default. A one-page full search then delivers as soon as results are captured: most result links are final, and any that Google still wraps stay as working Google redirect links marked pending; search_serp_status with the returned jobId supplies their destination URLs at no charge, usually within a minute, and the result states the wait. Other searches wait for final links by default. complete always waits until every link is a real destination URL, which adds 30 to 60 seconds to a full search. deferred never waits.
    */
   linkResolution?: "complete" | "deferred";
   /**
