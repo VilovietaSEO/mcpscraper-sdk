@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.61.2] - 2026-11-14 — targets mcp-scraper 0.109.1
+
+### Changed
+
+- `search_serp` in full mode returns in about six seconds by default. `linkResolution` no longer has a fixed default: omit it and a one-page full search is delivered as soon as results are captured, with any links Google still wraps marked pending; `search_serp_status` returns their destinations within about a minute. Pass `linkResolution: complete` to wait for every link as before.
+- No method was added or removed. Node, Python, CLI and cURL bindings are regenerated from the 0.109.1 tool contract.
+
+### Packages
+
+- Node scraper 0.61.2, unified Node client 0.60.2, CLI 0.59.2, Python scraper 0.59.2 and unified Python client 0.56.2.
+
 ## [0.61.1] - 2026-11-14 — targets mcp-scraper 0.107.0
 
 ### Changed
@@ -990,7 +1001,8 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.1...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.2...HEAD
+[0.61.2]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.1...v0.61.2
 [0.61.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.0...v0.61.1
 [0.61.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.60.0...v0.61.0
 [0.56.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.55.1...v0.56.0
