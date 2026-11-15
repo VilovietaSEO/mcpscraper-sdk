@@ -20,7 +20,7 @@ async function main(): Promise<void> {
   requireMatch(byName.get('search_serp')?.description ?? '', /Default light mode returns one organic-results page[\s\S]*Set pages:2 only when two pages are requested/, 'search_serp page default')
   requireMatch(byName.get('search_serp')?.description ?? '', /Date filters \(recency:week\/month\) and saved serpIdentity require one page/, 'search_serp two-page restrictions')
   requireMatch(byName.get('search_serp')?.description ?? '', /organic results only, no backup provider/, 'search_serp two-page routing')
-  requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 450 Credits per harvest plus 10 Credits per question/, 'harvest_paa rate')
+  requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 600 Credits per harvest plus 10 Credits per question/, 'harvest_paa rate')
   requireMatch(byName.get('capture_serp_snapshot')?.description ?? '', /Costs 60 Credits/, 'capture_serp_snapshot rate')
 
   const publicToolContract = JSON.stringify(manifest.tools)
@@ -30,7 +30,7 @@ async function main(): Promise<void> {
 
   const openapi = await readFile('contracts/scraper.openapi.yaml', 'utf8')
   requireMatch(openapi, /Full mode adds\s+available same-page SERP features for 45 Credits/, 'REST SERP mode rate')
-  requireMatch(openapi, /450 Credit base \+ 10 Credits per question actually returned/, 'REST PAA rate')
+  requireMatch(openapi, /600 Credit base \+ 10 Credits per question actually returned/, 'REST PAA rate')
   requireMatch(openapi, /unit_amount_usd: \{ type: number, enum: \[5\] \}/, 'concurrency pack monthly price')
   requireMatch(openapi, /slots_per_pack: \{ type: integer, enum: \[2\] \}/, 'concurrency pack slot count')
   requireMatch(openapi, /PublicErrorEnvelope:/, 'public error envelope')

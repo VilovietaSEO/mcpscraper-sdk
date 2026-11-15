@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.61.4] - 2026-11-15 — targets mcp-scraper 0.111.0
+
+### Changed
+
+- The People Also Ask base is 600 Credits per harvest, up from 450. Each returned question stays 10 Credits, and a harvest that fails is refunded in full.
+- No method was added or removed. Node, Python, CLI and cURL bindings are regenerated from the 0.111.0 tool contract.
+
+### Packages
+
+- Node scraper 0.61.4, unified Node client 0.60.4, CLI 0.59.4, Python scraper 0.59.4 and unified Python client 0.56.4.
+
 ## [0.61.3] - 2026-11-15 — targets mcp-scraper 0.110.0
 
 ### Changed
@@ -1014,7 +1025,8 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.3...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.4...HEAD
+[0.61.4]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.3...v0.61.4
 [0.61.3]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.2...v0.61.3
 [0.61.2]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.1...v0.61.2
 [0.61.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.0...v0.61.1
