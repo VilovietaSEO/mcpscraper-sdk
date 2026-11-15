@@ -107,7 +107,7 @@ paths:
         before acquisition or billing.
         A 35-Credit-per-requested-page hold is settled after delivery.
         Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
-        (450 Credit base + 10 Credits per question actually returned; unused estimate is
+        (600 Credit base + 10 Credits per question actually returned; unused estimate is
         refunded). Runs synchronously and returns the result inline.
       requestBody:
         required: true
