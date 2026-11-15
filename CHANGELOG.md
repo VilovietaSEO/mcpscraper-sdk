@@ -4,6 +4,19 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.61.3] - 2026-11-15 — targets mcp-scraper 0.110.0
+
+### Changed
+
+- A one-page full `search_serp` costs 45 Credits, up from 35. A full search whose page features cannot be collected is charged as a light search. Light, date-filtered and two-page searches keep their prices.
+- A full search can return its organic results first. The result then carries `featureCompletion` with status `pending` and `readyAfterSeconds`; call `search_serp_status` with the returned `jobId` after that time for the complete result, at no charge. `featureCompletion` is `complete` once the features are in, or `unavailable` when they could not be collected.
+- The READMEs state the date-filtered search price as 150 Credits; they still said 35.
+- No method was added or removed. Node, Python, CLI and cURL bindings are regenerated from the 0.110.0 tool contract.
+
+### Packages
+
+- Node scraper 0.61.3, unified Node client 0.60.3, CLI 0.59.3, Python scraper 0.59.3 and unified Python client 0.56.3.
+
 ## [0.61.2] - 2026-11-14 — targets mcp-scraper 0.109.1
 
 ### Changed
@@ -1001,7 +1014,8 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.2...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.3...HEAD
+[0.61.3]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.2...v0.61.3
 [0.61.2]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.1...v0.61.2
 [0.61.1]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.0...v0.61.1
 [0.61.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.60.0...v0.61.0

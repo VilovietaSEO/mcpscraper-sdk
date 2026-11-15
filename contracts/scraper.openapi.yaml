@@ -99,7 +99,8 @@ paths:
         Set `serpOnly: true` for a Google search. Light mode returns organic
         positions, URLs, titles, and descriptions for 20 Credits per delivered
         page, or 35 Credits when the backup supplies the result. Full mode adds
-        available same-page SERP features for 35 Credits per delivered page.
+        available same-page SERP features for 45 Credits; a full search whose
+        page features cannot be collected is charged as a light search.
         Both modes default to one page; set `pages: 2` explicitly for two unfiltered
         organic pages without a backup provider. With `serpOnly: true`, `recency: week` or `month` returns
         one page for 150 Credits. Combining recency with two pages is rejected

@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   }
 
   const byName = new Map(manifest.tools.map(tool => [tool.name, tool]))
-  requireMatch(byName.get('search_serp')?.description ?? '', /Light costs 20 Credits per delivered page \(35 with fallback\); one-page full costs 35; a date-filtered search costs 150; two-page full costs 40/i, 'search_serp mode rates')
+  requireMatch(byName.get('search_serp')?.description ?? '', /Light costs 20 Credits per delivered page \(35 with fallback\); one-page full costs 45 \(when featureCompletion is pending[\s\S]*charged as light\); a date-filtered search costs 150; two-page full costs 40/i, 'search_serp mode rates')
   requireMatch(byName.get('search_serp')?.description ?? '', /Default light mode returns one organic-results page[\s\S]*Set pages:2 only when two pages are requested/, 'search_serp page default')
   requireMatch(byName.get('search_serp')?.description ?? '', /Date filters \(recency:week\/month\) and saved serpIdentity require one page/, 'search_serp two-page restrictions')
   requireMatch(byName.get('search_serp')?.description ?? '', /organic results only, no backup provider/, 'search_serp two-page routing')
@@ -29,7 +29,7 @@ async function main(): Promise<void> {
   }
 
   const openapi = await readFile('contracts/scraper.openapi.yaml', 'utf8')
-  requireMatch(openapi, /Full mode adds\s+available same-page SERP features for 35 Credits per delivered page/, 'REST SERP mode rate')
+  requireMatch(openapi, /Full mode adds\s+available same-page SERP features for 45 Credits/, 'REST SERP mode rate')
   requireMatch(openapi, /450 Credit base \+ 10 Credits per question actually returned/, 'REST PAA rate')
   requireMatch(openapi, /unit_amount_usd: \{ type: number, enum: \[5\] \}/, 'concurrency pack monthly price')
   requireMatch(openapi, /slots_per_pack: \{ type: integer, enum: \[2\] \}/, 'concurrency pack slot count')
