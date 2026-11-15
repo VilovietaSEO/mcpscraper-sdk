@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 
 interface ToolContract {
@@ -7,6 +8,25 @@ interface ToolContract {
 
 function requireMatch(value: string, pattern: RegExp, label: string): void {
   if (!pattern.test(value)) throw new Error(`${label} is missing or stale (${pattern})`)
+}
+
+const WITHHELD_TERM_DIGESTS = new Set([
+  '6013857c6e7c9f0260885e487f775b1447c101076bd0b16957ff390a891ce703',
+  'd5dd4c3ebd80327ddddfc8d9064770c994b4e9361dcb160fffda3021ed967ee3',
+  '6923dd1bc0460082c5d55a831908c24a282860b7f1cd6c2b79cf1bc8857c639c',
+  '192eb9b224e1d5d3a1973afe17cf237d40c849ec90ed40da243e1745197fa003',
+  '229caf1f31e73aa2a2bfadc3f708dfb6d48d0e1d2efbb9261d87c700d856b06e',
+  '954f775230679543d69509c294e19c393d50202fce576bcad71ac6add7b819d7',
+  '92507c3cfb77dc2812aa6a5a378cb0f72e199e0469e939f5a0cac3408a83e7c8',
+  '270e2b2706ef33ac7bef60d32caf763496210c962c89a82c66ed9e5a3226a148',
+  '232bdfc7ffb8845e02596f9b7ca691b995295785287772b13f2543a670c9c87e',
+])
+
+function namesWithheldTerm(text: string): boolean {
+  const words = text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
+  const digest = (value: string) => createHash('sha256').update(value).digest('hex')
+  return words.some((word, index) =>
+    WITHHELD_TERM_DIGESTS.has(digest(word)) || (index > 0 && WITHHELD_TERM_DIGESTS.has(digest(`${words[index - 1]} ${word}`))))
 }
 
 async function main(): Promise<void> {
@@ -24,7 +44,7 @@ async function main(): Promise<void> {
   requireMatch(byName.get('capture_serp_snapshot')?.description ?? '', /Costs 60 Credits/, 'capture_serp_snapshot rate')
 
   const publicToolContract = JSON.stringify(manifest.tools)
-  if (/bright\s*data|brightdata|\bkernel(?:\.sh)?\b|\bnango\b/i.test(publicToolContract)) {
+  if (namesWithheldTerm(publicToolContract)) {
     throw new Error('Public MCP tool descriptions or schemas expose an infrastructure vendor')
   }
 

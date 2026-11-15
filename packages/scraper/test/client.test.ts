@@ -184,8 +184,8 @@ test('server failures cannot expose an upstream service or account state', async
   const fetchImpl = async () =>
     jsonResponse(503, {
       error: '403 Organization spending cap reached',
-      message: 'See https://dashboard.onkernel.com/billing',
-      provider: 'Kernel',
+      message: 'See https://billing.vendor.example/account',
+      provider: 'ExampleVendor',
     })
   const client = new ScraperClient({ apiKey: 'sk_test', fetch: fetchImpl as typeof fetch })
 

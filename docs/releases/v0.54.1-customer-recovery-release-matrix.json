@@ -280,12 +280,12 @@
       "candidateVersion": "0.49.1"
     },
     {
-      "id": "nango",
+      "id": "connection",
       "repository": "https://github.com/VilovietaSEO/mcp-scraper.git",
-      "rootPath": "nango-integrations",
+      "rootPath": "connection-integrations",
       "changelogPath": "CHANGELOG.md",
-      "deploymentTarget": "existing-nango-functions",
-      "tagNamespace": "nango-v",
+      "deploymentTarget": "existing-connection-functions",
+      "tagNamespace": "connection-v",
       "disposition": "not_applicable",
       "impactEvidence": [
         "No source or consumed-contract changes in this release; retained topology only."
@@ -385,8 +385,8 @@
     "retired:crm-recurrence",
     "retired:assistant-reminders",
     "retired:frontend-scheduling",
-    "retired:inngest-mastra",
-    "integration:nango-functions",
+    "retired:legacy-scheduler",
+    "integration:connection-functions",
     "integration:modal-runtime",
     "integration:acquisition-providers",
     "archive:npm-tgz:mcpscraper-sdk",
@@ -1322,7 +1322,7 @@
       ]
     },
     {
-      "id": "retired:inngest-mastra",
+      "id": "retired:legacy-scheduler",
       "kind": "retired_surface",
       "releaseUnit": "scheduler",
       "state": "not_applicable",
@@ -1331,9 +1331,9 @@
       ]
     },
     {
-      "id": "integration:nango-functions",
+      "id": "integration:connection-functions",
       "kind": "provider_functions",
-      "releaseUnit": "nango",
+      "releaseUnit": "connection",
       "state": "not_applicable",
       "evidence": [
         "Owning unit is unchanged and outside this contract dependency closure."
