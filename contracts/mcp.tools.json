@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.111.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "e73e873e9e73be4faa4c56d20ded184b2fe46be728355e22f9d89f34457259c8",
+  "generatedFrom": "mcp-scraper 0.112.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "c4f596f80f3418cc1535bfdad5342c9daf3daee06738a9152373909ca55ee47f",
   "toolCount": 459,
   "tools": [
     {
@@ -182347,7 +182347,7 @@
     {
       "name": "maps_place_intel",
       "title": "Google Maps Business Profile Details",
-      "description": "Inspect one named Google Business Profile: rating, reviews, category, address, phone, website, hours, About attributes, entity IDs/CID, services/areas, and optional photos when available. Use include:[\"all\"] or includeReviews/includeServices/includeImages; maxReviews and maxImages bound collection. Page saved reviews/images with maps_place_status and returned cursors. includeImages:true supplies a manifest, bounded AI image blocks, and an owner-scoped ZIP; imageScope:\"owner\" selects listing-owner photos. For category searches or multi-business lists use maps_search. Split business name from location.",
+      "description": "Inspect one named Google Business Profile: rating, reviews, category, address, phone, website, hours, About attributes, entity IDs/CID, services/areas, and optional photos when available. Use include:[\"all\"] or includeReviews/includeServices/includeImages; maxReviews and maxImages bound collection. Page saved reviews/images with maps_place_status and returned cursors. includeImages:true supplies a manifest, bounded AI image blocks, and an owner-scoped ZIP; imageScope:\"owner\" selects listing-owner photos. For category searches or multi-business lists use maps_search. Split business name from location. Costs 60 Credits plus 1 per saved review; 450 plus reviews when photos or services are requested.",
       "category": "maps",
       "methodName": "placeIntel",
       "inputSchema": {
