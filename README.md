@@ -78,7 +78,7 @@ Use Node `callToolResult(...)` or Python `call_tool_result(...)` to retain nativ
 
 Every example below runs the *same* operation four ways.
 
-Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 35 Credits. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches return one page of organic results at 35 Credits; omit the date filter when requesting two pages. Unfiltered one-page light searches try the primary path twice, then one API fallback; an unfiltered one-page full search uses the feature-capable API directly. Two-page searches return organic results without a backup provider. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
+Google Search light mode returns organic positions, URLs, titles, and descriptions for 20 Credits per delivered SERP page, or 35 Credits when the backup supplies the result. One-page full mode adds available same-page SERP features for 45 Credits; when those features take longer the organic results arrive first and `search_serp_status` returns the rest, and a full search without them is charged as a light search. Both modes default to one page; an unfiltered two-page search costs 40 Credits when the normal provider returns both pages. Past-week and past-month searches return one page of organic results at 150 Credits; omit the date filter when requesting two pages. Unfiltered one-page light searches try the primary path twice, then one API fallback; an unfiltered one-page full search uses the feature-capable API directly. Two-page searches return organic results without a backup provider. If page 2 cannot be delivered, an available page 1 is returned as partial and billed at the one-page rate. A 35-Credit-per-requested-page hold is settled after delivery. PAA costs 400 Credits plus 10 Credits per returned question. One optional concurrency pack adds two browser slots for $5/month; quantity n adds 2n browser slots.
 
 ### Lead-list enrichment
 
@@ -254,7 +254,7 @@ curl https://mcpscraper.dev/mcp \
 
 `search_serp` defaults to light mode and one page. Use `mode: 'full'` for
 available features on an unfiltered first page. Set `recency: 'week'` or
-`recency: 'month'` for one page of date-filtered organic results at 35 Credits.
+`recency: 'month'` for one page of date-filtered organic results at 150 Credits.
 Set `pages: 2` only for an unfiltered search when a second Google results page is wanted.
 Date filters and saved search identities require one page. Combining either with
 two pages is rejected before acquisition or billing. Two-page requests return organic results only;

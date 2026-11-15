@@ -63,6 +63,10 @@ export type Output =
         pending: number;
         readyAfterSeconds: number;
       } | null;
+      featureCompletion?: {
+        status: "pending" | "complete" | "unavailable";
+        readyAfterSeconds: number;
+      } | null;
       pagination: {
         requestedPages: 1 | 2;
         capturedPages: 1 | 2;
