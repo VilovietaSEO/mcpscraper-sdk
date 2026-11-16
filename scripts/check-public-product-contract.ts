@@ -40,7 +40,7 @@ async function main(): Promise<void> {
   requireMatch(byName.get('search_serp')?.description ?? '', /Default light mode returns one organic-results page[\s\S]*Set pages:2 only when two pages are requested/, 'search_serp page default')
   requireMatch(byName.get('search_serp')?.description ?? '', /Date filters \(recency:week\/month\) and saved serpIdentity require one page/, 'search_serp two-page restrictions')
   requireMatch(byName.get('search_serp')?.description ?? '', /organic results only, no backup provider/, 'search_serp two-page routing')
-  requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 600 Credits per harvest plus 10 Credits per question/, 'harvest_paa rate')
+  requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 500 Credits per harvest plus 35 Credits per question/, 'harvest_paa rate')
   requireMatch(byName.get('capture_serp_snapshot')?.description ?? '', /Costs 60 Credits/, 'capture_serp_snapshot rate')
   requireMatch(byName.get('maps_place_intel')?.description ?? '', /Costs 60 Credits plus 1 per saved review; 600 plus reviews when photos or services are requested/, 'maps_place_intel rate')
 
@@ -51,7 +51,7 @@ async function main(): Promise<void> {
 
   const openapi = await readFile('contracts/scraper.openapi.yaml', 'utf8')
   requireMatch(openapi, /Full mode adds\s+available same-page SERP features for 45 Credits/, 'REST SERP mode rate')
-  requireMatch(openapi, /600 Credit base \+ 10 Credits per question actually returned/, 'REST PAA rate')
+  requireMatch(openapi, /500 Credit base \+ 35 Credits per question actually returned/, 'REST PAA rate')
   requireMatch(openapi, /600 credits plus reviews when photos or services are requested/, 'REST Maps place rate')
   requireMatch(openapi, /unit_amount_usd: \{ type: number, enum: \[5\] \}/, 'concurrency pack monthly price')
   requireMatch(openapi, /slots_per_pack: \{ type: integer, enum: \[2\] \}/, 'concurrency pack slot count')
@@ -83,8 +83,8 @@ async function main(): Promise<void> {
   }
   for (const { path, text } of docs.filter(entry => entry.path !== 'docs/curl-tools.md')) {
     requireMatch(text, /20 Credits per delivered SERP page/, `${path} SERP rate`)
-    requireMatch(text, /400 Credits/, `${path} PAA base rate`)
-    requireMatch(text, /10 Credits per (?:returned )?question/, `${path} PAA question rate`)
+    requireMatch(text, /500 Credits/, `${path} PAA base rate`)
+    requireMatch(text, /35 Credits per (?:returned )?question/, `${path} PAA question rate`)
     requireMatch(text, /two (?:browser slots|extra browser slots)|two-browser/i, `${path} concurrency pack size`)
     requireMatch(text, /\$5(?:\/month| per month)/, `${path} concurrency pack price`)
   }
