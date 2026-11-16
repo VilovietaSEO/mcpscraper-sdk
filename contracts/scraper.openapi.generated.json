@@ -8045,6 +8045,13 @@
           "threadsScraped": {
             "type": "integer"
           },
+          "unopenedUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Threads not opened before the call reached its time limit of about 150 seconds. Not charged. Fetch them with another approve call or the thread endpoint."
+          },
           "candidatesFound": {
             "type": "integer"
           },

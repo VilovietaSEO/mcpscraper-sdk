@@ -103,6 +103,10 @@ export type Output =
         threadUrl: string;
       }[];
       threadsScraped: number;
+      /**
+       * Threads not opened before the time limit. Not charged. Fetch them with another approve call or reddit_thread.
+       */
+      unopenedUrls?: string[];
       candidatesFound: number;
       partial: boolean;
       searchQuery: string;

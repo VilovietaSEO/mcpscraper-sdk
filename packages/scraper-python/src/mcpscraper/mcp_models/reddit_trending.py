@@ -100,6 +100,7 @@ class RedditTrendingOutputVariant1(BaseModel):
     ranked_threads: list[RedditTrendingOutputVariant1RankedThreadsItem] = Field(..., alias='rankedThreads', description='')
     questions: list[RedditTrendingOutputVariant1QuestionsItem] = Field(..., alias='questions', description='')
     threads_scraped: Annotated[int, Field(ge=0, le=9007199254740991)] = Field(..., alias='threadsScraped', description='')
+    unopened_urls: Union[list[str], None] = Field(None, alias='unopenedUrls', description='Threads not opened before the time limit. Not charged. Fetch them with another approve call or reddit_thread.')
     candidates_found: Annotated[int, Field(ge=0, le=9007199254740991)] = Field(..., alias='candidatesFound', description='')
     partial: bool = Field(..., alias='partial', description='')
     search_query: str = Field(..., alias='searchQuery', description='')

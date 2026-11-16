@@ -4,6 +4,17 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.61.7] - 2026-11-16 — targets mcp-scraper 0.115.0
+
+### Changed
+
+- A Reddit batch result (`reddit_trending`, REST `POST /reddit/trending`) can include `unopenedUrls`: threads the call did not open before its time limit of about 150 seconds. They are not charged. Fetch them with another approve call or a single thread read. The tool description states the limit.
+- No method was added or removed. Node, Python, CLI and cURL bindings are regenerated from the 0.115.0 tool contract.
+
+### Packages
+
+- Node scraper 0.61.7, unified Node client 0.60.7, CLI 0.59.7, Python scraper 0.59.7 and unified Python client 0.56.7.
+
 ## [0.61.6] - 2026-11-15 — targets mcp-scraper 0.113.0
 
 ### Changed
@@ -1048,7 +1059,8 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.6...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.7...HEAD
+[0.61.7]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.6...v0.61.7
 [0.61.6]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.5...v0.61.6
 [0.61.5]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.4...v0.61.5
 [0.61.4]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.3...v0.61.4

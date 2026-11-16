@@ -2886,6 +2886,10 @@ class RedditTrendingResponse(BaseModel):
     rankedThreads: list[RankedThread] | None = None
     questions: list[Question] | None = None
     threadsScraped: int | None = None
+    unopenedUrls: list[str] | None = Field(
+        None,
+        description='Threads not opened before the call reached its time limit of about 150 seconds. Not charged. Fetch them with another approve call or the thread endpoint.',
+    )
     candidatesFound: int | None = None
     partial: bool | None = Field(
         None,
