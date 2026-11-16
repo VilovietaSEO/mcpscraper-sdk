@@ -71,7 +71,7 @@ export interface paths {
          *     before acquisition or billing.
          *     A 35-Credit-per-requested-page hold is settled after delivery.
          *     Omit or set `false` for a full People-Also-Ask harvest, which also returns SERP data
-         *     (600 Credit base + 10 Credits per question actually returned; unused estimate is
+         *     (500 Credit base + 35 Credits per question actually returned; unused estimate is
          *     refunded). Runs synchronously and returns the result inline.
          */
         post: operations["harvestSync"];
