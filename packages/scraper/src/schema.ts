@@ -2511,6 +2511,8 @@ export interface components {
                 threadUrl?: string;
             }[];
             threadsScraped?: number;
+            /** @description Threads not opened before the call reached its time limit of about 150 seconds. Not charged. Fetch them with another approve call or the thread endpoint. */
+            unopenedUrls?: string[];
             candidatesFound?: number;
             /** @description True when coverage is partial or the requested delivery target was missed. */
             partial?: boolean;

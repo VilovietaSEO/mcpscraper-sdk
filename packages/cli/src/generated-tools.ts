@@ -29802,7 +29802,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "reddit_trending",
     "category": "reddit",
     "title": "Reddit Trending",
-    "description": "Find Reddit discussions or fetch them in a batch. Review mode lists URLs without opening threads. Show those URLs and wait for the user to choose, then call approve mode with the review ID and selected URLs. Reviews can be approved for one hour. If the user says auto-approve, use auto mode to search and fetch immediately. Discovery, fetched threads and returned comments are billed separately. Use reddit_thread for one known URL.",
+    "description": "Find Reddit discussions or fetch them in a batch. Review mode lists URLs without opening threads. Show those URLs and wait for the user to choose, then call approve mode with the review ID and selected URLs. Reviews can be approved for one hour. If the user says auto-approve, use auto mode to search and fetch immediately. Discovery, fetched threads and returned comments are billed separately. One call stops opening threads after about 150 seconds and returns the rest as unopenedUrls, which are not charged. Use reddit_thread for one known URL.",
     "inputSchema": {
       "type": "object",
       "properties": {
