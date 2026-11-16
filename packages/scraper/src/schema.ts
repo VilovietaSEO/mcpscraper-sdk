@@ -687,7 +687,7 @@ export interface paths {
         put?: never;
         /**
          * Start a recoverable Google Maps business profile lookup
-         * @description Provide an Idempotency-Key and X-Maps-Run-Id to recover an unknown transport outcome. A maximum declared charge is held before browsing; completed work settles at 60 credits plus 1 credit per saved review card, or 450 credits plus reviews when photos or services are requested.
+         * @description Provide an Idempotency-Key and X-Maps-Run-Id to recover an unknown transport outcome. A maximum declared charge is held before browsing; completed work settles at 60 credits plus 1 credit per saved review card, or 600 credits plus reviews when photos or services are requested.
          */
         post: operations["mapsPlaceIntel"];
         delete?: never;
