@@ -236,7 +236,10 @@ paths:
         reconciled to the actual page count crawled; unused estimate refunded). Set
         `background: true` to enqueue an async crawl and poll
         `GET /extract-site/status/{id}` instead of waiting inline — recommended above a
-        few hundred pages.
+        few hundred pages. One background call collects one part of a site: up to 1,000
+        pages or about eight minutes of crawling. When more pages are known, the status
+        answer carries `continuation`; send `continueJobId` with the same site address
+        to collect the next part, charged separately.
       requestBody:
         required: true
         content:
@@ -1597,6 +1600,7 @@ components:
         rotateProxies: { type: boolean, default: false }
         rotateProxyEvery: { type: integer, minimum: 1, maximum: 100, default: 30 }
         browserFallback: { type: boolean, default: false }
+        continueJobId: { type: string, maxLength: 64, description: 'Continue a large site from an earlier background job: the continueJobId reported by its status. Collects the next part of the pages that job found but did not fetch and skips pages already collected. Use the same site address as the earlier job.' }
         formats:
           type: array
           items: { type: string, enum: [markdown, html, links, json, images, branding, issues] }
@@ -1747,6 +1751,14 @@ components:
         startUrl: { type: string }
         totalUrls: { type: integer }
         doneUrls: { type: integer }
+        continuation:
+          type: object
+          description: Present when the site has more known pages than this job collected. Each further part is charged separately.
+          properties:
+            available: { type: boolean, description: 'False when the saved list of remaining pages has expired.' }
+            continueJobId: { type: string }
+            pagesKnownRemaining: { type: integer, minimum: 0 }
+            expiresAt: { type: string, nullable: true }
         artifacts:
           type: array
           description: |

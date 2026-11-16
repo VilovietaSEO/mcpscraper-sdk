@@ -9,6 +9,15 @@ class CheckSiteExportInput(BaseModel):
     job_id: Annotated[str, Field(min_length=1)] = Field(..., alias='jobId', description='The jobId returned by extract_site, analyze_site_similarity, or audit_site. Poll until status is complete, partial, or failed; partial jobs still return successful content and failure details.')
 
 
+CheckSiteExportOutputVariant1Continuation = TypedDict('CheckSiteExportOutputVariant1Continuation', {
+    'available': Required[bool],
+    'continueJobId': Required[str],
+    'pagesKnownRemaining': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'expiresAt': Required[Union[str, None]],
+})
+CheckSiteExportOutputVariant1Continuation.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 class CheckSiteExportOutputVariant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
@@ -26,6 +35,7 @@ class CheckSiteExportOutputVariant1(BaseModel):
     effective_max_pages: Union[Annotated[int, Field(ge=1, le=9007199254740991)], None] = Field(None, alias='effectiveMaxPages', description='Page cap funded by the available credit hold.')
     credit_limited: Union[bool, None] = Field(None, alias='creditLimited', description='True when available credits reduced the requested page cap.')
     credit_truncated: Union[bool, None] = Field(None, alias='creditTruncated', description='True when the crawl reached the reduced funded cap and may have omitted discoverable pages.')
+    continuation: Union[CheckSiteExportOutputVariant1Continuation, None] = Field(None, alias='continuation', description='Present when one part of a large site finished and more pages are known. Ask the user before continuing; each part is charged separately.')
     bundle_url: Union[str, None] = Field(..., alias='bundleUrl', description='Downloadable ZIP URL for a terminal complete, partial, or diagnostic failed export; null while unavailable.')
     artifact_id: Union[Union[str, None], None] = Field(None, alias='artifactId', description='Owner-scoped artifact ID for archive_read. Prefer this over the temporary bundle URL.')
     bundle_bytes: Union[Annotated[int, Field(ge=0, le=9007199254740991)], None] = Field(..., alias='bundleBytes', description='ZIP size in bytes when a bundle is available; null otherwise.')

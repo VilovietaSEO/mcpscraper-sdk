@@ -11018,7 +11018,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "audit_site",
     "category": "web",
     "title": "Technical SEO Audit",
-    "description": "Run a full technical SEO audit (Screaming-Frog-style) on a public website: on-page issues, internal link graph, indexability, heading/image analysis. Pass a new idempotencyKey for each intended audit and reuse it only when retrying that call. Every MCP audit starts a durable export; poll check_site_export for discovered, attempted, successful, failed, and remaining counts plus the saved ZIP. Use extract_site instead for plain page content.",
+    "description": "Run a full technical SEO audit (Screaming-Frog-style) on a public website: on-page issues, internal link graph, indexability, heading/image analysis. Pass a new idempotencyKey for each intended audit and reuse it only when retrying that call. Every MCP audit starts a durable export; poll check_site_export for discovered, attempted, successful, failed, and remaining counts plus the saved ZIP. One call collects one part: up to 1,000 pages or about 8 minutes of crawling. When more pages are known, check_site_export reports how many remain and a continueJobId; ask the user, then call again with that continueJobId to collect the next part, charged separately. Use extract_site instead for plain page content.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -11032,6 +11032,12 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "type": "integer",
           "minimum": 1,
           "maximum": 10000
+        },
+        "continueJobId": {
+          "description": "Continue a large site from an earlier audit: pass the continueJobId reported by check_site_export. Audits the next part of the pages that job found but did not fetch, skips pages already collected, and is charged separately. Use the same url as the earlier job.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
         },
         "idempotencyKey": {
           "type": "string",
@@ -12560,7 +12566,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "check_site_export",
     "category": "web",
     "title": "Check Site Export",
-    "description": "Poll a background extract_site, analyze_site_similarity, or audit_site job. Reports page counters and a stable public error envelope when terminal. Complete and partial jobs expose direct AI readback and a downloadable ZIP.",
+    "description": "Poll a background extract_site, analyze_site_similarity, or audit_site job. Reports page counters and a stable public error envelope when terminal. Complete and partial jobs expose direct AI readback and a downloadable ZIP. When a large site has more known pages, the answer includes continuation with the pages remaining and the continueJobId to pass back.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -19895,7 +19901,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "extract_site",
     "category": "web",
     "title": "Multi-Page Site Content Crawl",
-    "description": "Crawl a public website and durably retain complete per-page JSON, acquired HTML, and Markdown. Each page is fetched with a plain HTTP request first; a browser retries only pages that were blocked or hit a bot check. A Wayback replay URL produces one archived site snapshot; the optional wayback plan produces timelines across explicit months or a month range. Pass a new idempotencyKey for each intended crawl and reuse it only when retrying that call. Poll check_site_export, then use site_export_read for complete page representations and site_export_image for preserved images; a saved ZIP is also produced. For a technical SEO audit use audit_site instead.",
+    "description": "Crawl a public website and durably retain complete per-page JSON, acquired HTML, and Markdown. Each page is fetched with a plain HTTP request first; a browser retries only pages that were blocked or hit a bot check. A Wayback replay URL produces one archived site snapshot; the optional wayback plan produces timelines across explicit months or a month range. Pass a new idempotencyKey for each intended crawl and reuse it only when retrying that call. Poll check_site_export, then use site_export_read for complete page representations and site_export_image for preserved images; a saved ZIP is also produced. One call collects one part: up to 1,000 pages or about 8 minutes of crawling. When more pages are known, check_site_export reports how many remain and a continueJobId; ask the user, then call again with that continueJobId to collect the next part, charged separately. For a technical SEO audit use audit_site instead.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -19909,6 +19915,12 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "type": "integer",
           "minimum": 1,
           "maximum": 10000
+        },
+        "continueJobId": {
+          "description": "Continue a large site from an earlier job: pass the continueJobId reported by check_site_export. Collects the next part of the pages that job found but did not fetch, skips pages already collected, and is charged separately. Use the same url as the earlier job.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
         },
         "wayback": {
           "description": "Optional temporal archive plan. Provide explicit YYYY-MM months or a from/to range plus intervalMonths. Omit urls for whole-site monthly snapshots, provide one URL for a single-page timeline, or several URLs for selected-page timelines. All results share one durable export.",

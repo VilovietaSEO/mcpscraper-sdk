@@ -447,6 +447,11 @@ class ExtractSiteRequest(BaseModel):
     rotateProxies: bool = False
     rotateProxyEvery: int = Field(30, ge=1, le=100)
     browserFallback: bool = False
+    continueJobId: str | None = Field(
+        None,
+        description='Continue a large site from an earlier background job: the continueJobId reported by its status. Collects the next part of the pages that job found but did not fetch and skips pages already collected. Use the same site address as the earlier job.',
+        max_length=64,
+    )
     formats: list[Format] | None = Field(
         None,
         description='Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and\nreturns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).\n`images` performs the image audit and returns `imageAudit` — on the synchronous\npath too, not just background jobs.\n',
@@ -619,12 +624,29 @@ class ExtractSiteQueuedResponse(BaseModel):
     statusUrl: str
 
 
+class Continuation(BaseModel):
+    """
+    Present when the site has more known pages than this job collected. Each further part is charged separately.
+    """
+
+    available: bool | None = Field(
+        None, description='False when the saved list of remaining pages has expired.'
+    )
+    continueJobId: str | None = None
+    pagesKnownRemaining: int | None = Field(None, ge=0)
+    expiresAt: str | None = None
+
+
 class ExtractSiteStatus(BaseModel):
     jobId: str | None = None
     status: str | None = None
     startUrl: str | None = None
     totalUrls: int | None = None
     doneUrls: int | None = None
+    continuation: Continuation | None = Field(
+        None,
+        description='Present when the site has more known pages than this job collected. Each further part is charged separately.',
+    )
     artifacts: list[dict[str, Any]] | None = Field(
         None,
         description='Produced files (name + MIME type). When the job requested formats including\n`issues`, this includes `seo-audit.json` (application/json — the same object as\nthe synchronous `seoAudit`), and rows in `pages.jsonl` include `inSitemap`. The\n`bundle.zip` entry is the full downloadable export — page Markdown under `pages/`,\nplus (when `downloadImages` was set) real image files under `images/<page>/` and an\n`images-download-summary.json` entry reporting queued/downloaded/failed counts.\n',
