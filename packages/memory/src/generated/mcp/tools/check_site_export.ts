@@ -34,6 +34,24 @@ export type Output =
        */
       creditTruncated?: boolean;
       /**
+       * Present when one part of a large site finished and more pages are known. Ask the user before continuing; each part is charged separately.
+       */
+      continuation?: {
+        /**
+         * False when the saved to-do list has expired.
+         */
+        available: boolean;
+        /**
+         * Pass as continueJobId to extract_site or audit_site to collect the next part.
+         */
+        continueJobId: string;
+        /**
+         * Pages this site is known to have that were not collected yet.
+         */
+        pagesKnownRemaining: number;
+        expiresAt: string | null;
+      };
+      /**
        * Downloadable ZIP URL for a terminal complete, partial, or diagnostic failed export; null while unavailable.
        */
       bundleUrl: string | null;

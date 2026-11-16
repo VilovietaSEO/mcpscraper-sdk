@@ -485,7 +485,7 @@
         ],
         "operationId": "extractSite",
         "summary": "Crawl and extract every page of a site (also serves audit_site)",
-        "description": "1 credit per page crawled (estimated up front against `maxPages`, then\nreconciled to the actual page count crawled; unused estimate refunded). Set\n`background: true` to enqueue an async crawl and poll\n`GET /extract-site/status/{id}` instead of waiting inline — recommended above a\nfew hundred pages.\n",
+        "description": "1 credit per page crawled (estimated up front against `maxPages`, then\nreconciled to the actual page count crawled; unused estimate refunded). Set\n`background: true` to enqueue an async crawl and poll\n`GET /extract-site/status/{id}` instead of waiting inline — recommended above a\nfew hundred pages. One background call collects one part of a site: up to 1,000\npages or about eight minutes of crawling. When more pages are known, the status\nanswer carries `continuation`; send `continueJobId` with the same site address\nto collect the next part, charged separately.\n",
         "requestBody": {
           "required": true,
           "content": {
@@ -4219,6 +4219,11 @@
             "type": "boolean",
             "default": false
           },
+          "continueJobId": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "Continue a large site from an earlier background job: the continueJobId reported by its status. Collects the next part of the pages that job found but did not fetch and skips pages already collected. Use the same site address as the earlier job."
+          },
           "formats": {
             "type": "array",
             "items": {
@@ -4541,6 +4546,27 @@
           },
           "doneUrls": {
             "type": "integer"
+          },
+          "continuation": {
+            "type": "object",
+            "description": "Present when the site has more known pages than this job collected. Each further part is charged separately.",
+            "properties": {
+              "available": {
+                "type": "boolean",
+                "description": "False when the saved list of remaining pages has expired."
+              },
+              "continueJobId": {
+                "type": "string"
+              },
+              "pagesKnownRemaining": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "expiresAt": {
+                "type": "string",
+                "nullable": true
+              }
+            }
           },
           "artifacts": {
             "type": "array",

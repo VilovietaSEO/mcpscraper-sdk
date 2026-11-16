@@ -8,6 +8,10 @@ export interface Input {
    */
   maxPages?: number;
   /**
+   * Continue a large site from an earlier audit: pass the continueJobId reported by check_site_export. Audits the next part of the pages that job found but did not fetch, skips pages already collected, and is charged separately. Use the same url as the earlier job.
+   */
+  continueJobId?: string;
+  /**
    * Required unique opaque ID for this intended audit (a UUID is ideal). Reuse the same value only when retrying the same call after a timeout; use a new value for every intentional rerun. This prevents a lost response from creating or charging for a duplicate job.
    */
   idempotencyKey: string;

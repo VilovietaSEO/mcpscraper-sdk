@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 0.115.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "8d47e0dfe0fc827612533a0f48dfe0258b2a6d4aa456c927ff363fc0211fd54f",
+  "generatedFrom": "mcp-scraper 0.116.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "64003e6c53c0b1b271de22580a9e3870e04eb66d063014c8c9f1b56b29ee04b0",
   "toolCount": 10,
   "tools": [
     {

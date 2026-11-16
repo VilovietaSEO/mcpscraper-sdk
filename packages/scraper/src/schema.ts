@@ -204,7 +204,10 @@ export interface paths {
          *     reconciled to the actual page count crawled; unused estimate refunded). Set
          *     `background: true` to enqueue an async crawl and poll
          *     `GET /extract-site/status/{id}` instead of waiting inline — recommended above a
-         *     few hundred pages.
+         *     few hundred pages. One background call collects one part of a site: up to 1,000
+         *     pages or about eight minutes of crawling. When more pages are known, the status
+         *     answer carries `continuation`; send `continueJobId` with the same site address
+         *     to collect the next part, charged separately.
          */
         post: operations["extractSite"];
         delete?: never;
@@ -1460,6 +1463,8 @@ export interface components {
             rotateProxyEvery: number;
             /** @default false */
             browserFallback: boolean;
+            /** @description Continue a large site from an earlier background job: the continueJobId reported by its status. Collects the next part of the pages that job found but did not fetch and skips pages already collected. Use the same site address as the earlier job. */
+            continueJobId?: string;
             /**
              * @description Output formats to produce. `issues` runs a site-wide SEO audit over the crawl and
              *     returns `seoAudit` (in background mode, writes the `seo-audit.json` artifact).
@@ -1592,6 +1597,14 @@ export interface components {
             startUrl?: string;
             totalUrls?: number;
             doneUrls?: number;
+            /** @description Present when the site has more known pages than this job collected. Each further part is charged separately. */
+            continuation?: {
+                /** @description False when the saved list of remaining pages has expired. */
+                available?: boolean;
+                continueJobId?: string;
+                pagesKnownRemaining?: number;
+                expiresAt?: string | null;
+            };
             /**
              * @description Produced files (name + MIME type). When the job requested formats including
              *     `issues`, this includes `seo-audit.json` (application/json — the same object as

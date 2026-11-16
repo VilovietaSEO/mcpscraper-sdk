@@ -8,6 +8,10 @@ export interface Input {
    */
   maxPages?: number;
   /**
+   * Continue a large site from an earlier job: pass the continueJobId reported by check_site_export. Collects the next part of the pages that job found but did not fetch, skips pages already collected, and is charged separately. Use the same url as the earlier job.
+   */
+  continueJobId?: string;
+  /**
    * Optional temporal archive plan. Provide explicit YYYY-MM months or a from/to range plus intervalMonths. Omit urls for whole-site monthly snapshots, provide one URL for a single-page timeline, or several URLs for selected-page timelines. All results share one durable export.
    */
   wayback?: {
