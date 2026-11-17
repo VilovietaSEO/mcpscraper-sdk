@@ -294,6 +294,7 @@ import * as GoogleAdsPageIntel from './tools/google_ads_page_intel.js'
 import * as GoogleAdsSearch from './tools/google_ads_search.js'
 import * as GoogleAdsTranscribe from './tools/google_ads_transcribe.js'
 import * as SearchHarvestPaa from './tools/harvest_paa.js'
+import * as SearchNewsSearch from './tools/news_search.js'
 import * as SearchSearchSerp from './tools/search_serp.js'
 import * as SearchSerpIdentityCreate from './tools/serp_identity_create.js'
 import * as SearchSerpIdentityDelete from './tools/serp_identity_delete.js'
@@ -2327,6 +2328,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "myMentions"
   },
   {
+    "name": "news_search",
+    "category": "search",
+    "methodName": "newsSearch"
+  },
+  {
     "name": "poll-channel",
     "category": "channels",
     "methodName": "pollChannel"
@@ -4034,6 +4040,10 @@ export class SearchNamespace {
     return this.callTool('harvest_paa', input) as Promise<SearchHarvestPaa.Output>
   }
 
+  async newsSearch(input: SearchNewsSearch.Input): Promise<SearchNewsSearch.Output> {
+    return this.callTool('news_search', input) as Promise<SearchNewsSearch.Output>
+  }
+
   async searchSerp(input: SearchSearchSerp.Input): Promise<SearchSearchSerp.Output> {
     return this.callTool('search_serp', input) as Promise<SearchSearchSerp.Output>
   }
@@ -4542,7 +4552,7 @@ export class CaptureNamespace {
 export class WorkflowsNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
-  async queryFanout(input: WorkflowsQueryFanout.Input): Promise<WorkflowsQueryFanout.Output> {
+  async queryFanout(input: WorkflowsQueryFanout.Input = {} as WorkflowsQueryFanout.Input): Promise<WorkflowsQueryFanout.Output> {
     return this.callTool('query_fanout_workflow', input) as Promise<WorkflowsQueryFanout.Output>
   }
 
