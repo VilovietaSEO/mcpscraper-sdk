@@ -29534,7 +29534,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "query_fanout_workflow",
     "category": "workflows",
     "title": "Capture AI Search Fan-Out",
-    "description": "Ask ChatGPT or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the top sourced sites, and its search queries when the assistant shows them. Simplest use: pass only prompt. The tool opens a browser on chatgpt.com, asks, captures and closes the browser in one call, with no sign-in and no saved profile; that is the answer a signed-out visitor gets, and ChatGPT may refuse some signed-out requests. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). Pass session_id only to capture inside a browser you already opened. WRITE NOTE: the prompt is sent as a real message. Billed as browser time at 120 Credits per minute, usually under a minute. The complete result is returned inline; export=true also writes JSON/CSV/TSV/HTML only when this MCP server is installed locally, and a local export failure is non-fatal. NOT for Google AI Overview — use harvest_paa for that.",
+    "description": "Ask ChatGPT or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the top sourced sites, its search queries when the assistant shows them, and the products and images it looked up. Simplest use: pass only prompt. The tool opens a browser on chatgpt.com, asks, captures and closes the browser in one call, with no sign-in and no saved profile; that is the answer a signed-out visitor gets, and ChatGPT may refuse some signed-out requests. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). Pass session_id only to capture inside a browser you already opened. WRITE NOTE: the prompt is sent as a real message. Billed as browser time at 120 Credits per minute, usually under a minute. The complete result is returned inline; export=true also writes JSON/CSV/TSV/HTML only when this MCP server is installed locally, and a local export failure is non-fatal. NOT for Google AI Overview — use harvest_paa for that.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -29560,7 +29560,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "type": "string"
         },
         "wait_ms": {
-          "description": "Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 90000 when a prompt is sent, 8000 without one.",
+          "description": "Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 150000 when a prompt is sent, 8000 without one. A signed-in answer with web research often takes about a minute.",
           "type": "integer",
           "minimum": 0,
           "maximum": 180000

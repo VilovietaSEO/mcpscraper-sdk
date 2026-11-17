@@ -4,6 +4,21 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.62.1] - 2026-11-17 — targets mcp-scraper 1.2.0
+
+### Added
+
+- `query_fanout_workflow` results carry two more lists: `product_lookups`, the products the assistant looked up to show as product cards, and `image_queries`, the picture searches it ran. They are kept apart from the web searches in `queries`.
+
+### Changed
+
+- `query_fanout_workflow` waits up to 150 seconds for an answer by default (was 90); the wait ends as soon as the answer ends.
+- Node, Python, CLI and cURL bindings are regenerated from the 1.2.0 tool contract (460 tools).
+
+### Packages
+
+- Node scraper 0.62.1, unified Node client 0.61.1, CLI 0.60.1, Python scraper 0.60.1 and unified Python client 0.57.1.
+
 ## [0.62.0] - 2026-11-17 — targets mcp-scraper 1.1.0
 
 ### Added
