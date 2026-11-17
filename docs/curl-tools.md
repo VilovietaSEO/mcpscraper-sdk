@@ -1,4 +1,4 @@
-# All 459 MCP tools with cURL
+# All 460 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -92,7 +92,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (459)
+## Complete catalog (460)
 
 ## access
 
@@ -462,6 +462,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 ## search
 
 - `harvest_paa` — Google PAA + SERP Harvest
+- `news_search` — Google News Search
 - `search_serp` — Google SERP Lookup
 - `serp_identity_create` — Create and Take Over Persistent SERP Identity
 - `serp_identity_delete` — Delete Persistent SERP Identity

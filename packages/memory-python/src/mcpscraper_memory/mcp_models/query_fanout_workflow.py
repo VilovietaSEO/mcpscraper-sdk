@@ -6,9 +6,11 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class QueryFanoutWorkflowInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    session_id: str = Field(..., alias='session_id', description='Session id from browser_open. Must be on chatgpt.com or claude.ai, logged in via a saved hosted profile.')
-    prompt: Union[str, None] = Field(None, alias='prompt', description='Optional prompt to type and submit before capturing. Omit to passively capture a prompt the user just ran. Must trigger web search to produce a fan-out.')
-    wait_ms: Union[Annotated[int, Field(ge=0, le=180000)], None] = Field(None, alias='wait_ms', description='How long to wait for the answer stream to finish. Defaults to 90000 when a prompt is sent, 8000 for passive capture.')
+    prompt: Union[str, None] = Field(None, alias='prompt', description='The question to ask. It is sent as a real message and should need current information so the assistant searches the web. Required unless session_id is given.')
+    platform: Union[Literal['chatgpt', 'claude'], None] = Field(None, alias='platform', description='Which assistant to ask when the tool opens the browser itself. Claude needs a saved signed-in profile.')
+    profile: Union[str, None] = Field(None, alias='profile', description='Saved profile name from browser_profile_connect, to ask as a signed-in account. Leave out for ChatGPT: it answers signed-out visitors, so no sign-in or setup is needed.')
+    session_id: Union[str, None] = Field(None, alias='session_id', description='Leave out: the tool then opens a browser, asks the prompt, captures and closes the browser in one call. Pass a session id from browser_open only to capture inside a browser you are already driving on chatgpt.com or claude.ai.')
+    wait_ms: Union[Annotated[int, Field(ge=0, le=180000)], None] = Field(None, alias='wait_ms', description='Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 90000 when a prompt is sent, 8000 without one.')
     first_party_domain: Union[str, None] = Field(None, alias='first_party_domain', description='The brand/site being researched, e.g. example.com — sources on this domain are tagged First-party/vendor.')
     reset: Union[bool, None] = Field(None, alias='reset', description='Clear any previously buffered stream for this page before capturing.')
     export: Union[bool, None] = Field(None, alias='export', description='When using the installed local MCP server, write JSON/CSV/TSV/HTML exports to MCP_SCRAPER_OUTPUT_DIR/fanout. Hosted clients such as ChatGPT always receive the complete structured result inline and leave exports null.')
@@ -150,6 +152,7 @@ class QueryFanoutWorkflowOutputVariant1(BaseModel):
     counts: QueryFanoutWorkflowOutputVariant1Counts = Field(..., alias='counts', description='')
     aggregates: QueryFanoutWorkflowOutputVariant1Aggregates = Field(..., alias='aggregates', description='Objective aggregates: top sourced sites by frequency, citation order, and URL-category counts.')
     first_party_domain: Union[str, None] = Field(..., alias='first_party_domain', description='')
+    browser_closed: Union[bool, None] = Field(None, alias='browser_closed', description='True when this call opened its own browser and closed it afterwards, so no browser time keeps running.')
     export_error: Union[Union[str, None], None] = Field(None, alias='export_error', description='Non-fatal local export failure. The inline capture remains complete when this is present.')
     exports: Union[QueryFanoutWorkflowOutputVariant1ExportsVariant1, None] = Field(..., alias='exports', description='Local-only export paths when export=true, otherwise null. Hosted clients receive the complete structured result inline instead of inaccessible server paths.')
     debug: Union[QueryFanoutWorkflowOutputVariant1Debug, None] = Field(None, alias='debug', description='')

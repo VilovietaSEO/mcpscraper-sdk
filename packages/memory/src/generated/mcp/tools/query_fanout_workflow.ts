@@ -1,14 +1,22 @@
 export interface Input {
   /**
-   * Session id from browser_open. Must be on chatgpt.com or claude.ai, logged in via a saved hosted profile.
-   */
-  session_id: string;
-  /**
-   * Optional prompt to type and submit before capturing. Omit to passively capture a prompt the user just ran. Must trigger web search to produce a fan-out.
+   * The question to ask. It is sent as a real message and should need current information so the assistant searches the web. Required unless session_id is given.
    */
   prompt?: string;
   /**
-   * How long to wait for the answer stream to finish. Defaults to 90000 when a prompt is sent, 8000 for passive capture.
+   * Which assistant to ask when the tool opens the browser itself. Claude needs a saved signed-in profile.
+   */
+  platform?: "chatgpt" | "claude";
+  /**
+   * Saved profile name from browser_profile_connect, to ask as a signed-in account. Leave out for ChatGPT: it answers signed-out visitors, so no sign-in or setup is needed.
+   */
+  profile?: string;
+  /**
+   * Leave out: the tool then opens a browser, asks the prompt, captures and closes the browser in one call. Pass a session id from browser_open only to capture inside a browser you are already driving on chatgpt.com or claude.ai.
+   */
+  session_id?: string;
+  /**
+   * Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 90000 when a prompt is sent, 8000 without one.
    */
   wait_ms?: number;
   /**
@@ -137,6 +145,10 @@ export type Output =
         };
       };
       first_party_domain: string | null;
+      /**
+       * True when this call opened its own browser and closed it afterwards, so no browser time keeps running.
+       */
+      browser_closed?: boolean;
       /**
        * Non-fatal local export failure. The inline capture remains complete when this is present.
        */

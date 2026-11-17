@@ -4,6 +4,22 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.62.0] - 2026-11-17 — targets mcp-scraper 1.1.0
+
+### Added
+
+- `news_search` (`newsSearch` in the search group): search Google News by keyword and get recent articles with headline, source, link, exact publish time, and usually a snippet and image. Inputs: `query`, `timeframe` (for example `2h`, `7d`, `6m`), `gl`, `hl`, `location`, `limit`. 20 Credits per search.
+- `query_fanout_workflow` accepts only a `prompt`: the hosted tool opens its own browser on ChatGPT, asks, captures and closes it, with no sign-in. New inputs `platform` and `profile`; the result can carry `browser_closed`.
+
+### Changed
+
+- `query_fanout_workflow`: `session_id` is now optional. Code that passes it keeps working.
+- Node, Python, CLI and cURL bindings are regenerated from the 1.1.0 tool contract (460 tools).
+
+### Packages
+
+- Node scraper 0.62.0, unified Node client 0.61.0, CLI 0.60.0, Python scraper 0.60.0 and unified Python client 0.57.0.
+
 ## [0.61.9] - 2026-11-16 — targets mcp-scraper 1.0.0
 
 ### Changed

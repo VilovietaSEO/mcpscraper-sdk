@@ -59,6 +59,7 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   harvest_paa_status: 'search',
   search_serp: 'search',
   search_serp_status: 'search',
+  news_search: 'search',
   serp_identity_create: 'search',
   serp_identity_delete: 'search',
   serp_identity_list: 'search',
@@ -157,6 +158,7 @@ const SCRAPER_PREFIX_CATEGORIES: Array<[string, string]> = [
 const EXPLICIT_METHOD_NAMES: Record<string, string> = {
   harvest_paa: 'harvestPaa',
   search_serp: 'searchSerp',
+  news_search: 'newsSearch',
   directory_workflow: 'run',
   query_fanout_workflow: 'queryFanout',
   rank_tracker_workflow: 'rankTracker',

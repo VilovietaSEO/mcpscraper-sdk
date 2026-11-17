@@ -29088,6 +29088,62 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     }
   },
   {
+    "name": "news_search",
+    "category": "search",
+    "title": "Google News Search",
+    "description": "Search Google News by keyword and get recent articles: headline, source, link, publish time, and usually a snippet and image. The query accepts site:, OR and - operators. 20 Credits per search; failed calls are refunded.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "gl": {
+          "description": "Two-letter country code for the news edition (e.g. us, gb, de). Default us.",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        },
+        "hl": {
+          "description": "Two-letter language code (e.g. en, es, de). Default en.",
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 5
+        },
+        "limit": {
+          "description": "How many articles to ask for (1-20, default 20). Google decides how many it returns.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "location": {
+          "description": "City-level location as Google writes it (e.g. 'London, United Kingdom'). More specific than gl.",
+          "type": "string",
+          "minLength": 1
+        },
+        "query": {
+          "type": "string",
+          "minLength": 1,
+          "description": "News search query (e.g. 'interest rates', 'bitcoin site:cnn.com')."
+        },
+        "timeframe": {
+          "description": "How far back to search: a count plus h, d, w, m or y (2h, 7d, 6m). Omit or send 'all' for no limit.",
+          "type": "string",
+          "pattern": "^(\\d{1,3}[hdwmy]|all)$"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "additionalProperties": false,
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Google News Search",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true
+    }
+  },
+  {
     "name": "poll-channel",
     "category": "channels",
     "title": "Poll Channel",
@@ -29478,20 +29534,33 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "query_fanout_workflow",
     "category": "workflows",
     "title": "Capture AI Search Fan-Out",
-    "description": "Capture the query fan-out behind a ChatGPT or Claude web-search answer for AEO: sub-queries issued, every researched URL split into cited vs browsed-only, and top sourced sites. The complete structured data is always returned inline. export=true additionally writes JSON/CSV/TSV/HTML only when this MCP server is installed locally; hosted clients such as ChatGPT receive exports=null and should use the inline data. A local export failure is non-fatal. WRITE NOTE: passing prompt submits a real message in the user's logged-in account — only send when the user wants that; omit it to capture a prompt the user just ran. The session must already be open on chatgpt.com or claude.ai (see browser_profile_connect) while the prompt streams. NOT for Google AI Overview — use harvest_paa for that.",
+    "description": "Ask ChatGPT or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the top sourced sites, and its search queries when the assistant shows them. Simplest use: pass only prompt. The tool opens a browser on chatgpt.com, asks, captures and closes the browser in one call, with no sign-in and no saved profile; that is the answer a signed-out visitor gets, and ChatGPT may refuse some signed-out requests. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). Pass session_id only to capture inside a browser you already opened. WRITE NOTE: the prompt is sent as a real message. Billed as browser time at 120 Credits per minute, usually under a minute. The complete result is returned inline; export=true also writes JSON/CSV/TSV/HTML only when this MCP server is installed locally, and a local export failure is non-fatal. NOT for Google AI Overview — use harvest_paa for that.",
     "inputSchema": {
       "type": "object",
       "properties": {
-        "session_id": {
-          "type": "string",
-          "description": "Session id from browser_open. Must be on chatgpt.com or claude.ai, logged in via a saved hosted profile."
-        },
         "prompt": {
-          "description": "Optional prompt to type and submit before capturing. Omit to passively capture a prompt the user just ran. Must trigger web search to produce a fan-out.",
+          "description": "The question to ask. It is sent as a real message and should need current information so the assistant searches the web. Required unless session_id is given.",
+          "type": "string"
+        },
+        "platform": {
+          "default": "chatgpt",
+          "description": "Which assistant to ask when the tool opens the browser itself. Claude needs a saved signed-in profile.",
+          "type": "string",
+          "enum": [
+            "chatgpt",
+            "claude"
+          ]
+        },
+        "profile": {
+          "description": "Saved profile name from browser_profile_connect, to ask as a signed-in account. Leave out for ChatGPT: it answers signed-out visitors, so no sign-in or setup is needed.",
+          "type": "string"
+        },
+        "session_id": {
+          "description": "Leave out: the tool then opens a browser, asks the prompt, captures and closes the browser in one call. Pass a session id from browser_open only to capture inside a browser you are already driving on chatgpt.com or claude.ai.",
           "type": "string"
         },
         "wait_ms": {
-          "description": "How long to wait for the answer stream to finish. Defaults to 90000 when a prompt is sent, 8000 for passive capture.",
+          "description": "Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 90000 when a prompt is sent, 8000 without one.",
           "type": "integer",
           "minimum": 0,
           "maximum": 180000
@@ -29511,9 +29580,6 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "type": "boolean"
         }
       },
-      "required": [
-        "session_id"
-      ],
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
