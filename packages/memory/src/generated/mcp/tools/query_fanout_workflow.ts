@@ -16,7 +16,7 @@ export interface Input {
    */
   session_id?: string;
   /**
-   * Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 90000 when a prompt is sent, 8000 without one.
+   * Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 150000 when a prompt is sent, 8000 without one. A signed-in answer with web research often takes about a minute.
    */
   wait_ms?: number;
   /**
@@ -63,6 +63,14 @@ export type Output =
        * Every web-search sub-query issued, in capture order.
        */
       queries: string[];
+      /**
+       * Products the assistant looked up to show as product cards. These are shopping lookups, not web searches.
+       */
+      product_lookups: string[];
+      /**
+       * Image searches the assistant ran for pictures shown in the answer.
+       */
+      image_queries: string[];
       /**
        * Every researched URL, cited first.
        */

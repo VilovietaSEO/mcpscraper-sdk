@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 1.1.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "172d2ff41bc0300fe7145b6db300ab30fdbac11f79bcab7ac63d8cc06ce1401e",
+  "generatedFrom": "mcp-scraper 1.2.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "02876880cf8d433d8fd6a4d8bc648768590d260eced2d7646222212cd9e78e2f",
   "toolCount": 460,
   "tools": [
     {
@@ -195414,7 +195414,7 @@
     {
       "name": "query_fanout_workflow",
       "title": "Capture AI Search Fan-Out",
-      "description": "Ask ChatGPT or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the top sourced sites, and its search queries when the assistant shows them. Simplest use: pass only prompt. The tool opens a browser on chatgpt.com, asks, captures and closes the browser in one call, with no sign-in and no saved profile; that is the answer a signed-out visitor gets, and ChatGPT may refuse some signed-out requests. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). Pass session_id only to capture inside a browser you already opened. WRITE NOTE: the prompt is sent as a real message. Billed as browser time at 120 Credits per minute, usually under a minute. The complete result is returned inline; export=true also writes JSON/CSV/TSV/HTML only when this MCP server is installed locally, and a local export failure is non-fatal. NOT for Google AI Overview — use harvest_paa for that.",
+      "description": "Ask ChatGPT or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the top sourced sites, its search queries when the assistant shows them, and the products and images it looked up. Simplest use: pass only prompt. The tool opens a browser on chatgpt.com, asks, captures and closes the browser in one call, with no sign-in and no saved profile; that is the answer a signed-out visitor gets, and ChatGPT may refuse some signed-out requests. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). Pass session_id only to capture inside a browser you already opened. WRITE NOTE: the prompt is sent as a real message. Billed as browser time at 120 Credits per minute, usually under a minute. The complete result is returned inline; export=true also writes JSON/CSV/TSV/HTML only when this MCP server is installed locally, and a local export failure is non-fatal. NOT for Google AI Overview — use harvest_paa for that.",
       "category": "workflows",
       "methodName": "queryFanout",
       "inputSchema": {
@@ -195442,7 +195442,7 @@
             "type": "string"
           },
           "wait_ms": {
-            "description": "Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 90000 when a prompt is sent, 8000 without one.",
+            "description": "Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 150000 when a prompt is sent, 8000 without one. A signed-in answer with web research often takes about a minute.",
             "type": "integer",
             "minimum": 0,
             "maximum": 180000
@@ -195537,6 +195537,20 @@
                   "type": "string"
                 },
                 "description": "Every web-search sub-query issued, in capture order."
+              },
+              "product_lookups": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Products the assistant looked up to show as product cards. These are shopping lookups, not web searches."
+              },
+              "image_queries": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Image searches the assistant ran for pictures shown in the answer."
               },
               "browsed_urls": {
                 "type": "array",
@@ -195978,6 +195992,8 @@
               "prompt",
               "meta",
               "queries",
+              "product_lookups",
+              "image_queries",
               "browsed_urls",
               "cited_urls",
               "browsed_only",
