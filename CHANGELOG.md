@@ -4,6 +4,20 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.64.0] - 2026-11-18 — targets mcp-scraper 1.5.0
+
+### Added
+
+- `rank_tracker_workflow` accepts `ai_answers` in `trackingModes`, with new inputs `prompts`, `assistants` and `runsPerPrompt`, to plan tracking of brand mentions in ChatGPT, Gemini and Claude answers. Its result gains `assistants` and `runsPerPrompt`.
+
+### Changed
+
+- Node, Python, CLI and cURL bindings are regenerated from the 1.5.0 tool contract (460 tools).
+
+### Packages
+
+- Node scraper 0.64.0, unified Node client 0.63.0, CLI 0.62.0, Python scraper 0.62.0 and unified Python client 0.59.0.
+
 ## [0.63.0] - 2026-11-18 — targets mcp-scraper 1.4.0
 
 ### Added

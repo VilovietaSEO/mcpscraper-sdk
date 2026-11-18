@@ -29605,7 +29605,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "rank_tracker_workflow",
     "category": "workflows",
     "title": "Rank Tracker Blueprint Builder",
-    "description": "Plan user-requested rank acquisition and saved comparisons for Maps, organic results, AI Overview, and PAA. Returns suggested tables, acquisition steps, and reporting requirements using existing MCP tools. Local planning only; does not acquire data or spend credits.",
+    "description": "Plan user-requested rank acquisition and saved comparisons for Maps, organic results, AI Overview, and PAA, and with trackingModes ai_answers, whether ChatGPT, Gemini or Claude name the brand and competitors when asked a list of questions. Returns suggested tables, acquisition steps, metrics such as mention rate, and reporting requirements using existing MCP tools. Local planning only; does not acquire data or spend credits.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -29620,7 +29620,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "minLength": 1
         },
         "targetBusinessName": {
-          "description": "Primary Google Business Profile/brand name to match in Maps results. Supply it when matching one business against Maps results.",
+          "description": "Primary Google Business Profile/brand name to match in Maps results, and the brand name looked for in assistant answers. Supply it when matching one business against Maps results or tracking ai_answers.",
           "type": "string",
           "minLength": 1
         },
@@ -29631,9 +29631,9 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
             "ai_overview",
             "paa"
           ],
-          "description": "Rank tracker surfaces to build: maps, organic, ai_overview, paa.",
+          "description": "Rank tracker surfaces to build: maps, organic, ai_overview, paa, and ai_answers (whether ChatGPT, Gemini or Claude name the brand when asked a question). ai_answers is not in the default set.",
           "minItems": 1,
-          "maxItems": 4,
+          "maxItems": 5,
           "type": "array",
           "items": {
             "type": "string",
@@ -29641,9 +29641,45 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
               "maps",
               "organic",
               "ai_overview",
-              "paa"
+              "paa",
+              "ai_answers"
             ]
           }
+        },
+        "prompts": {
+          "default": [],
+          "description": "For ai_answers: the full-sentence questions to ask the assistants, e.g. \"What is the best CRM for roofing companies?\". Leave empty to derive questions from keywords downstream.",
+          "maxItems": 200,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 3
+          }
+        },
+        "assistants": {
+          "default": [
+            "chatgpt",
+            "gemini"
+          ],
+          "description": "For ai_answers: which assistants to ask. chatgpt and gemini need no sign-in; claude needs a saved signed-in profile.",
+          "minItems": 1,
+          "maxItems": 3,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "chatgpt",
+              "gemini",
+              "claude"
+            ]
+          }
+        },
+        "runsPerPrompt": {
+          "default": 3,
+          "description": "For ai_answers: how many times each question is asked on each assistant in one requested batch. Answers vary between runs, so the mention rate is the share of runs that name the brand.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
         },
         "keywords": {
           "default": [],
@@ -29667,7 +29703,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
         },
         "competitors": {
           "default": [],
-          "description": "Optional competitor domains or business names to persist as comparison targets.",
+          "description": "Optional competitor domains or business names to persist as comparison targets. For ai_answers, competitor names are looked for in each answer beside the target brand.",
           "maxItems": 100,
           "type": "array",
           "items": {
