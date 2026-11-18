@@ -8046,6 +8046,10 @@ export interface Input {
    */
   filename?: string;
   /**
+   * Fill a missing logo, colour and presenter from the brand profile saved in the Brand vault. Values passed here always win.
+   */
+  useSavedBrand?: boolean;
+  /**
    * Also make a PDF file on A4 or US Letter paper. The PDF is charged; the page is free.
    */
   pdf?: "none" | "a4" | "letter";
@@ -8073,6 +8077,11 @@ export type Output =
       };
       localPath?: string;
       warnings: string[];
+      savedBrand?: {
+        status: "applied" | "not_saved" | "not_needed" | "turned_off" | "unavailable";
+        applied: string[];
+        hint?: string;
+      };
       pdf?: {
         ok: boolean;
         paper?: string;

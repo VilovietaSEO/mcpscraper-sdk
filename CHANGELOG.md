@@ -4,6 +4,22 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.67.0] - 2026-11-18 — targets mcp-scraper 1.8.1
+
+### Added
+
+- `create_ai_visibility_report` accepts `useSavedBrand` (default true) and returns `savedBrand`: a missing logo, colour and presenter are filled from the brand profile saved in the new Brand vault. Values passed in the call always win.
+
+### Changed
+
+- `get-vault-contract` names the Brand vault, a new default vault for the owner's own brand profile, guidelines, voice, messaging, positioning, ideal customer profile, buyer personas and logo files.
+- The result types of the 27 CRM and research tools (`crm-*`, `research-*`) are simplified: a duplicated wrapper is removed and the alternatives are unchanged. Generated type names lose one level, for example `CrmDealUpsertOutputVariant1Variant1Record` becomes `CrmDealUpsertOutputVariant1Record`.
+- Node, Python, CLI and cURL bindings are regenerated from the 1.8.1 tool contract (462 tools).
+
+### Packages
+
+- Node scraper 0.67.0, unified Node client 0.66.0, CLI 0.65.0, Python scraper 0.65.0 and unified Python client 0.62.0.
+
 ## [0.66.0] - 2026-11-18 — targets mcp-scraper 1.7.0
 
 ### Added

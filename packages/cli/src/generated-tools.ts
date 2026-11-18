@@ -567,7 +567,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "ai_visibility_report_guide",
     "category": "other",
     "title": "AI Visibility Report Guide",
-    "description": "Read how to build an AI visibility report before calling create_ai_visibility_report. It covers which AI answer tracking rows to collect and save, how each measure is computed from them (visibility, share of voice, by assistant, by question, by topic, trend, website outcome, source types), the honesty rules about sample sizes and failed runs, white-labelling, and how to get a PDF. Start with focus \"workflow\"; fetch \"data_contract\" for the formulas or \"example\" for a complete input. Free. This does not collect data, compute measures, or create a report.",
+    "description": "Read how to build an AI visibility report before calling create_ai_visibility_report. It covers which AI answer tracking rows to collect and save, how each measure is computed from them (visibility, share of voice, by assistant, by question, by topic, trend, website outcome, source types), the honesty rules about sample sizes and failed runs, white-labelling with the saved brand profile, and how to get a PDF. Start with focus \"workflow\"; fetch \"data_contract\" for the formulas or \"example\" for a complete input. Free. This does not collect data, compute measures, or create a report.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -16330,7 +16330,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "create_ai_visibility_report",
     "category": "other",
     "title": "Create AI Visibility Report",
-    "description": "Turn AI answer tracking measures into one client-ready report page with charts: headline visibility, share of voice, visibility by assistant, a trend line, competitor ranking, question and topic tables, what happened to the website, the kinds of site the assistants used, top sources, the assistants' own searches, written analysis and next steps. Mobile-friendly, self-contained, and white-label: pass the brand's colour and logos. Only summary is required; sections without data are left out. This tool draws the numbers it is given and does not collect, compute or invent them: compute the measures first (ai_visibility_report_guide). Check warnings in the result. Cost: the page is free; pdf \"a4\" or \"letter\" also makes a PDF file for 10 Credits, not charged if it fails. The page also prints to PDF from any browser. Local stdio clients save the page under the MCP Scraper output directory and return localPath.",
+    "description": "Turn AI answer tracking measures into one client-ready report page with charts: headline visibility, share of voice, visibility by assistant, a trend line, competitor ranking, question and topic tables, what happened to the website, the kinds of site the assistants used, top sources, the assistants' own searches, written analysis and next steps. Mobile-friendly, self-contained, and white-label: a missing logo, colour and presenter are filled from the brand profile saved in the Brand vault (savedBrand in the result says what was applied; when not_saved, offer to save one), and values you pass win. Only summary is required; sections without data are left out. This tool draws the numbers it is given and does not collect, compute or invent them: compute the measures first (ai_visibility_report_guide). Check warnings in the result. Cost: the page is free; pdf \"a4\" or \"letter\" also makes a PDF file for 10 Credits, not charged if it fails. The page also prints to PDF from any browser. Local stdio clients save the page under the MCP Scraper output directory and return localPath.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -16953,6 +16953,11 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "description": "Optional file name; derived from brand and period when omitted.",
           "type": "string",
           "maxLength": 120
+        },
+        "useSavedBrand": {
+          "default": true,
+          "description": "Fill a missing logo, colour and presenter from the brand profile saved in the Brand vault. Values passed here always win.",
+          "type": "boolean"
         },
         "pdf": {
           "default": "none",
@@ -21322,13 +21327,13 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "get-vault-contract",
     "category": "vaults",
     "title": "Get Vault Contract",
-    "description": "Read the machine-enforced purpose, template, statuses, types, required and recommended props, natural neighbor vaults, and typed relationship guidance for one of the 16 governed Obsidian-style vaults. Call before composing a note when the correct shape is uncertain.",
+    "description": "Read the machine-enforced purpose, template, statuses, types, required and recommended props, natural neighbor vaults, and typed relationship guidance for one governed Obsidian-style vault. Call before composing a note when the correct shape is uncertain.",
     "inputSchema": {
       "type": "object",
       "properties": {
         "vault": {
           "type": "string",
-          "description": "One governed vault: Ideas, Examples and Inspirations, Knowledge, Library, People, Organizations, Deals, Communication, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, or Skills. Former names Inspiration and Communications still resolve."
+          "description": "One governed vault: Ideas, Examples and Inspirations, Knowledge, Library, People, Organizations, Deals, Communication, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, Skills, CRM People, CRM Organizations, or Brand. Former names Inspiration and Communications still resolve."
         }
       },
       "required": [
