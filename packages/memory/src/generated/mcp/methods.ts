@@ -257,6 +257,10 @@ import * as CrmCounterpartPreview from './tools/crm-counterpart-preview.js'
 import * as CrmDealTransition from './tools/crm-deal-transition.js'
 import * as CrmDealUpsert from './tools/crm-deal-upsert.js'
 import * as CrmDuplicateSearch from './tools/crm-duplicate-search.js'
+import * as CrmFormCreate from './tools/crm-form-create.js'
+import * as CrmFormPreview from './tools/crm-form-preview.js'
+import * as CrmFormRevoke from './tools/crm-form-revoke.js'
+import * as CrmFormStatus from './tools/crm-form-status.js'
 import * as CrmImportApply from './tools/crm-import-apply.js'
 import * as CrmImportPreview from './tools/crm-import-preview.js'
 import * as CrmMergeApply from './tools/crm-merge-apply.js'
@@ -1378,6 +1382,26 @@ export const MCP_TOOL_BINDINGS = [
     "name": "crm-duplicate-search",
     "category": "crm",
     "methodName": "duplicateSearch"
+  },
+  {
+    "name": "crm-form-create",
+    "category": "crm",
+    "methodName": "formCreate"
+  },
+  {
+    "name": "crm-form-preview",
+    "category": "crm",
+    "methodName": "formPreview"
+  },
+  {
+    "name": "crm-form-revoke",
+    "category": "crm",
+    "methodName": "formRevoke"
+  },
+  {
+    "name": "crm-form-status",
+    "category": "crm",
+    "methodName": "formStatus"
   },
   {
     "name": "crm-import-apply",
@@ -3878,6 +3902,22 @@ export class CrmNamespace {
 
   async duplicateSearch(input: CrmDuplicateSearch.Input): Promise<CrmDuplicateSearch.Output> {
     return this.callTool('crm-duplicate-search', input) as Promise<CrmDuplicateSearch.Output>
+  }
+
+  async formCreate(input: CrmFormCreate.Input): Promise<CrmFormCreate.Output> {
+    return this.callTool('crm-form-create', input) as Promise<CrmFormCreate.Output>
+  }
+
+  async formPreview(input: CrmFormPreview.Input): Promise<CrmFormPreview.Output> {
+    return this.callTool('crm-form-preview', input) as Promise<CrmFormPreview.Output>
+  }
+
+  async formRevoke(input: CrmFormRevoke.Input = {} as CrmFormRevoke.Input): Promise<CrmFormRevoke.Output> {
+    return this.callTool('crm-form-revoke', input) as Promise<CrmFormRevoke.Output>
+  }
+
+  async formStatus(input: CrmFormStatus.Input = {} as CrmFormStatus.Input): Promise<CrmFormStatus.Output> {
+    return this.callTool('crm-form-status', input) as Promise<CrmFormStatus.Output>
   }
 
   async importApply(input: CrmImportApply.Input): Promise<CrmImportApply.Output> {

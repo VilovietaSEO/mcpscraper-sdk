@@ -866,3 +866,7 @@ Publication management: list owned subdomains with `commons_list_publications`, 
 PAA job progress can include optional `phase` and `observedAt` fields describing observed extraction work independently of worker renewal. The updated Node and Python output models preserve legacy responses without these fields. See [the progress-types release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.1).
 
 Read LinkedIn, X and Instagram profiles, posts, comments, followers, jobs, ads and searches through the new `linkedin` and `twitter` tool groups and 43 new `instagram` tools. See the [0.61.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.61.0) for the compatible package versions.
+
+### Connect an existing form to CRM
+
+Use `crm-form-preview` to validate a sample, `crm-form-create` to obtain a scoped submission URL, and `crm-form-status` to confirm a committed contact and activity after a test. `crm-form-revoke` disables future delivery. Keep the account API key out of form code. See [the setup guide](https://mcpscraper.dev/docs/xray/crm#connect-a-form) and [release 0.68.0](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.68.0).

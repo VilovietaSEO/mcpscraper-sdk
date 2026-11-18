@@ -4,6 +4,18 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.68.0] - 2026-11-18 — targets mcp-scraper 1.9.0
+
+### Added
+
+- Preview an existing form mapping, create a scoped CRM submission URL, verify committed contact and activity delivery, and revoke a connection through four new CRM form bindings.
+- Include a runnable form-to-CRM setup example.
+
+### Changed
+
+- Regenerate Node, Python, CLI and cURL bindings from the 466-tool catalog and the 130-tool direct Memory contract.
+- Publish Node scraper 0.68.0, unified Node client 0.67.0, CLI 0.66.0, Python scraper 0.66.0 and unified Python client 0.63.0.
+
 ## [0.67.0] - 2026-11-18 — targets mcp-scraper 1.8.1
 
 ### Added
@@ -1204,7 +1216,7 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.9...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.68.0...HEAD
 [0.61.9]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.8...v0.61.9
 [0.61.8]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.7...v0.61.8
 [0.61.7]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.6...v0.61.7
@@ -1252,3 +1264,5 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 [0.59.4]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.59.3...v0.59.4
 [0.59.5]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.59.4...v0.59.5
 [0.60.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.59.5...v0.60.0
+
+[0.68.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.67.0...v0.68.0
