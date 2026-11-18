@@ -29534,7 +29534,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "query_fanout_workflow",
     "category": "workflows",
     "title": "Capture AI Search Fan-Out",
-    "description": "Ask ChatGPT, Gemini or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the top sourced sites, its search queries when the assistant shows them, and the products and images it looked up. Also returns the answer text; pass brands (your name and competitors) to learn which the answer mentions, how often and in what order. Simplest use: pass only prompt: the tool opens chatgpt.com, asks, captures and closes the browser in one call, signed out; ChatGPT may refuse some signed-out requests. platform \"gemini\" asks Gemini the same way, also signed out. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). Pass session_id only to capture inside a browser you already opened. WRITE NOTE: the prompt is sent as a real message. Billed as browser time at 120 Credits per minute, usually under a minute. The complete result is returned inline; export=true also writes files only on a locally installed server. NOT for Google AI Overview — use harvest_paa for that.",
+    "description": "Ask ChatGPT, Gemini or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the mix of site types, its search queries when the assistant shows them, and the products and images it looked up. Also returns the answer text. Pass first_party_domain to learn whether your site was cited, only looked at, or absent; competitor_domains to flag competitor sites; brands to learn which names the answer mentions, how often and in what order. Simplest use: pass only prompt: the tool opens chatgpt.com, asks, captures and closes the browser in one call, signed out; ChatGPT may refuse some signed-out requests. platform \"gemini\" asks Gemini the same way. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). WRITE NOTE: the prompt is sent as a real message. Costs 20 Credits signed out (mention check) or 80 Credits with profile (full fan-out); a failed run is not charged. session_id captures inside a browser you opened, at its per-minute rate. NOT for Google AI Overview — use harvest_paa for that.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -29567,8 +29567,18 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "maximum": 180000
         },
         "first_party_domain": {
-          "description": "The brand/site being researched, e.g. example.com — sources on this domain are tagged First-party/vendor.",
+          "description": "The site being tracked, e.g. example.com. Sources on it are tagged First-party/vendor, and site_outcome says whether it was cited, only looked at, or absent.",
           "type": "string"
+        },
+        "competitor_domains": {
+          "description": "Competitor sites, e.g. [\"ridgeway.example\"]. Sources on them are tagged Competitor, and competitor_sites gives each one's outcome.",
+          "maxItems": 25,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 120
+          }
         },
         "brands": {
           "description": "Brand or product names to look for in the answer text, yours and competitors, e.g. [\"Acme\", \"Ridgeway\"]. Each comes back in brand_mentions with whether it was named, how often, and how early.",

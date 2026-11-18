@@ -11,7 +11,8 @@ class QueryFanoutWorkflowInput(BaseModel):
     profile: Union[str, None] = Field(None, alias='profile', description='Saved profile name from browser_profile_connect, to ask as a signed-in account. Leave out for ChatGPT and Gemini: they answer signed-out visitors, so no sign-in or setup is needed.')
     session_id: Union[str, None] = Field(None, alias='session_id', description='Leave out: the tool then opens a browser, asks the prompt, captures and closes the browser in one call. Pass a session id from browser_open only to capture inside a browser you are already driving on chatgpt.com, claude.ai or gemini.google.com.')
     wait_ms: Union[Annotated[int, Field(ge=0, le=180000)], None] = Field(None, alias='wait_ms', description='Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 150000 when a prompt is sent, 8000 without one. A signed-in answer with web research often takes about a minute.')
-    first_party_domain: Union[str, None] = Field(None, alias='first_party_domain', description='The brand/site being researched, e.g. example.com — sources on this domain are tagged First-party/vendor.')
+    first_party_domain: Union[str, None] = Field(None, alias='first_party_domain', description='The site being tracked, e.g. example.com. Sources on it are tagged First-party/vendor, and site_outcome says whether it was cited, only looked at, or absent.')
+    competitor_domains: Union[Annotated[list[Annotated[str, Field(min_length=3, max_length=120)]], Field(max_length=25)], None] = Field(None, alias='competitor_domains', description='Competitor sites, e.g. ["ridgeway.example"]. Sources on them are tagged Competitor, and competitor_sites gives each one\'s outcome.')
     brands: Union[Annotated[list[Annotated[str, Field(min_length=2, max_length=80)]], Field(max_length=25)], None] = Field(None, alias='brands', description='Brand or product names to look for in the answer text, yours and competitors, e.g. ["Acme", "Ridgeway"]. Each comes back in brand_mentions with whether it was named, how often, and how early.')
     reset: Union[bool, None] = Field(None, alias='reset', description='Clear any previously buffered stream for this page before capturing.')
     export: Union[bool, None] = Field(None, alias='export', description='When using the installed local MCP server, write JSON/CSV/TSV/HTML exports to MCP_SCRAPER_OUTPUT_DIR/fanout. Hosted clients such as ChatGPT always receive the complete structured result inline and leave exports null.')
@@ -121,6 +122,14 @@ QueryFanoutWorkflowOutputVariant1Aggregates = TypedDict('QueryFanoutWorkflowOutp
 QueryFanoutWorkflowOutputVariant1Aggregates.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+QueryFanoutWorkflowOutputVariant1CompetitorSitesItem = TypedDict('QueryFanoutWorkflowOutputVariant1CompetitorSitesItem', {
+    'domain': Required[str],
+    'outcome': Required[Literal['cited', 'researched', 'absent']],
+    'times_cited': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+})
+QueryFanoutWorkflowOutputVariant1CompetitorSitesItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 QueryFanoutWorkflowOutputVariant1ExportsVariant1 = TypedDict('QueryFanoutWorkflowOutputVariant1ExportsVariant1', {
     'relativeTo': Required[str],
     'dir': Required[str],
@@ -168,7 +177,12 @@ class QueryFanoutWorkflowOutputVariant1(BaseModel):
     counts: QueryFanoutWorkflowOutputVariant1Counts = Field(..., alias='counts', description='')
     aggregates: QueryFanoutWorkflowOutputVariant1Aggregates = Field(..., alias='aggregates', description='Objective aggregates: top sourced sites by frequency, citation order, and URL-category counts.')
     first_party_domain: Union[str, None] = Field(..., alias='first_party_domain', description='')
+    site_outcome: Union[Literal['cited', 'researched', 'absent'], None] = Field(..., alias='site_outcome', description='For first_party_domain: cited in the answer, researched (looked at but not cited), or absent. Null when first_party_domain was not passed.')
+    competitor_sites: list[QueryFanoutWorkflowOutputVariant1CompetitorSitesItem] = Field(..., alias='competitor_sites', description='One entry per domain passed in competitor_domains.')
+    commercial_sites_listed: bool = Field(..., alias='commercial_sites_listed', description='True when the sources include the tracked site, a listed competitor, or a known retailer. False means the assistant leaned only on non-commercial sources as far as these lists can tell.')
     browser_closed: Union[bool, None] = Field(None, alias='browser_closed', description='True when this call opened its own browser and closed it afterwards, so no browser time keeps running.')
+    check_type: Union[Union[Literal['mention_check', 'full_fanout'], None], None] = Field(None, alias='check_type', description='mention_check for a signed-out run, full_fanout for a run through a saved profile. Present when the tool opened its own browser.')
+    charged_credits: Union[Union[Annotated[Union[float, int], Field(ge=0)], None], None] = Field(None, alias='charged_credits', description='Credits charged for this run: the flat price for its check_type. Present when the tool opened its own browser.')
     export_error: Union[Union[str, None], None] = Field(None, alias='export_error', description='Non-fatal local export failure. The inline capture remains complete when this is present.')
     exports: Union[QueryFanoutWorkflowOutputVariant1ExportsVariant1, None] = Field(..., alias='exports', description='Local-only export paths when export=true, otherwise null. Hosted clients receive the complete structured result inline instead of inaccessible server paths.')
     debug: Union[QueryFanoutWorkflowOutputVariant1Debug, None] = Field(None, alias='debug', description='')

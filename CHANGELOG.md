@@ -4,6 +4,23 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.65.0] - 2026-11-18 — targets mcp-scraper 1.6.0
+
+### Added
+
+- `query_fanout_workflow` accepts `competitor_domains` and returns `site_outcome` (cited, researched or absent for `first_party_domain`), `competitor_sites` and `commercial_sites_listed`.
+- `query_fanout_workflow` results report `check_type` and `charged_credits`.
+
+### Changed
+
+- `query_fanout_workflow` has two flat prices when it opens its own browser: 20 Credits for a mention check (no profile) and 80 Credits for a full fan-out (with a saved profile); a failed run is not charged.
+- `siteType` on fan-out sources has more values (Government, Education, Forum, Local/directory, Retailer, Competitor); the catch-all is now `Other` (was `Blog`).
+- Node, Python, CLI and cURL bindings are regenerated from the 1.6.0 tool contract (460 tools).
+
+### Packages
+
+- Node scraper 0.65.0, unified Node client 0.64.0, CLI 0.63.0, Python scraper 0.63.0 and unified Python client 0.60.0.
+
 ## [0.64.0] - 2026-11-18 — targets mcp-scraper 1.5.0
 
 ### Added
