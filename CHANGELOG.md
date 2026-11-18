@@ -4,6 +4,21 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.66.0] - 2026-11-18 — targets mcp-scraper 1.7.0
+
+### Added
+
+- `create_ai_visibility_report` renders AI answer tracking measures as a client-ready report page with charts (free); with `pdf` set to `a4` or `letter` it also returns a PDF file for 10 Credits, not charged if it fails.
+- `ai_visibility_report_guide` explains how each measure is computed and returns a complete example input.
+
+### Changed
+
+- Node, Python, CLI and cURL bindings are regenerated from the 1.7.0 tool contract (462 tools).
+
+### Packages
+
+- Node scraper 0.66.0, unified Node client 0.65.0, CLI 0.64.0, Python scraper 0.64.0 and unified Python client 0.61.0.
+
 ## [0.65.0] - 2026-11-18 — targets mcp-scraper 1.6.0
 
 ### Added
