@@ -4,6 +4,21 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.63.0] - 2026-11-18 — targets mcp-scraper 1.4.0
+
+### Added
+
+- `query_fanout_workflow` returns `answer_text`, the text of the answer the assistant gave.
+- `query_fanout_workflow` accepts `brands` (up to 25 names); each comes back in `brand_mentions` with whether the answer mentions it, how often, where it first appears and its order among the names passed.
+
+### Changed
+
+- Node, Python, CLI and cURL bindings are regenerated from the 1.4.0 tool contract (460 tools).
+
+### Packages
+
+- Node scraper 0.63.0, unified Node client 0.62.0, CLI 0.61.0, Python scraper 0.61.0 and unified Python client 0.58.0.
+
 ## [0.62.2] - 2026-11-18 — targets mcp-scraper 1.3.0
 
 ### Added
