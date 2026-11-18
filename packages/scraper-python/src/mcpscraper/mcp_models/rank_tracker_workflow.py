@@ -8,11 +8,14 @@ class RankTrackerWorkflowInput(BaseModel):
 
     project_name: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='projectName', description='Optional name for the rank tracker project, client, or campaign.')
     target_domain: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='targetDomain', description='Primary domain to track in organic results, AI Overview citations, and PAA sources.')
-    target_business_name: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='targetBusinessName', description='Primary Google Business Profile/brand name to match in Maps results. Supply it when matching one business against Maps results.')
-    tracking_modes: Union[Annotated[list[Literal['maps', 'organic', 'ai_overview', 'paa']], Field(min_length=1, max_length=4)], None] = Field(None, alias='trackingModes', description='Rank tracker surfaces to build: maps, organic, ai_overview, paa.')
+    target_business_name: Union[Annotated[str, Field(min_length=1)], None] = Field(None, alias='targetBusinessName', description='Primary Google Business Profile/brand name to match in Maps results, and the brand name looked for in assistant answers. Supply it when matching one business against Maps results or tracking ai_answers.')
+    tracking_modes: Union[Annotated[list[Literal['maps', 'organic', 'ai_overview', 'paa', 'ai_answers']], Field(min_length=1, max_length=5)], None] = Field(None, alias='trackingModes', description='Rank tracker surfaces to build: maps, organic, ai_overview, paa, and ai_answers (whether ChatGPT, Gemini or Claude name the brand when asked a question). ai_answers is not in the default set.')
+    prompts: Union[Annotated[list[Annotated[str, Field(min_length=3)]], Field(max_length=200)], None] = Field(None, alias='prompts', description='For ai_answers: the full-sentence questions to ask the assistants, e.g. "What is the best CRM for roofing companies?". Leave empty to derive questions from keywords downstream.')
+    assistants: Union[Annotated[list[Literal['chatgpt', 'gemini', 'claude']], Field(min_length=1, max_length=3)], None] = Field(None, alias='assistants', description='For ai_answers: which assistants to ask. chatgpt and gemini need no sign-in; claude needs a saved signed-in profile.')
+    runs_per_prompt: Union[Annotated[int, Field(ge=1, le=10)], None] = Field(None, alias='runsPerPrompt', description='For ai_answers: how many times each question is asked on each assistant in one requested batch. Answers vary between runs, so the mention rate is the share of runs that name the brand.')
     keywords: Union[Annotated[list[Annotated[str, Field(min_length=1)]], Field(max_length=200)], None] = Field(None, alias='keywords', description='Seed keywords or service queries to track. Leave empty to derive from user input downstream.')
     locations: Union[Annotated[list[Annotated[str, Field(min_length=1)]], Field(max_length=100)], None] = Field(None, alias='locations', description='Markets, cities, ZIPs, or service areas to track, e.g. "Denver, CO".')
-    competitors: Union[Annotated[list[Annotated[str, Field(min_length=1)]], Field(max_length=100)], None] = Field(None, alias='competitors', description='Optional competitor domains or business names to persist as comparison targets.')
+    competitors: Union[Annotated[list[Annotated[str, Field(min_length=1)]], Field(max_length=100)], None] = Field(None, alias='competitors', description='Optional competitor domains or business names to persist as comparison targets. For ai_answers, competitor names are looked for in each answer beside the target brand.')
     database: Union[Literal['postgres', 'neon', 'supabase', 'sqlite', 'mysql'], None] = Field(None, alias='database', description='Database family to target when generating migrations.')
     include_dashboard: Union[bool, None] = Field(None, alias='includeDashboard', description='Include dashboard/reporting requirements.')
     include_alerts: Union[bool, None] = Field(None, alias='includeAlerts', description='Include saved change findings when manually comparing rank movement and SERP features.')
@@ -37,7 +40,7 @@ RankTrackerWorkflowOutputVariant1TablesItem.__pydantic_config__ = ConfigDict(ext
 RankTrackerWorkflowOutputVariant1StepsItem = TypedDict('RankTrackerWorkflowOutputVariant1StepsItem', {
     'name': Required[str],
     'purpose': Required[str],
-    'modes': Required[list[Literal['maps', 'organic', 'ai_overview', 'paa']]],
+    'modes': Required[list[Literal['maps', 'organic', 'ai_overview', 'paa', 'ai_answers']]],
     'recommendedTools': Required[list[str]],
 })
 RankTrackerWorkflowOutputVariant1StepsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
@@ -49,7 +52,9 @@ class RankTrackerWorkflowOutputVariant1(BaseModel):
     project_name: str = Field(..., alias='projectName', description='')
     target_domain: Union[str, None] = Field(..., alias='targetDomain', description='')
     target_business_name: Union[str, None] = Field(..., alias='targetBusinessName', description='')
-    tracking_modes: list[Literal['maps', 'organic', 'ai_overview', 'paa']] = Field(..., alias='trackingModes', description='')
+    tracking_modes: list[Literal['maps', 'organic', 'ai_overview', 'paa', 'ai_answers']] = Field(..., alias='trackingModes', description='')
+    assistants: list[Literal['chatgpt', 'gemini', 'claude']] = Field(..., alias='assistants', description='')
+    runs_per_prompt: Annotated[int, Field(ge=-9007199254740991, le=9007199254740991)] = Field(..., alias='runsPerPrompt', description='')
     database: str = Field(..., alias='database', description='')
     recommended_tools: list[RankTrackerWorkflowOutputVariant1RecommendedToolsItem] = Field(..., alias='recommendedTools', description='')
     tables: list[RankTrackerWorkflowOutputVariant1TablesItem] = Field(..., alias='tables', description='')
