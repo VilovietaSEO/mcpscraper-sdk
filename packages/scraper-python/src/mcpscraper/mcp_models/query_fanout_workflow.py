@@ -12,6 +12,7 @@ class QueryFanoutWorkflowInput(BaseModel):
     session_id: Union[str, None] = Field(None, alias='session_id', description='Leave out: the tool then opens a browser, asks the prompt, captures and closes the browser in one call. Pass a session id from browser_open only to capture inside a browser you are already driving on chatgpt.com, claude.ai or gemini.google.com.')
     wait_ms: Union[Annotated[int, Field(ge=0, le=180000)], None] = Field(None, alias='wait_ms', description='Longest wait for the answer to finish; the tool returns as soon as the answer ends. Defaults to 150000 when a prompt is sent, 8000 without one. A signed-in answer with web research often takes about a minute.')
     first_party_domain: Union[str, None] = Field(None, alias='first_party_domain', description='The brand/site being researched, e.g. example.com — sources on this domain are tagged First-party/vendor.')
+    brands: Union[Annotated[list[Annotated[str, Field(min_length=2, max_length=80)]], Field(max_length=25)], None] = Field(None, alias='brands', description='Brand or product names to look for in the answer text, yours and competitors, e.g. ["Acme", "Ridgeway"]. Each comes back in brand_mentions with whether it was named, how often, and how early.')
     reset: Union[bool, None] = Field(None, alias='reset', description='Clear any previously buffered stream for this page before capturing.')
     export: Union[bool, None] = Field(None, alias='export', description='When using the installed local MCP server, write JSON/CSV/TSV/HTML exports to MCP_SCRAPER_OUTPUT_DIR/fanout. Hosted clients such as ChatGPT always receive the complete structured result inline and leave exports null.')
 
@@ -23,6 +24,17 @@ QueryFanoutWorkflowOutputVariant1Meta = TypedDict('QueryFanoutWorkflowOutputVari
     'rounds': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
 })
 QueryFanoutWorkflowOutputVariant1Meta.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+QueryFanoutWorkflowOutputVariant1BrandMentionsItem = TypedDict('QueryFanoutWorkflowOutputVariant1BrandMentionsItem', {
+    'brand': Required[str],
+    'mentioned': Required[bool],
+    'count': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'first_position': Required[Union[Annotated[int, Field(ge=0, le=9007199254740991)], None]],
+    'order': Required[Union[Annotated[int, Field(ge=1, le=9007199254740991)], None]],
+    'context': Required[str],
+})
+QueryFanoutWorkflowOutputVariant1BrandMentionsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 QueryFanoutWorkflowOutputVariant1BrowsedUrlsItem = TypedDict('QueryFanoutWorkflowOutputVariant1BrowsedUrlsItem', {
@@ -144,6 +156,8 @@ class QueryFanoutWorkflowOutputVariant1(BaseModel):
     captured_at: str = Field(..., alias='captured_at', description='')
     prompt: str = Field(..., alias='prompt', description='The user prompt that triggered the captured fan-out, when recoverable.')
     meta: QueryFanoutWorkflowOutputVariant1Meta = Field(..., alias='meta', description='')
+    answer_text: str = Field(..., alias='answer_text', description='The text of the answer the assistant gave, with citation markers and layout tags removed; at most 20,000 characters. Empty when the text could not be read.')
+    brand_mentions: list[QueryFanoutWorkflowOutputVariant1BrandMentionsItem] = Field(..., alias='brand_mentions', description='One entry per name passed in brands. Empty when brands was not passed.')
     queries: list[str] = Field(..., alias='queries', description='Every web-search sub-query issued, in capture order.')
     product_lookups: list[str] = Field(..., alias='product_lookups', description='Products the assistant looked up to show as product cards. These are shopping lookups, not web searches.')
     image_queries: list[str] = Field(..., alias='image_queries', description='Image searches the assistant ran for pictures shown in the answer.')

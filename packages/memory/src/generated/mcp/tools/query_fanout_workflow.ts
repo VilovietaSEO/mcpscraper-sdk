@@ -24,6 +24,12 @@ export interface Input {
    */
   first_party_domain?: string;
   /**
+   * Brand or product names to look for in the answer text, yours and competitors, e.g. ["Acme", "Ridgeway"]. Each comes back in brand_mentions with whether it was named, how often, and how early.
+   *
+   * @maxItems 25
+   */
+  brands?: string[];
+  /**
    * Clear any previously buffered stream for this page before capturing.
    */
   reset?: boolean;
@@ -59,6 +65,33 @@ export type Output =
         title: string;
         rounds: number;
       };
+      /**
+       * The text of the answer the assistant gave, with citation markers and layout tags removed; at most 20,000 characters. Empty when the text could not be read.
+       */
+      answer_text: string;
+      /**
+       * One entry per name passed in brands. Empty when brands was not passed.
+       */
+      brand_mentions: {
+        brand: string;
+        /**
+         * Whether the name appears in the answer text as a whole word, ignoring case.
+         */
+        mentioned: boolean;
+        count: number;
+        /**
+         * Character offset of the first mention in answer_text.
+         */
+        first_position: number | null;
+        /**
+         * 1 for the brand named first among the brands passed, 2 for the next, and so on.
+         */
+        order: number | null;
+        /**
+         * The words around the first mention.
+         */
+        context: string;
+      }[];
       /**
        * Every web-search sub-query issued, in capture order.
        */
