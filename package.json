@@ -35,7 +35,8 @@
     "example:gmail:bulk-manage": "npm run build --workspace=mcpscraper-memory-sdk && node examples/gmail-bulk-manage.mjs",
     "example:xray:journeys": "npm run build --workspace=mcpscraper-memory-sdk && node examples/xray-journeys.mjs",
     "example:xray:attribution": "npm run build --workspace=mcpscraper-memory-sdk && node examples/xray-attribution.mjs",
-    "example:research-crm": "npm run build --workspace=mcpscraper-memory-sdk && node examples/research-crm-governed-workflow.mjs"
+    "example:research-crm": "npm run build --workspace=mcpscraper-memory-sdk && node examples/research-crm-governed-workflow.mjs",
+    "example:crm:form": "npm run build --workspace=mcpscraper-memory-sdk && node examples/crm-form-setup.mjs"
   },
   "devDependencies": {
     "@modelcontextprotocol/server": "^2.0.0",

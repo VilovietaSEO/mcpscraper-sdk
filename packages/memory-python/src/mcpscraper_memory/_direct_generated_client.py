@@ -30,6 +30,10 @@ from .direct_models.crm_counterpart_preview import CrmCounterpartPreviewInput, C
 from .direct_models.crm_deal_transition import CrmDealTransitionInput, CrmDealTransitionOutput
 from .direct_models.crm_deal_upsert import CrmDealUpsertInput, CrmDealUpsertOutput
 from .direct_models.crm_duplicate_search import CrmDuplicateSearchInput, CrmDuplicateSearchOutput
+from .direct_models.crm_form_create import CrmFormCreateInput, CrmFormCreateOutput
+from .direct_models.crm_form_preview import CrmFormPreviewInput, CrmFormPreviewOutput
+from .direct_models.crm_form_revoke import CrmFormRevokeInput, CrmFormRevokeOutput
+from .direct_models.crm_form_status import CrmFormStatusInput, CrmFormStatusOutput
 from .direct_models.crm_import_apply import CrmImportApplyInput, CrmImportApplyOutput
 from .direct_models.crm_import_preview import CrmImportPreviewInput, CrmImportPreviewOutput
 from .direct_models.crm_merge_apply import CrmMergeApplyInput, CrmMergeApplyOutput
@@ -257,6 +261,26 @@ class CrmNamespace:
         payload = CrmDuplicateSearchInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
         result = self._call_tool("crmDuplicateSearchTool", payload)
         return validate_tool_output(result, CrmDuplicateSearchOutput)
+
+    def form_create(self, **kwargs: Any) -> CrmFormCreateOutput | ArtifactDelivery:
+        payload = CrmFormCreateInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("crmFormCreateTool", payload)
+        return validate_tool_output(result, CrmFormCreateOutput)
+
+    def form_preview(self, **kwargs: Any) -> CrmFormPreviewOutput | ArtifactDelivery:
+        payload = CrmFormPreviewInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("crmFormPreviewTool", payload)
+        return validate_tool_output(result, CrmFormPreviewOutput)
+
+    def form_revoke(self, **kwargs: Any) -> CrmFormRevokeOutput | ArtifactDelivery:
+        payload = CrmFormRevokeInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("crmFormRevokeTool", payload)
+        return validate_tool_output(result, CrmFormRevokeOutput)
+
+    def form_status(self, **kwargs: Any) -> CrmFormStatusOutput | ArtifactDelivery:
+        payload = CrmFormStatusInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)
+        result = self._call_tool("crmFormStatusTool", payload)
+        return validate_tool_output(result, CrmFormStatusOutput)
 
     def import_apply(self, **kwargs: Any) -> CrmImportApplyOutput | ArtifactDelivery:
         payload = CrmImportApplyInput(**kwargs).model_dump(by_alias=True, exclude_unset=True)

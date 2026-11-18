@@ -45,6 +45,10 @@ import * as CrmCounterpartPreview from './tools/crm-counterpart-preview.js'
 import * as CrmDealTransition from './tools/crm-deal-transition.js'
 import * as CrmDealUpsert from './tools/crm-deal-upsert.js'
 import * as CrmDuplicateSearch from './tools/crm-duplicate-search.js'
+import * as CrmFormCreate from './tools/crm-form-create.js'
+import * as CrmFormPreview from './tools/crm-form-preview.js'
+import * as CrmFormRevoke from './tools/crm-form-revoke.js'
+import * as CrmFormStatus from './tools/crm-form-status.js'
 import * as CrmImportApply from './tools/crm-import-apply.js'
 import * as CrmImportPreview from './tools/crm-import-preview.js'
 import * as CrmMergeApply from './tools/crm-merge-apply.js'
@@ -336,6 +340,22 @@ export class CrmNamespace {
 
   async duplicateSearch(input: CrmDuplicateSearch.Input): Promise<CrmDuplicateSearch.Output> {
     return this.callTool('crmDuplicateSearchTool', input) as Promise<CrmDuplicateSearch.Output>
+  }
+
+  async formCreate(input: CrmFormCreate.Input): Promise<CrmFormCreate.Output> {
+    return this.callTool('crmFormCreateTool', input) as Promise<CrmFormCreate.Output>
+  }
+
+  async formPreview(input: CrmFormPreview.Input): Promise<CrmFormPreview.Output> {
+    return this.callTool('crmFormPreviewTool', input) as Promise<CrmFormPreview.Output>
+  }
+
+  async formRevoke(input: CrmFormRevoke.Input): Promise<CrmFormRevoke.Output> {
+    return this.callTool('crmFormRevokeTool', input) as Promise<CrmFormRevoke.Output>
+  }
+
+  async formStatus(input: CrmFormStatus.Input): Promise<CrmFormStatus.Output> {
+    return this.callTool('crmFormStatusTool', input) as Promise<CrmFormStatus.Output>
   }
 
   async importApply(input: CrmImportApply.Input): Promise<CrmImportApply.Output> {

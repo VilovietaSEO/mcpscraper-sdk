@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 1.8.1 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "ad4ea3636658d78077c40323980680f5e13afbae53c999b11122f893f5104402",
-  "toolCount": 462,
+  "generatedFrom": "mcp-scraper 1.9.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "62d3321ab13fc80d009e49a34206a04eef8df50bba58ef33e9ebdbc58f53bc47",
+  "toolCount": 466,
   "tools": [
     {
       "name": "access-accept-share",
@@ -91116,6 +91116,1900 @@
       "outputSchemaProvided": true,
       "annotations": {
         "title": "Search CRM Duplicates",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crm-form-create",
+      "title": "Connect Form to Vault CRM",
+      "description": "Connect an existing form to the native Vault CRM with a scoped submission URL and field mapping. Creates a reusable endpoint, not a contact. URL secret is shown once; setup-key retries do not create duplicates or reveal it again. Save the URL securely. If lost, revoke this connection and create a replacement. Use crm-form-status after a test submission; creation alone does not prove installation.",
+      "category": "crm",
+      "methodName": "formCreate",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Label identifying the form connection and its submission history."
+          },
+          "mapping": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing the full contact name; use this or firstName."
+              },
+              "firstName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing the first name when no full-name field is mapped."
+              },
+              "lastName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing the optional last name."
+              },
+              "email": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing an email address; map email or phone."
+              },
+              "phone": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing a phone number; map email or phone."
+              },
+              "company": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing a company label; this does not create an organization."
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing the inquiry text to retain in submission history."
+              },
+              "submissionId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Provider payload path containing its stable submission or event ID; otherwise send _submission_id or Idempotency-Key."
+              },
+              "custom": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80,
+                      "description": "Readable label for this selected value in submission history."
+                    },
+                    "field": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "Source field path whose scalar value should be retained."
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "field"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 20,
+                "default": [],
+                "description": "Additional explicitly selected fields to retain in submission history; unmapped values are discarded."
+              }
+            },
+            "additionalProperties": false,
+            "description": "Map CRM destination fields to existing input names or provider payload paths."
+          },
+          "allowedOrigins": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 300
+            },
+            "minItems": 1,
+            "maxItems": 10,
+            "description": "Exact HTTPS website origins permitted to submit from a browser, without paths or trailing slashes."
+          },
+          "relationshipType": {
+            "type": "string",
+            "enum": [
+              "prospect",
+              "customer",
+              "friend",
+              "coworker",
+              "collaborator",
+              "vendor",
+              "partner",
+              "advisor",
+              "media",
+              "community",
+              "other"
+            ],
+            "default": "prospect",
+            "description": "Relationship type for newly created contacts; existing contacts retain their managed fields."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 200,
+            "description": "Stable setup key; reuse unchanged arguments after an unknown result."
+          }
+        },
+        "required": [
+          "name",
+          "mapping",
+          "allowedOrigins",
+          "idempotencyKey"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              },
+              "message": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              },
+              "result": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "ok",
+              "message"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "idempotencyKey": {
+                "type": "string",
+                "maxLength": 512
+              },
+              "operation": {
+                "type": "object",
+                "properties": {
+                  "runId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "state": {
+                    "type": "string",
+                    "maxLength": 100
+                  }
+                },
+                "required": [
+                  "runId",
+                  "idempotencyKey",
+                  "state"
+                ],
+                "additionalProperties": false
+              },
+              "error_code": {
+                "type": "string"
+              },
+              "error_type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "retryable": {
+                "type": "boolean"
+              },
+              "retry_after_seconds": {
+                "type": "number"
+              },
+              "charge_status": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "error_code",
+              "error_type",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Connect Form to Vault CRM",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crm-form-preview",
+      "title": "Preview Form to CRM Mapping",
+      "description": "Plan an existing website form or form-provider webhook into the native Vault CRM. Preview field mapping against one sample submission without creating an endpoint or contact. Follow with crm-form-create, install its returned instructions, then crm-form-status to verify a real submission.",
+      "category": "crm",
+      "methodName": "formPreview",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120,
+            "description": "Label identifying the form connection and its submission history."
+          },
+          "mapping": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing the full contact name; use this or firstName."
+              },
+              "firstName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing the first name when no full-name field is mapped."
+              },
+              "lastName": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing the optional last name."
+              },
+              "email": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing an email address; map email or phone."
+              },
+              "phone": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing a phone number; map email or phone."
+              },
+              "company": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing a company label; this does not create an organization."
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source field path containing the inquiry text to retain in submission history."
+              },
+              "submissionId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Provider payload path containing its stable submission or event ID; otherwise send _submission_id or Idempotency-Key."
+              },
+              "custom": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80,
+                      "description": "Readable label for this selected value in submission history."
+                    },
+                    "field": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200,
+                      "description": "Source field path whose scalar value should be retained."
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "field"
+                  ],
+                  "additionalProperties": false
+                },
+                "maxItems": 20,
+                "default": [],
+                "description": "Additional explicitly selected fields to retain in submission history; unmapped values are discarded."
+              }
+            },
+            "additionalProperties": false,
+            "description": "Map CRM destination fields to existing input names or provider payload paths."
+          },
+          "allowedOrigins": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 300
+            },
+            "minItems": 1,
+            "maxItems": 10,
+            "description": "Exact HTTPS website origins permitted to submit from a browser, without paths or trailing slashes."
+          },
+          "relationshipType": {
+            "type": "string",
+            "enum": [
+              "prospect",
+              "customer",
+              "friend",
+              "coworker",
+              "collaborator",
+              "vendor",
+              "partner",
+              "advisor",
+              "media",
+              "community",
+              "other"
+            ],
+            "default": "prospect",
+            "description": "Relationship type for newly created contacts; existing contacts retain their managed fields."
+          },
+          "sample": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "One synthetic submission using the actual field names or provider JSON structure."
+          }
+        },
+        "required": [
+          "name",
+          "mapping",
+          "allowedOrigins",
+          "sample"
+        ],
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              },
+              "message": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              },
+              "result": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "ok",
+              "message"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "idempotencyKey": {
+                "type": "string",
+                "maxLength": 512
+              },
+              "operation": {
+                "type": "object",
+                "properties": {
+                  "runId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "state": {
+                    "type": "string",
+                    "maxLength": 100
+                  }
+                },
+                "required": [
+                  "runId",
+                  "idempotencyKey",
+                  "state"
+                ],
+                "additionalProperties": false
+              },
+              "error_code": {
+                "type": "string"
+              },
+              "error_type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "retryable": {
+                "type": "boolean"
+              },
+              "retry_after_seconds": {
+                "type": "number"
+              },
+              "charge_status": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "error_code",
+              "error_type",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Preview Form to CRM Mapping",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crm-form-revoke",
+      "title": "Disable Form to CRM Connection",
+      "description": "Disable one native CRM form submission URL immediately, or explicitly all connections for this account. Future submissions are rejected; existing CRM contacts, activities, and receipts remain. Repeated revocation is safe. Create a replacement connection and update the form to resume delivery.",
+      "category": "crm",
+      "methodName": "formRevoke",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "formId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Connection ID from crm-form-create or crm-form-status; omit only with all:true."
+          },
+          "all": {
+            "type": "boolean",
+            "default": false,
+            "description": "Set true only to disable every form connection for this account."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              },
+              "message": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              },
+              "result": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "ok",
+              "message"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "idempotencyKey": {
+                "type": "string",
+                "maxLength": 512
+              },
+              "operation": {
+                "type": "object",
+                "properties": {
+                  "runId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "state": {
+                    "type": "string",
+                    "maxLength": 100
+                  }
+                },
+                "required": [
+                  "runId",
+                  "idempotencyKey",
+                  "state"
+                ],
+                "additionalProperties": false
+              },
+              "error_code": {
+                "type": "string"
+              },
+              "error_type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "retryable": {
+                "type": "boolean"
+              },
+              "retry_after_seconds": {
+                "type": "number"
+              },
+              "charge_status": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "error_code",
+              "error_type",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Disable Form to CRM Connection",
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "crm-form-status",
+      "title": "Check Form to CRM Delivery",
+      "description": "Find native CRM form connections and verify their latest committed submission receipt, CRM Person, and activity IDs. Read-only, paginated, and account-scoped. No stored URL secrets are returned. A connection without a receipt is awaiting a test; a receipt proves CRM delivery, not that every website placement was installed.",
+      "category": "crm",
+      "methodName": "formStatus",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "formId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Connection ID from crm-form-create; omit to list connections."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 25,
+            "description": "Maximum rows or records to return on this page; use the returned cursor for more."
+          },
+          "cursor": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Opaque continuation cursor returned by the previous page; omit for the first page."
+          }
+        },
+        "additionalProperties": false,
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "outputSchema": {
+        "type": "object",
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              },
+              "message": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "error": {
+                "type": "string"
+              },
+              "result": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "ok",
+              "message"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object",
+            "properties": {
+              "delivery": {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "const": "artifact"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "complete",
+                      "partial",
+                      "unavailable"
+                    ]
+                  },
+                  "retainedRepresentation": {
+                    "type": "string",
+                    "const": "formatted-tool-result"
+                  },
+                  "sourceIsError": {
+                    "type": "boolean"
+                  },
+                  "artifacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string"
+                        },
+                        "contentType": {
+                          "type": "string"
+                        },
+                        "bytes": {
+                          "type": "number"
+                        },
+                        "sha256": {
+                          "type": "string"
+                        },
+                        "expiresAt": {
+                          "type": "string"
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "downloadUrl": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadUrlExpiresAt": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "downloadState": {
+                          "type": "string",
+                          "enum": [
+                            "available",
+                            "local",
+                            "unavailable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "filename",
+                        "contentType",
+                        "bytes",
+                        "sha256",
+                        "expiresAt",
+                        "capabilities",
+                        "downloadUrl",
+                        "downloadUrlExpiresAt",
+                        "downloadState"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "availableExports": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "artifactId": {
+                          "type": "string"
+                        },
+                        "sourceArtifactId": {
+                          "type": "string"
+                        },
+                        "filename": {
+                          "type": "string",
+                          "const": "result.md"
+                        },
+                        "contentType": {
+                          "type": "string",
+                          "const": "text/markdown; charset=utf-8"
+                        },
+                        "state": {
+                          "type": "string",
+                          "const": "on-demand"
+                        }
+                      },
+                      "required": [
+                        "artifactId",
+                        "sourceArtifactId",
+                        "filename",
+                        "contentType",
+                        "state"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "downloadLinksOmitted": {
+                    "type": "boolean"
+                  },
+                  "scopeOmittedFields": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "storageFailure": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "artifactId": {
+                            "anyOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "outcome": {
+                            "type": "string",
+                            "enum": [
+                              "unknown",
+                              "bytes-stored-metadata-pending",
+                              "failed"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "artifactId",
+                          "outcome"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "nextAction": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "mode",
+                  "status",
+                  "retainedRepresentation",
+                  "sourceIsError",
+                  "artifacts",
+                  "downloadLinksOmitted",
+                  "scopeOmittedFields",
+                  "storageFailure",
+                  "nextAction"
+                ],
+                "additionalProperties": false
+              },
+              "preview": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "recovery": {
+                "type": "object",
+                "properties": {
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "operationId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "jobId": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 200
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "idempotencyKey": {
+                        "type": "string",
+                        "maxLength": 512
+                      },
+                      "state": {
+                        "type": "string",
+                        "maxLength": 100
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "idempotencyKey",
+                      "state"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "delivery",
+              "preview",
+              "scope",
+              "recovery"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "idempotencyKey": {
+                "type": "string",
+                "maxLength": 512
+              },
+              "operation": {
+                "type": "object",
+                "properties": {
+                  "runId": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "state": {
+                    "type": "string",
+                    "maxLength": 100
+                  }
+                },
+                "required": [
+                  "runId",
+                  "idempotencyKey",
+                  "state"
+                ],
+                "additionalProperties": false
+              },
+              "error_code": {
+                "type": "string"
+              },
+              "error_type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "retryable": {
+                "type": "boolean"
+              },
+              "retry_after_seconds": {
+                "type": "number"
+              },
+              "charge_status": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "error_code",
+              "error_type",
+              "message",
+              "retryable"
+            ],
+            "additionalProperties": false,
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          }
+        ]
+      },
+      "outputSchemaProvided": true,
+      "annotations": {
+        "title": "Check Form to CRM Delivery",
         "readOnlyHint": true,
         "destructiveHint": false,
         "idempotentHint": true,
