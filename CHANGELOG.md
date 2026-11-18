@@ -4,6 +4,20 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.62.2] - 2026-11-18 — targets mcp-scraper 1.3.0
+
+### Added
+
+- `query_fanout_workflow` accepts `platform: "gemini"`: the hosted tool asks Gemini with no sign-in and returns the pages it searched and cited. The result's `platform` can now be `Gemini`.
+
+### Changed
+
+- Node, Python, CLI and cURL bindings are regenerated from the 1.3.0 tool contract (460 tools).
+
+### Packages
+
+- Node scraper 0.62.2, unified Node client 0.61.2, CLI 0.60.2, Python scraper 0.60.2 and unified Python client 0.57.2.
+
 ## [0.62.1] - 2026-11-17 — targets mcp-scraper 1.2.0
 
 ### Added

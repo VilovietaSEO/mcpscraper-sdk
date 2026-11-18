@@ -4,15 +4,15 @@ export interface Input {
    */
   prompt?: string;
   /**
-   * Which assistant to ask when the tool opens the browser itself. Claude needs a saved signed-in profile.
+   * Which assistant to ask when the tool opens the browser itself. ChatGPT and Gemini need no sign-in. Claude needs a saved signed-in profile.
    */
-  platform?: "chatgpt" | "claude";
+  platform?: "chatgpt" | "claude" | "gemini";
   /**
-   * Saved profile name from browser_profile_connect, to ask as a signed-in account. Leave out for ChatGPT: it answers signed-out visitors, so no sign-in or setup is needed.
+   * Saved profile name from browser_profile_connect, to ask as a signed-in account. Leave out for ChatGPT and Gemini: they answer signed-out visitors, so no sign-in or setup is needed.
    */
   profile?: string;
   /**
-   * Leave out: the tool then opens a browser, asks the prompt, captures and closes the browser in one call. Pass a session id from browser_open only to capture inside a browser you are already driving on chatgpt.com or claude.ai.
+   * Leave out: the tool then opens a browser, asks the prompt, captures and closes the browser in one call. Pass a session id from browser_open only to capture inside a browser you are already driving on chatgpt.com, claude.ai or gemini.google.com.
    */
   session_id?: string;
   /**
@@ -47,7 +47,7 @@ export type Output =
       /**
        * Which AI-search surface the fan-out was captured from.
        */
-      platform: "ChatGPT" | "Claude";
+      platform: "ChatGPT" | "Claude" | "Gemini";
       captured_at: string;
       /**
        * The user prompt that triggered the captured fan-out, when recoverable.
