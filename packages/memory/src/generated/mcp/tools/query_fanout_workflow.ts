@@ -20,9 +20,15 @@ export interface Input {
    */
   wait_ms?: number;
   /**
-   * The brand/site being researched, e.g. example.com — sources on this domain are tagged First-party/vendor.
+   * The site being tracked, e.g. example.com. Sources on it are tagged First-party/vendor, and site_outcome says whether it was cited, only looked at, or absent.
    */
   first_party_domain?: string;
+  /**
+   * Competitor sites, e.g. ["ridgeway.example"]. Sources on them are tagged Competitor, and competitor_sites gives each one's outcome.
+   *
+   * @maxItems 25
+   */
+  competitor_domains?: string[];
   /**
    * Brand or product names to look for in the answer text, yours and competitors, e.g. ["Acme", "Ridgeway"]. Each comes back in brand_mentions with whether it was named, how often, and how early.
    *
@@ -116,7 +122,7 @@ export type Output =
         snippet: string;
         round: number | null;
         /**
-         * URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog.
+         * URL category: First-party/vendor, Competitor, Government, Education, News/media, Reddit, Forum, Social/video, Encyclopedia, Review site, Local/directory, Retailer, Docs, or Other.
          */
         siteType: string;
       }[];
@@ -132,7 +138,7 @@ export type Output =
         snippet: string;
         round: number | null;
         /**
-         * URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog.
+         * URL category: First-party/vendor, Competitor, Government, Education, News/media, Reddit, Forum, Social/video, Encyclopedia, Review site, Local/directory, Retailer, Docs, or Other.
          */
         siteType: string;
       }[];
@@ -148,7 +154,7 @@ export type Output =
         snippet: string;
         round: number | null;
         /**
-         * URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog.
+         * URL category: First-party/vendor, Competitor, Government, Education, News/media, Reddit, Forum, Social/video, Encyclopedia, Review site, Local/directory, Retailer, Docs, or Other.
          */
         siteType: string;
       }[];
@@ -187,9 +193,33 @@ export type Output =
       };
       first_party_domain: string | null;
       /**
+       * For first_party_domain: cited in the answer, researched (looked at but not cited), or absent. Null when first_party_domain was not passed.
+       */
+      site_outcome: ("cited" | "researched" | "absent") | null;
+      /**
+       * One entry per domain passed in competitor_domains.
+       */
+      competitor_sites: {
+        domain: string;
+        outcome: "cited" | "researched" | "absent";
+        times_cited: number;
+      }[];
+      /**
+       * True when the sources include the tracked site, a listed competitor, or a known retailer. False means the assistant leaned only on non-commercial sources as far as these lists can tell.
+       */
+      commercial_sites_listed: boolean;
+      /**
        * True when this call opened its own browser and closed it afterwards, so no browser time keeps running.
        */
       browser_closed?: boolean;
+      /**
+       * mention_check for a signed-out run, full_fanout for a run through a saved profile. Present when the tool opened its own browser.
+       */
+      check_type?: ("mention_check" | "full_fanout") | null;
+      /**
+       * Credits charged for this run: the flat price for its check_type. Present when the tool opened its own browser.
+       */
+      charged_credits?: number | null;
       /**
        * Non-fatal local export failure. The inline capture remains complete when this is present.
        */

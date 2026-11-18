@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 1.5.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "d2f98ed4bc7c76665b0640f5c8c6359c72acc08d51b2432c0969fabc52152abc",
+  "generatedFrom": "mcp-scraper 1.6.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "db014c49822be2a094751ec12b52051248322ea416f65a3e422e526411e7fe2e",
   "toolCount": 460,
   "tools": [
     {
@@ -195414,7 +195414,7 @@
     {
       "name": "query_fanout_workflow",
       "title": "Capture AI Search Fan-Out",
-      "description": "Ask ChatGPT, Gemini or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the top sourced sites, its search queries when the assistant shows them, and the products and images it looked up. Also returns the answer text; pass brands (your name and competitors) to learn which the answer mentions, how often and in what order. Simplest use: pass only prompt: the tool opens chatgpt.com, asks, captures and closes the browser in one call, signed out; ChatGPT may refuse some signed-out requests. platform \"gemini\" asks Gemini the same way, also signed out. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). Pass session_id only to capture inside a browser you already opened. WRITE NOTE: the prompt is sent as a real message. Billed as browser time at 120 Credits per minute, usually under a minute. The complete result is returned inline; export=true also writes files only on a locally installed server. NOT for Google AI Overview — use harvest_paa for that.",
+      "description": "Ask ChatGPT, Gemini or Claude a question in a hosted browser and report the web research behind the answer, for AI-visibility (AEO) work: the pages it searched, the pages it cited, the links it placed in the answer, the mix of site types, its search queries when the assistant shows them, and the products and images it looked up. Also returns the answer text. Pass first_party_domain to learn whether your site was cited, only looked at, or absent; competitor_domains to flag competitor sites; brands to learn which names the answer mentions, how often and in what order. Simplest use: pass only prompt: the tool opens chatgpt.com, asks, captures and closes the browser in one call, signed out; ChatGPT may refuse some signed-out requests. platform \"gemini\" asks Gemini the same way. Pass profile for a signed-in answer (always needed for Claude; create it once with browser_profile_connect). WRITE NOTE: the prompt is sent as a real message. Costs 20 Credits signed out (mention check) or 80 Credits with profile (full fan-out); a failed run is not charged. session_id captures inside a browser you opened, at its per-minute rate. NOT for Google AI Overview — use harvest_paa for that.",
       "category": "workflows",
       "methodName": "queryFanout",
       "inputSchema": {
@@ -195449,8 +195449,18 @@
             "maximum": 180000
           },
           "first_party_domain": {
-            "description": "The brand/site being researched, e.g. example.com — sources on this domain are tagged First-party/vendor.",
+            "description": "The site being tracked, e.g. example.com. Sources on it are tagged First-party/vendor, and site_outcome says whether it was cited, only looked at, or absent.",
             "type": "string"
+          },
+          "competitor_domains": {
+            "description": "Competitor sites, e.g. [\"ridgeway.example\"]. Sources on them are tagged Competitor, and competitor_sites gives each one's outcome.",
+            "maxItems": 25,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 120
+            }
           },
           "brands": {
             "description": "Brand or product names to look for in the answer text, yours and competitors, e.g. [\"Acme\", \"Ridgeway\"]. Each comes back in brand_mentions with whether it was named, how often, and how early.",
@@ -195667,7 +195677,7 @@
                     },
                     "siteType": {
                       "type": "string",
-                      "description": "URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog."
+                      "description": "URL category: First-party/vendor, Competitor, Government, Education, News/media, Reddit, Forum, Social/video, Encyclopedia, Review site, Local/directory, Retailer, Docs, or Other."
                     }
                   },
                   "required": [
@@ -195723,7 +195733,7 @@
                     },
                     "siteType": {
                       "type": "string",
-                      "description": "URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog."
+                      "description": "URL category: First-party/vendor, Competitor, Government, Education, News/media, Reddit, Forum, Social/video, Encyclopedia, Review site, Local/directory, Retailer, Docs, or Other."
                     }
                   },
                   "required": [
@@ -195779,7 +195789,7 @@
                     },
                     "siteType": {
                       "type": "string",
-                      "description": "URL category: First-party/vendor, News/media, Reddit, Social/video, Encyclopedia, Review site, Docs, or Blog."
+                      "description": "URL category: First-party/vendor, Competitor, Government, Education, News/media, Reddit, Forum, Social/video, Encyclopedia, Review site, Local/directory, Retailer, Docs, or Other."
                     }
                   },
                   "required": [
@@ -195954,9 +195964,87 @@
                   }
                 ]
               },
+              "site_outcome": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "cited",
+                      "researched",
+                      "absent"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "For first_party_domain: cited in the answer, researched (looked at but not cited), or absent. Null when first_party_domain was not passed."
+              },
+              "competitor_sites": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string"
+                    },
+                    "outcome": {
+                      "type": "string",
+                      "enum": [
+                        "cited",
+                        "researched",
+                        "absent"
+                      ]
+                    },
+                    "times_cited": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "domain",
+                    "outcome",
+                    "times_cited"
+                  ],
+                  "additionalProperties": false
+                },
+                "description": "One entry per domain passed in competitor_domains."
+              },
+              "commercial_sites_listed": {
+                "type": "boolean",
+                "description": "True when the sources include the tracked site, a listed competitor, or a known retailer. False means the assistant leaned only on non-commercial sources as far as these lists can tell."
+              },
               "browser_closed": {
                 "description": "True when this call opened its own browser and closed it afterwards, so no browser time keeps running.",
                 "type": "boolean"
+              },
+              "check_type": {
+                "description": "mention_check for a signed-out run, full_fanout for a run through a saved profile. Present when the tool opened its own browser.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "mention_check",
+                      "full_fanout"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "charged_credits": {
+                "description": "Credits charged for this run: the flat price for its check_type. Present when the tool opened its own browser.",
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
               "export_error": {
                 "description": "Non-fatal local export failure. The inline capture remains complete when this is present.",
@@ -196079,6 +196167,9 @@
               "counts",
               "aggregates",
               "first_party_domain",
+              "site_outcome",
+              "competitor_sites",
+              "commercial_sites_listed",
               "exports"
             ],
             "additionalProperties": false
