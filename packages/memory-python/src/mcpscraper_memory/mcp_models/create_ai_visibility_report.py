@@ -183,6 +183,7 @@ class CreateAiVisibilityReportInput(BaseModel):
     recommendations: Union[Annotated[list[CreateAiVisibilityReportInputRecommendationsItem], Field(max_length=12)], None] = Field(None, alias='recommendations', description='Recommended next steps, most important first.')
     method: Union[CreateAiVisibilityReportInputMethod, None] = Field(None, alias='method', description='How the data was collected.')
     filename: Union[Annotated[str, Field(max_length=120)], None] = Field(None, alias='filename', description='Optional file name; derived from brand and period when omitted.')
+    use_saved_brand: Union[bool, None] = Field(None, alias='useSavedBrand', description='Fill a missing logo, colour and presenter from the brand profile saved in the Brand vault. Values passed here always win.')
     pdf: Union[Literal['none', 'a4', 'letter'], None] = Field(None, alias='pdf', description='Also make a PDF file on A4 or US Letter paper. The PDF is charged; the page is free.')
 
 
@@ -197,6 +198,14 @@ CreateAiVisibilityReportOutputVariant1Artifact = TypedDict('CreateAiVisibilityRe
     'downloadUrlExpiresAt': Required[Union[str, None]],
 })
 CreateAiVisibilityReportOutputVariant1Artifact.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+CreateAiVisibilityReportOutputVariant1SavedBrand = TypedDict('CreateAiVisibilityReportOutputVariant1SavedBrand', {
+    'status': Required[Literal['applied', 'not_saved', 'not_needed', 'turned_off', 'unavailable']],
+    'applied': Required[list[str]],
+    'hint': NotRequired[str],
+})
+CreateAiVisibilityReportOutputVariant1SavedBrand.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 CreateAiVisibilityReportOutputVariant1PdfArtifact = TypedDict('CreateAiVisibilityReportOutputVariant1PdfArtifact', {
@@ -236,6 +245,7 @@ class CreateAiVisibilityReportOutputVariant1(BaseModel):
     artifact: Union[CreateAiVisibilityReportOutputVariant1Artifact, None] = Field(None, alias='artifact', description='')
     local_path: Union[str, None] = Field(None, alias='localPath', description='')
     warnings: list[str] = Field(..., alias='warnings', description='')
+    saved_brand: Union[CreateAiVisibilityReportOutputVariant1SavedBrand, None] = Field(None, alias='savedBrand', description='')
     pdf: Union[CreateAiVisibilityReportOutputVariant1Pdf, None] = Field(None, alias='pdf', description='')
 
 

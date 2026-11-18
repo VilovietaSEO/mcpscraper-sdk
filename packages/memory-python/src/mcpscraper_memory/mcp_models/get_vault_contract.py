@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class GetVaultContractInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
-    vault: str = Field(..., alias='vault', description='One governed vault: Ideas, Examples and Inspirations, Knowledge, Library, People, Organizations, Deals, Communication, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, or Skills. Former names Inspiration and Communications still resolve.')
+    vault: str = Field(..., alias='vault', description='One governed vault: Ideas, Examples and Inspirations, Knowledge, Library, People, Organizations, Deals, Communication, Calendar, Tasks, Projects, Issues, Improvement Log, Experiments, Sprint, Skills, CRM People, CRM Organizations, or Brand. Former names Inspiration and Communications still resolve.')
 
 
 class GetVaultContractOutputVariant1(BaseModel):
