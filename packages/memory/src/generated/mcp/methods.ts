@@ -29,6 +29,13 @@ import * as VaultsListSharedWithMe from './tools/list-shared-with-me.js'
 import * as VaultsListVaults from './tools/list-vaults.js'
 import * as VaultsProvisionDefaults from './tools/provision-defaults.js'
 import * as VaultsRouteMemory from './tools/route-memory.js'
+import * as OtherAiVisibilityReportGuide from './tools/ai_visibility_report_guide.js'
+import * as OtherCreateAiVisibilityReport from './tools/create_ai_visibility_report.js'
+import * as OtherExtractUrlStatus from './tools/extract_url_status.js'
+import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
+import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
+import * as OtherSearchSerpStatus from './tools/search_serp_status.js'
+import * as OtherTiktokVideoTranscribe from './tools/tiktok_video_transcribe.js'
 import * as AmazonBestsellers from './tools/amazon_bestsellers.js'
 import * as AmazonDeals from './tools/amazon_deals.js'
 import * as AmazonOffers from './tools/amazon_offers.js'
@@ -276,11 +283,6 @@ import * as DirectoryLocationMarkets from './tools/location_markets.js'
 import * as DirectoryPrepareLocalSourcebookWrite from './tools/prepare-local-sourcebook-write.js'
 import * as DirectoryResolveLocalSourcebookTags from './tools/resolve-local-sourcebook-tags.js'
 import * as DirectoryValidateLocalSourcebookWrite from './tools/validate-local-sourcebook-write.js'
-import * as OtherExtractUrlStatus from './tools/extract_url_status.js'
-import * as OtherHarvestPaaStart from './tools/harvest_paa_start.js'
-import * as OtherHarvestPaaStatus from './tools/harvest_paa_status.js'
-import * as OtherSearchSerpStatus from './tools/search_serp_status.js'
-import * as OtherTiktokVideoTranscribe from './tools/tiktok_video_transcribe.js'
 import * as FacebookAdSearch from './tools/facebook_ad_search.js'
 import * as FacebookAdTranscribe from './tools/facebook_ad_transcribe.js'
 import * as FacebookPageIntel from './tools/facebook_page_intel.js'
@@ -546,6 +548,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "add-vault",
     "category": "vaults",
     "methodName": "addVault"
+  },
+  {
+    "name": "ai_visibility_report_guide",
+    "category": "other",
+    "methodName": "aiVisibilityReportGuide"
   },
   {
     "name": "amazon_bestsellers",
@@ -1306,6 +1313,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "cost-usage",
     "category": "storage",
     "methodName": "costUsage"
+  },
+  {
+    "name": "create_ai_visibility_report",
+    "category": "other",
+    "methodName": "createAiVisibilityReport"
   },
   {
     "name": "create_artifact_template",
@@ -2889,6 +2901,38 @@ export class VaultsNamespace {
   }
 }
 
+export class OtherNamespace {
+  constructor(private readonly callTool: McpToolCallFn) {}
+
+  async aiVisibilityReportGuide(input: OtherAiVisibilityReportGuide.Input = {} as OtherAiVisibilityReportGuide.Input): Promise<OtherAiVisibilityReportGuide.Output> {
+    return this.callTool('ai_visibility_report_guide', input) as Promise<OtherAiVisibilityReportGuide.Output>
+  }
+
+  async createAiVisibilityReport(input: OtherCreateAiVisibilityReport.Input): Promise<OtherCreateAiVisibilityReport.Output> {
+    return this.callTool('create_ai_visibility_report', input) as Promise<OtherCreateAiVisibilityReport.Output>
+  }
+
+  async extractUrlStatus(input: OtherExtractUrlStatus.Input): Promise<OtherExtractUrlStatus.Output> {
+    return this.callTool('extract_url_status', input) as Promise<OtherExtractUrlStatus.Output>
+  }
+
+  async harvestPaaStart(input: OtherHarvestPaaStart.Input): Promise<OtherHarvestPaaStart.Output> {
+    return this.callTool('harvest_paa_start', input) as Promise<OtherHarvestPaaStart.Output>
+  }
+
+  async harvestPaaStatus(input: OtherHarvestPaaStatus.Input): Promise<OtherHarvestPaaStatus.Output> {
+    return this.callTool('harvest_paa_status', input) as Promise<OtherHarvestPaaStatus.Output>
+  }
+
+  async searchSerpStatus(input: OtherSearchSerpStatus.Input): Promise<OtherSearchSerpStatus.Output> {
+    return this.callTool('search_serp_status', input) as Promise<OtherSearchSerpStatus.Output>
+  }
+
+  async tiktokVideoTranscribe(input: OtherTiktokVideoTranscribe.Input): Promise<OtherTiktokVideoTranscribe.Output> {
+    return this.callTool('tiktok_video_transcribe', input) as Promise<OtherTiktokVideoTranscribe.Output>
+  }
+}
+
 export class AmazonNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -3945,30 +3989,6 @@ export class DirectoryNamespace {
   }
 }
 
-export class OtherNamespace {
-  constructor(private readonly callTool: McpToolCallFn) {}
-
-  async extractUrlStatus(input: OtherExtractUrlStatus.Input): Promise<OtherExtractUrlStatus.Output> {
-    return this.callTool('extract_url_status', input) as Promise<OtherExtractUrlStatus.Output>
-  }
-
-  async harvestPaaStart(input: OtherHarvestPaaStart.Input): Promise<OtherHarvestPaaStart.Output> {
-    return this.callTool('harvest_paa_start', input) as Promise<OtherHarvestPaaStart.Output>
-  }
-
-  async harvestPaaStatus(input: OtherHarvestPaaStatus.Input): Promise<OtherHarvestPaaStatus.Output> {
-    return this.callTool('harvest_paa_status', input) as Promise<OtherHarvestPaaStatus.Output>
-  }
-
-  async searchSerpStatus(input: OtherSearchSerpStatus.Input): Promise<OtherSearchSerpStatus.Output> {
-    return this.callTool('search_serp_status', input) as Promise<OtherSearchSerpStatus.Output>
-  }
-
-  async tiktokVideoTranscribe(input: OtherTiktokVideoTranscribe.Input): Promise<OtherTiktokVideoTranscribe.Output> {
-    return this.callTool('tiktok_video_transcribe', input) as Promise<OtherTiktokVideoTranscribe.Output>
-  }
-}
-
 export class FacebookNamespace {
   constructor(private readonly callTool: McpToolCallFn) {}
 
@@ -4784,6 +4804,7 @@ export class ZillowNamespace {
 export class GeneratedMcpToolsClient {
   readonly access: AccessNamespace
   readonly vaults: VaultsNamespace
+  readonly other: OtherNamespace
   readonly amazon: AmazonNamespace
   readonly analytics: AnalyticsNamespace
   readonly web: WebNamespace
@@ -4801,7 +4822,6 @@ export class GeneratedMcpToolsClient {
   readonly billing: BillingNamespace
   readonly crm: CrmNamespace
   readonly directory: DirectoryNamespace
-  readonly other: OtherNamespace
   readonly facebook: FacebookNamespace
   readonly facts: FactsNamespace
   readonly reviews: ReviewsNamespace
@@ -4830,6 +4850,7 @@ export class GeneratedMcpToolsClient {
   constructor(callTool: McpToolCallFn) {
     this.access = new AccessNamespace(callTool)
     this.vaults = new VaultsNamespace(callTool)
+    this.other = new OtherNamespace(callTool)
     this.amazon = new AmazonNamespace(callTool)
     this.analytics = new AnalyticsNamespace(callTool)
     this.web = new WebNamespace(callTool)
@@ -4847,7 +4868,6 @@ export class GeneratedMcpToolsClient {
     this.billing = new BillingNamespace(callTool)
     this.crm = new CrmNamespace(callTool)
     this.directory = new DirectoryNamespace(callTool)
-    this.other = new OtherNamespace(callTool)
     this.facebook = new FacebookNamespace(callTool)
     this.facts = new FactsNamespace(callTool)
     this.reviews = new ReviewsNamespace(callTool)

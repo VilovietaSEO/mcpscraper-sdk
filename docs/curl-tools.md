@@ -1,4 +1,4 @@
-# All 460 MCP tools with cURL
+# All 462 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -92,7 +92,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (460)
+## Complete catalog (462)
 
 ## access
 
@@ -128,6 +128,16 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `list-vaults` — List Vaults
 - `provision-defaults` — Provision Default Vaults
 - `route-memory` — Route Memory
+
+## other
+
+- `ai_visibility_report_guide` — AI Visibility Report Guide
+- `create_ai_visibility_report` — Create AI Visibility Report
+- `extract_url_status` — Check Durable Single URL Extract
+- `harvest_paa_start` — Start Durable Google PAA Harvest
+- `harvest_paa_status` — Check Durable Google PAA Harvest
+- `search_serp_status` — Check Durable Google SERP Lookup
+- `tiktok_video_transcribe` — TikTok Video Transcription
 
 ## amazon
 
@@ -426,14 +436,6 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `prepare-local-sourcebook-write` — Prepare Local Sourcebook Write
 - `resolve-local-sourcebook-tags` — Resolve Local Sourcebook Tags
 - `validate-local-sourcebook-write` — Validate Local Sourcebook Write
-
-## other
-
-- `extract_url_status` — Check Durable Single URL Extract
-- `harvest_paa_start` — Start Durable Google PAA Harvest
-- `harvest_paa_status` — Check Durable Google PAA Harvest
-- `search_serp_status` — Check Durable Google SERP Lookup
-- `tiktok_video_transcribe` — TikTok Video Transcription
 
 ## facebook
 

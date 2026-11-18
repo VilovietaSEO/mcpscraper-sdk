@@ -564,6 +564,35 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     }
   },
   {
+    "name": "ai_visibility_report_guide",
+    "category": "other",
+    "title": "AI Visibility Report Guide",
+    "description": "Read how to build an AI visibility report before calling create_ai_visibility_report. It covers which AI answer tracking rows to collect and save, how each measure is computed from them (visibility, share of voice, by assistant, by question, by topic, trend, website outcome, source types), the honesty rules about sample sizes and failed runs, white-labelling, and how to get a PDF. Start with focus \"workflow\"; fetch \"data_contract\" for the formulas or \"example\" for a complete input. Free. This does not collect data, compute measures, or create a report.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "focus": {
+          "default": "workflow",
+          "description": "Which part of the AI visibility report guide to return. Start with workflow; fetch data_contract for how each measure is computed, or example for a complete input.",
+          "type": "string",
+          "enum": [
+            "workflow",
+            "data_contract",
+            "example"
+          ]
+        }
+      },
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "AI Visibility Report Guide",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
     "name": "amazon_bestsellers",
     "category": "amazon",
     "title": "Amazon Best Sellers",
@@ -16294,6 +16323,660 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
       "readOnlyHint": true,
       "destructiveHint": false,
       "idempotentHint": true,
+      "openWorldHint": false
+    }
+  },
+  {
+    "name": "create_ai_visibility_report",
+    "category": "other",
+    "title": "Create AI Visibility Report",
+    "description": "Turn AI answer tracking measures into one client-ready report page with charts: headline visibility, share of voice, visibility by assistant, a trend line, competitor ranking, question and topic tables, what happened to the website, the kinds of site the assistants used, top sources, the assistants' own searches, written analysis and next steps. Mobile-friendly, self-contained, and white-label: pass the brand's colour and logos. Only summary is required; sections without data are left out. This tool draws the numbers it is given and does not collect, compute or invent them: compute the measures first (ai_visibility_report_guide). Check warnings in the result. Cost: the page is free; pdf \"a4\" or \"letter\" also makes a PDF file for 10 Credits, not charged if it fails. The page also prints to PDF from any browser. Local stdio clients save the page under the MCP Scraper output directory and return localPath.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "default": "AI visibility report",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 140,
+          "description": "Report title shown at the top of the page."
+        },
+        "brand": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "The tracked brand, exactly as it was matched in the answers."
+            },
+            "domain": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "description": "The tracked brand's website domain, for example \"example.com\"."
+            },
+            "logoUrl": {
+              "type": "string",
+              "maxLength": 2000,
+              "pattern": "^https:\\/\\/",
+              "description": "The tracked brand's logo. Public https image."
+            },
+            "accentColor": {
+              "description": "Hex colour for the brand in every chart, for example \"#1f5fbf\". Too-pale colours are darkened.",
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "description": "The brand this report is about."
+        },
+        "preparedFor": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Client or team the report is prepared for."
+        },
+        "preparedBy": {
+          "description": "Who presents the report (white-label).",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Agency or person presenting the report."
+            },
+            "logoUrl": {
+              "type": "string",
+              "maxLength": 2000,
+              "pattern": "^https:\\/\\/",
+              "description": "The presenter's logo. Public https image."
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        "period": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Period shown under the title, for example \"1 to 30 September 2026\"."
+            },
+            "from": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "description": "First day covered, as an ISO date."
+            },
+            "to": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40,
+              "description": "Last day covered, as an ISO date."
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "description": "The period the measures cover."
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "visibilityPct": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Successful answers that named the brand, percent 0-100."
+            },
+            "answersNamed": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Number of successful answers that named the brand."
+            },
+            "answersTotal": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Successful answers behind the headline. Excludes failed runs."
+            },
+            "visibilityChangePts": {
+              "description": "Change against the previous period, in points. Omit without a previous period.",
+              "type": "number",
+              "minimum": -100,
+              "maximum": 100
+            },
+            "shareOfVoicePct": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Brand mentions divided by all tracked brands' mentions, percent 0-100."
+            },
+            "shareRank": {
+              "description": "Rank by share of voice; 1 is highest.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "brandsTracked": {
+              "description": "Brands tracked, including this one.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "failedRuns": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Runs that failed and were left out of every figure."
+            }
+          },
+          "required": [
+            "visibilityPct",
+            "answersNamed",
+            "answersTotal"
+          ],
+          "description": "Headline measures. The only required section."
+        },
+        "byAssistant": {
+          "description": "Visibility for each assistant.",
+          "maxItems": 12,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "assistant": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60,
+                "description": "Assistant name, for example \"ChatGPT\", \"Gemini\" or \"Claude\"."
+              },
+              "visibilityPct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "This assistant's answers naming the brand, percent 0-100."
+              },
+              "answersTotal": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Successful answers from this assistant."
+              }
+            },
+            "required": [
+              "assistant",
+              "visibilityPct",
+              "answersTotal"
+            ]
+          }
+        },
+        "trend": {
+          "description": "Visibility over time, oldest first; two points minimum.",
+          "maxItems": 120,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40,
+                "description": "Axis label, for example \"7 Sep\"."
+              },
+              "brandPct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "The brand's visibility at this point, percent 0-100."
+              },
+              "answersTotal": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Successful answers behind this point."
+              },
+              "competitors": {
+                "description": "Competitor visibility at this point.",
+                "maxItems": 8,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120,
+                      "description": "Competitor name, spelled the same everywhere."
+                    },
+                    "pct": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "description": "Answers naming this competitor, percent 0-100."
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "pct"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "date",
+              "brandPct"
+            ]
+          }
+        },
+        "shareOfVoice": {
+          "description": "Share of voice for every tracked brand, including this one.",
+          "maxItems": 25,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "Brand name. Include the tracked brand too."
+              },
+              "domain": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "The brand's website domain."
+              },
+              "sharePct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Its mentions divided by all tracked brands' mentions, percent 0-100."
+              },
+              "mentions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Number of mentions counted for this brand."
+              },
+              "changePts": {
+                "description": "Change against the previous period, in points.",
+                "type": "number",
+                "minimum": -100,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "name",
+              "sharePct"
+            ]
+          }
+        },
+        "prompts": {
+          "description": "Each question, per assistant.",
+          "maxItems": 200,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "prompt": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300,
+                "description": "The question asked."
+              },
+              "topic": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80,
+                "description": "Topic of this question."
+              },
+              "results": {
+                "maxItems": 12,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "assistant": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 60,
+                      "description": "Assistant name, matching byAssistant."
+                    },
+                    "runs": {
+                      "default": 1,
+                      "description": "Successful answers here.",
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 10000
+                    },
+                    "namedRuns": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Of those, answers naming the brand."
+                    },
+                    "citedRuns": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991,
+                      "description": "Of those, answers citing the brand's website."
+                    }
+                  },
+                  "required": [
+                    "assistant",
+                    "namedRuns"
+                  ]
+                },
+                "description": "One entry per assistant asked."
+              }
+            },
+            "required": [
+              "prompt",
+              "results"
+            ]
+          }
+        },
+        "topics": {
+          "description": "Visibility by topic against competitors.",
+          "maxItems": 50,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "topic": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120,
+                "description": "Topic or situation."
+              },
+              "answersTotal": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Successful answers in this topic."
+              },
+              "brandPct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "The brand's visibility in this topic, percent 0-100."
+              },
+              "competitors": {
+                "description": "Competitor visibility in this topic.",
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120,
+                      "description": "Competitor name, spelled the same everywhere."
+                    },
+                    "pct": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "description": "Answers naming this competitor, percent 0-100."
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "pct"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "topic",
+              "brandPct"
+            ]
+          }
+        },
+        "siteOutcome": {
+          "description": "The brand's website across the answers.",
+          "type": "object",
+          "properties": {
+            "cited": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Answers that cited the brand's website."
+            },
+            "researched": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Answers that read the website without citing it."
+            },
+            "absent": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991,
+              "description": "Answers where the website did not appear."
+            }
+          },
+          "required": [
+            "cited",
+            "researched",
+            "absent"
+          ]
+        },
+        "siteTypes": {
+          "description": "The kinds of site the assistants relied on.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60,
+                "description": "Site type, for example \"Review site\"."
+              },
+              "sources": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Pages of this type used."
+              },
+              "cited": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Of those, pages cited."
+              }
+            },
+            "required": [
+              "type",
+              "sources"
+            ]
+          }
+        },
+        "topSources": {
+          "description": "Domains that appeared most often.",
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "domain": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "description": "Source domain."
+              },
+              "siteType": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60,
+                "description": "Site type of this domain."
+              },
+              "answers": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Answers it appeared in."
+              },
+              "cited": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "Answers that cited it."
+              }
+            },
+            "required": [
+              "domain",
+              "answers"
+            ]
+          }
+        },
+        "searchQueries": {
+          "description": "The assistants' own searches, when shown.",
+          "maxItems": 100,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "query": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300,
+                "description": "A search an assistant ran."
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991,
+                "description": "How many answers ran this search."
+              }
+            },
+            "required": [
+              "query"
+            ]
+          }
+        },
+        "writeUps": {
+          "description": "Written analysis. State only what the figures support.",
+          "maxItems": 12,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "heading": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 140,
+                "description": "Section heading."
+              },
+              "body": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 6000,
+                "description": "Plain text: blank line = paragraph, \"- \" = list item, **bold**."
+              }
+            },
+            "required": [
+              "heading",
+              "body"
+            ]
+          }
+        },
+        "recommendations": {
+          "description": "Recommended next steps, most important first.",
+          "maxItems": 12,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160,
+                "description": "What to do."
+              },
+              "detail": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1500,
+                "description": "Why, citing evidence in this report."
+              }
+            },
+            "required": [
+              "title",
+              "detail"
+            ]
+          }
+        },
+        "method": {
+          "description": "How the data was collected.",
+          "type": "object",
+          "properties": {
+            "assistants": {
+              "description": "Assistants that were asked.",
+              "maxItems": 12,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60,
+                "description": "Assistant name."
+              }
+            },
+            "runsPerPrompt": {
+              "description": "Runs per question per assistant.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "notes": {
+              "description": "What a reader needs to judge the figures, such as how names were matched.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1500
+            }
+          }
+        },
+        "filename": {
+          "description": "Optional file name; derived from brand and period when omitted.",
+          "type": "string",
+          "maxLength": 120
+        },
+        "pdf": {
+          "default": "none",
+          "description": "Also make a PDF file on A4 or US Letter paper. The PDF is charged; the page is free.",
+          "type": "string",
+          "enum": [
+            "none",
+            "a4",
+            "letter"
+          ]
+        }
+      },
+      "required": [
+        "brand",
+        "period",
+        "summary"
+      ],
+      "$schema": "https://json-schema.org/draft/2020-12/schema"
+    },
+    "annotations": {
+      "title": "Create AI Visibility Report",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": false,
       "openWorldHint": false
     }
   },
