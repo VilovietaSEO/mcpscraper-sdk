@@ -42,7 +42,8 @@ async function main(): Promise<void> {
   requireMatch(byName.get('search_serp')?.description ?? '', /organic results only, no backup provider/, 'search_serp two-page routing')
   requireMatch(byName.get('harvest_paa')?.description ?? '', /Costs 500 Credits per harvest plus 35 Credits per question/, 'harvest_paa rate')
   requireMatch(byName.get('capture_serp_snapshot')?.description ?? '', /Costs 60 Credits/, 'capture_serp_snapshot rate')
-  requireMatch(byName.get('maps_place_intel')?.description ?? '', /Costs 60 Credits plus 1 per saved review; 600 plus reviews when photos or services are requested/, 'maps_place_intel rate')
+  requireMatch(byName.get('maps_place_intel')?.description ?? '', /Costs 60 Credits plus 1 per saved review; 600 plus reviews when requested photos or services arrive\. If none of them can be collected, the 60-Credit price applies/, 'maps_place_intel rate')
+  requireMatch(byName.get('maps_search')?.description ?? '', /Costs 5 Credits per search; includeServices adds 100 Credits for each business whose profile is opened/, 'maps_search rate')
 
   const publicToolContract = JSON.stringify(manifest.tools)
   if (namesWithheldTerm(publicToolContract)) {
