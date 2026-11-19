@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 1.12.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "cd22417f4493715f751733db3f6e152bc926c3ebfd9f8b733b43b31cbabdccc2",
+  "generatedFrom": "mcp-scraper 1.13.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "af38a4655fcbd8764bf06c827e779846292cde8b2d20aa91e048a48fab20c408",
   "toolCount": 466,
   "tools": [
     {
@@ -183698,7 +183698,7 @@
     {
       "name": "maps_search",
       "title": "Google Maps Business Search",
-      "description": "Search Google Maps for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. For ordinary searches, enter a US state in location to target that state; omit location for direct search. Returns up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. websiteUrl may be null; ordinary search does not open every profile and profileDetailsStatus:not_requested is expected. Use maps_place_intel selectively for complete website/profile fields (a separately billed lookup). Set includeServices:true to open organic Businesses profiles for configured services and areas served when available. Costs 5 Credits per search; includeServices adds 100 Credits for each business whose profile is opened, reserved for every requested result first, so set maxResults to what you need.",
+      "description": "Search Google Maps for multiple businesses by category, niche, or local market — leads, prospects, competitors, or beyond the 3-pack. For ordinary searches, enter a US state in location to target that state; omit location for direct search. Returns up to 50 candidates (default 10) with names, place URLs, CIDs, and ratings. websiteUrl may be null; ordinary search does not open every profile and profileDetailsStatus:not_requested is expected. Use maps_place_intel selectively for complete website/profile fields (a separately billed lookup). Set includeServices:true to open organic Businesses profiles for configured services and areas served when available. Costs 5 Credits per search; includeServices adds 200 Credits for each business whose profile is opened, reserved for every requested result first, so set maxResults to what you need. If the profiles cannot be opened, the plain list is returned with profileDetailsStatus:unavailable for the 5-Credit price.",
       "category": "maps",
       "methodName": "search",
       "inputSchema": {
