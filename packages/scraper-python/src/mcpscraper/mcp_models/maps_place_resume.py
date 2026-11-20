@@ -43,6 +43,32 @@ MapsPlaceResumeOutputVariant1ReviewTopicsItem = TypedDict('MapsPlaceResumeOutput
 MapsPlaceResumeOutputVariant1ReviewTopicsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+MapsPlaceResumeOutputVariant1MenuVariant1SectionsItemItemsItem = TypedDict('MapsPlaceResumeOutputVariant1MenuVariant1SectionsItemItemsItem', {
+    'name': Required[str],
+    'price': Required[Union[str, None]],
+    'description': Required[Union[str, None]],
+    'imageUrl': Required[Union[str, None]],
+})
+MapsPlaceResumeOutputVariant1MenuVariant1SectionsItemItemsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+MapsPlaceResumeOutputVariant1MenuVariant1SectionsItem = TypedDict('MapsPlaceResumeOutputVariant1MenuVariant1SectionsItem', {
+    'name': Required[str],
+    'items': Required[list[MapsPlaceResumeOutputVariant1MenuVariant1SectionsItemItemsItem]],
+})
+MapsPlaceResumeOutputVariant1MenuVariant1SectionsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+MapsPlaceResumeOutputVariant1MenuVariant1 = TypedDict('MapsPlaceResumeOutputVariant1MenuVariant1', {
+    'sections': Required[list[MapsPlaceResumeOutputVariant1MenuVariant1SectionsItem]],
+    'highlights': Required[list[str]],
+    'providedBy': Required[Union[str, None]],
+    'updated': Required[Union[str, None]],
+    'itemCount': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+})
+MapsPlaceResumeOutputVariant1MenuVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 MapsPlaceResumeOutputVariant1AboutAttributesItem = TypedDict('MapsPlaceResumeOutputVariant1AboutAttributesItem', {
     'section': Required[str],
     'attribute': Required[str],
@@ -146,6 +172,8 @@ class MapsPlaceResumeOutputVariant1(BaseModel):
     services: Union[list[str], None] = Field(None, alias='services', description='')
     areas_served: Union[list[str], None] = Field(None, alias='areasServed', description='')
     services_status: Union[str, None] = Field(None, alias='servicesStatus', description='')
+    menu_status: Union[str, None] = Field(None, alias='menuStatus', description='collected, unavailable or not_requested.')
+    menu: Union[Union[MapsPlaceResumeOutputVariant1MenuVariant1, None], None] = Field(None, alias='menu', description='')
     about_attributes: Union[list[MapsPlaceResumeOutputVariant1AboutAttributesItem], None] = Field(None, alias='aboutAttributes', description='')
     media: Union[MapsPlaceResumeOutputVariant1Media, None] = Field(None, alias='media', description='')
 

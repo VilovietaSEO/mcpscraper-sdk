@@ -79,6 +79,28 @@ export type Output =
       services?: string[];
       areasServed?: string[];
       servicesStatus?: string;
+      /**
+       * collected, unavailable or not_requested.
+       */
+      menuStatus?: string;
+      menu?: {
+        sections: {
+          name: string;
+          items: {
+            name: string;
+            price: string | null;
+            description: string | null;
+            imageUrl: string | null;
+          }[];
+        }[];
+        highlights: string[];
+        /**
+         * Who supplied the menu to Google, when Google says.
+         */
+        providedBy: string | null;
+        updated: string | null;
+        itemCount: number;
+      } | null;
       aboutAttributes?: {
         section: string;
         attribute: string;
