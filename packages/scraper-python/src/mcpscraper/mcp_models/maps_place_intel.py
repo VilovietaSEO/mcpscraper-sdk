@@ -14,7 +14,8 @@ class MapsPlaceIntelInput(BaseModel):
     max_reviews: Union[Annotated[int, Field(ge=1, le=1000)], None] = Field(None, alias='maxReviews', description='Max review cards when includeReviews is true. Default 50, maximum 1,000. Availability depends on the profile. Partial or interrupted runs can resume.')
     include_services: Union[bool, None] = Field(None, alias='includeServices', description="Collect the exact business's configured services and areas served when available. These fields are absent on some profiles.")
     include_images: Union[bool, None] = Field(None, alias='includeImages', description='Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.')
-    include: Union[list[Literal['core', 'hours', 'services', 'areasServed', 'reviews', 'images', 'all']], None] = Field(None, alias='include', description='Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.')
+    include_menu: Union[bool, None] = Field(None, alias='includeMenu', description='Collect the restaurant or food business menu Google shows for this profile: sections, items, prices and descriptions. Not every profile has one; menuStatus says whether it arrived.')
+    include: Union[list[Literal['core', 'hours', 'services', 'areasServed', 'reviews', 'images', 'menu', 'all']], None] = Field(None, alias='include', description='Requested place field groups. all requests reviews, services and images while maxReviews and maxImages still cap collection; the menu is collected only when menu or includeMenu is given. Existing includeReviews, includeServices, and includeImages flags remain valid.')
     image_scope: Union[Literal['owner', 'all'], None] = Field(None, alias='imageScope', description='owner collects only the Google Maps By owner gallery. all collects the full gallery and labels exact owner matches versus other/unknown media.')
     max_images: Union[Annotated[int, Field(ge=1, le=250)], None] = Field(None, alias='maxImages', description='Maximum photos to collect when includeImages is true. Default 100, maximum 250.')
     max_inline_images: Union[Annotated[int, Field(ge=0, le=5)], None] = Field(None, alias='maxInlineImages', description='Maximum downloaded photos attached as MCP image blocks for direct AI vision. The ZIP and structured manifest still contain the wider result.')
@@ -51,6 +52,32 @@ MapsPlaceIntelOutputVariant1ReviewTopicsItem = TypedDict('MapsPlaceIntelOutputVa
     'count': Required[str],
 })
 MapsPlaceIntelOutputVariant1ReviewTopicsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+MapsPlaceIntelOutputVariant1MenuVariant1SectionsItemItemsItem = TypedDict('MapsPlaceIntelOutputVariant1MenuVariant1SectionsItemItemsItem', {
+    'name': Required[str],
+    'price': Required[Union[str, None]],
+    'description': Required[Union[str, None]],
+    'imageUrl': Required[Union[str, None]],
+})
+MapsPlaceIntelOutputVariant1MenuVariant1SectionsItemItemsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+MapsPlaceIntelOutputVariant1MenuVariant1SectionsItem = TypedDict('MapsPlaceIntelOutputVariant1MenuVariant1SectionsItem', {
+    'name': Required[str],
+    'items': Required[list[MapsPlaceIntelOutputVariant1MenuVariant1SectionsItemItemsItem]],
+})
+MapsPlaceIntelOutputVariant1MenuVariant1SectionsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+MapsPlaceIntelOutputVariant1MenuVariant1 = TypedDict('MapsPlaceIntelOutputVariant1MenuVariant1', {
+    'sections': Required[list[MapsPlaceIntelOutputVariant1MenuVariant1SectionsItem]],
+    'highlights': Required[list[str]],
+    'providedBy': Required[Union[str, None]],
+    'updated': Required[Union[str, None]],
+    'itemCount': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+})
+MapsPlaceIntelOutputVariant1MenuVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 MapsPlaceIntelOutputVariant1AboutAttributesItem = TypedDict('MapsPlaceIntelOutputVariant1AboutAttributesItem', {
@@ -156,6 +183,8 @@ class MapsPlaceIntelOutputVariant1(BaseModel):
     services: Union[list[str], None] = Field(None, alias='services', description='')
     areas_served: Union[list[str], None] = Field(None, alias='areasServed', description='')
     services_status: Union[str, None] = Field(None, alias='servicesStatus', description='')
+    menu_status: Union[str, None] = Field(None, alias='menuStatus', description='collected, unavailable or not_requested.')
+    menu: Union[Union[MapsPlaceIntelOutputVariant1MenuVariant1, None], None] = Field(None, alias='menu', description='')
     about_attributes: Union[list[MapsPlaceIntelOutputVariant1AboutAttributesItem], None] = Field(None, alias='aboutAttributes', description='')
     media: Union[MapsPlaceIntelOutputVariant1Media, None] = Field(None, alias='media', description='')
 

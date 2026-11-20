@@ -4,6 +4,19 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.71.0] - 2026-11-20 — targets mcp-scraper 1.14.0
+
+### Added
+
+- `maps_place_intel` accepts `includeMenu` (and `"menu"` in `include`) and returns `menu` and `menuStatus`: a restaurant or food business's menu as Google shows it, with sections, item names, prices and descriptions, highlighted dishes and who supplied it. The menu is not part of `include: ["all"]`, and not every profile has one.
+
+### Changed
+
+- The bundled description of `maps_place_intel` states that the full price applies when requested photos, services or a menu arrive. The description of `maps_place_resume` states that a follow-up attempt is charged only for what it adds, so a run never costs more in total than one complete pass.
+- `maps_place_status` and `maps_place_resume` results carry the menu fields.
+- Regenerate Node, Python, CLI and cURL bindings from the 1.14.0 catalog: 466 tools, three changed.
+- Publish Node scraper 0.71.0, unified Node client 0.70.0, CLI 0.69.0, Python scraper 0.69.0 and unified Python client 0.66.0.
+
 ## [0.70.0] - 2026-11-19 — targets mcp-scraper 1.13.0
 
 ### Changed
@@ -1232,7 +1245,7 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 - Verified against mcp-scraper `main` as of commit `b04db11` ("merge mcp-memory's 74 tools into the unified MCP surface") and `mcpscraper-memory-tools@1.1.0` (confirmed exact 74/74 tool-name parity against `contracts/memory.tools.json` — no changes needed there).
 - `mcp-scraper-scheduler` (the new cron/automation worker mcp-memory's scheduling engine moved to) has no public API surface — confirmed via its own landing page copy — and is out of scope for this SDK.
 
-[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.70.0...HEAD
+[Unreleased]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.71.0...HEAD
 [0.61.9]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.8...v0.61.9
 [0.61.8]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.7...v0.61.8
 [0.61.7]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.61.6...v0.61.7
@@ -1283,4 +1296,5 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 
 [0.68.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.67.0...v0.68.0
 [0.69.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.68.0...v0.69.0
+[0.71.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.70.0...v0.71.0
 [0.70.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.69.0...v0.70.0

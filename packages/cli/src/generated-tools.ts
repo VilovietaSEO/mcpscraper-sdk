@@ -28928,7 +28928,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "maps_place_intel",
     "category": "maps",
     "title": "Google Maps Business Profile Details",
-    "description": "Inspect one named Google Business Profile: rating, reviews, category, address, phone, website, hours, About attributes, entity IDs/CID, services/areas, and optional photos when available. Use include:[\"all\"] or includeReviews/includeServices/includeImages; maxReviews and maxImages bound collection. Page saved reviews/images with maps_place_status and returned cursors. includeImages:true supplies a manifest, bounded AI image blocks, and an owner-scoped ZIP; imageScope:\"owner\" selects listing-owner photos. For category searches or multi-business lists use maps_search. Split business name from location. Costs 60 Credits plus 1 per saved review; 600 plus reviews when requested photos or services arrive. If none of them can be collected, the 60-Credit price applies.",
+    "description": "Inspect one named Google Business Profile: rating, reviews, category, address, phone, website, hours, About attributes, entity IDs/CID, services/areas, a restaurant menu, and optional photos when available. Use include:[\"all\"] or includeReviews/includeServices/includeImages; includeMenu:true adds the menu (sections, items, prices) when Google shows one; maxReviews and maxImages bound collection. Page saved reviews/images with maps_place_status and returned cursors. includeImages:true supplies a manifest, bounded AI image blocks, and an owner-scoped ZIP; imageScope:\"owner\" selects listing-owner photos. For category searches or multi-business lists use maps_search. Split business name from location. Costs 60 Credits plus 1 per saved review; 600 plus reviews when requested photos, services or a menu arrive. If none of them can be collected, the 60-Credit price applies.",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -28978,8 +28978,13 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "description": "Collect Google Maps listing photos, download them, and return an AI-readable manifest plus an owner-scoped ZIP artifact. The gallery is scrolled until quiescent or maxImages is reached.",
           "type": "boolean"
         },
+        "includeMenu": {
+          "default": false,
+          "description": "Collect the restaurant or food business menu Google shows for this profile: sections, items, prices and descriptions. Not every profile has one; menuStatus says whether it arrived.",
+          "type": "boolean"
+        },
         "include": {
-          "description": "Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.",
+          "description": "Requested place field groups. all requests reviews, services and images while maxReviews and maxImages still cap collection; the menu is collected only when menu or includeMenu is given. Existing includeReviews, includeServices, and includeImages flags remain valid.",
           "type": "array",
           "items": {
             "type": "string",
@@ -28990,6 +28995,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
               "areasServed",
               "reviews",
               "images",
+              "menu",
               "all"
             ]
           }
@@ -29036,7 +29042,7 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "name": "maps_place_resume",
     "category": "maps",
     "title": "Resume Google Maps Place Run",
-    "description": "Start another paid acquisition attempt for a partial or interrupted Maps place run after its previous billing is reconciled. Read maps_place_status first. Use a new resumeIdempotencyKey for this intended attempt; repeating the same key reads the existing run without starting or charging another attempt. The server reserves the declared maximum credits again before acquisition.",
+    "description": "Start another acquisition attempt for a partial or interrupted Maps place run after its previous billing is reconciled. Read maps_place_status first. Use a new resumeIdempotencyKey for this intended attempt; repeating the same key reads the existing run without starting or charging another attempt. The server reserves the declared maximum credits again before acquisition, then charges only for what this attempt adds: a run never costs more in total than one complete pass.",
     "inputSchema": {
       "type": "object",
       "properties": {

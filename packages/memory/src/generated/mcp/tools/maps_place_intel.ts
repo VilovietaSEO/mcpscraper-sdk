@@ -32,9 +32,13 @@ export interface Input {
    */
   includeImages?: boolean;
   /**
-   * Requested place field groups. all requests every supported group while maxReviews and maxImages still cap collection. Existing includeReviews, includeServices, and includeImages flags remain valid.
+   * Collect the restaurant or food business menu Google shows for this profile: sections, items, prices and descriptions. Not every profile has one; menuStatus says whether it arrived.
    */
-  include?: ("core" | "hours" | "services" | "areasServed" | "reviews" | "images" | "all")[];
+  includeMenu?: boolean;
+  /**
+   * Requested place field groups. all requests reviews, services and images while maxReviews and maxImages still cap collection; the menu is collected only when menu or includeMenu is given. Existing includeReviews, includeServices, and includeImages flags remain valid.
+   */
+  include?: ("core" | "hours" | "services" | "areasServed" | "reviews" | "images" | "menu" | "all")[];
   /**
    * owner collects only the Google Maps By owner gallery. all collects the full gallery and labels exact owner matches versus other/unknown media.
    */
@@ -111,6 +115,28 @@ export type Output =
       services?: string[];
       areasServed?: string[];
       servicesStatus?: string;
+      /**
+       * collected, unavailable or not_requested.
+       */
+      menuStatus?: string;
+      menu?: {
+        sections: {
+          name: string;
+          items: {
+            name: string;
+            price: string | null;
+            description: string | null;
+            imageUrl: string | null;
+          }[];
+        }[];
+        highlights: string[];
+        /**
+         * Who supplied the menu to Google, when Google says.
+         */
+        providedBy: string | null;
+        updated: string | null;
+        itemCount: number;
+      } | null;
       aboutAttributes?: {
         section: string;
         attribute: string;
