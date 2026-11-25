@@ -26,6 +26,22 @@ GmailExportSelectionOutputVariant1PreviewItem = TypedDict('GmailExportSelectionO
 GmailExportSelectionOutputVariant1PreviewItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GmailExportSelectionOutputVariant1ArtifactReadbackArguments = TypedDict('GmailExportSelectionOutputVariant1ArtifactReadbackArguments', {
+    'artifactId': Required[str],
+    'offset': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'maxBytes': Required[Annotated[int, Field(le=9007199254740991, gt=0)]],
+})
+GmailExportSelectionOutputVariant1ArtifactReadbackArguments.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+GmailExportSelectionOutputVariant1ArtifactReadback = TypedDict('GmailExportSelectionOutputVariant1ArtifactReadback', {
+    'tool': Required[Literal['artifact_read', 'report_artifact_read']],
+    'arguments': Required[GmailExportSelectionOutputVariant1ArtifactReadbackArguments],
+    'continuation': Required[str],
+})
+GmailExportSelectionOutputVariant1ArtifactReadback.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GmailExportSelectionOutputVariant1Artifact = TypedDict('GmailExportSelectionOutputVariant1Artifact', {
     'artifactId': Required[Annotated[str, Field(min_length=1, max_length=500)]],
     'filename': Required[Annotated[str, Field(min_length=1, max_length=500)]],
@@ -39,6 +55,7 @@ GmailExportSelectionOutputVariant1Artifact = TypedDict('GmailExportSelectionOutp
     'textReadable': Required[bool],
     'archiveReadable': Required[bool],
     'persistable': Required[bool],
+    'readback': NotRequired[GmailExportSelectionOutputVariant1ArtifactReadback],
 })
 GmailExportSelectionOutputVariant1Artifact.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 

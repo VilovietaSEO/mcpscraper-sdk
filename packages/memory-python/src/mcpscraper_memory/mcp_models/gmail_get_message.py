@@ -8,6 +8,7 @@ class GmailGetMessageInput(BaseModel):
 
     connection_id: Annotated[str, Field(min_length=1, max_length=500)] = Field(..., alias='connectionId', description='The same tenant-owned Gmail connectionId used to discover this message.')
     message_id: Annotated[str, Field(min_length=1, max_length=500)] = Field(..., alias='messageId', description='One Gmail messageId returned by gmail_search_messages or a frozen selection preview.')
+    representation: Union[Literal['full', 'text'], None] = Field(None, alias='representation', description='Use text for complete cleaned message text, participants and selected headers without duplicating MIME; full preserves the complete message projection.')
     include_raw_artifact: Union[bool, None] = Field(None, alias='includeRawArtifact', description='Keep true when complete RFC 822 fidelity or later export is required; large content is returned through an owned artifact, never silently truncated.')
 
 
@@ -37,6 +38,22 @@ GmailGetMessageOutputVariant1MessageProvenance = TypedDict('GmailGetMessageOutpu
 GmailGetMessageOutputVariant1MessageProvenance.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GmailGetMessageOutputVariant1MessageRawArtifactReadbackArguments = TypedDict('GmailGetMessageOutputVariant1MessageRawArtifactReadbackArguments', {
+    'artifactId': Required[str],
+    'offset': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'maxBytes': Required[Annotated[int, Field(le=9007199254740991, gt=0)]],
+})
+GmailGetMessageOutputVariant1MessageRawArtifactReadbackArguments.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+GmailGetMessageOutputVariant1MessageRawArtifactReadback = TypedDict('GmailGetMessageOutputVariant1MessageRawArtifactReadback', {
+    'tool': Required[Literal['artifact_read', 'report_artifact_read']],
+    'arguments': Required[GmailGetMessageOutputVariant1MessageRawArtifactReadbackArguments],
+    'continuation': Required[str],
+})
+GmailGetMessageOutputVariant1MessageRawArtifactReadback.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GmailGetMessageOutputVariant1MessageRawArtifact = TypedDict('GmailGetMessageOutputVariant1MessageRawArtifact', {
     'artifactId': Required[Annotated[str, Field(min_length=1, max_length=500)]],
     'filename': Required[Annotated[str, Field(min_length=1, max_length=500)]],
@@ -50,8 +67,25 @@ GmailGetMessageOutputVariant1MessageRawArtifact = TypedDict('GmailGetMessageOutp
     'textReadable': Required[bool],
     'archiveReadable': Required[bool],
     'persistable': Required[bool],
+    'readback': NotRequired[GmailGetMessageOutputVariant1MessageRawArtifactReadback],
 })
 GmailGetMessageOutputVariant1MessageRawArtifact.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+GmailGetMessageOutputVariant1MessageBodyArtifactReadbackArguments = TypedDict('GmailGetMessageOutputVariant1MessageBodyArtifactReadbackArguments', {
+    'artifactId': Required[str],
+    'offset': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'maxBytes': Required[Annotated[int, Field(le=9007199254740991, gt=0)]],
+})
+GmailGetMessageOutputVariant1MessageBodyArtifactReadbackArguments.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+GmailGetMessageOutputVariant1MessageBodyArtifactReadback = TypedDict('GmailGetMessageOutputVariant1MessageBodyArtifactReadback', {
+    'tool': Required[Literal['artifact_read', 'report_artifact_read']],
+    'arguments': Required[GmailGetMessageOutputVariant1MessageBodyArtifactReadbackArguments],
+    'continuation': Required[str],
+})
+GmailGetMessageOutputVariant1MessageBodyArtifactReadback.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 GmailGetMessageOutputVariant1MessageBodyArtifact = TypedDict('GmailGetMessageOutputVariant1MessageBodyArtifact', {
@@ -67,6 +101,7 @@ GmailGetMessageOutputVariant1MessageBodyArtifact = TypedDict('GmailGetMessageOut
     'textReadable': Required[bool],
     'archiveReadable': Required[bool],
     'persistable': Required[bool],
+    'readback': NotRequired[GmailGetMessageOutputVariant1MessageBodyArtifactReadback],
 })
 GmailGetMessageOutputVariant1MessageBodyArtifact.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
@@ -92,7 +127,8 @@ GmailGetMessageOutputVariant1Message = TypedDict('GmailGetMessageOutputVariant1M
     'attachments': Required[list[GmailGetMessageOutputVariant1MessageAttachmentsItem]],
     'providerSizeEstimate': Required[Union[Annotated[int, Field(ge=0, le=9007199254740991)], None]],
     'provenance': Required[GmailGetMessageOutputVariant1MessageProvenance],
-    'mime': Required[Any],
+    'mime': NotRequired[Any],
+    'representation': NotRequired[Literal['full', 'text']],
     'rawArtifact': NotRequired[GmailGetMessageOutputVariant1MessageRawArtifact],
     'bodyArtifact': NotRequired[GmailGetMessageOutputVariant1MessageBodyArtifact],
     'untrustedContent': Required[Literal[True]],
@@ -155,6 +191,15 @@ GmailGetMessageOutputVariant2Delivery = TypedDict('GmailGetMessageOutputVariant2
 GmailGetMessageOutputVariant2Delivery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+GmailGetMessageOutputVariant2RecoverySourceArtifact = TypedDict('GmailGetMessageOutputVariant2RecoverySourceArtifact', {
+    'artifactId': Required[Annotated[str, Field(min_length=1, max_length=2048)]],
+    'bytes': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'sha256': Required[str],
+    'readTool': Required[Literal['artifact_read']],
+})
+GmailGetMessageOutputVariant2RecoverySourceArtifact.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GmailGetMessageOutputVariant2RecoveryOperation = TypedDict('GmailGetMessageOutputVariant2RecoveryOperation', {
     'runId': Required[Union[Annotated[str, Field(max_length=200)], None]],
     'idempotencyKey': Required[Annotated[str, Field(max_length=512)]],
@@ -168,6 +213,7 @@ GmailGetMessageOutputVariant2Recovery = TypedDict('GmailGetMessageOutputVariant2
     'operationId': NotRequired[Annotated[str, Field(max_length=200)]],
     'runId': NotRequired[Annotated[str, Field(max_length=200)]],
     'jobId': NotRequired[Annotated[str, Field(max_length=200)]],
+    'sourceArtifact': NotRequired[GmailGetMessageOutputVariant2RecoverySourceArtifact],
     'operation': NotRequired[GmailGetMessageOutputVariant2RecoveryOperation],
 })
 GmailGetMessageOutputVariant2Recovery.__pydantic_config__ = ConfigDict(extra="allow", strict=True)

@@ -9,6 +9,22 @@ class GmailGetAttachmentInput(BaseModel):
     attachment_ref: Annotated[str, Field(min_length=1, max_length=500)] = Field(..., alias='attachmentRef', description='Opaque owner-bound attachmentRef returned by gmail_get_message; do not pass a provider attachment ID or URL.')
 
 
+GmailGetAttachmentOutputVariant1ArtifactReadbackArguments = TypedDict('GmailGetAttachmentOutputVariant1ArtifactReadbackArguments', {
+    'artifactId': Required[str],
+    'offset': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'maxBytes': Required[Annotated[int, Field(le=9007199254740991, gt=0)]],
+})
+GmailGetAttachmentOutputVariant1ArtifactReadbackArguments.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+GmailGetAttachmentOutputVariant1ArtifactReadback = TypedDict('GmailGetAttachmentOutputVariant1ArtifactReadback', {
+    'tool': Required[Literal['artifact_read', 'report_artifact_read']],
+    'arguments': Required[GmailGetAttachmentOutputVariant1ArtifactReadbackArguments],
+    'continuation': Required[str],
+})
+GmailGetAttachmentOutputVariant1ArtifactReadback.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 GmailGetAttachmentOutputVariant1Artifact = TypedDict('GmailGetAttachmentOutputVariant1Artifact', {
     'artifactId': Required[Annotated[str, Field(min_length=1, max_length=500)]],
     'filename': Required[Annotated[str, Field(min_length=1, max_length=500)]],
@@ -22,6 +38,7 @@ GmailGetAttachmentOutputVariant1Artifact = TypedDict('GmailGetAttachmentOutputVa
     'textReadable': Required[bool],
     'archiveReadable': Required[bool],
     'persistable': Required[bool],
+    'readback': NotRequired[GmailGetAttachmentOutputVariant1ArtifactReadback],
 })
 GmailGetAttachmentOutputVariant1Artifact.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 

@@ -8,6 +8,10 @@ export interface Input {
    */
   messageId: string;
   /**
+   * Use text for complete cleaned message text, participants and selected headers without duplicating MIME; full preserves the complete message projection.
+   */
+  representation?: "full" | "text";
+  /**
    * Keep true when complete RFC 822 fidelity or later export is required; large content is returned through an owned artifact, never silently truncated.
    */
   includeRawArtifact?: boolean;
@@ -51,7 +55,8 @@ export type Output =
           fetchedAt: string;
           format: "full";
         };
-        mime: _Schema0;
+        mime?: _Schema0;
+        representation?: "full" | "text";
         rawArtifact?: {
           artifactId: string;
           filename: string;
@@ -65,6 +70,15 @@ export type Output =
           textReadable: boolean;
           archiveReadable: boolean;
           persistable: boolean;
+          readback?: {
+            tool: "artifact_read" | "report_artifact_read";
+            arguments: {
+              artifactId: string;
+              offset: number;
+              maxBytes: number;
+            };
+            continuation: string;
+          };
         };
         bodyArtifact?: {
           artifactId: string;
@@ -79,6 +93,15 @@ export type Output =
           textReadable: boolean;
           archiveReadable: boolean;
           persistable: boolean;
+          readback?: {
+            tool: "artifact_read" | "report_artifact_read";
+            arguments: {
+              artifactId: string;
+              offset: number;
+              maxBytes: number;
+            };
+            continuation: string;
+          };
         };
         untrustedContent: true;
       };
@@ -126,6 +149,12 @@ export type Output =
         operationId?: string;
         runId?: string;
         jobId?: string;
+        sourceArtifact?: {
+          artifactId: string;
+          bytes: number;
+          sha256: string;
+          readTool: "artifact_read";
+        };
         operation?: {
           runId: string | null;
           idempotencyKey: string;

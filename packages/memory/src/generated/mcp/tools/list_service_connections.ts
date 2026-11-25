@@ -1,119 +1,289 @@
-export interface Input {}
+export interface Input {
+  /**
+   * Select one previously discovered tenant-owned connection instead of listing every service.
+   */
+  connectionId?: string;
+  /**
+   * Use identity with connectionId for compact account, availability and read-capability evidence; omitted preserves the full inventory.
+   */
+  projection?: "full" | "identity";
+  /**
+   * Exact provider read-tool names to verify in the identity projection, such as list-messages and get-message.
+   *
+   * @maxItems 20
+   */
+  requiredReadTools?:
+    | []
+    | [string]
+    | [string, string]
+    | [string, string, string]
+    | [string, string, string, string]
+    | [string, string, string, string, string]
+    | [string, string, string, string, string, string]
+    | [string, string, string, string, string, string, string]
+    | [string, string, string, string, string, string, string, string]
+    | [string, string, string, string, string, string, string, string, string]
+    | [string, string, string, string, string, string, string, string, string, string]
+    | [string, string, string, string, string, string, string, string, string, string, string]
+    | [string, string, string, string, string, string, string, string, string, string, string, string]
+    | [string, string, string, string, string, string, string, string, string, string, string, string, string]
+    | [string, string, string, string, string, string, string, string, string, string, string, string, string, string]
+    | [
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string
+      ]
+    | [
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string
+      ]
+    | [
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string
+      ]
+    | [
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string
+      ]
+    | [
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string
+      ]
+    | [
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string,
+        string
+      ];
+}
 
 export type Output =
   | {
-      connections: {
-        connectionId: string;
-        providerConfigKey: string;
-        /**
-         * Best available human-facing account label: a userLabel when set, otherwise verified provider identity, then a stable fallback.
-         */
-        label: string;
-        /**
-         * Optional tenant-owned name set in the dashboard to distinguish this connection. This is not asserted provider identity.
-         */
-        userLabel?: string | null;
-        /**
-         * Stable provider-side account, user, workspace, channel, or tenant identifier when the provider exposes one.
-         */
-        providerAccountId?: string | null;
-        /**
-         * Verified provider-side email when the provider exposes one. This is never inferred from the MCP Scraper login.
-         */
-        providerAccountEmail?: string | null;
-        /**
-         * Provider-side account, user, workspace, channel, or tenant name when the provider exposes one.
-         */
-        providerAccountName?: string | null;
-        /**
-         * Whether provider identity discovery is pending, returned at least one verified provider identifier, or completed without one.
-         */
-        providerIdentityStatus?: "pending" | "verified" | "unavailable";
-        status: string;
-        /**
-         * Credential lifecycle. This is separate from current provider availability.
-         */
-        lifecycleStatus?: "pending" | "connected" | "needs_reauth" | "disconnecting" | "disconnected";
-        /**
-         * Last observed provider transport availability. Unavailable does not imply reconnect is required.
-         */
-        operationalStatus?: "unknown" | "available" | "degraded" | "unavailable";
-        reconnectRequired?: boolean;
-        /**
-         * Public credential transport category behind this tenant-scoped connection. Tokens, API keys, and replaceable infrastructure identifiers are never returned.
-         */
-        transport: "managed_oauth" | "remote_mcp";
-        actionsEnabled: boolean;
-        /**
-         * Tool names this connection can be read with via read_service_connection.
-         */
-        readTools: string[];
-        /**
-         * Explicitly allowlisted write or mutation tool names callable through call_service_connection_action after actions are enabled for this connection.
-         */
-        actionTools: string[];
-        /**
-         * Permission-aware capability inventory. Unavailable Meta tools remain visible here with exact missing grants, but are excluded from readTools/actionTools and cannot be called.
-         */
-        toolCapabilities: {
-          name: string;
-          classification: "read" | "action";
-          requiredPermissions: string[];
-          requiredFeatures: string[];
-          available: boolean;
-          blockedReason:
-            | (
-                | "missing_permission"
-                | "missing_app_feature"
-                | "permission_policy_missing"
-                | "permission_verification_unavailable"
-              )
-            | null;
-          missingPermissions: string[];
-          missingFeatures: string[];
-        }[];
-        /**
-         * Sanitized OAuth permission names verified for this connection. Tokens and credentials are never returned.
-         */
-        grantedPermissions: string[];
-        /**
-         * Provider app features explicitly enabled for this deployment. Restricted tools fail closed until their feature is configured.
-         */
-        enabledFeatures: string[];
-        /**
-         * Whether this connection's provider grant was verified. Optional and core tools fail closed when verification is unavailable.
-         */
-        permissionVerification: ("verified" | "unavailable") | null;
-        /**
-         * Credential, OAuth-grant, or other administrative tools permanently blocked from connected-service execution.
-         */
-        adminBlockedTools: string[];
-        /**
-         * Authenticated connection-scoped MCP endpoint when native provider tools/list projection is available. Null means use describe_service_connection_tool on this root MCP.
-         */
-        mcpEndpoint: string | null;
-        /**
-         * How clients discover this connection's exact live provider schemas.
-         */
-        schemaDiscovery: "connection_tools_list" | "compatibility_describe";
-        /**
-         * Opaque revision of the resolved live tool catalog, when available. It changes when provider tools or policy change.
-         */
-        toolRevision: string | null;
-        lastCheckedAt?: string | null;
-        lastSuccessfulCallAt?: string | null;
-        lastFailureAt?: string | null;
-        lastFailureCode?: string | null;
-        lastFailureRetryable?: boolean | null;
-        /**
-         * Memory vault this connection's digest writes into, if it has run at least once. Search it with memory-search.
-         */
-        vaultName: string | null;
-        /**
-         * Tenant-owned structured table populated by this connection, if available. An existing Google Search Console performance table has typed columns with site_url, date, query, page, country, device, clicks, impressions, ctr, and position. Call table-describe, then filter or sort it with table-query.
-         */
-        tableName: string | null;
-      }[];
+      connections: (
+        | {
+            projection: "identity";
+            connectionId: string;
+            providerAccountId: string | null;
+            providerAccountEmail: string | null;
+            providerIdentityStatus: string;
+            status: string;
+            lifecycleStatus: string | null;
+            operationalStatus: string | null;
+            reconnectRequired: boolean;
+            transport: "managed_oauth" | "remote_mcp";
+            toolRevision: string | null;
+            lastCheckedAt: string | null;
+            readTools: string[];
+            readToolsComplete: boolean;
+            readCapabilities: {
+              name: string;
+              available: boolean;
+              blockedReason: string | null;
+            }[];
+          }
+        | {
+            connectionId: string;
+            providerConfigKey: string;
+            /**
+             * Best available human-facing account label: a userLabel when set, otherwise verified provider identity, then a stable fallback.
+             */
+            label: string;
+            /**
+             * Optional tenant-owned name set in the dashboard to distinguish this connection. This is not asserted provider identity.
+             */
+            userLabel?: string | null;
+            /**
+             * Stable provider-side account, user, workspace, channel, or tenant identifier when the provider exposes one.
+             */
+            providerAccountId?: string | null;
+            /**
+             * Verified provider-side email when the provider exposes one. This is never inferred from the MCP Scraper login.
+             */
+            providerAccountEmail?: string | null;
+            /**
+             * Provider-side account, user, workspace, channel, or tenant name when the provider exposes one.
+             */
+            providerAccountName?: string | null;
+            /**
+             * Whether provider identity discovery is pending, returned at least one verified provider identifier, or completed without one.
+             */
+            providerIdentityStatus?: "pending" | "verified" | "unavailable";
+            status: string;
+            /**
+             * Credential lifecycle. This is separate from current provider availability.
+             */
+            lifecycleStatus?: "pending" | "connected" | "needs_reauth" | "disconnecting" | "disconnected";
+            /**
+             * Last observed provider transport availability. Unavailable does not imply reconnect is required.
+             */
+            operationalStatus?: "unknown" | "available" | "degraded" | "unavailable";
+            reconnectRequired?: boolean;
+            /**
+             * Public credential transport category behind this tenant-scoped connection. Tokens, API keys, and replaceable infrastructure identifiers are never returned.
+             */
+            transport: "managed_oauth" | "remote_mcp";
+            actionsEnabled: boolean;
+            /**
+             * Tool names this connection can be read with via read_service_connection.
+             */
+            readTools: string[];
+            /**
+             * Explicitly allowlisted write or mutation tool names callable through call_service_connection_action after actions are enabled for this connection.
+             */
+            actionTools: string[];
+            /**
+             * Permission-aware capability inventory. Unavailable Meta tools remain visible here with exact missing grants, but are excluded from readTools/actionTools and cannot be called.
+             */
+            toolCapabilities: {
+              name: string;
+              classification: "read" | "action";
+              requiredPermissions: string[];
+              requiredFeatures: string[];
+              available: boolean;
+              blockedReason:
+                | (
+                    | "missing_permission"
+                    | "missing_app_feature"
+                    | "permission_policy_missing"
+                    | "permission_verification_unavailable"
+                  )
+                | null;
+              missingPermissions: string[];
+              missingFeatures: string[];
+            }[];
+            /**
+             * Sanitized OAuth permission names verified for this connection. Tokens and credentials are never returned.
+             */
+            grantedPermissions: string[];
+            /**
+             * Provider app features explicitly enabled for this deployment. Restricted tools fail closed until their feature is configured.
+             */
+            enabledFeatures: string[];
+            /**
+             * Whether this connection's provider grant was verified. Optional and core tools fail closed when verification is unavailable.
+             */
+            permissionVerification: ("verified" | "unavailable") | null;
+            /**
+             * Credential, OAuth-grant, or other administrative tools permanently blocked from connected-service execution.
+             */
+            adminBlockedTools: string[];
+            /**
+             * Authenticated connection-scoped MCP endpoint when native provider tools/list projection is available. Null means use describe_service_connection_tool on this root MCP.
+             */
+            mcpEndpoint: string | null;
+            /**
+             * How clients discover this connection's exact live provider schemas.
+             */
+            schemaDiscovery: "connection_tools_list" | "compatibility_describe";
+            /**
+             * Opaque revision of the resolved live tool catalog, when available. It changes when provider tools or policy change.
+             */
+            toolRevision: string | null;
+            lastCheckedAt?: string | null;
+            lastSuccessfulCallAt?: string | null;
+            lastFailureAt?: string | null;
+            lastFailureCode?: string | null;
+            lastFailureRetryable?: boolean | null;
+            /**
+             * Memory vault this connection's digest writes into, if it has run at least once. Search it with memory-search.
+             */
+            vaultName: string | null;
+            /**
+             * Tenant-owned structured table populated by this connection, if available. An existing Google Search Console performance table has typed columns with site_url, date, query, page, country, device, clicks, impressions, ctr, and position. Call table-describe, then filter or sort it with table-query.
+             */
+            tableName: string | null;
+          }
+      )[];
     }
   | {
       delivery: {

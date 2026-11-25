@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 1.14.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "851f27961563b742c1ad8fd40f8ea43506aa20eb5b3a8a848168c6e4f182da72",
+  "generatedFrom": "mcp-scraper 1.15.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "f125c7196f55848046fdeb4bcec2dedba997d7e9fa6ad35082f277783076f36d",
   "toolCount": 10,
   "tools": [
     {
@@ -14,15 +14,15 @@
     },
     {
       "name": "gmail_export_selection",
-      "sha256": "893d2f24a2c9b0e7b3250ae34ec2ff49360b496e81ce63e20129cc35766bd880"
+      "sha256": "fb659c98c8d92fb6cef1a29b0c844dfef23356cbad256b25864b919af5d8f099"
     },
     {
       "name": "gmail_get_attachment",
-      "sha256": "61aa9970c2b29db57ecd9567648cf31bc679b3392d41c43f150a5a988d9375ad"
+      "sha256": "67bd2d6855ff5d37bb4028ea7827f5512917b9ca33633532e67807cfffe3e237"
     },
     {
       "name": "gmail_get_message",
-      "sha256": "32567fac747285cf72673ac5bfc1cb0796e02bf99f446be4c26a85710e896060"
+      "sha256": "c9ff556b745880a81bcab430a5c5600c4fdf9199b4070a420e1d0a6cca107513"
     },
     {
       "name": "gmail_import_status",
