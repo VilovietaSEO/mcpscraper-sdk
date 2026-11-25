@@ -4,11 +4,15 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.72.0] - 2026-11-25 — targets mcp-scraper 1.15.0
+
 ### Changed
 
 - The connection tool descriptor recognizes schemas defined by the provider, including the read-only Bing Webmaster Tools reports.
 - Export Bing Webmaster Tools reports through the existing connected-data command. Select report types and sites, then resume an incomplete export with its cursor.
-- Refresh the Node, Python and CLI bindings from the MCP Scraper 1.15.0 candidate, including compact Gmail message results and connection identity summaries already available on the server.
+- Refresh the Node, Python and CLI bindings from the merged MCP Scraper 1.15.0 release, including compact Gmail message results and connection identity summaries already available on the server.
+
+- Node package versions: scraper SDK 0.72.0, unified client 0.71.0 and CLI 0.70.0. Python bindings are regenerated from the same contract; this npm publication does not publish Python distributions.
 
 ## [0.71.0] - 2026-11-20 — targets mcp-scraper 1.14.0
 

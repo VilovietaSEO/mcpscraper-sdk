@@ -233,7 +233,7 @@ Use `bug_reporting` to prepare a redacted draft from observed calls and errors. 
 
 ## Consistent hosted MCP protocol
 
-This release targets MCP Scraper 1.14.0 with 466 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
+This release targets MCP Scraper 1.15.0 with 466 tools. Calls use protocol `2026-07-28` with matching routing headers and the required protocol revision, client capabilities and client identity metadata. Poll the returned job/run ID through its dedicated status tool; MCP Task handles are no longer supported. Lead enrichment cancellation uses `lead_list_enrich_cancel`. Update the SDK packages together.
 
 Publication management: list owned subdomains with `commons_list_publications`, select a name with `commons_get_publication`, and edit one article with `commons_update_editorial_article`. Publishing merges omitted articles by default; use `mode:replace` for a full replacement. Use the dedicated article or publication delete tool with its current revision and a stable retry key. See the [release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.59.0).
 
@@ -244,3 +244,7 @@ Read LinkedIn, X and Instagram profiles, posts, comments, followers, jobs, ads a
 ### Connect an existing form to CRM
 
 Use `crm-form-preview` to validate a sample, `crm-form-create` to obtain a scoped submission URL, and `crm-form-status` to confirm a committed contact and activity after a test. `crm-form-revoke` disables future delivery. Keep the account API key out of form code. See [the setup guide](https://mcpscraper.dev/docs/xray/crm#connect-a-form) and [release 0.68.0](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.68.0).
+
+## Bing reporting
+
+Bing Webmaster Tools supports read-only reports and private cross-site exports. Select sites and report groups, preserve the returned continuation when resuming, and use authenticated artifact readback for saved files. Query and page coverage is provider-selected. See the [0.72.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.72.0).

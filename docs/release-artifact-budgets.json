@@ -43,19 +43,20 @@
     {
       "package": "mcpscraper-cli",
       "format": "npm-tgz",
-      "baselineVersion": "0.56.1",
-      "candidateVersion": "0.57.0",
-      "sha256": "4485e534264ed1807668c66ac626cc67db869d904c7ee141bd06222c9bac85db",
-      "compressedBytes": 157130,
-      "unpackedBytes": 1102760,
+      "baselineVersion": "0.68.0",
+      "candidateVersion": "0.70.0",
+      "sha256": "d22fd00a3e66bfd5f7f717c1b1dd64bde2b59726b21d5d8666466efe451dfc86",
+      "compressedBytes": 185740,
+      "unpackedBytes": 1332509,
       "fileCount": 3,
       "maximum": {
-        "compressedBytes": 185699,
-        "unpackedBytes": 1327802,
+        "compressedBytes": 214625,
+        "unpackedBytes": 1536482,
         "fileCount": 3,
         "sourceMaps": 0,
         "nestedNodeModulesEntries": 0
-      }
+      },
+      "budgetBasis": "Fresh npm 0.68.0 archive measured for this release. Retain 15 percent plus small release-note allowance for additive Bing export schemas and updated generated catalog; file count is unchanged."
     },
     {
       "package": "mcpscraper-sdk",

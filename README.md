@@ -15,6 +15,10 @@ These are thin HTTP/JSON-RPC clients — they call the same hosted APIs that bac
 | Python — memory | [`mcpscraper-memory-sdk`](./packages/memory-python) | `pip install mcpscraper-memory-sdk` |
 | CLI | [`mcpscraper-cli`](./packages/cli) | `npm install -g mcpscraper-cli` |
 
+## Bing reporting
+
+The 0.72.0 release targets MCP Scraper 1.15.0. Use the generated connection methods for read-only Bing reports and resumable private exports across accessible sites. Preserve the complete continuation and follow artifact text windows until the end. Bing selects the available query/page coverage. The [runnable example](examples/bing-report-export.mjs) uses your existing connection and API key.
+
 ## Getting an API key
 
 - **mcpscraper.dev**: `npx -y -p mcp-scraper@latest mcp-scraper-cli billing concurrency info`, or the [account dashboard](https://mcpscraper.dev).
