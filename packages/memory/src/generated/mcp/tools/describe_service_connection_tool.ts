@@ -57,7 +57,7 @@ export type Output =
         transport?: "managed_oauth" | "remote_mcp";
         providerConfigKey?: string;
         protocolVersion?: string | null;
-        schemaSource?: "live_tools_list";
+        schemaSource?: "live_tools_list" | "provider_contract";
         /**
          * JSON Schema for the exact connected-provider tool arguments.
          */

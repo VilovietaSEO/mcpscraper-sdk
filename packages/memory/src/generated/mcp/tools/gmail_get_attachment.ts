@@ -27,6 +27,15 @@ export type Output =
         textReadable: boolean;
         archiveReadable: boolean;
         persistable: boolean;
+        readback?: {
+          tool: "artifact_read" | "report_artifact_read";
+          arguments: {
+            artifactId: string;
+            offset: number;
+            maxBytes: number;
+          };
+          continuation: string;
+        };
       };
       text?: string;
       textComplete?: boolean;

@@ -6,9 +6,40 @@ from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 class ListServiceConnectionsInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
+    connection_id: Union[Annotated[str, Field(min_length=1, max_length=200)], None] = Field(None, alias='connectionId', description='Select one previously discovered tenant-owned connection instead of listing every service.')
+    projection: Union[Literal['full', 'identity'], None] = Field(None, alias='projection', description='Use identity with connectionId for compact account, availability and read-capability evidence; omitted preserves the full inventory.')
+    required_read_tools: Union[Annotated[list[Annotated[str, Field(min_length=1, max_length=200)]], Field(max_length=20)], None] = Field(None, alias='requiredReadTools', description='Exact provider read-tool names to verify in the identity projection, such as list-messages and get-message.')
 
 
-ListServiceConnectionsOutputVariant1ConnectionsItemToolCapabilitiesItem = TypedDict('ListServiceConnectionsOutputVariant1ConnectionsItemToolCapabilitiesItem', {
+ListServiceConnectionsOutputVariant1ConnectionsItemVariant1ReadCapabilitiesItem = TypedDict('ListServiceConnectionsOutputVariant1ConnectionsItemVariant1ReadCapabilitiesItem', {
+    'name': Required[str],
+    'available': Required[bool],
+    'blockedReason': Required[Union[str, None]],
+})
+ListServiceConnectionsOutputVariant1ConnectionsItemVariant1ReadCapabilitiesItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ListServiceConnectionsOutputVariant1ConnectionsItemVariant1 = TypedDict('ListServiceConnectionsOutputVariant1ConnectionsItemVariant1', {
+    'projection': Required[Literal['identity']],
+    'connectionId': Required[str],
+    'providerAccountId': Required[Union[str, None]],
+    'providerAccountEmail': Required[Union[str, None]],
+    'providerIdentityStatus': Required[str],
+    'status': Required[str],
+    'lifecycleStatus': Required[Union[str, None]],
+    'operationalStatus': Required[Union[str, None]],
+    'reconnectRequired': Required[bool],
+    'transport': Required[Literal['managed_oauth', 'remote_mcp']],
+    'toolRevision': Required[Union[str, None]],
+    'lastCheckedAt': Required[Union[str, None]],
+    'readTools': Required[list[str]],
+    'readToolsComplete': Required[bool],
+    'readCapabilities': Required[list[ListServiceConnectionsOutputVariant1ConnectionsItemVariant1ReadCapabilitiesItem]],
+})
+ListServiceConnectionsOutputVariant1ConnectionsItemVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+ListServiceConnectionsOutputVariant1ConnectionsItemVariant2ToolCapabilitiesItem = TypedDict('ListServiceConnectionsOutputVariant1ConnectionsItemVariant2ToolCapabilitiesItem', {
     'name': Required[str],
     'classification': Required[Literal['read', 'action']],
     'requiredPermissions': Required[list[str]],
@@ -18,10 +49,10 @@ ListServiceConnectionsOutputVariant1ConnectionsItemToolCapabilitiesItem = TypedD
     'missingPermissions': Required[list[str]],
     'missingFeatures': Required[list[str]],
 })
-ListServiceConnectionsOutputVariant1ConnectionsItemToolCapabilitiesItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+ListServiceConnectionsOutputVariant1ConnectionsItemVariant2ToolCapabilitiesItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
-ListServiceConnectionsOutputVariant1ConnectionsItem = TypedDict('ListServiceConnectionsOutputVariant1ConnectionsItem', {
+ListServiceConnectionsOutputVariant1ConnectionsItemVariant2 = TypedDict('ListServiceConnectionsOutputVariant1ConnectionsItemVariant2', {
     'connectionId': Required[str],
     'providerConfigKey': Required[str],
     'label': Required[str],
@@ -38,7 +69,7 @@ ListServiceConnectionsOutputVariant1ConnectionsItem = TypedDict('ListServiceConn
     'actionsEnabled': Required[bool],
     'readTools': Required[list[str]],
     'actionTools': Required[list[str]],
-    'toolCapabilities': Required[list[ListServiceConnectionsOutputVariant1ConnectionsItemToolCapabilitiesItem]],
+    'toolCapabilities': Required[list[ListServiceConnectionsOutputVariant1ConnectionsItemVariant2ToolCapabilitiesItem]],
     'grantedPermissions': Required[list[str]],
     'enabledFeatures': Required[list[str]],
     'permissionVerification': Required[Union[Literal['verified', 'unavailable'], None]],
@@ -54,13 +85,13 @@ ListServiceConnectionsOutputVariant1ConnectionsItem = TypedDict('ListServiceConn
     'vaultName': Required[Union[str, None]],
     'tableName': Required[Union[str, None]],
 })
-ListServiceConnectionsOutputVariant1ConnectionsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+ListServiceConnectionsOutputVariant1ConnectionsItemVariant2.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 class ListServiceConnectionsOutputVariant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
-    connections: list[ListServiceConnectionsOutputVariant1ConnectionsItem] = Field(..., alias='connections', description='')
+    connections: list[Union[ListServiceConnectionsOutputVariant1ConnectionsItemVariant1, ListServiceConnectionsOutputVariant1ConnectionsItemVariant2]] = Field(..., alias='connections', description='')
 
 
 ListServiceConnectionsOutputVariant2DeliveryArtifactsItem = TypedDict('ListServiceConnectionsOutputVariant2DeliveryArtifactsItem', {

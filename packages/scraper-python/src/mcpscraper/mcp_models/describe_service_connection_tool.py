@@ -50,7 +50,7 @@ DescribeServiceConnectionToolOutputVariant1Tool = TypedDict('DescribeServiceConn
     'transport': NotRequired[Literal['managed_oauth', 'remote_mcp']],
     'providerConfigKey': NotRequired[str],
     'protocolVersion': NotRequired[Union[str, None]],
-    'schemaSource': NotRequired[Literal['live_tools_list']],
+    'schemaSource': NotRequired[Literal['live_tools_list', 'provider_contract']],
     'inputSchema': Required[dict[str, Any]],
     'outputSchema': NotRequired[dict[str, Any]],
     'annotations': NotRequired[DescribeServiceConnectionToolOutputVariant1ToolAnnotations],

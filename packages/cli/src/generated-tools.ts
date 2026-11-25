@@ -22059,6 +22059,15 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
           "maxLength": 500,
           "description": "One Gmail messageId returned by gmail_search_messages or a frozen selection preview."
         },
+        "representation": {
+          "default": "full",
+          "description": "Use text for complete cleaned message text, participants and selected headers without duplicating MIME; full preserves the complete message projection.",
+          "type": "string",
+          "enum": [
+            "full",
+            "text"
+          ]
+        },
         "includeRawArtifact": {
           "default": true,
           "description": "Keep true when complete RFC 822 fidelity or later export is required; large content is returned through an owned artifact, never silently truncated.",
@@ -28267,7 +28276,32 @@ export const MCP_TOOL_CATALOG: readonly McpToolCatalogEntry[] = [
     "description": "List every service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, Google Search Console, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Google Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId; a tenant-owned userLabel; verified provider-side account ID, email, or name when available; credential transport; exact live readTools and gated actionTools; permission-aware toolCapabilities with missing OAuth-grant or provider-app-feature blockers; permanently blocked administrative tools; and schema-discovery metadata. Get a connectionId and exact tool name here before calling describe_service_connection_tool, read_service_connection, or call_service_connection_action. Managed OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. When a connection has an existing tenant-owned Search Console performance table, use its returned tableName with table-describe and table-query for historical filtering.",
     "inputSchema": {
       "type": "object",
-      "properties": {},
+      "properties": {
+        "connectionId": {
+          "description": "Select one previously discovered tenant-owned connection instead of listing every service.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "projection": {
+          "description": "Use identity with connectionId for compact account, availability and read-capability evidence; omitted preserves the full inventory.",
+          "type": "string",
+          "enum": [
+            "full",
+            "identity"
+          ]
+        },
+        "requiredReadTools": {
+          "description": "Exact provider read-tool names to verify in the identity projection, such as list-messages and get-message.",
+          "maxItems": 20,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        }
+      },
       "$schema": "https://json-schema.org/draft/2020-12/schema"
     },
     "annotations": {
