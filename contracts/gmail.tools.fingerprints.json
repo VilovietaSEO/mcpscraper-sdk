@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 1.15.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "f125c7196f55848046fdeb4bcec2dedba997d7e9fa6ad35082f277783076f36d",
-  "toolCount": 10,
+  "generatedFrom": "mcp-scraper 1.16.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "343a403278a37fc563e352d89ebdca0f7801d4223734a630a19ac39218ef6320",
+  "toolCount": 12,
   "tools": [
     {
       "name": "gmail_bulk_delete_messages",
@@ -11,6 +11,10 @@
     {
       "name": "gmail_bulk_manage_messages",
       "sha256": "439b155030642a8370e2807e1283d1c07cd3c3d0f02644fe189199963eab4c58"
+    },
+    {
+      "name": "gmail_create_reply_draft",
+      "sha256": "b2e1ff5ed677338d48713554b43caadc34742a8e51c65ba2756f0f7429e683f3"
     },
     {
       "name": "gmail_export_selection",
@@ -23,6 +27,10 @@
     {
       "name": "gmail_get_message",
       "sha256": "c9ff556b745880a81bcab430a5c5600c4fdf9199b4070a420e1d0a6cca107513"
+    },
+    {
+      "name": "gmail_get_thread",
+      "sha256": "9c0f7f75a6640ca976bb127272d29b42f281a214b2060ea1ffd6e719c1da1ca5"
     },
     {
       "name": "gmail_import_status",

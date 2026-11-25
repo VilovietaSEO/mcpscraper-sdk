@@ -4,6 +4,13 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.73.0] - 2026-11-25 — targets mcp-scraper 1.16.0
+
+### Added
+
+- Read a full Gmail conversation in order, then save a verified unsent reply to an exact parent with the new typed tools. Both tools require an activated direct Gmail connection.
+- Regenerate the Node, Python, CLI and cURL bindings for the new tool inputs and results.
+
 ## [0.72.0] - 2026-11-25 — targets mcp-scraper 1.15.0
 
 ### Changed
@@ -1306,5 +1313,6 @@ This sync's `contracts/mcp.tools.json` source was generated locally from mcp-scr
 
 [0.68.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.67.0...v0.68.0
 [0.69.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.68.0...v0.69.0
+[0.73.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.72.0...v0.73.0
 [0.71.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.70.0...v0.71.0
 [0.70.0]: https://github.com/VilovietaSEO/mcpscraper-sdk/compare/v0.69.0...v0.70.0

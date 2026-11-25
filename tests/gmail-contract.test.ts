@@ -6,6 +6,8 @@ import test from 'node:test'
 const GMAIL_TOOLS = [
   'gmail_search_messages',
   'gmail_get_message',
+  'gmail_get_thread',
+  'gmail_create_reply_draft',
   'gmail_get_attachment',
   'gmail_prepare_selection',
   'gmail_export_selection',
@@ -78,3 +80,12 @@ test('runnable examples cover attachment access, resumable Memory import, and re
   assert.match(bulk, /Permanent deletion is intentionally absent/)
 })
 
+
+test('the thread example uses the exact parent, follows continuation, and only creates a draft', async () => {
+  const example = await readFile('examples/gmail-thread-reply.mjs', 'utf8')
+  assert.match(example, /gmailGetThread/)
+  assert.match(example, /gmailCreateReplyDraft/)
+  assert.match(example, /GMAIL_PARENT_MESSAGE_ID/)
+  assert.match(example, /nextCursor/)
+  assert.doesNotMatch(example, /gmailSendMessage/)
+})

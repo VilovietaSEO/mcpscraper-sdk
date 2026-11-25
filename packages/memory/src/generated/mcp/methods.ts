@@ -190,9 +190,11 @@ import * as ConnectionsExportConnectedServiceData from './tools/export_connected
 import * as ConnectionsExportSearchConsoleTableData from './tools/export_search_console_table_data.js'
 import * as ConnectionsGmailBulkDeleteMessages from './tools/gmail_bulk_delete_messages.js'
 import * as ConnectionsGmailBulkManageMessages from './tools/gmail_bulk_manage_messages.js'
+import * as ConnectionsGmailCreateReplyDraft from './tools/gmail_create_reply_draft.js'
 import * as ConnectionsGmailExportSelection from './tools/gmail_export_selection.js'
 import * as ConnectionsGmailGetAttachment from './tools/gmail_get_attachment.js'
 import * as ConnectionsGmailGetMessage from './tools/gmail_get_message.js'
+import * as ConnectionsGmailGetThread from './tools/gmail_get_thread.js'
 import * as ConnectionsGmailImportStatus from './tools/gmail_import_status.js'
 import * as ConnectionsGmailImportToMemory from './tools/gmail_import_to_memory.js'
 import * as ConnectionsGmailPrepareMemoryImport from './tools/gmail_prepare_memory_import.js'
@@ -1619,6 +1621,11 @@ export const MCP_TOOL_BINDINGS = [
     "methodName": "gmailBulkManageMessages"
   },
   {
+    "name": "gmail_create_reply_draft",
+    "category": "connections",
+    "methodName": "gmailCreateReplyDraft"
+  },
+  {
     "name": "gmail_export_selection",
     "category": "connections",
     "methodName": "gmailExportSelection"
@@ -1632,6 +1639,11 @@ export const MCP_TOOL_BINDINGS = [
     "name": "gmail_get_message",
     "category": "connections",
     "methodName": "gmailGetMessage"
+  },
+  {
+    "name": "gmail_get_thread",
+    "category": "connections",
+    "methodName": "gmailGetThread"
   },
   {
     "name": "gmail_import_status",
@@ -3604,6 +3616,10 @@ export class ConnectionsNamespace {
     return this.callTool('gmail_bulk_manage_messages', input) as Promise<ConnectionsGmailBulkManageMessages.Output>
   }
 
+  async gmailCreateReplyDraft(input: ConnectionsGmailCreateReplyDraft.Input): Promise<ConnectionsGmailCreateReplyDraft.Output> {
+    return this.callTool('gmail_create_reply_draft', input) as Promise<ConnectionsGmailCreateReplyDraft.Output>
+  }
+
   async gmailExportSelection(input: ConnectionsGmailExportSelection.Input): Promise<ConnectionsGmailExportSelection.Output> {
     return this.callTool('gmail_export_selection', input) as Promise<ConnectionsGmailExportSelection.Output>
   }
@@ -3614,6 +3630,10 @@ export class ConnectionsNamespace {
 
   async gmailGetMessage(input: ConnectionsGmailGetMessage.Input): Promise<ConnectionsGmailGetMessage.Output> {
     return this.callTool('gmail_get_message', input) as Promise<ConnectionsGmailGetMessage.Output>
+  }
+
+  async gmailGetThread(input: ConnectionsGmailGetThread.Input): Promise<ConnectionsGmailGetThread.Output> {
+    return this.callTool('gmail_get_thread', input) as Promise<ConnectionsGmailGetThread.Output>
   }
 
   async gmailImportStatus(input: ConnectionsGmailImportStatus.Input): Promise<ConnectionsGmailImportStatus.Output> {

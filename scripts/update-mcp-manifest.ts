@@ -9,6 +9,8 @@ const GMAIL_FINGERPRINT_PATH = join(process.cwd(), 'contracts/gmail.tools.finger
 const GMAIL_WORKFLOW_TOOLS = new Set([
   'gmail_search_messages',
   'gmail_get_message',
+  'gmail_get_thread',
+  'gmail_create_reply_draft',
   'gmail_get_attachment',
   'gmail_prepare_selection',
   'gmail_export_selection',
@@ -94,6 +96,8 @@ const EXACT_SCRAPER_CATEGORIES: Record<string, string> = {
   slack_send_message: 'connections',
   gmail_send_message: 'connections',
   gmail_search_contacts: 'connections',
+  gmail_get_thread: 'connections',
+  gmail_create_reply_draft: 'connections',
   google_calendar_create_event: 'connections',
   zoom_create_meeting: 'connections',
   read_service_connection: 'connections',
@@ -309,7 +313,9 @@ async function main(): Promise<void> {
     const prior = existingTools.get(tool.name)
     const category = /^(?:archive|create|get|list|update)_artifact_templates?$/.test(tool.name)
       ? 'artifacts'
-      : prior?.category ?? memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
+      : ['gmail_get_thread', 'gmail_create_reply_draft'].includes(tool.name)
+        ? 'connections'
+        : prior?.category ?? memoryCategories.get(tool.name) ?? scraperCategory(tool.name)
     return {
       name: tool.name,
       title: tool.title,
