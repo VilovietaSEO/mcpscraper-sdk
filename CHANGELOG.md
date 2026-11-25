@@ -4,6 +4,14 @@ All notable changes to `mcpscraper-sdk` and `mcpscraper-memory-sdk` are document
 
 ## [Unreleased]
 
+## [0.74.0] - 2026-11-25 — targets mcp-scraper 1.17.0
+
+### Added
+
+- Work with direct Outlook mail through the existing connection discovery, description, read, action and export methods. Each mailbox retains its verified email and separate action gate.
+- Regenerate Node, Python, CLI and cURL contracts, including current connection capability blockers and Outlook calling guidance.
+- Node versions: scraper SDK 0.74.0, unified client 0.73.0, CLI 0.72.0. Python distributions: scraper 0.72.0 and unified client 0.69.0, distributed as release assets.
+
 ## [0.73.0] - 2026-11-25 — targets mcp-scraper 1.16.0
 
 ### Added

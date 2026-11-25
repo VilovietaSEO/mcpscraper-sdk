@@ -29,6 +29,7 @@ export type Output =
           | (
               | "actions_disabled"
               | "inactive_connection"
+              | "admin_blocked"
               | "missing_permission"
               | "missing_app_feature"
               | "permission_policy_missing"

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedFrom": "mcp-scraper 1.16.0 dist/bin/mcp-stdio-server.js",
-  "sourceContractSha256": "343a403278a37fc563e352d89ebdca0f7801d4223734a630a19ac39218ef6320",
+  "generatedFrom": "mcp-scraper 1.17.0 dist/bin/mcp-stdio-server.js",
+  "sourceContractSha256": "31f790e635360928c6db906e7d0725ced7122157a234828435951aec8a85c6a4",
   "toolCount": 468,
   "tools": [
     {
@@ -25237,7 +25237,7 @@
     {
       "name": "analytics_get_dimensions",
       "title": "Analytics Dimensions",
-      "description": "Read chart-ready device, source, country, region, or weekday-hour rows.",
+      "description": "Read grouped X-Ray events by channel, external referrer hostname, UTM source/medium/campaign/term/content, device, source, region, country, or hour. Filter by channelFamily or campaign; follow pageInfo. Sessions can overlap across rows. UTM source, medium, term, and content are captured by the pixel with advertising measurement consent.",
       "category": "analytics",
       "methodName": "getDimensions",
       "inputSchema": {
@@ -25481,7 +25481,14 @@
               "source",
               "country",
               "region",
-              "weekday_hour"
+              "weekday_hour",
+              "channel",
+              "referrer_host",
+              "utm_source",
+              "utm_medium",
+              "utm_campaign",
+              "utm_term",
+              "utm_content"
             ],
             "description": "Dimension used to group returned analytics rows."
           }
@@ -25504,10 +25511,129 @@
               },
               "data": {
                 "type": "object",
-                "propertyNames": {
-                  "type": "string"
+                "properties": {
+                  "dimension": {
+                    "type": "string",
+                    "enum": [
+                      "device",
+                      "source",
+                      "country",
+                      "region",
+                      "weekday_hour",
+                      "channel",
+                      "referrer_host",
+                      "utm_source",
+                      "utm_medium",
+                      "utm_campaign",
+                      "utm_term",
+                      "utm_content"
+                    ]
+                  },
+                  "unit": {
+                    "type": "string",
+                    "const": "events"
+                  },
+                  "chartRecommendation": {
+                    "type": "string",
+                    "enum": [
+                      "donut",
+                      "heatmap",
+                      "choropleth_or_bar",
+                      "horizontal_bar"
+                    ]
+                  },
+                  "rows": {
+                    "maxItems": 250,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "visitors": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "sessions": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "pageviews": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "events": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "value": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "label",
+                        "visitors",
+                        "sessions",
+                        "pageviews",
+                        "events",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "truncated": {
+                    "type": "boolean"
+                  },
+                  "pageInfo": {
+                    "type": "object",
+                    "properties": {
+                      "nextCursor": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "hasNextPage": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "nextCursor",
+                      "hasNextPage"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "dataFreshThrough": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  }
                 },
-                "additionalProperties": {}
+                "required": [
+                  "dimension",
+                  "unit",
+                  "chartRecommendation",
+                  "rows",
+                  "truncated",
+                  "pageInfo",
+                  "dataFreshThrough"
+                ],
+                "additionalProperties": false
               },
               "filters": {
                 "type": "object",
@@ -102403,6 +102529,7 @@
                         "enum": [
                           "actions_disabled",
                           "inactive_connection",
+                          "admin_blocked",
                           "missing_permission",
                           "missing_app_feature",
                           "permission_policy_missing",
@@ -175396,7 +175523,7 @@
     {
       "name": "list_service_connections",
       "title": "List Connected Services",
-      "description": "List every service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, Google Search Console, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Calendar, Google Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId; a tenant-owned userLabel; verified provider-side account ID, email, or name when available; credential transport; exact live readTools and gated actionTools; permission-aware toolCapabilities with missing OAuth-grant or provider-app-feature blockers; permanently blocked administrative tools; and schema-discovery metadata. Get a connectionId and exact tool name here before calling describe_service_connection_tool, read_service_connection, or call_service_connection_action. Managed OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. When a connection has an existing tenant-owned Search Console performance table, use its returned tableName with table-describe and table-query for historical filtering.",
+      "description": "List every service connection this MCP Scraper account has authorized, including Resend, GitHub, Google Analytics, Google Search Console, YouTube, Facebook Pages, LinkedIn, X, Meta Marketing, Slack, Gmail, Microsoft Outlook, Calendar, Google Drive, Zoom, Xero, and others. Returns the tenant-scoped connectionId; a tenant-owned userLabel; verified provider-side account ID, email, or name when available; credential transport; exact live readTools and gated actionTools; permission-aware toolCapabilities with missing OAuth-grant or provider-app-feature blockers; permanently blocked administrative tools; and schema-discovery metadata. Get a connectionId and exact tool name here before calling describe_service_connection_tool, read_service_connection, or call_service_connection_action. Managed OAuth and official remote MCP connections use the same provider-neutral bridges; mutations still require the account action switch and an exact allowed action. When a connection has an existing tenant-owned Search Console performance table, use its returned tableName with table-describe and table-query for historical filtering.",
       "category": "connections",
       "methodName": "listServiceConnections",
       "inputSchema": {
@@ -175740,6 +175867,9 @@
                                   {
                                     "type": "string",
                                     "enum": [
+                                      "actions_disabled",
+                                      "inactive_connection",
+                                      "admin_blocked",
                                       "missing_permission",
                                       "missing_app_feature",
                                       "permission_policy_missing",

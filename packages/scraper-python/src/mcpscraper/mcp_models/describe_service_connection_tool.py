@@ -42,7 +42,7 @@ DescribeServiceConnectionToolOutputVariant1Tool = TypedDict('DescribeServiceConn
     'description': Required[Union[str, None]],
     'classification': Required[Literal['read', 'action']],
     'callable': NotRequired[bool],
-    'blockedReason': NotRequired[Union[Literal['actions_disabled', 'inactive_connection', 'missing_permission', 'missing_app_feature', 'permission_policy_missing', 'permission_verification_unavailable'], None]],
+    'blockedReason': NotRequired[Union[Literal['actions_disabled', 'inactive_connection', 'admin_blocked', 'missing_permission', 'missing_app_feature', 'permission_policy_missing', 'permission_verification_unavailable'], None]],
     'requiredPermissions': NotRequired[list[str]],
     'missingPermissions': NotRequired[list[str]],
     'requiredFeatures': NotRequired[list[str]],

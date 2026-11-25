@@ -29,14 +29,45 @@ class AnalyticsGetDimensionsInput(BaseModel):
     conversion_kind: Union[str, None] = Field(None, alias='conversionKind', description='Optional normalized conversion event kind filter.')
     limit: Union[Annotated[int, Field(ge=1, le=250)], None] = Field(None, alias='limit', description='Maximum rows or records to return on this page; use the returned cursor for more.')
     cursor: Union[Annotated[str, Field(max_length=1000)], None] = Field(None, alias='cursor', description='Opaque continuation cursor returned by the previous page; omit for the first page.')
-    dimension: Literal['device', 'source', 'country', 'region', 'weekday_hour'] = Field(..., alias='dimension', description='Dimension used to group returned analytics rows.')
+    dimension: Literal['device', 'source', 'country', 'region', 'weekday_hour', 'channel', 'referrer_host', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] = Field(..., alias='dimension', description='Dimension used to group returned analytics rows.')
+
+
+AnalyticsGetDimensionsOutputVariant1DataRowsItem = TypedDict('AnalyticsGetDimensionsOutputVariant1DataRowsItem', {
+    'key': Required[str],
+    'label': Required[str],
+    'visitors': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'sessions': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'pageviews': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'events': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+    'value': Required[Annotated[int, Field(ge=0, le=9007199254740991)]],
+})
+AnalyticsGetDimensionsOutputVariant1DataRowsItem.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+AnalyticsGetDimensionsOutputVariant1DataPageInfo = TypedDict('AnalyticsGetDimensionsOutputVariant1DataPageInfo', {
+    'nextCursor': Required[Union[str, None]],
+    'hasNextPage': Required[bool],
+})
+AnalyticsGetDimensionsOutputVariant1DataPageInfo.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
+AnalyticsGetDimensionsOutputVariant1Data = TypedDict('AnalyticsGetDimensionsOutputVariant1Data', {
+    'dimension': Required[Literal['device', 'source', 'country', 'region', 'weekday_hour', 'channel', 'referrer_host', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']],
+    'unit': Required[Literal['events']],
+    'chartRecommendation': Required[Literal['donut', 'heatmap', 'choropleth_or_bar', 'horizontal_bar']],
+    'rows': Required[Annotated[list[AnalyticsGetDimensionsOutputVariant1DataRowsItem], Field(max_length=250)]],
+    'truncated': Required[bool],
+    'pageInfo': Required[AnalyticsGetDimensionsOutputVariant1DataPageInfo],
+    'dataFreshThrough': Required[str],
+})
+AnalyticsGetDimensionsOutputVariant1Data.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
 class AnalyticsGetDimensionsOutputVariant1(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=True)
 
     ok: bool = Field(..., alias='ok', description='')
-    data: dict[str, Any] = Field(..., alias='data', description='')
+    data: AnalyticsGetDimensionsOutputVariant1Data = Field(..., alias='data', description='')
     filters: dict[str, Any] = Field(..., alias='filters', description='')
 
 

@@ -363,14 +363,58 @@ export interface Input {
   /**
    * Dimension used to group returned analytics rows.
    */
-  dimension: "device" | "source" | "country" | "region" | "weekday_hour";
+  dimension:
+    | "device"
+    | "source"
+    | "country"
+    | "region"
+    | "weekday_hour"
+    | "channel"
+    | "referrer_host"
+    | "utm_source"
+    | "utm_medium"
+    | "utm_campaign"
+    | "utm_term"
+    | "utm_content";
 }
 
 export type Output =
   | {
       ok: boolean;
       data: {
-        [k: string]: unknown;
+        dimension:
+          | "device"
+          | "source"
+          | "country"
+          | "region"
+          | "weekday_hour"
+          | "channel"
+          | "referrer_host"
+          | "utm_source"
+          | "utm_medium"
+          | "utm_campaign"
+          | "utm_term"
+          | "utm_content";
+        unit: "events";
+        chartRecommendation: "donut" | "heatmap" | "choropleth_or_bar" | "horizontal_bar";
+        /**
+         * @maxItems 250
+         */
+        rows: {
+          key: string;
+          label: string;
+          visitors: number;
+          sessions: number;
+          pageviews: number;
+          events: number;
+          value: number;
+        }[];
+        truncated: boolean;
+        pageInfo: {
+          nextCursor: string | null;
+          hasNextPage: boolean;
+        };
+        dataFreshThrough: string;
       };
       filters: {
         [k: string]: unknown;
