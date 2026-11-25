@@ -3,6 +3,13 @@ from typing_extensions import NotRequired, Required, TypedDict
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 
+ExportConnectedServiceDataInputBing = TypedDict('ExportConnectedServiceDataInputBing', {
+    'siteUrls': NotRequired[Annotated[list[Annotated[str, Field(max_length=2048)]], Field(min_length=1, max_length=100)]],
+    'reports': NotRequired[Annotated[list[Literal['search-performance', 'queries', 'pages', 'crawl', 'sitemaps']], Field(min_length=1, max_length=5)]],
+})
+ExportConnectedServiceDataInputBing.__pydantic_config__ = ConfigDict(extra="allow", strict=False)
+
+
 ExportConnectedServiceDataInputGoogleAnalytics = TypedDict('ExportConnectedServiceDataInputGoogleAnalytics', {
     'propertyIds': NotRequired[Annotated[list[str], Field(min_length=1, max_length=100)]],
     'dimensions': NotRequired[Annotated[list[Annotated[str, Field(min_length=1, max_length=200)]], Field(max_length=9)]],
@@ -11,6 +18,13 @@ ExportConnectedServiceDataInputGoogleAnalytics = TypedDict('ExportConnectedServi
     'metricFilter': NotRequired[dict[str, Any]],
 })
 ExportConnectedServiceDataInputGoogleAnalytics.__pydantic_config__ = ConfigDict(extra="allow", strict=False)
+
+
+ExportConnectedServiceDataInputContinuationScopeBing = TypedDict('ExportConnectedServiceDataInputContinuationScopeBing', {
+    'siteUrls': NotRequired[Annotated[list[Annotated[str, Field(max_length=2048)]], Field(min_length=1, max_length=100)]],
+    'reports': NotRequired[Annotated[list[Literal['search-performance', 'queries', 'pages', 'crawl', 'sitemaps']], Field(min_length=1, max_length=5)]],
+})
+ExportConnectedServiceDataInputContinuationScopeBing.__pydantic_config__ = ConfigDict(extra="allow", strict=False)
 
 
 ExportConnectedServiceDataInputContinuationScopeGoogleAnalytics = TypedDict('ExportConnectedServiceDataInputContinuationScopeGoogleAnalytics', {
@@ -31,6 +45,7 @@ ExportConnectedServiceDataInputContinuationScopeSlack.__pydantic_config__ = Conf
 
 
 ExportConnectedServiceDataInputContinuationScope = TypedDict('ExportConnectedServiceDataInputContinuationScope', {
+    'bing': NotRequired[ExportConnectedServiceDataInputContinuationScopeBing],
     'googleAnalytics': NotRequired[ExportConnectedServiceDataInputContinuationScopeGoogleAnalytics],
     'slack': NotRequired[ExportConnectedServiceDataInputContinuationScopeSlack],
 })
@@ -41,7 +56,7 @@ ExportConnectedServiceDataInputContinuation = TypedDict('ExportConnectedServiceD
     'cursor': Required[str],
     'from': Required[str],
     'to': Required[str],
-    'dataset': Required[Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates']],
+    'dataset': Required[Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'bing_webmaster_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates']],
     'scope': NotRequired[ExportConnectedServiceDataInputContinuationScope],
 })
 ExportConnectedServiceDataInputContinuation.__pydantic_config__ = ConfigDict(extra="allow", strict=False)
@@ -51,7 +66,8 @@ class ExportConnectedServiceDataInput(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="allow", strict=False)
 
     connection_id: Annotated[str, Field(min_length=1)] = Field(..., alias='connectionId', description='A tenant-owned connectionId from list_service_connections.')
-    dataset: Union[Literal['auto', 'emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'], None] = Field(None, alias='dataset', description='Dataset to export. Choose google_analytics_reports for GA4 aggregate export across selected or discovered properties. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.')
+    dataset: Union[Literal['auto', 'emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'bing_webmaster_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'], None] = Field(None, alias='dataset', description='Dataset to export. Bing auto-selects bing_webmaster_reports for cross-site reports with seven-day private snapshots and resumable export. Choose google_analytics_reports for GA4 aggregate export across selected or discovered properties. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.')
+    bing: Union[ExportConnectedServiceDataInputBing, None] = Field(None, alias='bing', description='Bing site URLs and reports. Omit to export all accessible sites across traffic, top queries/pages, crawl and current sitemaps. Dated rows are filtered locally; provider coverage may be incomplete.')
     google_analytics: Union[ExportConnectedServiceDataInputGoogleAnalytics, None] = Field(None, alias='googleAnalytics', description='GA4 report query for dataset google_analytics_reports. Produces aggregate rows with quality metadata, signed resumable pagination and explicit property failure records; not raw event export.')
     channel_id: Union[Annotated[str, Field(min_length=2, max_length=100)], None] = Field(None, alias='channelId', description='Slack conversation ID to export. Required for a new slack_channel_messages export; preserved inside continuation on resume. The export never joins a channel.')
     include_threads: Union[bool, None] = Field(None, alias='includeThreads', description='For Slack exports, automatically fetch every threaded reply. Defaults to true.')
@@ -72,6 +88,13 @@ ExportConnectedServiceDataOutputVariant1Range = TypedDict('ExportConnectedServic
 ExportConnectedServiceDataOutputVariant1Range.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ExportConnectedServiceDataOutputVariant1ScopeBing = TypedDict('ExportConnectedServiceDataOutputVariant1ScopeBing', {
+    'siteUrls': NotRequired[Annotated[list[Annotated[str, Field(max_length=2048)]], Field(min_length=1, max_length=100)]],
+    'reports': Required[Annotated[list[Literal['search-performance', 'queries', 'pages', 'crawl', 'sitemaps']], Field(min_length=1, max_length=5)]],
+})
+ExportConnectedServiceDataOutputVariant1ScopeBing.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ExportConnectedServiceDataOutputVariant1ScopeGoogleAnalytics = TypedDict('ExportConnectedServiceDataOutputVariant1ScopeGoogleAnalytics', {
     'propertyIds': NotRequired[Annotated[list[str], Field(min_length=1, max_length=100)]],
     'dimensions': Required[Annotated[list[Annotated[str, Field(min_length=1, max_length=200)]], Field(max_length=9)]],
@@ -90,6 +113,7 @@ ExportConnectedServiceDataOutputVariant1ScopeSlack.__pydantic_config__ = ConfigD
 
 
 ExportConnectedServiceDataOutputVariant1Scope = TypedDict('ExportConnectedServiceDataOutputVariant1Scope', {
+    'bing': NotRequired[ExportConnectedServiceDataOutputVariant1ScopeBing],
     'googleAnalytics': NotRequired[ExportConnectedServiceDataOutputVariant1ScopeGoogleAnalytics],
     'slack': NotRequired[ExportConnectedServiceDataOutputVariant1ScopeSlack],
 })
@@ -136,6 +160,13 @@ ExportConnectedServiceDataOutputVariant1Artifact = TypedDict('ExportConnectedSer
 ExportConnectedServiceDataOutputVariant1Artifact.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
 
 
+ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeBing = TypedDict('ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeBing', {
+    'siteUrls': NotRequired[Annotated[list[Annotated[str, Field(max_length=2048)]], Field(min_length=1, max_length=100)]],
+    'reports': Required[Annotated[list[Literal['search-performance', 'queries', 'pages', 'crawl', 'sitemaps']], Field(min_length=1, max_length=5)]],
+})
+ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeBing.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
+
+
 ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeGoogleAnalytics = TypedDict('ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeGoogleAnalytics', {
     'propertyIds': NotRequired[Annotated[list[str], Field(min_length=1, max_length=100)]],
     'dimensions': Required[Annotated[list[Annotated[str, Field(min_length=1, max_length=200)]], Field(max_length=9)]],
@@ -154,6 +185,7 @@ ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeSlack.__pydanti
 
 
 ExportConnectedServiceDataOutputVariant1ContinuationVariant1Scope = TypedDict('ExportConnectedServiceDataOutputVariant1ContinuationVariant1Scope', {
+    'bing': NotRequired[ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeBing],
     'googleAnalytics': NotRequired[ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeGoogleAnalytics],
     'slack': NotRequired[ExportConnectedServiceDataOutputVariant1ContinuationVariant1ScopeSlack],
 })
@@ -164,7 +196,7 @@ ExportConnectedServiceDataOutputVariant1ContinuationVariant1 = TypedDict('Export
     'cursor': Required[str],
     'from': Required[str],
     'to': Required[str],
-    'dataset': Required[Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates']],
+    'dataset': Required[Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'bing_webmaster_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates']],
     'scope': NotRequired[ExportConnectedServiceDataOutputVariant1ContinuationVariant1Scope],
 })
 ExportConnectedServiceDataOutputVariant1ContinuationVariant1.__pydantic_config__ = ConfigDict(extra="allow", strict=True)
@@ -177,7 +209,7 @@ class ExportConnectedServiceDataOutputVariant1(BaseModel):
     export_id: Union[str, None] = Field(None, alias='exportId', description='')
     status: Union[Literal['complete', 'partial'], None] = Field(None, alias='status', description='')
     provider_config_key: Union[str, None] = Field(None, alias='providerConfigKey', description='')
-    dataset: Union[Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'], None] = Field(None, alias='dataset', description='')
+    dataset: Union[Literal['emails', 'calendar_events', 'zoom_recordings', 'zoom_transcripts', 'slack_channel_messages', 'meta_ads_insights', 'search_console_performance', 'google_analytics_reports', 'bing_webmaster_reports', 'resend_data', 'resend_emails', 'resend_received_emails', 'resend_logs', 'resend_contacts', 'resend_broadcasts', 'resend_templates'], None] = Field(None, alias='dataset', description='')
     range: Union[ExportConnectedServiceDataOutputVariant1Range, None] = Field(None, alias='range', description='')
     scope: Union[ExportConnectedServiceDataOutputVariant1Scope, None] = Field(None, alias='scope', description='')
     counts: Union[ExportConnectedServiceDataOutputVariant1Counts, None] = Field(None, alias='counts', description='')

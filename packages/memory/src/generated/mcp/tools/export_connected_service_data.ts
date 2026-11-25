@@ -4,7 +4,7 @@ export interface Input {
    */
   connectionId: string;
   /**
-   * Dataset to export. Choose google_analytics_reports for GA4 aggregate export across selected or discovered properties. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
+   * Dataset to export. Bing auto-selects bing_webmaster_reports for cross-site reports with seven-day private snapshots and resumable export. Choose google_analytics_reports for GA4 aggregate export across selected or discovered properties. auto maps Gmail to emails, Google Calendar to calendar_events, Zoom to zoom_transcripts, Meta Marketing to meta_ads_insights, Google Search Console to search_console_performance, Resend to resend_data, and Slack to slack_channel_messages when channelId is supplied. Slack walks top-level channel history plus threaded replies server-side. Search Console walks bounded Search Analytics rows across every accessible property. Meta walks daily account, campaign, ad-set, and ad insight levels across the connected ad accounts. The Resend aggregate walks 12 practical safe collections; six core collections are also individually selectable.
    */
   dataset?:
     | "auto"
@@ -16,6 +16,7 @@ export interface Input {
     | "meta_ads_insights"
     | "search_console_performance"
     | "google_analytics_reports"
+    | "bing_webmaster_reports"
     | "resend_data"
     | "resend_emails"
     | "resend_received_emails"
@@ -23,6 +24,48 @@ export interface Input {
     | "resend_contacts"
     | "resend_broadcasts"
     | "resend_templates";
+  /**
+   * Bing site URLs and reports. Omit to export all accessible sites across traffic, top queries/pages, crawl and current sitemaps. Dated rows are filtered locally; provider coverage may be incomplete.
+   */
+  bing?: {
+    /**
+     * Exact Bing site URLs from list-sites, including protocol and trailing slash. Omit to discover all accessible sites, capped at 100.
+     *
+     * @minItems 1
+     * @maxItems 100
+     */
+    siteUrls?: [string, ...string[]];
+    /**
+     * Report groups to save for each site: search-performance, queries, pages, crawl or current sitemaps. Defaults to all five.
+     *
+     * @minItems 1
+     * @maxItems 5
+     */
+    reports?:
+      | ["search-performance" | "queries" | "pages" | "crawl" | "sitemaps"]
+      | [
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+        ]
+      | [
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+        ]
+      | [
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+        ]
+      | [
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+          "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+        ];
+  };
   /**
    * GA4 report query for dataset google_analytics_reports. Produces aggregate rows with quality metadata, signed resumable pagination and explicit property failure records; not raw event export.
    */
@@ -140,6 +183,7 @@ export interface Input {
       | "meta_ads_insights"
       | "search_console_performance"
       | "google_analytics_reports"
+      | "bing_webmaster_reports"
       | "resend_data"
       | "resend_emails"
       | "resend_received_emails"
@@ -151,6 +195,48 @@ export interface Input {
      * Read, write, and administrative permissions granted to this member or key.
      */
     scope?: {
+      /**
+       * Bing report and site selection, preserved unchanged when resuming an export.
+       */
+      bing?: {
+        /**
+         * Exact Bing site URLs from list-sites, including protocol and trailing slash. Omit to discover all accessible sites, capped at 100.
+         *
+         * @minItems 1
+         * @maxItems 100
+         */
+        siteUrls?: [string, ...string[]];
+        /**
+         * Report groups to save for each site: search-performance, queries, pages, crawl or current sitemaps. Defaults to all five.
+         *
+         * @minItems 1
+         * @maxItems 5
+         */
+        reports?:
+          | ["search-performance" | "queries" | "pages" | "crawl" | "sitemaps"]
+          | [
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+            ]
+          | [
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+            ]
+          | [
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+            ]
+          | [
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+              "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+            ];
+      };
       /**
        * Exact GA4 property selection, dimensions, metrics and filters preserved from the original export.
        */
@@ -244,6 +330,7 @@ export type Output =
         | "meta_ads_insights"
         | "search_console_performance"
         | "google_analytics_reports"
+        | "bing_webmaster_reports"
         | "resend_data"
         | "resend_emails"
         | "resend_received_emails"
@@ -256,6 +343,48 @@ export type Output =
         to: string;
       };
       scope?: {
+        /**
+         * Bing report and site selection, preserved unchanged when resuming an export.
+         */
+        bing?: {
+          /**
+           * Exact Bing site URLs from list-sites, including protocol and trailing slash. Omit to discover all accessible sites, capped at 100.
+           *
+           * @minItems 1
+           * @maxItems 100
+           */
+          siteUrls?: [string, ...string[]];
+          /**
+           * Report groups to save for each site: search-performance, queries, pages, crawl or current sitemaps. Defaults to all five.
+           *
+           * @minItems 1
+           * @maxItems 5
+           */
+          reports:
+            | ["search-performance" | "queries" | "pages" | "crawl" | "sitemaps"]
+            | [
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+              ]
+            | [
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+              ]
+            | [
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+              ]
+            | [
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+              ];
+        };
         /**
          * Exact GA4 property selection, dimensions, metrics and filters preserved from the original export.
          */
@@ -360,6 +489,7 @@ export type Output =
           | "meta_ads_insights"
           | "search_console_performance"
           | "google_analytics_reports"
+          | "bing_webmaster_reports"
           | "resend_data"
           | "resend_emails"
           | "resend_received_emails"
@@ -368,6 +498,48 @@ export type Output =
           | "resend_broadcasts"
           | "resend_templates";
         scope?: {
+          /**
+           * Bing report and site selection, preserved unchanged when resuming an export.
+           */
+          bing?: {
+            /**
+             * Exact Bing site URLs from list-sites, including protocol and trailing slash. Omit to discover all accessible sites, capped at 100.
+             *
+             * @minItems 1
+             * @maxItems 100
+             */
+            siteUrls?: [string, ...string[]];
+            /**
+             * Report groups to save for each site: search-performance, queries, pages, crawl or current sitemaps. Defaults to all five.
+             *
+             * @minItems 1
+             * @maxItems 5
+             */
+            reports:
+              | ["search-performance" | "queries" | "pages" | "crawl" | "sitemaps"]
+              | [
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+                ]
+              | [
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+                ]
+              | [
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+                ]
+              | [
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps",
+                  "search-performance" | "queries" | "pages" | "crawl" | "sitemaps"
+                ];
+          };
           /**
            * Exact GA4 property selection, dimensions, metrics and filters preserved from the original export.
            */
