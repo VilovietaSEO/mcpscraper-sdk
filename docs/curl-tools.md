@@ -1,4 +1,4 @@
-# All 466 MCP tools with cURL
+# All 468 MCP tools with cURL
 
 This catalog is generated from `contracts/mcp.tools.json`. Every listed tool is callable through the same JSON-RPC endpoint with an `MCP_SCRAPER_API_KEY`.
 
@@ -92,7 +92,7 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 
 > **Permanent delete is separate and irreversible.** `gmail_bulk_delete_messages` requires the unchanged selection receipt, an idempotency key, and `confirmPermanentDelete:true`. Never use it for cleanup unless every selected message was created specifically as a disposable fixture.
 
-## Complete catalog (466)
+## Complete catalog (468)
 
 ## access
 
@@ -316,9 +316,11 @@ Use `gmail_prepare_selection` with `purpose:"mailbox_action"`, review its exact 
 - `export_search_console_table_data` — Download Filtered Search Console Table Data
 - `gmail_bulk_delete_messages` — Permanently Delete Gmail Messages
 - `gmail_bulk_manage_messages` — Manage Gmail Messages in Bulk
+- `gmail_create_reply_draft` — Draft Gmail Reply
 - `gmail_export_selection` — Export Gmail Selection
 - `gmail_get_attachment` — Open Gmail Attachment
 - `gmail_get_message` — Read Full Gmail Message
+- `gmail_get_thread` — Read Gmail Thread
 - `gmail_import_status` — Get Gmail Memory Import Status
 - `gmail_import_to_memory` — Import Gmail Selection to Memory
 - `gmail_prepare_memory_import` — Plan Gmail Import to Memory
