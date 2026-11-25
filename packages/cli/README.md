@@ -207,3 +207,7 @@ Use `crm-form-preview` to validate a sample, `crm-form-create` to obtain a scope
 ## Bing reporting
 
 Bing Webmaster Tools supports read-only reports and private cross-site exports. Select sites and report groups, preserve the returned continuation when resuming, and use authenticated artifact readback for saved files. Query and page coverage is provider-selected. See the [0.72.0 release notes](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.72.0).
+
+### Outlook connections
+
+This release targets MCP Scraper 1.17.0 and its 468-tool contract. Use the shared service-connection tools to read Outlook messages, download supported file attachments and export message bodies. Each connected mailbox includes its verified email. Mail changes require actions to be enabled for that account. Organization policies may require administrator consent. See the [Outlook guide](https://mcpscraper.dev/docs#outlook-mail) and [release changes](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.74.0/CHANGELOG.md).

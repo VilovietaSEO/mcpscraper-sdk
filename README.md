@@ -874,3 +874,7 @@ Read LinkedIn, X and Instagram profiles, posts, comments, followers, jobs, ads a
 ### Connect an existing form to CRM
 
 Use `crm-form-preview` to validate a sample, `crm-form-create` to obtain a scoped submission URL, and `crm-form-status` to confirm a committed contact and activity after a test. `crm-form-revoke` disables future delivery. Keep the account API key out of form code. See [the setup guide](https://mcpscraper.dev/docs/xray/crm#connect-a-form) and [release 0.68.0](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.68.0).
+
+### Direct Outlook mail
+
+Connect a mailbox in the dashboard, select its verified email with `listServiceConnections`, and use the existing description, read, action and export bridges. Each account has a separate action setting. See [the read-only example](examples/outlook-mail.mjs) and [release notes](CHANGELOG.md#0740---2026-11-25--targets-mcp-scraper-1170).

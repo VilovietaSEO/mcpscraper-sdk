@@ -45,7 +45,7 @@ ListServiceConnectionsOutputVariant1ConnectionsItemVariant2ToolCapabilitiesItem 
     'requiredPermissions': Required[list[str]],
     'requiredFeatures': Required[list[str]],
     'available': Required[bool],
-    'blockedReason': Required[Union[Literal['missing_permission', 'missing_app_feature', 'permission_policy_missing', 'permission_verification_unavailable'], None]],
+    'blockedReason': Required[Union[Literal['actions_disabled', 'inactive_connection', 'admin_blocked', 'missing_permission', 'missing_app_feature', 'permission_policy_missing', 'permission_verification_unavailable'], None]],
     'missingPermissions': Required[list[str]],
     'missingFeatures': Required[list[str]],
 })

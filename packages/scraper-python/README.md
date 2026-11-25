@@ -202,3 +202,7 @@ Read LinkedIn, X and Instagram profiles, posts, comments, followers, jobs, ads a
 ### Connect an existing form to CRM
 
 Use `crm-form-preview` to validate a sample, `crm-form-create` to obtain a scoped submission URL, and `crm-form-status` to confirm a committed contact and activity after a test. `crm-form-revoke` disables future delivery. Keep the account API key out of form code. See [the setup guide](https://mcpscraper.dev/docs/xray/crm#connect-a-form) and [release 0.68.0](https://github.com/VilovietaSEO/mcpscraper-sdk/releases/tag/v0.68.0).
+
+### Outlook connections
+
+This release targets MCP Scraper 1.17.0 and its 468-tool contract. Use the shared service-connection tools to read Outlook messages, download supported file attachments and export message bodies. Each connected mailbox includes its verified email. Mail changes require actions to be enabled for that account. Organization policies may require administrator consent. See the [Outlook guide](https://mcpscraper.dev/docs#outlook-mail) and [release changes](https://github.com/VilovietaSEO/mcpscraper-sdk/blob/v0.74.0/CHANGELOG.md).
